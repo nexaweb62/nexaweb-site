@@ -1,1118 +1,490 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- SEO -->
-  <title>Nexa Web | Création de sites internet à Carvin (62) | TPE &amp; Artisans</title>
-  <meta name="description" content="Agence web à Carvin (62). Création de sites vitrines, e-commerce et refonte pour artisans et TPE des Hauts-de-France. Devis gratuit sous 24h. Garantie 30 jours.">
-  <meta name="keywords" content="création site internet Carvin, agence web Hauts-de-France, site vitrine artisan, site e-commerce TPE, refonte site web, SEO local, devis gratuit site internet">
-  <meta name="author" content="Nexa Web">
-  <link rel="canonical" href="https://nexaaweb.com">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-
-  <!-- PWA -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#7c3aed">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="NexaWeb">
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="Nexa Web | Création de sites internet à Carvin (62) | TPE & Artisans">
-  <meta property="og:description" content="Agence web à Carvin (62). Création de sites vitrines, e-commerce et refonte pour artisans et TPE des Hauts-de-France. Devis gratuit sous 24h. Garantie 30 jours.">
-  <meta property="og:url" content="https://nexaaweb.com">
-  <meta property="og:type" content="website">
-
-  <!-- Polices Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
-  <!-- Styles -->
-  <link rel="stylesheet" href="style.css">
-  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
-
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8TPVX3PQ1S"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-8TPVX3PQ1S');
-  </script>
-
-  <!-- Schema.org -->
-  <script type="application/ld+json">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nexa Web — Agence Web Premium · Sites en 7 jours</title>
+  <meta name="description" content="Nexa Web crée votre site internet premium en 7 jours. Sites vitrine, e-commerce, refonte. 50+ projets livrés, 98% de clients satisfaits." />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script type="importmap">
   {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": "Nexa Web",
-    "description": "Agence web à Carvin spécialisée en création de sites internet pour TPE et artisans",
-    "url": "https://nexaaweb.com",
-    "telephone": "+33698840194",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "Carvin",
-      "addressLocality": "Carvin",
-      "postalCode": "62220",
-      "addressCountry": "FR"
-    },
-    "geo": {
-      "@type": "GeoCoordinates",
-      "latitude": 50.4897,
-      "longitude": 2.9631
-    },
-    "openingHours": "Mo-Fr 09:00-18:00",
-    "priceRange": "€€",
-    "image": "https://nexaaweb.com/favicon.svg"
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.168.0/build/three.webgpu.js",
+      "three/webgpu": "https://cdn.jsdelivr.net/npm/three@0.168.0/build/three.webgpu.js",
+      "three/tsl": "https://cdn.jsdelivr.net/npm/three@0.168.0/build/three.tsl.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/"
+    }
   }
   </script>
 </head>
 <body>
 
-  <!-- ===================== BARRE DE PROGRESSION AU SCROLL ===================== -->
-  <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
+  <!-- Silk WebGL background (position: fixed, always visible) -->
+  <canvas id="silk-bg" aria-hidden="true"></canvas>
 
-  <!-- ===================== TOPBAR ===================== -->
-  <div class="topbar">
-    <div class="container topbar__inner">
-      <a href="https://www.google.com/maps/search/Carvin,+Hauts-de-France" target="_blank" rel="noopener noreferrer" class="topbar__location">📍 <span data-i18n="footer.address">Carvin, Hauts-de-France</span></a>
-      <span class="topbar__phones">
-        📞 <a href="tel:0698840194" class="topbar__phone">06 98 84 01 94</a>
-        <span class="topbar__sep">|</span>
-        <a href="tel:0641467898" class="topbar__phone">06 41 46 78 98</a>
-        <span class="topbar__email-wrap">
-          <span class="topbar__sep">|</span>
-          <a href="mailto:contact.nexaweb62@gmail.com" class="topbar__phone" id="topbar-email-link">✉️ contact.nexaweb62@gmail.com</a>
-        </span>
-      </span>
+  <!-- Loader -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader__inner">
+      <div class="loader__logo">NEXA<span>WEB</span></div>
+      <div class="loader__bar"><div class="loader__fill"></div></div>
     </div>
   </div>
 
-  <!-- ===================== HEADER / NAVIGATION ===================== -->
-  <header class="header" id="header">
-    <div class="container header__inner">
-
-      <a href="#accueil" class="logo" aria-label="Nexa Web - Accueil">
-        Nexa<span class="logo__accent">Web</span>
-      </a>
-
-      <!-- Navigation desktop -->
-      <nav class="nav" id="nav" aria-label="Navigation principale">
-        <ul class="nav__list">
-          <li><a href="#accueil" class="nav__link" data-i18n="nav.home">Accueil</a></li>
-          <li class="nav__item--dropdown">
-            <a href="#services" class="nav__link" data-i18n="nav.services">Services</a>
-            <ul class="nav__dropdown">
-              <li><a href="site-vitrine.html" class="nav__dropdown-link" data-i18n="nav.serviceVitrine">Sites vitrines</a></li>
-              <li><a href="ecommerce.html" class="nav__dropdown-link" data-i18n="nav.serviceEcommerce">E-commerce</a></li>
-              <li><a href="seo.html" class="nav__dropdown-link" data-i18n="nav.serviceSeo">Référencement SEO</a></li>
-            </ul>
-          </li>
-          <li><a href="rendez-vous.html" class="nav__link" data-i18n="nav.appointment">Rendez-vous</a></li>
-          <li><a href="#pourquoi-nous" class="nav__link" data-i18n="nav.why">Pourquoi nous</a></li>
-          <li><a href="#realisations" class="nav__link" data-i18n="nav.projects">Réalisations</a></li>
-          <li><a href="#avis" class="nav__link" data-i18n="nav.reviews">Avis</a></li>
-          <li><a href="tarifs.html" class="nav__link" data-i18n="nav.pricing">Tarifs</a></li>
-          <li><a href="blog.html" class="nav__link" data-i18n="nav.blog">Blog</a></li>
-          <li><a href="contact.html" class="nav__link" data-i18n="nav.contact">Contact</a></li>
-        </ul>
-      </nav>
-
-      <div class="header__actions">
-        <button class="lang-toggle" id="lang-toggle" aria-label="Switch to English">
-          <span class="lang-toggle__flag" aria-hidden="true">🇫🇷</span>
-          <span class="lang-toggle__code">FR</span>
-        </button>
-
-        <button class="device-toggle" id="device-toggle" aria-label="Simuler la vue mobile">
-          <span class="device-toggle__icon">💻</span>
-        </button>
-
-        <button class="theme-toggle" id="theme-toggle" aria-label="Activer le mode clair">
-          <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-          </svg>
-          <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="4"></circle>
-            <path d="M12 2v2"></path>
-            <path d="M12 20v2"></path>
-            <path d="M4.93 4.93l1.41 1.41"></path>
-            <path d="M17.66 17.66l1.41 1.41"></path>
-            <path d="M2 12h2"></path>
-            <path d="M20 12h2"></path>
-            <path d="M6.34 17.66l-1.41 1.41"></path>
-            <path d="M19.07 4.93l-1.41 1.41"></path>
-          </svg>
-        </button>
-
-        <a href="devis.html" class="btn btn--primary btn--header" data-i18n="header.quoteBtn">Devis gratuit</a>
-      </div>
-
-      <!-- Bouton burger mobile -->
-      <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav">
-        <span></span>
-        <span></span>
-        <span></span>
+  <!-- Navigation (fixed, outside stage) -->
+  <header class="site-header" id="site-header">
+    <nav class="nav">
+      <a href="#accueil" data-view="accueil" class="nav__logo">Nexa<span>Web</span></a>
+      <ul class="nav__list" id="nav-list">
+        <li><a href="#accueil" data-view="accueil" class="nav__link active">Accueil</a></li>
+        <li><a href="#tarifs"  data-view="tarifs"  class="nav__link" id="nav-tarifs">Tarifs</a></li>
+        <li><a href="#devis"   data-view="devis"   class="nav__link">Devis</a></li>
+        <li><a href="blog.html" class="nav__link">Blog</a></li>
+        <li><a href="#contact" data-view="contact" class="nav__link">Contact</a></li>
+      </ul>
+      <a href="#devis" data-goto-view="devis" class="btn btn--nav">Devis gratuit</a>
+      <button class="nav__burger" id="nav-burger" aria-label="Ouvrir le menu" aria-expanded="false">
+        <span></span><span></span><span></span>
       </button>
-
-    </div>
+    </nav>
   </header>
 
-  <main>
-    <!-- ===================== HERO SECTION ===================== -->
-    <section class="hero" id="accueil">
-      <!-- Effet de glow en arrière-plan -->
-      <div class="hero__glow hero__glow--1" aria-hidden="true"></div>
-      <div class="hero__glow hero__glow--2" aria-hidden="true"></div>
-      <canvas id="hero-particles" class="hero__particles" aria-hidden="true"></canvas>
+  <!-- Backdrop for mobile nav panel -->
+  <div class="panel-backdrop" id="panel-backdrop" aria-hidden="true"></div>
 
-      <div class="container hero__inner">
-        <p class="hero__tag fade-in" data-i18n="hero.tag">Création de sites internet pour TPE/PME</p>
 
-        <h1 class="hero__title fade-in">
-          <span data-i18n="hero.titlePart1">Votre entreprise mérite un site qui lui </span><span class="text-accent" data-i18n="hero.titleAccent">ressemble</span>
-        </h1>
+  <!-- ══════════════════════════════════════════════════════════
+       4-VIEW STAGE
+       Layout 2D: Accueil(0,0) → Tarifs(1,0) → Devis(1,1) → Contact(1,2)
+       ══════════════════════════════════════════════════════════ -->
+  <div id="stage" data-active="accueil">
 
-        <p class="hero__subtitle fade-in" data-i18n="hero.subtitle">
-          Nexa Web conçoit des sites internet modernes, rapides et sur-mesure pour les artisans,
-          commerçants et petites entreprises — basé à Carvin, à votre service partout en France.
-        </p>
+    <!-- ▓▓ VIEW 1 — ACCUEIL ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ -->
+    <div id="view-accueil" class="view" data-view="accueil">
+      <main>
 
-        <div class="hero__actions fade-in">
-          <a href="devis.html" class="btn btn--primary btn--lg" data-i18n="hero.btnQuote">Demander un devis gratuit</a>
-          <a href="#realisations" class="btn btn--ghost btn--lg" data-i18n="hero.btnProjects">Voir nos réalisations</a>
-        </div>
+        <!-- HERO -->
+        <section class="hero" id="hero">
 
-        <div class="hero__trust-badges fade-in">
-          <span class="hero__trust-badge">🔒 <span data-i18n="hero.badge1">Site sécurisé SSL</span></span>
-          <span class="hero__trust-badge">✅ <span data-i18n="hero.badge2">Garantie 30 jours</span></span>
-          <span class="hero__trust-badge">⚡ <span data-i18n="hero.badge3">Réponse sous 24h</span></span>
-        </div>
-      </div>
-    </section>
+          <canvas class="hero__canvas" id="hero-canvas" aria-hidden="true"></canvas>
+          <div class="hero-glow" aria-hidden="true"></div>
 
-    <!-- ===================== ENGAGEMENTS (TIMELINE) ===================== -->
-    <section class="engagements" id="engagements">
-      <div class="container">
-        <h2 class="engagements__title fade-in" data-i18n="engagements.title">J'applique 4 engagements à votre projet web</h2>
+          <svg class="hero-lines" viewBox="0 0 1200 700" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <linearGradient id="hl-g1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#4ee6c8"/><stop offset="100%" stop-color="#4c72ff"/></linearGradient>
+              <linearGradient id="hl-g2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#8b6bf2"/><stop offset="100%" stop-color="#c026d3"/></linearGradient>
+              <linearGradient id="hl-g3" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#4c72ff"/><stop offset="100%" stop-color="#8b6bf2"/></linearGradient>
+            </defs>
+            <path d="M -80 120 C 300 120, 480 420, 1100 360" stroke-width="1.3"/>
+            <path d="M -80 180 C 340 180, 520 480, 1150 420" stroke-width="1.3"/>
+            <path d="M -80 240 C 380 260, 580 540, 1200 480" stroke-width="1.3"/>
+          </svg>
 
-        <div class="engagements__timeline">
-
-          <div class="engagements__item engagements__item--right fade-in">
-            <span class="engagements__dot" aria-hidden="true"></span>
-            <div class="engagements__content">
-              <h3 class="engagements__item-title" data-i18n="engagements.item1.title">Rapidité</h3>
-              <p class="engagements__item-text" data-i18n="engagements.item1.text">
-                Votre site livré en 5 à 15 jours selon la formule. Pas de délais interminables, on respecte les deadlines.
+          <div class="hero__left">
+            <div class="hero__pagination" aria-hidden="true">
+              <span class="hero__dot hero__dot--active"></span>
+              <span class="hero__dot"></span>
+              <span class="hero__dot"></span>
+            </div>
+            <div class="hero__content">
+              <div class="hero__eyebrow reveal">
+                <div class="hero__eyebrow-bar"></div>
+                <p class="hero__label">Agence Web &middot; Carvin</p>
+              </div>
+              <h1 class="hero__title">
+                <span class="line"><span>NEXA</span></span>
+                <span class="line"><span class="hero__title--accent">WEB</span></span>
+              </h1>
+              <p class="hero__tagline reveal reveal--delay-2">
+                Votre site internet premium.<br>Livré en <strong>7 jours.</strong>
               </p>
+              <div class="hero__ctas reveal reveal--delay-3">
+                <a href="#devis" data-goto-view="devis" class="btn btn--hero-outline">Devis gratuit</a>
+                <a href="#morph-gallery" class="btn btn--ghost">Voir nos projets</a>
+              </div>
             </div>
           </div>
 
-          <div class="engagements__item engagements__item--left fade-in">
-            <span class="engagements__dot" aria-hidden="true"></span>
-            <div class="engagements__content">
-              <h3 class="engagements__item-title" data-i18n="engagements.item2.title">Rentabilité</h3>
-              <p class="engagements__item-text" data-i18n="engagements.item2.text">
-                Investir dans un site Nexa Web c'est investir dans votre chiffre d'affaires. Je conçois des outils qui génèrent des demandes de devis et transforment vos visiteurs en clients.
-              </p>
-            </div>
+          <div class="hero__right"></div>
+
+          <nav class="hero__socials" aria-label="Réseaux sociaux">
+            <a href="#" aria-label="Instagram">Ig</a>
+            <a href="#" aria-label="TikTok">Tk</a>
+            <a href="#" aria-label="LinkedIn">Li</a>
+            <a href="#" aria-label="Behance">Be</a>
+          </nav>
+
+          <div class="hero__scroll" aria-hidden="true">
+            <svg class="hero__scroll-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
 
-          <div class="engagements__item engagements__item--right fade-in">
-            <span class="engagements__dot" aria-hidden="true"></span>
-            <div class="engagements__content">
-              <h3 class="engagements__item-title" data-i18n="engagements.item3.title">Visibilité</h3>
-              <p class="engagements__item-text" data-i18n="engagements.item3.text">
-                Être sur internet ne suffit pas : encore faut-il être trouvé. J'optimise votre référencement local (SEO) pour que vous apparaissiez en première page sur Google.
-              </p>
+          <!-- Objets traversants scroll-driven -->
+        </section>
+
+        <!-- MORPH GALLERY -->
+        <section class="morph-gallery" id="morph-gallery">
+          <div class="mg-sticky">
+            <div class="mg-scene"></div>
+            <div class="mg-intro">
+              <h2 class="mg-intro__title">Nos<br>Pages</h2>
+              <p class="mg-scroll-hint">Scroll pour explorer</p>
+            </div>
+            <div class="mg-content">
+              <h2 class="mg-content__title">Cliquez<br>Pour Visiter</h2>
+              <p class="mg-content__desc">Explorez chaque page de Nexa Web.<br>Glissez la souris vers le haut pour fermer.</p>
             </div>
           </div>
+        </section>
 
-          <div class="engagements__item engagements__item--left fade-in">
-            <span class="engagements__dot" aria-hidden="true"></span>
-            <div class="engagements__content">
-              <h3 class="engagements__item-title" data-i18n="engagements.item4.title">Sur-mesure</h3>
-              <p class="engagements__item-text" data-i18n="engagements.item4.text">
-                Chaque secteur a ses codes et ses clients. Je ne vends pas de templates génériques. Je construis votre site en fonction de votre business.
-              </p>
+        <!-- PROCESS -->
+        <section class="process-section" id="process" aria-labelledby="process-title">
+          <div class="process-section__bg" aria-hidden="true"></div>
+          <div class="container">
+            <div class="process-header">
+              <p class="process-eyebrow reveal">Comment ça marche</p>
+              <h2 class="process-title reveal reveal--delay-1" id="process-title">EN 4 ÉTAPES</h2>
+              <p class="process-subtitle reveal reveal--delay-2">De l'idée à la mise en ligne en 7 jours chrono.</p>
+            </div>
+            <div class="process-steps" role="list">
+              <div class="process-step reveal reveal--delay-1" role="listitem">
+                <div class="process-step__num" aria-hidden="true">01</div>
+                <div class="process-step__icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+                <h3 class="process-step__title">Brief</h3>
+                <p class="process-step__desc">On cerne votre projet, votre cible et votre univers visuel en un call de 30 min.</p>
+              </div>
+              <div class="process-step__line" aria-hidden="true"></div>
+              <div class="process-step reveal reveal--delay-2" role="listitem">
+                <div class="process-step__num" aria-hidden="true">02</div>
+                <div class="process-step__icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg></div>
+                <h3 class="process-step__title">Design</h3>
+                <p class="process-step__desc">Maquette pixel-perfect soumise sous 48h pour validation et retours libres.</p>
+              </div>
+              <div class="process-step__line" aria-hidden="true"></div>
+              <div class="process-step reveal reveal--delay-3" role="listitem">
+                <div class="process-step__num" aria-hidden="true">03</div>
+                <div class="process-step__icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+                <h3 class="process-step__title">Développement</h3>
+                <p class="process-step__desc">Intégration soignée : animations GSAP, SEO technique, Core Web Vitals 90+.</p>
+              </div>
+              <div class="process-step__line" aria-hidden="true"></div>
+              <div class="process-step reveal reveal--delay-4" role="listitem">
+                <div class="process-step__num" aria-hidden="true">04</div>
+                <div class="process-step__icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg></div>
+                <h3 class="process-step__title">Livraison</h3>
+                <p class="process-step__desc">Mise en ligne, formation et passation des accès. En 7 jours depuis le brief.</p>
+              </div>
             </div>
           </div>
+        </section>
 
+        <!-- CTA FINAL -->
+        <section class="cta-section" id="cta-section" aria-labelledby="cta-title">
+          <div class="cta-section__glow" aria-hidden="true"></div>
+          <div class="container" style="position:relative;z-index:2;text-align:center;">
+            <p class="cta-eyebrow reveal">On commence cette semaine</p>
+            <h2 class="cta-title reveal reveal--delay-1" id="cta-title">PRÊT À VOUS<br><span>LANCER ?</span></h2>
+            <p class="cta-sub reveal reveal--delay-2">Votre site premium, livré en 7 jours.<br>Devis gratuit et sans engagement.</p>
+            <div class="cta-buttons reveal reveal--delay-3">
+              <a href="#devis" data-goto-view="devis" class="btn btn--primary btn--lg">Démarrer mon projet →</a>
+              <a href="rendez-vous.html" class="btn btn--ghost">Prendre RDV</a>
+            </div>
+            <p class="cta-trust reveal reveal--delay-4">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+              50+ projets · 98% satisfaits · Réponse sous 24h
+            </p>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- FOOTER -->
+      <footer class="site-footer">
+        <div class="footer__watermark" aria-hidden="true">NEXAWEB</div>
+        <div class="container">
+          <div class="footer__top">
+            <div class="footer__brand reveal">
+              <a href="#accueil" data-view="accueil" class="footer__logo">Nexa<span>Web</span></a>
+              <p class="footer__tagline">Votre site premium<br>livré en 7 jours.</p>
+              <div class="footer__socials">
+                <a href="#" class="footer__social" aria-label="Instagram">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" stroke="none"/></svg>
+                </a>
+                <a href="#" class="footer__social" aria-label="TikTok">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V9.41a8.16 8.16 0 004.77 1.52V7.48a4.85 4.85 0 01-1-.79z"/></svg>
+                </a>
+                <a href="#" class="footer__social" aria-label="LinkedIn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+                </a>
+              </div>
+            </div>
+            <nav class="footer__nav reveal reveal--delay-1" aria-label="Liens du pied de page">
+              <div class="footer__col">
+                <h4 class="footer__col-title">Navigation</h4>
+                <ul>
+                  <li><a href="#accueil" data-view="accueil">Accueil</a></li>
+                  <li><a href="#tarifs"  data-view="tarifs">Tarifs</a></li>
+                  <li><a href="blog.html">Blog</a></li>
+                  <li><a href="#contact" data-view="contact">Contact</a></li>
+                </ul>
+              </div>
+              <div class="footer__col">
+                <h4 class="footer__col-title">Services</h4>
+                <ul>
+                  <li><a href="site-vitrine.html">Site Vitrine</a></li>
+                  <li><a href="ecommerce.html">E-Commerce</a></li>
+                  <li><a href="seo.html">Référencement SEO</a></li>
+                  <li><a href="#devis" data-goto-view="devis">Obtenir un devis</a></li>
+                </ul>
+              </div>
+              <div class="footer__col">
+                <h4 class="footer__col-title">Légal</h4>
+                <ul>
+                  <li><a href="mentions-legales.html">Mentions légales</a></li>
+                  <li><a href="contrat.html">CGV</a></li>
+                  <li><a href="rendez-vous.html">Prendre RDV</a></li>
+                </ul>
+              </div>
+            </nav>
+          </div>
+          <div class="footer__bottom">
+            <p>&copy; 2025 Nexa Web. Tous droits réservés.</p>
+          </div>
+        </div>
+      </footer>
+    </div><!-- /#view-accueil -->
+
+
+    <!-- ▓▓ VIEW 2 — TARIFS ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ -->
+    <div id="view-tarifs" class="view" data-view="tarifs" inert>
+
+      <!-- Draggable gallery -->
+      <div class="tg-viewport" id="tarifs-gallery"
+           tabindex="0" role="region"
+           aria-label="Galerie des offres — faites glisser ou utilisez les flèches pour naviguer">
+        <div class="tg-world" id="tg-world"></div>
+      </div>
+
+      <!-- Fixed UI overlay: title + guarantee -->
+      <div class="tg-ui-overlay" aria-hidden="false">
+        <div class="tg-header">
+          <p class="tg-eyebrow">Transparence totale</p>
+          <h2 class="tg-title" id="tarifs-view-title">NOS<br>TARIFS</h2>
+        </div>
+        <div class="tg-guarantee">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M9 12l2 2 4-4"/>
+          </svg>
+          <div>
+            <p class="tg-guarantee__title">Satisfait ou retravaillé</p>
+            <p class="tg-guarantee__text">Révisions sans frais jusqu'à votre entière satisfaction — c'est notre engagement.</p>
+          </div>
         </div>
       </div>
-    </section>
 
-    <!-- ===================== SERVICES SECTION ===================== -->
-    <section class="services" id="services">
-      <div class="container">
+    </div><!-- /#view-tarifs -->
 
-        <div class="section-head fade-in">
-          <p class="section-tag" data-i18n="services.tag">Nos services</p>
-          <h2 class="section-title" data-i18n="services.title">Des solutions web adaptées à votre activité</h2>
-          <p class="section-subtitle" data-i18n="services.subtitle">
-            Du premier site internet à la refonte complète, Nexa Web vous accompagne avec une offre
-            claire et adaptée aux besoins des petites entreprises.
+
+    <!-- ▓▓ VIEW 3 — DEVIS ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ -->
+    <div id="view-devis" class="view" data-view="devis" inert>
+      <div class="view-devis-wrap">
+
+        <!-- Colonne gauche -->
+        <div class="view-devis__left">
+          <p class="view-devis__eyebrow">Gratuit &amp; sans engagement</p>
+          <h2 class="view-devis__title">VOTRE<br><span>PROJET</span></h2>
+          <ul class="view-devis__features">
+            <li>Réponse sous 24h</li>
+            <li>Devis détaillé offert</li>
+            <li>Livraison en 7 jours</li>
+            <li>Satisfaction garantie</li>
+          </ul>
+          <p class="view-devis__contact-alt">
+            Préférez écrire directement ?<br>
+            <button class="view-devis__link" data-goto-view="contact">Voir la page Contact →</button>
           </p>
         </div>
 
-        <div class="services__grid">
-
-          <!-- Carte 1 : Site vitrine -->
-          <article class="service-card fade-in">
-            <div class="service-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="4" width="18" height="14" rx="2"></rect>
-                <path d="M3 9h18"></path>
-                <path d="M7 14h6"></path>
-              </svg>
-            </div>
-            <h3 class="service-card__title" data-i18n="services.card1.title">Site vitrine</h3>
-            <p class="service-card__text" data-i18n="services.card1.text">
-              Un site clair et professionnel pour présenter votre activité, vos services et vos
-              coordonnées, et donner confiance à vos visiteurs.
-            </p>
-          </article>
-
-          <!-- Carte 2 : Site e-commerce -->
-          <article class="service-card fade-in">
-            <div class="service-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="9" cy="20" r="1.4"></circle>
-                <circle cx="18" cy="20" r="1.4"></circle>
-                <path d="M2 3h2.2l2.2 12.4a2 2 0 0 0 2 1.6h9.1a2 2 0 0 0 2-1.6L21 7H6"></path>
-              </svg>
-            </div>
-            <h3 class="service-card__title" data-i18n="services.card2.title">Site e-commerce</h3>
-            <p class="service-card__text" data-i18n="services.card2.text">
-              Une boutique en ligne simple à gérer, sécurisée et pensée pour convertir vos visiteurs
-              en clients, où que vous soyez basé.
-            </p>
-          </article>
-
-          <!-- Carte 3 : Refonte de site existant -->
-          <article class="service-card fade-in">
-            <div class="service-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 12a9 9 0 1 0 3-6.7"></path>
-                <path d="M3 4v5h5"></path>
-              </svg>
-            </div>
-            <h3 class="service-card__title" data-i18n="services.card3.title">Refonte de site existant</h3>
-            <p class="service-card__text" data-i18n="services.card3.text">
-              Votre site est dépassé ou peu efficace ? On le modernise : design actuel, vitesse de
-              chargement et expérience mobile optimisée.
-            </p>
-          </article>
-
-          <!-- Carte 4 : SEO / Visibilité Google -->
-          <article class="service-card fade-in">
-            <div class="service-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="7"></circle>
-                <path d="M21 21l-4.3-4.3"></path>
-              </svg>
-            </div>
-            <h3 class="service-card__title" data-i18n="services.card4.title">Référencement SEO</h3>
-            <p class="service-card__text" data-i18n="services.card4.text">
-              Une structure et un contenu optimisés pour être mieux référencé sur Google et être
-              trouvé par de nouveaux clients près de chez vous.
-            </p>
-          </article>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================== POURQUOI NEXA WEB ===================== -->
-    <section class="why" id="pourquoi-nous">
-      <!-- Effet de glow en arrière-plan -->
-      <div class="why__glow" aria-hidden="true"></div>
-
-      <div class="container">
-
-        <div class="section-head fade-in">
-          <p class="section-tag" data-i18n="why.tag">Pourquoi nous</p>
-          <h2 class="section-title" data-i18n="why.title">Une jeune agence, des engagements clairs</h2>
-          <p class="section-subtitle" data-i18n="why.subtitle">
-            Pas de jargon ni de promesses creuses : juste un travail sérieux, transparent et
-            taillé pour les besoins des petites structures.
-          </p>
-        </div>
-
-        <div class="why__grid">
-
-          <!-- Bloc 1 : Rapidité -->
-          <article class="why-card fade-in">
-            <div class="why-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"></path>
-              </svg>
-            </div>
-            <h3 class="why-card__title" data-i18n="why.card1.title">Rapidité de livraison</h3>
-            <p class="why-card__text" data-i18n="why.card1.text">
-              Votre site en quelques jours à quelques semaines selon le projet, sans sacrifier la
-              qualité ni le soin du détail.
-            </p>
-          </article>
-
-          <!-- Bloc 2 : Tarifs adaptés -->
-          <article class="why-card fade-in">
-            <div class="why-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 2v20"></path>
-                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-              </svg>
-            </div>
-            <h3 class="why-card__title" data-i18n="why.card2.title">Tarifs adaptés</h3>
-            <p class="why-card__text" data-i18n="why.card2.text">
-              Des formules pensées pour le budget réel des artisans, commerces et petites
-              entreprises, sans coûts cachés.
-            </p>
-          </article>
-
-          <!-- Bloc 3 : Accompagnement personnalisé -->
-          <article class="why-card fade-in">
-            <div class="why-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="8" r="3.2"></circle>
-                <path d="M5 20c0-3.5 3.1-6 7-6s7 2.5 7 6"></path>
-              </svg>
-            </div>
-            <h3 class="why-card__title" data-i18n="why.card3.title">Accompagnement personnalisé</h3>
-            <p class="why-card__text" data-i18n="why.card3.text">
-              Un interlocuteur unique à chaque étape, qui prend le temps de comprendre votre
-              activité et vos besoins réels.
-            </p>
-          </article>
-
-          <!-- Bloc 4 : Design moderne sur-mesure -->
-          <article class="why-card fade-in">
-            <div class="why-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M4 21v-4.8L16.2 4a2 2 0 0 1 2.8 0l1.8 1.8a2 2 0 0 1 0 2.8L8.8 21H4z"></path>
-                <path d="M14.5 6.5l3 3"></path>
-              </svg>
-            </div>
-            <h3 class="why-card__title" data-i18n="why.card4.title">Design moderne sur-mesure</h3>
-            <p class="why-card__text" data-i18n="why.card4.text">
-              Chaque site est conçu spécifiquement pour votre image de marque, pas à partir d'un
-              modèle générique.
-            </p>
-          </article>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================== COMPTEUR ANIMÉ ===================== -->
-    <section class="stats" id="stats">
-      <div class="container stats__grid">
-
-        <div class="stat-item fade-in">
-          <div class="stat-item__icon" aria-hidden="true">🚀</div>
-          <p class="stat-item__number"><span class="stat-item__count" data-target="10" data-suffix="+">0</span></p>
-          <p class="stat-item__label" data-i18n="stats.item1">Projets réalisés</p>
-        </div>
-
-        <div class="stat-item fade-in">
-          <div class="stat-item__icon" aria-hidden="true">😊</div>
-          <p class="stat-item__number"><span class="stat-item__count" data-target="100" data-suffix="%">0</span></p>
-          <p class="stat-item__label" data-i18n="stats.item2">Clients satisfaits</p>
-        </div>
-
-        <div class="stat-item fade-in">
-          <div class="stat-item__icon" aria-hidden="true">⚡</div>
-          <p class="stat-item__number"><span class="stat-item__count" data-target="7" data-suffix=" jours">0</span></p>
-          <p class="stat-item__label" data-i18n="stats.item3">Délai moyen</p>
-        </div>
-
-        <div class="stat-item fade-in">
-          <div class="stat-item__icon" aria-hidden="true">🏆</div>
-          <p class="stat-item__number"><span class="stat-item__count" data-target="1" data-suffix=" an">0</span></p>
-          <p class="stat-item__label" data-i18n="stats.item4">Expérience</p>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ===================== RÉALISATIONS / PORTFOLIO ===================== -->
-    <section class="portfolio" id="realisations">
-      <div class="container">
-
-        <div class="section-head fade-in">
-          <p class="section-tag" data-i18n="portfolio.tag">Réalisations</p>
-          <h2 class="section-title" data-i18n="portfolio.title">Quelques exemples de projets</h2>
-          <p class="section-subtitle" data-i18n="portfolio.subtitle">
-            Activité encore jeune : voici des exemples représentatifs du type de sites que nous
-            réalisons. Nos vrais projets clients viendront enrichir cette galerie.
-          </p>
-        </div>
-
-        <div class="portfolio__grid">
-
-          <!-- Projet 1 : Boulangerie Dupont -->
-          <article class="portfolio-card fade-in">
-            <div class="portfolio-card__visual portfolio-mockup portfolio-mockup--bakery">
-              <span class="portfolio-card__badge" data-i18n="portfolio.card1.badge">Site vitrine</span>
-              <div class="portfolio-mockup__browser">
-                <div class="portfolio-mockup__bar"><span></span><span></span><span></span></div>
-                <div class="portfolio-mockup__hero"></div>
-                <div class="portfolio-mockup__lines"><span></span><span></span><span></span></div>
-                <div class="portfolio-mockup__button"></div>
+        <!-- Colonne droite : formulaire -->
+        <div class="view-devis__right">
+          <form class="view-devis__form" id="devis-view-form" action="merci.html" method="GET" novalidate>
+            <h3 class="view-devis__form-title">Décrivez votre projet</h3>
+            <div class="view-devis__form-row">
+              <div class="vd-field">
+                <label for="vd-nom">Nom complet</label>
+                <input type="text" id="vd-nom" name="nom" placeholder="Jean Dupont" required autocomplete="name" />
+              </div>
+              <div class="vd-field">
+                <label for="vd-email">Email</label>
+                <input type="email" id="vd-email" name="email" placeholder="jean@exemple.fr" required autocomplete="email" />
               </div>
             </div>
-            <div class="portfolio-card__body">
-              <h3 class="portfolio-card__title">Boulangerie Dupont</h3>
-              <p class="portfolio-card__sector" data-i18n="portfolio.card1.sector">Boulangerie artisanale</p>
-              <a href="demo-boulangerie.html" class="portfolio-card__link project-modal-trigger" data-demo-url="demo-boulangerie.html" data-demo-name="Boulangerie Dupont" data-i18n="portfolio.link">Voir le projet →</a>
+            <div class="vd-field">
+              <label for="vd-service">Service souhaité</label>
+              <select id="vd-service" name="service">
+                <option value="">Sélectionnez un service</option>
+                <option value="vitrine">Site vitrine</option>
+                <option value="ecommerce">E-commerce</option>
+                <option value="refonte">Refonte de site existant</option>
+                <option value="seo">Référencement SEO</option>
+                <option value="autre">Autre</option>
+              </select>
             </div>
-          </article>
-
-          <!-- Projet 2 : Garage Martin Auto -->
-          <article class="portfolio-card fade-in">
-            <div class="portfolio-card__visual portfolio-mockup portfolio-mockup--garage">
-              <span class="portfolio-card__badge" data-i18n="portfolio.card2.badge">Site vitrine</span>
-              <div class="portfolio-mockup__browser">
-                <div class="portfolio-mockup__bar"><span></span><span></span><span></span></div>
-                <div class="portfolio-mockup__hero"></div>
-                <div class="portfolio-mockup__lines"><span></span><span></span><span></span></div>
-                <div class="portfolio-mockup__button"></div>
-              </div>
+            <div class="vd-field">
+              <label for="vd-budget">Budget indicatif</label>
+              <select id="vd-budget" name="budget">
+                <option value="">Sélectionnez un budget</option>
+                <option value="500-1000">500 – 1 000 €</option>
+                <option value="1000-2000">1 000 – 2 000 €</option>
+                <option value="2000-5000">2 000 – 5 000 €</option>
+                <option value="5000+">5 000 € et plus</option>
+              </select>
             </div>
-            <div class="portfolio-card__body">
-              <h3 class="portfolio-card__title">Garage Martin Auto</h3>
-              <p class="portfolio-card__sector" data-i18n="portfolio.card2.sector">Mécanique automobile</p>
-              <a href="demo-garage.html" class="portfolio-card__link project-modal-trigger" data-demo-url="demo-garage.html" data-demo-name="Garage Martin Auto" data-i18n="portfolio.link">Voir le projet →</a>
+            <div class="vd-field">
+              <label for="vd-message">Votre projet</label>
+              <textarea id="vd-message" name="message" placeholder="Parlez-nous de votre activité, vos objectifs, vos inspirations…" required></textarea>
             </div>
-          </article>
-
-          <!-- Projet 3 : Institut Beauté Zen -->
-          <article class="portfolio-card fade-in">
-            <div class="portfolio-card__visual portfolio-mockup portfolio-mockup--beauty">
-              <span class="portfolio-card__badge" data-i18n="portfolio.card3.badge">E-commerce</span>
-              <div class="portfolio-mockup__browser">
-                <div class="portfolio-mockup__bar"><span></span><span></span><span></span></div>
-                <div class="portfolio-mockup__hero"></div>
-                <div class="portfolio-mockup__lines"><span></span><span></span><span></span></div>
-                <div class="portfolio-mockup__button"></div>
-              </div>
-            </div>
-            <div class="portfolio-card__body">
-              <h3 class="portfolio-card__title">Institut Beauté Zen</h3>
-              <p class="portfolio-card__sector" data-i18n="portfolio.card3.sector">Institut de beauté</p>
-              <a href="demo-beaute.html" class="portfolio-card__link project-modal-trigger" data-demo-url="demo-beaute.html" data-demo-name="Institut Beauté Zen" data-i18n="portfolio.link">Voir le projet →</a>
-            </div>
-          </article>
-
-          <!-- Projet 4 : Cabinet Leroy Conseil -->
-          <article class="portfolio-card fade-in">
-            <div class="portfolio-card__visual portfolio-mockup portfolio-mockup--consulting">
-              <span class="portfolio-card__badge" data-i18n="portfolio.card4.badge">Refonte</span>
-              <div class="portfolio-mockup__browser">
-                <div class="portfolio-mockup__bar"><span></span><span></span><span></span></div>
-                <div class="portfolio-mockup__hero"></div>
-                <div class="portfolio-mockup__lines"><span></span><span></span><span></span></div>
-                <div class="portfolio-mockup__button"></div>
-              </div>
-            </div>
-            <div class="portfolio-card__body">
-              <h3 class="portfolio-card__title">Cabinet Leroy Conseil</h3>
-              <p class="portfolio-card__sector" data-i18n="portfolio.card4.sector">Conseil aux entreprises</p>
-              <a href="demo-conseil.html" class="portfolio-card__link project-modal-trigger" data-demo-url="demo-conseil.html" data-demo-name="Cabinet Leroy Conseil" data-i18n="portfolio.link">Voir le projet →</a>
-            </div>
-          </article>
-
-          <!-- Projet 5 : Restaurant Le Terroir -->
-          <article class="portfolio-card fade-in">
-            <div class="portfolio-card__visual portfolio-mockup portfolio-mockup--restaurant">
-              <span class="portfolio-card__badge" data-i18n="portfolio.card5.badge">Site vitrine</span>
-              <div class="portfolio-mockup__browser">
-                <div class="portfolio-mockup__bar"><span></span><span></span><span></span></div>
-                <div class="portfolio-mockup__hero"></div>
-                <div class="portfolio-mockup__lines"><span></span><span></span><span></span></div>
-                <div class="portfolio-mockup__button"></div>
-              </div>
-            </div>
-            <div class="portfolio-card__body">
-              <h3 class="portfolio-card__title">Restaurant Le Terroir</h3>
-              <p class="portfolio-card__sector" data-i18n="portfolio.card5.sector">Restauration</p>
-              <a href="demo-restaurant.html" class="portfolio-card__link project-modal-trigger" data-demo-url="demo-restaurant.html" data-demo-name="Restaurant Le Terroir" data-i18n="portfolio.link">Voir le projet →</a>
-            </div>
-          </article>
-
-          <!-- Projet 6 : Plombier Express 62 -->
-          <article class="portfolio-card fade-in">
-            <div class="portfolio-card__visual portfolio-mockup portfolio-mockup--plumbing">
-              <span class="portfolio-card__badge" data-i18n="portfolio.card6.badge">Site vitrine</span>
-              <div class="portfolio-mockup__browser">
-                <div class="portfolio-mockup__bar"><span></span><span></span><span></span></div>
-                <div class="portfolio-mockup__hero"></div>
-                <div class="portfolio-mockup__lines"><span></span><span></span><span></span></div>
-                <div class="portfolio-mockup__button"></div>
-              </div>
-            </div>
-            <div class="portfolio-card__body">
-              <h3 class="portfolio-card__title">Plombier Express 62</h3>
-              <p class="portfolio-card__sector" data-i18n="portfolio.card6.sector">Plomberie &amp; dépannage</p>
-              <a href="demo-plombier.html" class="portfolio-card__link project-modal-trigger" data-demo-url="demo-plombier.html" data-demo-name="Plombier Express 62" data-i18n="portfolio.link">Voir le projet →</a>
-            </div>
-          </article>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================== CONFIANCE / GARANTIES ===================== -->
-    <section class="trust" id="confiance">
-      <div class="container">
-
-        <div class="section-head fade-in">
-          <p class="section-tag" data-i18n="trust.tag">Ils nous font confiance</p>
-          <h2 class="section-title" data-i18n="trust.title">Les premiers avis arrivent bientôt</h2>
-          <p class="section-subtitle" data-i18n="trust.subtitle">
-            Nexa Web est une agence jeune et ambitieuse. Nos premiers clients témoigneront ici
-            très prochainement. En attendant, parlons de votre projet !
-          </p>
-        </div>
-
-        <div class="trust__grid">
-
-          <!-- Garantie 1 : Satisfait ou remboursé -->
-          <article class="trust-card fade-in">
-            <div class="trust-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>
-              </svg>
-            </div>
-            <h3 class="trust-card__title" data-i18n="trust.card1.title">Garantie 30 jours</h3>
-            <p class="trust-card__text" data-i18n="trust.card1.text">
-              Pas satisfait du résultat dans les 30 jours suivant la livraison ? On vous rembourse
-              intégralement. Sans question, sans discussion.
+            <button type="submit" class="btn btn--primary">Envoyer ma demande →</button>
+            <p class="vd-trust">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Sans engagement · Réponse sous 24h · Données sécurisées
             </p>
-          </article>
-
-          <!-- Garantie 2 : Devis gratuit sans engagement -->
-          <article class="trust-card fade-in">
-            <div class="trust-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
-              </svg>
-            </div>
-            <h3 class="trust-card__title" data-i18n="trust.card2.title">Devis gratuit sans engagement</h3>
-            <p class="trust-card__text" data-i18n="trust.card2.text">
-              On échange sur votre projet, vous décidez ensuite. Aucune pression.
-            </p>
-          </article>
-
-          <!-- Garantie 3 : Votre site vous appartient -->
-          <article class="trust-card fade-in">
-            <div class="trust-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <path d="m21 2-9.6 9.6"></path>
-                <circle cx="7.5" cy="15.5" r="5.5"></circle>
-              </svg>
-            </div>
-            <h3 class="trust-card__title" data-i18n="trust.card3.title">Votre site vous appartient</h3>
-            <p class="trust-card__text" data-i18n="trust.card3.text">
-              Vous gardez tous vos fichiers et votre domaine, même si on arrête de travailler
-              ensemble.
-            </p>
-          </article>
-
-        </div>
-
-        <div class="trust__reviews">
-
-          <article class="review-card fade-in">
-            <div class="review-card__header">
-              <div class="review-card__identity">
-                <span class="review-card__avatar review-card__avatar--purple" aria-hidden="true">IM</span>
-                <div>
-                  <span class="review-card__name">Imad</span>
-                  <span class="review-card__entreprise">PROXYSERV</span>
-                </div>
-              </div>
-              <span class="review-card__stars" aria-label="Note : 5 sur 5">★★★★★</span>
-            </div>
-            <p class="review-card__text">Service sérieux, ponctuel, travail de qualité. Je recommande !!!!!</p>
-            <span class="review-card__date">21 juin 2026</span>
-          </article>
-
-          <article class="review-card fade-in">
-            <div class="review-card__header">
-              <div class="review-card__identity">
-                <span class="review-card__avatar review-card__avatar--blue" aria-hidden="true">KB</span>
-                <div>
-                  <span class="review-card__name">Karim Benali</span>
-                  <span class="review-card__entreprise">KB Plomberie &amp; Chauffage</span>
-                </div>
-              </div>
-              <span class="review-card__stars" aria-label="Note : 5 sur 5">★★★★★</span>
-            </div>
-            <p class="review-card__text">Avant je n'avais aucune présence sur internet. Aujourd'hui mon site est professionnel, rapide, et je reçois des demandes de devis chaque semaine. Équipe réactive et à l'écoute du début à la fin.</p>
-            <span class="review-card__date">22 juin 2026</span>
-          </article>
-
-          <article class="review-card fade-in">
-            <div class="review-card__header">
-              <div class="review-card__identity">
-                <span class="review-card__avatar review-card__avatar--green" aria-hidden="true">LF</span>
-                <div>
-                  <span class="review-card__name">Lucie Fontaine</span>
-                  <span class="review-card__entreprise">Cabinet LF Conseil</span>
-                </div>
-              </div>
-              <span class="review-card__stars" aria-label="Note : 5 sur 5">★★★★★</span>
-            </div>
-            <p class="review-card__text">J'avais besoin d'un site qui inspire confiance à mes clients professionnels. Nexa Web a livré exactement ça : un design soigné, un contenu bien structuré, et une mise en ligne rapide.</p>
-            <span class="review-card__date">22 juin 2026</span>
-          </article>
-
-        </div>
-
-        <div class="trust__cta fade-in">
-          <a href="contact.html" class="btn btn--primary btn--lg" data-i18n="trust.cta">Discutons de votre projet</a>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ===================== AVIS CLIENTS ===================== -->
-    <section class="reviews" id="avis">
-      <div class="container">
-
-        <div class="section-head fade-in">
-          <p class="section-tag" data-i18n="reviews.tag">Avis clients</p>
-          <h2 class="section-title" data-i18n="reviews.title">Donnez votre avis</h2>
-          <p class="section-subtitle" data-i18n="reviews.subtitle">
-            Vous avez travaillé avec Nexa Web ? Partagez votre expérience, elle sera publiée ici
-            après validation.
-          </p>
-        </div>
-
-        <div class="reviews__grid">
-
-          <!-- Formulaire d'avis -->
-          <form class="contact-form fade-in" id="review-form" action="https://formspree.io/f/xgojwqyo" method="POST" novalidate>
-
-            <div class="form-group">
-              <label for="review-nom" data-i18n="reviewForm.nameLabel">Prénom et nom</label>
-              <input type="text" id="review-nom" name="prenom" placeholder="Votre prénom et nom" data-i18n-placeholder="reviewForm.namePlaceholder" required>
-            </div>
-
-            <div class="form-group">
-              <label for="review-entreprise" data-i18n="reviewForm.companyLabel">Nom de l'entreprise</label>
-              <input type="text" id="review-entreprise" name="entreprise" placeholder="Nom de votre activité" data-i18n-placeholder="reviewForm.companyPlaceholder" required>
-            </div>
-
-            <div class="form-group">
-              <label data-i18n="reviewForm.ratingLabel">Votre note</label>
-              <div class="star-rating" id="review-star-rating" role="radiogroup" aria-label="Note de 1 à 5 étoiles">
-                <button type="button" class="star-rating__star" data-value="1" role="radio" aria-checked="false" aria-label="1 étoile">★</button>
-                <button type="button" class="star-rating__star" data-value="2" role="radio" aria-checked="false" aria-label="2 étoiles">★</button>
-                <button type="button" class="star-rating__star" data-value="3" role="radio" aria-checked="false" aria-label="3 étoiles">★</button>
-                <button type="button" class="star-rating__star" data-value="4" role="radio" aria-checked="false" aria-label="4 étoiles">★</button>
-                <button type="button" class="star-rating__star" data-value="5" role="radio" aria-checked="false" aria-label="5 étoiles">★</button>
-              </div>
-              <input type="hidden" id="review-note" name="note">
-            </div>
-
-            <div class="form-group">
-              <label for="review-message" data-i18n="reviewForm.messageLabel">Votre avis</label>
-              <textarea id="review-message" name="message" rows="4" placeholder="Partagez votre expérience avec Nexa Web..." data-i18n-placeholder="reviewForm.messagePlaceholder" required></textarea>
-            </div>
-
-            <button type="submit" class="btn btn--primary btn--lg contact-form__submit" data-i18n="reviewForm.submit">
-              Envoyer mon avis
-            </button>
-
-            <p class="contact-form__feedback" id="review-form-feedback" role="status" aria-live="polite"></p>
           </form>
-
-          <!-- Avis publiés : ajoutés manuellement ici au fur et à mesure
-               (copier le modèle .review-card ci-dessous pour chaque nouvel avis approuvé). -->
-          <div class="reviews__list" id="reviews-list">
-
-            <!-- Exemple de modèle à dupliquer pour un avis réel :
-            <article class="review-card">
-              <div class="review-card__header">
-                <div class="review-card__identity">
-                  <span class="review-card__avatar review-card__avatar--purple" aria-hidden="true">PN</span>
-                  <div>
-                    <span class="review-card__name">Prénom Nom</span>
-                    <span class="review-card__entreprise">Nom de l'entreprise</span>
-                  </div>
-                </div>
-                <span class="review-card__stars" aria-label="Note : 5 sur 5">★★★★★</span>
-              </div>
-              <p class="review-card__text">Texte de l'avis...</p>
-              <span class="review-card__date">21 juin 2026</span>
-            </article>
-            -->
-
-          </div>
-
         </div>
+
       </div>
-    </section>
+    </div><!-- /#view-devis -->
 
-    <!-- ===================== TÉMOIGNAGES ===================== -->
-    <section class="testimonials" id="temoignages">
-      <div class="container">
 
-        <div class="section-head fade-in">
-          <p class="section-tag" data-i18n="testimonials.tag">Témoignages</p>
-          <h2 class="section-title" data-i18n="testimonials.title">Ils nous ont fait confiance</h2>
+    <!-- ▓▓ VIEW 4 — CONTACT ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ -->
+    <div id="view-contact" class="view" data-view="contact" inert>
+      <div class="view-contact-wrap">
+
+        <div class="view-contact__header">
+          <p class="view-contact__eyebrow">On est là pour vous</p>
+          <h2 class="view-contact__title">CONTACT</h2>
         </div>
 
-        <div class="testimonials__grid">
+        <div class="view-contact__grid">
 
-          <article class="review-card fade-in">
-            <div class="review-card__header">
-              <div class="review-card__identity">
-                <span class="review-card__avatar review-card__avatar--purple" aria-hidden="true">MD</span>
+          <!-- Infos -->
+          <div class="view-contact__left">
+            <div class="view-contact__info">
+              <div class="view-contact__item">
+                <span class="view-contact__item-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
                 <div>
-                  <span class="review-card__name">Marie D.</span>
-                  <span class="review-card__entreprise" data-i18n="testimonials.item1.meta">Carvin — Site vitrine</span>
+                  <div class="view-contact__item-label">Localisation</div>
+                  <div class="view-contact__item-value">Carvin, Pas-de-Calais (62220)</div>
                 </div>
               </div>
-              <span class="review-card__stars" aria-label="Note : 5 sur 5">★★★★★</span>
-            </div>
-            <p class="review-card__text" data-i18n="testimonials.item1.text">Mon site vitrine a été livré en 5 jours, je suis ravie !</p>
-          </article>
-
-          <article class="review-card fade-in">
-            <div class="review-card__header">
-              <div class="review-card__identity">
-                <span class="review-card__avatar review-card__avatar--blue" aria-hidden="true">TB</span>
+              <div class="view-contact__item">
+                <span class="view-contact__item-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,4 12,13 2,4"/></svg></span>
                 <div>
-                  <span class="review-card__name">Thomas B.</span>
-                  <span class="review-card__entreprise" data-i18n="testimonials.item2.meta">Lens — Site vitrine restaurant</span>
+                  <div class="view-contact__item-label">Email</div>
+                  <div class="view-contact__item-value">contact@nexaweb.fr</div>
                 </div>
               </div>
-              <span class="review-card__stars" aria-label="Note : 5 sur 5">★★★★★</span>
-            </div>
-            <p class="review-card__text" data-i18n="testimonials.item2.text">Super travail, mon restaurant a maintenant une belle présence en ligne.</p>
-          </article>
-
-          <article class="review-card fade-in">
-            <div class="review-card__header">
-              <div class="review-card__identity">
-                <span class="review-card__avatar review-card__avatar--green" aria-hidden="true">SM</span>
+              <div class="view-contact__item">
+                <span class="view-contact__item-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
                 <div>
-                  <span class="review-card__name">Sophie M.</span>
-                  <span class="review-card__entreprise" data-i18n="testimonials.item3.meta">Hénin-Beaumont — Refonte de site</span>
+                  <div class="view-contact__item-label">Disponibilité</div>
+                  <div class="view-contact__item-value">Lun – Ven · 9h – 18h</div>
                 </div>
               </div>
-              <span class="review-card__stars" aria-label="Note : 5 sur 5">★★★★★</span>
             </div>
-            <p class="review-card__text" data-i18n="testimonials.item3.text">Très professionnel, je recommande sans hésiter.</p>
-          </article>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================== FAQ ===================== -->
-    <section class="faq" id="faq">
-      <div class="container">
-
-        <div class="section-head fade-in">
-          <p class="section-tag" data-i18n="faq.tag">Questions fréquentes</p>
-          <h2 class="section-title" data-i18n="faq.title">Vous avez des questions ?</h2>
-        </div>
-
-        <div class="faq__list">
-
-          <div class="faq-item fade-in">
-            <button type="button" class="faq-item__question" aria-expanded="false">
-              <span data-i18n="faq.q1">Combien coûte un site internet ?</span>
-              <span class="faq-item__icon" aria-hidden="true">+</span>
-            </button>
-            <div class="faq-item__answer">
-              <div class="faq-item__answer-inner">
-                <p data-i18n="faq.a1">À partir de 490€ pour un site vitrine complet.</p>
-              </div>
+            <div class="view-contact__socials">
+              <a href="#" class="footer__social" aria-label="Instagram">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" stroke="none"/></svg>
+              </a>
+              <a href="#" class="footer__social" aria-label="TikTok">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V9.41a8.16 8.16 0 004.77 1.52V7.48a4.85 4.85 0 01-1-.79z"/></svg>
+              </a>
+              <a href="#" class="footer__social" aria-label="LinkedIn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+              </a>
             </div>
           </div>
 
-          <div class="faq-item fade-in">
-            <button type="button" class="faq-item__question" aria-expanded="false">
-              <span data-i18n="faq.q2">Combien de temps pour créer mon site ?</span>
-              <span class="faq-item__icon" aria-hidden="true">+</span>
-            </button>
-            <div class="faq-item__answer">
-              <div class="faq-item__answer-inner">
-                <p data-i18n="faq.a2">Entre 5 et 15 jours selon la complexité.</p>
+          <!-- Formulaire -->
+          <div class="view-contact__right">
+            <form class="view-contact__form" id="contact-view-form" action="merci.html" method="GET" novalidate>
+              <h3 class="view-contact__form-title">Envoyez un message</h3>
+              <div class="view-contact__form-row">
+                <div class="vd-field">
+                  <label for="vc-nom">Nom complet</label>
+                  <input type="text" id="vc-nom" name="nom" placeholder="Jean Dupont" required autocomplete="name" />
+                </div>
+                <div class="vd-field">
+                  <label for="vc-email">Email</label>
+                  <input type="email" id="vc-email" name="email" placeholder="jean@exemple.fr" required autocomplete="email" />
+                </div>
               </div>
-            </div>
-          </div>
-
-          <div class="faq-item fade-in">
-            <button type="button" class="faq-item__question" aria-expanded="false">
-              <span data-i18n="faq.q3">Est-ce que mon site sera visible sur Google ?</span>
-              <span class="faq-item__icon" aria-hidden="true">+</span>
-            </button>
-            <div class="faq-item__answer">
-              <div class="faq-item__answer-inner">
-                <p data-i18n="faq.a3">Oui, on optimise le SEO de base inclus.</p>
+              <div class="vd-field">
+                <label for="vc-sujet">Sujet</label>
+                <select id="vc-sujet" name="sujet">
+                  <option value="">Sélectionnez un sujet</option>
+                  <option value="devis">Demande de devis</option>
+                  <option value="question">Question générale</option>
+                  <option value="support">Support / SAV</option>
+                  <option value="partenariat">Partenariat</option>
+                </select>
               </div>
-            </div>
-          </div>
-
-          <div class="faq-item fade-in">
-            <button type="button" class="faq-item__question" aria-expanded="false">
-              <span data-i18n="faq.q4">Puis-je modifier mon site après livraison ?</span>
-              <span class="faq-item__icon" aria-hidden="true">+</span>
-            </button>
-            <div class="faq-item__answer">
-              <div class="faq-item__answer-inner">
-                <p data-i18n="faq.a4">Oui, avec la maintenance à 29€/mois.</p>
+              <div class="vd-field">
+                <label for="vc-message">Message</label>
+                <textarea id="vc-message" name="message" placeholder="Décrivez votre besoin en quelques lignes…" required></textarea>
               </div>
-            </div>
-          </div>
-
-          <div class="faq-item fade-in">
-            <button type="button" class="faq-item__question" aria-expanded="false">
-              <span data-i18n="faq.q5">Proposez-vous une garantie ?</span>
-              <span class="faq-item__icon" aria-hidden="true">+</span>
-            </button>
-            <div class="faq-item__answer">
-              <div class="faq-item__answer-inner">
-                <p data-i18n="faq.a5">Oui, garantie 30 jours satisfait ou remboursé.</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="faq-item fade-in">
-            <button type="button" class="faq-item__question" aria-expanded="false">
-              <span data-i18n="faq.q6">Vous déplacez-vous ?</span>
-              <span class="faq-item__icon" aria-hidden="true">+</span>
-            </button>
-            <div class="faq-item__answer">
-              <div class="faq-item__answer-inner">
-                <p data-i18n="faq.a6">On travaille à distance, partout en France.</p>
-              </div>
-            </div>
+              <button type="submit" class="btn btn--primary">Envoyer →</button>
+            </form>
           </div>
 
         </div>
       </div>
-    </section>
-  </main>
+    </div><!-- /#view-contact -->
 
-  <!-- ===================== FOOTER ===================== -->
-  <footer class="site-footer">
-    <div class="container footer__grid">
+  </div><!-- /#stage -->
 
-      <div class="footer__brand">
-        <a href="index.html#accueil" class="logo" aria-label="Nexa Web - Accueil">
-          Nexa<span class="logo__accent">Web</span>
-        </a>
-        <p class="footer__tagline" data-i18n="footer.tagline">Des sites internet sur-mesure pour les artisans et TPE des Hauts-de-France.</p>
-        <div class="footer__socials">
-          <a href="https://www.instagram.com/nexaaweb1" class="footer__social" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="2" y="2" width="20" height="20" rx="5"></rect>
-              <circle cx="12" cy="12" r="4"></circle>
-              <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"></circle>
-            </svg>
-          </a>
-          <a href="https://www.tiktok.com/@nexaweb1" class="footer__social" aria-label="TikTok" target="_blank" rel="noopener noreferrer">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.75a4.85 4.85 0 01-1.01-.06z"/>
-            </svg>
-          </a>
-        </div>
-      </div>
-
-      <div class="footer__col">
-        <h3 class="footer__col-title" data-i18n="footer.quickLinks">Liens rapides</h3>
-        <ul class="footer__col-list">
-          <li><a href="index.html#accueil" data-i18n="nav.home">Accueil</a></li>
-          <li><a href="index.html#services" data-i18n="nav.services">Services</a></li>
-          <li><a href="index.html#realisations" data-i18n="nav.projects">Réalisations</a></li>
-          <li><a href="tarifs.html" data-i18n="nav.pricing">Tarifs</a></li>
-          <li><a href="blog.html" data-i18n="nav.blog">Blog</a></li>
-          <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
-        </ul>
-      </div>
-
-      <div class="footer__col">
-        <h3 class="footer__col-title" data-i18n="footer.legalTitle">Légal</h3>
-        <ul class="footer__col-list">
-          <li><a href="mentions-legales.html#mentions-legales" data-i18n="footer.legal">Mentions légales</a></li>
-          <li><a href="mentions-legales.html#cgv" data-i18n="footer.cgv">CGV</a></li>
-          <li><a href="mentions-legales.html#cookies" data-i18n="footer.cookiesPolicy">Politique cookies</a></li>
-        </ul>
-      </div>
-
-      <div class="footer__col">
-        <h3 class="footer__col-title" data-i18n="footer.contactTitle">Contact</h3>
-        <ul class="footer__contact">
-          <li class="footer__contact-item">
-            <span class="footer__contact-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path>
-              </svg>
-            </span>
-            <span class="footer__contact-numbers">
-              <a href="tel:0698840194" class="footer__contact-number">06 98 84 01 94</a>
-              <span class="footer__contact-or">ou</span>
-              <a href="tel:0641467898" class="footer__contact-number">06 41 46 78 98</a>
-            </span>
-          </li>
-          <li>
-            <a href="mailto:contact.nexaweb62@gmail.com" class="footer__contact-link">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="3" y="5" width="18" height="14" rx="2"></rect>
-                <path d="m3 7 9 6 9-6"></path>
-              </svg>
-              contact.nexaweb62@gmail.com
-            </a>
-          </li>
-          <li>
-            <span class="footer__contact-link">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1 1 16 0z"></path>
-                <circle cx="12" cy="10" r="3"></circle>
-              </svg>
-              <span data-i18n="footer.address">Carvin, Hauts-de-France</span>
-            </span>
-          </li>
-        </ul>
-      </div>
-
-    </div>
-
-    <div class="container footer__bottom">
-      <p data-i18n="footer.copyright">© 2025 Nexa Web — Tous droits réservés — Carvin (62)</p>
-    </div>
-  </footer>
-
-  <!-- ===================== BOUTON RETOUR EN HAUT ===================== -->
-  <button class="scroll-top-btn" id="scroll-top-btn" aria-label="Retour en haut de page">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M12 19V5"></path>
-      <path d="M5 12l7-7 7 7"></path>
-    </svg>
+  <!-- Bouton flottant "NOS TARIFS" (fixed, outside stage) -->
+  <button class="tarifs-float" id="tarifs-float" aria-label="Voir nos tarifs">
+    <span class="tarifs-float__inner">
+      <span class="tarifs-float__label">NOS TARIFS</span>
+      <span class="tarifs-float__chevron" aria-hidden="true">›</span>
+    </span>
+    <span class="tarifs-float__bar" aria-hidden="true">
+      <span class="tarifs-float__fill"></span>
+    </span>
   </button>
 
-  <!-- ===================== BOUTON WHATSAPP ===================== -->
-  <a href="https://wa.me/33698840194" target="_blank" rel="noopener noreferrer" class="whatsapp-button" aria-label="Discuter avec nous sur WhatsApp">
-    <span class="whatsapp-button__tooltip" data-i18n="whatsapp.tooltip">Discutez avec nous sur WhatsApp !</span>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" aria-hidden="true">
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"></path>
-      <path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.556 4.112 1.523 5.836L.057 23.986l6.304-1.654A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.369l-.36-.214-3.736.979 1.001-3.645-.235-.374A9.818 9.818 0 1112 21.818z"></path>
-    </svg>
-  </a>
-
-  <!-- ===================== CHATBOT ===================== -->
-  <button class="chatbot-toggle" id="chatbot-toggle" aria-label="Ouvrir le chat" aria-expanded="false" aria-controls="chatbot-window">
-    <svg class="chatbot-toggle__icon chatbot-toggle__icon--chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
-    </svg>
-    <svg class="chatbot-toggle__icon chatbot-toggle__icon--close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M18 6 6 18"></path>
-      <path d="M6 6l12 12"></path>
-    </svg>
-  </button>
-
-  <div class="chatbot-window" id="chatbot-window" role="dialog" aria-label="Assistant Nexa Web">
-    <div class="chatbot-window__header">
-      <span class="chatbot-window__title">Assistant Nexa Web</span>
-      <button class="chatbot-window__close" id="chatbot-close" aria-label="Fermer le chat">✕</button>
+  <!-- Navigation vues (4 dots) -->
+  <nav class="snap-nav" id="snap-nav" aria-label="Navigation entre vues">
+    <div class="snap-dot snap-dot--active" data-view="accueil" role="button" tabindex="0" aria-label="Accueil">
+      <span class="snap-dot__label">Accueil</span>
     </div>
+    <div class="snap-dot" data-view="tarifs" role="button" tabindex="0" aria-label="Tarifs">
+      <span class="snap-dot__label">Tarifs</span>
+    </div>
+    <div class="snap-dot" data-view="devis" role="button" tabindex="0" aria-label="Devis">
+      <span class="snap-dot__label">Devis</span>
+    </div>
+    <div class="snap-dot" data-view="contact" role="button" tabindex="0" aria-label="Contact">
+      <span class="snap-dot__label">Contact</span>
+    </div>
+  </nav>
 
-    <div class="chatbot-window__messages" id="chatbot-messages"></div>
-
-    <form class="chatbot-window__form" id="chatbot-form">
-      <input type="text" id="chatbot-input" class="chatbot-window__input" placeholder="Écrivez votre message..." autocomplete="off" required>
-      <button type="submit" class="chatbot-window__send" aria-label="Envoyer le message">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M22 2 11 13"></path>
-          <path d="M22 2 15 22l-4-9-9-4 20-7z"></path>
-        </svg>
-      </button>
-    </form>
+  <!-- Barre de progression scroll -->
+  <div class="scroll-progress" id="scroll-progress" aria-hidden="true">
+    <div class="scroll-progress__fill" id="scroll-progress-fill"></div>
   </div>
 
-  <!-- ===================== POPUP TÉLÉPHONE ===================== -->
-  <div class="phone-modal-overlay" id="phone-modal-overlay">
-    <div class="phone-modal" role="dialog" aria-modal="true" aria-labelledby="phone-modal-title">
-      <button type="button" class="phone-modal__close" id="phone-modal-close" aria-label="Fermer">✕</button>
-      <h3 class="phone-modal__title" id="phone-modal-title" data-i18n="phoneModal.title">Comment voulez-vous nous contacter ?</h3>
-      <div class="phone-modal__actions">
-        <button type="button" class="btn btn--primary btn--lg phone-modal__btn" id="phone-modal-call" data-i18n="phoneModal.call">📞 Appeler maintenant</button>
-        <button type="button" class="btn btn--ghost btn--lg phone-modal__btn" data-i18n="phoneModal.appointment" onclick='Calendly.initPopupWidget({url: "https://calendly.com/contact-nexaweb62/30min"});return false;'>📅 Prendre un rendez-vous</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===================== POPUP EMAIL (TOPBAR) ===================== -->
-  <div class="email-modal-overlay" id="email-modal-overlay">
-    <div class="email-modal" role="dialog" aria-modal="true" aria-labelledby="email-modal-title">
-      <button type="button" class="email-modal__close" id="email-modal-close" aria-label="Fermer">✕</button>
-      <h3 class="email-modal__title" id="email-modal-title" data-i18n="emailModal.title">Comment pouvons-nous vous aider ?</h3>
-      <div class="email-modal__actions">
-        <a href="contact.html#contact" class="btn btn--primary btn--lg email-modal__btn" id="email-modal-devis" data-i18n="emailModal.devisBtn">📋 Demander un devis</a>
-        <button type="button" class="btn btn--ghost btn--lg email-modal__btn" data-i18n="phoneModal.appointment" onclick='Calendly.initPopupWidget({url: "https://calendly.com/contact-nexaweb62/30min"});return false;'>📅 Prendre un rendez-vous</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===================== POPUP OFFRE DE LANCEMENT ===================== -->
-  <div class="welcome-popup-overlay" id="welcome-popup-overlay">
-    <div class="welcome-popup" role="dialog" aria-modal="true" aria-labelledby="welcome-popup-title">
-      <button type="button" class="welcome-popup__close" id="welcome-popup-close" aria-label="Fermer">✕</button>
-      <div class="welcome-popup__emoji" aria-hidden="true">🎁</div>
-      <h3 class="welcome-popup__title" id="welcome-popup-title" data-i18n="welcomePopup.title">Offre de lancement !</h3>
-      <p class="welcome-popup__text" data-i18n="welcomePopup.text">
-        Pour tout projet signé avant le 31 juillet 2026, bénéficiez d'1 mois de maintenance offert !
-        Soit 29€ offerts
-      </p>
-      <div class="welcome-popup__actions">
-        <a href="contact.html" class="btn btn--primary btn--lg welcome-popup__btn" id="welcome-popup-cta" data-i18n="welcomePopup.cta">J'en profite !</a>
-        <button type="button" class="welcome-popup__dismiss" id="welcome-popup-dismiss" data-i18n="welcomePopup.dismiss">Non merci</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===================== POPUP DE SORTIE (EXIT INTENT) ===================== -->
-  <div class="exit-popup-overlay" id="exit-popup-overlay">
-    <div class="exit-popup" role="dialog" aria-modal="true" aria-labelledby="exit-popup-title">
-      <button type="button" class="exit-popup__close" id="exit-popup-close" aria-label="Fermer">✕</button>
-      <h3 class="exit-popup__title" id="exit-popup-title" data-i18n="exitPopup.title">Attendez ! 🎁</h3>
-      <p class="exit-popup__text" data-i18n="exitPopup.text">Obtenez votre devis gratuit en 24h — Sans engagement</p>
-      <a href="contact.html#contact" class="btn btn--primary btn--lg exit-popup__btn" id="exit-popup-cta" data-i18n="exitPopup.cta">Demander mon devis gratuit</a>
-    </div>
-  </div>
-
-  <!-- ===================== POPUP RÉALISATIONS (APERÇU PROJET) ===================== -->
-  <div class="project-modal-overlay" id="project-modal-overlay">
-    <div class="project-modal" role="dialog" aria-modal="true" aria-labelledby="project-modal-title">
-      <div class="project-modal__bar">
-        <span class="project-modal__title" id="project-modal-title">Aperçu du projet</span>
-        <button type="button" class="project-modal__close" id="project-modal-close" aria-label="Fermer">✕</button>
-      </div>
-      <iframe class="project-modal__iframe" id="project-modal-iframe" title="Aperçu du projet" loading="lazy"></iframe>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script src="https://assets.calendly.com/assets/external/widget.js"></script>
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="script.js"></script>
-  <script src="chatbot.js"></script>
-  <script src="cookie-consent.js"></script>
-
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js');
-    }
-  </script>
+  <script src="morph-gallery.js"></script>
+  <script src="tarifs-gallery.js"></script>
+  <script src="view-nav.js"></script>
+  <script src="view-transitions.js"></script>
 </body>
 </html>

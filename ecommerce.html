@@ -1,345 +1,872 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nexa Web — Boutique E-Commerce · Vente en Ligne Clé en Main</title>
+  <meta name="description" content="Lancez votre boutique en ligne avec Nexa Web. Paiement Stripe, gestion stocks, dashboard admin. Solution complète dès 1 490 €." />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── ACCENT GRADIENT ── */
+    .accent-gradient {
+      background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-2) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-  <!-- SEO -->
-  <title>Création de site e-commerce - Nexa Web | Carvin (62)</title>
-  <meta name="description" content="Création de sites e-commerce pour TPE et artisans des Hauts-de-France. Catalogue produits, paiement en ligne sécurisé, design optimisé pour la conversion.">
-  <meta name="keywords" content="site e-commerce, boutique en ligne, création site marchand, Nexa Web, Carvin, Hauts-de-France">
-  <meta name="author" content="Nexa Web">
+    /* ── PAGE HERO ── */
+    .page-hero {
+      position: relative;
+      padding: 10rem 0 6rem;
+      overflow: hidden;
+      z-index: 2;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 60% 0%, rgba(192,38,211,0.1) 0%, rgba(76,114,255,0.08) 40%, transparent 70%);
+      pointer-events: none;
+    }
+    .page-hero__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 1.5rem;
+    }
+    .page-hero__eyebrow-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      flex-shrink: 0;
+    }
+    .page-hero__title {
+      font-family: var(--font-heading);
+      font-size: clamp(4rem, 9vw, 9rem);
+      font-weight: 900;
+      line-height: 0.88;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+    .page-hero__subtitle {
+      font-size: clamp(0.95rem, 1.6vw, 1.1rem);
+      font-weight: 300;
+      color: var(--color-muted);
+      line-height: 1.7;
+      max-width: 580px;
+      margin-bottom: 3rem;
+    }
+    .page-hero__ctas {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 5rem;
+    }
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: rgba(16,16,28,0.5);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      max-width: 680px;
+    }
+    .stat-item {
+      padding: 1.6rem 1.2rem;
+      text-align: center;
+      border-right: 1px solid var(--color-border);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-item__value {
+      font-family: var(--font-heading);
+      font-size: 2.2rem;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.25rem;
+    }
+    .stat-item__label {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+    }
 
-  <!-- Open Graph -->
-  <meta property="og:title" content="Création de site e-commerce - Nexa Web">
-  <meta property="og:description" content="Vendez vos produits en ligne, simplement, avec un site e-commerce sur-mesure.">
-  <meta property="og:type" content="website">
+    /* ── FEATURES ── */
+    .features-section {
+      padding: 8rem 0;
+      position: relative;
+      z-index: 2;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-top: 4rem;
+    }
+    .feature-card {
+      background: rgba(16,16,28,0.6);
+      border: 1px solid var(--color-border);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: border-color 0.3s ease, transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.35s;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .feature-card:hover {
+      border-color: rgba(192,38,211,0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(192,38,211,0.07);
+    }
+    .feature-card__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(192,38,211,0.12), rgba(76,114,255,0.1));
+      border: 1px solid rgba(192,38,211,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.4rem;
+      color: #c026d3;
+      flex-shrink: 0;
+    }
+    .feature-card__title {
+      font-family: var(--font-heading);
+      font-size: 1.2rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.65rem;
+    }
+    .feature-card__desc {
+      font-size: 0.88rem;
+      color: var(--color-muted);
+      line-height: 1.65;
+    }
 
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    /* ── PROCESS ── */
+    .process-section {
+      padding: 8rem 0;
+      background: rgba(14,14,23,0.6);
+      position: relative;
+      z-index: 2;
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+      overflow: hidden;
+    }
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0;
+      margin-top: 4rem;
+      position: relative;
+    }
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      left: calc(10% + 20px);
+      right: calc(10% + 20px);
+      height: 1px;
+      border-top: 2px dashed rgba(192,38,211,0.2);
+      pointer-events: none;
+    }
+    .process-step {
+      padding: 0 0.75rem;
+      text-align: center;
+      position: relative;
+    }
+    .process-step__num {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-family: var(--font-heading);
+      font-weight: 900;
+      color: #fff;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 0 0 6px rgba(192,38,211,0.08);
+    }
+    .process-step__label {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 0.5rem;
+    }
+    .process-step__title {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.6rem;
+    }
+    .process-step__desc {
+      font-size: 0.8rem;
+      color: var(--color-muted);
+      line-height: 1.6;
+    }
 
-  <!-- Polices Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    /* ── SECURITY BAND ── */
+    .security-section {
+      padding: 4rem 0;
+      position: relative;
+      z-index: 2;
+    }
+    .security-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+      padding: 2.5rem 3rem;
+      background: rgba(16,16,28,0.5);
+      border: 1px solid var(--color-border);
+      border-radius: 16px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .security-item {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--color-text);
+    }
+    .security-item__icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(76,114,255,0.12), rgba(192,38,211,0.08));
+      border: 1px solid rgba(76,114,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-accent);
+      flex-shrink: 0;
+    }
+    .security-divider {
+      width: 1px;
+      height: 32px;
+      background: var(--color-border);
+    }
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="style.css">
-  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+    /* ── PRICING ── */
+    .pricing-section {
+      padding: 8rem 0;
+      position: relative;
+      z-index: 2;
+      border-top: 1px solid var(--color-border);
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 4rem;
+      max-width: 880px;
+      margin-inline: auto;
+    }
+    .pricing-card {
+      background: rgba(16,16,28,0.6);
+      border: 1px solid var(--color-border);
+      border-radius: 20px;
+      padding: 2.5rem;
+      position: relative;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: transform 0.3s ease, box-shadow 0.3s;
+    }
+    .pricing-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(76,114,255,0.1);
+    }
+    .pricing-card--featured {
+      border-color: rgba(76,114,255,0.3);
+      background: rgba(20,20,36,0.8);
+    }
+    .pricing-card--featured::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(76,114,255,0.5), rgba(192,38,211,0.5), transparent 60%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+    .pricing-card__badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.9rem;
+      background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2));
+      color: #fff;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+    }
+    .pricing-card__name {
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+    }
+    .pricing-card__price {
+      font-family: var(--font-heading);
+      font-size: 3.5rem;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.4rem;
+    }
+    .pricing-card__period {
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      margin-bottom: 2rem;
+    }
+    .pricing-card__features {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+    .pricing-card__feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      font-size: 0.87rem;
+      color: var(--color-text);
+    }
+    .pricing-card__feature svg {
+      color: var(--color-accent);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
 
-  <script>
-    (function () {
-      var theme = localStorage.getItem('nexaweb-theme');
-      if (theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
-    })();
-  </script>
+    /* ── FINAL CTA ── */
+    .final-cta {
+      padding: 8rem 0;
+      background: rgba(14,14,23,0.6);
+      border-top: 1px solid var(--color-border);
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      overflow: hidden;
+    }
+    .final-cta::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      width: 700px;
+      height: 500px;
+      background: radial-gradient(ellipse, rgba(192,38,211,0.08) 0%, rgba(76,114,255,0.06) 40%, transparent 70%);
+      pointer-events: none;
+    }
+    .final-cta__label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 1.5rem;
+    }
+    .final-cta__title {
+      font-family: var(--font-heading);
+      font-size: clamp(2.8rem, 5.5vw, 6rem);
+      font-weight: 900;
+      line-height: 0.9;
+      text-transform: uppercase;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.25rem;
+    }
+    .final-cta__sub {
+      font-size: 1rem;
+      color: var(--color-muted);
+      margin-bottom: 3rem;
+      line-height: 1.6;
+      max-width: 480px;
+      margin-inline: auto;
+      margin-bottom: 3rem;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .process-steps { grid-template-columns: repeat(3, 1fr); gap: 2.5rem; }
+      .process-steps::before { display: none; }
+    }
+    @media (max-width: 768px) {
+      .pricing-grid { grid-template-columns: 1fr; max-width: 460px; }
+      .security-inner { gap: 1.5rem; }
+      .security-divider { display: none; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .features-grid { grid-template-columns: 1fr; }
+      .process-steps { grid-template-columns: 1fr; gap: 2rem; }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- ===================== TOPBAR ===================== -->
-  <div class="topbar">
-    <div class="container topbar__inner">
-      <a href="https://www.google.com/maps/search/Carvin,+Hauts-de-France" target="_blank" rel="noopener noreferrer" class="topbar__location">📍 <span data-i18n="footer.address">Carvin, Hauts-de-France</span></a>
-      <span class="topbar__phones">
-        📞 <a href="tel:0698840194" class="topbar__phone">06 98 84 01 94</a>
-        <span class="topbar__sep">|</span>
-        <a href="tel:0641467898" class="topbar__phone">06 41 46 78 98</a>
-        <span class="topbar__email-wrap">
-          <span class="topbar__sep">|</span>
-          <a href="mailto:contact.nexaweb62@gmail.com" class="topbar__phone" id="topbar-email-link">✉️ contact.nexaweb62@gmail.com</a>
-        </span>
-      </span>
-    </div>
-  </div>
+  <canvas id="silk-bg" aria-hidden="true"></canvas>
 
-  <!-- ===================== HEADER / NAVIGATION ===================== -->
-  <header class="header" id="header">
-    <div class="container header__inner">
-
-      <a href="index.html#accueil" class="logo" aria-label="Nexa Web - Accueil">
-        Nexa<span class="logo__accent">Web</span>
-      </a>
-
-      <!-- Navigation desktop -->
-      <nav class="nav" id="nav" aria-label="Navigation principale">
-        <ul class="nav__list">
-          <li><a href="index.html#accueil" class="nav__link" data-i18n="nav.home">Accueil</a></li>
-          <li class="nav__item--dropdown">
-            <a href="index.html#services" class="nav__link" data-i18n="nav.services">Services</a>
-            <ul class="nav__dropdown">
-              <li><a href="site-vitrine.html" class="nav__dropdown-link" data-i18n="nav.serviceVitrine">Sites vitrines</a></li>
-              <li><a href="ecommerce.html" class="nav__dropdown-link nav__link--active" aria-current="page" data-i18n="nav.serviceEcommerce">E-commerce</a></li>
-              <li><a href="seo.html" class="nav__dropdown-link" data-i18n="nav.serviceSeo">Référencement SEO</a></li>
-            </ul>
-          </li>
-          <li><a href="rendez-vous.html" class="nav__link" data-i18n="nav.appointment">Rendez-vous</a></li>
-          <li><a href="index.html#realisations" class="nav__link" data-i18n="nav.projects">Réalisations</a></li>
-          <li><a href="tarifs.html" class="nav__link" data-i18n="nav.pricing">Tarifs</a></li>
-          <li><a href="blog.html" class="nav__link" data-i18n="nav.blog">Blog</a></li>
-          <li><a href="contact.html" class="nav__link" data-i18n="nav.contact">Contact</a></li>
-        </ul>
-      </nav>
-
-      <div class="header__actions">
-        <button class="lang-toggle" id="lang-toggle" aria-label="Switch to English">
-          <span class="lang-toggle__flag" aria-hidden="true">🇫🇷</span>
-          <span class="lang-toggle__code">FR</span>
-        </button>
-
-        <button class="theme-toggle" id="theme-toggle" aria-label="Activer le mode clair">
-          <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-          </svg>
-          <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="4"></circle>
-            <path d="M12 2v2"></path>
-            <path d="M12 20v2"></path>
-            <path d="M4.93 4.93l1.41 1.41"></path>
-            <path d="M17.66 17.66l1.41 1.41"></path>
-            <path d="M2 12h2"></path>
-            <path d="M20 12h2"></path>
-            <path d="M6.34 17.66l-1.41 1.41"></path>
-            <path d="M19.07 4.93l-1.41 1.41"></path>
-          </svg>
-        </button>
-
-        <a href="devis.html" class="btn btn--primary btn--header" data-i18n="header.quoteBtn">Devis gratuit</a>
-      </div>
-
-      <!-- Bouton burger mobile -->
-      <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav">
-        <span></span>
-        <span></span>
-        <span></span>
+  <header class="site-header" id="site-header">
+    <nav class="nav">
+      <a href="index.html" class="nav__logo">Nexa<span>Web</span></a>
+      <ul class="nav__list" id="nav-list">
+        <li><a href="index.html" class="nav__link">Accueil</a></li>
+        <li><a href="tarifs.html" class="nav__link" id="nav-tarifs">Tarifs</a></li>
+        <li><a href="devis.html" class="nav__link">Devis</a></li>
+        <li><a href="blog.html" class="nav__link">Blog</a></li>
+        <li><a href="contact.html" class="nav__link">Contact</a></li>
+      </ul>
+      <a href="devis.html" class="btn btn--nav">Devis gratuit</a>
+      <button class="nav__burger" id="nav-burger" aria-label="Ouvrir le menu" aria-expanded="false">
+        <span></span><span></span><span></span>
       </button>
-
-    </div>
+    </nav>
   </header>
 
+  <div class="panel-backdrop" id="panel-backdrop" aria-hidden="true"></div>
+
   <main>
-    <!-- ===================== BANNIÈRE DE PAGE ===================== -->
-    <section class="page-banner" id="ecommerce">
-      <div class="page-banner__glow" aria-hidden="true"></div>
 
-      <div class="container page-banner__inner">
-        <p class="hero__tag fade-in">Sites e-commerce</p>
-        <h1 class="page-banner__title fade-in">
-          Vendez vos produits en ligne, <span class="text-accent">simplement</span>
-        </h1>
-        <p class="page-banner__subtitle fade-in">
-          Un site marchand sur-mesure pour présenter vos produits, encaisser vos ventes et développer votre activité en ligne.
+    <!-- ═══ HERO ═══ -->
+    <section class="page-hero">
+      <div class="container">
+        <p class="page-hero__eyebrow reveal">
+          <span class="page-hero__eyebrow-dot"></span>
+          E-Commerce · À partir de 1 490 €
         </p>
-        <a href="devis.html" class="btn btn--primary btn--lg fade-in">Demander un devis gratuit</a>
-      </div>
-    </section>
-
-    <!-- ===================== AVANTAGES ===================== -->
-    <section id="avantages">
-      <div class="container">
-        <div class="section-head fade-in">
-          <p class="section-tag">Avantages</p>
-          <h2 class="section-title">Pourquoi un site e-commerce ?</h2>
+        <h1 class="page-hero__title reveal reveal--delay-1">
+          VOTRE BOUTIQUE<br>
+          <span class="accent-gradient">EN LIGNE</span>
+        </h1>
+        <p class="page-hero__subtitle reveal reveal--delay-2">
+          Solution e-commerce complète avec paiement sécurisé, gestion des stocks et tableau de bord admin. Prêt à vendre en 10 jours.
+        </p>
+        <div class="page-hero__ctas reveal reveal--delay-3">
+          <a href="devis.html" class="btn btn--primary btn--lg">Lancer ma boutique →</a>
+          <a href="#tarifs" class="btn btn--ghost btn--lg">Voir les tarifs</a>
         </div>
-        <div class="why__grid">
-          <article class="why-card fade-in">
-            <div class="why-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-            </div>
-            <h3 class="why-card__title">Catalogue illimité</h3>
-            <p class="why-card__text">Présentez tous vos produits, organisés par catégories, sans limite de nombre.</p>
-          </article>
-          <article class="why-card fade-in">
-            <div class="why-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg>
-            </div>
-            <h3 class="why-card__title">Paiement sécurisé</h3>
-            <p class="why-card__text">Vos clients paient en ligne en toute confiance, avec une solution de paiement reconnue.</p>
-          </article>
-          <article class="why-card fade-in">
-            <div class="why-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h2l2.4 12.4a2 2 0 0 0 2 1.6h8.4a2 2 0 0 0 2-1.6L22 8H6"></path></svg>
-            </div>
-            <h3 class="why-card__title">Gestion simplifiée</h3>
-            <p class="why-card__text">Suivez vos commandes et votre stock facilement, sans compétence technique requise.</p>
-          </article>
-          <article class="why-card fade-in">
-            <div class="why-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg>
-            </div>
-            <h3 class="why-card__title">Optimisé conversion</h3>
-            <p class="why-card__text">Un parcours d'achat fluide pensé pour transformer vos visiteurs en clients.</p>
-          </article>
+        <div class="stats-row reveal reveal--delay-4">
+          <div class="stat-item">
+            <div class="stat-item__value">0%</div>
+            <div class="stat-item__label">Commission</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-item__value">10j</div>
+            <div class="stat-item__label">Livraison</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-item__value">SSL</div>
+            <div class="stat-item__label">Sécurisé</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-item__value">100%</div>
+            <div class="stat-item__label">Mobile</div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ===================== PROCESSUS ===================== -->
-    <section id="processus" style="background: var(--color-surface);">
+    <!-- ═══ FEATURES ═══ -->
+    <section class="features-section" id="fonctionnalites">
       <div class="container">
-        <div class="section-head fade-in">
-          <p class="section-tag">Notre processus</p>
-          <h2 class="section-title">Comment ça se passe</h2>
+        <div class="section-header reveal">
+          <span class="section-tag">Fonctionnalités incluses</span>
+          <h2 class="section-title">TOUT POUR VENDRE<br>DÈS LE PREMIER JOUR</h2>
         </div>
-        <div class="trust__grid">
-          <article class="trust-card fade-in">
-            <div class="trust-card__icon" aria-hidden="true" style="font-weight:700; font-size:1.3rem;">1</div>
-            <h3 class="trust-card__title">Étude de votre activité</h3>
-            <p class="trust-card__text">On échange sur vos produits, vos volumes de vente et vos besoins logistiques.</p>
-          </article>
-          <article class="trust-card fade-in">
-            <div class="trust-card__icon" aria-hidden="true" style="font-weight:700; font-size:1.3rem;">2</div>
-            <h3 class="trust-card__title">Maquette et catalogue</h3>
-            <p class="trust-card__text">Mise en place de votre boutique et import de vos produits.</p>
-          </article>
-          <article class="trust-card fade-in">
-            <div class="trust-card__icon" aria-hidden="true" style="font-weight:700; font-size:1.3rem;">3</div>
-            <h3 class="trust-card__title">Paiement et livraison</h3>
-            <p class="trust-card__text">Configuration du paiement en ligne et des options de livraison.</p>
-          </article>
-          <article class="trust-card fade-in">
-            <div class="trust-card__icon" aria-hidden="true" style="font-weight:700; font-size:1.3rem;">4</div>
-            <h3 class="trust-card__title">Mise en ligne</h3>
-            <p class="trust-card__text">Votre boutique est publiée et vous êtes formé pour la gérer au quotidien.</p>
-          </article>
+        <div class="features-grid">
+
+          <div class="feature-card reveal">
+            <div class="feature-card__icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                <line x1="1" y1="10" x2="23" y2="10"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Paiement Stripe</h3>
+            <p class="feature-card__desc">Carte bancaire, Apple Pay, Google Pay. Fonds virés sous 2 jours ouvrés. Zéro commission de notre part.</p>
+          </div>
+
+          <div class="feature-card reveal reveal--delay-1">
+            <div class="feature-card__icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
+                <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Catalogue Illimité</h3>
+            <p class="feature-card__desc">Autant de produits que vous voulez. Photos multiples, variantes de taille et couleur, gestion des stocks en temps réel.</p>
+          </div>
+
+          <div class="feature-card reveal reveal--delay-2">
+            <div class="feature-card__icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Dashboard Admin</h3>
+            <p class="feature-card__desc">Gérez commandes, stocks et clients depuis un panneau d'administration intuitif. Aucune compétence technique requise.</p>
+          </div>
+
+          <div class="feature-card reveal reveal--delay-3">
+            <div class="feature-card__icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Emails Automatiques</h3>
+            <p class="feature-card__desc">Confirmation de commande, suivi de livraison, relance panier abandonné. Fidélisation incluse dès le départ.</p>
+          </div>
+
+          <div class="feature-card reveal reveal--delay-4">
+            <div class="feature-card__icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">SEO Produits</h3>
+            <p class="feature-card__desc">Fiches produits entièrement optimisées. Visibles sur Google et Google Shopping dès la mise en ligne.</p>
+          </div>
+
+          <div class="feature-card reveal reveal--delay-1">
+            <div class="feature-card__icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Formation Incluse</h3>
+            <p class="feature-card__desc">On vous forme à utiliser votre boutique en live. Autonome en 30 minutes pour gérer commandes et catalogue.</p>
+          </div>
+
         </div>
       </div>
     </section>
 
-    <!-- ===================== TARIF ===================== -->
-    <section id="tarif">
+    <!-- ═══ PROCESS ═══ -->
+    <section class="process-section" id="processus">
       <div class="container">
-        <div class="service-pricing fade-in">
-          <p class="section-tag">Tarif</p>
-          <p class="service-pricing__amount">Sur devis</p>
-          <p style="color: var(--color-text-muted); margin-bottom: 20px;">Formule Premium — site e-commerce complet, back-office de gestion, accompagnement prioritaire.</p>
-          <a href="tarifs.html" class="btn btn--ghost">Voir toutes les formules</a>
+        <div class="section-header reveal" style="text-align:center;">
+          <span class="section-tag">Notre processus</span>
+          <h2 class="section-title">DE L'IDÉE À<br>LA PREMIÈRE VENTE</h2>
+        </div>
+        <div class="process-steps">
+
+          <div class="process-step reveal">
+            <div class="process-step__num">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+            </div>
+            <p class="process-step__label">Étape 1</p>
+            <h3 class="process-step__title">Brief</h3>
+            <p class="process-step__desc">Analyse de vos produits, de votre secteur et de vos besoins spécifiques.</p>
+          </div>
+
+          <div class="process-step reveal reveal--delay-1">
+            <div class="process-step__num">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/>
+                <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
+              </svg>
+            </div>
+            <p class="process-step__label">Étape 2</p>
+            <h3 class="process-step__title">Design</h3>
+            <p class="process-step__desc">Maquette complète de la boutique validée avant développement.</p>
+          </div>
+
+          <div class="process-step reveal reveal--delay-2">
+            <div class="process-step__num">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+              </svg>
+            </div>
+            <p class="process-step__label">Étape 3</p>
+            <h3 class="process-step__title">Développement</h3>
+            <p class="process-step__desc">Intégration du catalogue, du panier et des pages produits.</p>
+          </div>
+
+          <div class="process-step reveal reveal--delay-3">
+            <div class="process-step__num">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                <line x1="1" y1="10" x2="23" y2="10"/>
+              </svg>
+            </div>
+            <p class="process-step__label">Étape 4</p>
+            <h3 class="process-step__title">Paiement</h3>
+            <p class="process-step__desc">Connexion Stripe, tests de commande, sécurisation SSL.</p>
+          </div>
+
+          <div class="process-step reveal reveal--delay-4">
+            <div class="process-step__num">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/>
+              </svg>
+            </div>
+            <p class="process-step__label">Étape 5</p>
+            <h3 class="process-step__title">Formation</h3>
+            <p class="process-step__desc">Formation admin, mise en ligne et passation complète des accès.</p>
+          </div>
+
         </div>
       </div>
     </section>
 
-    <!-- ===================== CTA FINALE ===================== -->
-    <section class="service-cta">
+    <!-- ═══ SECURITY BAND ═══ -->
+    <section class="security-section">
       <div class="container">
-        <h2 class="service-cta__title">Prêt à vendre en ligne ?</h2>
-        <p class="service-cta__text">Demandez un devis gratuit, sans engagement, et recevez une réponse sous 24h.</p>
-        <a href="devis.html" class="btn btn--primary btn--lg">Demander un devis gratuit</a>
+        <div class="security-inner reveal">
+
+          <div class="security-item">
+            <div class="security-item__icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </div>
+            SSL Certifié
+          </div>
+
+          <div class="security-divider" aria-hidden="true"></div>
+
+          <div class="security-item">
+            <div class="security-item__icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                <line x1="1" y1="10" x2="23" y2="10"/>
+              </svg>
+            </div>
+            PCI DSS Stripe
+          </div>
+
+          <div class="security-divider" aria-hidden="true"></div>
+
+          <div class="security-item">
+            <div class="security-item__icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+              </svg>
+            </div>
+            Conforme RGPD
+          </div>
+
+          <div class="security-divider" aria-hidden="true"></div>
+
+          <div class="security-item">
+            <div class="security-item__icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+              </svg>
+            </div>
+            Sauvegardes Quotidiennes
+          </div>
+
+          <div class="security-divider" aria-hidden="true"></div>
+
+          <div class="security-item">
+            <div class="security-item__icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </div>
+            99.9% Uptime
+          </div>
+
+        </div>
       </div>
     </section>
+
+    <!-- ═══ PRICING ═══ -->
+    <section class="pricing-section" id="tarifs">
+      <div class="container">
+        <div class="section-header reveal" style="text-align:center;">
+          <span class="section-tag">Tarifs clairs</span>
+          <h2 class="section-title">CHOISISSEZ<br>VOTRE FORMULE</h2>
+        </div>
+        <div class="pricing-grid reveal reveal--delay-1">
+
+          <!-- Starter -->
+          <div class="pricing-card">
+            <h3 class="pricing-card__name">Boutique Starter</h3>
+            <div class="pricing-card__price">1 490 €</div>
+            <p class="pricing-card__period">paiement unique · livraison en 10 jours</p>
+            <div class="pricing-card__features">
+              <div class="pricing-card__feature">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Jusqu'à 50 produits
+              </div>
+              <div class="pricing-card__feature">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Paiement Stripe intégré
+              </div>
+              <div class="pricing-card__feature">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Dashboard admin complet
+              </div>
+              <div class="pricing-card__feature">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Design responsive mobile
+              </div>
+              <div class="pricing-card__feature">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Emails de confirmation
+              </div>
+              <div class="pricing-card__feature">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Formation 30 min incluse
+              </div>
+            </div>
+            <a href="devis.html" class="btn btn--outline" style="width:100%; justify-content:center;">Choisir Starter</a>
+          </div>
+
+          <!-- Pro -->
+          <div class="pricing-card pricing-card--featured">
+            <span class="pricing-card__badge">Recommandé</span>
+            <h3 class="pricing-card__name">Boutique Pro</h3>
+            <div class="pricing-card__price">2 490 €</div>
+            <p class="pricing-card__period">paiement unique · livraison en 10 jours</p>
+            <div class="pricing-card__features">
+              <div class="pricing-card__feature">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Produits illimités
+              </div>
+              <div class="pricing-card__feature">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Multi-devises &amp; multi-langues
+              </div>
+              <div class="pricing-card__feature">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Marketing automation
+              </div>
+              <div class="pricing-card__feature">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Analytics avancés
+              </div>
+              <div class="pricing-card__feature">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Google Shopping intégré
+              </div>
+              <div class="pricing-card__feature">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                1 mois de support prioritaire
+              </div>
+            </div>
+            <a href="devis.html" class="btn btn--primary" style="width:100%; justify-content:center;">Choisir Pro →</a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ FINAL CTA ═══ -->
+    <section class="final-cta">
+      <div class="container" style="position:relative;z-index:2;">
+        <p class="final-cta__label reveal">Votre boutique vous attend</p>
+        <h2 class="final-cta__title reveal reveal--delay-1">OUVREZ VOTRE<br>BOUTIQUE<br><span class="accent-gradient">AUJOURD'HUI</span></h2>
+        <p class="final-cta__sub reveal reveal--delay-2">Votre première vente peut avoir lieu dans 10 jours.</p>
+        <a href="devis.html" class="btn btn--primary btn--lg reveal reveal--delay-3">Démarrer mon projet →</a>
+      </div>
+    </section>
+
   </main>
 
-  <!-- ===================== FOOTER ===================== -->
   <footer class="site-footer">
-    <div class="container footer__grid">
-
-      <div class="footer__brand">
-        <a href="index.html#accueil" class="logo" aria-label="Nexa Web - Accueil">
-          Nexa<span class="logo__accent">Web</span>
-        </a>
-        <p class="footer__tagline" data-i18n="footer.tagline">Des sites internet sur-mesure pour les artisans et TPE des Hauts-de-France.</p>
-        <div class="footer__socials">
-          <a href="https://www.instagram.com/nexaaweb1" class="footer__social" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="2" y="2" width="20" height="20" rx="5"></rect>
-              <circle cx="12" cy="12" r="4"></circle>
-              <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"></circle>
-            </svg>
-          </a>
-          <a href="https://www.tiktok.com/@nexaweb1" class="footer__social" aria-label="TikTok" target="_blank" rel="noopener noreferrer">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.75a4.85 4.85 0 01-1.01-.06z"/>
-            </svg>
-          </a>
+    <div class="footer__watermark" aria-hidden="true">NEXAWEB</div>
+    <div class="container">
+      <div class="footer__top">
+        <div class="footer__brand reveal">
+          <a href="index.html" class="footer__logo">Nexa<span>Web</span></a>
+          <p class="footer__tagline">Votre site premium<br>livré en 7 jours.</p>
+          <div class="footer__socials">
+            <a href="#" class="footer__social" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" stroke="none"/></svg></a>
+            <a href="#" class="footer__social" aria-label="TikTok"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V9.41a8.16 8.16 0 004.77 1.52V7.48a4.85 4.85 0 01-1-.79z"/></svg></a>
+            <a href="#" class="footer__social" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg></a>
+          </div>
         </div>
+        <nav class="footer__nav reveal reveal--delay-1" aria-label="Liens du pied de page">
+          <div class="footer__col">
+            <h4 class="footer__col-title">Navigation</h4>
+            <ul>
+              <li><a href="index.html">Accueil</a></li>
+              <li><a href="tarifs.html">Tarifs</a></li>
+              <li><a href="blog.html">Blog</a></li>
+              <li><a href="contact.html">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer__col">
+            <h4 class="footer__col-title">Services</h4>
+            <ul>
+              <li><a href="site-vitrine.html">Site Vitrine</a></li>
+              <li><a href="ecommerce.html">E-Commerce</a></li>
+              <li><a href="seo.html">Référencement SEO</a></li>
+              <li><a href="devis.html">Obtenir un devis</a></li>
+            </ul>
+          </div>
+          <div class="footer__col">
+            <h4 class="footer__col-title">Légal</h4>
+            <ul>
+              <li><a href="mentions-legales.html">Mentions légales</a></li>
+              <li><a href="contrat.html">CGV</a></li>
+              <li><a href="rendez-vous.html">Prendre RDV</a></li>
+            </ul>
+          </div>
+        </nav>
       </div>
-
-      <div class="footer__col">
-        <h3 class="footer__col-title" data-i18n="footer.quickLinks">Liens rapides</h3>
-        <ul class="footer__col-list">
-          <li><a href="index.html#accueil" data-i18n="nav.home">Accueil</a></li>
-          <li><a href="index.html#services" data-i18n="nav.services">Services</a></li>
-          <li><a href="index.html#realisations" data-i18n="nav.projects">Réalisations</a></li>
-          <li><a href="tarifs.html" data-i18n="nav.pricing">Tarifs</a></li>
-          <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
-        </ul>
+      <div class="footer__bottom">
+        <p>&copy; 2025 Nexa Web. Tous droits réservés.</p>
       </div>
-
-      <div class="footer__col">
-        <h3 class="footer__col-title" data-i18n="footer.legalTitle">Légal</h3>
-        <ul class="footer__col-list">
-          <li><a href="mentions-legales.html#mentions-legales" data-i18n="footer.legal">Mentions légales</a></li>
-          <li><a href="mentions-legales.html#cgv" data-i18n="footer.cgv">CGV</a></li>
-          <li><a href="mentions-legales.html#cookies" data-i18n="footer.cookiesPolicy">Politique cookies</a></li>
-        </ul>
-      </div>
-
-      <div class="footer__col">
-        <h3 class="footer__col-title" data-i18n="footer.contactTitle">Contact</h3>
-        <ul class="footer__contact">
-          <li class="footer__contact-item">
-            <span class="footer__contact-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path>
-              </svg>
-            </span>
-            <span class="footer__contact-numbers">
-              <a href="tel:0698840194" class="footer__contact-number">06 98 84 01 94</a>
-              <span class="footer__contact-or">ou</span>
-              <a href="tel:0641467898" class="footer__contact-number">06 41 46 78 98</a>
-            </span>
-          </li>
-          <li>
-            <a href="mailto:contact.nexaweb62@gmail.com" class="footer__contact-link">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="3" y="5" width="18" height="14" rx="2"></rect>
-                <path d="m3 7 9 6 9-6"></path>
-              </svg>
-              contact.nexaweb62@gmail.com
-            </a>
-          </li>
-          <li>
-            <span class="footer__contact-link">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1 1 16 0z"></path>
-                <circle cx="12" cy="10" r="3"></circle>
-              </svg>
-              <span data-i18n="footer.address">Carvin, Hauts-de-France</span>
-            </span>
-          </li>
-        </ul>
-      </div>
-
-    </div>
-
-    <div class="container footer__bottom">
-      <p data-i18n="footer.copyright">© 2025 Nexa Web — Tous droits réservés — Carvin (62)</p>
     </div>
   </footer>
 
-  <!-- ===================== POPUP TÉLÉPHONE ===================== -->
-  <div class="phone-modal-overlay" id="phone-modal-overlay">
-    <div class="phone-modal" role="dialog" aria-modal="true" aria-labelledby="phone-modal-title">
-      <button type="button" class="phone-modal__close" id="phone-modal-close" aria-label="Fermer">✕</button>
-      <h3 class="phone-modal__title" id="phone-modal-title" data-i18n="phoneModal.title">Comment voulez-vous nous contacter ?</h3>
-      <div class="phone-modal__actions">
-        <button type="button" class="btn btn--primary btn--lg phone-modal__btn" id="phone-modal-call" data-i18n="phoneModal.call">📞 Appeler maintenant</button>
-        <button type="button" class="btn btn--ghost btn--lg phone-modal__btn" data-i18n="phoneModal.appointment" onclick='Calendly.initPopupWidget({url: "https://calendly.com/contact-nexaweb62/30min"});return false;'>📅 Prendre un rendez-vous</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===================== POPUP EMAIL (TOPBAR) ===================== -->
-  <div class="email-modal-overlay" id="email-modal-overlay">
-    <div class="email-modal" role="dialog" aria-modal="true" aria-labelledby="email-modal-title">
-      <button type="button" class="email-modal__close" id="email-modal-close" aria-label="Fermer">✕</button>
-      <h3 class="email-modal__title" id="email-modal-title" data-i18n="emailModal.title">Comment pouvons-nous vous aider ?</h3>
-      <div class="email-modal__actions">
-        <a href="contact.html#contact" class="btn btn--primary btn--lg email-modal__btn" id="email-modal-devis" data-i18n="emailModal.devisBtn">📋 Demander un devis</a>
-        <button type="button" class="btn btn--ghost btn--lg email-modal__btn" data-i18n="phoneModal.appointment" onclick='Calendly.initPopupWidget({url: "https://calendly.com/contact-nexaweb62/30min"});return false;'>📅 Prendre un rendez-vous</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="https://assets.calendly.com/assets/external/widget.js"></script>
   <script src="script.js"></script>
-  <script src="cookie-consent.js"></script>
 </body>
 </html>

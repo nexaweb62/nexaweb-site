@@ -1,370 +1,130 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Plombier Express 62 — Dépannage rapide</title>
-<meta name="description" content="Plombier Express 62 : dépannage et installation sanitaire en urgence, intervention rapide. Démo de site réalisée par Nexa Web.">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-
-<style>
-  :root {
-    --blue: #1d3557;
-    --blue-dark: #0d1b2a;
-    --orange: #f4a261;
-    --orange-strong: #ff8c42;
-    --bg: #0b1420;
-    --surface: #15233a;
-    --text: #e9eef5;
-    --text-muted: #93a3b8;
-    --border: #233246;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: 'Roboto', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.65;
-  }
-
-  h1, h2, h3 { font-family: 'Montserrat', sans-serif; }
-
-  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
-  a { color: inherit; text-decoration: none; }
-
-  header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: var(--blue-dark);
-    border-bottom: 2px solid var(--orange);
-  }
-
-  .header__inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 18px 24px;
-  }
-
-  .logo { font-family: 'Montserrat', sans-serif; font-size: 1.2rem; font-weight: 800; }
-  .logo span { color: var(--orange); }
-
-  nav ul { display: flex; gap: 26px; list-style: none; flex-wrap: wrap; }
-
-  nav a {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--text-muted);
-    transition: color 0.2s ease;
-  }
-
-  nav a:hover { color: var(--orange); }
-
-  /* Hero urgence */
-  .hero {
-    background: linear-gradient(135deg, var(--blue-dark), var(--blue) 80%);
-    padding: 110px 0 90px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hero::before {
-    content: '🔧';
-    position: absolute;
-    font-size: 13rem;
-    opacity: 0.08;
-    right: -30px;
-    bottom: -40px;
-  }
-
-  .hero__badge {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(244, 162, 97, 0.15);
-    border: 1px solid var(--orange);
-    color: var(--orange);
-    font-size: 0.85rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    padding: 7px 16px;
-    border-radius: 999px;
-    margin-bottom: 22px;
-  }
-
-  .hero__badge::before {
-    content: '●';
-    color: #4ade80;
-    font-size: 0.7rem;
-  }
-
-  .hero h1 {
-    position: relative;
-    font-size: clamp(2.1rem, 5vw, 3.1rem);
-    margin-bottom: 18px;
-    font-weight: 800;
-  }
-
-  .hero p {
-    position: relative;
-    max-width: 560px;
-    margin: 0 auto 36px;
-    color: var(--text-muted);
-    font-size: 1.08rem;
-  }
-
-  .btn {
-    position: relative;
-    display: inline-block;
-    padding: 16px 36px;
-    border-radius: 8px;
-    font-weight: 700;
-    font-size: 1.02rem;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-
-  .btn--orange {
-    background: var(--orange-strong);
-    color: #1a0f06;
-    box-shadow: 0 10px 30px rgba(255, 140, 66, 0.4);
-  }
-
-  .btn--orange:hover { transform: translateY(-3px); }
-
-  section { padding: 80px 0; }
-
-  .section-head { text-align: center; max-width: 600px; margin: 0 auto 48px; }
-
-  .section-tag {
-    color: var(--orange);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: 0.8rem;
-    margin-bottom: 10px;
-  }
-
-  .section-head h2 { font-size: clamp(1.7rem, 3vw, 2.2rem); }
-
-  /* Services */
-  .services__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-
-  .service-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 28px 20px;
-    text-align: center;
-    transition: transform 0.2s ease, border-color 0.2s ease;
-  }
-
-  .service-card:hover { transform: translateY(-6px); border-color: var(--orange); }
-  .service-card__icon { font-size: 2.1rem; margin-bottom: 14px; }
-  .service-card h3 { font-size: 1rem; margin-bottom: 8px; }
-  .service-card p { font-size: 0.88rem; color: var(--text-muted); }
-
-  /* Zone d'intervention */
-  .zone { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-
-  .zone__list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-    max-width: 720px;
-    margin: 0 auto;
-  }
-
-  .zone__chip {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    color: var(--text-muted);
-    padding: 9px 18px;
-    border-radius: 999px;
-    font-size: 0.9rem;
-  }
-
-  /* Contact rapide */
-  .contact-rapide { text-align: center; }
-
-  .contact-rapide__phone {
-    font-family: 'Montserrat', sans-serif;
-    font-size: clamp(2rem, 5vw, 2.8rem);
-    font-weight: 800;
-    color: var(--orange);
-    margin: 18px 0 28px;
-  }
-
-  .contact__grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    text-align: center;
-    margin-top: 36px;
-  }
-
-  .contact-item {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 28px 18px;
-  }
-
-  .contact-item__icon { font-size: 1.6rem; margin-bottom: 10px; }
-  .contact-item h3 { font-size: 0.95rem; margin-bottom: 6px; }
-  .contact-item p { font-size: 0.88rem; color: var(--text-muted); }
-
-  footer {
-    background: var(--blue-dark);
-    color: var(--text-muted);
-    text-align: center;
-    padding: 30px 0;
-    font-size: 0.85rem;
-  }
-
-  .back-btn {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    background: var(--orange-strong);
-    color: #1a0f06;
-    padding: 13px 22px;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-    z-index: 200;
-    transition: transform 0.2s ease;
-  }
-
-  .back-btn:hover { transform: translateY(-3px); }
-
-  @media (max-width: 760px) {
-    .header__inner { flex-direction: column; gap: 12px; }
-    .services__grid { grid-template-columns: repeat(2, 1fr); }
-    .contact__grid { grid-template-columns: 1fr; }
-    .back-btn { right: 16px; bottom: 16px; padding: 11px 18px; font-size: 0.78rem; }
-  }
-</style>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AquaPro — Plombier & Chauffagiste</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--bg:#061418;--acc:#06b6d4;--acc2:#0e7490;--tx:#e0f7fa;--mu:rgba(224,247,250,.44);--cb:rgba(255,255,255,.04)}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--tx);overflow-x:hidden}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 2.5rem;background:rgba(6,20,24,.9);backdrop-filter:blur(20px);border-bottom:1px solid rgba(6,182,212,.12)}
+    .nl{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;color:var(--tx);text-decoration:none}.nl span{color:var(--acc)}
+    nav ul{display:flex;gap:2rem;list-style:none}nav ul a{color:var(--mu);text-decoration:none;font-size:.88rem;transition:color .3s}nav ul a:hover{color:var(--tx)}
+    .nc{padding:.5rem 1.4rem;border-radius:100px;background:var(--acc);color:#fff;text-decoration:none;font-size:.85rem;font-weight:700;transition:background .3s}.nc:hover{background:var(--acc2)}
+    .hero{min-height:100vh;display:flex;align-items:center;padding:8rem 2.5rem 5rem;position:relative;overflow:hidden}
+    .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 65% at 75% 25%,rgba(6,182,212,.15),transparent 70%),radial-gradient(ellipse 35% 45% at 5% 85%,rgba(14,116,144,.12),transparent 60%),linear-gradient(160deg,#061418,#081e24)}
+    .flow{position:absolute;top:0;right:0;width:45%;height:100%;background:radial-gradient(ellipse 80% 100% at 100% 50%,rgba(6,182,212,.07),transparent);pointer-events:none}
+    .hi{position:relative;z-index:1;max-width:680px}
+    .badge-urg{display:inline-flex;align-items:center;gap:.5rem;margin-bottom:1.5rem;padding:.42rem 1.1rem;border-radius:100px;background:rgba(6,182,212,.12);border:1px solid rgba(6,182,212,.3);font-size:.73rem;letter-spacing:.15em;text-transform:uppercase;color:var(--acc)}
+    .urg-dot{width:7px;height:7px;border-radius:50%;background:var(--acc);box-shadow:0 0 8px var(--acc);animation:pulse 1.8s ease-in-out infinite}
+    @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.5)}}
+    h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.8rem,7.5vw,5.8rem);font-weight:700;line-height:1.05;margin-bottom:1.5rem;letter-spacing:-.02em}
+    h1 span{color:var(--acc)}
+    .sub{font-size:1.08rem;line-height:1.78;color:var(--mu);margin-bottom:2.5rem;max-width:520px}
+    .btns{display:flex;gap:1rem;flex-wrap:wrap}
+    .bp{padding:.85rem 2rem;border-radius:100px;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;text-decoration:none;font-weight:700;font-size:.92rem;box-shadow:0 8px 30px rgba(6,182,212,.25);transition:transform .3s,box-shadow .3s}.bp:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(6,182,212,.4)}
+    .bg{padding:.85rem 2rem;border-radius:100px;border:1px solid rgba(224,247,250,.17);color:var(--tx);text-decoration:none;font-size:.92rem;transition:border-color .3s}.bg:hover{border-color:var(--acc)}
+    .stats{display:flex;gap:2.5rem;margin-top:3.5rem;padding-top:2rem;border-top:1px solid rgba(224,247,250,.07)}
+    .sn{font-family:'Space Grotesk',sans-serif;font-size:2.2rem;font-weight:700;color:var(--acc);display:block}.sl{font-size:.75rem;color:var(--mu);letter-spacing:.06em}
+    section.sec{padding:6rem 2.5rem}
+    .sl2{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin-bottom:.75rem}
+    h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,4.5vw,3rem);font-weight:700;line-height:1.15;margin-bottom:.9rem;letter-spacing:-.015em}
+    .desc{color:var(--mu);font-size:.96rem;line-height:1.78;max-width:520px;margin-bottom:3rem}
+    .svs{background:rgba(255,255,255,.018)}
+    .sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1.2rem}
+    .sc{background:var(--cb);border:1px solid rgba(6,182,212,.1);border-radius:16px;padding:2rem 1.7rem;transition:transform .4s,border-color .4s,background .4s}
+    .sc:hover{transform:translateY(-5px);border-color:rgba(6,182,212,.35);background:rgba(6,182,212,.06)}
+    .si{font-size:2rem;margin-bottom:1rem}.sn2{font-family:'Space Grotesk',sans-serif;font-size:1.12rem;font-weight:600;margin-bottom:.5rem}.sd{color:var(--mu);font-size:.85rem;line-height:1.65}
+    .urg-s{background:linear-gradient(135deg,rgba(6,182,212,.1),rgba(14,116,144,.06));border-top:1px solid rgba(6,182,212,.15);border-bottom:1px solid rgba(6,182,212,.15);text-align:center}
+    .urg-num{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.5rem,7vw,5rem);font-weight:700;color:var(--acc);display:block;letter-spacing:.03em;margin:1rem 0}
+    .zones{text-align:center}
+    .zg{display:flex;flex-wrap:wrap;justify-content:center;gap:.8rem;margin-top:2rem}
+    .zone{background:var(--cb);border:1px solid rgba(6,182,212,.1);border-radius:100px;padding:.5rem 1.3rem;font-size:.88rem;color:var(--mu);transition:color .3s,border-color .3s}
+    .zone:hover{color:var(--acc);border-color:rgba(6,182,212,.35)}
+    .gars{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.2rem}
+    .gar{background:var(--cb);border:1px solid rgba(6,182,212,.1);border-radius:16px;padding:2rem;text-align:center}
+    .gar-icon{font-size:2.5rem;margin-bottom:.8rem}.gar-t{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.1rem;margin-bottom:.4rem}.gar-d{color:var(--mu);font-size:.85rem;line-height:1.6}
+    footer{padding:3rem 2.5rem;text-align:center;border-top:1px solid rgba(6,182,212,.1)}
+    .fl{font-family:'Space Grotesk',sans-serif;font-size:1.7rem;font-weight:700;margin-bottom:.4rem}.fl span{color:var(--acc)}
+    .fs{color:var(--mu);font-size:.84rem;margin-bottom:1.8rem}
+    .fls{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;margin-bottom:1.5rem}
+    .fls a{color:var(--mu);text-decoration:none;font-size:.84rem;transition:color .3s}.fls a:hover{color:var(--acc)}
+    .fc{color:rgba(224,247,250,.2);font-size:.73rem}
+    @media(max-width:768px){nav{padding:1rem 1.2rem}nav ul{display:none}.hero{padding:6rem 1.5rem 4rem}section.sec{padding:4rem 1.5rem}}
+  </style>
 </head>
 <body>
-
-  <header>
-    <div class="header__inner">
-      <span class="logo">Plombier <span>Express 62</span></span>
-      <nav>
-        <ul>
-          <li><a href="#accueil">Accueil</a></li>
-          <li><a href="#services">Services</a></li>
-          <li><a href="#zone">Zone d'intervention</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </nav>
+<nav>
+  <a href="#" class="nl">Aqua<span>Pro</span></a>
+  <ul><li><a href="#services">Services</a></li><li><a href="#urgence">Urgence</a></li><li><a href="#zones">Zones</a></li><li><a href="#contact">Contact</a></li></ul>
+  <a href="#urgence" class="nc">Urgence 24h/7j</a>
+</nav>
+<main>
+<section class="hero">
+  <div class="flow"></div>
+  <div class="hi">
+    <div class="badge-urg"><span class="urg-dot"></span>Intervention en moins de 2h — 24h/7j</div>
+    <h1>Plombier &<br>chauffagiste,<br><span>disponible maintenant.</span></h1>
+    <p class="sub">Fuite, dépannage, installation de chaudière, débouchage. Devis gratuit sur place, facturation transparente, garantie 2 ans pièces & main d'œuvre.</p>
+    <div class="btns">
+      <a href="tel:0321000000" class="bp">Appeler maintenant</a>
+      <a href="#services" class="bg">Nos prestations</a>
     </div>
-  </header>
-
-  <section class="hero" id="accueil">
-    <div class="container">
-      <span class="hero__badge">Disponible 24h/24 — 7j/7</span>
-      <h1>Une fuite ? Une panne ?<br>On intervient en moins d'1h</h1>
-      <p>Plombier Express 62 dépanne et installe vos équipements sanitaires en urgence, partout dans le secteur de Carvin et ses environs.</p>
-      <a href="#contact" class="btn btn--orange">📞 Appeler en urgence</a>
+    <div class="stats">
+      <div><span class="sn">&lt; 2h</span><span class="sl">Délai d'intervention</span></div>
+      <div><span class="sn">1800+</span><span class="sl">Chantiers réalisés</span></div>
+      <div><span class="sn">2 ans</span><span class="sl">Garantie pièces & MO</span></div>
     </div>
-  </section>
-
-  <section id="services">
-    <div class="container">
-      <div class="section-head">
-        <p class="section-tag">Nos services</p>
-        <h2>Une intervention pour chaque problème</h2>
-      </div>
-      <div class="services__grid">
-        <article class="service-card">
-          <div class="service-card__icon">🚿</div>
-          <h3>Débouchage</h3>
-          <p>Débouchage de canalisations, éviers et WC, rapide et efficace.</p>
-        </article>
-        <article class="service-card">
-          <div class="service-card__icon">💧</div>
-          <h3>Recherche de fuite</h3>
-          <p>Détection précise des fuites d'eau avant qu'elles ne s'aggravent.</p>
-        </article>
-        <article class="service-card">
-          <div class="service-card__icon">🚰</div>
-          <h3>Installation sanitaire</h3>
-          <p>Pose et remplacement de robinetterie, WC, douches et baignoires.</p>
-        </article>
-        <article class="service-card">
-          <div class="service-card__icon">🔥</div>
-          <h3>Dépannage chauffe-eau</h3>
-          <p>Réparation et remplacement de chauffe-eau et ballons d'eau chaude.</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <section class="zone" id="zone">
-    <div class="container">
-      <div class="section-head">
-        <p class="section-tag">Zone d'intervention</p>
-        <h2>On intervient près de chez vous</h2>
-      </div>
-      <div class="zone__list">
-        <span class="zone__chip">Carvin</span>
-        <span class="zone__chip">Lens</span>
-        <span class="zone__chip">Douai</span>
-        <span class="zone__chip">Arras</span>
-        <span class="zone__chip">Hénin-Beaumont</span>
-        <span class="zone__chip">Liévin</span>
-        <span class="zone__chip">Béthune</span>
-      </div>
-    </div>
-  </section>
-
-  <section class="contact-rapide" id="contact">
-    <div class="container">
-      <p class="section-tag">Contact rapide</p>
-      <h2>Une urgence ? Appelez-nous</h2>
-      <div class="contact-rapide__phone">📞 03 21 55 55 55</div>
-      <a href="tel:0321555555" class="btn btn--orange">Appeler maintenant</a>
-
-      <div class="contact__grid">
-        <div class="contact-item">
-          <div class="contact-item__icon">📍</div>
-          <h3>Secteur</h3>
-          <p>Carvin et environs<br>62220</p>
-        </div>
-        <div class="contact-item">
-          <div class="contact-item__icon">🕒</div>
-          <h3>Disponibilité</h3>
-          <p>24h/24, 7j/7</p>
-        </div>
-        <div class="contact-item">
-          <div class="contact-item__icon">✉️</div>
-          <h3>Email</h3>
-          <p>contact@plombier-express62.fr</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <footer>
-    <div class="container">
-      © 2026 Plombier Express 62 — Site de démonstration réalisé par Nexa Web
-    </div>
-  </footer>
-
-  <a href="index.html#realisations" class="back-btn">⬅ Retour aux réalisations</a>
-
-  <script src="cookie-consent.js"></script>
+  </div>
+</section>
+<section id="services" class="sec svs">
+  <p class="sl2">Nos prestations</p>
+  <h2>Toute la plomberie<br>sous un seul toit</h2>
+  <p class="desc">Artisan RGE certifié, nous intervenons sur tous types d'installations plomberie, chauffage et sanitaire.</p>
+  <div class="sg">
+    <div class="sc"><div class="si">💧</div><div class="sn2">Dépannage & Fuite</div><div class="sd">Fuite d'eau, robinet qui goutte, joint HS. Intervention rapide pour éviter les dégâts des eaux.</div></div>
+    <div class="sc"><div class="si">🔥</div><div class="sn2">Chaudière & Chauffage</div><div class="sd">Installation, remplacement, entretien annuel. Chaudières gaz, fioul, pompe à chaleur, plancher chauffant.</div></div>
+    <div class="sc"><div class="si">🚿</div><div class="sn2">Salle de bain complète</div><div class="sd">Création et rénovation clé en main : douche à l'italienne, baignoire, vasque, faïence et plomberie.</div></div>
+    <div class="sc"><div class="si">♻️</div><div class="sn2">Débouchage</div><div class="sd">Canalisations bouchées, WC, évier. Hydrocurage haute pression, caméra d'inspection pour diagnostic précis.</div></div>
+    <div class="sc"><div class="si">🌡️</div><div class="sn2">Climatisation</div><div class="sd">Installation et entretien de climatiseurs reversibles. Confort en été et en hiver, label RGE.</div></div>
+    <div class="sc"><div class="si">☀️</div><div class="sn2">Chauffe-eau & Solaire</div><div class="sd">Ballon électrique, chauffe-eau thermodynamique, panneaux solaires thermiques. Économies garanties.</div></div>
+  </div>
+</section>
+<section id="urgence" class="sec urg-s">
+  <p class="sl2">Urgence plomberie</p>
+  <h2>Problème d'eau ?<br>On est là maintenant.</h2>
+  <p style="color:var(--mu);font-size:.95rem">Appelez-nous à n'importe quelle heure. Un technicien arrive chez vous dans les 2 heures.</p>
+  <span class="urg-num">03 21 XX XX XX</span>
+  <p style="color:var(--mu);font-size:.85rem;margin-bottom:1.5rem">Disponible 24h/24 · 7j/7 · Jours fériés inclus</p>
+  <a href="tel:0321000000" class="bp">Appeler maintenant</a>
+</section>
+<section id="zones" class="sec zones">
+  <p class="sl2">Zones d'intervention</p>
+  <h2>On intervient dans<br>tout le bassin minier</h2>
+  <p style="color:var(--mu);font-size:.95rem">Carvin et les communes environnantes dans un rayon de 30 km.</p>
+  <div class="zg">
+    <div class="zone">Carvin</div><div class="zone">Lens</div><div class="zone">Hénin-Beaumont</div><div class="zone">Liévin</div><div class="zone">Wingles</div><div class="zone">Dourges</div><div class="zone">Courrières</div><div class="zone">Nœux-les-Mines</div><div class="zone">Bully-les-Mines</div><div class="zone">Harnes</div>
+  </div>
+</section>
+<section id="contact" class="sec">
+  <p class="sl2">Pourquoi nous choisir</p>
+  <h2>Des artisans<br>de confiance</h2>
+  <div class="gars">
+    <div class="gar"><div class="gar-icon">🏅</div><div class="gar-t">Certifié RGE</div><div class="gar-d">Reconnu Garant de l'Environnement pour bénéficier des aides de l'État sur vos travaux.</div></div>
+    <div class="gar"><div class="gar-icon">📋</div><div class="gar-t">Devis gratuit</div><div class="gar-d">Devis détaillé et transparent établi sur place avant chaque intervention. Aucune mauvaise surprise.</div></div>
+    <div class="gar"><div class="gar-icon">🛡️</div><div class="gar-t">Garantie 2 ans</div><div class="gar-d">Toutes nos interventions sont garanties 2 ans pièces et main d'œuvre, assurance décennale incluse.</div></div>
+    <div class="gar"><div class="gar-icon">⚡</div><div class="gar-t">Réactivité totale</div><div class="gar-d">Intervention en moins de 2h en urgence. Prise de RDV le jour même pour les chantiers planifiés.</div></div>
+  </div>
+</section>
+</main>
+<footer>
+  <div class="fl">Aqua<span>Pro</span></div>
+  <p class="fs">Plombier & Chauffagiste · Carvin et bassin minier · 03 21 XX XX XX</p>
+  <div class="fls"><a href="#">Services</a><a href="#">Urgence</a><a href="#">Zones</a><a href="#">Contact</a><a href="#">Mentions légales</a></div>
+  <p class="fc">© 2025 AquaPro — Site réalisé par <strong>Nexa Web</strong></p>
+</footer>
 </body>
 </html>

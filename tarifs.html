@@ -1,347 +1,204 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- SEO -->
-  <title>Tarifs - Nexa Web | Création de sites internet pour TPE/PME</title>
-  <meta name="description" content="Découvrez les formules de Nexa Web pour la création de votre site internet : Essentiel, Standard et Premium. Des tarifs clairs, adaptés aux artisans, commerces et petites entreprises.">
-  <meta name="keywords" content="tarif site internet, prix site vitrine, prix site e-commerce, devis site web, Nexa Web, Carvin, Hauts-de-France">
-  <meta name="author" content="Nexa Web">
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="Tarifs - Nexa Web">
-  <meta property="og:description" content="Des formules claires pour la création de votre site internet, pensées pour les petites entreprises.">
-  <meta property="og:type" content="website">
-
-  <!-- Polices Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
-  <!-- Styles -->
-  <link rel="stylesheet" href="style.css">
-  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nexa Web — Tarifs · Sites Premium dès 490 €</title>
+  <meta name="description" content="Découvrez les tarifs Nexa Web : site vitrine, e-commerce et refontes. Livraison garantie en 7 jours. Devis gratuit." />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- ===================== TOPBAR ===================== -->
-  <div class="topbar">
-    <div class="container topbar__inner">
-      <a href="https://www.google.com/maps/search/Carvin,+Hauts-de-France" target="_blank" rel="noopener noreferrer" class="topbar__location">📍 <span data-i18n="footer.address">Carvin, Hauts-de-France</span></a>
-      <span class="topbar__phones">
-        📞 <a href="tel:0698840194" class="topbar__phone">06 98 84 01 94</a>
-        <span class="topbar__sep">|</span>
-        <a href="tel:0641467898" class="topbar__phone">06 41 46 78 98</a>
-        <span class="topbar__email-wrap">
-          <span class="topbar__sep">|</span>
-          <a href="mailto:contact.nexaweb62@gmail.com" class="topbar__phone" id="topbar-email-link">✉️ contact.nexaweb62@gmail.com</a>
-        </span>
-      </span>
-    </div>
-  </div>
+  <!-- Silk WebGL background -->
+  <canvas id="silk-bg" aria-hidden="true"></canvas>
 
-  <!-- ===================== HEADER / NAVIGATION ===================== -->
-  <header class="header" id="header">
-    <div class="container header__inner">
-
-      <a href="index.html#accueil" class="logo" aria-label="Nexa Web - Accueil">
-        Nexa<span class="logo__accent">Web</span>
-      </a>
-
-      <!-- Navigation desktop -->
-      <nav class="nav" id="nav" aria-label="Navigation principale">
-        <ul class="nav__list">
-          <li><a href="index.html#accueil" class="nav__link" data-i18n="nav.home">Accueil</a></li>
-          <li><a href="index.html#services" class="nav__link" data-i18n="nav.services">Services</a></li>
-          <li><a href="rendez-vous.html" class="nav__link" data-i18n="nav.appointment">Rendez-vous</a></li>
-          <li><a href="index.html#pourquoi-nous" class="nav__link" data-i18n="nav.why">Pourquoi nous</a></li>
-          <li><a href="index.html#realisations" class="nav__link" data-i18n="nav.projects">Réalisations</a></li>
-          <li><a href="index.html#avis" class="nav__link" data-i18n="nav.reviews">Avis</a></li>
-          <li><a href="tarifs.html" class="nav__link nav__link--active" aria-current="page" data-i18n="nav.pricing">Tarifs</a></li>
-          <li><a href="contact.html" class="nav__link" data-i18n="nav.contact">Contact</a></li>
-        </ul>
-      </nav>
-
-      <div class="header__actions">
-        <button class="lang-toggle" id="lang-toggle" aria-label="Switch to English">
-          <span class="lang-toggle__flag" aria-hidden="true">🇫🇷</span>
-          <span class="lang-toggle__code">FR</span>
-        </button>
-
-        <button class="theme-toggle" id="theme-toggle" aria-label="Activer le mode clair">
-          <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-          </svg>
-          <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="4"></circle>
-            <path d="M12 2v2"></path>
-            <path d="M12 20v2"></path>
-            <path d="M4.93 4.93l1.41 1.41"></path>
-            <path d="M17.66 17.66l1.41 1.41"></path>
-            <path d="M2 12h2"></path>
-            <path d="M20 12h2"></path>
-            <path d="M6.34 17.66l-1.41 1.41"></path>
-            <path d="M19.07 4.93l-1.41 1.41"></path>
-          </svg>
-        </button>
-
-        <a href="devis.html" class="btn btn--primary btn--header" data-i18n="header.quoteBtn">Devis gratuit</a>
-      </div>
-
-      <!-- Bouton burger mobile -->
-      <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav">
-        <span></span>
-        <span></span>
-        <span></span>
+  <!-- Navigation -->
+  <header class="site-header" id="site-header">
+    <nav class="nav">
+      <a href="index.html" class="nav__logo">Nexa<span>Web</span></a>
+      <ul class="nav__list" id="nav-list">
+        <li><a href="index.html" class="nav__link">Accueil</a></li>
+        <li><a href="tarifs.html" class="nav__link" id="nav-tarifs">Tarifs</a></li>
+        <li><a href="devis.html" class="nav__link">Devis</a></li>
+        <li><a href="blog.html" class="nav__link">Blog</a></li>
+        <li><a href="contact.html" class="nav__link">Contact</a></li>
+      </ul>
+      <a href="devis.html" class="btn btn--nav">Devis gratuit</a>
+      <button class="nav__burger" id="nav-burger" aria-label="Ouvrir le menu" aria-expanded="false">
+        <span></span><span></span><span></span>
       </button>
-
-    </div>
+    </nav>
   </header>
 
+  <!-- Backdrop for mobile nav panel -->
+  <div class="panel-backdrop" id="panel-backdrop" aria-hidden="true"></div>
+
+  <!-- Bouton retour -->
+  <button class="tarifs-page-back" id="tarifs-page-back" aria-label="Retour à l'accueil">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path d="M19 12H5M12 5l-7 7 7 7"/>
+    </svg>
+    Retour
+  </button>
+
   <main>
-    <!-- ===================== BANNIÈRE DE PAGE ===================== -->
-    <section class="page-banner" id="tarifs">
-      <div class="page-banner__glow" aria-hidden="true"></div>
+    <section class="tarifs-page">
 
-      <div class="container page-banner__inner">
-        <p class="hero__tag fade-in" data-i18n="pricingBanner.tag">Tarifs</p>
-        <h1 class="page-banner__title fade-in">
-          <span data-i18n="pricingBanner.part1">Des tarifs simples, pensés pour les </span><span class="text-accent" data-i18n="pricingBanner.accent">petites entreprises</span>
-        </h1>
-        <p class="page-banner__subtitle fade-in" data-i18n="pricingBanner.subtitle">
-          Trois formules claires, sans coûts cachés. Chaque projet reste personnalisable selon vos
-          besoins réels.
-        </p>
+      <div class="tarifs-page__header">
+        <p class="tarifs-page__eyebrow">Transparence totale</p>
+        <h1 class="tarifs-page__title">NOS<br>TARIFS</h1>
       </div>
-    </section>
 
-    <!-- ===================== CALCULATEUR DE PRIX ===================== -->
-    <section class="calculator">
-      <div class="container">
+      <div class="tarifs-page__cards">
 
-        <div class="section-head fade-in">
-          <p class="section-tag" data-i18n="calculator.tag">Calculateur</p>
-          <h2 class="section-title" data-i18n="calculator.title">Estimez le prix de votre projet</h2>
-          <p class="section-subtitle" data-i18n="calculator.subtitle">Répondez à 3 questions pour obtenir une estimation immédiate.</p>
+        <!-- VITRINE -->
+        <div class="tarif-card">
+          <div class="tarif-card__header">
+            <span class="tarif-card__name">Vitrine</span>
+            <div class="tarif-card__price">
+              <span class="tarif-card__prefix">À partir de</span>
+              <span class="tarif-card__amount">490 €</span>
+            </div>
+          </div>
+          <ul class="tarif-card__features">
+            <li>Site 5 à 8 pages</li>
+            <li>Design sur mesure</li>
+            <li>Mobile-first responsive</li>
+            <li>SEO technique inclus</li>
+            <li>Formulaire de contact</li>
+            <li>Livraison en 7 jours</li>
+          </ul>
+          <a href="devis.html" class="tarif-card__cta">Obtenir un devis</a>
         </div>
 
-        <div class="calculator__box fade-in">
-
-          <div class="calculator__question">
-            <p class="calculator__label" data-i18n="calculator.q1">Type de site ?</p>
-            <div class="calculator__options" data-calc-group="type">
-              <button type="button" class="calculator__option is-active" data-value="490" data-type-key="vitrine" data-i18n="calculator.opt.vitrine">Vitrine</button>
-              <button type="button" class="calculator__option" data-value="1200" data-type-key="ecommerce" data-i18n="calculator.opt.ecommerce">E-commerce</button>
-              <button type="button" class="calculator__option" data-value="690" data-type-key="refonte" data-i18n="calculator.opt.refonte">Refonte</button>
+        <!-- ESSENTIEL (featured) -->
+        <div class="tarif-card tarif-card--featured">
+          <span class="tarif-card__badge">Le plus choisi</span>
+          <div class="tarif-card__header">
+            <span class="tarif-card__name">Essentiel</span>
+            <div class="tarif-card__price">
+              <span class="tarif-card__prefix">À partir de</span>
+              <span class="tarif-card__amount">890 €</span>
             </div>
           </div>
-
-          <div class="calculator__question">
-            <p class="calculator__label" data-i18n="calculator.q2">Nombre de pages ?</p>
-            <div class="calculator__options" data-calc-group="pages">
-              <button type="button" class="calculator__option is-active" data-value="0" data-i18n="calculator.opt.pages1">1 à 3</button>
-              <button type="button" class="calculator__option" data-value="400" data-i18n="calculator.opt.pages2">4 à 7</button>
-              <button type="button" class="calculator__option" data-value="900" data-i18n="calculator.opt.pages3">8 et plus</button>
-            </div>
-          </div>
-
-          <div class="calculator__question">
-            <p class="calculator__label" data-i18n="calculator.q3">Délai souhaité ?</p>
-            <div class="calculator__options" data-calc-group="delai">
-              <button type="button" class="calculator__option" data-value="200" data-i18n="calculator.opt.express">Express (5j)</button>
-              <button type="button" class="calculator__option is-active" data-value="0" data-i18n="calculator.opt.normal">Normal (10j)</button>
-              <button type="button" class="calculator__option" data-value="-50" data-i18n="calculator.opt.flexible">Flexible (15j)</button>
-            </div>
-          </div>
-
-          <div class="calculator__result">
-            <p class="calculator__result-label" data-i18n="calculator.resultLabel">Prix estimé</p>
-            <p class="calculator__result-price" id="calculator-price">490 €</p>
-            <a href="devis.html#devis" id="calculator-cta" class="btn btn--primary btn--lg" data-i18n="calculator.cta">Obtenir ce tarif</a>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================== SECTION TARIFS ===================== -->
-    <section class="pricing">
-      <div class="container">
-
-        <div class="pricing__grid">
-
-          <!-- Formule 1 : Essentiel -->
-          <article class="pricing-card fade-in">
-            <h3 class="pricing-card__name" data-i18n="pricing.card1.name">Essentiel</h3>
-            <p class="pricing-card__tagline" data-i18n="pricing.card1.tagline">Idéal pour démarrer en ligne</p>
-            <p class="pricing-card__price">
-              <span data-i18n="pricing.priceLabel">À partir de</span> <span class="pricing-card__amount">490 €</span>
-            </p>
-            <span class="pricing-card__guarantee" data-i18n="pricing.guaranteeBadge">✅ Garantie 30 jours incluse</span>
-
-            <ul class="pricing-card__list">
-              <li data-i18n="pricing.card1.item1">Site one-page jusqu'à 3 sections</li>
-              <li data-i18n="pricing.card1.item2">Design responsive (mobile / tablette)</li>
-              <li data-i18n="pricing.card1.item3">Formulaire de contact</li>
-              <li data-i18n="pricing.card1.item4">Nom de domaine et hébergement offerts 1 an</li>
-              <li data-i18n="pricing.card1.item5">Livraison en 5 à 7 jours</li>
-            </ul>
-
-            <a href="devis.html?formule=Essentiel" class="btn btn--ghost pricing-card__cta" data-i18n="pricing.cta">Demander un devis</a>
-          </article>
-
-          <!-- Formule 2 : Standard (Populaire) -->
-          <article class="pricing-card pricing-card--featured fade-in">
-            <span class="pricing-card__badge" data-i18n="pricing.card2.badge">Populaire</span>
-
-            <h3 class="pricing-card__name" data-i18n="pricing.card2.name">Standard</h3>
-            <p class="pricing-card__tagline" data-i18n="pricing.card2.tagline">Le plus choisi par nos clients</p>
-            <p class="pricing-card__price">
-              <span data-i18n="pricing.priceLabel">À partir de</span> <span class="pricing-card__amount">890 €</span>
-            </p>
-            <span class="pricing-card__guarantee" data-i18n="pricing.guaranteeBadge">✅ Garantie 30 jours incluse</span>
-
-            <ul class="pricing-card__list">
-              <li data-i18n="pricing.card2.item1">Site jusqu'à 5 pages</li>
-              <li data-i18n="pricing.card2.item2">Design sur-mesure adapté à votre image</li>
-              <li data-i18n="pricing.card2.item3">Optimisation SEO de base</li>
-              <li data-i18n="pricing.card2.item4">Formulaire de contact + liens réseaux sociaux</li>
-              <li data-i18n="pricing.card2.item5">Nom de domaine et hébergement offerts 1 an</li>
-              <li data-i18n="pricing.card2.item6">Livraison en 10 à 15 jours</li>
-              <li data-i18n="pricing.card2.item7">✓ Site installable sur mobile (PWA)</li>
-            </ul>
-
-            <a href="devis.html?formule=Standard" class="btn btn--primary pricing-card__cta" data-i18n="pricing.cta">Demander un devis</a>
-          </article>
-
-          <!-- Formule 3 : Premium -->
-          <article class="pricing-card fade-in">
-            <h3 class="pricing-card__name" data-i18n="pricing.card3.name">Premium</h3>
-            <p class="pricing-card__tagline" data-i18n="pricing.card3.tagline">Pour les projets ambitieux</p>
-            <p class="pricing-card__price">
-              <span class="pricing-card__amount" data-i18n="pricing.card3.amount">Sur devis</span>
-            </p>
-            <span class="pricing-card__guarantee" data-i18n="pricing.guaranteeBadge">✅ Garantie 30 jours incluse</span>
-
-            <ul class="pricing-card__list">
-              <li data-i18n="pricing.card3.item1">Site vitrine ou e-commerce complet</li>
-              <li data-i18n="pricing.card3.item2">Nombre de pages illimité</li>
-              <li data-i18n="pricing.card3.item3">SEO avancé et suivi de positionnement</li>
-              <li data-i18n="pricing.card3.item4">Back-office pour gérer votre contenu</li>
-              <li data-i18n="pricing.card3.item5">Accompagnement et support prioritaire</li>
-              <li data-i18n="pricing.card3.item6">Maintenance incluse pendant 3 mois</li>
-              <li data-i18n="pricing.card3.item7">✓ PWA incluse</li>
-            </ul>
-
-            <a href="devis.html?formule=Premium" class="btn btn--ghost pricing-card__cta" data-i18n="pricing.cta">Demander un devis</a>
-          </article>
-
-          <!-- Formule 4 : Maintenance & Mises à jour -->
-          <article class="pricing-card fade-in">
-            <div class="pricing-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
-              </svg>
-            </div>
-
-            <h3 class="pricing-card__name" data-i18n="pricing.card4.name">Maintenance &amp; Mises à jour</h3>
-            <p class="pricing-card__tagline" data-i18n="pricing.card4.tagline">Pour garder votre site au top</p>
-            <p class="pricing-card__price">
-              <span data-i18n="pricing.priceLabel">À partir de</span> <span class="pricing-card__amount">29 €/mois</span>
-            </p>
-
-            <ul class="pricing-card__list">
-              <li data-i18n="pricing.card4.item1">Mises à jour du contenu (textes, photos, prix)</li>
-              <li data-i18n="pricing.card4.item2">Corrections et améliorations rapides</li>
-              <li data-i18n="pricing.card4.item3">Sauvegarde mensuelle de votre site</li>
-              <li data-i18n="pricing.card4.item4">Support prioritaire par téléphone et WhatsApp</li>
-              <li data-i18n="pricing.card4.item5">Rapport mensuel de performance</li>
-            </ul>
-
-            <a href="devis.html?formule=Maintenance" class="btn btn--ghost pricing-card__cta" data-i18n="pricing.card4.cta">Nous contacter</a>
-          </article>
-
+          <ul class="tarif-card__features">
+            <li>Jusqu'à 15 pages</li>
+            <li>Animations GSAP premium</li>
+            <li>Blog intégré</li>
+            <li>Google Analytics</li>
+            <li>Optimisation Core Web Vitals</li>
+            <li>1 mois de support offert</li>
+            <li>Livraison en 7 jours</li>
+          </ul>
+          <a href="devis.html" class="tarif-card__cta">Obtenir un devis</a>
         </div>
 
-        <p class="pricing__note fade-in" data-i18n="pricing.note">
-          Les tarifs affichés sont indicatifs et ajustés selon la complexité de votre projet.
-          Un devis détaillé et gratuit vous est toujours communiqué avant toute mission.
-        </p>
+        <!-- E-COMMERCE -->
+        <div class="tarif-card">
+          <div class="tarif-card__header">
+            <span class="tarif-card__name">E-Commerce</span>
+            <div class="tarif-card__price">
+              <span class="tarif-card__prefix">À partir de</span>
+              <span class="tarif-card__amount">1 490 €</span>
+            </div>
+          </div>
+          <ul class="tarif-card__features">
+            <li>Boutique illimitée</li>
+            <li>Paiement Stripe / PayPal</li>
+            <li>Gestion des stocks</li>
+            <li>Emails transactionnels</li>
+            <li>Tableau de bord admin</li>
+            <li>Formation incluse</li>
+            <li>Livraison en 10 jours</li>
+          </ul>
+          <a href="devis.html" class="tarif-card__cta">Obtenir un devis</a>
+        </div>
+
       </div>
+
+      <!-- Bloc garantie -->
+      <div class="tarifs-guarantee">
+        <svg class="tarifs-guarantee__icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="M9 12l2 2 4-4"/>
+        </svg>
+        <div>
+          <p class="tarifs-guarantee__title">Satisfait ou retravaillé</p>
+          <p class="tarifs-guarantee__text">Nous révisons votre site jusqu'à votre entière satisfaction. Si le résultat ne correspond pas au brief validé, on retravaille sans frais supplémentaires — c'est notre engagement.</p>
+        </div>
+      </div>
+
     </section>
   </main>
 
-  <!-- ===================== FOOTER ===================== -->
+  <!-- FOOTER -->
   <footer class="site-footer">
-    <div class="container footer__inner">
-
-      <a href="index.html#accueil" class="logo" aria-label="Nexa Web - Accueil">
-        Nexa<span class="logo__accent">Web</span>
-      </a>
-
-      <ul class="footer__contact">
-        <li class="footer__contact-item">
-          <span class="footer__contact-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path>
-            </svg>
-          </span>
-          <span class="footer__contact-numbers">
-            <a href="tel:0698840194" class="footer__contact-number">06 98 84 01 94</a>
-            <span class="footer__contact-or">ou</span>
-            <a href="tel:0641467898" class="footer__contact-number">06 41 46 78 98</a>
-          </span>
-        </li>
-        <li>
-          <a href="mailto:contact.nexaweb62@gmail.com" class="footer__contact-link">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="3" y="5" width="18" height="14" rx="2"></rect>
-              <path d="m3 7 9 6 9-6"></path>
-            </svg>
-            contact.nexaweb62@gmail.com
-          </a>
-        </li>
-        <li>
-          <span class="footer__contact-link">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1 1 16 0z"></path>
-              <circle cx="12" cy="10" r="3"></circle>
-            </svg>
-            <span data-i18n="footer.address">Carvin, Hauts-de-France</span>
-          </span>
-        </li>
-      </ul>
-
+    <div class="footer__watermark" aria-hidden="true">NEXAWEB</div>
+    <div class="container">
+      <div class="footer__top">
+        <div class="footer__brand reveal">
+          <a href="index.html" class="footer__logo">Nexa<span>Web</span></a>
+          <p class="footer__tagline">Votre site premium<br>livré en 7 jours.</p>
+          <div class="footer__socials">
+            <a href="#" class="footer__social" aria-label="Instagram">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <rect x="2" y="2" width="20" height="20" rx="5"/>
+                <circle cx="12" cy="12" r="4"/>
+                <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" stroke="none"/>
+              </svg>
+            </a>
+            <a href="#" class="footer__social" aria-label="TikTok">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V9.41a8.16 8.16 0 004.77 1.52V7.48a4.85 4.85 0 01-1-.79z"/>
+              </svg>
+            </a>
+            <a href="#" class="footer__social" aria-label="LinkedIn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/>
+                <circle cx="4" cy="4" r="2"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+        <nav class="footer__nav reveal reveal--delay-1" aria-label="Liens du pied de page">
+          <div class="footer__col">
+            <h4 class="footer__col-title">Navigation</h4>
+            <ul>
+              <li><a href="index.html">Accueil</a></li>
+              <li><a href="tarifs.html">Tarifs</a></li>
+              <li><a href="blog.html">Blog</a></li>
+              <li><a href="contact.html">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer__col">
+            <h4 class="footer__col-title">Services</h4>
+            <ul>
+              <li><a href="site-vitrine.html">Site Vitrine</a></li>
+              <li><a href="ecommerce.html">E-Commerce</a></li>
+              <li><a href="seo.html">Référencement SEO</a></li>
+              <li><a href="devis.html">Obtenir un devis</a></li>
+            </ul>
+          </div>
+          <div class="footer__col">
+            <h4 class="footer__col-title">Légal</h4>
+            <ul>
+              <li><a href="mentions-legales.html">Mentions légales</a></li>
+              <li><a href="contrat.html">CGV</a></li>
+              <li><a href="rendez-vous.html">Prendre RDV</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <div class="footer__bottom">
+        <p>&copy; 2025 Nexa Web. Tous droits réservés.</p>
+      </div>
     </div>
   </footer>
 
-  <!-- ===================== POPUP TÉLÉPHONE ===================== -->
-  <div class="phone-modal-overlay" id="phone-modal-overlay">
-    <div class="phone-modal" role="dialog" aria-modal="true" aria-labelledby="phone-modal-title">
-      <button type="button" class="phone-modal__close" id="phone-modal-close" aria-label="Fermer">✕</button>
-      <h3 class="phone-modal__title" id="phone-modal-title" data-i18n="phoneModal.title">Comment voulez-vous nous contacter ?</h3>
-      <div class="phone-modal__actions">
-        <button type="button" class="btn btn--primary btn--lg phone-modal__btn" id="phone-modal-call" data-i18n="phoneModal.call">📞 Appeler maintenant</button>
-        <button type="button" class="btn btn--ghost btn--lg phone-modal__btn" data-i18n="phoneModal.appointment" onclick='Calendly.initPopupWidget({url: "https://calendly.com/contact-nexaweb62/30min"});return false;'>📅 Prendre un rendez-vous</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===================== POPUP EMAIL (TOPBAR) ===================== -->
-  <div class="email-modal-overlay" id="email-modal-overlay">
-    <div class="email-modal" role="dialog" aria-modal="true" aria-labelledby="email-modal-title">
-      <button type="button" class="email-modal__close" id="email-modal-close" aria-label="Fermer">✕</button>
-      <h3 class="email-modal__title" id="email-modal-title" data-i18n="emailModal.title">Comment pouvons-nous vous aider ?</h3>
-      <div class="email-modal__actions">
-        <a href="contact.html#contact" class="btn btn--primary btn--lg email-modal__btn" id="email-modal-devis" data-i18n="emailModal.devisBtn">📋 Demander un devis</a>
-        <button type="button" class="btn btn--ghost btn--lg email-modal__btn" data-i18n="phoneModal.appointment" onclick='Calendly.initPopupWidget({url: "https://calendly.com/contact-nexaweb62/30min"});return false;'>📅 Prendre un rendez-vous</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="https://assets.calendly.com/assets/external/widget.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

@@ -1,76 +1,373 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nexa Web — Merci ! Votre message est envoyé</title>
+  <meta name="description" content="Votre message a bien été reçu. L'équipe Nexa Web revient vers vous sous 24 heures avec une proposition personnalisée." />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Confetti dots ── */
+    .confetti-wrap {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+    .dot {
+      position: absolute;
+      border-radius: 50%;
+      animation: float-up linear infinite;
+      opacity: 0;
+    }
+    .dot:nth-child(1)  { width: 8px;  height: 8px;  background: var(--color-accent);   left: 10%; animation-duration: 6s;  animation-delay: 0s;    bottom: -10%; }
+    .dot:nth-child(2)  { width: 6px;  height: 6px;  background: var(--color-accent-2);  left: 20%; animation-duration: 7s;  animation-delay: 1s;    bottom: -10%; }
+    .dot:nth-child(3)  { width: 10px; height: 10px; background: #34d399;               left: 35%; animation-duration: 5.5s;animation-delay: 0.5s;  bottom: -10%; }
+    .dot:nth-child(4)  { width: 6px;  height: 6px;  background: #fbbf24;               left: 52%; animation-duration: 8s;  animation-delay: 1.5s;  bottom: -10%; }
+    .dot:nth-child(5)  { width: 9px;  height: 9px;  background: var(--color-accent);   left: 68%; animation-duration: 6.5s;animation-delay: 0.8s;  bottom: -10%; }
+    .dot:nth-child(6)  { width: 5px;  height: 5px;  background: #f472b6;               left: 80%; animation-duration: 7.5s;animation-delay: 2s;    bottom: -10%; }
+    .dot:nth-child(7)  { width: 7px;  height: 7px;  background: var(--color-accent-2);  left: 90%; animation-duration: 5s;  animation-delay: 1.2s;  bottom: -10%; }
+    .dot:nth-child(8)  { width: 8px;  height: 8px;  background: #34d399;               left: 45%; animation-duration: 9s;  animation-delay: 3s;    bottom: -10%; }
 
-  <title>Merci - Nexa Web</title>
-  <meta name="description" content="Votre demande a bien été envoyée. Nexa Web vous recontacte sous 24h.">
-  <meta name="robots" content="noindex, follow">
+    @keyframes float-up {
+      0%   { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+      10%  { opacity: .8; }
+      90%  { opacity: .4; }
+      100% { transform: translateY(-110vh) translateX(30px) scale(.7); opacity: 0; }
+    }
 
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    /* ── Thank You Section ── */
+    .merci-section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 7rem 1.5rem 5rem;
+      position: relative;
+      z-index: 1;
+    }
+    .merci-inner {
+      max-width: 680px;
+      width: 100%;
+      text-align: center;
+    }
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    /* ── Animated Checkmark ── */
+    .checkmark-wrap {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 2.5rem;
+      position: relative;
+    }
+    .checkmark-circle {
+      stroke: var(--color-accent);
+      stroke-width: 2;
+      fill: rgba(76,114,255,.1);
+    }
+    .checkmark-tick {
+      stroke: var(--color-accent);
+      stroke-width: 3;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 60;
+      stroke-dashoffset: 60;
+      animation: draw-check .6s ease forwards .4s;
+    }
+    .checkmark-ring {
+      fill: none;
+      stroke: var(--color-accent);
+      stroke-width: 2;
+      stroke-dasharray: 283;
+      stroke-dashoffset: 283;
+      animation: draw-ring .5s ease forwards .1s;
+      transform-origin: center;
+      transform: rotate(-90deg);
+    }
+    @keyframes draw-ring {
+      to { stroke-dashoffset: 0; }
+    }
+    @keyframes draw-check {
+      to { stroke-dashoffset: 0; }
+    }
 
-  <link rel="stylesheet" href="style.css">
+    /* ── Headings ── */
+    .merci-inner h1 {
+      font-family: var(--font-heading);
+      font-size: clamp(3.5rem, 10vw, 6rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1.25rem;
+    }
+    .merci-inner .subtitle {
+      color: var(--color-muted);
+      font-size: 1.1rem;
+      line-height: 1.75;
+      max-width: 52ch;
+      margin: 0 auto 3rem;
+    }
 
-  <script>
-    (function () {
-      var theme = localStorage.getItem('nexaweb-theme');
-      if (theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
-    })();
-  </script>
+    /* ── Steps ── */
+    .steps-label {
+      font-family: var(--font-body);
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 1.5rem;
+    }
+    .steps-row {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+    .step-card {
+      flex: 1;
+      min-width: 160px;
+      max-width: 200px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid var(--color-border);
+      border-radius: 1rem;
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+      transition: border-color .3s ease;
+    }
+    .step-card:hover {
+      border-color: var(--color-accent);
+    }
+    .step-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: .75rem;
+      background: rgba(76,114,255,.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+    }
+    .step-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: var(--color-accent);
+    }
+    .step-num {
+      font-family: var(--font-heading);
+      font-size: .7rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: .4rem;
+    }
+    .step-card h3 {
+      font-family: var(--font-heading);
+      font-size: .95rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--color-text);
+      margin-bottom: .5rem;
+      line-height: 1.2;
+    }
+    .step-card p {
+      color: var(--color-muted);
+      font-size: .8rem;
+      line-height: 1.55;
+    }
+
+    /* ── CTA buttons ── */
+    .merci-ctas {
+      display: flex;
+      gap: .9rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ── Connector lines ── */
+    @media (min-width: 520px) {
+      .steps-row {
+        position: relative;
+      }
+      .steps-row::before {
+        content: '';
+        position: absolute;
+        top: calc(44px / 2 + 1.5rem);
+        left: calc(50% - 200px);
+        right: calc(50% - 200px);
+        height: 1px;
+        background: var(--color-border);
+        z-index: 0;
+      }
+      .step-card { position: relative; z-index: 1; }
+    }
+
+    @media (max-width: 520px) {
+      .steps-row { flex-direction: column; align-items: center; }
+    }
+  </style>
 </head>
 <body>
+  <canvas id="silk-bg" aria-hidden="true"></canvas>
 
-  <!-- ===================== HEADER SIMPLIFIÉ ===================== -->
-  <header class="legal-header">
-    <div class="container legal-header__inner">
-      <a href="index.html" class="logo" aria-label="Nexa Web - Accueil">
-        Nexa<span class="logo__accent">Web</span>
-      </a>
-      <a href="index.html" class="legal-header__back">← Retour à l'accueil</a>
-    </div>
+  <!-- Confetti dots -->
+  <div class="confetti-wrap" aria-hidden="true">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+
+  <header class="site-header" id="site-header">
+    <nav class="nav">
+      <a href="index.html" class="nav__logo">Nexa<span>Web</span></a>
+      <ul class="nav__list" id="nav-list">
+        <li><a href="index.html" class="nav__link">Accueil</a></li>
+        <li><a href="tarifs.html" class="nav__link">Tarifs</a></li>
+        <li><a href="devis.html" class="nav__link">Devis</a></li>
+        <li><a href="blog.html" class="nav__link">Blog</a></li>
+        <li><a href="contact.html" class="nav__link">Contact</a></li>
+      </ul>
+      <a href="devis.html" class="btn btn--nav">Devis gratuit</a>
+      <button class="nav__burger" id="nav-burger" aria-label="Ouvrir le menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
   </header>
+  <div class="panel-backdrop" id="panel-backdrop" aria-hidden="true"></div>
 
-  <main class="thanks-page">
-    <div class="confetti-container" id="confetti-container" aria-hidden="true"></div>
-    <div class="container">
-      <div class="thanks-page__icon" aria-hidden="true">🎉</div>
-      <h1 class="thanks-page__title">Merci ! On vous recontacte sous 24h ✅</h1>
-      <p class="thanks-page__text">Votre demande a bien été envoyée à Nexa Web. Un membre de notre équipe revient vers vous très rapidement.</p>
-      <a href="index.html" class="btn btn--primary">Retour à l'accueil</a>
-    </div>
+  <main>
+    <section class="merci-section" role="main" aria-labelledby="merci-heading">
+      <div class="merci-inner">
+
+        <!-- Animated SVG Checkmark -->
+        <div class="checkmark-wrap" aria-hidden="true">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle class="checkmark-circle" cx="50" cy="50" r="48"/>
+            <circle class="checkmark-ring"   cx="50" cy="50" r="45"/>
+            <polyline class="checkmark-tick" points="28,52 44,68 72,34"/>
+          </svg>
+        </div>
+
+        <h1 id="merci-heading">Merci !</h1>
+        <p class="subtitle">Votre message a bien été reçu. On revient vers vous sous 24 heures avec une proposition personnalisée.</p>
+
+        <!-- Steps -->
+        <p class="steps-label">Ce qui se passe ensuite</p>
+        <div class="steps-row">
+
+          <div class="step-card">
+            <div class="step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </div>
+            <p class="step-num">Étape 1</p>
+            <h3>Analyse de votre projet</h3>
+            <p>Notre équipe étudie votre demande en détail</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true">
+                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+              </svg>
+            </div>
+            <p class="step-num">Étape 2</p>
+            <h3>Proposition sous 24h</h3>
+            <p>Devis détaillé et planning de réalisation</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true">
+                <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+              </svg>
+            </div>
+            <p class="step-num">Étape 3</p>
+            <h3>On démarre !</h3>
+            <p>Signature et début du projet dès validation</p>
+          </div>
+
+        </div>
+
+        <!-- CTAs -->
+        <div class="merci-ctas">
+          <a href="index.html" class="btn btn--outline">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            Retour à l'accueil
+          </a>
+          <a href="rendez-vous.html" class="btn btn--primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Prendre un RDV
+          </a>
+        </div>
+
+      </div>
+    </section>
   </main>
 
-  <!-- ===================== FOOTER SIMPLIFIÉ ===================== -->
-  <footer class="legal-footer">
-    <div class="container legal-footer__inner">
-      <span class="logo">Nexa<span class="logo__accent">Web</span></span>
-      <p>© 2026 Nexa Web — Tous droits réservés.</p>
-      <a href="index.html">Retour à l'accueil</a>
+  <footer class="site-footer">
+    <div class="footer__watermark" aria-hidden="true">NEXAWEB</div>
+    <div class="container">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <a href="index.html" class="footer__logo">Nexa<span>Web</span></a>
+          <p class="footer__tagline">Votre site premium<br>livré en 7 jours.</p>
+          <div class="footer__socials">
+            <a href="#" class="footer__social" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" stroke="none"/></svg></a>
+            <a href="#" class="footer__social" aria-label="TikTok"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V9.41a8.16 8.16 0 004.77 1.52V7.48a4.85 4.85 0 01-1-.79z"/></svg></a>
+            <a href="#" class="footer__social" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg></a>
+          </div>
+        </div>
+        <nav class="footer__nav" aria-label="Liens du pied de page">
+          <div class="footer__col">
+            <h4 class="footer__col-title">Navigation</h4>
+            <ul>
+              <li><a href="index.html">Accueil</a></li>
+              <li><a href="tarifs.html">Tarifs</a></li>
+              <li><a href="blog.html">Blog</a></li>
+              <li><a href="contact.html">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer__col">
+            <h4 class="footer__col-title">Services</h4>
+            <ul>
+              <li><a href="site-vitrine.html">Site Vitrine</a></li>
+              <li><a href="ecommerce.html">E-Commerce</a></li>
+              <li><a href="seo.html">Référencement SEO</a></li>
+              <li><a href="devis.html">Obtenir un devis</a></li>
+            </ul>
+          </div>
+          <div class="footer__col">
+            <h4 class="footer__col-title">Légal</h4>
+            <ul>
+              <li><a href="mentions-legales.html">Mentions légales</a></li>
+              <li><a href="contrat.html">CGV</a></li>
+              <li><a href="rendez-vous.html">Prendre RDV</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <div class="footer__bottom"><p>&copy; 2025 Nexa Web. Tous droits réservés.</p></div>
     </div>
   </footer>
 
-  <script>
-    (function () {
-      var colors = ['#a855f7', '#7c3aed', '#d8b4fe', '#facc15', '#34d399', '#f472b6'];
-      var container = document.getElementById('confetti-container');
-      var count = 70;
-
-      for (var i = 0; i < count; i++) {
-        var piece = document.createElement('span');
-        piece.className = 'confetti';
-        piece.style.left = Math.random() * 100 + '%';
-        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-        piece.style.animationDuration = (2.5 + Math.random() * 2) + 's';
-        piece.style.animationDelay = (Math.random() * 2) + 's';
-        piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-        container.appendChild(piece);
-      }
-    })();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>

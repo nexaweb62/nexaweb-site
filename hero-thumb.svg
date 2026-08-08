@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 542 305">
+  <defs>
+    <!-- Silk light-trail gradients (red/pink → blue/violet, diagonal) -->
+    <linearGradient id="ht-silk1" x1="0" y1="120" x2="542" y2="180" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#ff2060" stop-opacity=".0"/>
+      <stop offset="28%"  stop-color="#ff2060" stop-opacity=".72"/>
+      <stop offset="55%"  stop-color="#9b30ff" stop-opacity=".6"/>
+      <stop offset="80%"  stop-color="#4c72ff" stop-opacity=".55"/>
+      <stop offset="100%" stop-color="#4c72ff" stop-opacity=".0"/>
+    </linearGradient>
+    <linearGradient id="ht-silk2" x1="0" y1="80" x2="542" y2="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#c026d3" stop-opacity=".0"/>
+      <stop offset="22%"  stop-color="#c026d3" stop-opacity=".55"/>
+      <stop offset="58%"  stop-color="#6040ff" stop-opacity=".5"/>
+      <stop offset="100%" stop-color="#4c72ff" stop-opacity=".0"/>
+    </linearGradient>
+    <linearGradient id="ht-silk3" x1="80" y1="0" x2="460" y2="305" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#ff4080" stop-opacity=".0"/>
+      <stop offset="35%"  stop-color="#ff4080" stop-opacity=".45"/>
+      <stop offset="65%"  stop-color="#8050ff" stop-opacity=".4"/>
+      <stop offset="100%" stop-color="#4c72ff" stop-opacity=".0"/>
+    </linearGradient>
+    <linearGradient id="ht-silk4" x1="120" y1="305" x2="400" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#4c72ff" stop-opacity=".0"/>
+      <stop offset="40%"  stop-color="#7040e0" stop-opacity=".38"/>
+      <stop offset="75%"  stop-color="#e0306a" stop-opacity=".42"/>
+      <stop offset="100%" stop-color="#ff2060" stop-opacity=".0"/>
+    </linearGradient>
+    <linearGradient id="ht-silk5" x1="0" y1="200" x2="542" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#ff3070" stop-opacity=".0"/>
+      <stop offset="32%"  stop-color="#ff3070" stop-opacity=".3"/>
+      <stop offset="68%"  stop-color="#5040d0" stop-opacity=".28"/>
+      <stop offset="100%" stop-color="#3c60ff" stop-opacity=".0"/>
+    </linearGradient>
+    <linearGradient id="ht-web" x1="196" y1="0" x2="348" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#4c72ff"/>
+      <stop offset="50%"  stop-color="#8b50ff"/>
+      <stop offset="100%" stop-color="#c026d3"/>
+    </linearGradient>
+    <!-- Soft glow behind text -->
+    <radialGradient id="ht-glow" cx="50%" cy="58%" r="38%">
+      <stop offset="0%"   stop-color="#1a1040" stop-opacity=".9"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="542" height="305" fill="#000000"/>
+
+  <!-- Silk light trails — curved diagonal strokes -->
+  <!-- Main bold trail 1 (pink → blue) -->
+  <path d="M-20,210 C80,155 180,130 300,148 S440,170 562,100"
+        fill="none" stroke="url(#ht-silk1)" stroke-width="28" stroke-linecap="round" opacity=".9"/>
+  <!-- Main bold trail 2 (violet → blue) -->
+  <path d="M-20,160 C60,120 160,100 285,118 S430,145 562,80"
+        fill="none" stroke="url(#ht-silk2)" stroke-width="18" stroke-linecap="round" opacity=".85"/>
+  <!-- Trail 3 (pink → purple, lower arc) -->
+  <path d="M-20,260 C100,200 220,175 340,190 S470,210 562,155"
+        fill="none" stroke="url(#ht-silk3)" stroke-width="14" stroke-linecap="round" opacity=".7"/>
+  <!-- Trail 4 (ascending, blue → pink) -->
+  <path d="M60,305 C160,250 240,190 350,160 S480,138 562,90"
+        fill="none" stroke="url(#ht-silk4)" stroke-width="10" stroke-linecap="round" opacity=".65"/>
+  <!-- Trail 5 (thin highlight) -->
+  <path d="M-20,185 C90,145 200,128 310,140 S450,155 562,118"
+        fill="none" stroke="url(#ht-silk5)" stroke-width="5" stroke-linecap="round" opacity=".55"/>
+  <!-- Extra thin accent near center -->
+  <path d="M-20,230 C120,178 240,158 360,168 S470,180 562,140"
+        fill="none" stroke="url(#ht-silk1)" stroke-width="3" stroke-linecap="round" opacity=".35"/>
+
+  <!-- Soft glow to help text legibility -->
+  <rect width="542" height="305" fill="url(#ht-glow)"/>
+
+  <!-- Nav bar -->
+  <rect width="542" height="28" fill="rgba(0,0,0,0.88)"/>
+  <text x="18" y="19" font-family="Impact,'Arial Black',sans-serif" font-size="11" font-weight="900" fill="#e2e2f0" letter-spacing="1">NEXA<tspan fill="#4c72ff">WEB</tspan></text>
+  <text x="271" y="19" text-anchor="middle" font-family="Arial,sans-serif" font-size="6" fill="rgba(226,226,240,0.38)" letter-spacing="1.5">Accueil · Tarifs · Devis · Blog · Contact</text>
+  <rect x="462" y="7" width="62" height="14" rx="7" fill="#4c72ff"/>
+  <text x="493" y="18" text-anchor="middle" font-family="Arial,sans-serif" font-size="6.5" fill="white" font-weight="700">Devis gratuit</text>
+
+  <!-- Label -->
+  <text x="271" y="107" text-anchor="middle" font-family="Arial,sans-serif" font-size="6.5" fill="#4c72ff" letter-spacing="4">AGENCE WEB  ·  CARVIN</text>
+
+  <!-- NEXA -->
+  <text x="271" y="163" text-anchor="middle" font-family="Impact,'Arial Black',sans-serif" font-size="63" font-weight="900" fill="#e2e2f0" letter-spacing="-1">NEXA</text>
+
+  <!-- WEB gradient -->
+  <text x="271" y="215" text-anchor="middle" font-family="Impact,'Arial Black',sans-serif" font-size="63" font-weight="900" fill="url(#ht-web)" letter-spacing="-1">WEB</text>
+
+  <!-- Subtitle -->
+  <text x="271" y="243" text-anchor="middle" font-family="Arial,sans-serif" font-size="8.5" fill="rgba(226,226,240,0.48)">Votre site internet premium. Livré en <tspan font-weight="700" fill="rgba(226,226,240,0.72)">7 jours.</tspan></text>
+
+  <!-- CTAs -->
+  <rect x="163" y="255" width="80" height="17" rx="8.5" fill="#4c72ff"/>
+  <text x="203" y="267" text-anchor="middle" font-family="Arial,sans-serif" font-size="6.5" fill="white" font-weight="700">Devis gratuit</text>
+  <rect x="257" y="255" width="90" height="17" rx="8.5" fill="none" stroke="rgba(226,226,240,0.2)" stroke-width="1"/>
+  <text x="302" y="267" text-anchor="middle" font-family="Arial,sans-serif" font-size="6.5" fill="rgba(226,226,240,0.52)">Voir nos projets</text>
+
+  <!-- Scroll hint -->
+  <text x="271" y="294" text-anchor="middle" font-family="Arial,sans-serif" font-size="5" fill="rgba(226,226,240,0.18)" letter-spacing="4">SCROLL</text>
+  <line x1="271" y1="297" x2="271" y2="304" stroke="rgba(226,226,240,0.15)" stroke-width="1"/>
+</svg>

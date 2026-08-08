@@ -1,345 +1,1072 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nexa Web — Référencement SEO · Visibilité Google Garantie</title>
+  <meta name="description" content="Boostez votre visibilité sur Google avec Nexa Web. Audit SEO, optimisation technique, content strategy. Résultats mesurables." />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── ACCENT GRADIENT ── */
+    .accent-gradient {
+      background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-2) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-  <!-- SEO -->
-  <title>Référencement Google (SEO) - Nexa Web | Carvin (62)</title>
-  <meta name="description" content="Améliorez votre référencement Google avec Nexa Web : SEO local, optimisation technique et suivi de positionnement pour TPE et artisans des Hauts-de-France.">
-  <meta name="keywords" content="référencement Google, SEO local, optimisation SEO, visibilité Google, Nexa Web, Carvin, Hauts-de-France">
-  <meta name="author" content="Nexa Web">
+    /* ── PAGE HERO ── */
+    .page-hero {
+      position: relative;
+      padding: 10rem 0 6rem;
+      overflow: hidden;
+      z-index: 2;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 30% 0%, rgba(76,114,255,0.1) 0%, rgba(192,38,211,0.06) 40%, transparent 70%);
+      pointer-events: none;
+    }
+    .page-hero__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 1.5rem;
+    }
+    .page-hero__eyebrow-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      flex-shrink: 0;
+    }
+    .page-hero__title {
+      font-family: var(--font-heading);
+      font-size: clamp(4rem, 10vw, 10rem);
+      font-weight: 900;
+      line-height: 0.88;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+    .page-hero__subtitle {
+      font-size: clamp(0.95rem, 1.6vw, 1.1rem);
+      font-weight: 300;
+      color: var(--color-muted);
+      line-height: 1.7;
+      max-width: 580px;
+      margin-bottom: 3rem;
+    }
+    .page-hero__ctas {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 5rem;
+    }
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: rgba(16,16,28,0.5);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      max-width: 700px;
+    }
+    .stat-item {
+      padding: 1.6rem 1.2rem;
+      text-align: center;
+      border-right: 1px solid var(--color-border);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-item__value {
+      font-family: var(--font-heading);
+      font-size: 2.2rem;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.25rem;
+    }
+    .stat-item__label {
+      font-size: 0.64rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+    }
 
-  <!-- Open Graph -->
-  <meta property="og:title" content="Référencement Google (SEO) - Nexa Web">
-  <meta property="og:description" content="Soyez visible quand vos clients vous recherchent sur Google.">
-  <meta property="og:type" content="website">
+    /* ── SEO PILLARS ── */
+    .pillars-section {
+      padding: 8rem 0;
+      position: relative;
+      z-index: 2;
+    }
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 4rem;
+    }
+    .pillar-card {
+      background: rgba(16,16,28,0.6);
+      border: 1px solid var(--color-border);
+      border-radius: 20px;
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s ease, transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.35s;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .pillar-card:hover {
+      border-color: rgba(76,114,255,0.3);
+      transform: translateY(-5px);
+      box-shadow: 0 20px 60px rgba(76,114,255,0.1);
+    }
+    .pillar-card::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(76,114,255,0.06), transparent 70%);
+      pointer-events: none;
+    }
+    .pillar-card__num {
+      font-family: var(--font-heading);
+      font-size: 5rem;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, rgba(76,114,255,0.15), rgba(192,38,211,0.1));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1.5rem;
+      display: block;
+    }
+    .pillar-card__icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(76,114,255,0.15), rgba(192,38,211,0.1));
+      border: 1px solid rgba(76,114,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      color: var(--color-accent);
+    }
+    .pillar-card__title {
+      font-family: var(--font-heading);
+      font-size: 1.6rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 1.25rem;
+    }
+    .pillar-card__list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .pillar-card__item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      font-size: 0.86rem;
+      color: var(--color-muted);
+      line-height: 1.5;
+    }
+    .pillar-card__item::before {
+      content: '';
+      display: block;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      flex-shrink: 0;
+      margin-top: 6px;
+    }
 
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    /* ── PROCESS ── */
+    .process-section {
+      padding: 8rem 0;
+      background: rgba(14,14,23,0.6);
+      position: relative;
+      z-index: 2;
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .process-timeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      margin-top: 4rem;
+      position: relative;
+    }
+    .process-timeline::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      left: calc(12.5% + 20px);
+      right: calc(12.5% + 20px);
+      height: 1px;
+      border-top: 2px dashed rgba(76,114,255,0.25);
+      pointer-events: none;
+    }
+    .timeline-step {
+      padding: 0 1.5rem;
+      text-align: center;
+      position: relative;
+    }
+    .timeline-step__num {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      color: #fff;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 0 0 6px rgba(76,114,255,0.1);
+    }
+    .timeline-step__label {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 0.5rem;
+    }
+    .timeline-step__title {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+    }
+    .timeline-step__duration {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--color-accent);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+      opacity: 0.7;
+    }
+    .timeline-step__desc {
+      font-size: 0.82rem;
+      color: var(--color-muted);
+      line-height: 1.6;
+    }
+    .timeline-step__deliverable {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.8rem;
+      background: rgba(76,114,255,0.08);
+      border: 1px solid rgba(76,114,255,0.18);
+      border-radius: 100px;
+      color: var(--color-accent);
+      margin-top: 0.75rem;
+    }
 
-  <!-- Polices Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    /* ── RESULTS METRICS ── */
+    .results-section {
+      padding: 8rem 0;
+      position: relative;
+      z-index: 2;
+    }
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 4rem;
+    }
+    .result-card {
+      background: rgba(16,16,28,0.7);
+      border: 1px solid var(--color-border);
+      border-radius: 20px;
+      padding: 3rem 2.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: border-color 0.3s ease, transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .result-card:hover {
+      border-color: rgba(76,114,255,0.25);
+      transform: translateY(-4px);
+    }
+    .result-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--color-accent), var(--color-accent-2), transparent);
+      opacity: 0.6;
+    }
+    .result-card::after {
+      content: '';
+      position: absolute;
+      bottom: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 120px;
+      background: radial-gradient(ellipse, rgba(76,114,255,0.06), transparent 70%);
+      pointer-events: none;
+    }
+    .result-card__value {
+      font-family: var(--font-heading);
+      font-size: clamp(3rem, 5vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.75rem;
+    }
+    .result-card__label {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--color-text);
+      line-height: 1.5;
+      margin-bottom: 0.5rem;
+    }
+    .result-card__sub {
+      font-size: 0.78rem;
+      color: var(--color-muted);
+    }
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="style.css">
-  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+    /* ── OFFERS ── */
+    .offers-section {
+      padding: 8rem 0;
+      position: relative;
+      z-index: 2;
+      border-top: 1px solid var(--color-border);
+    }
+    .offers-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 4rem;
+    }
+    .offer-card {
+      background: rgba(16,16,28,0.6);
+      border: 1px solid var(--color-border);
+      border-radius: 20px;
+      padding: 2.5rem;
+      position: relative;
+      transition: border-color 0.3s, transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.35s;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: flex;
+      flex-direction: column;
+    }
+    .offer-card:hover {
+      border-color: rgba(76,114,255,0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(76,114,255,0.1);
+    }
+    .offer-card--featured {
+      border-color: rgba(76,114,255,0.3);
+    }
+    .offer-card--featured::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(76,114,255,0.5), rgba(192,38,211,0.4), transparent 60%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+    .offer-card__badge {
+      display: inline-block;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 0.28rem 0.8rem;
+      background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2));
+      color: #fff;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+    }
+    .offer-card__type {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 0.5rem;
+    }
+    .offer-card__name {
+      font-family: var(--font-heading);
+      font-size: 1.45rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+    }
+    .offer-card__price {
+      font-family: var(--font-heading);
+      font-size: 3rem;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.35rem;
+    }
+    .offer-card__billing {
+      font-size: 0.75rem;
+      color: var(--color-muted);
+      margin-bottom: 1.75rem;
+    }
+    .offer-card__features {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      margin-bottom: 2rem;
+      flex: 1;
+    }
+    .offer-card__feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      font-size: 0.85rem;
+      color: var(--color-text);
+      line-height: 1.5;
+    }
+    .offer-card__feature svg {
+      color: var(--color-accent);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
 
-  <script>
-    (function () {
-      var theme = localStorage.getItem('nexaweb-theme');
-      if (theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
-    })();
-  </script>
+    /* ── FAQ STRIP ── */
+    .faq-section {
+      padding: 6rem 0;
+      position: relative;
+      z-index: 2;
+      background: rgba(14,14,23,0.5);
+      border-top: 1px solid var(--color-border);
+    }
+    .faq-list {
+      margin-top: 3.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border-top: 1px solid var(--color-border);
+    }
+    .faq-item {
+      border-bottom: 1px solid var(--color-border);
+      overflow: hidden;
+    }
+    .faq-item__question {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.5rem 0;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: var(--color-text);
+      list-style: none;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+    }
+    .faq-item__question::-webkit-details-marker { display: none; }
+    .faq-item[open] .faq-item__icon { transform: rotate(45deg); }
+    .faq-item__icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-muted);
+      flex-shrink: 0;
+      transition: transform 0.3s ease, border-color 0.3s;
+    }
+    .faq-item[open] .faq-item__icon {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+    .faq-item__answer {
+      font-size: 0.88rem;
+      color: var(--color-muted);
+      line-height: 1.7;
+      padding-bottom: 1.5rem;
+      max-width: 680px;
+    }
+
+    /* ── FINAL CTA ── */
+    .final-cta {
+      padding: 8rem 0;
+      background: rgba(14,14,23,0.6);
+      border-top: 1px solid var(--color-border);
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      overflow: hidden;
+    }
+    .final-cta::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      width: 700px;
+      height: 500px;
+      background: radial-gradient(ellipse, rgba(76,114,255,0.09) 0%, rgba(192,38,211,0.05) 40%, transparent 70%);
+      pointer-events: none;
+    }
+    .final-cta__label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 1.5rem;
+    }
+    .final-cta__title {
+      font-family: var(--font-heading);
+      font-size: clamp(2.6rem, 5.5vw, 5.5rem);
+      font-weight: 900;
+      line-height: 0.9;
+      text-transform: uppercase;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.25rem;
+    }
+    .final-cta__sub {
+      font-size: 1rem;
+      color: var(--color-muted);
+      line-height: 1.6;
+      max-width: 480px;
+      margin: 0 auto 3rem;
+    }
+    .final-cta__note {
+      display: block;
+      margin-top: 1.25rem;
+      font-size: 0.78rem;
+      color: var(--color-muted);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .pillars-grid { grid-template-columns: 1fr; max-width: 540px; }
+      .process-timeline { grid-template-columns: repeat(2, 1fr); gap: 3rem; }
+      .process-timeline::before { display: none; }
+      .results-grid { grid-template-columns: 1fr; max-width: 420px; margin-inline: auto; }
+      .offers-grid { grid-template-columns: 1fr; max-width: 480px; margin-inline: auto; }
+    }
+    @media (max-width: 768px) {
+      .pillars-grid { grid-template-columns: 1fr; max-width: 100%; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .process-timeline { grid-template-columns: 1fr; gap: 2rem; }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- ===================== TOPBAR ===================== -->
-  <div class="topbar">
-    <div class="container topbar__inner">
-      <a href="https://www.google.com/maps/search/Carvin,+Hauts-de-France" target="_blank" rel="noopener noreferrer" class="topbar__location">📍 <span data-i18n="footer.address">Carvin, Hauts-de-France</span></a>
-      <span class="topbar__phones">
-        📞 <a href="tel:0698840194" class="topbar__phone">06 98 84 01 94</a>
-        <span class="topbar__sep">|</span>
-        <a href="tel:0641467898" class="topbar__phone">06 41 46 78 98</a>
-        <span class="topbar__email-wrap">
-          <span class="topbar__sep">|</span>
-          <a href="mailto:contact.nexaweb62@gmail.com" class="topbar__phone" id="topbar-email-link">✉️ contact.nexaweb62@gmail.com</a>
-        </span>
-      </span>
-    </div>
-  </div>
+  <canvas id="silk-bg" aria-hidden="true"></canvas>
 
-  <!-- ===================== HEADER / NAVIGATION ===================== -->
-  <header class="header" id="header">
-    <div class="container header__inner">
-
-      <a href="index.html#accueil" class="logo" aria-label="Nexa Web - Accueil">
-        Nexa<span class="logo__accent">Web</span>
-      </a>
-
-      <!-- Navigation desktop -->
-      <nav class="nav" id="nav" aria-label="Navigation principale">
-        <ul class="nav__list">
-          <li><a href="index.html#accueil" class="nav__link" data-i18n="nav.home">Accueil</a></li>
-          <li class="nav__item--dropdown">
-            <a href="index.html#services" class="nav__link" data-i18n="nav.services">Services</a>
-            <ul class="nav__dropdown">
-              <li><a href="site-vitrine.html" class="nav__dropdown-link" data-i18n="nav.serviceVitrine">Sites vitrines</a></li>
-              <li><a href="ecommerce.html" class="nav__dropdown-link" data-i18n="nav.serviceEcommerce">E-commerce</a></li>
-              <li><a href="seo.html" class="nav__dropdown-link nav__link--active" aria-current="page" data-i18n="nav.serviceSeo">Référencement SEO</a></li>
-            </ul>
-          </li>
-          <li><a href="rendez-vous.html" class="nav__link" data-i18n="nav.appointment">Rendez-vous</a></li>
-          <li><a href="index.html#realisations" class="nav__link" data-i18n="nav.projects">Réalisations</a></li>
-          <li><a href="tarifs.html" class="nav__link" data-i18n="nav.pricing">Tarifs</a></li>
-          <li><a href="blog.html" class="nav__link" data-i18n="nav.blog">Blog</a></li>
-          <li><a href="contact.html" class="nav__link" data-i18n="nav.contact">Contact</a></li>
-        </ul>
-      </nav>
-
-      <div class="header__actions">
-        <button class="lang-toggle" id="lang-toggle" aria-label="Switch to English">
-          <span class="lang-toggle__flag" aria-hidden="true">🇫🇷</span>
-          <span class="lang-toggle__code">FR</span>
-        </button>
-
-        <button class="theme-toggle" id="theme-toggle" aria-label="Activer le mode clair">
-          <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-          </svg>
-          <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="4"></circle>
-            <path d="M12 2v2"></path>
-            <path d="M12 20v2"></path>
-            <path d="M4.93 4.93l1.41 1.41"></path>
-            <path d="M17.66 17.66l1.41 1.41"></path>
-            <path d="M2 12h2"></path>
-            <path d="M20 12h2"></path>
-            <path d="M6.34 17.66l-1.41 1.41"></path>
-            <path d="M19.07 4.93l-1.41 1.41"></path>
-          </svg>
-        </button>
-
-        <a href="devis.html" class="btn btn--primary btn--header" data-i18n="header.quoteBtn">Devis gratuit</a>
-      </div>
-
-      <!-- Bouton burger mobile -->
-      <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav">
-        <span></span>
-        <span></span>
-        <span></span>
+  <header class="site-header" id="site-header">
+    <nav class="nav">
+      <a href="index.html" class="nav__logo">Nexa<span>Web</span></a>
+      <ul class="nav__list" id="nav-list">
+        <li><a href="index.html" class="nav__link">Accueil</a></li>
+        <li><a href="tarifs.html" class="nav__link" id="nav-tarifs">Tarifs</a></li>
+        <li><a href="devis.html" class="nav__link">Devis</a></li>
+        <li><a href="blog.html" class="nav__link">Blog</a></li>
+        <li><a href="contact.html" class="nav__link">Contact</a></li>
+      </ul>
+      <a href="devis.html" class="btn btn--nav">Devis gratuit</a>
+      <button class="nav__burger" id="nav-burger" aria-label="Ouvrir le menu" aria-expanded="false">
+        <span></span><span></span><span></span>
       </button>
-
-    </div>
+    </nav>
   </header>
 
+  <div class="panel-backdrop" id="panel-backdrop" aria-hidden="true"></div>
+
   <main>
-    <!-- ===================== BANNIÈRE DE PAGE ===================== -->
-    <section class="page-banner" id="seo">
-      <div class="page-banner__glow" aria-hidden="true"></div>
 
-      <div class="container page-banner__inner">
-        <p class="hero__tag fade-in">Référencement Google</p>
-        <h1 class="page-banner__title fade-in">
-          Soyez visible quand vos clients <span class="text-accent">vous recherchent</span>
-        </h1>
-        <p class="page-banner__subtitle fade-in">
-          Un bon référencement (SEO), c'est plus de visibilité sur Google et plus de demandes de devis, sans publicité payante.
+    <!-- ═══ HERO ═══ -->
+    <section class="page-hero">
+      <div class="container">
+        <p class="page-hero__eyebrow reveal">
+          <span class="page-hero__eyebrow-dot"></span>
+          Référencement SEO · Audit dès 290 €
         </p>
-        <a href="devis.html" class="btn btn--primary btn--lg fade-in">Demander un devis gratuit</a>
-      </div>
-    </section>
-
-    <!-- ===================== AVANTAGES ===================== -->
-    <section id="avantages">
-      <div class="container">
-        <div class="section-head fade-in">
-          <p class="section-tag">Avantages</p>
-          <h2 class="section-title">Pourquoi travailler le SEO ?</h2>
+        <h1 class="page-hero__title reveal reveal--delay-1">
+          DOMINONS<br>
+          <span class="accent-gradient">GOOGLE</span>
+        </h1>
+        <p class="page-hero__subtitle reveal reveal--delay-2">
+          Audit complet, optimisation technique et stratégie de contenu. Votre site en première page des résultats Google.
+        </p>
+        <div class="page-hero__ctas reveal reveal--delay-3">
+          <a href="devis.html" class="btn btn--primary btn--lg">Demander un audit →</a>
+          <a href="#offres" class="btn btn--ghost btn--lg">Voir les offres</a>
         </div>
-        <div class="why__grid">
-          <article class="why-card fade-in">
-            <div class="why-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-            </div>
-            <h3 class="why-card__title">Référencement local</h3>
-            <p class="why-card__text">Apparaissez auprès des clients qui recherchent vos services près de chez eux.</p>
-          </article>
-          <article class="why-card fade-in">
-            <div class="why-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
-            </div>
-            <h3 class="why-card__title">Mots-clés ciblés</h3>
-            <p class="why-card__text">Votre site est optimisé sur les recherches réellement utilisées par vos clients.</p>
-          </article>
-          <article class="why-card fade-in">
-            <div class="why-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg>
-            </div>
-            <h3 class="why-card__title">Suivi de positionnement</h3>
-            <p class="why-card__text">Vous savez exactement où vous vous situez sur Google, et son évolution dans le temps.</p>
-          </article>
-          <article class="why-card fade-in">
-            <div class="why-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-            </div>
-            <h3 class="why-card__title">Plus de clients</h3>
-            <p class="why-card__text">Plus de visibilité sur Google se traduit directement par plus de demandes de devis.</p>
-          </article>
+        <div class="stats-row reveal reveal--delay-4">
+          <div class="stat-item">
+            <div class="stat-item__value">92%</div>
+            <div class="stat-item__label">Clics page 1</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-item__value">+340%</div>
+            <div class="stat-item__label">Trafic moyen</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-item__value">3 mois</div>
+            <div class="stat-item__label">Premiers résultats</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-item__value">0</div>
+            <div class="stat-item__label">Black-hat</div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ===================== PROCESSUS ===================== -->
-    <section id="processus" style="background: var(--color-surface);">
+    <!-- ═══ SEO PILLARS ═══ -->
+    <section class="pillars-section" id="piliers">
       <div class="container">
-        <div class="section-head fade-in">
-          <p class="section-tag">Notre processus</p>
-          <h2 class="section-title">Comment ça se passe</h2>
+        <div class="section-header reveal">
+          <span class="section-tag">Notre approche</span>
+          <h2 class="section-title">LES 3 PILIERS<br>DU SEO DURABLE</h2>
         </div>
-        <div class="trust__grid">
-          <article class="trust-card fade-in">
-            <div class="trust-card__icon" aria-hidden="true" style="font-weight:700; font-size:1.3rem;">1</div>
-            <h3 class="trust-card__title">Audit SEO</h3>
-            <p class="trust-card__text">On analyse votre site et votre positionnement actuel sur Google.</p>
-          </article>
-          <article class="trust-card fade-in">
-            <div class="trust-card__icon" aria-hidden="true" style="font-weight:700; font-size:1.3rem;">2</div>
-            <h3 class="trust-card__title">Optimisation technique</h3>
-            <p class="trust-card__text">Structure, vitesse, contenu : on optimise tous les leviers SEO de votre site.</p>
-          </article>
-          <article class="trust-card fade-in">
-            <div class="trust-card__icon" aria-hidden="true" style="font-weight:700; font-size:1.3rem;">3</div>
-            <h3 class="trust-card__title">Suivi des mots-clés</h3>
-            <p class="trust-card__text">On surveille l'évolution de votre positionnement sur vos mots-clés cibles.</p>
-          </article>
-          <article class="trust-card fade-in">
-            <div class="trust-card__icon" aria-hidden="true" style="font-weight:700; font-size:1.3rem;">4</div>
-            <h3 class="trust-card__title">Rapport mensuel</h3>
-            <p class="trust-card__text">Vous recevez un rapport clair sur vos résultats et les actions à venir.</p>
-          </article>
+        <div class="pillars-grid">
+
+          <!-- Technique -->
+          <div class="pillar-card reveal">
+            <div class="pillar-card__icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+              </svg>
+            </div>
+            <h3 class="pillar-card__title">SEO<br>Technique</h3>
+            <div class="pillar-card__list">
+              <div class="pillar-card__item">Vitesse de chargement &amp; Core Web Vitals</div>
+              <div class="pillar-card__item">Schema.org &amp; données structurées</div>
+              <div class="pillar-card__item">Sitemap XML &amp; robots.txt</div>
+              <div class="pillar-card__item">Balises canoniques &amp; redirections</div>
+              <div class="pillar-card__item">Indexation mobile-first</div>
+              <div class="pillar-card__item">Sécurité HTTPS &amp; performances serveur</div>
+            </div>
+          </div>
+
+          <!-- On-Page -->
+          <div class="pillar-card reveal reveal--delay-1">
+            <div class="pillar-card__icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+              </svg>
+            </div>
+            <h3 class="pillar-card__title">SEO<br>On-Page</h3>
+            <div class="pillar-card__list">
+              <div class="pillar-card__item">Recherche et analyse de mots-clés</div>
+              <div class="pillar-card__item">Optimisation des contenus existants</div>
+              <div class="pillar-card__item">Maillage interne stratégique</div>
+              <div class="pillar-card__item">Balises méta, titres H1-H6</div>
+              <div class="pillar-card__item">Optimisation des images (alt, WebP)</div>
+              <div class="pillar-card__item">Stratégie de contenu long-terme</div>
+            </div>
+          </div>
+
+          <!-- Off-Page -->
+          <div class="pillar-card reveal reveal--delay-2">
+            <div class="pillar-card__icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+              </svg>
+            </div>
+            <h3 class="pillar-card__title">SEO<br>Off-Page</h3>
+            <div class="pillar-card__list">
+              <div class="pillar-card__item">Netlinking qualitatif et éthique</div>
+              <div class="pillar-card__item">Citations locales (NAP)</div>
+              <div class="pillar-card__item">Google Business Profile optimisé</div>
+              <div class="pillar-card__item">Gestion de l'e-réputation</div>
+              <div class="pillar-card__item">Relations presse digitale</div>
+              <div class="pillar-card__item">Signaux sociaux &amp; mentions de marque</div>
+            </div>
+          </div>
+
         </div>
       </div>
     </section>
 
-    <!-- ===================== TARIF ===================== -->
-    <section id="tarif">
+    <!-- ═══ PROCESS ═══ -->
+    <section class="process-section" id="processus">
       <div class="container">
-        <div class="service-pricing fade-in">
-          <p class="section-tag">Tarif</p>
-          <p class="service-pricing__amount">SEO de base inclus</p>
-          <p style="color: var(--color-text-muted); margin-bottom: 20px;">Le SEO de base est inclus dans toutes nos formules. Le SEO avancé et le suivi de positionnement sont proposés avec la formule Premium.</p>
-          <a href="tarifs.html" class="btn btn--ghost">Voir toutes les formules</a>
+        <div class="section-header reveal" style="text-align:center;">
+          <span class="section-tag">Notre méthode</span>
+          <h2 class="section-title">DU DIAGNOSTIC<br>AUX RÉSULTATS</h2>
+        </div>
+        <div class="process-timeline">
+
+          <div class="timeline-step reveal">
+            <div class="timeline-step__num">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+            </div>
+            <p class="timeline-step__label">Phase 1</p>
+            <h3 class="timeline-step__title">Audit</h3>
+            <p class="timeline-step__duration">Semaine 1</p>
+            <p class="timeline-step__desc">Analyse technique complète de votre site sur 30+ points de contrôle.</p>
+            <span class="timeline-step__deliverable">Rapport PDF complet</span>
+          </div>
+
+          <div class="timeline-step reveal reveal--delay-1">
+            <div class="timeline-step__num">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+              </svg>
+            </div>
+            <p class="timeline-step__label">Phase 2</p>
+            <h3 class="timeline-step__title">Stratégie</h3>
+            <p class="timeline-step__duration">Semaine 2</p>
+            <p class="timeline-step__desc">Plan d'action priorisé, recherche de mots-clés et roadmap content.</p>
+            <span class="timeline-step__deliverable">Roadmap SEO 6 mois</span>
+          </div>
+
+          <div class="timeline-step reveal reveal--delay-2">
+            <div class="timeline-step__num">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+              </svg>
+            </div>
+            <p class="timeline-step__label">Phase 3</p>
+            <h3 class="timeline-step__title">Implémentation</h3>
+            <p class="timeline-step__duration">Semaines 3–8</p>
+            <p class="timeline-step__desc">Optimisations techniques, contenus et netlinking selon la roadmap.</p>
+            <span class="timeline-step__deliverable">Corrections appliquées</span>
+          </div>
+
+          <div class="timeline-step reveal reveal--delay-3">
+            <div class="timeline-step__num">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+              </svg>
+            </div>
+            <p class="timeline-step__label">Phase 4</p>
+            <h3 class="timeline-step__title">Suivi Mensuel</h3>
+            <p class="timeline-step__duration">En continu</p>
+            <p class="timeline-step__desc">Rapport mensuel de positionnement, ajustements et nouvelles opportunités.</p>
+            <span class="timeline-step__deliverable">Rapport mensuel</span>
+          </div>
+
         </div>
       </div>
     </section>
 
-    <!-- ===================== CTA FINALE ===================== -->
-    <section class="service-cta">
+    <!-- ═══ RESULTS ═══ -->
+    <section class="results-section" id="resultats">
       <div class="container">
-        <h2 class="service-cta__title">Prêt à être visible sur Google ?</h2>
-        <p class="service-cta__text">Demandez un devis gratuit, sans engagement, et recevez une réponse sous 24h.</p>
-        <a href="devis.html" class="btn btn--primary btn--lg">Demander un devis gratuit</a>
+        <div class="section-header reveal" style="text-align:center;">
+          <span class="section-tag">Résultats concrets</span>
+          <h2 class="section-title">CE QUE NOS CLIENTS<br>ONT OBTENU</h2>
+        </div>
+        <div class="results-grid">
+
+          <div class="result-card reveal">
+            <div class="result-card__value">+340%</div>
+            <p class="result-card__label">De trafic organique moyen</p>
+            <p class="result-card__sub">Mesuré sur 12 mois après optimisation SEO complète</p>
+          </div>
+
+          <div class="result-card reveal reveal--delay-1">
+            <div class="result-card__value">3×</div>
+            <p class="result-card__label">Plus de leads qualifiés</p>
+            <p class="result-card__sub">Visiteurs issus de Google convertissent mieux que les autres sources</p>
+          </div>
+
+          <div class="result-card reveal reveal--delay-2">
+            <div class="result-card__value">3 mois</div>
+            <p class="result-card__label">Pour atteindre la page 1 Google</p>
+            <p class="result-card__sub">Sur les mots-clés stratégiques ciblés dans notre roadmap</p>
+          </div>
+
+        </div>
       </div>
     </section>
+
+    <!-- ═══ OFFERS ═══ -->
+    <section class="offers-section" id="offres">
+      <div class="container">
+        <div class="section-header reveal" style="text-align:center;">
+          <span class="section-tag">Nos formules</span>
+          <h2 class="section-title">COMMENCEZ<br>AU BON NIVEAU</h2>
+        </div>
+        <div class="offers-grid">
+
+          <!-- Audit -->
+          <div class="offer-card reveal">
+            <p class="offer-card__type">Ponctuel</p>
+            <h3 class="offer-card__name">Audit SEO Complet</h3>
+            <div class="offer-card__price">290 €</div>
+            <p class="offer-card__billing">paiement unique · livré en 5 jours ouvrés</p>
+            <div class="offer-card__features">
+              <div class="offer-card__feature">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Rapport d'audit 30+ points
+              </div>
+              <div class="offer-card__feature">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Analyse technique complète
+              </div>
+              <div class="offer-card__feature">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Analyse des concurrents
+              </div>
+              <div class="offer-card__feature">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Recommandations priorisées
+              </div>
+              <div class="offer-card__feature">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Appel de restitution 1h
+              </div>
+            </div>
+            <a href="devis.html" class="btn btn--outline" style="width:100%; justify-content:center;">Obtenir mon audit</a>
+          </div>
+
+          <!-- SEO Mensuel -->
+          <div class="offer-card offer-card--featured reveal reveal--delay-1">
+            <span class="offer-card__badge">Le plus complet</span>
+            <p class="offer-card__type">Abonnement mensuel</p>
+            <h3 class="offer-card__name">SEO Mensuel</h3>
+            <div class="offer-card__price">490 €</div>
+            <p class="offer-card__billing">par mois · sans engagement après 3 mois</p>
+            <div class="offer-card__features">
+              <div class="offer-card__feature">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Optimisation continue
+              </div>
+              <div class="offer-card__feature">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Rapport mensuel de positions
+              </div>
+              <div class="offer-card__feature">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Création de contenus SEO
+              </div>
+              <div class="offer-card__feature">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Suivi des positions clés
+              </div>
+              <div class="offer-card__feature">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Netlinking mensuel
+              </div>
+            </div>
+            <a href="devis.html" class="btn btn--primary" style="width:100%; justify-content:center;">Démarrer le SEO →</a>
+          </div>
+
+          <!-- Pack Lancement -->
+          <div class="offer-card reveal reveal--delay-2">
+            <p class="offer-card__type">Pack complet</p>
+            <h3 class="offer-card__name">Pack Lancement</h3>
+            <div class="offer-card__price">890 €</div>
+            <p class="offer-card__billing">paiement unique · idéal pour démarrer</p>
+            <div class="offer-card__features">
+              <div class="offer-card__feature">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Audit SEO complet inclus
+              </div>
+              <div class="offer-card__feature">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Implémentation des corrections
+              </div>
+              <div class="offer-card__feature">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                1 mois de suivi mensuel
+              </div>
+              <div class="offer-card__feature">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Google Business Profile
+              </div>
+              <div class="offer-card__feature">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Bilan de résultats à 30 jours
+              </div>
+            </div>
+            <a href="devis.html" class="btn btn--outline" style="width:100%; justify-content:center;">Choisir ce pack</a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ FAQ ═══ -->
+    <section class="faq-section">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-tag">Questions fréquentes</span>
+          <h2 class="section-title">VOS QUESTIONS,<br>NOS RÉPONSES</h2>
+        </div>
+        <div class="faq-list reveal reveal--delay-1">
+
+          <details class="faq-item">
+            <summary class="faq-item__question">
+              En combien de temps verra-t-on les résultats SEO ?
+              <span class="faq-item__icon" aria-hidden="true">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </span>
+            </summary>
+            <p class="faq-item__answer">Les premières améliorations de positionnement se constatent généralement entre 4 et 12 semaines après les premières optimisations. Les résultats significatifs (trafic, leads) sont visibles à partir de 3 mois. Le SEO est un investissement long terme à ROI croissant.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-item__question">
+              Quelle est la différence entre SEO et publicité Google (SEA) ?
+              <span class="faq-item__icon" aria-hidden="true">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </span>
+            </summary>
+            <p class="faq-item__answer">Le SEA (Google Ads) génère du trafic immédiat mais s'arrête dès que vous coupez le budget. Le SEO est durable : une fois votre site bien positionné, le trafic continue même sans paiement continu. Nous recommandons souvent une combinaison des deux pour maximiser les résultats.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-item__question">
+              Travaillez-vous sur des sites existants ou uniquement sur les sites créés avec Nexa Web ?
+              <span class="faq-item__icon" aria-hidden="true">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </span>
+            </summary>
+            <p class="faq-item__answer">Nous intervenons sur tous les types de sites web, quelle que soit la technologie utilisée (WordPress, Webflow, HTML statique, etc.). Notre audit SEO est indépendant de la technologie et nos recommandations s'adaptent à votre CMS.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-item__question">
+              Garantissez-vous la première position sur Google ?
+              <span class="faq-item__icon" aria-hidden="true">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </span>
+            </summary>
+            <p class="faq-item__answer">Aucune agence sérieuse ne peut garantir la 1ère position (Google le précise lui-même). Ce que nous garantissons : une progression mesurable du trafic organique, une augmentation des positions sur vos mots-clés cibles et des rapports transparents chaque mois.</p>
+          </details>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ FINAL CTA ═══ -->
+    <section class="final-cta">
+      <div class="container" style="position:relative;z-index:2;">
+        <p class="final-cta__label reveal">Passez à la vitesse supérieure</p>
+        <h2 class="final-cta__title reveal reveal--delay-1">
+          COMMENCEZ PAR<br>UN AUDIT<br>
+          <span class="accent-gradient">GRATUIT</span>
+        </h2>
+        <p class="final-cta__sub reveal reveal--delay-2">
+          On analyse votre site et on vous dit exactement ce qui bloque votre visibilité sur Google.
+        </p>
+        <a href="devis.html" class="btn btn--primary btn--lg reveal reveal--delay-3">Demander mon audit →</a>
+        <span class="final-cta__note reveal reveal--delay-4">Réponse sous 24h · Analyse personnalisée · Sans engagement</span>
+      </div>
+    </section>
+
   </main>
 
-  <!-- ===================== FOOTER ===================== -->
   <footer class="site-footer">
-    <div class="container footer__grid">
-
-      <div class="footer__brand">
-        <a href="index.html#accueil" class="logo" aria-label="Nexa Web - Accueil">
-          Nexa<span class="logo__accent">Web</span>
-        </a>
-        <p class="footer__tagline" data-i18n="footer.tagline">Des sites internet sur-mesure pour les artisans et TPE des Hauts-de-France.</p>
-        <div class="footer__socials">
-          <a href="https://www.instagram.com/nexaaweb1" class="footer__social" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="2" y="2" width="20" height="20" rx="5"></rect>
-              <circle cx="12" cy="12" r="4"></circle>
-              <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"></circle>
-            </svg>
-          </a>
-          <a href="https://www.tiktok.com/@nexaweb1" class="footer__social" aria-label="TikTok" target="_blank" rel="noopener noreferrer">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.75a4.85 4.85 0 01-1.01-.06z"/>
-            </svg>
-          </a>
+    <div class="footer__watermark" aria-hidden="true">NEXAWEB</div>
+    <div class="container">
+      <div class="footer__top">
+        <div class="footer__brand reveal">
+          <a href="index.html" class="footer__logo">Nexa<span>Web</span></a>
+          <p class="footer__tagline">Votre site premium<br>livré en 7 jours.</p>
+          <div class="footer__socials">
+            <a href="#" class="footer__social" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" stroke="none"/></svg></a>
+            <a href="#" class="footer__social" aria-label="TikTok"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V9.41a8.16 8.16 0 004.77 1.52V7.48a4.85 4.85 0 01-1-.79z"/></svg></a>
+            <a href="#" class="footer__social" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg></a>
+          </div>
         </div>
+        <nav class="footer__nav reveal reveal--delay-1" aria-label="Liens du pied de page">
+          <div class="footer__col">
+            <h4 class="footer__col-title">Navigation</h4>
+            <ul>
+              <li><a href="index.html">Accueil</a></li>
+              <li><a href="tarifs.html">Tarifs</a></li>
+              <li><a href="blog.html">Blog</a></li>
+              <li><a href="contact.html">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer__col">
+            <h4 class="footer__col-title">Services</h4>
+            <ul>
+              <li><a href="site-vitrine.html">Site Vitrine</a></li>
+              <li><a href="ecommerce.html">E-Commerce</a></li>
+              <li><a href="seo.html">Référencement SEO</a></li>
+              <li><a href="devis.html">Obtenir un devis</a></li>
+            </ul>
+          </div>
+          <div class="footer__col">
+            <h4 class="footer__col-title">Légal</h4>
+            <ul>
+              <li><a href="mentions-legales.html">Mentions légales</a></li>
+              <li><a href="contrat.html">CGV</a></li>
+              <li><a href="rendez-vous.html">Prendre RDV</a></li>
+            </ul>
+          </div>
+        </nav>
       </div>
-
-      <div class="footer__col">
-        <h3 class="footer__col-title" data-i18n="footer.quickLinks">Liens rapides</h3>
-        <ul class="footer__col-list">
-          <li><a href="index.html#accueil" data-i18n="nav.home">Accueil</a></li>
-          <li><a href="index.html#services" data-i18n="nav.services">Services</a></li>
-          <li><a href="index.html#realisations" data-i18n="nav.projects">Réalisations</a></li>
-          <li><a href="tarifs.html" data-i18n="nav.pricing">Tarifs</a></li>
-          <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
-        </ul>
+      <div class="footer__bottom">
+        <p>&copy; 2025 Nexa Web. Tous droits réservés.</p>
       </div>
-
-      <div class="footer__col">
-        <h3 class="footer__col-title" data-i18n="footer.legalTitle">Légal</h3>
-        <ul class="footer__col-list">
-          <li><a href="mentions-legales.html#mentions-legales" data-i18n="footer.legal">Mentions légales</a></li>
-          <li><a href="mentions-legales.html#cgv" data-i18n="footer.cgv">CGV</a></li>
-          <li><a href="mentions-legales.html#cookies" data-i18n="footer.cookiesPolicy">Politique cookies</a></li>
-        </ul>
-      </div>
-
-      <div class="footer__col">
-        <h3 class="footer__col-title" data-i18n="footer.contactTitle">Contact</h3>
-        <ul class="footer__contact">
-          <li class="footer__contact-item">
-            <span class="footer__contact-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path>
-              </svg>
-            </span>
-            <span class="footer__contact-numbers">
-              <a href="tel:0698840194" class="footer__contact-number">06 98 84 01 94</a>
-              <span class="footer__contact-or">ou</span>
-              <a href="tel:0641467898" class="footer__contact-number">06 41 46 78 98</a>
-            </span>
-          </li>
-          <li>
-            <a href="mailto:contact.nexaweb62@gmail.com" class="footer__contact-link">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="3" y="5" width="18" height="14" rx="2"></rect>
-                <path d="m3 7 9 6 9-6"></path>
-              </svg>
-              contact.nexaweb62@gmail.com
-            </a>
-          </li>
-          <li>
-            <span class="footer__contact-link">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1 1 16 0z"></path>
-                <circle cx="12" cy="10" r="3"></circle>
-              </svg>
-              <span data-i18n="footer.address">Carvin, Hauts-de-France</span>
-            </span>
-          </li>
-        </ul>
-      </div>
-
-    </div>
-
-    <div class="container footer__bottom">
-      <p data-i18n="footer.copyright">© 2025 Nexa Web — Tous droits réservés — Carvin (62)</p>
     </div>
   </footer>
 
-  <!-- ===================== POPUP TÉLÉPHONE ===================== -->
-  <div class="phone-modal-overlay" id="phone-modal-overlay">
-    <div class="phone-modal" role="dialog" aria-modal="true" aria-labelledby="phone-modal-title">
-      <button type="button" class="phone-modal__close" id="phone-modal-close" aria-label="Fermer">✕</button>
-      <h3 class="phone-modal__title" id="phone-modal-title" data-i18n="phoneModal.title">Comment voulez-vous nous contacter ?</h3>
-      <div class="phone-modal__actions">
-        <button type="button" class="btn btn--primary btn--lg phone-modal__btn" id="phone-modal-call" data-i18n="phoneModal.call">📞 Appeler maintenant</button>
-        <button type="button" class="btn btn--ghost btn--lg phone-modal__btn" data-i18n="phoneModal.appointment" onclick='Calendly.initPopupWidget({url: "https://calendly.com/contact-nexaweb62/30min"});return false;'>📅 Prendre un rendez-vous</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===================== POPUP EMAIL (TOPBAR) ===================== -->
-  <div class="email-modal-overlay" id="email-modal-overlay">
-    <div class="email-modal" role="dialog" aria-modal="true" aria-labelledby="email-modal-title">
-      <button type="button" class="email-modal__close" id="email-modal-close" aria-label="Fermer">✕</button>
-      <h3 class="email-modal__title" id="email-modal-title" data-i18n="emailModal.title">Comment pouvons-nous vous aider ?</h3>
-      <div class="email-modal__actions">
-        <a href="contact.html#contact" class="btn btn--primary btn--lg email-modal__btn" id="email-modal-devis" data-i18n="emailModal.devisBtn">📋 Demander un devis</a>
-        <button type="button" class="btn btn--ghost btn--lg email-modal__btn" data-i18n="phoneModal.appointment" onclick='Calendly.initPopupWidget({url: "https://calendly.com/contact-nexaweb62/30min"});return false;'>📅 Prendre un rendez-vous</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="https://assets.calendly.com/assets/external/widget.js"></script>
   <script src="script.js"></script>
-  <script src="cookie-consent.js"></script>
 </body>
 </html>

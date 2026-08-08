@@ -1,295 +1,702 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nexa Web — Contact · Agence Web à Carvin</title>
+  <meta name="description" content="Contactez Nexa Web à Carvin. Devis gratuit, réponse sous 24h. Votre projet web commence ici." />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── CONTACT HERO ───────────────────────────── */
+    .contact-hero {
+      padding: 10rem 0 4rem;
+      text-align: center;
+      position: relative;
+    }
+    .contact-hero__label {
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 1.25rem;
+    }
+    .contact-hero__title {
+      font-family: var(--font-heading);
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: 900;
+      line-height: 0.95;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+    }
+    .contact-hero__title span {
+      background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .contact-hero__sub {
+      color: var(--color-muted);
+      font-size: 1.05rem;
+      max-width: 480px;
+      margin: 0 auto;
+      line-height: 1.75;
+    }
 
-  <!-- SEO -->
-  <title>Contact - Nexa Web | Demandez votre devis gratuit</title>
-  <meta name="description" content="Contactez Nexa Web pour un devis gratuit et sans engagement : création de site vitrine, e-commerce, refonte ou SEO. Intervention à Carvin et partout en France.">
-  <meta name="keywords" content="contact Nexa Web, devis gratuit site internet, Carvin, Hauts-de-France">
-  <meta name="author" content="Nexa Web">
+    /* ── CONTACT LAYOUT ─────────────────────────── */
+    .contact-section { padding: 2rem 0 8rem; }
 
-  <!-- Open Graph -->
-  <meta property="og:title" content="Contact - Nexa Web">
-  <meta property="og:description" content="Demandez votre devis gratuit pour la création de votre site internet.">
-  <meta property="og:type" content="website">
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
 
-  <!-- Polices Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    /* ── INFO CARDS ─────────────────────────────── */
+    .response-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.45rem 1rem;
+      background: rgba(76,114,255,0.1);
+      border: 1px solid rgba(76,114,255,0.22);
+      border-radius: 100px;
+      font-size: 0.74rem;
+      letter-spacing: 0.05em;
+      color: var(--color-accent);
+      margin-bottom: 2rem;
+    }
+    .response-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      box-shadow: 0 0 8px var(--color-accent);
+      animation: pulse-blue 2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    @keyframes pulse-blue {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.5); opacity: 0.5; }
+    }
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="style.css">
-  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+    .contact-info { display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2.5rem; }
+
+    .contact-info__item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.15rem 1.4rem;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      transition: border-color 0.25s;
+    }
+    .contact-info__item:hover { border-color: var(--color-border-hi); }
+    .contact-info__icon { font-size: 1.15rem; flex-shrink: 0; margin-top: 0.1rem; }
+    .contact-info__label {
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 0.2rem;
+    }
+    .contact-info__value { font-size: 0.95rem; color: var(--color-text); }
+    .contact-info__note { font-size: 0.76rem; color: var(--color-muted); margin-top: 0.1rem; }
+
+    /* ── FORM ───────────────────────────────────── */
+    .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+    .contact-form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-field { display: flex; flex-direction: column; gap: 0.35rem; }
+    .form-field label {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+    }
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--color-border);
+      border-radius: 10px;
+      padding: 0.82rem 1.05rem;
+      color: var(--color-text);
+      font-family: var(--font-body);
+      font-size: 0.93rem;
+      transition: border-color 0.25s, background 0.25s;
+      outline: none;
+      width: 100%;
+    }
+    .form-field select {
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.35)' stroke-width='2'%3E%3Cpolyline points='6,9 12,15 18,9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      padding-right: 2.5rem;
+      cursor: pointer;
+    }
+    .form-field select option { background: #0a0a0f; color: #e2e2f0; }
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus {
+      border-color: var(--color-accent);
+      background: rgba(76,114,255,0.06);
+    }
+    .form-field textarea { resize: vertical; min-height: 130px; }
+    .form-field input::placeholder,
+    .form-field textarea::placeholder { color: rgba(226,226,240,0.2); }
+    .form-submit { margin-top: 0.5rem; }
+
+    /* ── GLOBE ──────────────────────────────────── */
+    .globe-wrapper { position: sticky; top: 110px; }
+    .globe-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 0.75rem;
+    }
+    .globe-title {
+      font-family: var(--font-heading);
+      font-size: 1.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .globe-sub {
+      color: var(--color-muted);
+      font-size: 0.87rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+    #globe-canvas {
+      display: block;
+      width: 100%;
+      border-radius: 16px;
+      cursor: grab;
+      background: #000;
+      border: 1px solid var(--color-border);
+    }
+    #globe-canvas:active { cursor: grabbing; }
+    .globe-loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      aspect-ratio: 1 / 0.85;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--color-border);
+      color: var(--color-muted);
+      font-size: 0.85rem;
+    }
+    .globe-legend {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 0.75rem;
+      font-size: 0.74rem;
+      color: var(--color-muted);
+    }
+    .globe-legend__loc { display: flex; align-items: center; gap: 0.5rem; }
+    .globe-legend__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 8px rgba(34,197,94,0.7);
+      animation: pulse-green 2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    @keyframes pulse-green {
+      0%, 100% { box-shadow: 0 0 5px rgba(34,197,94,0.4); }
+      50%       { box-shadow: 0 0 14px rgba(34,197,94,0.9); }
+    }
+
+    /* ── RESPONSIVE ─────────────────────────────── */
+    @media (max-width: 960px) {
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+      .globe-wrapper {
+        position: static;
+        order: -1;
+      }
+    }
+    @media (max-width: 600px) {
+      .contact-form__row { grid-template-columns: 1fr; }
+      .contact-hero { padding: 8rem 0 3rem; }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- ===================== TOPBAR ===================== -->
-  <div class="topbar">
-    <div class="container topbar__inner">
-      <a href="https://www.google.com/maps/search/Carvin,+Hauts-de-France" target="_blank" rel="noopener noreferrer" class="topbar__location">📍 <span data-i18n="footer.address">Carvin, Hauts-de-France</span></a>
-      <span class="topbar__phones">
-        📞 <a href="tel:0698840194" class="topbar__phone">06 98 84 01 94</a>
-        <span class="topbar__sep">|</span>
-        <a href="tel:0641467898" class="topbar__phone">06 41 46 78 98</a>
-        <span class="topbar__email-wrap">
-          <span class="topbar__sep">|</span>
-          <a href="mailto:contact.nexaweb62@gmail.com" class="topbar__phone" id="topbar-email-link">✉️ contact.nexaweb62@gmail.com</a>
-        </span>
-      </span>
-    </div>
-  </div>
+  <canvas id="silk-bg" aria-hidden="true"></canvas>
 
-  <!-- ===================== HEADER / NAVIGATION ===================== -->
-  <header class="header" id="header">
-    <div class="container header__inner">
-
-      <a href="index.html#accueil" class="logo" aria-label="Nexa Web - Accueil">
-        Nexa<span class="logo__accent">Web</span>
-      </a>
-
-      <!-- Navigation desktop -->
-      <nav class="nav" id="nav" aria-label="Navigation principale">
-        <ul class="nav__list">
-          <li><a href="index.html#accueil" class="nav__link" data-i18n="nav.home">Accueil</a></li>
-          <li><a href="index.html#services" class="nav__link" data-i18n="nav.services">Services</a></li>
-          <li><a href="rendez-vous.html" class="nav__link" data-i18n="nav.appointment">Rendez-vous</a></li>
-          <li><a href="index.html#pourquoi-nous" class="nav__link" data-i18n="nav.why">Pourquoi nous</a></li>
-          <li><a href="index.html#realisations" class="nav__link" data-i18n="nav.projects">Réalisations</a></li>
-          <li><a href="index.html#avis" class="nav__link" data-i18n="nav.reviews">Avis</a></li>
-          <li><a href="tarifs.html" class="nav__link" data-i18n="nav.pricing">Tarifs</a></li>
-          <li><a href="contact.html" class="nav__link nav__link--active" aria-current="page" data-i18n="nav.contact">Contact</a></li>
-        </ul>
-      </nav>
-
-      <div class="header__actions">
-        <button class="lang-toggle" id="lang-toggle" aria-label="Switch to English">
-          <span class="lang-toggle__flag" aria-hidden="true">🇫🇷</span>
-          <span class="lang-toggle__code">FR</span>
-        </button>
-
-        <button class="theme-toggle" id="theme-toggle" aria-label="Activer le mode clair">
-          <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-          </svg>
-          <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="4"></circle>
-            <path d="M12 2v2"></path>
-            <path d="M12 20v2"></path>
-            <path d="M4.93 4.93l1.41 1.41"></path>
-            <path d="M17.66 17.66l1.41 1.41"></path>
-            <path d="M2 12h2"></path>
-            <path d="M20 12h2"></path>
-            <path d="M6.34 17.66l-1.41 1.41"></path>
-            <path d="M19.07 4.93l-1.41 1.41"></path>
-          </svg>
-        </button>
-
-        <a href="devis.html" class="btn btn--primary btn--header" data-i18n="header.quoteBtn">Devis gratuit</a>
-      </div>
-
-      <!-- Bouton burger mobile -->
-      <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav">
-        <span></span>
-        <span></span>
-        <span></span>
+  <header class="site-header" id="site-header">
+    <nav class="nav">
+      <a href="index.html" class="nav__logo">Nexa<span>Web</span></a>
+      <ul class="nav__list" id="nav-list">
+        <li><a href="index.html" class="nav__link">Accueil</a></li>
+        <li><a href="tarifs.html" class="nav__link">Tarifs</a></li>
+        <li><a href="devis.html" class="nav__link">Devis</a></li>
+        <li><a href="blog.html" class="nav__link">Blog</a></li>
+        <li><a href="contact.html" class="nav__link active">Contact</a></li>
+      </ul>
+      <a href="devis.html" class="btn btn--nav">Devis gratuit</a>
+      <button class="nav__burger" id="nav-burger" aria-label="Ouvrir le menu" aria-expanded="false">
+        <span></span><span></span><span></span>
       </button>
-
-    </div>
+    </nav>
   </header>
 
   <main>
-    <!-- ===================== BANNIÈRE DE PAGE ===================== -->
-    <section class="page-banner" id="contact">
-      <div class="page-banner__glow" aria-hidden="true"></div>
 
-      <div class="container page-banner__inner">
-        <p class="hero__tag fade-in" data-i18n="contactBanner.tag">Contact</p>
-        <h1 class="page-banner__title fade-in">
-          <span data-i18n="contactBanner.part1">Parlons de votre </span><span class="text-accent" data-i18n="contactBanner.accent">projet</span>
+    <!-- HERO -->
+    <section class="contact-hero">
+      <div class="container">
+        <p class="contact-hero__label reveal">Agence Web · Carvin</p>
+        <h1 class="contact-hero__title reveal reveal--delay-1">
+          Parlons de<br><span>votre projet</span>
         </h1>
-        <p class="page-banner__subtitle fade-in" data-i18n="contactBanner.subtitle">
-          Décrivez-nous votre besoin, nous vous répondons rapidement avec un devis gratuit et
-          sans engagement.
+        <p class="contact-hero__sub reveal reveal--delay-2">
+          Décrivez votre idée, on revient vers vous sous 24h avec une proposition claire et un devis gratuit.
         </p>
       </div>
     </section>
 
-    <!-- ===================== SECTION CONTACT ===================== -->
+    <!-- CONTACT -->
     <section class="contact-section">
-      <div class="container contact__grid">
+      <div class="container">
+        <div class="contact-grid">
 
-        <!-- Formulaire -->
-        <form class="contact-form fade-in ajax-form" id="contact-form" novalidate>
+          <!-- LEFT : infos + formulaire -->
+          <div>
+            <div class="response-badge">Réponse garantie sous 24h</div>
 
-          <p class="form-error-banner" data-i18n="form.fillAllRequired" hidden>Veuillez remplir tous les champs obligatoires</p>
-
-          <div class="form-group">
-            <label for="nom" data-i18n="form.nameLabel">Nom complet</label>
-            <input type="text" id="nom" name="nom_complet" placeholder="Votre nom" data-i18n-placeholder="form.namePlaceholder" required>
-          </div>
-
-          <div class="form-group">
-            <label for="email" data-i18n="form.emailLabel">Email</label>
-            <input type="email" id="email" name="email" placeholder="vous@exemple.com" data-i18n-placeholder="form.emailPlaceholder" required>
-          </div>
-
-          <div class="form-group">
-            <label for="telephone" data-i18n="form.phoneLabel">Téléphone</label>
-            <input type="tel" id="telephone" name="telephone" placeholder="06 12 34 56 78" required>
-          </div>
-
-          <div class="form-group">
-            <label for="type-projet" data-i18n="form.projectTypeLabel">Type de projet</label>
-            <select id="type-projet" name="type_projet" required>
-              <option value="" disabled selected data-i18n="form.projectTypeDefault">Sélectionnez votre besoin</option>
-              <option value="Site vitrine" data-i18n="form.projectType.vitrine">Site vitrine</option>
-              <option value="Site e-commerce" data-i18n="form.projectType.ecommerce">Site e-commerce</option>
-              <option value="Refonte de site existant" data-i18n="form.projectType.refonte">Refonte de site existant</option>
-              <option value="SEO / Visibilité Google" data-i18n="form.projectType.seo">SEO / Visibilité Google</option>
-              <option value="Autre" data-i18n="form.projectType.autre">Autre</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="message" data-i18n="form.messageLabel">Message</label>
-            <textarea id="message" name="message" rows="5" placeholder="Décrivez votre projet en quelques lignes..." data-i18n-placeholder="contactForm.messagePlaceholder" required></textarea>
-          </div>
-
-          <button type="submit" class="btn btn--primary btn--lg contact-form__submit" data-i18n="contactForm.submit">
-            Envoyer ma demande
-          </button>
-
-          <p class="contact-form__feedback" id="form-feedback" role="status" aria-live="polite"></p>
-        </form>
-
-        <!-- Coordonnées -->
-        <aside class="contact-info fade-in">
-          <h2 class="contact-info__title" data-i18n="contactInfo.title">Coordonnées</h2>
-          <p class="contact-info__text" data-i18n="contactInfo.text">
-            Une question, un projet en tête ? Contactez-nous directement, nous revenons vers vous
-            sous 24 à 48h.
-          </p>
-
-          <ul class="contact-info__list">
-            <li class="contact-info__item">
-              <span class="contact-info__icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="3" y="5" width="18" height="14" rx="2"></rect>
-                  <path d="m3 7 9 6 9-6"></path>
-                </svg>
-              </span>
-              <div>
-                <span class="contact-info__label" data-i18n="contactInfo.emailLabel">Email</span>
-                <a href="mailto:contact.nexaweb62@gmail.com" class="contact-info__value">contact.nexaweb62@gmail.com</a>
+            <div class="contact-info">
+              <div class="contact-info__item">
+                <span class="contact-info__icon">📍</span>
+                <div>
+                  <div class="contact-info__label">Localisation</div>
+                  <div class="contact-info__value">Carvin, Pas-de-Calais (62220)</div>
+                  <div class="contact-info__note">Déplacements dans tout le Nord et à distance</div>
+                </div>
               </div>
-            </li>
-
-            <li class="contact-info__item">
-              <span class="contact-info__icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L8 9.7a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2z"></path>
-                </svg>
-              </span>
-              <div>
-                <span class="contact-info__label" data-i18n="contactInfo.phoneLabel">Téléphone</span>
-                <a href="tel:+33698840194" class="contact-info__value">06 98 84 01 94</a>
-                <span class="contact-info__or">ou</span>
-                <a href="tel:0641467898" class="contact-info__value">06 41 46 78 98</a>
+              <div class="contact-info__item">
+                <span class="contact-info__icon">✉️</span>
+                <div>
+                  <div class="contact-info__label">Email</div>
+                  <div class="contact-info__value">contact@nexaweb.fr</div>
+                  <div class="contact-info__note">Réponse sous 24h, souvent bien moins</div>
+                </div>
               </div>
-            </li>
-
-            <li class="contact-info__item">
-              <span class="contact-info__icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1 1 16 0z"></path>
-                  <circle cx="12" cy="10" r="3"></circle>
-                </svg>
-              </span>
-              <div>
-                <span class="contact-info__label" data-i18n="contactInfo.zoneLabel">Zone d'intervention</span>
-                <span class="contact-info__value" data-i18n="contactInfo.zoneValue">Carvin, Hauts-de-France &amp; toute la France (à distance)</span>
+              <div class="contact-info__item">
+                <span class="contact-info__icon">🕐</span>
+                <div>
+                  <div class="contact-info__label">Disponibilité</div>
+                  <div class="contact-info__value">Lun – Ven · 9h – 18h</div>
+                  <div class="contact-info__note">Réponse également le week-end selon urgence</div>
+                </div>
               </div>
-            </li>
-          </ul>
-        </aside>
+            </div>
 
+            <form class="contact-form" id="contact-form" action="merci.html" method="GET" novalidate>
+              <div class="contact-form__row">
+                <div class="form-field">
+                  <label for="cf-nom">Nom complet</label>
+                  <input type="text" id="cf-nom" name="nom" placeholder="Jean Dupont" required />
+                </div>
+                <div class="form-field">
+                  <label for="cf-email">Email</label>
+                  <input type="email" id="cf-email" name="email" placeholder="jean@exemple.fr" required />
+                </div>
+              </div>
+              <div class="form-field">
+                <label for="cf-sujet">Type de projet</label>
+                <select id="cf-sujet" name="sujet">
+                  <option value="">Sélectionnez un type de projet</option>
+                  <option value="vitrine">Site vitrine</option>
+                  <option value="ecommerce">E-commerce</option>
+                  <option value="refonte">Refonte de site existant</option>
+                  <option value="seo">Référencement SEO</option>
+                  <option value="application">Application web</option>
+                  <option value="autre">Autre</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="cf-message">Votre message</label>
+                <textarea id="cf-message" name="message" placeholder="Décrivez votre projet en quelques lignes…" required></textarea>
+              </div>
+              <div class="form-submit">
+                <button type="submit" class="btn btn--primary">Envoyer le message →</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- RIGHT : globe -->
+          <div class="globe-wrapper">
+            <p class="globe-eyebrow">Notre position</p>
+            <h2 class="globe-title">Basés à Carvin</h2>
+            <p class="globe-sub">
+              Au cœur du Pas-de-Calais, nous accompagnons des clients dans toute la France et à l'international. Tout se fait en ligne, sans contrainte géographique.
+            </p>
+            <canvas id="globe-canvas"
+              width="600" height="510"
+              aria-label="Globe interactif — Nexa Web, Carvin, France">
+            </canvas>
+            <div class="globe-legend">
+              <span class="globe-legend__loc">
+                <span class="globe-legend__dot"></span>
+                Carvin, France (62220)
+              </span>
+              <span>Glisser · Zoomer</span>
+            </div>
+          </div>
+
+        </div>
       </div>
     </section>
+
   </main>
 
-  <!-- ===================== FOOTER ===================== -->
+  <!-- FOOTER -->
   <footer class="site-footer">
-    <div class="container footer__inner">
-
-      <a href="index.html#accueil" class="logo" aria-label="Nexa Web - Accueil">
-        Nexa<span class="logo__accent">Web</span>
-      </a>
-
-      <ul class="footer__contact">
-        <li class="footer__contact-item">
-          <span class="footer__contact-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path>
-            </svg>
-          </span>
-          <span class="footer__contact-numbers">
-            <a href="tel:0698840194" class="footer__contact-number">06 98 84 01 94</a>
-            <span class="footer__contact-or">ou</span>
-            <a href="tel:0641467898" class="footer__contact-number">06 41 46 78 98</a>
-          </span>
-        </li>
-        <li>
-          <a href="mailto:contact.nexaweb62@gmail.com" class="footer__contact-link">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="3" y="5" width="18" height="14" rx="2"></rect>
-              <path d="m3 7 9 6 9-6"></path>
-            </svg>
-            contact.nexaweb62@gmail.com
-          </a>
-        </li>
-        <li>
-          <span class="footer__contact-link">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1 1 16 0z"></path>
-              <circle cx="12" cy="10" r="3"></circle>
-            </svg>
-            <span data-i18n="footer.address">Carvin, Hauts-de-France</span>
-          </span>
-        </li>
-      </ul>
-
+    <div class="footer__watermark" aria-hidden="true">NEXAWEB</div>
+    <div class="container">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <a href="index.html" class="footer__logo">Nexa<span>Web</span></a>
+          <p class="footer__tagline">Votre site premium<br>livré en 7 jours.</p>
+          <div class="footer__socials">
+            <a href="#" class="footer__social" aria-label="Instagram">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <rect x="2" y="2" width="20" height="20" rx="5"/>
+                <circle cx="12" cy="12" r="4"/>
+                <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" stroke="none"/>
+              </svg>
+            </a>
+            <a href="#" class="footer__social" aria-label="TikTok">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V9.41a8.16 8.16 0 004.77 1.52V7.48a4.85 4.85 0 01-1-.79z"/>
+              </svg>
+            </a>
+            <a href="#" class="footer__social" aria-label="LinkedIn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/>
+                <circle cx="4" cy="4" r="2"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+        <nav class="footer__nav" aria-label="Liens du pied de page">
+          <div class="footer__col">
+            <h4 class="footer__col-title">Navigation</h4>
+            <ul>
+              <li><a href="index.html">Accueil</a></li>
+              <li><a href="tarifs.html">Tarifs</a></li>
+              <li><a href="blog.html">Blog</a></li>
+              <li><a href="contact.html">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer__col">
+            <h4 class="footer__col-title">Services</h4>
+            <ul>
+              <li><a href="site-vitrine.html">Site Vitrine</a></li>
+              <li><a href="ecommerce.html">E-Commerce</a></li>
+              <li><a href="seo.html">Référencement SEO</a></li>
+              <li><a href="devis.html">Obtenir un devis</a></li>
+            </ul>
+          </div>
+          <div class="footer__col">
+            <h4 class="footer__col-title">Légal</h4>
+            <ul>
+              <li><a href="mentions-legales.html">Mentions légales</a></li>
+              <li><a href="contrat.html">CGV</a></li>
+              <li><a href="rendez-vous.html">Prendre RDV</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <div class="footer__bottom">
+        <p>&copy; 2025 Nexa Web. Tous droits réservés.</p>
+      </div>
     </div>
   </footer>
 
-  <!-- ===================== POPUP TÉLÉPHONE ===================== -->
-  <div class="phone-modal-overlay" id="phone-modal-overlay">
-    <div class="phone-modal" role="dialog" aria-modal="true" aria-labelledby="phone-modal-title">
-      <button type="button" class="phone-modal__close" id="phone-modal-close" aria-label="Fermer">✕</button>
-      <h3 class="phone-modal__title" id="phone-modal-title" data-i18n="phoneModal.title">Comment voulez-vous nous contacter ?</h3>
-      <div class="phone-modal__actions">
-        <button type="button" class="btn btn--primary btn--lg phone-modal__btn" id="phone-modal-call" data-i18n="phoneModal.call">📞 Appeler maintenant</button>
-        <button type="button" class="btn btn--ghost btn--lg phone-modal__btn" data-i18n="phoneModal.appointment" onclick='Calendly.initPopupWidget({url: "https://calendly.com/contact-nexaweb62/30min"});return false;'>📅 Prendre un rendez-vous</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===================== POPUP EMAIL (TOPBAR) ===================== -->
-  <div class="email-modal-overlay" id="email-modal-overlay">
-    <div class="email-modal" role="dialog" aria-modal="true" aria-labelledby="email-modal-title">
-      <button type="button" class="email-modal__close" id="email-modal-close" aria-label="Fermer">✕</button>
-      <h3 class="email-modal__title" id="email-modal-title" data-i18n="emailModal.title">Comment pouvons-nous vous aider ?</h3>
-      <div class="email-modal__actions">
-        <a href="#contact" class="btn btn--primary btn--lg email-modal__btn" id="email-modal-devis" data-i18n="emailModal.devisBtn">📋 Demander un devis</a>
-        <button type="button" class="btn btn--ghost btn--lg email-modal__btn" data-i18n="phoneModal.appointment" onclick='Calendly.initPopupWidget({url: "https://calendly.com/contact-nexaweb62/30min"});return false;'>📅 Prendre un rendez-vous</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script src="https://assets.calendly.com/assets/external/widget.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
   <script src="script.js"></script>
+  <script>
+  (function initGlobe() {
+    var canvas = document.getElementById('globe-canvas');
+    if (!canvas || typeof d3 === 'undefined') return;
+
+    var ctx    = canvas.getContext('2d');
+    var dpr    = window.devicePixelRatio || 1;
+    var MARKER = { lng: 2.9557, lat: 50.4936 };
+
+    var W, H, baseRadius;
+    var projection, pathGen;
+    var allDots      = [];
+    var landData     = null;
+    var rotation     = [-3, -51]; // Carvin face au départ
+    var autoRotate   = true;
+    var animId       = null;
+    var pulsePhase   = 0;
+    var lastTime     = 0;
+
+    /* ── Dimensionnement ── */
+    function resize() {
+      W           = canvas.parentElement.offsetWidth;
+      H           = Math.round(W * 0.85);
+      baseRadius  = Math.min(W, H) / 2.2;
+
+      canvas.width        = W * dpr;
+      canvas.height       = H * dpr;
+      canvas.style.width  = W + 'px';
+      canvas.style.height = H + 'px';
+      ctx.scale(dpr, dpr);
+
+      projection = d3.geoOrthographic()
+        .scale(baseRadius)
+        .translate([W / 2, H / 2])
+        .clipAngle(90);
+
+      pathGen = d3.geoPath().projection(projection).context(ctx);
+    }
+
+    /* ── Helpers point-dans-polygone ── */
+    function pip(pt, ring) {
+      var x = pt[0], y = pt[1], inside = false;
+      for (var i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+        var xi = ring[i][0], yi = ring[i][1];
+        var xj = ring[j][0], yj = ring[j][1];
+        if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi)
+          inside = !inside;
+      }
+      return inside;
+    }
+
+    function inFeature(pt, f) {
+      var g = f.geometry;
+      if (g.type === 'Polygon') {
+        if (!pip(pt, g.coordinates[0])) return false;
+        for (var i = 1; i < g.coordinates.length; i++)
+          if (pip(pt, g.coordinates[i])) return false;
+        return true;
+      }
+      if (g.type === 'MultiPolygon') {
+        for (var p = 0; p < g.coordinates.length; p++) {
+          var poly = g.coordinates[p];
+          if (!pip(pt, poly[0])) continue;
+          var hole = false;
+          for (var h = 1; h < poly.length; h++)
+            if (pip(pt, poly[h])) { hole = true; break; }
+          if (!hole) return true;
+        }
+        return false;
+      }
+      return false;
+    }
+
+    function buildDots(feature) {
+      var bounds  = d3.geoBounds(feature);
+      var step    = 16 * 0.08; // ~1.28°
+      var dots    = [];
+      for (var lng = bounds[0][0]; lng <= bounds[1][0]; lng += step)
+        for (var lat = bounds[0][1]; lat <= bounds[1][1]; lat += step)
+          if (inFeature([lng, lat], feature)) dots.push([lng, lat]);
+      return dots;
+    }
+
+    /* ── Rendu ── */
+    function render() {
+      ctx.clearRect(0, 0, W, H);
+      var sc = projection.scale();
+      var sf = sc / baseRadius;
+
+      // Sphère
+      ctx.beginPath();
+      ctx.arc(W / 2, H / 2, sc, 0, 2 * Math.PI);
+      ctx.fillStyle = '#000';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+      ctx.lineWidth   = 1.5 * sf;
+      ctx.stroke();
+
+      if (!landData) return;
+
+      // Graticule
+      ctx.beginPath();
+      pathGen(d3.geoGraticule()());
+      ctx.strokeStyle  = 'rgba(255,255,255,0.09)';
+      ctx.lineWidth    = 0.5 * sf;
+      ctx.stroke();
+
+      // Contours terres
+      ctx.beginPath();
+      landData.features.forEach(function(f) { pathGen(f); });
+      ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+      ctx.lineWidth   = 0.7 * sf;
+      ctx.stroke();
+
+      // Points bleus sur les terres
+      for (var i = 0; i < allDots.length; i++) {
+        var p = projection(allDots[i]);
+        if (!p || p[0] < 0 || p[0] > W || p[1] < 0 || p[1] > H) continue;
+        ctx.beginPath();
+        ctx.arc(p[0], p[1], 1.1 * sf, 0, 2 * Math.PI);
+        ctx.fillStyle = 'rgba(76,114,255,0.65)';
+        ctx.fill();
+      }
+
+      // Marqueur Carvin
+      var rot = projection.rotate();
+      var mRot = d3.geoRotation(rot)([MARKER.lng, MARKER.lat]);
+      var visible = mRot[0] > -90 && mRot[0] < 90;
+      if (visible) {
+        var mp = projection([MARKER.lng, MARKER.lat]);
+        if (mp) {
+          pulsePhase += 0.04;
+          var pulse = Math.sin(pulsePhase) * 0.5 + 0.5;
+
+          // Halo externe
+          ctx.beginPath();
+          ctx.arc(mp[0], mp[1], (5 + pulse * 5) * sf, 0, 2 * Math.PI);
+          ctx.fillStyle = 'rgba(34,197,94,' + (0.08 + pulse * 0.14) + ')';
+          ctx.fill();
+
+          // Halo interne
+          ctx.beginPath();
+          ctx.arc(mp[0], mp[1], 3.5 * sf, 0, 2 * Math.PI);
+          ctx.fillStyle = 'rgba(34,197,94,0.28)';
+          ctx.fill();
+
+          // Point central
+          ctx.beginPath();
+          ctx.arc(mp[0], mp[1], 2.2 * sf, 0, 2 * Math.PI);
+          ctx.fillStyle = '#22c55e';
+          ctx.fill();
+          ctx.strokeStyle = '#fff';
+          ctx.lineWidth   = 0.7 * sf;
+          ctx.stroke();
+        }
+      }
+    }
+
+    /* ── Boucle ── */
+    function loop(time) {
+      var dt = Math.min(time - lastTime, 50);
+      lastTime = time;
+      if (autoRotate) {
+        rotation[0] += 0.25 * (dt / 16);
+        projection.rotate(rotation);
+      }
+      render();
+      animId = requestAnimationFrame(loop);
+    }
+
+    /* ── Interactions souris ── */
+    var dragging = false, dragStart, startRot;
+
+    canvas.addEventListener('mousedown', function(e) {
+      autoRotate = false;
+      dragging   = true;
+      dragStart  = [e.clientX, e.clientY];
+      startRot   = rotation.slice();
+      e.preventDefault();
+    });
+    document.addEventListener('mousemove', function(e) {
+      if (!dragging) return;
+      var dx = e.clientX - dragStart[0];
+      var dy = e.clientY - dragStart[1];
+      rotation[0] = startRot[0] + dx * 0.45;
+      rotation[1] = Math.max(-90, Math.min(90, startRot[1] - dy * 0.45));
+      projection.rotate(rotation);
+    });
+    document.addEventListener('mouseup', function() {
+      if (!dragging) return;
+      dragging = false;
+      setTimeout(function() { autoRotate = true; }, 2000);
+    });
+
+    canvas.addEventListener('wheel', function(e) {
+      e.preventDefault();
+      var factor   = e.deltaY > 0 ? 0.92 : 1.09;
+      var newScale = Math.max(baseRadius * 0.5, Math.min(baseRadius * 3.5, projection.scale() * factor));
+      projection.scale(newScale);
+    }, { passive: false });
+
+    /* ── Interactions tactiles ── */
+    var tStart, tStartRot, tDist0;
+    canvas.addEventListener('touchstart', function(e) {
+      autoRotate = false;
+      if (e.touches.length === 1) {
+        tStart    = [e.touches[0].clientX, e.touches[0].clientY];
+        tStartRot = rotation.slice();
+      } else if (e.touches.length === 2) {
+        tDist0 = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+      }
+      e.preventDefault();
+    }, { passive: false });
+
+    canvas.addEventListener('touchmove', function(e) {
+      if (e.touches.length === 1 && tStart) {
+        var dx = e.touches[0].clientX - tStart[0];
+        var dy = e.touches[0].clientY - tStart[1];
+        rotation[0] = tStartRot[0] + dx * 0.45;
+        rotation[1] = Math.max(-90, Math.min(90, tStartRot[1] - dy * 0.45));
+        projection.rotate(rotation);
+      } else if (e.touches.length === 2) {
+        var d = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        var nsc = Math.max(baseRadius * 0.5, Math.min(baseRadius * 3.5, projection.scale() * (d / tDist0)));
+        projection.scale(nsc);
+        tDist0 = d;
+      }
+      e.preventDefault();
+    }, { passive: false });
+
+    canvas.addEventListener('touchend', function() {
+      tStart = null;
+      setTimeout(function() { autoRotate = true; }, 2000);
+    });
+
+    /* ── Resize ── */
+    window.addEventListener('resize', function() {
+      if (animId) cancelAnimationFrame(animId);
+      resize();
+      animId = requestAnimationFrame(loop);
+    });
+
+    /* ── Chargement données et démarrage ── */
+    resize();
+    animId = requestAnimationFrame(loop); // démarre immédiatement (sphère noire)
+
+    fetch('https://raw.githubusercontent.com/martynafford/natural-earth-geojson/refs/heads/master/110m/physical/ne_110m_land.json')
+      .then(function(r) { return r.json(); })
+      .then(function(json) {
+        landData = json;
+        json.features.forEach(function(f) {
+          buildDots(f).forEach(function(d) { allDots.push(d); });
+        });
+      })
+      .catch(function(err) { console.warn('[Globe] Chargement échoué :', err); });
+  })();
+  </script>
+
 </body>
 </html>

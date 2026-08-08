@@ -1,297 +1,500 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nexa Web — Mentions Légales &amp; RGPD</title>
+  <meta name="description" content="Mentions légales, politique de confidentialité RGPD et informations légales de Nexa Web, agence de création de sites web." />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Legal Hero ── */
+    .legal-hero {
+      padding: 9rem 0 4rem;
+      position: relative;
+    }
+    .legal-hero .eyebrow {
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+    .legal-hero .eyebrow::before {
+      content: '';
+      display: block;
+      width: 2rem;
+      height: 1px;
+      background: var(--color-accent);
+      opacity: .5;
+    }
+    .legal-hero h1 {
+      font-family: var(--font-heading);
+      font-size: clamp(2.2rem, 7vw, 5rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      color: var(--color-text);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+    .legal-hero .legal-meta {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+    .legal-updated {
+      font-size: .82rem;
+      color: var(--color-muted);
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+    .legal-updated svg {
+      width: 13px;
+      height: 13px;
+      stroke: var(--color-muted);
+    }
 
-  <title>Mentions légales & CGV - Nexa Web</title>
-  <meta name="description" content="Mentions légales, politique de confidentialité, cookies et conditions générales de vente de Nexa Web.">
-  <meta name="robots" content="noindex, follow">
+    /* ── Layout ── */
+    .legal-layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 3rem;
+      padding-bottom: 7rem;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .legal-layout { grid-template-columns: 1fr; }
+      .legal-toc { display: none; }
+    }
 
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    /* ── Table of Contents (sticky sidebar) ── */
+    .legal-toc {
+      position: sticky;
+      top: 6rem;
+      background: rgba(255,255,255,.025);
+      border: 1px solid var(--color-border);
+      border-radius: 1rem;
+      padding: 1.5rem;
+    }
+    .legal-toc h3 {
+      font-family: var(--font-heading);
+      font-size: .85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--color-muted);
+      margin-bottom: 1rem;
+    }
+    .legal-toc ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+    }
+    .legal-toc a {
+      font-size: .82rem;
+      color: var(--color-muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .35rem .5rem;
+      border-radius: .4rem;
+      transition: color .2s ease, background .2s ease;
+    }
+    .legal-toc a:hover {
+      color: var(--color-text);
+      background: rgba(255,255,255,.04);
+    }
+    .legal-toc a::before {
+      content: '';
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      flex-shrink: 0;
+    }
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    /* ── Legal Sections ── */
+    .legal-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .legal-section {
+      background: rgba(255,255,255,.03);
+      border: 1px solid var(--color-border);
+      border-radius: 1rem;
+      padding: 2rem 2.25rem;
+      scroll-margin-top: 7rem;
+      transition: border-color .3s ease;
+    }
+    .legal-section:hover {
+      border-color: rgba(255,255,255,.12);
+    }
+    .legal-section-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .legal-section-num {
+      font-family: var(--font-heading);
+      font-size: .75rem;
+      font-weight: 800;
+      letter-spacing: .1em;
+      color: var(--color-accent);
+      background: rgba(76,114,255,.1);
+      border: 1px solid rgba(76,114,255,.2);
+      border-radius: .4rem;
+      padding: .25rem .6rem;
+      flex-shrink: 0;
+    }
+    .legal-section h2 {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--color-text);
+      line-height: 1.2;
+    }
+    .legal-section p,
+    .legal-section li {
+      color: var(--color-muted);
+      font-size: .925rem;
+      line-height: 1.75;
+    }
+    .legal-section strong {
+      color: var(--color-text);
+      font-weight: 600;
+    }
+    .legal-section a {
+      color: var(--color-accent);
+      text-decoration: none;
+    }
+    .legal-section a:hover {
+      text-decoration: underline;
+    }
+    .legal-section ul {
+      padding-left: 1.25rem;
+      margin-top: .75rem;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+    }
+    .legal-section ul li::marker {
+      color: var(--color-accent);
+    }
+    .legal-divider {
+      border: none;
+      border-top: 1px solid var(--color-border);
+      margin: 1rem 0;
+    }
 
-  <link rel="stylesheet" href="style.css">
+    /* ── Info rows inside sections ── */
+    .legal-info-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .25rem .75rem;
+      margin-top: .35rem;
+    }
+    .legal-info-row dt {
+      color: var(--color-muted);
+      font-size: .875rem;
+      font-weight: 600;
+      min-width: 160px;
+    }
+    .legal-info-row dd {
+      color: var(--color-text);
+      font-size: .875rem;
+      margin: 0;
+    }
+    dl.legal-dl {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: .5rem 1.5rem;
+      margin-top: .75rem;
+    }
+    dl.legal-dl dt {
+      color: var(--color-muted);
+      font-size: .875rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    dl.legal-dl dd {
+      color: var(--color-text);
+      font-size: .875rem;
+      margin: 0;
+    }
 
-  <script>
-    (function () {
-      var theme = localStorage.getItem('nexaweb-theme');
-      if (theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
-    })();
-  </script>
+    /* ── Rights banner ── */
+    .rights-banner {
+      margin-top: 1rem;
+      background: rgba(76,114,255,.06);
+      border: 1px solid rgba(76,114,255,.18);
+      border-radius: .75rem;
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: .85rem;
+    }
+    .rights-banner svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--color-accent);
+      flex-shrink: 0;
+    }
+    .rights-banner p {
+      margin: 0;
+      font-size: .875rem;
+      color: var(--color-muted);
+    }
+    .rights-banner strong {
+      color: var(--color-accent);
+    }
+
+    @media (max-width: 768px) {
+      .legal-section { padding: 1.5rem; }
+      dl.legal-dl { grid-template-columns: 1fr; gap: .25rem .5rem; }
+      dl.legal-dl dt { margin-top: .5rem; }
+    }
+  </style>
 </head>
 <body>
-
-  <!-- ===================== HEADER SIMPLIFIÉ ===================== -->
-  <header class="legal-header">
-    <div class="container legal-header__inner">
-      <a href="index.html" class="logo" aria-label="Nexa Web - Accueil">
-        Nexa<span class="logo__accent">Web</span>
-      </a>
-      <a href="index.html" class="legal-header__back">← Retour à l'accueil</a>
-    </div>
+  <canvas id="silk-bg" aria-hidden="true"></canvas>
+  <header class="site-header" id="site-header">
+    <nav class="nav">
+      <a href="index.html" class="nav__logo">Nexa<span>Web</span></a>
+      <ul class="nav__list" id="nav-list">
+        <li><a href="index.html" class="nav__link">Accueil</a></li>
+        <li><a href="tarifs.html" class="nav__link">Tarifs</a></li>
+        <li><a href="devis.html" class="nav__link">Devis</a></li>
+        <li><a href="blog.html" class="nav__link">Blog</a></li>
+        <li><a href="contact.html" class="nav__link">Contact</a></li>
+      </ul>
+      <a href="devis.html" class="btn btn--nav">Devis gratuit</a>
+      <button class="nav__burger" id="nav-burger" aria-label="Ouvrir le menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
   </header>
+  <div class="panel-backdrop" id="panel-backdrop" aria-hidden="true"></div>
 
-  <main class="legal-page">
-    <div class="container legal-page__inner">
-
-      <div class="legal-intro">
-        <h1>Mentions légales &amp; CGV</h1>
-        <p class="legal-intro__date">Dernière mise à jour : 23 juin 2026</p>
+  <main>
+    <!-- Hero -->
+    <section class="legal-hero">
+      <div class="container">
+        <p class="eyebrow">Transparence &amp; Conformité</p>
+        <h1>Mentions Légales</h1>
+        <div class="legal-meta">
+          <span class="legal-updated">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Mise à jour : Janvier 2025
+          </span>
+        </div>
       </div>
+    </section>
 
-      <nav class="legal-toc" aria-label="Sommaire">
-        <a href="#mentions-legales">Mentions légales</a>
-        <a href="#confidentialite">Confidentialité</a>
-        <a href="#cookies">Cookies</a>
-        <a href="#cgv">CGV</a>
-      </nav>
+    <!-- Legal content -->
+    <div class="container">
+      <div class="legal-layout">
 
-      <article class="legal-content">
-
-        <!-- ===================== MENTIONS LÉGALES ===================== -->
-        <section class="legal-section" id="mentions-legales">
-          <h2>1. Mentions légales</h2>
-
-          <h3>1.1 Éditeur du site</h3>
-          <p>
-            Le site <strong>nexaaweb.com</strong> est édité par Nexa Web, entreprise individuelle
-            (auto-entrepreneur) représentée par <strong>Ahmed</strong>.
-          </p>
+        <!-- Sidebar TOC -->
+        <aside class="legal-toc" aria-label="Table des matières">
+          <h3>Sommaire</h3>
           <ul>
-            <li><strong>Nom commercial :</strong> Nexa Web</li>
-            <li><strong>Statut :</strong> Auto-entrepreneur (entreprise individuelle)</li>
-            <li><strong>Adresse :</strong> Carvin, Hauts-de-France, 62220, France</li>
-            <li><strong>Email :</strong> <a href="mailto:contact.nexaweb62@gmail.com">contact.nexaweb62@gmail.com</a></li>
-            <li><strong>Site internet :</strong> <a href="https://nexaaweb.com">nexaaweb.com</a></li>
+            <li><a href="#editeur">Éditeur du site</a></li>
+            <li><a href="#directeur">Directeur de publication</a></li>
+            <li><a href="#hebergement">Hébergement</a></li>
+            <li><a href="#propriete">Propriété intellectuelle</a></li>
+            <li><a href="#rgpd">Protection des données</a></li>
+            <li><a href="#cookies">Cookies</a></li>
+            <li><a href="#liens">Liens hypertextes</a></li>
           </ul>
+        </aside>
 
-          <h3>1.2 Hébergement</h3>
-          <p>
-            Le site est hébergé par :
-          </p>
-          <ul>
-            <li><strong>Hébergeur :</strong> Netlify, Inc.</li>
-            <li><strong>Adresse :</strong> 512 2nd Street, San Francisco, CA 94107, USA</li>
-            <li><strong>Site internet :</strong> <a href="https://www.netlify.com" target="_blank" rel="noopener noreferrer">netlify.com</a></li>
-          </ul>
+        <!-- Sections -->
+        <div class="legal-content">
 
-          <h3>1.3 Propriété intellectuelle</h3>
-          <p>
-            L'ensemble du contenu présent sur le site nexaaweb.com (textes, images, graphismes, logo,
-            icônes, mises en page, structure, code source) est la propriété exclusive de Nexa Web, sauf
-            mention contraire. Toute reproduction, distribution, modification, adaptation, retransmission
-            ou publication, même partielle, de ces différents éléments est strictement interdite sans
-            l'accord exprès par écrit de Nexa Web.
-          </p>
-          <p>
-            Les réalisations présentées dans la section « Réalisations » du site sont des exemples
-            illustratifs et démonstratifs créés par Nexa Web à titre de présentation de son savoir-faire ;
-            elles ne correspondent pas nécessairement à des clients réels.
-          </p>
-        </section>
+          <!-- 1. Éditeur -->
+          <section class="legal-section" id="editeur" aria-labelledby="h-editeur">
+            <div class="legal-section-header">
+              <span class="legal-section-num">01</span>
+              <h2 id="h-editeur">Éditeur du site</h2>
+            </div>
+            <p>Le site <strong>nexaweb.fr</strong> est édité par :</p>
+            <dl class="legal-dl">
+              <dt>Dénomination</dt>
+              <dd>Nexa Web</dd>
+              <dt>Statut juridique</dt>
+              <dd>Auto-entrepreneur (entreprise individuelle)</dd>
+              <dt>SIRET</dt>
+              <dd>En cours d'immatriculation</dd>
+              <dt>Siège social</dt>
+              <dd>Carvin (62220), Pas-de-Calais, France</dd>
+              <dt>Contact</dt>
+              <dd><a href="mailto:contact@nexaweb.fr">contact@nexaweb.fr</a></dd>
+            </dl>
+          </section>
 
-        <!-- ===================== CONFIDENTIALITÉ / RGPD ===================== -->
-        <section class="legal-section" id="confidentialite">
-          <h2>2. Politique de confidentialité</h2>
+          <!-- 2. Directeur publication -->
+          <section class="legal-section" id="directeur" aria-labelledby="h-directeur">
+            <div class="legal-section-header">
+              <span class="legal-section-num">02</span>
+              <h2 id="h-directeur">Directeur de la publication</h2>
+            </div>
+            <p>Le directeur de la publication du site <strong>nexaweb.fr</strong> est <strong>Ahmad Chteoui</strong>, en tant que représentant de l'entreprise individuelle Nexa Web.</p>
+            <p>Pour toute question relative aux contenus publiés sur ce site, vous pouvez contacter le directeur de publication à l'adresse : <a href="mailto:contact@nexaweb.fr">contact@nexaweb.fr</a></p>
+          </section>
 
-          <h3>2.1 Données collectées</h3>
-          <p>
-            Dans le cadre de l'utilisation du site, Nexa Web peut collecter les données personnelles
-            suivantes, exclusivement lorsque vous les renseignez volontairement via l'un des formulaires
-            du site (contact, demande de devis, avis client, chatbot) :
-          </p>
-          <ul>
-            <li>Nom et prénom</li>
-            <li>Adresse email</li>
-            <li>Numéro de téléphone</li>
-            <li>Nom de l'entreprise (le cas échéant)</li>
-            <li>Contenu du message ou de la demande</li>
-          </ul>
+          <!-- 3. Hébergement -->
+          <section class="legal-section" id="hebergement" aria-labelledby="h-hebergement">
+            <div class="legal-section-header">
+              <span class="legal-section-num">03</span>
+              <h2 id="h-hebergement">Hébergement</h2>
+            </div>
+            <p>Le site <strong>nexaweb.fr</strong> est hébergé par :</p>
+            <dl class="legal-dl">
+              <dt>Société</dt>
+              <dd>Netlify Inc.</dd>
+              <dt>Adresse</dt>
+              <dd>44 Montgomery Street Suite 300, San Francisco, CA 94104, USA</dd>
+              <dt>Site web</dt>
+              <dd><a href="https://netlify.com" target="_blank" rel="noopener noreferrer">https://netlify.com</a></dd>
+            </dl>
+          </section>
 
-          <h3>2.2 Finalité des traitements</h3>
-          <p>
-            Ces données sont collectées uniquement afin de répondre à vos demandes de contact, d'établir
-            un devis, de publier un avis client après validation, ou de vous fournir une réponse via
-            l'assistant conversationnel du site. Elles ne sont en aucun cas revendues ou cédées à des
-            tiers à des fins commerciales.
-          </p>
+          <!-- 4. Propriété intellectuelle -->
+          <section class="legal-section" id="propriete" aria-labelledby="h-propriete">
+            <div class="legal-section-header">
+              <span class="legal-section-num">04</span>
+              <h2 id="h-propriete">Propriété intellectuelle</h2>
+            </div>
+            <p>L'ensemble du contenu du site <strong>nexaweb.fr</strong> — incluant, sans s'y limiter, les textes, les images, les illustrations, les animations, le code source, les graphismes, les logos et les éléments de design — est protégé par le droit d'auteur et constitue la propriété exclusive de Nexa Web ou de leurs auteurs respectifs.</p>
+            <hr class="legal-divider" />
+            <p>Toute reproduction, représentation, modification, publication, adaptation ou exploitation de tout ou partie des éléments du site, quel qu'en soit le moyen ou le procédé, est interdite sans l'accord écrit préalable de Nexa Web.</p>
+            <p>Toute exploitation non autorisée du site ou de l'un de ses éléments sera considérée comme constitutive d'une contrefaçon et poursuivie conformément aux dispositions des articles L.335-2 et suivants du Code de la propriété intellectuelle.</p>
+          </section>
 
-          <h3>2.3 Durée de conservation</h3>
-          <p>
-            Les données transmises via les formulaires sont conservées le temps nécessaire au traitement
-            de votre demande, puis pour la durée légale de prescription applicable en cas de relation
-            commerciale, et au maximum 3 ans à compter du dernier contact en l'absence de suite donnée.
-          </p>
+          <!-- 5. RGPD -->
+          <section class="legal-section" id="rgpd" aria-labelledby="h-rgpd">
+            <div class="legal-section-header">
+              <span class="legal-section-num">05</span>
+              <h2 id="h-rgpd">Protection des données personnelles (RGPD)</h2>
+            </div>
+            <p>Conformément au Règlement Général sur la Protection des Données (RGPD — Règlement UE 2016/679) et à la loi Informatique et Libertés du 6 janvier 1978 modifiée, vous disposez de droits sur vos données personnelles.</p>
+            <hr class="legal-divider" />
+            <dl class="legal-dl">
+              <dt>Données collectées</dt>
+              <dd>Nom, prénom, adresse email, numéro de téléphone, description du projet</dd>
+              <dt>Source</dt>
+              <dd>Formulaires de contact et de demande de devis présents sur le site</dd>
+              <dt>Finalité</dt>
+              <dd>Répondre aux demandes de devis et aux demandes de contact</dd>
+              <dt>Base légale</dt>
+              <dd>Intérêt légitime et exécution d'un contrat (art. 6.1.b RGPD)</dd>
+              <dt>Conservation</dt>
+              <dd>3 ans à compter du dernier contact</dd>
+              <dt>Responsable</dt>
+              <dd>Ahmad Chteoui — contact@nexaweb.fr</dd>
+              <dt>Destinataires</dt>
+              <dd>Nexa Web uniquement — aucun partage avec des tiers</dd>
+            </dl>
+            <div class="rights-banner">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <p><strong>Vos droits :</strong> accès, rectification, effacement, opposition, portabilité. Exercez-les par email à <strong>contact@nexaweb.fr</strong>. Vous pouvez également déposer une réclamation auprès de la CNIL (cnil.fr).</p>
+            </div>
+          </section>
 
-          <h3>2.4 Destinataires des données et sous-traitants</h3>
-          <p>
-            Pour assurer le fonctionnement du site, certaines données peuvent être transmises aux
-            prestataires techniques suivants, agissant en tant que sous-traitants :
-          </p>
-          <ul>
-            <li><strong>EmailJS</strong> — envoi des emails issus des formulaires de contact et de devis</li>
-            <li><strong>Formspree</strong> — traitement du formulaire d'avis clients</li>
-            <li><strong>Calendly</strong> — gestion des prises de rendez-vous en ligne</li>
-            <li><strong>Cloudflare</strong> — infrastructure technique de l'assistant conversationnel (chatbot)</li>
-            <li><strong>Google reCAPTCHA</strong> — protection anti-spam du formulaire de devis</li>
-          </ul>
-          <p>
-            Ces prestataires sont susceptibles de traiter des données en dehors de l'Union européenne ;
-            ils s'engagent contractuellement à respecter un niveau de protection des données conforme à la
-            réglementation applicable.
-          </p>
+          <!-- 6. Cookies -->
+          <section class="legal-section" id="cookies" aria-labelledby="h-cookies">
+            <div class="legal-section-header">
+              <span class="legal-section-num">06</span>
+              <h2 id="h-cookies">Cookies</h2>
+            </div>
+            <p>Ce site utilise des cookies pour améliorer votre expérience de navigation et mesurer l'audience du site.</p>
+            <ul>
+              <li><strong>Google Analytics</strong> — cookies analytiques permettant de mesurer le trafic et l'utilisation du site (données anonymisées). Durée de conservation : 13 mois.</li>
+              <li><strong>Cookies fonctionnels</strong> — cookies techniques nécessaires au bon fonctionnement du site (session, préférences). Durée : session.</li>
+            </ul>
+            <hr class="legal-divider" />
+            <p>Ce site <strong>ne dépose pas</strong> de cookies publicitaires ou de profilage comportemental. Vous pouvez à tout moment refuser ou supprimer les cookies via les paramètres de votre navigateur, ou via notre bandeau de consentement lors de votre première visite.</p>
+            <p>Pour en savoir plus sur les cookies : <a href="https://www.cnil.fr/fr/cookies-et-autres-traceurs" target="_blank" rel="noopener noreferrer">cnil.fr — Cookies et traceurs</a></p>
+          </section>
 
-          <h3>2.5 Vos droits</h3>
-          <p>
-            Conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi
-            Informatique et Libertés, vous disposez d'un droit d'accès, de rectification, de suppression,
-            de limitation, d'opposition et de portabilité de vos données personnelles. Vous pouvez exercer
-            ces droits à tout moment en écrivant à
-            <a href="mailto:contact.nexaweb62@gmail.com">contact.nexaweb62@gmail.com</a>.
-          </p>
-          <p>
-            Vous disposez également du droit d'introduire une réclamation auprès de la Commission
-            Nationale de l'Informatique et des Libertés (CNIL) si vous estimez que vos droits ne sont pas
-            respectés.
-          </p>
+          <!-- 7. Liens hypertextes -->
+          <section class="legal-section" id="liens" aria-labelledby="h-liens">
+            <div class="legal-section-header">
+              <span class="legal-section-num">07</span>
+              <h2 id="h-liens">Liens hypertextes</h2>
+            </div>
+            <p>Le site <strong>nexaweb.fr</strong> peut contenir des liens vers des sites tiers. Nexa Web n'exerce aucun contrôle sur ces sites et décline toute responsabilité quant à leur contenu, leur disponibilité ou leur politique de confidentialité.</p>
+            <p>La présence de liens hypertextes vers des sites tiers ne constitue pas une validation ou une approbation de ces sites ou de leur contenu par Nexa Web.</p>
+            <p>Tout site souhaitant créer un lien vers <strong>nexaweb.fr</strong> doit obtenir l'autorisation préalable de Nexa Web.</p>
+          </section>
 
-          <h3>2.6 Sécurité</h3>
-          <p>
-            Nexa Web met en œuvre les mesures techniques raisonnables pour assurer la sécurité et la
-            confidentialité des données transmises (formulaires sécurisés, prestataires reconnus). Aucune
-            transmission de données sur Internet n'étant garantie totalement sécurisée à 100 %, Nexa Web
-            ne peut garantir une sécurité absolue.
-          </p>
-        </section>
-
-        <!-- ===================== COOKIES ===================== -->
-        <section class="legal-section" id="cookies">
-          <h2>3. Cookies et traceurs</h2>
-
-          <h3>3.1 Qu'est-ce qu'un cookie ?</h3>
-          <p>
-            Un cookie est un petit fichier texte déposé sur votre appareil lors de la visite d'un site
-            internet, permettant de conserver certaines informations (préférences, identifiants de
-            session, etc.).
-          </p>
-
-          <h3>3.2 Cookies et stockage utilisés sur ce site</h3>
-          <p>Le site nexaaweb.com utilise :</p>
-          <ul>
-            <li>
-              <strong>Stockage local technique (localStorage)</strong> — pour mémoriser votre préférence
-              de thème (clair/sombre), votre choix de langue (FR/EN) et la fermeture des popups
-              d'information. Ces données restent sur votre appareil et ne sont jamais transmises à
-              Nexa Web.
-            </li>
-            <li>
-              <strong>Cookies tiers</strong> — déposés par certains services intégrés au site lorsque
-              vous interagissez avec eux : Calendly (prise de rendez-vous), Google reCAPTCHA (protection
-              anti-spam du formulaire de devis) et Google Fonts (chargement des polices). Ces services
-              peuvent déposer leurs propres cookies, soumis à leur propre politique de confidentialité.
-            </li>
-          </ul>
-
-          <h3>3.3 Comment gérer les cookies</h3>
-          <p>
-            Vous pouvez à tout moment configurer votre navigateur pour refuser les cookies ou être averti
-            avant leur dépôt. La désactivation de certains cookies tiers peut toutefois limiter le bon
-            fonctionnement de certaines fonctionnalités du site (par exemple, la prise de rendez-vous
-            Calendly ou la vérification anti-spam du formulaire de devis).
-          </p>
-        </section>
-
-        <!-- ===================== CGV ===================== -->
-        <section class="legal-section" id="cgv">
-          <h2>4. Conditions générales de vente</h2>
-
-          <h3>4.1 Objet et champ d'application</h3>
-          <p>
-            Les présentes conditions générales de vente (CGV) régissent les relations contractuelles
-            entre Nexa Web, auto-entrepreneur représenté par Ahmed, et toute personne physique ou morale
-            (« le Client ») souhaitant faire réaliser une prestation de création ou de refonte de site
-            internet. Toute commande de prestation implique l'acceptation sans réserve des présentes CGV.
-          </p>
-
-          <h3>4.2 Prestations et tarifs</h3>
-          <p>Nexa Web propose les formules suivantes, détaillées sur la page Tarifs du site :</p>
-          <ul>
-            <li><strong>Essentiel</strong> — à partir de 490 €</li>
-            <li><strong>Standard</strong> — à partir de 890 €</li>
-            <li><strong>Premium</strong> — sur devis personnalisé</li>
-            <li><strong>Maintenance &amp; mises à jour</strong> — à partir de 29 €/mois</li>
-          </ul>
-          <p>
-            Les tarifs affichés sont indicatifs et peuvent être ajustés selon la complexité réelle du
-            projet ; un devis détaillé et gratuit est systématiquement communiqué au Client avant toute
-            mission.
-          </p>
-
-          <h3>4.3 Devis et commande</h3>
-          <p>
-            Toute prestation débute par une demande de devis gratuite et sans engagement, via le
-            formulaire du site, par téléphone ou par email. Le devis précise la nature de la prestation,
-            son tarif et son délai estimé. La commande est considérée comme ferme à compter de
-            l'acceptation écrite du devis par le Client (validation par email suffisante).
-          </p>
-
-          <h3>4.4 Délais de réalisation</h3>
-          <p>
-            Les délais de livraison varient de 5 à 15 jours ouvrés selon la formule choisie et la
-            complexité du projet, sous réserve de la transmission par le Client de l'ensemble des
-            éléments nécessaires (textes, visuels, accès) dans des délais raisonnables. Tout retard du
-            Client dans la fourniture de ces éléments peut entraîner un report proportionnel du délai de
-            livraison.
-          </p>
-
-          <h3>4.5 Modalités de paiement</h3>
-          <p>
-            Le règlement s'effectue selon les modalités précisées sur le devis accepté (virement
-            bancaire ou tout autre moyen convenu entre les parties). Un acompte peut être demandé à la
-            commande, le solde étant exigible à la livraison du site, sauf accord particulier mentionné
-            sur le devis.
-          </p>
-
-          <h3>4.6 Garantie 30 jours</h3>
-          <p>
-            Nexa Web propose une garantie de satisfaction de 30 jours à compter de la livraison du site :
-            si le résultat livré ne correspond pas aux spécifications validées dans le devis, le Client
-            peut demander le remboursement intégral de la prestation, sans condition ni justification
-            supplémentaire à apporter, sous réserve d'en faire la demande dans ce délai de 30 jours.
-          </p>
-
-          <h3>4.7 Responsabilité</h3>
-          <p>
-            Nexa Web s'engage à exécuter ses prestations avec soin et selon les règles de l'art. Nexa Web
-            ne saurait toutefois être tenu responsable des dommages indirects, pertes de données ou pertes
-            d'exploitation pouvant résulter de l'utilisation du site livré, ni des dysfonctionnements
-            imputables à des services tiers (hébergeur, noms de domaine, prestataires intégrés).
-          </p>
-
-          <h3>4.8 Droit applicable et litiges</h3>
-          <p>
-            Les présentes CGV sont soumises au droit français. En cas de litige, une solution amiable sera
-            recherchée en priorité entre les parties avant toute action judiciaire. À défaut d'accord
-            amiable, les tribunaux français compétents seront seuls habilités à trancher le litige.
-          </p>
-        </section>
-
-      </article>
+        </div>
+      </div>
     </div>
   </main>
 
-  <!-- ===================== FOOTER SIMPLIFIÉ ===================== -->
-  <footer class="legal-footer">
-    <div class="container legal-footer__inner">
-      <span class="logo">Nexa<span class="logo__accent">Web</span></span>
-      <p>© 2026 Nexa Web — Tous droits réservés.</p>
-      <a href="index.html">Retour à l'accueil</a>
+  <footer class="site-footer">
+    <div class="footer__watermark" aria-hidden="true">NEXAWEB</div>
+    <div class="container">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <a href="index.html" class="footer__logo">Nexa<span>Web</span></a>
+          <p class="footer__tagline">Votre site premium<br>livré en 7 jours.</p>
+          <div class="footer__socials">
+            <a href="#" class="footer__social" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" stroke="none"/></svg></a>
+            <a href="#" class="footer__social" aria-label="TikTok"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V9.41a8.16 8.16 0 004.77 1.52V7.48a4.85 4.85 0 01-1-.79z"/></svg></a>
+            <a href="#" class="footer__social" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg></a>
+          </div>
+        </div>
+        <nav class="footer__nav" aria-label="Liens du pied de page">
+          <div class="footer__col">
+            <h4 class="footer__col-title">Navigation</h4>
+            <ul>
+              <li><a href="index.html">Accueil</a></li>
+              <li><a href="tarifs.html">Tarifs</a></li>
+              <li><a href="blog.html">Blog</a></li>
+              <li><a href="contact.html">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer__col">
+            <h4 class="footer__col-title">Services</h4>
+            <ul>
+              <li><a href="site-vitrine.html">Site Vitrine</a></li>
+              <li><a href="ecommerce.html">E-Commerce</a></li>
+              <li><a href="seo.html">Référencement SEO</a></li>
+              <li><a href="devis.html">Obtenir un devis</a></li>
+            </ul>
+          </div>
+          <div class="footer__col">
+            <h4 class="footer__col-title">Légal</h4>
+            <ul>
+              <li><a href="mentions-legales.html">Mentions légales</a></li>
+              <li><a href="contrat.html">CGV</a></li>
+              <li><a href="rendez-vous.html">Prendre RDV</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <div class="footer__bottom"><p>&copy; 2025 Nexa Web. Tous droits réservés.</p></div>
     </div>
   </footer>
 
+  <script src="script.js"></script>
 </body>
 </html>

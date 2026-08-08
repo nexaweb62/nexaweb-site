@@ -1,387 +1,158 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Institut Beauté Zen — Soins &amp; bien-être</title>
-<meta name="description" content="Institut Beauté Zen : soins du visage, massages et manucure dans un cadre apaisant. Démo de site réalisée par Nexa Web.">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Élégance Studio — Institut de Beauté</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--bg:#12071a;--acc:#d946ef;--acc2:#a21caf;--gold:#f59e0b;--tx:#f0e6ff;--mu:rgba(240,230,255,.48);--cb:rgba(255,255,255,.04)}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'Lato',sans-serif;background:var(--bg);color:var(--tx);overflow-x:hidden}
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 2.5rem;background:rgba(18,7,26,.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(217,70,239,.12)}
+    .nl{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--tx);text-decoration:none}.nl span{color:var(--acc)}
+    nav ul{display:flex;gap:2rem;list-style:none}nav ul a{color:var(--mu);text-decoration:none;font-size:.88rem;letter-spacing:.05em;transition:color .3s}nav ul a:hover{color:var(--tx)}
+    .nc{padding:.5rem 1.4rem;border-radius:100px;background:var(--acc);color:#fff;text-decoration:none;font-size:.85rem;font-weight:700;transition:opacity .3s}.nc:hover{opacity:.85}
 
-<style>
-  :root {
-    --pink: #ec4899;
-    --mauve: #a855f7;
-    --rose-deep: #831843;
-    --bg: #fff5f8;
-    --surface: #ffffff;
-    --text: #4a1942;
-    --text-muted: #9a7b94;
-    --border: #f4d9e6;
-  }
+    .hero{min-height:100vh;display:flex;align-items:center;padding:8rem 2.5rem 5rem;position:relative;overflow:hidden}
+    .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 65% 70% at 75% 35%,rgba(217,70,239,.22) 0%,transparent 70%),radial-gradient(ellipse 40% 50% at 15% 80%,rgba(162,28,175,.15) 0%,transparent 60%),linear-gradient(150deg,#12071a 0%,#1e0a2d 100%)}
+    .hero::after{content:'';position:absolute;top:-150px;right:-80px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(217,70,239,.1) 0%,transparent 70%);animation:flt 9s ease-in-out infinite}
+    @keyframes flt{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-28px) scale(1.04)}}
+    .hi{position:relative;z-index:1;max-width:660px}
+    .lbl{display:inline-block;margin-bottom:1.5rem;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);border:1px solid rgba(217,70,239,.3);padding:.35rem 1rem;border-radius:100px}
+    h1{font-family:'Playfair Display',serif;font-size:clamp(3rem,8vw,5.8rem);line-height:1.05;margin-bottom:1.5rem}
+    h1 em{font-style:italic;color:var(--acc)}
+    .sub{font-size:1.1rem;line-height:1.75;color:var(--mu);margin-bottom:2.5rem;max-width:500px}
+    .btns{display:flex;gap:1rem;flex-wrap:wrap}
+    .bp{padding:.85rem 2rem;border-radius:100px;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;text-decoration:none;font-weight:700;font-size:.92rem;box-shadow:0 8px 32px rgba(217,70,239,.28);transition:transform .3s,box-shadow .3s}.bp:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(217,70,239,.42)}
+    .bg{padding:.85rem 2rem;border-radius:100px;border:1px solid rgba(240,230,255,.18);color:var(--tx);text-decoration:none;font-size:.92rem;transition:border-color .3s,background .3s}.bg:hover{border-color:var(--acc);background:rgba(217,70,239,.07)}
+    .stats{display:flex;gap:2.5rem;margin-top:3.5rem;padding-top:2rem;border-top:1px solid rgba(240,230,255,.08)}
+    .sn{font-family:'Playfair Display',serif;font-size:2.2rem;color:var(--acc);display:block}.sl{font-size:.78rem;color:var(--mu);letter-spacing:.08em}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+    section.sec{padding:6rem 2.5rem}
+    .sl2{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin-bottom:.75rem}
+    h2{font-family:'Playfair Display',serif;font-size:clamp(1.9rem,5vw,3.2rem);line-height:1.15;margin-bottom:.9rem}
+    .desc{color:var(--mu);font-size:.98rem;line-height:1.75;max-width:520px;margin-bottom:3rem}
 
-  body {
-    font-family: 'Poppins', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.7;
-    font-weight: 300;
-  }
+    .svs{background:rgba(255,255,255,.018)}
+    .sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem}
+    .sc{background:var(--cb);border:1px solid rgba(217,70,239,.1);border-radius:20px;padding:2rem 1.7rem;transition:transform .4s,border-color .4s,background .4s;cursor:default}
+    .sc:hover{transform:translateY(-6px);border-color:rgba(217,70,239,.38);background:rgba(217,70,239,.06)}
+    .si{font-size:2rem;margin-bottom:1rem}
+    .sn2{font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:.5rem}
+    .sd{color:var(--mu);font-size:.86rem;line-height:1.6}
+    .sp{margin-top:1rem;font-size:.84rem;color:var(--acc);font-weight:700}
 
-  h1, h2, h3 { font-family: 'Cormorant Garamond', serif; font-weight: 600; }
+    .gg{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:200px 200px;gap:1rem;margin-top:2rem}
+    .gi{border-radius:16px;overflow:hidden;border:1px solid rgba(217,70,239,.08);display:flex;align-items:center;justify-content:center;font-size:2.8rem}
+    .gi:first-child{grid-row:span 2}
+    .g1{background:linear-gradient(135deg,#2d0a3f,#1a0528)}.g2{background:linear-gradient(135deg,#200b30,#310d4a)}.g3{background:linear-gradient(135deg,#280933,#1a0626)}.g4{background:linear-gradient(135deg,#1e0830,#150523)}.g5{background:linear-gradient(135deg,#1d0729,#2c0a40)}
 
-  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
-  a { color: inherit; text-decoration: none; }
+    .tg{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem}
+    .tc{background:var(--cb);border:1px solid rgba(217,70,239,.1);border-radius:20px;padding:2rem}
+    .ts{color:var(--gold);font-size:.9rem;margin-bottom:.8rem}
+    .tt{font-style:italic;color:var(--mu);line-height:1.7;margin-bottom:1.2rem;font-size:.93rem}
+    .ta{font-weight:700;font-size:.84rem}.tr{color:var(--mu);font-size:.76rem}
 
-  header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(255, 245, 248, 0.92);
-    backdrop-filter: blur(6px);
-    border-bottom: 1px solid var(--border);
-  }
+    .bk{background:linear-gradient(135deg,rgba(217,70,239,.1),rgba(162,28,175,.06));border-top:1px solid rgba(217,70,239,.13);border-bottom:1px solid rgba(217,70,239,.13);text-align:center}
+    .bk form{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-top:2.5rem}
+    .bk input,.bk select{padding:.8rem 1.2rem;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(217,70,239,.18);color:var(--tx);font-family:'Lato',sans-serif;font-size:.88rem;outline:none;min-width:170px}
+    .bk input::placeholder{color:var(--mu)}.bk input:focus,.bk select:focus{border-color:var(--acc)}.bk select option{background:#1a0a2e}
 
-  .header__inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 24px;
-  }
+    footer{padding:3rem 2.5rem;text-align:center;border-top:1px solid rgba(217,70,239,.09)}
+    .fl{font-family:'Playfair Display',serif;font-size:1.7rem;margin-bottom:.4rem}.fl span{color:var(--acc)}
+    .fs{color:var(--mu);font-size:.84rem;margin-bottom:1.8rem}
+    .fls{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;margin-bottom:1.5rem}
+    .fls a{color:var(--mu);text-decoration:none;font-size:.84rem;transition:color .3s}.fls a:hover{color:var(--acc)}
+    .fc{color:rgba(240,230,255,.2);font-size:.73rem}
 
-  .logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--rose-deep);
-    letter-spacing: 0.02em;
-  }
-
-  .logo span { color: var(--mauve); }
-
-  nav ul { display: flex; gap: 30px; list-style: none; flex-wrap: wrap; }
-
-  nav a {
-    font-size: 0.88rem;
-    letter-spacing: 0.03em;
-    color: var(--text-muted);
-    transition: color 0.2s ease;
-  }
-
-  nav a:hover { color: var(--pink); }
-
-  /* Hero */
-  .hero {
-    position: relative;
-    overflow: hidden;
-    text-align: center;
-    padding: 130px 0 110px;
-    background: linear-gradient(160deg, #fde6f0 0%, #f3def7 55%, #e9d3fb 100%);
-  }
-
-  .hero__blob {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(40px);
-    opacity: 0.5;
-  }
-
-  .hero__blob--1 { width: 320px; height: 320px; background: var(--pink); top: -120px; left: -80px; }
-  .hero__blob--2 { width: 260px; height: 260px; background: var(--mauve); bottom: -100px; right: -60px; }
-
-  .hero__tag {
-    position: relative;
-    display: inline-block;
-    font-size: 0.85rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--rose-deep);
-    margin-bottom: 20px;
-  }
-
-  .hero h1 {
-    position: relative;
-    font-size: clamp(2.4rem, 5vw, 3.4rem);
-    color: var(--rose-deep);
-    margin-bottom: 20px;
-  }
-
-  .hero p {
-    position: relative;
-    max-width: 540px;
-    margin: 0 auto 34px;
-    color: #7a4f72;
-    font-size: 1.05rem;
-  }
-
-  .btn {
-    position: relative;
-    display: inline-block;
-    padding: 14px 34px;
-    border-radius: 999px;
-    font-weight: 500;
-    font-size: 0.92rem;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-
-  .btn--pink {
-    background: linear-gradient(120deg, var(--pink), var(--mauve));
-    color: #fff;
-    box-shadow: 0 10px 28px rgba(236, 72, 153, 0.35);
-  }
-
-  .btn--pink:hover { transform: translateY(-3px); }
-
-  section { padding: 80px 0; }
-
-  .section-head { text-align: center; max-width: 600px; margin: 0 auto 48px; }
-
-  .section-tag {
-    color: var(--pink);
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-size: 0.78rem;
-    margin-bottom: 10px;
-  }
-
-  .section-head h2 { font-size: clamp(1.9rem, 3vw, 2.4rem); color: var(--rose-deep); }
-
-  /* Prestations */
-  .prestations__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
-
-  .prestation-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 30px 20px;
-    text-align: center;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-
-  .prestation-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 16px 32px rgba(236, 72, 153, 0.15);
-  }
-
-  .prestation-card__icon { font-size: 2.1rem; margin-bottom: 14px; }
-  .prestation-card h3 { font-size: 1.15rem; margin-bottom: 8px; }
-  .prestation-card p { font-size: 0.88rem; color: var(--text-muted); }
-
-  /* Tarifs */
-  .tarifs { background: var(--surface); }
-
-  .tarifs__list { max-width: 600px; margin: 0 auto; }
-
-  .tarifs__row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding: 18px 0;
-    border-bottom: 1px dashed var(--border);
-  }
-
-  .tarifs__row:last-child { border-bottom: none; }
-  .tarifs__name { font-size: 1.02rem; }
-  .tarifs__name small { display: block; color: var(--text-muted); font-size: 0.82rem; margin-top: 2px; }
-  .tarifs__price { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; color: var(--pink); }
-
-  /* Réservation */
-  .reservation {
-    text-align: center;
-    background: linear-gradient(120deg, var(--rose-deep), var(--mauve));
-    color: #fff;
-  }
-
-  .reservation h2 { color: #fff; }
-  .reservation p { color: rgba(255,255,255,0.85); max-width: 480px; margin: 0 auto 28px; }
-
-  .btn--white {
-    background: #fff;
-    color: var(--rose-deep);
-  }
-
-  /* Contact */
-  .contact__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; text-align: center; }
-
-  .contact-item {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 30px 20px;
-  }
-
-  .contact-item__icon { font-size: 1.7rem; margin-bottom: 10px; }
-  .contact-item h3 { font-size: 1.05rem; margin-bottom: 6px; }
-  .contact-item p { font-size: 0.9rem; color: var(--text-muted); }
-
-  footer {
-    background: var(--rose-deep);
-    color: #f4d9e6;
-    text-align: center;
-    padding: 30px 0;
-    font-size: 0.85rem;
-  }
-
-  .back-btn {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    background: linear-gradient(120deg, var(--pink), var(--mauve));
-    color: #fff;
-    padding: 13px 22px;
-    border-radius: 999px;
-    font-size: 0.86rem;
-    font-weight: 500;
-    box-shadow: 0 10px 26px rgba(168, 85, 247, 0.4);
-    z-index: 200;
-    transition: transform 0.2s ease;
-  }
-
-  .back-btn:hover { transform: translateY(-3px); }
-
-  @media (max-width: 760px) {
-    .header__inner { flex-direction: column; gap: 12px; }
-    .prestations__grid { grid-template-columns: repeat(2, 1fr); }
-    .contact__grid { grid-template-columns: 1fr; }
-    .hero { padding: 100px 0 80px; }
-    .back-btn { right: 16px; bottom: 16px; padding: 11px 18px; font-size: 0.78rem; }
-  }
-</style>
+    @media(max-width:768px){nav{padding:1rem 1.2rem}nav ul{display:none}.hero{padding:6rem 1.5rem 4rem}section.sec{padding:4rem 1.5rem}.gg{grid-template-columns:1fr 1fr;grid-template-rows:140px 140px 140px}.gi:first-child{grid-row:span 1}}
+  </style>
 </head>
 <body>
 
-  <header>
-    <div class="header__inner">
-      <span class="logo">Institut <span>Beauté Zen</span></span>
-      <nav>
-        <ul>
-          <li><a href="#accueil">Accueil</a></li>
-          <li><a href="#prestations">Prestations</a></li>
-          <li><a href="#tarifs">Tarifs</a></li>
-          <li><a href="#reservation">Réservation</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </nav>
+<nav>
+  <a href="#" class="nl">Élégance<span>Studio</span></a>
+  <ul><li><a href="#services">Soins</a></li><li><a href="#galerie">Galerie</a></li><li><a href="#avis">Avis</a></li><li><a href="#rdv">RDV</a></li></ul>
+  <a href="#rdv" class="nc">Prendre RDV</a>
+</nav>
+
+<main>
+
+<section class="hero">
+  <div class="hi">
+    <span class="lbl">Institut de Beauté · Carvin</span>
+    <h1>La beauté,<br><em>réinventée</em><br>pour vous.</h1>
+    <p class="sub">Soins premium, nail art, maquillage et épilation. Offrez-vous un moment d'exception dans un cadre d'élégance absolue.</p>
+    <div class="btns">
+      <a href="#rdv" class="bp">Réserver un soin</a>
+      <a href="#services" class="bg">Découvrir nos soins</a>
     </div>
-  </header>
-
-  <section class="hero" id="accueil">
-    <span class="hero__blob hero__blob--1"></span>
-    <span class="hero__blob hero__blob--2"></span>
-    <div class="container">
-      <span class="hero__tag">Institut de beauté &amp; bien-être</span>
-      <h1>Prenez soin de vous,<br>sublimez votre beauté</h1>
-      <p>Soins du visage, massages relaxants et manucure dans un cadre apaisant, pensé pour vous offrir une parenthèse de douceur.</p>
-      <a href="#reservation" class="btn btn--pink">Réserver un soin</a>
+    <div class="stats">
+      <div><span class="sn">4.9★</span><span class="sl">Note Google</span></div>
+      <div><span class="sn">850+</span><span class="sl">Clientes fidèles</span></div>
+      <div><span class="sn">12 ans</span><span class="sl">d'expertise</span></div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section id="prestations">
-    <div class="container">
-      <div class="section-head">
-        <p class="section-tag">Nos prestations</p>
-        <h2>Des soins pour chaque besoin</h2>
-      </div>
-      <div class="prestations__grid">
-        <article class="prestation-card">
-          <div class="prestation-card__icon">🧖‍♀️</div>
-          <h3>Soins du visage</h3>
-          <p>Nettoyage, hydratation et éclat pour une peau resplendissante.</p>
-        </article>
-        <article class="prestation-card">
-          <div class="prestation-card__icon">💆‍♀️</div>
-          <h3>Massages</h3>
-          <p>Massages relaxants ou californiens pour relâcher les tensions.</p>
-        </article>
-        <article class="prestation-card">
-          <div class="prestation-card__icon">💅</div>
-          <h3>Manucure</h3>
-          <p>Pose de vernis semi-permanent et soin complet des mains.</p>
-        </article>
-        <article class="prestation-card">
-          <div class="prestation-card__icon">✨</div>
-          <h3>Épilation</h3>
-          <p>Épilation douce à la cire pour une peau parfaitement lisse.</p>
-        </article>
-      </div>
-    </div>
-  </section>
+<section id="services" class="sec svs">
+  <p class="sl2">Nos prestations</p>
+  <h2>Des soins d'exception<br>signés Élégance</h2>
+  <p class="desc">Chaque soin est pensé pour révéler votre éclat naturel, avec les meilleures marques du marché.</p>
+  <div class="sg">
+    <div class="sc"><div class="si">✨</div><div class="sn2">Soins du visage</div><div class="sd">Hydratation profonde, anti-âge, éclat du teint. Protocoles personnalisés selon votre type de peau.</div><div class="sp">À partir de 65 €</div></div>
+    <div class="sc"><div class="si">💅</div><div class="sn2">Nail Art & Manucure</div><div class="sd">Semi-permanent, gel, nail art sur mesure. Mains et pieds traités avec le plus grand soin.</div><div class="sp">À partir de 35 €</div></div>
+    <div class="sc"><div class="si">💄</div><div class="sn2">Maquillage</div><div class="sd">Mariée, soirée, shooting photo. Un maquillage qui tient et qui sublime votre beauté naturelle.</div><div class="sp">À partir de 80 €</div></div>
+    <div class="sc"><div class="si">💆</div><div class="sn2">Épilation & Modelage</div><div class="sd">Épilation à la cire tiède ou au fil, modelage relaxant corps & visage pour un moment de bien-être.</div><div class="sp">À partir de 25 €</div></div>
+  </div>
+</section>
 
-  <section class="tarifs" id="tarifs">
-    <div class="container">
-      <div class="section-head">
-        <p class="section-tag">Tarifs</p>
-        <h2>Des prix transparents</h2>
-      </div>
-      <div class="tarifs__list">
-        <div class="tarifs__row">
-          <span class="tarifs__name">Soin du visage<small>45 minutes</small></span>
-          <span class="tarifs__price">55 €</span>
-        </div>
-        <div class="tarifs__row">
-          <span class="tarifs__name">Massage relaxant<small>1 heure</small></span>
-          <span class="tarifs__price">70 €</span>
-        </div>
-        <div class="tarifs__row">
-          <span class="tarifs__name">Manucure semi-permanent<small>45 minutes</small></span>
-          <span class="tarifs__price">38 €</span>
-        </div>
-        <div class="tarifs__row">
-          <span class="tarifs__name">Épilation jambes complètes<small>30 minutes</small></span>
-          <span class="tarifs__price">32 €</span>
-        </div>
-      </div>
-    </div>
-  </section>
+<section id="galerie" class="sec">
+  <p class="sl2">Notre univers</p>
+  <h2>Un espace pensé<br>pour votre bien-être</h2>
+  <div class="gg">
+    <div class="gi g1">🌸</div>
+    <div class="gi g2">✨</div>
+    <div class="gi g3">💅</div>
+    <div class="gi g4">🕯️</div>
+    <div class="gi g5">💄</div>
+  </div>
+</section>
 
-  <section class="reservation" id="reservation">
-    <div class="container">
-      <p class="section-tag" style="color:#fbe4f0;">Réservation</p>
-      <h2>Offrez-vous un moment pour vous</h2>
-      <p>Réservez votre créneau en ligne ou par téléphone, notre équipe vous accueille du mardi au samedi.</p>
-      <a href="#contact" class="btn btn--white">Prendre rendez-vous</a>
-    </div>
-  </section>
+<section id="avis" class="sec" style="text-align:center">
+  <p class="sl2">Témoignages</p>
+  <h2>Ce que disent<br>nos clientes</h2>
+  <div class="tg" style="margin-top:2rem">
+    <div class="tc"><div class="ts">★★★★★</div><p class="tt">"Une expérience absolument divine. Le soin du visage m'a transformée, ma peau n'a jamais été aussi lumineuse. Je reviendrai chaque mois !"</p><div class="ta">Camille R.</div><div class="tr">Cliente depuis 3 ans</div></div>
+    <div class="tc"><div class="ts">★★★★★</div><p class="tt">"Le nail art est à couper le souffle, un vrai travail d'artiste. L'équipe est aux petits soins, on se sent vraiment choyée."</p><div class="ta">Léa M.</div><div class="tr">Cliente fidèle</div></div>
+    <div class="tc"><div class="ts">★★★★★</div><p class="tt">"Maquillage de mariée parfait, exactement ce que j'avais imaginé. Professionnel, ponctuel, et tellement talentueux. Merci !"</p><div class="ta">Sophie D.</div><div class="tr">Mariée 2024</div></div>
+  </div>
+</section>
 
-  <section id="contact">
-    <div class="container">
-      <div class="section-head">
-        <p class="section-tag">Contact</p>
-        <h2>Nous trouver</h2>
-      </div>
-      <div class="contact__grid">
-        <div class="contact-item">
-          <div class="contact-item__icon">📍</div>
-          <h3>Adresse</h3>
-          <p>8 rue des Lilas<br>62220 Carvin</p>
-        </div>
-        <div class="contact-item">
-          <div class="contact-item__icon">📞</div>
-          <h3>Téléphone</h3>
-          <p>03 21 22 22 22</p>
-        </div>
-        <div class="contact-item">
-          <div class="contact-item__icon">🕒</div>
-          <h3>Horaires</h3>
-          <p>Mar – Sam : 9h30 – 19h</p>
-        </div>
-      </div>
-    </div>
-  </section>
+<section id="rdv" class="sec bk">
+  <p class="sl2">Réservation</p>
+  <h2>Prendre rendez-vous</h2>
+  <p style="color:var(--mu);text-align:center;font-size:.95rem">Réservez en ligne en 30 secondes. Confirmation immédiate par SMS.</p>
+  <form onsubmit="return false">
+    <input type="text" placeholder="Votre prénom"/>
+    <input type="tel" placeholder="Votre téléphone"/>
+    <select><option>Choisir un soin</option><option>Soin du visage</option><option>Manucure / Nail Art</option><option>Maquillage</option><option>Épilation</option></select>
+    <input type="date"/>
+    <button type="submit" class="bp" style="border:none;cursor:pointer">Confirmer le RDV</button>
+  </form>
+</section>
 
-  <footer>
-    <div class="container">
-      © 2026 Institut Beauté Zen — Site de démonstration réalisé par Nexa Web
-    </div>
-  </footer>
+</main>
 
-  <a href="index.html#realisations" class="back-btn">⬅ Retour aux réalisations</a>
+<footer>
+  <div class="fl">Élégance<span>Studio</span></div>
+  <p class="fs">Institut de beauté à Carvin · Ouvert du Mardi au Samedi · 03 21 XX XX XX</p>
+  <div class="fls"><a href="#">Soins</a><a href="#">Galerie</a><a href="#">Avis</a><a href="#">Contact</a><a href="#">Mentions légales</a></div>
+  <p class="fc">© 2025 Élégance Studio — Site réalisé par <strong>Nexa Web</strong></p>
+</footer>
 
-  <script src="cookie-consent.js"></script>
 </body>
 </html>
