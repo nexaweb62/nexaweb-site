@@ -1,0 +1,22 @@
+# ─── Netlify — Nexa Web ───────────────────────────────────────────────────────
+# Site statique (HTML/CSS/JS vanilla). Aucune commande de build nécessaire.
+# Les Edge Functions tournent sur Supabase, pas sur Netlify.
+
+[build]
+  publish = "."
+
+# ─── En-têtes de sécurité (toutes les pages) ─────────────────────────────────
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options            = "SAMEORIGIN"
+    X-Content-Type-Options     = "nosniff"
+    Referrer-Policy            = "strict-origin-when-cross-origin"
+    Permissions-Policy         = "camera=(), microphone=(), geolocation=()"
+    Strict-Transport-Security  = "max-age=31536000; includeSubDomains; preload"
+
+# ─── Page 404 personnalisée ───────────────────────────────────────────────────
+[[redirects]]
+  from   = "/*"
+  to     = "/404.html"
+  status = 404

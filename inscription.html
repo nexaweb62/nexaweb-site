@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Créer un compte — Nexa Web</title>
+<meta name="robots" content="noindex,nofollow">
+<script>(function(){var t=localStorage.getItem('nw-theme');if(t)document.documentElement.setAttribute('data-theme',t);}());</script>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@splinetool/viewer/build/spline-viewer.js"></script>
+<style>
+/* ── TOKENS ── */
+:root{
+  --bg:#080811;--bg-alt:#0c0c18;--bg-card:#10101e;
+  --border:rgba(220,220,242,.07);--border-hi:rgba(220,220,242,.14);
+  --text:#E8E8F2;--text-muted:rgba(232,232,242,.44);--text-dim:rgba(232,232,242,.18);
+  --btn-bg:#E8E8F2;--btn-text:#080811;
+  --ghost-border:rgba(232,232,242,.22);
+  --accent:#8B5CF6;
+  --ok:#4ade80;--err:#f87171;
+  --font:"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:var(--font);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow:hidden}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
+
+/* ── LAYOUT ── */
+.login-wrap{display:grid;grid-template-columns:1fr 1fr;height:100vh;overflow:hidden}
+@media(max-width:768px){
+  .login-wrap{grid-template-columns:1fr}
+  .login-right{display:none}
+  html,body{overflow:auto}
+}
+
+/* ── LEFT PANEL ── */
+.login-left{
+  display:flex;flex-direction:column;
+  background:var(--bg-alt);
+  height:100vh;overflow-y:auto;
+  position:relative;z-index:2;
+}
+.login-left::after{
+  content:'';position:fixed;left:25%;top:50%;transform:translate(-50%,-50%);
+  width:500px;height:500px;
+  background:radial-gradient(ellipse,rgba(139,92,246,.06) 0%,transparent 70%);
+  pointer-events:none;z-index:0;
+}
+
+.lf-top{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:28px 40px;position:relative;z-index:1;
+}
+.lf-logo{font-size:14px;font-weight:900;letter-spacing:.1em;color:var(--text)}
+.lf-logo span{color:var(--text-muted)}
+.lf-back{
+  font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--text-muted);display:flex;align-items:center;gap:6px;transition:color .2s;
+}
+.lf-back:hover{color:var(--text)}
+.lf-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+.lf-body{
+  flex:1;display:flex;align-items:flex-start;justify-content:center;
+  padding:24px 40px 40px;position:relative;z-index:1;
+}
+.lf-form-wrap{width:100%;max-width:400px}
+
+.lf-headline{
+  font-size:clamp(1.5rem,2.6vw,2rem);font-weight:900;line-height:.96;
+  letter-spacing:-.04em;margin-bottom:32px;text-wrap:balance;
+}
+.lf-headline em{font-style:italic;font-weight:800;color:var(--text-muted)}
+
+/* Social / Google button */
+.lf-social-btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:13px 20px;
+  border:1px solid var(--ghost-border);border-radius:3px;
+  font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-muted);transition:border-color .2s,color .2s,background .2s;background:transparent;
+}
+.lf-social-btn:hover{border-color:var(--border-hi);color:var(--text);background:rgba(232,232,242,.03)}
+
+/* Divider */
+.lf-divider{display:flex;align-items:center;gap:14px;margin:20px 0}
+.lf-divider::before,.lf-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.lf-divider span{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);flex-shrink:0}
+
+/* Two-column field row */
+.insc-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:480px){.insc-row{grid-template-columns:1fr}}
+
+/* Inputs */
+.lf-field{margin-bottom:10px}
+.lf-label{display:block;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);margin-bottom:5px}
+.lf-input{
+  display:block;width:100%;padding:12px 16px;
+  background:var(--bg-card);border:1px solid var(--border);border-radius:3px;
+  font:inherit;font-size:13px;color:var(--text);outline:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+.lf-input::placeholder{color:var(--text-dim)}
+.lf-input:focus{border-color:rgba(139,92,246,.5);box-shadow:0 0 0 3px rgba(139,92,246,.12)}
+
+/* Optional badge */
+.lf-opt{font-size:9px;letter-spacing:.08em;color:var(--text-dim);margin-left:5px;font-weight:400;text-transform:none}
+
+/* Password criteria */
+.insc-criteria{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;margin-top:7px}
+@media(max-width:480px){.insc-criteria{grid-template-columns:1fr}}
+.insc-crit{
+  display:flex;align-items:center;gap:6px;
+  font-size:10.5px;color:var(--text-dim);transition:color .25s;
+}
+.insc-crit::before{content:'○';font-size:9px;flex-shrink:0;transition:color .25s}
+.insc-crit.ok{color:var(--ok)}
+.insc-crit.ok::before{content:'●'}
+
+/* Confirm match */
+.insc-match{font-size:10.5px;margin-top:5px;min-height:14px;transition:color .2s;color:var(--text-dim)}
+.insc-match.ok{color:var(--ok)}
+.insc-match.err{color:var(--err)}
+
+/* RGPD checkbox */
+.insc-rgpd{display:flex;align-items:flex-start;gap:10px;margin-top:14px}
+.insc-rgpd input[type="checkbox"]{width:15px;height:15px;margin-top:2px;accent-color:var(--accent);flex-shrink:0;cursor:pointer}
+.insc-rgpd label{font-size:11px;color:var(--text-muted);line-height:1.5;cursor:pointer}
+.insc-rgpd a{color:var(--text);text-decoration:underline;text-underline-offset:3px}
+
+/* Honeypot */
+.insc-hp{position:absolute;left:-9999px;height:0;overflow:hidden;opacity:0}
+
+/* Primary button */
+.lf-btn{
+  display:flex;align-items:center;justify-content:center;
+  width:100%;margin-top:16px;padding:14px 20px;
+  background:var(--btn-bg);color:var(--btn-text);border-radius:3px;
+  font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  transition:opacity .2s,transform .2s;
+}
+.lf-btn:hover{opacity:.88;transform:translateY(-1px)}
+.lf-btn:focus-visible{outline:2px solid var(--text);outline-offset:3px}
+.lf-btn.loading{opacity:.6;pointer-events:none}
+.lf-btn-spinner{
+  width:14px;height:14px;border:2px solid rgba(8,8,17,.3);border-top-color:var(--btn-text);
+  border-radius:50%;animation:spin .7s linear infinite;display:none;
+}
+.lf-btn.loading .lf-btn-spinner{display:block}
+.lf-btn.loading .lf-btn-label{display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Error / success banners */
+.lf-error{
+  display:none;align-items:center;gap:9px;
+  background:rgba(239,68,68,.10);border:1px solid rgba(239,68,68,.30);border-radius:4px;
+  padding:11px 14px;margin-bottom:14px;font-size:12px;font-weight:500;color:#f87171;line-height:1.45;
+}
+.lf-error.show{display:flex}
+.lf-error svg{width:14px;height:14px;stroke:#f87171;fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0}
+
+/* Success state */
+.insc-success{display:none;text-align:center;padding:20px 0}
+.insc-success.show{display:block}
+.insc-success-icon{
+  width:64px;height:64px;border-radius:50%;
+  background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.3);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 20px;color:#4ade80;
+}
+.insc-success h2{font-size:1.3rem;font-weight:800;letter-spacing:-.03em;margin-bottom:12px}
+.insc-success p{font-size:12.5px;color:var(--text-muted);line-height:1.65;margin-bottom:6px}
+.insc-success strong{color:var(--text)}
+
+/* Footer links */
+.lf-foot{text-align:center;margin-top:18px}
+.lf-register{font-size:11.5px;color:var(--text-muted)}
+.lf-register a{color:var(--text);text-decoration:underline;text-underline-offset:3px;transition:opacity .2s}
+.lf-register a:hover{opacity:.7}
+
+.lf-bottom{padding:20px 40px;text-align:center;position:relative;z-index:1}
+.lf-bottom p{font-size:10.5px;color:var(--text-dim);line-height:1.6;max-width:340px;margin:0 auto}
+.lf-bottom a{text-decoration:underline;text-underline-offset:3px;transition:color .2s}
+.lf-bottom a:hover{color:var(--text-muted)}
+
+/* ── RIGHT PANEL ── */
+.login-right{position:relative;height:100vh;overflow:hidden;background:var(--bg)}
+.login-right::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to right,var(--bg-alt) 0%,transparent 18%),
+             linear-gradient(to bottom,var(--bg) 0%,transparent 10%,transparent 90%,var(--bg) 100%);
+  z-index:2;pointer-events:none;
+}
+.lr-trust{
+  position:absolute;bottom:36px;left:0;right:0;
+  display:flex;flex-direction:column;align-items:center;gap:14px;
+  z-index:3;pointer-events:none;
+}
+.lr-trust-label{font-size:9.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim)}
+.lr-logos{display:flex;align-items:center;gap:16px}
+.lr-logo-pill{
+  padding:6px 14px;border:1px solid var(--border);border-radius:3px;
+  font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--text-dim);background:rgba(8,8,17,.6);
+}
+spline-viewer{width:100%;height:100%;display:block}
+
+/* ── FOCUS ── */
+:focus-visible{outline:2px solid rgba(139,92,246,.7);outline-offset:3px;border-radius:2px}
+
+/* ── LIGHT MODE ── */
+@media(prefers-color-scheme:light){
+  :root:not([data-theme="dark"]) .login-left::after{background:radial-gradient(ellipse,rgba(139,92,246,.04) 0%,transparent 70%)}
+  :root:not([data-theme="dark"]) .lf-social-btn:hover{background:rgba(18,18,22,.04)}
+}
+:root[data-theme="light"] .login-left::after{background:radial-gradient(ellipse,rgba(139,92,246,.04) 0%,transparent 70%)}
+:root[data-theme="light"] .lf-social-btn:hover{background:rgba(18,18,22,.04)}
+</style>
+</head>
+<body>
+
+<div class="login-wrap">
+
+  <!-- ─── GAUCHE : formulaire ─── -->
+  <div class="login-left">
+
+    <div class="lf-top">
+      <a href="index.html" class="lf-logo">NEXA<span>WEB</span></a>
+      <div style="display:flex;align-items:center;gap:12px">
+        <button id="theme-btn" aria-label="Basculer le thème" style="width:28px;height:28px;border:1px solid var(--border-hi);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text-muted);background:none;cursor:pointer;transition:border-color .2s,color .2s">○</button>
+        <a href="login.html" class="lf-back" aria-label="Déjà un compte">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          Connexion
+        </a>
+      </div>
+    </div>
+
+    <div class="lf-body">
+      <div class="lf-form-wrap">
+
+        <h1 class="lf-headline">
+          Créez votre<br>
+          espace <em>client.</em>
+        </h1>
+
+        <!-- SUCCESS STATE (hidden until signup succeeds) -->
+        <div class="insc-success" id="insc-success">
+          <div class="insc-success-icon">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <h2>Vérifiez votre boîte mail</h2>
+          <p>Un email de confirmation a été envoyé à <strong id="success-email"></strong>.</p>
+          <p>Cliquez sur le lien dans cet email pour activer votre compte, puis <a href="login.html" style="color:var(--text);text-decoration:underline;text-underline-offset:3px">connectez-vous</a>.</p>
+        </div>
+
+        <!-- FORM (hidden after success) -->
+        <div id="insc-form-wrap">
+
+          <!-- Google OAuth -->
+          <button type="button" class="lf-social-btn" id="google-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px;flex-shrink:0">
+              <path style="fill:#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path style="fill:#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path style="fill:#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+              <path style="fill:#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+            Continuer avec Google
+          </button>
+
+          <div class="lf-divider"><span>ou</span></div>
+
+          <form id="insc-form" novalidate>
+
+            <!-- Honeypot anti-bot -->
+            <div class="insc-hp" aria-hidden="true">
+              <label for="website">Ne pas remplir</label>
+              <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+            </div>
+
+            <!-- Error banner -->
+            <div class="lf-error" id="insc-error" role="alert" aria-live="polite">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span id="insc-error-text"></span>
+            </div>
+
+            <!-- Prénom + Nom -->
+            <div class="insc-row">
+              <div class="lf-field">
+                <label class="lf-label" for="prenom">Prénom</label>
+                <input class="lf-input" type="text" id="prenom" name="prenom" placeholder="Ahmed" autocomplete="given-name" required>
+              </div>
+              <div class="lf-field">
+                <label class="lf-label" for="nom">Nom</label>
+                <input class="lf-input" type="text" id="nom" name="nom" placeholder="Dupont" autocomplete="family-name" required>
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="lf-field">
+              <label class="lf-label" for="email">Adresse e-mail</label>
+              <input class="lf-input" type="email" id="email" name="email" placeholder="vous@example.com" autocomplete="email" required>
+            </div>
+
+            <!-- Téléphone + Entreprise -->
+            <div class="insc-row">
+              <div class="lf-field">
+                <label class="lf-label" for="telephone">Téléphone <span class="lf-opt">(optionnel)</span></label>
+                <input class="lf-input" type="tel" id="telephone" name="telephone" placeholder="+33 6 …" autocomplete="tel">
+              </div>
+              <div class="lf-field">
+                <label class="lf-label" for="entreprise">Entreprise <span class="lf-opt">(optionnel)</span></label>
+                <input class="lf-input" type="text" id="entreprise" name="entreprise" placeholder="Votre société" autocomplete="organization">
+              </div>
+            </div>
+
+            <!-- Mot de passe -->
+            <div class="lf-field">
+              <label class="lf-label" for="password">Mot de passe</label>
+              <div style="position:relative">
+                <input class="lf-input" type="password" id="password" name="password" placeholder="••••••••••••" autocomplete="new-password" required style="padding-right:44px">
+                <button type="button" id="pwd-toggle" aria-label="Afficher le mot de passe" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--text-dim);background:none;border:none;padding:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:color .2s">
+                  <svg id="eye-open" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  <svg id="eye-close" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                </button>
+              </div>
+              <!-- Critères -->
+              <div class="insc-criteria" aria-live="polite">
+                <span class="insc-crit" id="crit-length">12 caractères minimum</span>
+                <span class="insc-crit" id="crit-upper">Une lettre majuscule</span>
+                <span class="insc-crit" id="crit-digit">Un chiffre</span>
+                <span class="insc-crit" id="crit-special">Un caractère spécial</span>
+              </div>
+            </div>
+
+            <!-- Confirmer mot de passe -->
+            <div class="lf-field">
+              <label class="lf-label" for="confirm">Confirmer le mot de passe</label>
+              <input class="lf-input" type="password" id="confirm" name="confirm" placeholder="••••••••••••" autocomplete="new-password" required>
+              <p class="insc-match" id="match-indicator"></p>
+            </div>
+
+            <!-- RGPD -->
+            <div class="insc-rgpd">
+              <input type="checkbox" id="rgpd" name="rgpd" required>
+              <label for="rgpd">
+                J'accepte la <a href="mentions-legales.html" target="_blank">politique de confidentialité</a> et le traitement de mes données à des fins de gestion de mon compte client.
+              </label>
+            </div>
+
+            <button type="submit" class="lf-btn" id="submit-btn">
+              <span class="lf-btn-label">Créer mon compte</span>
+              <span class="lf-btn-spinner" aria-hidden="true"></span>
+            </button>
+
+          </form>
+
+          <div class="lf-foot">
+            <p class="lf-register">Déjà un compte ? <a href="login.html">Se connecter</a></p>
+          </div>
+
+        </div><!-- /insc-form-wrap -->
+
+      </div>
+    </div>
+
+    <div class="lf-bottom">
+      <p>
+        Vos données sont traitées conformément au RGPD.
+        <a href="mentions-legales.html">Politique de confidentialité</a>
+        · <a href="mentions-legales.html">Mentions légales</a>
+      </p>
+    </div>
+
+  </div>
+
+  <!-- ─── DROITE : Robot 3D ─── -->
+  <div class="login-right" aria-hidden="true">
+    <spline-viewer
+      url="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+      background="transparent"
+      loading-anim-type="none">
+    </spline-viewer>
+    <div class="lr-trust">
+      <span class="lr-trust-label">Inscription sécurisée</span>
+      <div class="lr-logos">
+        <span class="lr-logo-pill">SSL</span>
+        <span class="lr-logo-pill">RGPD</span>
+        <span class="lr-logo-pill">Chiffré</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="supabase-client.js"></script>
+<script>
+/* ═══════════════════════════════════════════
+   Nexa Web — inscription.html
+   ═══════════════════════════════════════════ */
+
+/* ── Rediriger si déjà connecté ── */
+(async function(){
+  if(!window.sb) return;
+  var s=await window.sb.auth.getSession();
+  if(s.data.session) window.location.replace('espace-client.html');
+})();
+
+/* ── Domaines jetables ── */
+var DISPOSABLE=['mailinator.com','guerrillamail.com','10minutemail.com','temp-mail.org','yopmail.com','trashmail.com','sharklasers.com','spam4.me','maildrop.cc','dispostable.com','fakeinbox.com','throwaway.email','tmpmail.net','tmpmail.org','trashmail.at','trashmail.io','trashmail.me','trashmail.net','discard.email','spamgourmet.com','grr.la','guerrillamail.info','guerrillamail.biz','guerrillamail.de'];
+function isDisposable(email){
+  var d=(email.split('@')[1]||'').toLowerCase();
+  return DISPOSABLE.indexOf(d)!==-1;
+}
+
+/* ── Validation mot de passe ── */
+function checkPwd(pwd){
+  return{
+    length:pwd.length>=12,
+    upper:/[A-Z]/.test(pwd),
+    digit:/[0-9]/.test(pwd),
+    special:/[^A-Za-z0-9]/.test(pwd)
+  };
+}
+function updateCriteria(pwd){
+  var c=checkPwd(pwd);
+  document.getElementById('crit-length').className='insc-crit'+(c.length?' ok':'');
+  document.getElementById('crit-upper').className='insc-crit'+(c.upper?' ok':'');
+  document.getElementById('crit-digit').className='insc-crit'+(c.digit?' ok':'');
+  document.getElementById('crit-special').className='insc-crit'+(c.special?' ok':'');
+  return c.length&&c.upper&&c.digit&&c.special;
+}
+document.getElementById('password').addEventListener('input',function(){
+  updateCriteria(this.value);
+  checkConfirm();
+});
+
+/* ── Confirmation mot de passe ── */
+function checkConfirm(){
+  var pwd=document.getElementById('password').value;
+  var conf=document.getElementById('confirm').value;
+  var el=document.getElementById('match-indicator');
+  if(!conf){el.className='insc-match';el.textContent='';return false;}
+  if(pwd===conf){el.className='insc-match ok';el.textContent='✓ Les mots de passe correspondent';return true;}
+  el.className='insc-match err';el.textContent='✗ Les mots de passe ne correspondent pas';return false;
+}
+document.getElementById('confirm').addEventListener('input',checkConfirm);
+
+/* ── Affichage / masquage mot de passe ── */
+(function(){
+  var btn=document.getElementById('pwd-toggle');
+  var inp=document.getElementById('password');
+  var eo=document.getElementById('eye-open');
+  var ec=document.getElementById('eye-close');
+  btn.addEventListener('click',function(){
+    var show=inp.type==='password';
+    inp.type=show?'text':'password';
+    eo.style.display=show?'none':'block';
+    ec.style.display=show?'block':'none';
+    btn.setAttribute('aria-label',show?'Masquer le mot de passe':'Afficher le mot de passe');
+  });
+})();
+
+/* ── Thème ── */
+(function(){
+  var root=document.documentElement;
+  var btn=document.getElementById('theme-btn');
+  function sync(){btn.textContent=root.getAttribute('data-theme')==='light'?'●':'○';}
+  sync();
+  btn.addEventListener('click',function(){
+    var next=root.getAttribute('data-theme')==='dark'?'light':'dark';
+    root.setAttribute('data-theme',next);
+    localStorage.setItem('nw-theme',next);
+    sync();
+  });
+})();
+
+/* ── UI helpers ── */
+function showError(msg){
+  var el=document.getElementById('insc-error');
+  document.getElementById('insc-error-text').textContent=msg;
+  el.classList.add('show');
+  el.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function clearError(){document.getElementById('insc-error').classList.remove('show');}
+function setLoading(on){
+  var btn=document.getElementById('submit-btn');
+  btn.classList.toggle('loading',on);
+  btn.disabled=on;
+}
+
+function translateError(err){
+  if(!err) return 'Une erreur est survenue.';
+  var msg=(err.message||'').toLowerCase();
+  if(msg.includes('user already registered')||msg.includes('already been registered'))
+    return 'Cette adresse e-mail est déjà utilisée. <a href="login.html" style="color:inherit;text-decoration:underline">Connectez-vous</a> ou réinitialisez votre mot de passe.';
+  if(msg.includes('password')&&(msg.includes('weak')||msg.includes('strength')))
+    return 'Mot de passe trop faible. Respectez les critères indiqués.';
+  if(msg.includes('rate limit')||msg.includes('too many'))
+    return 'Trop de tentatives. Réessayez dans quelques minutes.';
+  if(msg.includes('invalid email'))
+    return 'Adresse e-mail invalide.';
+  if(msg.includes('network')||msg.includes('fetch'))
+    return 'Erreur réseau. Vérifiez votre connexion.';
+  return 'Une erreur est survenue. Contactez-nous si le problème persiste.';
+}
+
+/* ── Google OAuth ── */
+document.getElementById('google-btn').addEventListener('click',async function(){
+  var btn=this;
+  btn.disabled=true; btn.style.opacity='.6';
+  clearError();
+  try {
+    var result=await window.sb.auth.signInWithOAuth({
+      provider:'google',
+      options:{redirectTo:window.location.origin+'/espace-client.html'}
+    });
+    if(result.error) showError('Erreur Google : '+result.error.message);
+  } catch(err) {
+    showError('Erreur Google. Réessayez dans quelques instants.');
+    btn.disabled=false; btn.style.opacity='';
+  }
+});
+
+/* ── Soumission du formulaire ── */
+document.getElementById('insc-form').addEventListener('submit',async function(e){
+  e.preventDefault();
+  clearError();
+
+  /* Honeypot */
+  if(document.getElementById('website').value) return;
+
+  var prenom=document.getElementById('prenom').value.trim();
+  var nom=document.getElementById('nom').value.trim();
+  var email=document.getElementById('email').value.trim();
+  var telephone=document.getElementById('telephone').value.trim();
+  var entreprise=document.getElementById('entreprise').value.trim();
+  var pwd=document.getElementById('password').value;
+  var conf=document.getElementById('confirm').value;
+  var rgpd=document.getElementById('rgpd').checked;
+
+  /* Champs obligatoires */
+  if(!prenom||!nom||!email||!pwd||!conf){
+    showError('Veuillez remplir tous les champs obligatoires.');
+    return;
+  }
+
+  /* Email jetable */
+  if(isDisposable(email)){
+    showError('Les adresses e-mail temporaires ne sont pas acceptées.');
+    return;
+  }
+
+  /* Règles de mot de passe */
+  if(!updateCriteria(pwd)){
+    showError('Le mot de passe ne respecte pas les critères requis.');
+    return;
+  }
+
+  /* Confirmation */
+  if(pwd!==conf){
+    showError('Les mots de passe ne correspondent pas.');
+    return;
+  }
+
+  /* RGPD */
+  if(!rgpd){
+    showError('Vous devez accepter la politique de confidentialité pour créer un compte.');
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    var result=await window.sb.auth.signUp({
+      email:email,
+      password:pwd,
+      options:{
+        data:{
+          prenom:prenom,
+          nom:nom,
+          telephone:telephone||null,
+          entreprise:entreprise||null
+        }
+      }
+    });
+
+    if(result.error){
+      showError(translateError(result.error));
+    } else {
+      /* Succès — afficher état de confirmation */
+      document.getElementById('insc-form-wrap').style.display='none';
+      document.getElementById('success-email').textContent=email;
+      var succ=document.getElementById('insc-success');
+      succ.classList.add('show');
+      succ.scrollIntoView({behavior:'smooth',block:'nearest'});
+    }
+  } catch(err){
+    showError(translateError(err));
+  } finally {
+    setLoading(false);
+  }
+});
+</script>
+
+</body>
+</html>

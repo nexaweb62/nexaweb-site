@@ -1,498 +1,345 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nexa Web — Prendre Rendez-Vous · Consultation Gratuite</title>
-  <meta name="description" content="Réservez votre consultation gratuite de 30 min avec l'équipe Nexa Web. Visio ou téléphone, à votre convenance. Zéro engagement." />
-  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    /* ── Hero ── */
-    .rdv-hero {
-      padding: 9rem 0 4rem;
-      text-align: center;
-      position: relative;
-    }
-    .rdv-hero .eyebrow {
-      font-size: .78rem;
-      font-weight: 600;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: var(--color-accent);
-      margin-bottom: 1.2rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: .6rem;
-    }
-    .rdv-hero .eyebrow::before,
-    .rdv-hero .eyebrow::after {
-      content: '';
-      display: block;
-      width: 2.5rem;
-      height: 1px;
-      background: var(--color-accent);
-      opacity: .5;
-    }
-    .rdv-hero h1 {
-      font-family: var(--font-heading);
-      font-size: clamp(2.8rem, 9vw, 6.5rem);
-      font-weight: 900;
-      line-height: .95;
-      text-transform: uppercase;
-      color: var(--color-text);
-      margin-bottom: 1.5rem;
-    }
-    .rdv-hero h1 span {
-      background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .rdv-hero .subtitle {
-      max-width: 56ch;
-      margin: 0 auto;
-      color: var(--color-muted);
-      font-size: 1.08rem;
-      line-height: 1.75;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rendez-vous — Nexa Web</title>
+<meta name="description" content="Réservez une consultation gratuite de 30 min avec Nexa Web. Visio ou téléphone. Zéro engagement.">
+<script>(function(){var t=localStorage.getItem('nw-theme');if(t)document.documentElement.setAttribute('data-theme',t);}());</script>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+/* ── TOKENS ── */
+:root{
+  --bg:#080811;--bg-alt:#0c0c18;--bg-card:#10101e;
+  --border:rgba(220,220,242,.07);--border-hi:rgba(220,220,242,.14);
+  --text:#E8E8F2;--text-muted:rgba(232,232,242,.44);--text-dim:rgba(232,232,242,.18);
+  --btn-bg:#E8E8F2;--btn-text:#080811;
+  --ghost-border:rgba(232,232,242,.22);
+  --accent:#8B5CF6;--accent-dim:rgba(139,92,246,.15);--accent-ring:rgba(139,92,246,.35);
+  --green:#22c55e;--green-dim:rgba(34,197,94,.12);--green-ring:rgba(34,197,94,.3);
+  --font:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  --max-w:1280px;--pad-x:clamp(20px,5vw,80px);--hdr:80px;
+}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]){
+  --bg:#F4F4F0;--bg-alt:#EAEAE6;--bg-card:#E4E4E0;
+  --border:rgba(18,18,22,.09);--border-hi:rgba(18,18,22,.16);
+  --text:#111118;--text-muted:rgba(17,17,22,.50);--text-dim:rgba(17,17,22,.20);
+  --btn-bg:#111118;--btn-text:#F4F4F0;--ghost-border:rgba(17,17,22,.22);
+}}
+:root[data-theme="light"]{
+  --bg:#F4F4F0;--bg-alt:#EAEAE6;--bg-card:#E4E4E0;
+  --border:rgba(18,18,22,.09);--border-hi:rgba(18,18,22,.16);
+  --text:#111118;--text-muted:rgba(17,17,22,.50);--text-dim:rgba(17,17,22,.20);
+  --btn-bg:#111118;--btn-text:#F4F4F0;--ghost-border:rgba(17,17,22,.22);
+}
 
-    /* ── Badges row ── */
-    .rdv-badges {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: .75rem;
-      flex-wrap: wrap;
-      margin-top: 1.5rem;
-    }
-    .rdv-badge {
-      display: flex;
-      align-items: center;
-      gap: .4rem;
-      font-size: .8rem;
-      color: var(--color-muted);
-      background: rgba(255,255,255,.04);
-      border: 1px solid var(--color-border);
-      border-radius: 100px;
-      padding: .4rem .9rem;
-    }
-    .rdv-badge svg {
-      width: 14px;
-      height: 14px;
-      stroke: var(--color-accent);
-      flex-shrink: 0;
-    }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:var(--font);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .35s,color .35s;min-height:100vh}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
+ul{list-style:none}
+.wrap{max-width:var(--max-w);margin:0 auto;padding:0 var(--pad-x)}
 
-    /* ── Two-column layout ── */
-    .rdv-section {
-      padding: 3rem 0 7rem;
-    }
-    .rdv-grid {
-      display: grid;
-      grid-template-columns: 1fr 1.5fr;
-      gap: 3rem;
-      align-items: start;
-    }
-    @media (max-width: 900px) {
-      .rdv-grid { grid-template-columns: 1fr; }
-    }
+/* ── NEON CANVAS ── */
+#neon-canvas{
+  position:fixed;inset:0;width:100%;height:100%;
+  z-index:0;pointer-events:none;opacity:.48;
+}
 
-    /* ── Left column ── */
-    .rdv-left-card {
-      background: rgba(255,255,255,.03);
-      border: 1px solid var(--color-border);
-      border-radius: 1.25rem;
-      padding: 2.5rem;
-      position: sticky;
-      top: 6rem;
-    }
-    .rdv-left-card h2 {
-      font-family: var(--font-heading);
-      font-size: 1.5rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      color: var(--color-text);
-      margin-bottom: 1.75rem;
-      line-height: 1.2;
-    }
-    .rdv-left-card h2 span {
-      background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .rdv-bullets {
-      list-style: none;
-      padding: 0;
-      margin: 0 0 2.25rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.1rem;
-    }
-    .rdv-bullets li {
-      display: flex;
-      align-items: flex-start;
-      gap: .85rem;
-      color: var(--color-muted);
-      font-size: .95rem;
-      line-height: 1.55;
-    }
-    .rdv-bullets .bullet-icon {
-      width: 28px;
-      height: 28px;
-      border-radius: .5rem;
-      background: rgba(76,114,255,.12);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-top: .05rem;
-    }
-    .rdv-bullets .bullet-icon svg {
-      width: 14px;
-      height: 14px;
-      stroke: var(--color-accent);
-    }
-    .rdv-left-divider {
-      border: none;
-      border-top: 1px solid var(--color-border);
-      margin: 1.75rem 0;
-    }
-    .rdv-contact-label {
-      font-size: .75rem;
-      font-weight: 600;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--color-muted);
-      margin-bottom: 1rem;
-    }
-    .rdv-contact-link {
-      display: flex;
-      align-items: center;
-      gap: .6rem;
-      color: var(--color-text);
-      text-decoration: none;
-      font-size: .95rem;
-      margin-bottom: .75rem;
-      transition: color .2s ease;
-    }
-    .rdv-contact-link:hover { color: var(--color-accent); }
-    .rdv-contact-link svg {
-      width: 16px;
-      height: 16px;
-      stroke: var(--color-accent);
-      flex-shrink: 0;
-    }
-    .tel-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      background: rgba(76,114,255,.1);
-      border: 1px solid rgba(76,114,255,.25);
-      border-radius: 100px;
-      padding: .45rem 1rem;
-      color: var(--color-accent);
-      font-size: .875rem;
-      font-weight: 500;
-      text-decoration: none;
-      transition: background .2s ease;
-    }
-    .tel-badge:hover { background: rgba(76,114,255,.18); }
-    .tel-badge svg {
-      width: 14px;
-      height: 14px;
-      stroke: currentColor;
-    }
+/* ── HEADER ── */
+.hdr{position:fixed;inset:0 0 auto;height:var(--hdr);z-index:100;border-bottom:1px solid transparent;transition:background .4s,border-color .4s,backdrop-filter .4s}
+.hdr.on{border-bottom-color:var(--border);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);background:rgba(8,8,17,.88)}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .hdr.on{background:rgba(244,244,240,.92)}}
+:root[data-theme="light"] .hdr.on{background:rgba(244,244,240,.92)}
+.nav{display:flex;align-items:center;height:var(--hdr);position:relative}
+.nav-logo{font-size:14px;font-weight:900;letter-spacing:.08em}
+.nav-logo span{color:var(--text-muted)}
+.nav-links{display:flex;gap:clamp(16px,3vw,40px);position:absolute;left:50%;transform:translateX(-50%)}
+.nav-link{font-size:10.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);transition:color .2s}
+.nav-link:hover,.nav-link.on{color:var(--text)}
+.nav-r{display:flex;align-items:center;gap:14px;margin-left:auto}
+.theme-btn,.login-btn{width:30px;height:30px;border:1px solid var(--border-hi);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:13px;transition:border-color .2s,color .2s}
+.theme-btn:hover,.login-btn:hover{border-color:var(--text-muted);color:var(--text)}
+.login-btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.btn{display:inline-flex;align-items:center;gap:9px;background:var(--btn-bg);color:var(--btn-text);font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;padding:14px 28px;border-radius:2px;transition:opacity .2s,transform .2s;white-space:nowrap}
+.btn:hover{opacity:.82;transform:translateY(-1px)}
+@media(max-width:768px){.nav-links{display:none}}
 
-    /* ── Right column (Calendly area) ── */
-    .calendly-wrapper {
-      border-radius: 1.25rem;
-      border: 1px solid var(--color-border);
-      overflow: hidden;
-      background: rgba(255,255,255,.03);
-      position: relative;
-    }
-    .calendly-header {
-      padding: 1.5rem 2rem;
-      border-bottom: 1px solid var(--color-border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: .75rem;
-    }
-    .calendly-header-title {
-      font-family: var(--font-heading);
-      font-size: 1.1rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      color: var(--color-text);
-    }
-    .calendly-live-dot {
-      display: flex;
-      align-items: center;
-      gap: .4rem;
-      font-size: .78rem;
-      color: #34d399;
-    }
-    .calendly-live-dot::before {
-      content: '';
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #34d399;
-      animation: pulse-dot 2s ease infinite;
-    }
-    @keyframes pulse-dot {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50%       { opacity: .5; transform: scale(.75); }
-    }
-    .calendly-iframe-area {
-      position: relative;
-      min-height: 650px;
-    }
-    .calendly-iframe-area iframe {
-      display: block;
-      width: 100%;
-      min-height: 650px;
-      border: none;
-    }
-    .calendly-loading {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      background: rgba(10,10,15,.6);
-      backdrop-filter: blur(4px);
-      z-index: 2;
-      transition: opacity .5s ease;
-    }
-    .loading-spinner {
-      width: 44px;
-      height: 44px;
-      border: 2px solid var(--color-border);
-      border-top-color: var(--color-accent);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    .calendly-loading p {
-      color: var(--color-muted);
-      font-size: .9rem;
-    }
-    .calendly-fallback {
-      padding: 1.5rem 2rem;
-      border-top: 1px solid var(--color-border);
-      text-align: center;
-    }
-    .calendly-fallback p {
-      color: var(--color-muted);
-      font-size: .875rem;
-      margin-bottom: .5rem;
-    }
-    .calendly-fallback a {
-      color: var(--color-accent);
-      text-decoration: none;
-      font-weight: 500;
-    }
-    .calendly-fallback a:hover {
-      text-decoration: underline;
-    }
+/* ── MENU BUTTON ── */
+.menu-btn{width:36px;height:36px;border:1px solid var(--border-hi);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text-muted);cursor:pointer;transition:border-color .2s,color .2s,background .2s;flex-shrink:0}
+.menu-btn:hover{border-color:rgba(139,92,246,.55);color:var(--text);background:rgba(139,92,246,.09)}
+.menu-btn svg{width:15px;height:15px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round}
+.cnav{position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;background:rgba(4,3,14,.90);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:0;pointer-events:none;transition:opacity .32s cubic-bezier(.16,1,.3,1)}
+.cnav.open{opacity:1;pointer-events:all}
+.cnav-ring{position:relative;width:420px;height:420px;max-width:88vw;max-height:88vw;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(139,92,246,.04);border:1px solid rgba(139,92,246,.18);box-shadow:0 0 90px rgba(139,92,246,.07),inset 2px 2px 5px rgba(255,255,255,.05),inset -2px -2px 5px rgba(0,0,0,.28);transform:scale(0);transition:transform .44s cubic-bezier(.16,1,.3,1)}
+.cnav.open .cnav-ring{transform:scale(1)}
+.cnav-close{width:54px;height:54px;border-radius:50%;background:var(--btn-bg);color:var(--btn-text);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .24s,background .24s,color .24s;position:relative;z-index:1}
+.cnav-close:hover{background:#8B5CF6;color:#fff;transform:scale(1.1) rotate(90deg)}
+.cnav-close svg{width:20px;height:20px;stroke:currentColor;stroke-width:2.5;fill:none;stroke-linecap:round}
+.cnav-item{position:absolute;top:50%;left:50%}
+.cnav-link{display:flex;flex-direction:column;align-items:center;justify-content:center;width:74px;height:74px;border-radius:50%;color:rgba(232,232,242,.60);text-decoration:none;transition:background .22s,color .22s,transform .22s,box-shadow .22s;gap:4px}
+.cnav-link:hover{background:rgba(139,92,246,.22);color:#fff;transform:scale(1.09);box-shadow:0 0 26px rgba(139,92,246,.20)}
+.cnav-link svg{width:21px;height:21px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.cnav-name{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
 
-    @media (max-width: 768px) {
-      .rdv-left-card { position: static; }
-      .calendly-iframe-area { min-height: 500px; }
-      .calendly-iframe-area iframe { min-height: 500px; }
-    }
-  </style>
+/* ── MAIN ── */
+main{position:relative;z-index:1;padding-top:var(--hdr)}
+
+/* ── HERO ── */
+.rdv-hero{
+  text-align:center;
+  padding:clamp(64px,11vh,130px) var(--pad-x) clamp(48px,7vh,80px);
+}
+.rdv-label{
+  display:inline-block;
+  font-size:9.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--accent);
+  border:1px solid var(--accent-ring);
+  border-radius:100px;
+  padding:5px 16px;
+  margin-bottom:26px;
+  background:var(--accent-dim);
+}
+.rdv-title{
+  font-size:clamp(2.4rem,5.5vw,5rem);
+  font-weight:900;
+  line-height:.93;
+  letter-spacing:-.04em;
+  margin-bottom:20px;
+  text-wrap:balance;
+}
+.rdv-title em{font-style:italic;color:var(--text-muted)}
+.rdv-sub{
+  font-size:clamp(.88rem,1.3vw,1.05rem);
+  color:var(--text-muted);
+  font-weight:300;
+  line-height:1.65;
+  max-width:480px;
+  margin:0 auto 32px;
+}
+.rdv-badges{
+  display:flex;align-items:center;justify-content:center;
+  flex-wrap:wrap;gap:10px;
+  margin-bottom:0;
+}
+.rdv-badge{
+  display:inline-flex;align-items:center;gap:7px;
+  border:1px solid var(--border-hi);
+  border-radius:100px;
+  padding:7px 16px;
+  font-size:11px;font-weight:500;color:var(--text-muted);
+  letter-spacing:.04em;
+}
+.rdv-badge svg{width:13px;height:13px;stroke:var(--accent);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+
+/* ── CALENDLY SECTION ── */
+.rdv-section{
+  max-width:900px;
+  margin:0 auto;
+  padding:0 var(--pad-x) clamp(80px,12vh,140px);
+}
+.rdv-card{
+  background:rgba(16,16,30,.84);
+  border:1px solid var(--border);
+  border-radius:16px;
+  overflow:hidden;
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  box-shadow:0 0 0 1px var(--accent-ring),0 32px 80px rgba(139,92,246,.12);
+}
+.rdv-card-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 24px;
+  border-bottom:1px solid var(--border);
+}
+.rdv-card-title{
+  font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);
+}
+.rdv-live{
+  display:flex;align-items:center;gap:7px;
+  font-size:11px;font-weight:500;color:#22c55e;
+}
+.rdv-live::before{
+  content:'';
+  width:7px;height:7px;border-radius:50%;background:#22c55e;
+  animation:pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.75)}}
+
+.calendly-inline-widget{
+  min-width:320px;
+  height:700px;
+}
+@media(max-width:600px){
+  .calendly-inline-widget{height:580px}
+}
+
+.rdv-fallback{
+  padding:16px 24px;
+  border-top:1px solid var(--border);
+  text-align:center;
+  font-size:12px;
+  color:var(--text-dim);
+}
+.rdv-fallback a{color:var(--accent);text-decoration:none}
+.rdv-fallback a:hover{text-decoration:underline}
+
+:focus-visible{outline:2px solid var(--accent-ring);outline-offset:3px;border-radius:2px}
+
+@media(prefers-color-scheme:light){
+  :root:not([data-theme="dark"]) .rdv-card{
+    background:rgba(255,255,255,.93);
+    box-shadow:0 0 0 1px var(--accent-ring),0 24px 60px rgba(139,92,246,.09);
+  }
+}
+:root[data-theme="light"] .rdv-card{
+  background:rgba(255,255,255,.93);
+  box-shadow:0 0 0 1px var(--accent-ring),0 24px 60px rgba(139,92,246,.09);
+}
+</style>
 </head>
 <body>
-  <canvas id="silk-bg" aria-hidden="true"></canvas>
-  <header class="site-header" id="site-header">
-    <nav class="nav">
-      <a href="index.html" class="nav__logo">Nexa<span>Web</span></a>
-      <ul class="nav__list" id="nav-list">
-        <li><a href="index.html" class="nav__link">Accueil</a></li>
-        <li><a href="tarifs.html" class="nav__link">Tarifs</a></li>
-        <li><a href="devis.html" class="nav__link">Devis</a></li>
-        <li><a href="blog.html" class="nav__link">Blog</a></li>
-        <li><a href="contact.html" class="nav__link">Contact</a></li>
-      </ul>
-      <a href="devis.html" class="btn btn--nav">Devis gratuit</a>
-      <button class="nav__burger" id="nav-burger" aria-label="Ouvrir le menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
+
+<canvas id="neon-canvas" aria-hidden="true"></canvas>
+
+<!-- HEADER -->
+<header class="hdr" id="hdr">
+  <div class="wrap">
+    <nav class="nav" aria-label="Navigation principale">
+      <a href="index.html" class="nav-logo">NEXA<span>WEB</span></a>
+      <div class="nav-r">
+        <button class="menu-btn" id="menu-btn" aria-label="Ouvrir la navigation" aria-expanded="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
+        </button>
+        <button class="theme-btn" id="theme-btn" aria-label="Basculer le thème">○</button>
+        <a href="login.html" class="login-btn" aria-label="Connexion">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        </a>
+        <a href="devis.html" class="btn">Démarrer un projet</a>
+      </div>
     </nav>
-  </header>
-  <div class="panel-backdrop" id="panel-backdrop" aria-hidden="true"></div>
+  </div>
+</header>
 
-  <main>
-    <!-- Hero -->
-    <section class="rdv-hero">
-      <div class="container">
-        <p class="eyebrow">Consultation Gratuite</p>
-        <h1>PRENONS<br><span>RENDEZ-VOUS</span></h1>
-        <p class="subtitle">Consultation gratuite de 30 min pour discuter de votre projet. Visio ou téléphone, à votre convenance.</p>
-        <div class="rdv-badges">
-          <span class="rdv-badge">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-            100% gratuit
-          </span>
-          <span class="rdv-badge">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            30 minutes
-          </span>
-          <span class="rdv-badge">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-            Visio ou téléphone
-          </span>
-          <span class="rdv-badge">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            Zéro engagement
-          </span>
-        </div>
-      </div>
-    </section>
+<div class="cnav" id="cnav" role="dialog" aria-modal="true" aria-label="Navigation">
+  <div class="cnav-ring" id="cnav-ring">
+    <button class="cnav-close" id="cnav-close" aria-label="Fermer la navigation"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div class="cnav-item"><a href="index.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span class="cnav-name">Accueil</span></a></div>
+    <div class="cnav-item"><a href="index.html#services" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg><span class="cnav-name">Services</span></a></div>
+    <div class="cnav-item"><a href="index.html#projets" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><span class="cnav-name">Projets</span></a></div>
+    <div class="cnav-item"><a href="index.html#apropos" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="cnav-name">À propos</span></a></div>
+    <div class="cnav-item"><a href="tarifs.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg><span class="cnav-name">Tarifs</span></a></div>
+    <div class="cnav-item"><a href="index.html#faq" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span class="cnav-name">FAQ</span></a></div>
+    <div class="cnav-item"><a href="contact.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span class="cnav-name">Contact</span></a></div>
+    <div class="cnav-item"><a href="rendez-vous.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span class="cnav-name">RDV</span></a></div>
+    <div class="cnav-item"><a href="equipe.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="cnav-name">Équipe</span></a></div>
+  </div>
+</div>
 
-    <!-- Main content -->
-    <section class="rdv-section">
-      <div class="container">
-        <div class="rdv-grid">
+<main>
 
-          <!-- LEFT: Why section -->
-          <div class="rdv-left-card">
-            <h2>Pourquoi une <span>consultation</span> ?</h2>
-            <ul class="rdv-bullets" aria-label="Raisons de prendre un rendez-vous">
-              <li>
-                <span class="bullet-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                </span>
-                <span><strong style="color:var(--color-text)">Zéro engagement, 100% gratuit</strong><br>Aucune obligation après l'appel. Repartez libre.</span>
-              </li>
-              <li>
-                <span class="bullet-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
-                </span>
-                <span><strong style="color:var(--color-text)">Définir le périmètre du projet</strong><br>On cadre ensemble vos besoins et objectifs précis.</span>
-              </li>
-              <li>
-                <span class="bullet-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-                </span>
-                <span><strong style="color:var(--color-text)">Estimer budget &amp; délai</strong><br>Un devis réaliste adapté à votre situation.</span>
-              </li>
-              <li>
-                <span class="bullet-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" aria-hidden="true"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-                </span>
-                <span><strong style="color:var(--color-text)">Poser toutes vos questions</strong><br>Technologie, design, hébergement, maintenance…</span>
-              </li>
-            </ul>
-
-            <hr class="rdv-left-divider" />
-            <p class="rdv-contact-label">Ou contactez-nous directement</p>
-            <a href="mailto:contact@nexaweb.fr" class="rdv-contact-link">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-              contact@nexaweb.fr
-            </a>
-            <a href="tel:+33600000000" class="tel-badge" aria-label="Appeler Nexa Web">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-              Appeler directement
-            </a>
-          </div>
-
-          <!-- RIGHT: Calendly widget -->
-          <div>
-            <div class="calendly-wrapper">
-              <div class="calendly-header">
-                <span class="calendly-header-title">Choisissez un créneau</span>
-                <span class="calendly-live-dot">Disponible</span>
-              </div>
-              <div class="calendly-iframe-area">
-                <!-- Loading overlay -->
-                <div class="calendly-loading" id="calendly-loading" aria-live="polite" aria-label="Chargement du calendrier">
-                  <div class="loading-spinner" aria-hidden="true"></div>
-                  <p>Calendly en cours de chargement…</p>
-                </div>
-                <iframe
-                  src="https://calendly.com/nexaweb/consultation"
-                  width="100%"
-                  height="650"
-                  frameborder="0"
-                  title="Calendrier de réservation Nexa Web"
-                  id="calendly-iframe"
-                  loading="lazy"
-                  onload="document.getElementById('calendly-loading').style.opacity='0'; setTimeout(()=>document.getElementById('calendly-loading').style.display='none',500);"
-                ></iframe>
-              </div>
-              <div class="calendly-fallback">
-                <p>Si le calendrier ne s'affiche pas, prenez rendez-vous directement par email :</p>
-                <a href="mailto:contact@nexaweb.fr?subject=Demande%20de%20RDV%20consultation">contact@nexaweb.fr</a>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="footer__watermark" aria-hidden="true">NEXAWEB</div>
-    <div class="container">
-      <div class="footer__top">
-        <div class="footer__brand">
-          <a href="index.html" class="footer__logo">Nexa<span>Web</span></a>
-          <p class="footer__tagline">Votre site premium<br>livré en 7 jours.</p>
-          <div class="footer__socials">
-            <a href="#" class="footer__social" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" stroke="none"/></svg></a>
-            <a href="#" class="footer__social" aria-label="TikTok"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V9.41a8.16 8.16 0 004.77 1.52V7.48a4.85 4.85 0 01-1-.79z"/></svg></a>
-            <a href="#" class="footer__social" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg></a>
-          </div>
-        </div>
-        <nav class="footer__nav" aria-label="Liens du pied de page">
-          <div class="footer__col">
-            <h4 class="footer__col-title">Navigation</h4>
-            <ul>
-              <li><a href="index.html">Accueil</a></li>
-              <li><a href="tarifs.html">Tarifs</a></li>
-              <li><a href="blog.html">Blog</a></li>
-              <li><a href="contact.html">Contact</a></li>
-            </ul>
-          </div>
-          <div class="footer__col">
-            <h4 class="footer__col-title">Services</h4>
-            <ul>
-              <li><a href="site-vitrine.html">Site Vitrine</a></li>
-              <li><a href="ecommerce.html">E-Commerce</a></li>
-              <li><a href="seo.html">Référencement SEO</a></li>
-              <li><a href="devis.html">Obtenir un devis</a></li>
-            </ul>
-          </div>
-          <div class="footer__col">
-            <h4 class="footer__col-title">Légal</h4>
-            <ul>
-              <li><a href="mentions-legales.html">Mentions légales</a></li>
-              <li><a href="contrat.html">CGV</a></li>
-              <li><a href="rendez-vous.html">Prendre RDV</a></li>
-            </ul>
-          </div>
-        </nav>
-      </div>
-      <div class="footer__bottom"><p>&copy; 2025 Nexa Web. Tous droits réservés.</p></div>
+  <!-- Hero -->
+  <div class="rdv-hero">
+    <span class="rdv-label">Consultation gratuite</span>
+    <h1 class="rdv-title">Prenons<br><em>rendez-vous.</em></h1>
+    <p class="rdv-sub">30 minutes pour cadrer votre projet. Visio ou téléphone, à votre convenance. Zéro engagement.</p>
+    <div class="rdv-badges">
+      <span class="rdv-badge">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+        100 % gratuit
+      </span>
+      <span class="rdv-badge">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        30 minutes
+      </span>
+      <span class="rdv-badge">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+        Visio ou téléphone
+      </span>
+      <span class="rdv-badge">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Zéro engagement
+      </span>
     </div>
-  </footer>
+  </div>
 
-  <script src="script.js"></script>
+  <!-- Calendly -->
+  <div class="rdv-section">
+    <div class="rdv-card">
+      <div class="rdv-card-header">
+        <span class="rdv-card-title">Choisissez un créneau</span>
+        <span class="rdv-live">Disponible</span>
+      </div>
+      <div class="calendly-inline-widget"
+           data-url="https://calendly.com/contact-nexaweb62/30min?background_color=080811&text_color=e8e8f2&primary_color=8b5cf6"
+           aria-label="Calendrier de réservation Nexa Web"></div>
+      <div class="rdv-fallback">
+        Si le calendrier ne s'affiche pas —
+        <a href="devis.html">remplissez le formulaire de devis</a>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+
+<script type="module">
+/* ── NEON FLOW ── */
+(async function(){
+  var canvas = document.getElementById('neon-canvas');
+  try{
+    var mod = await import('https://cdn.jsdelivr.net/npm/threejs-components@0.0.19/build/cursors/tubes1.min.js');
+    var TubesCursor = mod.default;
+    TubesCursor(canvas,{
+      tubes:{
+        colors:['#8B5CF6','#6366f1','#a78bfa'],
+        lights:{intensity:180,colors:['#8B5CF6','#60aed5','#ff008a','#53bc28']}
+      }
+    });
+  }catch(err){ console.warn('Neon flow:',err); }
+})();
+
+/* ── HEADER SCROLL ── */
+(function(){
+  var hdr=document.getElementById('hdr');
+  window.addEventListener('scroll',function(){hdr.classList.toggle('on',window.scrollY>8);},{passive:true});
+  if(window.scrollY>8)hdr.classList.add('on');
+})();
+
+/* ── THEME TOGGLE ── */
+(function(){
+  var root=document.documentElement;
+  var btn=document.getElementById('theme-btn');
+  var stored=localStorage.getItem('nw-theme');
+  if(stored)root.setAttribute('data-theme',stored);
+  function sync(){btn.textContent=root.getAttribute('data-theme')==='light'?'●':'○';}
+  sync();
+  btn.addEventListener('click',function(){
+    var next=root.getAttribute('data-theme')==='dark'?'light':'dark';
+    root.setAttribute('data-theme',next);
+    localStorage.setItem('nw-theme',next);
+    sync();
+  });
+})();
+</script>
+<script>
+(function(){
+  var overlay=document.getElementById('cnav'),ring=document.getElementById('cnav-ring'),menuBtn=document.getElementById('menu-btn'),closeBtn=document.getElementById('cnav-close');
+  if(!overlay||!ring||!menuBtn)return;
+  var items=Array.from(ring.querySelectorAll('.cnav-item')),n=items.length;
+  function pos(){var s=ring.offsetWidth,r=s*0.368;items.forEach(function(it,i){var a=((360/n)*i-90)*Math.PI/180;it.style.transform='translate(calc(-50% + '+(Math.cos(a)*r).toFixed(1)+'px),calc(-50% + '+(Math.sin(a)*r).toFixed(1)+'px))';});}
+  function open(){overlay.classList.add('open');menuBtn.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';pos();closeBtn.focus();}
+  function close(){overlay.classList.remove('open');menuBtn.setAttribute('aria-expanded','false');document.body.style.overflow='';menuBtn.focus();}
+  menuBtn.addEventListener('click',open);closeBtn.addEventListener('click',close);
+  overlay.addEventListener('click',function(e){if(e.target===overlay)close();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&overlay.classList.contains('open'))close();});
+  ring.querySelectorAll('.cnav-link').forEach(function(l){l.addEventListener('click',close);});
+  window.addEventListener('resize',function(){if(overlay.classList.contains('open'))pos();},{passive:true});
+})();
+</script>
+<script src="chat-widget.js"></script>
+
 </body>
 </html>

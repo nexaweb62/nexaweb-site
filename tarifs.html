@@ -1,204 +1,544 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nexa Web — Tarifs · Sites Premium dès 490 €</title>
-  <meta name="description" content="Découvrez les tarifs Nexa Web : site vitrine, e-commerce et refontes. Livraison garantie en 7 jours. Devis gratuit." />
-  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarifs — Nexa Web</title>
+<script>(function(){var t=localStorage.getItem('nw-theme');if(t)document.documentElement.setAttribute('data-theme',t);}());</script>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+/* ── TOKENS ── */
+:root{
+  --bg:#080811;--bg-alt:#0c0c18;--bg-card:#10101e;
+  --border:rgba(220,220,242,.07);--border-hi:rgba(220,220,242,.14);
+  --text:#E8E8F2;--text-muted:rgba(232,232,242,.44);--text-dim:rgba(232,232,242,.18);
+  --btn-bg:#E8E8F2;--btn-text:#080811;
+  --ghost-border:rgba(232,232,242,.22);
+  --accent:#8B5CF6;--accent-dim:rgba(139,92,246,.15);--accent-ring:rgba(139,92,246,.35);
+  --green:#22c55e;--green-dim:rgba(34,197,94,.12);--green-ring:rgba(34,197,94,.3);
+  --font:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  --max-w:1280px;--pad-x:clamp(20px,5vw,80px);--hdr:80px;
+}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]){
+  --bg:#F4F4F0;--bg-alt:#EAEAE6;--bg-card:#E4E4E0;
+  --border:rgba(18,18,22,.09);--border-hi:rgba(18,18,22,.16);
+  --text:#111118;--text-muted:rgba(17,17,22,.50);--text-dim:rgba(17,17,22,.20);
+  --btn-bg:#111118;--btn-text:#F4F4F0;--ghost-border:rgba(17,17,22,.22);
+}}
+:root[data-theme="light"]{
+  --bg:#F4F4F0;--bg-alt:#EAEAE6;--bg-card:#E4E4E0;
+  --border:rgba(18,18,22,.09);--border-hi:rgba(18,18,22,.16);
+  --text:#111118;--text-muted:rgba(17,17,22,.50);--text-dim:rgba(17,17,22,.20);
+  --btn-bg:#111118;--btn-text:#F4F4F0;--ghost-border:rgba(17,17,22,.22);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:var(--font);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .35s,color .35s;min-height:100vh}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
+ul{list-style:none}
+.wrap{max-width:var(--max-w);margin:0 auto;padding:0 var(--pad-x)}
+
+/* ── NEON CANVAS ── */
+#neon-canvas{
+  position:fixed;inset:0;width:100%;height:100%;
+  z-index:0;pointer-events:none;
+  opacity:.48;
+}
+
+/* ── HEADER ── */
+.hdr{position:fixed;inset:0 0 auto;height:var(--hdr);z-index:100;border-bottom:1px solid transparent;transition:background .4s,border-color .4s,backdrop-filter .4s}
+.hdr.on{border-bottom-color:var(--border);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);background:rgba(8,8,17,.88)}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .hdr.on{background:rgba(244,244,240,.92)}}
+:root[data-theme="light"] .hdr.on{background:rgba(244,244,240,.92)}
+.nav{display:flex;align-items:center;height:var(--hdr);position:relative}
+.nav-logo{font-size:14px;font-weight:900;letter-spacing:.08em}
+.nav-logo span{color:var(--text-muted)}
+.nav-links{display:flex;gap:clamp(16px,3vw,40px);position:absolute;left:50%;transform:translateX(-50%)}
+.nav-link{font-size:10.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);transition:color .2s}
+.nav-link:hover,.nav-link.on{color:var(--text)}
+.nav-r{display:flex;align-items:center;gap:14px;margin-left:auto}
+.theme-btn,.login-btn{width:30px;height:30px;border:1px solid var(--border-hi);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:13px;transition:border-color .2s,color .2s}
+.theme-btn:hover,.login-btn:hover{border-color:var(--text-muted);color:var(--text)}
+.login-btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.btn{display:inline-flex;align-items:center;gap:9px;background:var(--btn-bg);color:var(--btn-text);font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;padding:14px 28px;border-radius:2px;transition:opacity .2s,transform .2s;white-space:nowrap}
+.btn:hover{opacity:.82;transform:translateY(-1px)}
+@media(max-width:768px){.nav-links{display:none}}
+
+/* ── MENU BUTTON ── */
+.menu-btn{width:36px;height:36px;border:1px solid var(--border-hi);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text-muted);cursor:pointer;transition:border-color .2s,color .2s,background .2s;flex-shrink:0}
+.menu-btn:hover{border-color:rgba(139,92,246,.55);color:var(--text);background:rgba(139,92,246,.09)}
+.menu-btn svg{width:15px;height:15px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round}
+/* ── CIRCULAR NAV ── */
+.cnav{position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;background:rgba(4,3,14,.90);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:0;pointer-events:none;transition:opacity .32s cubic-bezier(.16,1,.3,1)}
+.cnav.open{opacity:1;pointer-events:all}
+.cnav-ring{position:relative;width:420px;height:420px;max-width:88vw;max-height:88vw;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(139,92,246,.04);border:1px solid rgba(139,92,246,.18);box-shadow:0 0 90px rgba(139,92,246,.07),inset 2px 2px 5px rgba(255,255,255,.05),inset -2px -2px 5px rgba(0,0,0,.28);transform:scale(0);transition:transform .44s cubic-bezier(.16,1,.3,1)}
+.cnav.open .cnav-ring{transform:scale(1)}
+.cnav-close{width:54px;height:54px;border-radius:50%;background:var(--btn-bg);color:var(--btn-text);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .24s,background .24s,color .24s;position:relative;z-index:1}
+.cnav-close:hover{background:#8B5CF6;color:#fff;transform:scale(1.1) rotate(90deg)}
+.cnav-close svg{width:20px;height:20px;stroke:currentColor;stroke-width:2.5;fill:none;stroke-linecap:round}
+.cnav-item{position:absolute;top:50%;left:50%}
+.cnav-link{display:flex;flex-direction:column;align-items:center;justify-content:center;width:74px;height:74px;border-radius:50%;color:rgba(232,232,242,.60);text-decoration:none;transition:background .22s,color .22s,transform .22s,box-shadow .22s;gap:4px}
+.cnav-link:hover{background:rgba(139,92,246,.22);color:#fff;transform:scale(1.09);box-shadow:0 0 26px rgba(139,92,246,.20)}
+.cnav-link svg{width:21px;height:21px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.cnav-name{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+
+/* ── MAIN ── */
+main{position:relative;z-index:1;padding-top:var(--hdr)}
+
+/* ── HERO ── */
+.tarifs-hero{
+  text-align:center;
+  padding:clamp(64px,11vh,130px) var(--pad-x) clamp(48px,7vh,90px);
+}
+.tarifs-label{
+  display:inline-block;
+  font-size:9.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--accent);
+  border:1px solid var(--accent-ring);
+  border-radius:100px;
+  padding:5px 16px;
+  margin-bottom:26px;
+  background:var(--accent-dim);
+}
+.tarifs-title{
+  font-size:clamp(2.4rem,5.5vw,5rem);
+  font-weight:900;
+  line-height:.93;
+  letter-spacing:-.04em;
+  margin-bottom:20px;
+  text-wrap:balance;
+}
+.tarifs-title em{font-style:italic;color:var(--text-muted)}
+.tarifs-sub{
+  font-size:clamp(.88rem,1.3vw,1.05rem);
+  color:var(--text-muted);
+  font-weight:300;
+  line-height:1.65;
+  max-width:480px;
+  margin:0 auto 18px;
+}
+
+/* ── GUARANTEE BANNER ── */
+.guarantee-band{
+  display:inline-flex;align-items:center;gap:10px;
+  border:1px solid var(--green-ring);
+  background:var(--green-dim);
+  border-radius:100px;
+  padding:8px 20px;
+  margin-bottom:64px;
+}
+.guarantee-band svg{width:16px;height:16px;stroke:var(--green);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.guarantee-band span{font-size:11px;font-weight:600;letter-spacing:.08em;color:var(--green)}
+
+/* ── CARDS GRID ── */
+.tarifs-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:22px;
+  max-width:980px;
+  margin:0 auto;
+  padding:0 var(--pad-x) clamp(80px,12vh,140px);
+  align-items:start;
+}
+@media(max-width:900px){.tarifs-grid{grid-template-columns:1fr;max-width:420px}}
+
+.prix-card{
+  position:relative;
+  display:flex;flex-direction:column;
+  background:rgba(16,16,30,.84);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:30px 26px 26px;
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  transition:border-color .3s,transform .3s,box-shadow .3s;
+}
+.prix-card:hover{border-color:var(--border-hi);transform:translateY(-4px);box-shadow:0 24px 52px rgba(0,0,0,.45)}
+.prix-card.featured{
+  border-color:var(--accent-ring);
+  box-shadow:0 0 0 1px var(--accent-ring),0 24px 60px rgba(139,92,246,.18);
+  transform:scale(1.04);
+  background:rgba(20,14,38,.92);
+  z-index:2;
+}
+.prix-card.featured:hover{transform:scale(1.04) translateY(-4px)}
+
+/* Popular ribbon */
+.card-popular{
+  position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  font-size:8px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;
+  background:linear-gradient(135deg,var(--accent),#a78bfa);
+  color:#fff;
+  padding:4px 16px;border-radius:100px;
+  white-space:nowrap;
+  box-shadow:0 4px 18px rgba(139,92,246,.42);
+}
+
+/* Card top */
+.card-top{
+  padding-bottom:22px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:22px;
+}
+.card-name{
+  font-size:9px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--text-dim);
+  margin-bottom:18px;
+  display:flex;align-items:center;gap:8px;
+}
+.prix-card.featured .card-name{color:var(--accent)}
+
+.card-price{
+  display:flex;align-items:baseline;gap:5px;
+  margin-bottom:6px;
+}
+.price-amount{
+  font-size:clamp(2.4rem,4vw,3.2rem);
+  font-weight:900;
+  letter-spacing:-.05em;
+  line-height:1;
+  color:var(--text);
+}
+.prix-card.featured .price-amount{
+  background:linear-gradient(135deg,#fff 30%,rgba(167,139,250,.8));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.price-currency{font-size:1.4rem;font-weight:700;color:var(--text-muted);align-self:flex-start;margin-top:8px}
+.price-note{font-size:11px;color:var(--text-dim);font-weight:400}
+.card-desc{font-size:12.5px;color:var(--text-muted);line-height:1.58;margin-top:12px}
+
+/* Features */
+.card-features{
+  flex:1;
+  display:flex;flex-direction:column;gap:11px;
+  margin-bottom:26px;
+}
+.card-feat{
+  display:flex;align-items:flex-start;gap:10px;
+  font-size:12.5px;color:var(--text-muted);line-height:1.4;
+}
+.feat-check{
+  width:15px;height:15px;flex-shrink:0;margin-top:2px;
+  stroke:var(--accent);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;
+}
+.prix-card:not(.featured) .feat-check{stroke:var(--text-dim)}
+
+/* CTA button */
+.card-cta{
+  display:flex;align-items:center;justify-content:center;
+  width:100%;padding:14px 20px;
+  border-radius:5px;
+  font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  transition:opacity .2s,transform .2s,box-shadow .2s;
+  cursor:pointer;border:none;
+}
+.card-cta.ghost{background:transparent;color:var(--text-muted);border:1px solid var(--ghost-border)}
+.card-cta.ghost:hover{color:var(--text);border-color:var(--border-hi);transform:translateY(-1px)}
+.card-cta.primary{
+  background:linear-gradient(135deg,var(--accent) 0%,#a78bfa 100%);
+  color:#fff;
+  box-shadow:0 6px 22px rgba(139,92,246,.38);
+}
+.card-cta.primary:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 8px 28px rgba(139,92,246,.5)}
+
+/* ── GUARANTEE FOOTER ── */
+.guarantee-section{
+  position:relative;z-index:1;
+  text-align:center;
+  padding:0 var(--pad-x) clamp(60px,10vh,110px);
+}
+.guarantee-box{
+  display:inline-flex;flex-direction:column;align-items:center;gap:14px;
+  border:1px solid var(--green-ring);
+  background:var(--green-dim);
+  border-radius:14px;
+  padding:clamp(28px,4vw,44px) clamp(32px,6vw,72px);
+  max-width:620px;
+  backdrop-filter:blur(10px);
+}
+.guarantee-icon{
+  width:52px;height:52px;
+  border-radius:50%;
+  background:rgba(34,197,94,.15);
+  border:1px solid var(--green-ring);
+  display:flex;align-items:center;justify-content:center;
+}
+.guarantee-icon svg{width:26px;height:26px;stroke:var(--green);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.guarantee-title{
+  font-size:clamp(1.1rem,2vw,1.5rem);
+  font-weight:800;
+  letter-spacing:-.02em;
+  color:var(--green);
+}
+.guarantee-text{
+  font-size:13px;
+  color:var(--text-muted);
+  line-height:1.65;
+  max-width:440px;
+}
+.guarantee-text strong{color:var(--text);font-weight:600}
+
+/* ── CLICK HINT ── */
+.neon-hint{
+  position:fixed;bottom:22px;left:50%;transform:translateX(-50%);
+  font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--text-dim);
+  pointer-events:none;z-index:10;
+  animation:hint-pulse 3.5s ease-in-out infinite;
+}
+@keyframes hint-pulse{0%,100%{opacity:.3}50%{opacity:.8}}
+
+:focus-visible{outline:2px solid var(--accent-ring);outline-offset:3px;border-radius:2px}
+
+/* ── LIGHT MODE OVERRIDES ── */
+@media(prefers-color-scheme:light){
+  :root:not([data-theme="dark"]) .prix-card{
+    background:rgba(255,255,255,.93);
+    box-shadow:0 8px 28px rgba(0,0,0,.07);
+  }
+  :root:not([data-theme="dark"]) .prix-card:hover{
+    box-shadow:0 18px 44px rgba(0,0,0,.11);
+  }
+  :root:not([data-theme="dark"]) .prix-card.featured{
+    background:rgba(250,248,255,.97);
+    box-shadow:0 0 0 1px var(--accent-ring),0 16px 48px rgba(139,92,246,.13);
+  }
+  :root:not([data-theme="dark"]) .prix-card.featured .price-amount{
+    background:linear-gradient(135deg,var(--accent) 20%,#7c3aed 100%);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  }
+  :root:not([data-theme="dark"]) .card-top{border-bottom-color:rgba(18,18,22,.09)}
+  :root:not([data-theme="dark"]) .guarantee-box{backdrop-filter:blur(10px)}
+}
+:root[data-theme="light"] .prix-card{
+  background:rgba(255,255,255,.93);
+  box-shadow:0 8px 28px rgba(0,0,0,.07);
+}
+:root[data-theme="light"] .prix-card:hover{
+  box-shadow:0 18px 44px rgba(0,0,0,.11);
+}
+:root[data-theme="light"] .prix-card.featured{
+  background:rgba(250,248,255,.97);
+  box-shadow:0 0 0 1px var(--accent-ring),0 16px 48px rgba(139,92,246,.13);
+}
+:root[data-theme="light"] .prix-card.featured .price-amount{
+  background:linear-gradient(135deg,var(--accent) 20%,#7c3aed 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+:root[data-theme="light"] .card-top{border-bottom-color:rgba(18,18,22,.09)}
+</style>
 </head>
 <body>
 
-  <!-- Silk WebGL background -->
-  <canvas id="silk-bg" aria-hidden="true"></canvas>
+<canvas id="neon-canvas" aria-hidden="true"></canvas>
 
-  <!-- Navigation -->
-  <header class="site-header" id="site-header">
-    <nav class="nav">
-      <a href="index.html" class="nav__logo">Nexa<span>Web</span></a>
-      <ul class="nav__list" id="nav-list">
-        <li><a href="index.html" class="nav__link">Accueil</a></li>
-        <li><a href="tarifs.html" class="nav__link" id="nav-tarifs">Tarifs</a></li>
-        <li><a href="devis.html" class="nav__link">Devis</a></li>
-        <li><a href="blog.html" class="nav__link">Blog</a></li>
-        <li><a href="contact.html" class="nav__link">Contact</a></li>
-      </ul>
-      <a href="devis.html" class="btn btn--nav">Devis gratuit</a>
-      <button class="nav__burger" id="nav-burger" aria-label="Ouvrir le menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
+<!-- HEADER -->
+<header class="hdr" id="hdr">
+  <div class="wrap">
+    <nav class="nav" aria-label="Navigation principale">
+      <a href="index.html" class="nav-logo">NEXA<span>WEB</span></a>
+      <div class="nav-r">
+        <button class="menu-btn" id="menu-btn" aria-label="Ouvrir la navigation" aria-expanded="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
+        </button>
+        <button class="theme-btn" id="theme-btn" aria-label="Basculer le thème">○</button>
+        <a href="login.html" class="login-btn" aria-label="Connexion">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        </a>
+        <a href="index.html#contact" class="btn">Démarrer un projet</a>
+      </div>
     </nav>
-  </header>
+  </div>
+</header>
 
-  <!-- Backdrop for mobile nav panel -->
-  <div class="panel-backdrop" id="panel-backdrop" aria-hidden="true"></div>
+<!-- CIRCULAR NAV OVERLAY -->
+<div class="cnav" id="cnav" role="dialog" aria-modal="true" aria-label="Navigation">
+  <div class="cnav-ring" id="cnav-ring">
+    <button class="cnav-close" id="cnav-close" aria-label="Fermer la navigation">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="cnav-item"><a href="index.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span class="cnav-name">Accueil</span></a></div>
+    <div class="cnav-item"><a href="index.html#services" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg><span class="cnav-name">Services</span></a></div>
+    <div class="cnav-item"><a href="index.html#projets" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><span class="cnav-name">Projets</span></a></div>
+    <div class="cnav-item"><a href="index.html#apropos" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="cnav-name">À propos</span></a></div>
+    <div class="cnav-item"><a href="tarifs.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg><span class="cnav-name">Tarifs</span></a></div>
+    <div class="cnav-item"><a href="index.html#faq" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span class="cnav-name">FAQ</span></a></div>
+    <div class="cnav-item"><a href="contact.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span class="cnav-name">Contact</span></a></div>
+    <div class="cnav-item"><a href="rendez-vous.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span class="cnav-name">RDV</span></a></div>
+    <div class="cnav-item"><a href="equipe.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="cnav-name">Équipe</span></a></div>
+  </div>
+</div>
 
-  <!-- Bouton retour -->
-  <button class="tarifs-page-back" id="tarifs-page-back" aria-label="Retour à l'accueil">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-      <path d="M19 12H5M12 5l-7 7 7 7"/>
-    </svg>
-    Retour
-  </button>
+<main>
 
-  <main>
-    <section class="tarifs-page">
+  <!-- Hero -->
+  <div class="tarifs-hero">
+    <span class="tarifs-label">Tarification claire &amp; transparente</span>
+    <h1 class="tarifs-title">Des prix honnêtes,<br><em>zéro mauvaise surprise.</em></h1>
+    <p class="tarifs-sub">Paiement unique, livraison en 7 jours. Pas d'abonnement caché, pas de frais supplémentaires.</p>
 
-      <div class="tarifs-page__header">
-        <p class="tarifs-page__eyebrow">Transparence totale</p>
-        <h1 class="tarifs-page__title">NOS<br>TARIFS</h1>
-      </div>
-
-      <div class="tarifs-page__cards">
-
-        <!-- VITRINE -->
-        <div class="tarif-card">
-          <div class="tarif-card__header">
-            <span class="tarif-card__name">Vitrine</span>
-            <div class="tarif-card__price">
-              <span class="tarif-card__prefix">À partir de</span>
-              <span class="tarif-card__amount">490 €</span>
-            </div>
-          </div>
-          <ul class="tarif-card__features">
-            <li>Site 5 à 8 pages</li>
-            <li>Design sur mesure</li>
-            <li>Mobile-first responsive</li>
-            <li>SEO technique inclus</li>
-            <li>Formulaire de contact</li>
-            <li>Livraison en 7 jours</li>
-          </ul>
-          <a href="devis.html" class="tarif-card__cta">Obtenir un devis</a>
-        </div>
-
-        <!-- ESSENTIEL (featured) -->
-        <div class="tarif-card tarif-card--featured">
-          <span class="tarif-card__badge">Le plus choisi</span>
-          <div class="tarif-card__header">
-            <span class="tarif-card__name">Essentiel</span>
-            <div class="tarif-card__price">
-              <span class="tarif-card__prefix">À partir de</span>
-              <span class="tarif-card__amount">890 €</span>
-            </div>
-          </div>
-          <ul class="tarif-card__features">
-            <li>Jusqu'à 15 pages</li>
-            <li>Animations GSAP premium</li>
-            <li>Blog intégré</li>
-            <li>Google Analytics</li>
-            <li>Optimisation Core Web Vitals</li>
-            <li>1 mois de support offert</li>
-            <li>Livraison en 7 jours</li>
-          </ul>
-          <a href="devis.html" class="tarif-card__cta">Obtenir un devis</a>
-        </div>
-
-        <!-- E-COMMERCE -->
-        <div class="tarif-card">
-          <div class="tarif-card__header">
-            <span class="tarif-card__name">E-Commerce</span>
-            <div class="tarif-card__price">
-              <span class="tarif-card__prefix">À partir de</span>
-              <span class="tarif-card__amount">1 490 €</span>
-            </div>
-          </div>
-          <ul class="tarif-card__features">
-            <li>Boutique illimitée</li>
-            <li>Paiement Stripe / PayPal</li>
-            <li>Gestion des stocks</li>
-            <li>Emails transactionnels</li>
-            <li>Tableau de bord admin</li>
-            <li>Formation incluse</li>
-            <li>Livraison en 10 jours</li>
-          </ul>
-          <a href="devis.html" class="tarif-card__cta">Obtenir un devis</a>
-        </div>
-
-      </div>
-
-      <!-- Bloc garantie -->
-      <div class="tarifs-guarantee">
-        <svg class="tarifs-guarantee__icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          <path d="M9 12l2 2 4-4"/>
-        </svg>
-        <div>
-          <p class="tarifs-guarantee__title">Satisfait ou retravaillé</p>
-          <p class="tarifs-guarantee__text">Nous révisons votre site jusqu'à votre entière satisfaction. Si le résultat ne correspond pas au brief validé, on retravaille sans frais supplémentaires — c'est notre engagement.</p>
-        </div>
-      </div>
-
-    </section>
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="footer__watermark" aria-hidden="true">NEXAWEB</div>
-    <div class="container">
-      <div class="footer__top">
-        <div class="footer__brand reveal">
-          <a href="index.html" class="footer__logo">Nexa<span>Web</span></a>
-          <p class="footer__tagline">Votre site premium<br>livré en 7 jours.</p>
-          <div class="footer__socials">
-            <a href="#" class="footer__social" aria-label="Instagram">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                <rect x="2" y="2" width="20" height="20" rx="5"/>
-                <circle cx="12" cy="12" r="4"/>
-                <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" stroke="none"/>
-              </svg>
-            </a>
-            <a href="#" class="footer__social" aria-label="TikTok">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V9.41a8.16 8.16 0 004.77 1.52V7.48a4.85 4.85 0 01-1-.79z"/>
-              </svg>
-            </a>
-            <a href="#" class="footer__social" aria-label="LinkedIn">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/>
-                <circle cx="4" cy="4" r="2"/>
-              </svg>
-            </a>
-          </div>
-        </div>
-        <nav class="footer__nav reveal reveal--delay-1" aria-label="Liens du pied de page">
-          <div class="footer__col">
-            <h4 class="footer__col-title">Navigation</h4>
-            <ul>
-              <li><a href="index.html">Accueil</a></li>
-              <li><a href="tarifs.html">Tarifs</a></li>
-              <li><a href="blog.html">Blog</a></li>
-              <li><a href="contact.html">Contact</a></li>
-            </ul>
-          </div>
-          <div class="footer__col">
-            <h4 class="footer__col-title">Services</h4>
-            <ul>
-              <li><a href="site-vitrine.html">Site Vitrine</a></li>
-              <li><a href="ecommerce.html">E-Commerce</a></li>
-              <li><a href="seo.html">Référencement SEO</a></li>
-              <li><a href="devis.html">Obtenir un devis</a></li>
-            </ul>
-          </div>
-          <div class="footer__col">
-            <h4 class="footer__col-title">Légal</h4>
-            <ul>
-              <li><a href="mentions-legales.html">Mentions légales</a></li>
-              <li><a href="contrat.html">CGV</a></li>
-              <li><a href="rendez-vous.html">Prendre RDV</a></li>
-            </ul>
-          </div>
-        </nav>
-      </div>
-      <div class="footer__bottom">
-        <p>&copy; 2025 Nexa Web. Tous droits réservés.</p>
-      </div>
+    <div class="guarantee-band" role="note" aria-label="Garantie satisfait ou remboursé 30 jours">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+      <span>Garantie satisfait ou remboursé — 30 jours</span>
     </div>
-  </footer>
+  </div>
 
-  <script src="script.js"></script>
+  <!-- Cards -->
+  <div class="tarifs-grid">
+
+    <!-- Vitrine -->
+    <div class="prix-card">
+      <div class="card-top">
+        <div class="card-name">Vitrine</div>
+        <div class="card-price">
+          <span class="price-currency">€</span>
+          <span class="price-amount">790</span>
+        </div>
+        <div class="price-note">Paiement unique · TVA non applicable</div>
+        <p class="card-desc">Parfait pour lancer votre présence en ligne rapidement avec un site élégant et professionnel.</p>
+      </div>
+      <ul class="card-features">
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Site vitrine 3 à 5 pages</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Design 100 % sur-mesure &amp; responsive</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>SEO de base (balises, sitemap, robots)</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Formulaire de contact</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Livraison en 7 jours ouvrés</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>1 mois de support inclus</span></li>
+      </ul>
+      <button class="card-cta ghost" onclick="window.location='devis.html?plan=vitrine'">Choisir Vitrine</button>
+    </div>
+
+    <!-- Business (featured) -->
+    <div class="prix-card featured">
+      <div class="card-popular">★ Le plus choisi</div>
+      <div class="card-top">
+        <div class="card-name">Business</div>
+        <div class="card-price">
+          <span class="price-currency">€</span>
+          <span class="price-amount">1 490</span>
+        </div>
+        <div class="price-note">Paiement unique · TVA non applicable</div>
+        <p class="card-desc">Pour les entreprises qui veulent un site complet, gérable en autonomie, avec un référencement solide.</p>
+      </div>
+      <ul class="card-features">
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Site jusqu'à 10 pages</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>CMS intégré (modifiable sans code)</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>SEO avancé + Google Analytics 4</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Blog / actualités intégré</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Livraison en 7 jours ouvrés</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>3 mois de support prioritaire inclus</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Formation à la prise en main</span></li>
+      </ul>
+      <button class="card-cta primary" onclick="window.location='devis.html?plan=business'">Choisir Business</button>
+    </div>
+
+    <!-- Premium -->
+    <div class="prix-card">
+      <div class="card-top">
+        <div class="card-name">Premium</div>
+        <div class="card-price">
+          <span class="price-currency">€</span>
+          <span class="price-amount">2 490</span>
+        </div>
+        <div class="price-note">Paiement unique · TVA non applicable</div>
+        <p class="card-desc">Pour les boutiques en ligne et projets ambitieux qui ont besoin de fonctionnalités sur-mesure.</p>
+      </div>
+      <ul class="card-features">
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Pages illimitées</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Boutique e-commerce complète</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Intégration API &amp; outils tiers</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Tableau de bord analytics avancé</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Livraison en 7 jours ouvrés</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>6 mois de support prioritaire 24/7</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Audit SEO &amp; rapport mensuel</span></li>
+      </ul>
+      <button class="card-cta ghost" onclick="window.location='devis.html?plan=premium'">Choisir Premium</button>
+    </div>
+
+  </div>
+
+  <!-- Guarantee section -->
+  <div class="guarantee-section">
+    <div class="guarantee-box" role="note">
+      <div class="guarantee-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+      </div>
+      <div class="guarantee-title">Garantie satisfait ou remboursé — 30 jours</div>
+      <p class="guarantee-text">
+        Vous avez <strong>30 jours après la livraison</strong> pour tester votre site. Si le résultat ne vous convient pas, nous vous remboursons intégralement, sans question. Votre satisfaction est notre seule priorité.
+      </p>
+    </div>
+  </div>
+
+</main>
+
+<span class="neon-hint" aria-hidden="true">Cliquez pour changer les couleurs du fond</span>
+
+<script type="module">
+/* ── NEON FLOW ── */
+(async function(){
+  var canvas = document.getElementById('neon-canvas');
+  try{
+    var mod = await import('https://cdn.jsdelivr.net/npm/threejs-components@0.0.19/build/cursors/tubes1.min.js');
+    var TubesCursor = mod.default;
+    var app = TubesCursor(canvas,{
+      tubes:{
+        colors:['#8B5CF6','#6366f1','#a78bfa'],
+        lights:{intensity:180,colors:['#8B5CF6','#60aed5','#ff008a','#53bc28']}
+      }
+    });
+    function rnd(){ return '#'+Math.floor(Math.random()*16777215).toString(16).padStart(6,'0'); }
+    document.addEventListener('click',function(e){
+      if(e.target.closest('button')||e.target.closest('a'))return;
+      app.tubes.setColors([rnd(),rnd(),rnd()]);
+      app.tubes.setLightsColors([rnd(),rnd(),rnd(),rnd()]);
+    });
+  }catch(err){ console.warn('Neon flow:',err); }
+})();
+
+/* ── HEADER SCROLL ── */
+(function(){
+  var hdr=document.getElementById('hdr');
+  window.addEventListener('scroll',function(){hdr.classList.toggle('on',window.scrollY>8);},{passive:true});
+  if(window.scrollY>8)hdr.classList.add('on');
+})();
+
+/* ── THEME TOGGLE ── */
+(function(){
+  var root=document.documentElement;
+  var btn=document.getElementById('theme-btn');
+  var stored=localStorage.getItem('nw-theme');
+  if(stored)root.setAttribute('data-theme',stored);
+  function sync(){btn.textContent=root.getAttribute('data-theme')==='light'?'●':'○';}
+  sync();
+  btn.addEventListener('click',function(){
+    var next=root.getAttribute('data-theme')==='dark'?'light':'dark';
+    root.setAttribute('data-theme',next);
+    localStorage.setItem('nw-theme',next);
+    sync();
+  });
+})();
+</script>
+<script>
+(function(){
+  var overlay=document.getElementById('cnav'),ring=document.getElementById('cnav-ring'),menuBtn=document.getElementById('menu-btn'),closeBtn=document.getElementById('cnav-close');
+  if(!overlay||!ring||!menuBtn)return;
+  var items=Array.from(ring.querySelectorAll('.cnav-item')),n=items.length;
+  function pos(){var s=ring.offsetWidth,r=s*0.368;items.forEach(function(it,i){var a=((360/n)*i-90)*Math.PI/180;it.style.transform='translate(calc(-50% + '+( Math.cos(a)*r).toFixed(1)+'px),calc(-50% + '+(Math.sin(a)*r).toFixed(1)+'px))';});}
+  function open(){overlay.classList.add('open');menuBtn.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';pos();closeBtn.focus();}
+  function close(){overlay.classList.remove('open');menuBtn.setAttribute('aria-expanded','false');document.body.style.overflow='';menuBtn.focus();}
+  menuBtn.addEventListener('click',open);
+  closeBtn.addEventListener('click',close);
+  overlay.addEventListener('click',function(e){if(e.target===overlay)close();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&overlay.classList.contains('open'))close();});
+  ring.querySelectorAll('.cnav-link').forEach(function(l){l.addEventListener('click',close);});
+  window.addEventListener('resize',function(){if(overlay.classList.contains('open'))pos();},{passive:true});
+})();
+</script>
+<script src="chat-widget.js"></script>
+
 </body>
 </html>

@@ -1,1227 +1,958 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nexa Web — Devis Gratuit · Votre projet en 48h</title>
-  <meta name="description" content="Obtenez votre devis Nexa Web en 2 minutes. Site vitrine, e-commerce, SEO. Réponse sous 48h, sans engagement." />
-  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
-  <style>
-
-    /* ── DEVIS HERO ─────────────────────────────── */
-    .devis-hero {
-      padding: 10rem 0 5rem;
-      text-align: center;
-      position: relative;
-      z-index: 2;
-    }
-
-    .devis-hero__eyebrow {
-      display: inline-block;
-      font-size: 0.72rem;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: var(--color-accent);
-      margin-bottom: 1.5rem;
-    }
-
-    .devis-hero__title {
-      font-family: var(--font-heading);
-      font-size: clamp(3.2rem, 9vw, 8rem);
-      font-weight: 900;
-      line-height: 0.92;
-      text-transform: uppercase;
-      letter-spacing: -0.025em;
-      margin-bottom: 1.5rem;
-    }
-
-    .devis-hero__title span {
-      background: linear-gradient(135deg, var(--color-accent), #8b6bf2);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .devis-hero__sub {
-      color: var(--color-muted);
-      font-size: 1.05rem;
-      max-width: 500px;
-      margin: 0 auto 2rem;
-      line-height: 1.75;
-    }
-
-    .devis-hero__badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      padding: 0.5rem 1.25rem;
-      background: rgba(76, 114, 255, 0.1);
-      border: 1px solid rgba(76, 114, 255, 0.22);
-      border-radius: 100px;
-      font-size: 0.76rem;
-      letter-spacing: 0.06em;
-      color: var(--color-accent);
-    }
-
-    .devis-hero__badge-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--color-accent);
-      box-shadow: 0 0 8px var(--color-accent);
-      animation: pulse-dot 2s ease-in-out infinite;
-      flex-shrink: 0;
-    }
-
-    @keyframes pulse-dot {
-      0%, 100% { transform: scale(1); opacity: 1; box-shadow: 0 0 8px var(--color-accent); }
-      50% { transform: scale(1.6); opacity: 0.5; box-shadow: 0 0 16px var(--color-accent); }
-    }
-
-    /* ── DEVIS SECTION ──────────────────────────── */
-    .devis-section {
-      padding: 0 0 8rem;
-      position: relative;
-      z-index: 2;
-    }
-
-    .devis-wrapper {
-      max-width: 820px;
-      margin-inline: auto;
-    }
-
-    /* ── PROGRESS BAR ───────────────────────────── */
-    .progress-bar {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0;
-      margin-bottom: 3.5rem;
-    }
-
-    .progress-step {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.55rem;
-      position: relative;
-      z-index: 1;
-    }
-
-    .progress-step__circle {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      border: 2px solid rgba(255, 255, 255, 0.12);
-      background: rgba(255, 255, 255, 0.03);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-heading);
-      font-size: 1rem;
-      font-weight: 800;
-      color: var(--color-muted);
-      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-      position: relative;
-    }
-
-    .progress-step__label {
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--color-muted);
-      white-space: nowrap;
-      transition: color 0.3s;
-    }
-
-    .progress-step.active .progress-step__circle {
-      border-color: var(--color-accent);
-      background: rgba(76, 114, 255, 0.12);
-      color: var(--color-accent);
-      box-shadow: 0 0 0 4px rgba(76, 114, 255, 0.15), 0 0 20px rgba(76, 114, 255, 0.25);
-    }
-
-    .progress-step.active .progress-step__label {
-      color: var(--color-accent);
-    }
-
-    .progress-step.completed .progress-step__circle {
-      border-color: #22c55e;
-      background: rgba(34, 197, 94, 0.1);
-      color: #22c55e;
-      box-shadow: 0 0 12px rgba(34, 197, 94, 0.2);
-    }
-
-    .progress-step.completed .progress-step__label {
-      color: #22c55e;
-    }
-
-    /* checkmark icon inside completed circle */
-    .progress-step.completed .progress-step__circle::after {
-      content: '';
-      display: block;
-      width: 12px;
-      height: 7px;
-      border-left: 2px solid #22c55e;
-      border-bottom: 2px solid #22c55e;
-      transform: rotate(-45deg) translate(1px, -1px);
-    }
-
-    /* hide the number text when completed */
-    .progress-step.completed .step-num { display: none; }
-
-    .progress-line {
-      flex: 1;
-      height: 2px;
-      background: rgba(255, 255, 255, 0.08);
-      margin: 0 0.75rem;
-      margin-bottom: 1.65rem; /* optical alignment with circle center */
-      position: relative;
-      overflow: hidden;
-    }
-
-    .progress-line__fill {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, var(--color-accent), #22c55e);
-      transition: width 0.5s var(--ease-out);
-    }
-
-    /* ── WIZARD PANEL ───────────────────────────── */
-    .wizard-panel {
-      background: rgba(14, 14, 23, 0.6);
-      border: 1px solid var(--color-border);
-      border-radius: 20px;
-      padding: 2.75rem;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .wizard-panel::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(76, 114, 255, 0.4), transparent);
-    }
-
-    /* ── STEP CONTAINER ─────────────────────────── */
-    .step {
-      display: none;
-      animation: stepFadeIn 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-    }
-
-    .step.active {
-      display: block;
-    }
-
-    @keyframes stepFadeIn {
-      from {
-        opacity: 0;
-        transform: translateX(24px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    @keyframes stepFadeOut {
-      from {
-        opacity: 1;
-        transform: translateX(0);
-      }
-      to {
-        opacity: 0;
-        transform: translateX(-24px);
-      }
-    }
-
-    .step.leaving {
-      display: block;
-      animation: stepFadeOut 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-    }
-
-    .step__title {
-      font-family: var(--font-heading);
-      font-size: 1.7rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: -0.01em;
-      margin-bottom: 0.45rem;
-    }
-
-    .step__sub {
-      font-size: 0.87rem;
-      color: var(--color-muted);
-      margin-bottom: 2rem;
-      line-height: 1.6;
-    }
-
-    /* ── CHOICE CARDS ───────────────────────────── */
-    .cards-grid-2x2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    .cards-grid-4 {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0.85rem;
-      margin-bottom: 2rem;
-    }
-
-    .cards-grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    .choice-card {
-      position: relative;
-      padding: 1.5rem 1.25rem;
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 14px;
-      cursor: pointer;
-      transition: border-color 0.25s, background 0.25s, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s;
-      user-select: none;
-      -webkit-user-select: none;
-    }
-
-    .choice-card:hover {
-      border-color: var(--color-accent);
-      background: rgba(76, 114, 255, 0.05);
-      transform: scale(1.02);
-    }
-
-    .choice-card.selected {
-      border-color: var(--color-accent);
-      background: rgba(76, 114, 255, 0.09);
-      box-shadow: 0 0 0 1px rgba(76, 114, 255, 0.3), inset 0 0 30px rgba(76, 114, 255, 0.04);
-    }
-
-    /* checkmark badge top-right */
-    .choice-card__check {
-      position: absolute;
-      top: 0.75rem;
-      right: 0.75rem;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: var(--color-accent);
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transform: scale(0.5);
-      transition: opacity 0.2s, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    .choice-card__check svg {
-      width: 10px;
-      height: 10px;
-    }
-
-    .choice-card.selected .choice-card__check {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    .choice-card__icon {
-      width: 42px;
-      height: 42px;
-      margin-bottom: 1rem;
-      color: var(--color-accent);
-      opacity: 0.75;
-      transition: opacity 0.25s;
-    }
-
-    .choice-card.selected .choice-card__icon {
-      opacity: 1;
-    }
-
-    .choice-card__title {
-      font-family: var(--font-heading);
-      font-size: 1.05rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.01em;
-      margin-bottom: 0.35rem;
-      color: var(--color-text);
-    }
-
-    .choice-card__desc {
-      font-size: 0.78rem;
-      color: var(--color-muted);
-      line-height: 1.55;
-    }
-
-    /* Budget card variant — more compact */
-    .cards-grid-4 .choice-card {
-      padding: 1.25rem 1rem;
-      text-align: center;
-    }
-
-    .cards-grid-4 .choice-card__icon {
-      margin: 0 auto 0.75rem;
-    }
-
-    .choice-card__price {
-      font-family: var(--font-heading);
-      font-size: 1.15rem;
-      font-weight: 900;
-      color: var(--color-text);
-      margin-bottom: 0.25rem;
-      letter-spacing: -0.01em;
-    }
-
-    /* Deadline card variant */
-    .cards-grid-3 .choice-card {
-      text-align: center;
-      padding: 1.75rem 1rem;
-    }
-
-    .cards-grid-3 .choice-card__icon {
-      margin: 0 auto 1rem;
-    }
-
-    .choice-card__badge {
-      display: inline-block;
-      font-size: 0.62rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 0.2rem 0.6rem;
-      background: rgba(76, 114, 255, 0.1);
-      border: 1px solid rgba(76, 114, 255, 0.2);
-      border-radius: 100px;
-      color: var(--color-accent);
-      margin-top: 0.5rem;
-    }
-
-    .choice-card__badge.urgent {
-      background: rgba(239, 68, 68, 0.1);
-      border-color: rgba(239, 68, 68, 0.25);
-      color: #f87171;
-    }
-
-    .choice-card__badge.flexible {
-      background: rgba(34, 197, 94, 0.1);
-      border-color: rgba(34, 197, 94, 0.25);
-      color: #4ade80;
-    }
-
-    /* ── FORM STEP ──────────────────────────────── */
-    .devis-form {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .form-row-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
-
-    .form-field {
-      display: flex;
-      flex-direction: column;
-      gap: 0.38rem;
-    }
-
-    .form-field label {
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--color-muted);
-    }
-
-    .form-field input,
-    .form-field textarea {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 10px;
-      padding: 0.85rem 1.1rem;
-      color: var(--color-text);
-      font-family: var(--font-body);
-      font-size: 0.93rem;
-      transition: border-color 0.25s, background 0.25s;
-      outline: none;
-      width: 100%;
-    }
-
-    .form-field input::placeholder,
-    .form-field textarea::placeholder {
-      color: rgba(226, 226, 240, 0.2);
-    }
-
-    .form-field input:focus,
-    .form-field textarea:focus {
-      border-color: var(--color-accent);
-      background: rgba(76, 114, 255, 0.06);
-    }
-
-    .form-field textarea {
-      resize: vertical;
-      min-height: 130px;
-    }
-
-    .form-field__optional {
-      font-size: 0.6rem;
-      letter-spacing: 0.08em;
-      color: rgba(226, 226, 240, 0.28);
-      text-transform: uppercase;
-    }
-
-    /* ── STEP FOOTER (buttons row) ──────────────── */
-    .step-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 2rem;
-      gap: 1rem;
-    }
-
-    .step-footer--right {
-      justify-content: flex-end;
-    }
-
-    .btn--back {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      font-family: var(--font-body);
-      font-size: 0.78rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--color-muted);
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0.4rem 0;
-      transition: color 0.2s;
-    }
-
-    .btn--back:hover {
-      color: var(--color-text);
-    }
-
-    .btn--next {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-family: var(--font-body);
-      font-size: 0.82rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.9rem 2.25rem;
-      background: linear-gradient(135deg, var(--color-accent), #8b6bf2);
-      color: #fff;
-      border: none;
-      cursor: pointer;
-      clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
-      transition: opacity 0.2s, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s;
-    }
-
-    .btn--next:hover:not(:disabled) {
-      opacity: 0.88;
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 8px 30px rgba(76, 114, 255, 0.35);
-    }
-
-    .btn--next:disabled {
-      opacity: 0.35;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    /* submit button */
-    .btn--submit {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-family: var(--font-body);
-      font-size: 0.85rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 1rem 2.5rem;
-      background: linear-gradient(135deg, var(--color-accent), #8b6bf2);
-      color: #fff;
-      border: none;
-      cursor: pointer;
-      clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
-      transition: opacity 0.2s, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s;
-    }
-
-    .btn--submit:hover {
-      opacity: 0.88;
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 10px 35px rgba(76, 114, 255, 0.4);
-    }
-
-    /* ── PRIVACY NOTE ───────────────────────────── */
-    .privacy-note {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      margin-top: 1.25rem;
-      font-size: 0.74rem;
-      color: var(--color-muted);
-      letter-spacing: 0.05em;
-    }
-
-    .privacy-note svg {
-      width: 13px;
-      height: 13px;
-      color: rgba(226, 226, 240, 0.35);
-      flex-shrink: 0;
-    }
-
-    /* ── ERROR STATE ────────────────────────────── */
-    .step-error {
-      font-size: 0.76rem;
-      color: #f87171;
-      margin-top: -0.5rem;
-      margin-bottom: 0.5rem;
-      display: none;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    .step-error.visible {
-      display: flex;
-    }
-
-    /* ── RESPONSIVE ─────────────────────────────── */
-    @media (max-width: 768px) {
-      .wizard-panel { padding: 1.75rem 1.25rem; }
-      .cards-grid-2x2 { grid-template-columns: 1fr; }
-      .cards-grid-4 { grid-template-columns: 1fr 1fr; }
-      .cards-grid-3 { grid-template-columns: 1fr; gap: 0.75rem; }
-      .form-row-2 { grid-template-columns: 1fr; }
-      .devis-hero { padding: 8rem 0 3rem; }
-      .devis-hero__title { font-size: clamp(2.8rem, 12vw, 5rem); }
-      .progress-step__label { display: none; }
-      .progress-bar { gap: 0; margin-bottom: 2.5rem; }
-    }
-
-    @media (max-width: 500px) {
-      .cards-grid-4 { grid-template-columns: 1fr 1fr; }
-      .progress-step__circle { width: 36px; height: 36px; font-size: 0.85rem; }
-    }
-
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demande de devis — Nexa Web</title>
+<script>(function(){var t=localStorage.getItem('nw-theme');if(t)document.documentElement.setAttribute('data-theme',t);}());</script>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+/* ── TOKENS ── */
+:root{
+  --bg:#080811;--bg-alt:#0c0c18;--bg-card:#10101e;
+  --border:rgba(220,220,242,.07);--border-hi:rgba(220,220,242,.14);
+  --text:#E8E8F2;--text-muted:rgba(232,232,242,.44);--text-dim:rgba(232,232,242,.18);
+  --btn-bg:#E8E8F2;--btn-text:#080811;
+  --ghost-border:rgba(232,232,242,.22);
+  --accent:#8B5CF6;--accent-dim:rgba(139,92,246,.15);--accent-ring:rgba(139,92,246,.35);
+  --green:#22c55e;--green-dim:rgba(34,197,94,.12);--green-ring:rgba(34,197,94,.28);
+  --font:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  --max-w:1280px;--pad-x:clamp(20px,5vw,80px);--hdr:80px;
+}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]){
+  --bg:#F4F4F0;--bg-alt:#EAEAE6;--bg-card:#E4E4E0;
+  --border:rgba(18,18,22,.09);--border-hi:rgba(18,18,22,.16);
+  --text:#111118;--text-muted:rgba(17,17,22,.50);--text-dim:rgba(17,17,22,.20);
+  --btn-bg:#111118;--btn-text:#F4F4F0;--ghost-border:rgba(17,17,22,.22);
+}}
+:root[data-theme="light"]{
+  --bg:#F4F4F0;--bg-alt:#EAEAE6;--bg-card:#E4E4E0;
+  --border:rgba(18,18,22,.09);--border-hi:rgba(18,18,22,.16);
+  --text:#111118;--text-muted:rgba(17,17,22,.50);--text-dim:rgba(17,17,22,.20);
+  --btn-bg:#111118;--btn-text:#F4F4F0;--ghost-border:rgba(17,17,22,.22);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:var(--font);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .35s,color .35s;min-height:100vh}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
+ul{list-style:none}
+.wrap{max-width:var(--max-w);margin:0 auto;padding:0 var(--pad-x)}
+
+/* ── AETHER CANVAS ── */
+#aether-canvas{
+  position:fixed;inset:0;width:100%;height:100%;
+  z-index:0;pointer-events:none;
+}
+
+/* ── HEADER ── */
+.hdr{position:fixed;inset:0 0 auto;height:var(--hdr);z-index:100;border-bottom:1px solid transparent;transition:background .4s,border-color .4s,backdrop-filter .4s}
+.hdr.on{border-bottom-color:var(--border);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);background:rgba(8,8,17,.88)}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .hdr.on{background:rgba(244,244,240,.92)}}
+:root[data-theme="light"] .hdr.on{background:rgba(244,244,240,.92)}
+.nav{display:flex;align-items:center;height:var(--hdr);position:relative}
+.nav-logo{font-size:14px;font-weight:900;letter-spacing:.08em}
+.nav-logo span{color:var(--text-muted)}
+.nav-links{display:flex;gap:clamp(16px,3vw,40px);position:absolute;left:50%;transform:translateX(-50%)}
+.nav-link{font-size:10.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);transition:color .2s}
+.nav-link:hover,.nav-link.on{color:var(--text)}
+.nav-r{display:flex;align-items:center;gap:14px;margin-left:auto}
+.theme-btn,.login-btn{width:30px;height:30px;border:1px solid var(--border-hi);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:13px;transition:border-color .2s,color .2s}
+.theme-btn:hover,.login-btn:hover{border-color:var(--text-muted);color:var(--text)}
+.login-btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.btn-nav{display:inline-flex;align-items:center;gap:9px;background:var(--btn-bg);color:var(--btn-text);font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;padding:12px 24px;border-radius:2px;transition:opacity .2s;white-space:nowrap}
+.btn-nav:hover{opacity:.82}
+@media(max-width:768px){.nav-links{display:none}}
+.menu-btn{width:36px;height:36px;border:1px solid var(--border-hi);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text-muted);cursor:pointer;transition:border-color .2s,color .2s,background .2s;flex-shrink:0}
+.menu-btn:hover{border-color:rgba(139,92,246,.55);color:var(--text);background:rgba(139,92,246,.09)}
+.menu-btn svg{width:15px;height:15px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round}
+.cnav{position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;background:rgba(4,3,14,.90);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:0;pointer-events:none;transition:opacity .32s cubic-bezier(.16,1,.3,1)}
+.cnav.open{opacity:1;pointer-events:all}
+.cnav-ring{position:relative;width:420px;height:420px;max-width:88vw;max-height:88vw;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(139,92,246,.04);border:1px solid rgba(139,92,246,.18);box-shadow:0 0 90px rgba(139,92,246,.07),inset 2px 2px 5px rgba(255,255,255,.05),inset -2px -2px 5px rgba(0,0,0,.28);transform:scale(0);transition:transform .44s cubic-bezier(.16,1,.3,1)}
+.cnav.open .cnav-ring{transform:scale(1)}
+.cnav-close{width:54px;height:54px;border-radius:50%;background:var(--btn-bg);color:var(--btn-text);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .24s,background .24s,color .24s;position:relative;z-index:1}
+.cnav-close:hover{background:#8B5CF6;color:#fff;transform:scale(1.1) rotate(90deg)}
+.cnav-close svg{width:20px;height:20px;stroke:currentColor;stroke-width:2.5;fill:none;stroke-linecap:round}
+.cnav-item{position:absolute;top:50%;left:50%}
+.cnav-link{display:flex;flex-direction:column;align-items:center;justify-content:center;width:74px;height:74px;border-radius:50%;color:rgba(232,232,242,.60);text-decoration:none;transition:background .22s,color .22s,transform .22s,box-shadow .22s;gap:4px}
+.cnav-link:hover{background:rgba(139,92,246,.22);color:#fff;transform:scale(1.09);box-shadow:0 0 26px rgba(139,92,246,.20)}
+.cnav-link svg{width:21px;height:21px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.cnav-name{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+
+/* ── MAIN ── */
+main{position:relative;z-index:1;padding-top:var(--hdr)}
+
+/* ── PAGE LAYOUT ── */
+.devis-page{
+  min-height:calc(100vh - var(--hdr));
+  display:flex;align-items:flex-start;justify-content:center;
+  padding:clamp(48px,8vh,96px) var(--pad-x) clamp(64px,10vh,120px);
+}
+
+/* ── FORM CARD ── */
+.devis-card{
+  width:100%;max-width:780px;
+  background:rgba(12,12,24,.82);
+  border:1px solid var(--border-hi);
+  border-radius:16px;
+  padding:clamp(32px,5vw,56px) clamp(28px,5vw,52px);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  box-shadow:0 32px 80px rgba(0,0,0,.5),0 0 0 1px rgba(139,92,246,.08);
+}
+
+/* Card header */
+.card-head{margin-bottom:36px}
+.card-eyebrow{
+  font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:10px;
+}
+.card-title{
+  font-size:clamp(1.6rem,3vw,2.4rem);
+  font-weight:900;letter-spacing:-.04em;line-height:.95;
+  margin-bottom:10px;
+}
+.card-title em{font-style:italic;color:var(--text-muted)}
+.card-sub{font-size:13px;color:var(--text-muted);line-height:1.6}
+
+/* Section label */
+.form-section{margin-bottom:28px}
+.section-label{
+  font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--text-dim);
+  margin-bottom:16px;
+  padding-bottom:8px;
+  border-bottom:1px solid var(--border);
+  display:block;
+}
+
+/* ── PLAN SELECTOR ── */
+.plan-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+  margin-bottom:28px;
+}
+@media(max-width:560px){.plan-grid{grid-template-columns:1fr}}
+
+.plan-opt{
+  position:relative;
+  display:flex;flex-direction:column;gap:4px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:14px 16px;
+  cursor:pointer;
+  transition:border-color .2s,background .2s;
+  user-select:none;
+}
+.plan-opt input[type=radio]{
+  position:absolute;opacity:0;width:0;height:0;pointer-events:none;
+}
+.plan-opt:hover{border-color:var(--border-hi);background:rgba(232,232,242,.02)}
+.plan-opt.selected{
+  border-color:var(--accent-ring);
+  background:var(--accent-dim);
+}
+.plan-name{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text)}
+.plan-price{font-size:13px;font-weight:800;color:var(--text-muted)}
+.plan-opt.selected .plan-price{color:var(--accent)}
+.plan-check{
+  position:absolute;top:10px;right:12px;
+  width:16px;height:16px;border-radius:50%;
+  border:1.5px solid var(--border-hi);
+  display:flex;align-items:center;justify-content:center;
+  transition:border-color .2s,background .2s;
+}
+.plan-opt.selected .plan-check{
+  background:var(--accent);border-color:var(--accent);
+}
+.plan-check::after{
+  content:'';width:6px;height:6px;border-radius:50%;background:#fff;
+  transform:scale(0);transition:transform .15s;
+}
+.plan-opt.selected .plan-check::after{transform:scale(1)}
+
+/* ── FORM FIELDS ── */
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:560px){.field-grid{grid-template-columns:1fr}}
+
+.field{display:flex;flex-direction:column;gap:6px}
+.field-full{grid-column:1/-1}
+.field label{
+  font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--text-dim);
+}
+.field input:not([type=checkbox]):not([type=radio]),
+.field textarea,
+.field select{
+  width:100%;
+  padding:12px 15px;
+  background:rgba(8,8,17,.6);
+  border:1px solid var(--border);
+  border-radius:5px;
+  font:inherit;font-size:13px;
+  color:var(--text);
+  outline:none;
+  transition:border-color .2s,box-shadow .2s;
+  -webkit-appearance:none;appearance:none;
+}
+.field input:not([type=checkbox])::placeholder,
+.field textarea::placeholder{color:var(--text-dim)}
+.field input:not([type=checkbox]):not([type=radio]):focus,
+.field textarea:focus,
+.field select:focus{
+  border-color:rgba(139,92,246,.5);
+  box-shadow:0 0 0 3px rgba(139,92,246,.1);
+}
+.field select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(232,232,242,.3)' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 14px center;
+  padding-right:36px;
+  cursor:pointer;
+}
+.field select option{background:var(--bg-card);color:var(--text)}
+.field textarea{resize:vertical;min-height:110px;line-height:1.6}
+
+/* ── BUDGET PILLS ── */
+.budget-pills{display:flex;flex-wrap:wrap;gap:8px}
+.budget-pill{
+  position:relative;
+  font-size:10.5px;font-weight:600;letter-spacing:.08em;
+  padding:8px 16px;
+  border:1px solid var(--border);border-radius:100px;
+  cursor:pointer;
+  transition:border-color .2s,background .2s,color .2s;
+  color:var(--text-muted);
+  user-select:none;
+}
+.budget-pill input{position:absolute;opacity:0;width:0;height:0}
+.budget-pill:hover{border-color:var(--border-hi);color:var(--text)}
+.budget-pill.selected{
+  border-color:var(--accent-ring);
+  background:var(--accent-dim);
+  color:var(--accent);
+}
+
+/* ── SUBMIT ── */
+.submit-row{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;flex-wrap:wrap;
+  margin-top:32px;
+  padding-top:24px;
+  border-top:1px solid var(--border);
+}
+.submit-note{font-size:11px;color:var(--text-dim);line-height:1.55}
+.submit-note svg{display:inline;width:12px;height:12px;stroke:var(--green);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;margin-right:4px;vertical-align:-1px}
+.submit-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:15px 32px;
+  background:linear-gradient(135deg,var(--accent),#a78bfa);
+  color:#fff;
+  border-radius:5px;
+  font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  border:none;cursor:pointer;
+  box-shadow:0 6px 24px rgba(139,92,246,.4);
+  transition:opacity .2s,transform .2s,box-shadow .2s;
+  white-space:nowrap;
+}
+.submit-btn:hover{opacity:.9;transform:translateY(-2px);box-shadow:0 10px 30px rgba(139,92,246,.5)}
+.submit-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── SUCCESS STATE ── */
+.success-overlay{
+  display:none;
+  flex-direction:column;align-items:center;justify-content:center;
+  gap:18px;text-align:center;
+  padding:40px;min-height:360px;
+}
+.success-overlay.show{display:flex}
+.devis-form.hide{display:none}
+.success-icon{
+  width:64px;height:64px;border-radius:50%;
+  background:var(--green-dim);
+  border:1px solid var(--green-ring);
+  display:flex;align-items:center;justify-content:center;
+}
+.success-icon svg{width:30px;height:30px;stroke:var(--green);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.success-title{font-size:1.5rem;font-weight:800;letter-spacing:-.03em}
+.success-text{font-size:13px;color:var(--text-muted);line-height:1.65;max-width:380px}
+.success-back{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--text-muted);
+  border:1px solid var(--ghost-border);border-radius:4px;
+  padding:11px 22px;
+  transition:color .2s,border-color .2s;
+  cursor:pointer;background:none;
+}
+.success-back:hover{color:var(--text);border-color:var(--border-hi)}
+
+/* required asterisk */
+.req{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent-ring);outline-offset:3px;border-radius:3px}
+
+/* ── FIELD ERRORS ── */
+.field-err{
+  font-size:11px;color:#ef4444;
+  min-height:14px;display:block;margin-top:3px;
+  line-height:1.4;
+}
+/* ── RGPD ROW ── */
+.rgpd-row{
+  padding:14px 16px;margin-top:6px;
+  background:rgba(139,92,246,.07);
+  border:1px solid rgba(139,92,246,.18);
+  border-radius:8px;
+}
+.rgpd-label{display:flex;align-items:flex-start;gap:10px;cursor:pointer}
+.rgpd-label input[type=checkbox]{
+  width:15px;height:15px;flex-shrink:0;margin-top:2px;
+  accent-color:var(--accent);cursor:pointer;
+}
+.rgpd-label span{font-size:11.5px;line-height:1.65;color:var(--text-muted);text-transform:none;letter-spacing:0;font-weight:400}
+.rgpd-label a{color:var(--accent);text-decoration:underline}
+.rgpd-label a:hover{opacity:.8}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .rgpd-row{background:rgba(139,92,246,.05)}}
+:root[data-theme="light"] .rgpd-row{background:rgba(139,92,246,.05)}
+
+/* ── SUBMIT LOADING ── */
+.submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none!important;box-shadow:none!important}
+.submit-btn-spinner{
+  display:none;width:14px;height:14px;
+  border:2px solid rgba(255,255,255,.3);
+  border-top-color:#fff;border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+.submit-btn.loading .submit-btn-icon{display:none}
+.submit-btn.loading .submit-btn-spinner{display:block}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── FORM ERROR BANNER ── */
+.form-banner{
+  display:none;align-items:flex-start;gap:10px;
+  padding:12px 16px;border-radius:9px;
+  font-size:12.5px;line-height:1.55;margin-bottom:20px;
+}
+.form-banner.show{display:flex}
+.form-banner.error{
+  background:rgba(239,68,68,.10);
+  border:1px solid rgba(239,68,68,.28);
+  color:#ef4444;
+}
+.form-banner svg{flex-shrink:0;margin-top:1px}
+
+/* ── LIGHT MODE OVERRIDES ── */
+@media(prefers-color-scheme:light){
+  :root:not([data-theme="dark"]) .devis-card{
+    background:rgba(255,255,255,.96);
+    border-color:rgba(18,18,22,.11);
+    box-shadow:0 24px 60px rgba(0,0,0,.09),0 0 0 1px rgba(18,18,22,.05);
+  }
+  :root:not([data-theme="dark"]) .field input,
+  :root:not([data-theme="dark"]) .field textarea,
+  :root:not([data-theme="dark"]) .field select{
+    background:rgba(244,244,240,.9);
+    border-color:rgba(18,18,22,.14);
+    color:var(--text);
+  }
+  :root:not([data-theme="dark"]) .field select{
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  }
+  :root:not([data-theme="dark"]) .section-label{border-bottom-color:rgba(18,18,22,.09)}
+  :root:not([data-theme="dark"]) .submit-row{border-top-color:rgba(18,18,22,.09)}
+  :root:not([data-theme="dark"]) .plan-opt{border-color:rgba(18,18,22,.12)}
+  :root:not([data-theme="dark"]) .plan-opt:hover{background:rgba(18,18,22,.03)}
+  :root:not([data-theme="dark"]) .budget-pill{border-color:rgba(18,18,22,.14);color:var(--text-muted)}
+}
+:root[data-theme="light"] .devis-card{
+  background:rgba(255,255,255,.96);
+  border-color:rgba(18,18,22,.11);
+  box-shadow:0 24px 60px rgba(0,0,0,.09),0 0 0 1px rgba(18,18,22,.05);
+}
+:root[data-theme="light"] .field input,
+:root[data-theme="light"] .field textarea,
+:root[data-theme="light"] .field select{
+  background:rgba(244,244,240,.9);
+  border-color:rgba(18,18,22,.14);
+  color:var(--text);
+}
+:root[data-theme="light"] .field select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+:root[data-theme="light"] .section-label{border-bottom-color:rgba(18,18,22,.09)}
+:root[data-theme="light"] .submit-row{border-top-color:rgba(18,18,22,.09)}
+:root[data-theme="light"] .plan-opt{border-color:rgba(18,18,22,.12)}
+:root[data-theme="light"] .plan-opt:hover{background:rgba(18,18,22,.03)}
+:root[data-theme="light"] .budget-pill{border-color:rgba(18,18,22,.14);color:var(--text-muted)}
+</style>
 </head>
 <body>
 
-  <canvas id="silk-bg" aria-hidden="true"></canvas>
+<canvas id="aether-canvas" aria-hidden="true"></canvas>
 
-  <header class="site-header" id="site-header">
-    <nav class="nav">
-      <a href="index.html" class="nav__logo">Nexa<span>Web</span></a>
-      <ul class="nav__list" id="nav-list">
-        <li><a href="index.html" class="nav__link">Accueil</a></li>
-        <li><a href="tarifs.html" class="nav__link">Tarifs</a></li>
-        <li><a href="devis.html" class="nav__link active">Devis</a></li>
-        <li><a href="blog.html" class="nav__link">Blog</a></li>
-        <li><a href="contact.html" class="nav__link">Contact</a></li>
-      </ul>
-      <a href="devis.html" class="btn btn--nav">Devis gratuit</a>
-      <button class="nav__burger" id="nav-burger" aria-label="Ouvrir le menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
+<!-- HEADER -->
+<header class="hdr" id="hdr">
+  <div class="wrap">
+    <nav class="nav" aria-label="Navigation principale">
+      <a href="index.html" class="nav-logo">NEXA<span>WEB</span></a>
+      <div class="nav-r">
+        <button class="menu-btn" id="menu-btn" aria-label="Ouvrir la navigation" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
+        <button class="theme-btn" id="theme-btn" aria-label="Basculer le thème">○</button>
+        <a href="login.html" class="login-btn" aria-label="Connexion">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        </a>
+        <a href="devis.html" class="btn-nav">Démarrer un projet</a>
+      </div>
     </nav>
-  </header>
+  </div>
+</header>
 
-  <div class="panel-backdrop" id="panel-backdrop" aria-hidden="true"></div>
+<div class="cnav" id="cnav" role="dialog" aria-modal="true" aria-label="Navigation">
+  <div class="cnav-ring" id="cnav-ring">
+    <button class="cnav-close" id="cnav-close" aria-label="Fermer la navigation"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div class="cnav-item"><a href="index.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span class="cnav-name">Accueil</span></a></div>
+    <div class="cnav-item"><a href="index.html#services" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg><span class="cnav-name">Services</span></a></div>
+    <div class="cnav-item"><a href="index.html#projets" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><span class="cnav-name">Projets</span></a></div>
+    <div class="cnav-item"><a href="index.html#apropos" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="cnav-name">À propos</span></a></div>
+    <div class="cnav-item"><a href="tarifs.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg><span class="cnav-name">Tarifs</span></a></div>
+    <div class="cnav-item"><a href="index.html#faq" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span class="cnav-name">FAQ</span></a></div>
+    <div class="cnav-item"><a href="contact.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span class="cnav-name">Contact</span></a></div>
+    <div class="cnav-item"><a href="rendez-vous.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span class="cnav-name">RDV</span></a></div>
+    <div class="cnav-item"><a href="equipe.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="cnav-name">Équipe</span></a></div>
+  </div>
+</div>
 
-  <main>
+<main>
+  <div class="devis-page">
+    <div class="devis-card">
 
-    <!-- HERO -->
-    <section class="devis-hero">
-      <div class="container">
-        <span class="devis-hero__eyebrow reveal">Gratuit · Sans engagement</span>
-        <h1 class="devis-hero__title reveal reveal--delay-1">
-          VOTRE DEVIS<br><span>EN 2 MIN</span>
-        </h1>
-        <p class="devis-hero__sub reveal reveal--delay-2">
-          Dites-nous ce dont vous avez besoin. Nous vous envoyons une proposition claire et un chiffrage précis sous 48h.
+      <!-- Success state -->
+      <div class="success-overlay" id="success-overlay" role="alert" aria-live="polite">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h2 class="success-title">Devis envoyé !</h2>
+        <p class="success-text">
+          Merci pour votre demande. Nous avons bien reçu vos informations et vous recontacterons sous <strong>24 heures ouvrées</strong> avec une proposition personnalisée.
         </p>
-        <div class="devis-hero__badge reveal reveal--delay-3">
-          <span class="devis-hero__badge-dot"></span>
-          Réponse sous 48h garantie
+        <button class="success-back" onclick="window.location='index.html'">
+          <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" style="stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round"><polyline points="15 18 9 12 15 6"/></svg>
+          Retour à l'accueil
+        </button>
+      </div>
+
+      <!-- Form -->
+      <form class="devis-form" id="devis-form" novalidate>
+
+        <!-- Honeypot anti-spam (invisible aux humains) -->
+        <div style="position:absolute;left:-9999px;opacity:0;pointer-events:none" aria-hidden="true">
+          <input type="text" name="website_url" id="website_url" tabindex="-1" autocomplete="new-password">
         </div>
-      </div>
-    </section>
 
-    <!-- WIZARD -->
-    <section class="devis-section">
-      <div class="container">
-        <div class="devis-wrapper">
+        <!-- Bannière d'erreur globale -->
+        <div class="form-banner error" id="form-error" role="alert">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span id="form-error-text"></span>
+        </div>
 
-          <!-- PROGRESS BAR -->
-          <div class="progress-bar" id="progress-bar" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="4">
-            <div class="progress-step active" id="ps-1" data-step="1">
-              <div class="progress-step__circle"><span class="step-num">1</span></div>
-              <span class="progress-step__label">Projet</span>
-            </div>
-            <div class="progress-line"><div class="progress-line__fill" id="line-1"></div></div>
-            <div class="progress-step" id="ps-2" data-step="2">
-              <div class="progress-step__circle"><span class="step-num">2</span></div>
-              <span class="progress-step__label">Budget</span>
-            </div>
-            <div class="progress-line"><div class="progress-line__fill" id="line-2"></div></div>
-            <div class="progress-step" id="ps-3" data-step="3">
-              <div class="progress-step__circle"><span class="step-num">3</span></div>
-              <span class="progress-step__label">Délai</span>
-            </div>
-            <div class="progress-line"><div class="progress-line__fill" id="line-3"></div></div>
-            <div class="progress-step" id="ps-4" data-step="4">
-              <div class="progress-step__circle"><span class="step-num">4</span></div>
-              <span class="progress-step__label">Contact</span>
-            </div>
-          </div>
+        <div class="card-head">
+          <div class="card-eyebrow">Demande de devis gratuit</div>
+          <h1 class="card-title">Parlons de<br><em>votre projet.</em></h1>
+          <p class="card-sub">Répondez sous 24 h · Devis gratuit &amp; sans engagement</p>
+        </div>
 
-          <!-- WIZARD PANEL -->
-          <div class="wizard-panel">
+        <!-- PLAN SELECTOR -->
+        <div class="form-section">
+          <span class="section-label">1 — Choisissez votre formule</span>
+          <div class="plan-grid" role="radiogroup" aria-label="Formule souhaitée">
 
-            <!-- STEP 1 — Type de projet -->
-            <div class="step active" id="step-1" role="group" aria-labelledby="step-1-title">
-              <h2 class="step__title" id="step-1-title">Type de projet</h2>
-              <p class="step__sub">Quel type de site ou service vous intéresse ?</p>
-              <div class="cards-grid-2x2" id="cards-step-1">
+            <label class="plan-opt" id="opt-vitrine" tabindex="0">
+              <input type="radio" name="plan" value="vitrine" aria-label="Vitrine 790€">
+              <div class="plan-check" aria-hidden="true"></div>
+              <span class="plan-name">Vitrine</span>
+              <span class="plan-price">790 €</span>
+            </label>
 
-                <!-- Site Vitrine -->
-                <div class="choice-card" data-step="1" data-value="Site Vitrine" tabindex="0" role="radio" aria-checked="false" aria-label="Site Vitrine">
-                  <div class="choice-card__check" aria-hidden="true">
-                    <svg viewBox="0 0 10 8" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <polyline points="1,4 3.5,6.5 9,1"/>
-                    </svg>
-                  </div>
-                  <svg class="choice-card__icon" viewBox="0 0 42 42" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <rect x="4" y="7" width="34" height="22" rx="2.5"/>
-                    <line x1="14" y1="35" x2="28" y2="35"/>
-                    <line x1="10" y1="35" x2="32" y2="35"/>
-                    <line x1="4" y1="23" x2="38" y2="23"/>
-                    <circle cx="10" cy="15" r="1.2" fill="currentColor" stroke="none"/>
-                    <circle cx="15" cy="15" r="1.2" fill="currentColor" stroke="none"/>
-                  </svg>
-                  <div class="choice-card__title">Site Vitrine</div>
-                  <div class="choice-card__desc">Présentez votre activité avec un site élégant et percutant, livré en 7 jours.</div>
-                </div>
+            <label class="plan-opt" id="opt-business" tabindex="0">
+              <input type="radio" name="plan" value="business" aria-label="Business 1490€">
+              <div class="plan-check" aria-hidden="true"></div>
+              <span class="plan-name">Business</span>
+              <span class="plan-price">1 490 €</span>
+            </label>
 
-                <!-- E-Commerce -->
-                <div class="choice-card" data-step="1" data-value="E-Commerce" tabindex="0" role="radio" aria-checked="false" aria-label="E-Commerce">
-                  <div class="choice-card__check" aria-hidden="true">
-                    <svg viewBox="0 0 10 8" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <polyline points="1,4 3.5,6.5 9,1"/>
-                    </svg>
-                  </div>
-                  <svg class="choice-card__icon" viewBox="0 0 42 42" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M12 8h18l3 12H9L12 8z"/>
-                    <path d="M9 20l1.5 8h21l1.5-8"/>
-                    <circle cx="16" cy="33" r="2.2"/>
-                    <circle cx="26" cy="33" r="2.2"/>
-                    <line x1="6" y1="8" x2="9" y2="8"/>
-                    <line x1="3" y1="5" x2="6" y2="8"/>
-                  </svg>
-                  <div class="choice-card__title">E-Commerce</div>
-                  <div class="choice-card__desc">Boutique en ligne complète avec paiement sécurisé, gestion des stocks et analytics.</div>
-                </div>
+            <label class="plan-opt" id="opt-premium" tabindex="0">
+              <input type="radio" name="plan" value="premium" aria-label="Premium 2490€">
+              <div class="plan-check" aria-hidden="true"></div>
+              <span class="plan-name">Premium</span>
+              <span class="plan-price">2 490 €</span>
+            </label>
 
-                <!-- Refonte -->
-                <div class="choice-card" data-step="1" data-value="Refonte" tabindex="0" role="radio" aria-checked="false" aria-label="Refonte de site">
-                  <div class="choice-card__check" aria-hidden="true">
-                    <svg viewBox="0 0 10 8" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <polyline points="1,4 3.5,6.5 9,1"/>
-                    </svg>
-                  </div>
-                  <svg class="choice-card__icon" viewBox="0 0 42 42" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M8 21a13 13 0 0 1 13-13"/>
-                    <path d="M21 8l-4 4 4 4"/>
-                    <path d="M34 21a13 13 0 0 1-13 13"/>
-                    <path d="M21 34l4-4-4-4"/>
-                    <circle cx="21" cy="21" r="4"/>
-                  </svg>
-                  <div class="choice-card__title">Refonte</div>
-                  <div class="choice-card__desc">Modernisez votre site existant : nouveau design, meilleures performances, meilleur SEO.</div>
-                </div>
-
-                <!-- SEO -->
-                <div class="choice-card" data-step="1" data-value="SEO" tabindex="0" role="radio" aria-checked="false" aria-label="Référencement SEO">
-                  <div class="choice-card__check" aria-hidden="true">
-                    <svg viewBox="0 0 10 8" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <polyline points="1,4 3.5,6.5 9,1"/>
-                    </svg>
-                  </div>
-                  <svg class="choice-card__icon" viewBox="0 0 42 42" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <circle cx="19" cy="19" r="10"/>
-                    <line x1="26.5" y1="26.5" x2="35" y2="35"/>
-                    <polyline points="11,23 15,19 19,22 24,14"/>
-                    <polyline points="21,14 24,14 24,17"/>
-                  </svg>
-                  <div class="choice-card__title">SEO</div>
-                  <div class="choice-card__desc">Apparaissez en première page Google et générez un flux régulier de clients qualifiés.</div>
-                </div>
-
-              </div>
-              <div class="step-error" id="error-step-1" role="alert" aria-live="polite">
-                <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 10a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm.75-4.25a.75.75 0 0 1-1.5 0V5.5a.75.75 0 0 1 1.5 0v1.25z"/></svg>
-                Veuillez sélectionner un type de projet.
-              </div>
-              <div class="step-footer step-footer--right">
-                <button class="btn--next" id="next-1" type="button">
-                  Suivant
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="2" y1="8" x2="14" y2="8"/><polyline points="9,3 14,8 9,13"/></svg>
-                </button>
-              </div>
-            </div>
-
-            <!-- STEP 2 — Budget -->
-            <div class="step" id="step-2" role="group" aria-labelledby="step-2-title">
-              <h2 class="step__title" id="step-2-title">Budget estimé</h2>
-              <p class="step__sub">Quelle fourchette correspond à votre projet ? (Hors taxes)</p>
-              <div class="cards-grid-4" id="cards-step-2">
-
-                <div class="choice-card" data-step="2" data-value="Moins de 1 000 €" tabindex="0" role="radio" aria-checked="false" aria-label="Moins de 1 000 euros">
-                  <div class="choice-card__check" aria-hidden="true">
-                    <svg viewBox="0 0 10 8" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <polyline points="1,4 3.5,6.5 9,1"/>
-                    </svg>
-                  </div>
-                  <svg class="choice-card__icon" viewBox="0 0 42 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
-                    <rect x="3" y="8" width="36" height="18" rx="3"/>
-                    <circle cx="21" cy="17" r="5"/>
-                    <line x1="8" y1="13" x2="8" y2="21"/>
-                    <line x1="34" y1="13" x2="34" y2="21"/>
-                  </svg>
-                  <div class="choice-card__price">- 1 000 €</div>
-                  <div class="choice-card__desc">Démarrage, site simple, budget serré</div>
-                </div>
-
-                <div class="choice-card" data-step="2" data-value="1 000 – 3 000 €" tabindex="0" role="radio" aria-checked="false" aria-label="1 000 à 3 000 euros">
-                  <div class="choice-card__check" aria-hidden="true">
-                    <svg viewBox="0 0 10 8" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <polyline points="1,4 3.5,6.5 9,1"/>
-                    </svg>
-                  </div>
-                  <svg class="choice-card__icon" viewBox="0 0 42 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
-                    <rect x="3" y="8" width="36" height="18" rx="3"/>
-                    <circle cx="21" cy="17" r="5"/>
-                    <line x1="8" y1="13" x2="8" y2="21"/>
-                    <line x1="34" y1="13" x2="34" y2="21"/>
-                    <path d="M3 14h5M34 14h5"/>
-                  </svg>
-                  <div class="choice-card__price">1 – 3 K€</div>
-                  <div class="choice-card__desc">Site vitrine professionnel</div>
-                </div>
-
-                <div class="choice-card" data-step="2" data-value="3 000 – 8 000 €" tabindex="0" role="radio" aria-checked="false" aria-label="3 000 à 8 000 euros">
-                  <div class="choice-card__check" aria-hidden="true">
-                    <svg viewBox="0 0 10 8" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <polyline points="1,4 3.5,6.5 9,1"/>
-                    </svg>
-                  </div>
-                  <svg class="choice-card__icon" viewBox="0 0 42 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
-                    <rect x="3" y="8" width="36" height="18" rx="3"/>
-                    <circle cx="21" cy="17" r="5"/>
-                    <path d="M21 12v2M21 20v2M17 14l1.5 1.5M23.5 19.5l1.5 1.5M17 20l1.5-1.5M23.5 14.5l1.5-1.5"/>
-                  </svg>
-                  <div class="choice-card__price">3 – 8 K€</div>
-                  <div class="choice-card__desc">E-commerce, refonte complète</div>
-                </div>
-
-                <div class="choice-card" data-step="2" data-value="8 000 € +" tabindex="0" role="radio" aria-checked="false" aria-label="Plus de 8 000 euros">
-                  <div class="choice-card__check" aria-hidden="true">
-                    <svg viewBox="0 0 10 8" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <polyline points="1,4 3.5,6.5 9,1"/>
-                    </svg>
-                  </div>
-                  <svg class="choice-card__icon" viewBox="0 0 42 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
-                    <polygon points="21,4 26,13 37,14.5 29,22 31,33 21,28 11,33 13,22 5,14.5 16,13"/>
-                  </svg>
-                  <div class="choice-card__price">8 K€ +</div>
-                  <div class="choice-card__desc">Projet ambitieux, sur-mesure</div>
-                </div>
-
-              </div>
-              <div class="step-error" id="error-step-2" role="alert" aria-live="polite">
-                <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 10a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm.75-4.25a.75.75 0 0 1-1.5 0V5.5a.75.75 0 0 1 1.5 0v1.25z"/></svg>
-                Veuillez sélectionner une fourchette de budget.
-              </div>
-              <div class="step-footer">
-                <button class="btn--back" id="back-2" type="button">
-                  <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="14" y1="8" x2="2" y2="8"/><polyline points="7,3 2,8 7,13"/></svg>
-                  Retour
-                </button>
-                <button class="btn--next" id="next-2" type="button">
-                  Suivant
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="2" y1="8" x2="14" y2="8"/><polyline points="9,3 14,8 9,13"/></svg>
-                </button>
-              </div>
-            </div>
-
-            <!-- STEP 3 — Délai -->
-            <div class="step" id="step-3" role="group" aria-labelledby="step-3-title">
-              <h2 class="step__title" id="step-3-title">Délai souhaité</h2>
-              <p class="step__sub">Quand souhaitez-vous lancer votre projet ?</p>
-              <div class="cards-grid-3" id="cards-step-3">
-
-                <div class="choice-card" data-step="3" data-value="Urgent (< 2 semaines)" tabindex="0" role="radio" aria-checked="false" aria-label="Urgent, moins de 2 semaines">
-                  <div class="choice-card__check" aria-hidden="true">
-                    <svg viewBox="0 0 10 8" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <polyline points="1,4 3.5,6.5 9,1"/>
-                    </svg>
-                  </div>
-                  <svg class="choice-card__icon" viewBox="0 0 42 42" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <circle cx="21" cy="22" r="14"/>
-                    <path d="M21 13v9l5 3"/>
-                    <path d="M17 6l4-3 4 3"/>
-                    <path d="M26 7.5l5 2"/>
-                  </svg>
-                  <div class="choice-card__title">Urgent</div>
-                  <div class="choice-card__desc">Moins de 2 semaines</div>
-                  <span class="choice-card__badge urgent">Prioritaire</span>
-                </div>
-
-                <div class="choice-card" data-step="3" data-value="Standard (1 mois)" tabindex="0" role="radio" aria-checked="false" aria-label="Standard, environ 1 mois">
-                  <div class="choice-card__check" aria-hidden="true">
-                    <svg viewBox="0 0 10 8" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <polyline points="1,4 3.5,6.5 9,1"/>
-                    </svg>
-                  </div>
-                  <svg class="choice-card__icon" viewBox="0 0 42 42" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <rect x="7" y="9" width="28" height="26" rx="3"/>
-                    <line x1="7" y1="16" x2="35" y2="16"/>
-                    <line x1="14" y1="6" x2="14" y2="12"/>
-                    <line x1="28" y1="6" x2="28" y2="12"/>
-                    <rect x="15" y="21" width="5" height="5" rx="1"/>
-                    <rect x="22" y="21" width="5" height="5" rx="1"/>
-                  </svg>
-                  <div class="choice-card__title">Standard</div>
-                  <div class="choice-card__desc">Environ 1 mois</div>
-                  <span class="choice-card__badge">Recommandé</span>
-                </div>
-
-                <div class="choice-card" data-step="3" data-value="Flexible (sans contrainte)" tabindex="0" role="radio" aria-checked="false" aria-label="Flexible, sans contrainte de délai">
-                  <div class="choice-card__check" aria-hidden="true">
-                    <svg viewBox="0 0 10 8" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <polyline points="1,4 3.5,6.5 9,1"/>
-                    </svg>
-                  </div>
-                  <svg class="choice-card__icon" viewBox="0 0 42 42" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M10 28 Q14 10 21 21 Q28 32 32 14"/>
-                    <circle cx="10" cy="28" r="2.5" fill="currentColor" stroke="none"/>
-                    <circle cx="32" cy="14" r="2.5" fill="currentColor" stroke="none"/>
-                  </svg>
-                  <div class="choice-card__title">Flexible</div>
-                  <div class="choice-card__desc">Pas de contrainte, on optimise la qualité</div>
-                  <span class="choice-card__badge flexible">Liberté totale</span>
-                </div>
-
-              </div>
-              <div class="step-error" id="error-step-3" role="alert" aria-live="polite">
-                <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 10a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm.75-4.25a.75.75 0 0 1-1.5 0V5.5a.75.75 0 0 1 1.5 0v1.25z"/></svg>
-                Veuillez sélectionner un délai.
-              </div>
-              <div class="step-footer">
-                <button class="btn--back" id="back-3" type="button">
-                  <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="14" y1="8" x2="2" y2="8"/><polyline points="7,3 2,8 7,13"/></svg>
-                  Retour
-                </button>
-                <button class="btn--next" id="next-3" type="button">
-                  Suivant
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="2" y1="8" x2="14" y2="8"/><polyline points="9,3 14,8 9,13"/></svg>
-                </button>
-              </div>
-            </div>
-
-            <!-- STEP 4 — Coordonnées -->
-            <div class="step" id="step-4" role="group" aria-labelledby="step-4-title">
-              <h2 class="step__title" id="step-4-title">Vos coordonnées</h2>
-              <p class="step__sub">Dernière étape — on vous contacte sous 48h avec votre devis.</p>
-
-              <form id="devis-form" action="merci.html" method="GET" novalidate>
-                <!-- Hidden inputs to carry selections -->
-                <input type="hidden" name="projet" id="hidden-projet" value="" />
-                <input type="hidden" name="budget" id="hidden-budget" value="" />
-                <input type="hidden" name="delai"  id="hidden-delai"  value="" />
-
-                <div class="devis-form">
-                  <div class="form-row-2">
-                    <div class="form-field">
-                      <label for="dv-nom">Nom complet</label>
-                      <input type="text" id="dv-nom" name="nom" placeholder="Jean Dupont" required autocomplete="name" />
-                    </div>
-                    <div class="form-field">
-                      <label for="dv-email">Email</label>
-                      <input type="email" id="dv-email" name="email" placeholder="jean@exemple.fr" required autocomplete="email" />
-                    </div>
-                  </div>
-                  <div class="form-field">
-                    <label for="dv-tel">
-                      Téléphone
-                      <span class="form-field__optional">(optionnel)</span>
-                    </label>
-                    <input type="tel" id="dv-tel" name="tel" placeholder="06 12 34 56 78" autocomplete="tel" />
-                  </div>
-                  <div class="form-field">
-                    <label for="dv-message">Votre projet</label>
-                    <textarea id="dv-message" name="message" placeholder="Décrivez votre projet, vos objectifs, votre secteur d'activité…" required></textarea>
-                  </div>
-                </div>
-
-                <div class="step-footer">
-                  <button class="btn--back" id="back-4" type="button">
-                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="14" y1="8" x2="2" y2="8"/><polyline points="7,3 2,8 7,13"/></svg>
-                    Retour
-                  </button>
-                  <button class="btn--submit" type="submit" id="submit-btn">
-                    Envoyer mon projet
-                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="2" y1="8" x2="14" y2="8"/><polyline points="9,3 14,8 9,13"/></svg>
-                  </button>
-                </div>
-              </form>
-
-              <p class="privacy-note">
-                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <rect x="3" y="7" width="10" height="8" rx="1.5"/>
-                  <path d="M5 7V5a3 3 0 0 1 6 0v2"/>
-                  <circle cx="8" cy="11" r="1" fill="currentColor" stroke="none"/>
-                </svg>
-                Données chiffrées — jamais partagées avec des tiers
-              </p>
-            </div>
-
-          </div><!-- /.wizard-panel -->
-
-        </div><!-- /.devis-wrapper -->
-      </div>
-    </section>
-
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="footer__watermark" aria-hidden="true">NEXAWEB</div>
-    <div class="container">
-      <div class="footer__top">
-        <div class="footer__brand reveal">
-          <a href="index.html" class="footer__logo">Nexa<span>Web</span></a>
-          <p class="footer__tagline">Votre site premium<br>livré en 7 jours.</p>
-          <div class="footer__socials">
-            <a href="#" class="footer__social" aria-label="Instagram">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" stroke="none"/></svg>
-            </a>
-            <a href="#" class="footer__social" aria-label="TikTok">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V9.41a8.16 8.16 0 004.77 1.52V7.48a4.85 4.85 0 01-1-.79z"/></svg>
-            </a>
-            <a href="#" class="footer__social" aria-label="LinkedIn">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
-            </a>
           </div>
         </div>
-        <nav class="footer__nav reveal reveal--delay-1" aria-label="Liens du pied de page">
-          <div class="footer__col"><h4 class="footer__col-title">Navigation</h4><ul><li><a href="index.html">Accueil</a></li><li><a href="tarifs.html">Tarifs</a></li><li><a href="blog.html">Blog</a></li><li><a href="contact.html">Contact</a></li></ul></div>
-          <div class="footer__col"><h4 class="footer__col-title">Services</h4><ul><li><a href="site-vitrine.html">Site Vitrine</a></li><li><a href="ecommerce.html">E-Commerce</a></li><li><a href="seo.html">Référencement SEO</a></li><li><a href="devis.html">Obtenir un devis</a></li></ul></div>
-          <div class="footer__col"><h4 class="footer__col-title">Légal</h4><ul><li><a href="mentions-legales.html">Mentions légales</a></li><li><a href="contrat.html">CGV</a></li><li><a href="rendez-vous.html">Prendre RDV</a></li></ul></div>
-        </nav>
-      </div>
-      <div class="footer__bottom"><p>&copy; 2025 Nexa Web. Tous droits réservés.</p></div>
+
+        <!-- CONTACT INFO -->
+        <div class="form-section">
+          <span class="section-label">2 — Vos coordonnées</span>
+          <div class="field-grid">
+            <div class="field">
+              <label for="prenom">Prénom <span class="req">*</span></label>
+              <input type="text" id="prenom" name="prenom" placeholder="Jean" autocomplete="given-name" required>
+              <span class="field-err" id="err-prenom"></span>
+            </div>
+            <div class="field">
+              <label for="nom">Nom <span class="req">*</span></label>
+              <input type="text" id="nom" name="nom" placeholder="Dupont" autocomplete="family-name" required>
+              <span class="field-err" id="err-nom"></span>
+            </div>
+            <div class="field">
+              <label for="email">E-mail <span class="req">*</span></label>
+              <input type="email" id="email" name="email" placeholder="jean@entreprise.fr" autocomplete="email" required>
+              <span class="field-err" id="err-email"></span>
+            </div>
+            <div class="field">
+              <label for="tel">Téléphone</label>
+              <input type="tel" id="tel" name="tel" placeholder="+33 6 00 00 00 00" autocomplete="tel">
+            </div>
+            <div class="field field-full">
+              <label for="entreprise">Entreprise / Activité</label>
+              <input type="text" id="entreprise" name="entreprise" placeholder="Ma Boulangerie, Auto-entrepreneur…" autocomplete="organization">
+            </div>
+          </div>
+        </div>
+
+        <!-- PROJECT DETAILS -->
+        <div class="form-section">
+          <span class="section-label">3 — Votre projet</span>
+          <div class="field-grid">
+            <div class="field">
+              <label for="type">Type de site <span class="req">*</span></label>
+              <select id="type" name="type" required>
+                <option value="" disabled selected>Sélectionner…</option>
+                <option value="vitrine">Site vitrine</option>
+                <option value="portfolio">Portfolio</option>
+                <option value="ecommerce">Boutique e-commerce</option>
+                <option value="blog">Blog / Magazine</option>
+                <option value="app">Application web</option>
+                <option value="refonte">Refonte de site existant</option>
+                <option value="autre">Autre</option>
+              </select>
+              <span class="field-err" id="err-type"></span>
+            </div>
+            <div class="field">
+              <label for="delai">Délai souhaité</label>
+              <select id="delai" name="delai">
+                <option value="" disabled selected>Sélectionner…</option>
+                <option value="urgent">Dès que possible</option>
+                <option value="1mois">Dans 1 mois</option>
+                <option value="3mois">Dans 2 à 3 mois</option>
+                <option value="flexible">Flexible</option>
+              </select>
+            </div>
+            <div class="field field-full">
+              <label>Budget estimé</label>
+              <div class="budget-pills" role="radiogroup" aria-label="Budget estimé">
+                <label class="budget-pill"><input type="radio" name="budget" value="<500">Moins de 500 €</label>
+                <label class="budget-pill"><input type="radio" name="budget" value="500-1000">500 – 1 000 €</label>
+                <label class="budget-pill"><input type="radio" name="budget" value="1000-2000">1 000 – 2 000 €</label>
+                <label class="budget-pill"><input type="radio" name="budget" value="2000+">2 000 € +</label>
+                <label class="budget-pill"><input type="radio" name="budget" value="nsp">Je ne sais pas encore</label>
+              </div>
+            </div>
+            <div class="field field-full">
+              <label for="description">Décrivez votre projet <span class="req">*</span></label>
+              <textarea id="description" name="description" placeholder="Parlez-nous de votre activité, de vos objectifs, de l'inspiration que vous avez, des fonctionnalités souhaitées…" required></textarea>
+              <span class="field-err" id="err-desc"></span>
+            </div>
+            <div class="field field-full">
+              <label for="site-actuel">Avez-vous un site existant ?</label>
+              <input type="url" id="site-actuel" name="site-actuel" placeholder="https://monsite-actuel.fr (optionnel)">
+            </div>
+          </div>
+        </div>
+
+        <!-- RGPD -->
+        <div class="field field-full rgpd-row">
+          <label class="rgpd-label">
+            <input type="checkbox" id="rgpd-consent" name="rgpd-consent" required>
+            <span>J'accepte que mes données (nom, e-mail, téléphone, description du projet) soient utilisées par Nexa Web dans le seul but de traiter ma demande de devis et de me recontacter. Aucune donnée n'est revendue ou utilisée à des fins commerciales tierces. <span class="req">*</span></span>
+          </label>
+          <span class="field-err" id="err-rgpd"></span>
+        </div>
+
+        <!-- SUBMIT -->
+        <div class="submit-row">
+          <p class="submit-note">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+            Garantie 30 jours · Réponse sous 24 h · Devis 100 % gratuit
+          </p>
+          <button type="submit" class="submit-btn" id="submit-btn">
+            <span class="submit-btn-label">Envoyer ma demande</span>
+            <span class="submit-btn-spinner" aria-hidden="true"></span>
+            <svg class="submit-btn-icon" viewBox="0 0 24 24" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+
+      </form>
     </div>
-  </footer>
+  </div>
+</main>
 
-  <script src="script.js"></script>
-  <script>
-  (function () {
-    'use strict';
+<script>
+/* ──────────────────────────────────────────
+   AETHER FLOW — Canvas 2D particle network
+   ────────────────────────────────────────── */
+(function(){
+  var canvas = document.getElementById('aether-canvas');
+  var ctx = canvas.getContext('2d');
+  var particles = [];
+  var raf;
+  var mouse = { x: null, y: null, radius: 200 };
 
-    /* ── State ─────────────────────────────────── */
-    var currentStep = 1;
-    var totalSteps  = 4;
+  function Particle(x,y,dx,dy,size){
+    this.x=x; this.y=y; this.dx=dx; this.dy=dy; this.size=size;
+  }
+  Particle.prototype.draw = function(){
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(139,92,246,0.75)';
+    ctx.fill();
+  };
+  Particle.prototype.update = function(){
+    if(this.x > canvas.width || this.x < 0) this.dx = -this.dx;
+    if(this.y > canvas.height || this.y < 0) this.dy = -this.dy;
+    if(mouse.x !== null){
+      var ddx = mouse.x - this.x, ddy = mouse.y - this.y;
+      var dist = Math.sqrt(ddx*ddx + ddy*ddy);
+      if(dist < mouse.radius + this.size){
+        var f = (mouse.radius - dist)/mouse.radius;
+        this.x -= (ddx/dist)*f*5;
+        this.y -= (ddy/dist)*f*5;
+      }
+    }
+    this.x += this.dx;
+    this.y += this.dy;
+    this.draw();
+  };
 
-    /* selections[stepNum] = value string */
-    var selections = { 1: null, 2: null, 3: null };
+  function init(){
+    particles = [];
+    var n = (canvas.width * canvas.height) / 9000;
+    for(var i=0; i<n; i++){
+      var size = Math.random()*2 + 1;
+      var x = Math.random()*(canvas.width  - size*4) + size*2;
+      var y = Math.random()*(canvas.height - size*4) + size*2;
+      var dx = (Math.random()*.4) - .2;
+      var dy = (Math.random()*.4) - .2;
+      particles.push(new Particle(x,y,dx,dy,size));
+    }
+  }
 
-    /* ── DOM refs ───────────────────────────────── */
-    var steps       = [null, document.getElementById('step-1'), document.getElementById('step-2'), document.getElementById('step-3'), document.getElementById('step-4')];
-    var psEls       = [null, document.getElementById('ps-1'), document.getElementById('ps-2'), document.getElementById('ps-3'), document.getElementById('ps-4')];
-    var lineEls     = [null, document.getElementById('line-1'), document.getElementById('line-2'), document.getElementById('line-3')];
-    var errorEls    = { 1: document.getElementById('error-step-1'), 2: document.getElementById('error-step-2'), 3: document.getElementById('error-step-3') };
-
-    var hiddenProjet = document.getElementById('hidden-projet');
-    var hiddenBudget = document.getElementById('hidden-budget');
-    var hiddenDelai  = document.getElementById('hidden-delai');
-    var devisForm    = document.getElementById('devis-form');
-
-    /* ── Progress updates ───────────────────────── */
-    function updateProgress(toStep) {
-      for (var i = 1; i <= totalSteps; i++) {
-        var el = psEls[i];
-        if (!el) continue;
-        el.classList.remove('active', 'completed');
-        if (i < toStep) {
-          el.classList.add('completed');
-        } else if (i === toStep) {
-          el.classList.add('active');
+  function connect(){
+    var threshold = (canvas.width/7)*(canvas.height/7);
+    for(var a=0; a<particles.length; a++){
+      for(var b=a; b<particles.length; b++){
+        var dx = particles[a].x - particles[b].x;
+        var dy = particles[a].y - particles[b].y;
+        var dist2 = dx*dx + dy*dy;
+        if(dist2 < threshold){
+          var op = 1 - dist2/20000;
+          var dxm = particles[a].x - (mouse.x||0);
+          var dym = particles[a].y - (mouse.y||0);
+          var dm  = Math.sqrt(dxm*dxm + dym*dym);
+          ctx.strokeStyle = (mouse.x && dm < mouse.radius)
+            ? 'rgba(255,255,255,'+op+')'
+            : 'rgba(167,139,250,'+op+')';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(particles[a].x, particles[a].y);
+          ctx.lineTo(particles[b].x, particles[b].y);
+          ctx.stroke();
         }
       }
-      /* fill connecting lines */
-      for (var j = 1; j <= 3; j++) {
-        if (lineEls[j]) {
-          lineEls[j].style.width = (j < toStep) ? '100%' : '0%';
-        }
-      }
-      /* ARIA */
-      var pb = document.getElementById('progress-bar');
-      if (pb) pb.setAttribute('aria-valuenow', toStep);
+    }
+  }
+
+  function animate(){
+    raf = requestAnimationFrame(animate);
+    ctx.fillStyle = 'rgba(8,8,17,1)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    for(var i=0; i<particles.length; i++) particles[i].update();
+    connect();
+  }
+
+  function resize(){
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    init();
+  }
+
+  window.addEventListener('resize', resize, {passive:true});
+  window.addEventListener('mousemove', function(e){ mouse.x=e.clientX; mouse.y=e.clientY; });
+  window.addEventListener('mouseout',  function(){ mouse.x=null; mouse.y=null; });
+  resize();
+  animate();
+})();
+
+/* ──────────────────────────────────────────
+   HEADER SCROLL
+   ────────────────────────────────────────── */
+(function(){
+  var hdr = document.getElementById('hdr');
+  window.addEventListener('scroll',function(){hdr.classList.toggle('on',window.scrollY>8);},{passive:true});
+  if(window.scrollY>8)hdr.classList.add('on');
+})();
+
+/* ──────────────────────────────────────────
+   THEME TOGGLE
+   ────────────────────────────────────────── */
+(function(){
+  var root = document.documentElement;
+  var btn  = document.getElementById('theme-btn');
+  var stored = localStorage.getItem('nw-theme');
+  if(stored) root.setAttribute('data-theme', stored);
+  function sync(){ btn.textContent = root.getAttribute('data-theme')==='light'?'●':'○'; }
+  sync();
+  btn.addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='dark'?'light':'dark';
+    root.setAttribute('data-theme',next);
+    localStorage.setItem('nw-theme',next);
+    sync();
+  });
+})();
+
+/* ──────────────────────────────────────────
+   PLAN SELECTOR (radio cards + URL param)
+   ────────────────────────────────────────── */
+(function(){
+  var opts = document.querySelectorAll('.plan-opt');
+
+  function selectPlan(value){
+    opts.forEach(function(opt){
+      var radio = opt.querySelector('input[type=radio]');
+      var active = radio.value === value;
+      radio.checked = active;
+      opt.classList.toggle('selected', active);
+    });
+  }
+
+  /* Pre-select from URL: ?plan=vitrine|business|premium */
+  var param = new URLSearchParams(window.location.search).get('plan');
+  if(param && ['vitrine','business','premium'].includes(param)){
+    selectPlan(param);
+  }
+
+  /* Click selection */
+  opts.forEach(function(opt){
+    opt.addEventListener('click', function(){
+      selectPlan(opt.querySelector('input').value);
+    });
+    /* Keyboard a11y */
+    opt.addEventListener('keydown', function(e){
+      if(e.key===' '||e.key==='Enter'){ e.preventDefault(); selectPlan(opt.querySelector('input').value); }
+    });
+  });
+})();
+
+/* ──────────────────────────────────────────
+   BUDGET PILLS
+   ────────────────────────────────────────── */
+(function(){
+  var pills = document.querySelectorAll('.budget-pill');
+  pills.forEach(function(pill){
+    var radio = pill.querySelector('input');
+    radio.addEventListener('change', function(){
+      pills.forEach(function(p){ p.classList.remove('selected'); });
+      if(radio.checked) pill.classList.add('selected');
+    });
+    pill.addEventListener('click', function(){
+      pills.forEach(function(p){ p.classList.remove('selected'); });
+      pill.classList.add('selected');
+      radio.checked = true;
+    });
+  });
+})();
+
+/* ──────────────────────────────────────────
+   FORM SUBMIT — Supabase insert + Edge Function email
+   ────────────────────────────────────────── */
+(function(){
+  var form    = document.getElementById('devis-form');
+  var overlay = document.getElementById('success-overlay');
+  var btn     = document.getElementById('submit-btn');
+
+  /* ── Rate limit : 1 demande / 60 s par onglet ── */
+  function canSubmit(){
+    var last = sessionStorage.getItem('nw_devis_ts');
+    return !last || (Date.now() - parseInt(last, 10)) > 60000;
+  }
+  function stampSubmit(){ sessionStorage.setItem('nw_devis_ts', String(Date.now())); }
+
+  /* ── UI ── */
+  function setFieldErr(id, msg){
+    var el = document.getElementById(id);
+    if(el) el.textContent = msg;
+  }
+  function clearErrors(){
+    ['err-prenom','err-nom','err-email','err-type','err-desc','err-rgpd'].forEach(function(id){
+      setFieldErr(id,'');
+    });
+    hideBanner();
+  }
+  function showBanner(msg){
+    var b = document.getElementById('form-error');
+    document.getElementById('form-error-text').textContent = msg;
+    b.classList.add('show');
+    b.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+  function hideBanner(){
+    document.getElementById('form-error').classList.remove('show');
+  }
+  function setLoading(on){
+    btn.classList.toggle('loading', on);
+    btn.disabled = on;
+  }
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    clearErrors();
+
+    /* ── Honeypot ── */
+    if(document.getElementById('website_url').value.length > 0){
+      /* Bot détecté — succès silencieux */
+      form.classList.add('hide');
+      overlay.classList.add('show');
+      return;
     }
 
-    /* ── Step transition ────────────────────────── */
-    function goToStep(newStep) {
-      var oldStep = currentStep;
-
-      /* animate out */
-      var outEl = steps[oldStep];
-      if (outEl) {
-        outEl.classList.add('leaving');
-        outEl.classList.remove('active');
-        setTimeout(function () { outEl.classList.remove('leaving'); }, 320);
-      }
-
-      currentStep = newStep;
-      updateProgress(newStep);
-
-      /* animate in after short delay so fade-out has time */
-      setTimeout(function () {
-        var inEl = steps[newStep];
-        if (inEl) {
-          inEl.classList.add('active');
-          /* focus first focusable inside for a11y */
-          var firstFocusable = inEl.querySelector('button, input, textarea, [tabindex="0"]');
-          if (firstFocusable) firstFocusable.focus({ preventScroll: true });
-        }
-      }, 50);
+    /* ── Rate limit ── */
+    if(!canSubmit()){
+      showBanner('Une demande a déjà été envoyée. Attendez une minute avant de réessayer.');
+      return;
     }
 
-    /* ── Card selection ─────────────────────────── */
-    function attachCardListeners(container, stepNum) {
-      if (!container) return;
-      var cards = container.querySelectorAll('.choice-card');
+    /* ── Collecte ── */
+    var prenom     = document.getElementById('prenom').value.trim();
+    var nom        = document.getElementById('nom').value.trim();
+    var emailVal   = document.getElementById('email').value.trim();
+    var type       = document.getElementById('type').value;
+    var desc       = document.getElementById('description').value.trim();
+    var tel        = document.getElementById('tel').value.trim();
+    var entreprise = document.getElementById('entreprise').value.trim();
+    var delai      = document.getElementById('delai').value;
+    var siteActuel = document.getElementById('site-actuel').value.trim();
+    var rgpd       = document.getElementById('rgpd-consent').checked;
+    var planRadio  = document.querySelector('input[name="plan"]:checked');
+    var budgetRadio= document.querySelector('input[name="budget"]:checked');
+    var formule    = planRadio   ? planRadio.value   : '';
+    var budget     = budgetRadio ? budgetRadio.value : '';
 
-      cards.forEach(function (card) {
-        function select() {
-          /* deselect siblings */
-          cards.forEach(function (c) {
-            c.classList.remove('selected');
-            c.setAttribute('aria-checked', 'false');
-          });
-          /* select this one */
-          card.classList.add('selected');
-          card.setAttribute('aria-checked', 'true');
-          selections[stepNum] = card.getAttribute('data-value');
-          /* hide error */
-          if (errorEls[stepNum]) errorEls[stepNum].classList.remove('visible');
-        }
+    /* ── Validation ── */
+    var ok = true;
+    if(!prenom){ setFieldErr('err-prenom','Le prénom est requis.'); ok=false; }
+    if(!nom)   { setFieldErr('err-nom',   'Le nom est requis.');    ok=false; }
+    if(!emailVal){
+      setFieldErr('err-email','L\'e-mail est requis.'); ok=false;
+    } else if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(emailVal)){
+      setFieldErr('err-email','Adresse e-mail invalide.'); ok=false;
+    }
+    if(!type){ setFieldErr('err-type','Veuillez sélectionner un type de site.'); ok=false; }
+    if(!desc){
+      setFieldErr('err-desc','La description est requise.'); ok=false;
+    } else if(desc.length < 20){
+      setFieldErr('err-desc','Décrivez votre projet en au moins 20 caractères.'); ok=false;
+    }
+    if(!rgpd){ setFieldErr('err-rgpd','Vous devez accepter le traitement de vos données pour continuer.'); ok=false; }
+    if(!ok) return;
 
-        card.addEventListener('click', select);
-        card.addEventListener('keydown', function (e) {
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(); }
+    /* ── Client Supabase ── */
+    if(!window.sb){
+      showBanner('Erreur de connexion. Rechargez la page ou écrivez-nous à contact.nexaweb62@gmail.com');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      /* 1 — Insérer la demande en base */
+      var { error: insertErr } = await window.sb
+        .from('demandes_devis')
+        .insert({
+          formule:        formule || null,
+          prenom:         prenom,
+          nom:            nom,
+          email:          emailVal,
+          telephone:      tel || null,
+          entreprise:     entreprise || null,
+          type_site:      type || null,
+          delai_souhaite: delai || null,
+          budget_estime:  budget || null,
+          description:    desc,
+          site_existant:  siteActuel || null,
         });
-      });
-    }
 
-    attachCardListeners(document.getElementById('cards-step-1'), 1);
-    attachCardListeners(document.getElementById('cards-step-2'), 2);
-    attachCardListeners(document.getElementById('cards-step-3'), 3);
+      if(insertErr){
+        console.error('[devis] insert error:', insertErr);
+        showBanner('Erreur lors de l\'enregistrement. Contactez-nous directement à contact.nexaweb62@gmail.com');
+        return;
+      }
 
-    /* ── Next / back wiring ─────────────────────── */
-    function wireNext(btnId, stepNum) {
-      var btn = document.getElementById(btnId);
-      if (!btn) return;
-      btn.addEventListener('click', function () {
-        if (!selections[stepNum]) {
-          if (errorEls[stepNum]) errorEls[stepNum].classList.add('visible');
-          return;
-        }
-        if (errorEls[stepNum]) errorEls[stepNum].classList.remove('visible');
-        goToStep(stepNum + 1);
-      });
-    }
+      stampSubmit();
 
-    function wireBack(btnId, stepNum) {
-      var btn = document.getElementById(btnId);
-      if (!btn) return;
-      btn.addEventListener('click', function () { goToStep(stepNum - 1); });
-    }
-
-    wireNext('next-1', 1);
-    wireNext('next-2', 2);
-    wireNext('next-3', 3);
-
-    wireBack('back-2', 2);
-    wireBack('back-3', 3);
-    wireBack('back-4', 4);
-
-    /* ── Form submit — inject hidden values ─────── */
-    if (devisForm) {
-      devisForm.addEventListener('submit', function (e) {
-        /* Basic HTML5 validation */
-        var nom     = document.getElementById('dv-nom');
-        var email   = document.getElementById('dv-email');
-        var message = document.getElementById('dv-message');
-        var valid   = true;
-
-        [nom, email, message].forEach(function (field) {
-          if (!field) return;
-          if (!field.value.trim() || (field.type === 'email' && !field.value.includes('@'))) {
-            field.style.borderColor = '#f87171';
-            valid = false;
-          } else {
-            field.style.borderColor = '';
+      /* 2 — Notifier par email (non bloquant — la demande est déjà sauvegardée) */
+      try {
+        await window.sb.functions.invoke('send-devis-email', {
+          body: {
+            prenom:         prenom,
+            nom:            nom,
+            email:          emailVal,
+            telephone:      tel,
+            entreprise:     entreprise,
+            formule:        formule,
+            type_site:      type,
+            delai_souhaite: delai,
+            budget_estime:  budget,
+            description:    desc,
+            site_existant:  siteActuel,
           }
         });
+      } catch(emailErr){
+        /* L'email a échoué mais la demande est enregistrée — on continue vers le succès */
+        console.warn('[devis] email notification failed (data saved):', emailErr);
+      }
 
-        if (!valid) {
-          e.preventDefault();
-          return;
-        }
+      /* 3 — Succès */
+      form.classList.add('hide');
+      overlay.classList.add('show');
+      window.scrollTo({top:0, behavior:'smooth'});
 
-        /* Inject wizard selections into hidden fields */
-        if (hiddenProjet) hiddenProjet.value = selections[1] || '';
-        if (hiddenBudget) hiddenBudget.value = selections[2] || '';
-        if (hiddenDelai)  hiddenDelai.value  = selections[3] || '';
-      });
+    } catch(err){
+      console.error('[devis] unexpected error:', err);
+      showBanner('Une erreur inattendue est survenue. Vos données n\'ont pas été enregistrées. Écrivez-nous à contact.nexaweb62@gmail.com');
+    } finally {
+      setLoading(false);
     }
+  });
+})();
+</script>
 
-    /* ── Init ───────────────────────────────────── */
-    updateProgress(1);
-
-  })();
-  </script>
+<script src="supabase-client.js"></script>
+<script>
+(function(){
+  var overlay=document.getElementById('cnav'),ring=document.getElementById('cnav-ring'),menuBtn=document.getElementById('menu-btn'),closeBtn=document.getElementById('cnav-close');
+  if(!overlay||!ring||!menuBtn)return;
+  var items=Array.from(ring.querySelectorAll('.cnav-item')),n=items.length;
+  function pos(){var s=ring.offsetWidth,r=s*0.368;items.forEach(function(it,i){var a=((360/n)*i-90)*Math.PI/180;it.style.transform='translate(calc(-50% + '+(Math.cos(a)*r).toFixed(1)+'px),calc(-50% + '+(Math.sin(a)*r).toFixed(1)+'px))';});}
+  function open(){overlay.classList.add('open');menuBtn.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';pos();closeBtn.focus();}
+  function close(){overlay.classList.remove('open');menuBtn.setAttribute('aria-expanded','false');document.body.style.overflow='';menuBtn.focus();}
+  menuBtn.addEventListener('click',open);closeBtn.addEventListener('click',close);
+  overlay.addEventListener('click',function(e){if(e.target===overlay)close();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&overlay.classList.contains('open'))close();});
+  ring.querySelectorAll('.cnav-link').forEach(function(l){l.addEventListener('click',close);});
+  window.addEventListener('resize',function(){if(overlay.classList.contains('open'))pos();},{passive:true});
+})();
+</script>
+<script src="chat-widget.js"></script>
 
 </body>
 </html>

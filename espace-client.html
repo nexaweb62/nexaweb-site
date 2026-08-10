@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Espace Client — Nexa Web</title>
+<meta name="robots" content="noindex,nofollow">
+
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- Restore theme before CSS paints -->
+<script>
+(function(){
+  var t=localStorage.getItem('nw-theme');
+  if(t) document.documentElement.setAttribute('data-theme',t);
+})();
+</script>
+
+<style>
+/* ─── Tokens ─── */
+:root {
+  --bg:       #08080f;
+  --surface:  rgba(16,16,30,.88);
+  --surface2: rgba(20,20,40,.70);
+  --border:   rgba(232,232,242,.10);
+  --text:     #e8e8f2;
+  --muted:    rgba(232,232,242,.50);
+  --accent:   #8b5cf6;
+  --accent2:  #7c3aed;
+  --success:  #22c55e;
+  --warning:  #f59e0b;
+  --error:    #ef4444;
+  --radius:   14px;
+  --font:     'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+@media(prefers-color-scheme:light){
+  :root:not([data-theme="dark"]){
+    --bg:       #f4f4f0;
+    --surface:  rgba(255,255,255,.96);
+    --surface2: rgba(244,244,240,.90);
+    --border:   rgba(0,0,0,.09);
+    --text:     #18181b;
+    --muted:    rgba(24,24,27,.50);
+  }
+}
+:root[data-theme="light"]{
+  --bg:       #f4f4f0;
+  --surface:  rgba(255,255,255,.96);
+  --surface2: rgba(244,244,240,.90);
+  --border:   rgba(0,0,0,.09);
+  --text:     #18181b;
+  --muted:    rgba(24,24,27,.50);
+}
+
+/* ─── Reset ─── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-font-smoothing:antialiased}
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  position:relative;
+  overflow-x:hidden;
+}
+
+/* ─── Aether canvas ─── */
+#aether-canvas{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+}
+
+/* ─── Nav ─── */
+.ec-nav{
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:100;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  height:60px;
+  background:rgba(8,8,15,.72);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+:root[data-theme="light"] .ec-nav,
+@media(prefers-color-scheme:light){
+  :root:not([data-theme="dark"]) .ec-nav{
+    background:rgba(244,244,240,.80);
+  }
+}
+:root[data-theme="light"] .ec-nav{ background:rgba(244,244,240,.80); }
+
+.ec-logo{
+  font-size:1.1rem;
+  font-weight:700;
+  letter-spacing:-.02em;
+  color:var(--text);
+  text-decoration:none;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.ec-logo span{color:var(--accent)}
+.ec-logo-badge{
+  font-size:.65rem;
+  font-weight:600;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+  padding:2px 7px;
+  border:1px solid var(--border);
+  border-radius:20px;
+}
+
+.ec-nav-r{display:flex;align-items:center;gap:10px}
+.ec-theme-btn{
+  background:none;
+  border:1px solid var(--border);
+  color:var(--muted);
+  width:34px;height:34px;
+  border-radius:50%;
+  cursor:pointer;
+  font-size:1rem;
+  display:flex;align-items:center;justify-content:center;
+  transition:border-color .2s,color .2s;
+}
+.ec-theme-btn:hover{border-color:var(--accent);color:var(--accent)}
+.ec-logout-btn{
+  display:flex;align-items:center;gap:6px;
+  padding:6px 14px;
+  background:rgba(239,68,68,.12);
+  border:1px solid rgba(239,68,68,.25);
+  border-radius:8px;
+  color:#ef4444;
+  font-size:.82rem;
+  font-weight:600;
+  cursor:pointer;
+  transition:background .2s;
+}
+.ec-logout-btn:hover{background:rgba(239,68,68,.22)}
+.ec-logout-btn svg{width:14px;height:14px}
+
+/* ─── Page wrapper ─── */
+.ec-page{
+  position:relative;
+  z-index:1;
+  max-width:900px;
+  margin:0 auto;
+  padding:88px 20px 60px;
+}
+
+/* ─── Welcome hero ─── */
+.ec-welcome{
+  display:flex;
+  align-items:center;
+  gap:20px;
+  margin-bottom:36px;
+}
+.ec-avatar{
+  width:56px;height:56px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;
+  font-weight:700;
+  color:#fff;
+  flex-shrink:0;
+  user-select:none;
+}
+.ec-welcome-text h1{
+  font-size:1.45rem;
+  font-weight:700;
+  letter-spacing:-.03em;
+  margin-bottom:2px;
+}
+.ec-welcome-text p{
+  font-size:.88rem;
+  color:var(--muted);
+}
+
+/* ─── Section header ─── */
+.ec-section{margin-bottom:32px}
+.ec-section-title{
+  font-size:.75rem;
+  font-weight:700;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:14px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.ec-section-title::after{
+  content:'';
+  flex:1;
+  height:1px;
+  background:var(--border);
+}
+
+/* ─── Project card ─── */
+.ec-project-list{display:flex;flex-direction:column;gap:16px}
+.ec-project-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:22px 24px;
+  backdrop-filter:blur(12px);
+}
+.ec-proj-header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:18px;
+}
+.ec-proj-name{
+  font-size:1rem;
+  font-weight:600;
+  letter-spacing:-.02em;
+}
+.ec-proj-meta{
+  font-size:.8rem;
+  color:var(--muted);
+  margin-top:2px;
+}
+.ec-proj-preview{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:5px 12px;
+  border:1px solid var(--accent);
+  border-radius:7px;
+  color:var(--accent);
+  font-size:.78rem;
+  font-weight:600;
+  text-decoration:none;
+  flex-shrink:0;
+  transition:background .15s;
+}
+.ec-proj-preview:hover{background:rgba(139,92,246,.12)}
+.ec-proj-preview.hidden{display:none}
+.ec-proj-preview svg{width:12px;height:12px}
+
+/* ─── Status stepper ─── */
+.ec-stepper{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:0;
+  position:relative;
+}
+.ec-stepper::before{
+  content:'';
+  position:absolute;
+  top:14px;
+  left:12.5%;right:12.5%;
+  height:2px;
+  background:var(--border);
+}
+.ec-step{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  position:relative;
+  z-index:1;
+}
+.ec-step-dot{
+  width:28px;height:28px;
+  border-radius:50%;
+  border:2px solid var(--border);
+  background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.7rem;
+  color:var(--muted);
+  transition:all .3s;
+}
+.ec-step.done .ec-step-dot{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:#fff;
+}
+.ec-step.active .ec-step-dot{
+  border-color:var(--accent);
+  color:var(--accent);
+  background:rgba(139,92,246,.12);
+  box-shadow:0 0 0 4px rgba(139,92,246,.15);
+}
+.ec-step-label{
+  font-size:.72rem;
+  font-weight:500;
+  color:var(--muted);
+  text-align:center;
+  line-height:1.3;
+}
+.ec-step.done .ec-step-label,
+.ec-step.active .ec-step-label{color:var(--text)}
+
+/* ─── Delivery bar ─── */
+.ec-delivery{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:16px;
+  padding-top:14px;
+  border-top:1px solid var(--border);
+  font-size:.8rem;
+  color:var(--muted);
+}
+.ec-delivery svg{width:14px;height:14px;flex-shrink:0;color:var(--accent)}
+
+/* ─── Documents ─── */
+.ec-doc-list{display:flex;flex-direction:column;gap:8px}
+.ec-doc-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 16px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px;
+  backdrop-filter:blur(12px);
+  transition:border-color .2s;
+}
+.ec-doc-item:hover{border-color:rgba(139,92,246,.35)}
+.ec-doc-left{display:flex;align-items:center;gap:10px}
+.ec-doc-icon{
+  width:36px;height:36px;
+  border-radius:8px;
+  background:rgba(139,92,246,.12);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.ec-doc-icon svg{width:16px;height:16px;color:var(--accent)}
+.ec-doc-name{font-size:.88rem;font-weight:500}
+.ec-doc-date{font-size:.75rem;color:var(--muted)}
+.ec-doc-dl{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 12px;
+  background:rgba(139,92,246,.10);
+  border:1px solid rgba(139,92,246,.20);
+  border-radius:7px;
+  color:var(--accent);
+  font-size:.78rem;
+  font-weight:600;
+  text-decoration:none;
+  transition:background .15s;
+}
+.ec-doc-dl:hover{background:rgba(139,92,246,.20)}
+.ec-doc-dl svg{width:12px;height:12px}
+
+/* ─── Contact block ─── */
+.ec-contact{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+  backdrop-filter:blur(12px);
+}
+.ec-contact-text h3{font-size:.95rem;font-weight:600;margin-bottom:4px}
+.ec-contact-text p{font-size:.83rem;color:var(--muted)}
+.ec-contact-btn{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:10px 20px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  border-radius:9px;
+  color:#fff;
+  font-size:.85rem;
+  font-weight:600;
+  text-decoration:none;
+  flex-shrink:0;
+  transition:opacity .2s;
+}
+.ec-contact-btn:hover{opacity:.88}
+.ec-contact-btn svg{width:15px;height:15px}
+
+/* ─── Empty / loading states ─── */
+.ec-empty{
+  text-align:center;
+  padding:36px 16px;
+  color:var(--muted);
+  font-size:.88rem;
+  background:var(--surface);
+  border:1px dashed var(--border);
+  border-radius:var(--radius);
+}
+.ec-spinner{
+  display:inline-block;
+  width:18px;height:18px;
+  border:2px solid var(--border);
+  border-top-color:var(--accent);
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+  vertical-align:middle;
+  margin-right:6px;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ─── Banner ─── */
+.ec-banner{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 16px;
+  border-radius:10px;
+  font-size:.85rem;
+  font-weight:500;
+  margin-bottom:20px;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .3s;
+}
+.ec-banner.show{opacity:1;pointer-events:auto}
+.ec-banner.error{background:rgba(239,68,68,.10);border:1px solid rgba(239,68,68,.25);color:#ef4444}
+.ec-banner svg{width:16px;height:16px;flex-shrink:0}
+
+/* ─── New-user empty state ─── */
+.ec-new-user{text-align:center;padding:44px 24px;background:var(--surface);border:1px dashed rgba(139,92,246,.3);border-radius:var(--radius);backdrop-filter:blur(12px)}
+.ec-new-user-icon{width:64px;height:64px;border-radius:50%;background:rgba(139,92,246,.12);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:var(--accent)}
+.ec-new-user h3{font-size:1.05rem;font-weight:700;letter-spacing:-.02em;margin-bottom:8px}
+.ec-new-user p{font-size:.88rem;color:var(--muted);max-width:320px;margin:0 auto 22px;line-height:1.55}
+.ec-new-user-actions{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.ec-cta-btn{display:inline-flex;align-items:center;padding:10px 22px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:9px;color:#fff;font-size:.84rem;font-weight:600;text-decoration:none;transition:opacity .2s}
+.ec-cta-btn:hover{opacity:.86}
+.ec-ghost-btn{display:inline-flex;align-items:center;padding:10px 22px;border:1px solid var(--border);border-radius:9px;color:var(--muted);font-size:.84rem;font-weight:600;text-decoration:none;transition:border-color .2s,color .2s}
+.ec-ghost-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ─── Profile card ─── */
+.ec-profile-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px 24px;backdrop-filter:blur(12px)}
+.ec-profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.ec-profile-field{display:flex;flex-direction:column;gap:4px}
+.ec-profile-label{font-size:.7rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.ec-profile-value{font-size:.9rem;color:var(--text)}
+.ec-profile-input{width:100%;padding:9px 12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font:inherit;font-size:.88rem;color:var(--text);outline:none;transition:border-color .2s}
+.ec-profile-input:focus{border-color:var(--accent)}
+.ec-profile-actions{display:flex;gap:8px;margin-top:4px}
+.ec-profile-edit-btn{padding:7px 16px;background:rgba(139,92,246,.10);border:1px solid rgba(139,92,246,.22);border-radius:8px;color:var(--accent);font-size:.82rem;font-weight:600;cursor:pointer;transition:background .2s}
+.ec-profile-edit-btn:hover{background:rgba(139,92,246,.20)}
+.ec-profile-save-btn{padding:7px 16px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:8px;color:#fff;font-size:.82rem;font-weight:600;cursor:pointer;transition:opacity .2s}
+.ec-profile-save-btn:hover{opacity:.86}
+.ec-profile-save-btn:disabled{opacity:.5;cursor:default}
+.ec-profile-cancel-btn{padding:7px 16px;background:none;border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:.82rem;font-weight:600;cursor:pointer;transition:color .2s,border-color .2s}
+.ec-profile-cancel-btn:hover{color:var(--text);border-color:var(--muted)}
+.ec-profile-banner{display:flex;align-items:center;gap:8px;padding:10px 14px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.22);border-radius:8px;font-size:.83rem;color:#fbbf24;margin-bottom:14px}
+.ec-profile-banner svg{flex-shrink:0}
+.ec-profile-saved{font-size:.82rem;color:var(--success);margin-top:6px;display:none}
+.ec-profile-saved.show{display:block}
+
+/* ─── Responsive ─── */
+@media(max-width:600px){
+  .ec-nav{padding:0 16px}
+  .ec-page{padding:78px 14px 50px}
+  .ec-stepper{gap:0}
+  .ec-step-label{font-size:.66rem}
+  .ec-contact{flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<canvas id="aether-canvas"></canvas>
+
+<!-- Nav -->
+<nav class="ec-nav">
+  <a href="index.html" class="ec-logo">
+    Nexa<span>Web</span>
+    <span class="ec-logo-badge">Espace Client</span>
+  </a>
+  <div class="ec-nav-r">
+    <button class="ec-theme-btn" id="theme-btn" aria-label="Basculer le thème">○</button>
+    <button class="ec-logout-btn" id="logout-btn" aria-label="Se déconnecter">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+        <polyline points="16 17 21 12 16 7"/>
+        <line x1="21" y1="12" x2="9" y2="12"/>
+      </svg>
+      Déconnexion
+    </button>
+  </div>
+</nav>
+
+<!-- Page content -->
+<main class="ec-page">
+
+  <!-- Error banner -->
+  <div class="ec-banner error" id="ec-error" role="alert">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <span id="ec-error-text"></span>
+  </div>
+
+  <!-- Welcome -->
+  <div class="ec-welcome">
+    <div class="ec-avatar" id="ec-avatar">…</div>
+    <div class="ec-welcome-text">
+      <h1 id="ec-name">Chargement…</h1>
+      <p id="ec-email"></p>
+    </div>
+  </div>
+
+  <!-- Projects -->
+  <section class="ec-section">
+    <h2 class="ec-section-title">Mes projets</h2>
+    <div id="ec-projects-list" class="ec-project-list">
+      <div class="ec-empty"><span class="ec-spinner"></span> Chargement des projets…</div>
+    </div>
+  </section>
+
+  <!-- Documents -->
+  <section class="ec-section">
+    <h2 class="ec-section-title">Mes documents</h2>
+    <div id="ec-docs-list" class="ec-doc-list">
+      <div class="ec-empty"><span class="ec-spinner"></span> Chargement des documents…</div>
+    </div>
+  </section>
+
+  <!-- Profile -->
+  <section class="ec-section" id="ec-profile-section">
+    <h2 class="ec-section-title">Mon profil</h2>
+    <div class="ec-profile-card" id="ec-profile-card">
+      <div class="ec-empty"><span class="ec-spinner"></span> Chargement…</div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="ec-section">
+    <h2 class="ec-section-title">Contact</h2>
+    <div class="ec-contact">
+      <div class="ec-contact-text">
+        <h3>Besoin d'aide ou d'une mise à jour ?</h3>
+        <p>L'équipe Nexa Web répond sous 24 h en jours ouvrés.</p>
+      </div>
+      <a href="mailto:contact@nexa-web.fr" class="ec-contact-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Envoyer un message
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<!-- Supabase client -->
+<script src="supabase-client.js"></script>
+
+<script>
+/* ═══════════════════════════════════════════
+   Nexa Web — espace-client.html
+   ═══════════════════════════════════════════ */
+
+/* ─── Aether Flow background ─── */
+(function(){
+  var canvas=document.getElementById('aether-canvas');
+  var ctx=canvas.getContext('2d');
+  var W,H,particles,mouse={x:-999,y:-999};
+  var PARTICLE_COUNT=80;
+  var CONNECT_DIST=140;
+  var REPEL_RADIUS=160;
+
+  function resize(){
+    W=canvas.width=window.innerWidth;
+    H=canvas.height=window.innerHeight;
+  }
+
+  function mkParticle(){
+    return{
+      x:Math.random()*W,
+      y:Math.random()*H,
+      vx:(Math.random()-.5)*.35,
+      vy:(Math.random()-.5)*.35,
+      r:Math.random()*2+1.2
+    };
+  }
+
+  function init(){
+    resize();
+    particles=[];
+    for(var i=0;i<PARTICLE_COUNT;i++) particles.push(mkParticle());
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='rgba(8,8,17,1)';
+    ctx.fillRect(0,0,W,H);
+
+    for(var i=0;i<particles.length;i++){
+      var p=particles[i];
+      var dx=p.x-mouse.x, dy=p.y-mouse.y;
+      var dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<REPEL_RADIUS && dist>0){
+        var force=(REPEL_RADIUS-dist)/REPEL_RADIUS;
+        p.vx+=dx/dist*force*.55;
+        p.vy+=dy/dist*force*.55;
+      }
+      var speed=Math.sqrt(p.vx*p.vx+p.vy*p.vy);
+      var maxSpeed=1.8;
+      if(speed>maxSpeed){p.vx=p.vx/speed*maxSpeed;p.vy=p.vy/speed*maxSpeed;}
+      p.vx*=.985; p.vy*=.985;
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0)p.x=W; if(p.x>W)p.x=0;
+      if(p.y<0)p.y=H; if(p.y>H)p.y=0;
+
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(139,92,246,0.70)';
+      ctx.fill();
+
+      for(var j=i+1;j<particles.length;j++){
+        var q=particles[j];
+        var ex=p.x-q.x, ey=p.y-q.y;
+        var ed=Math.sqrt(ex*ex+ey*ey);
+        if(ed<CONNECT_DIST){
+          var op=(1-ed/CONNECT_DIST)*.45;
+          var mdx=((p.x+q.x)/2)-mouse.x, mdy=((p.y+q.y)/2)-mouse.y;
+          var md=Math.sqrt(mdx*mdx+mdy*mdy);
+          var col=md<80
+            ? 'rgba(255,255,255,'+op+')'
+            : 'rgba(167,139,250,'+op+')';
+          ctx.beginPath();
+          ctx.moveTo(p.x,p.y);
+          ctx.lineTo(q.x,q.y);
+          ctx.strokeStyle=col;
+          ctx.lineWidth=.8;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize',init);
+  window.addEventListener('mousemove',function(e){mouse.x=e.clientX;mouse.y=e.clientY;});
+  window.addEventListener('touchmove',function(e){var t=e.touches[0];mouse.x=t.clientX;mouse.y=t.clientY;},{passive:true});
+
+  init();
+  draw();
+})();
+
+/* ─── Theme toggle ─── */
+(function(){
+  var root=document.documentElement;
+  var btn=document.getElementById('theme-btn');
+  function sync(){btn.textContent=root.getAttribute('data-theme')==='light'?'●':'○';}
+  sync();
+  btn.addEventListener('click',function(){
+    var next=root.getAttribute('data-theme')==='dark'?'light':'dark';
+    root.setAttribute('data-theme',next);
+    localStorage.setItem('nw-theme',next);
+    sync();
+  });
+})();
+
+/* ─── UI helpers ─── */
+function showError(msg){
+  var el=document.getElementById('ec-error');
+  document.getElementById('ec-error-text').textContent=msg;
+  el.classList.add('show');
+}
+
+function initials(str){
+  if(!str) return '?';
+  var parts=str.split(/[\s@]/);
+  return (parts[0]||'').charAt(0).toUpperCase();
+}
+
+function formatDate(iso){
+  if(!iso) return null;
+  var d=new Date(iso);
+  return d.toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+}
+
+/* ─── Status stepper ─── */
+var STATUS_STEPS=['devis','design','développement','livré'];
+var STATUS_LABELS=['Devis','Design','Développement','Livré'];
+
+function buildStepper(currentStatus){
+  var idx=STATUS_STEPS.indexOf(currentStatus);
+  if(idx===-1) idx=0;
+  return STATUS_STEPS.map(function(s,i){
+    var cls=i<idx?'done':i===idx?'active':'';
+    var icon=i<idx
+      ? '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
+      : (i+1);
+    return '<div class="ec-step '+cls+'"><div class="ec-step-dot">'+icon+'</div><div class="ec-step-label">'+STATUS_LABELS[i]+'</div></div>';
+  }).join('');
+}
+
+function buildProjectCard(proj){
+  var preview = proj.lien_preview
+    ? '<a class="ec-proj-preview" href="'+encodeURI(proj.lien_preview)+'" target="_blank" rel="noopener">'+
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>'+
+        'Aperçu</a>'
+    : '<a class="ec-proj-preview hidden">Aperçu</a>';
+
+  var delivery = proj.date_livraison
+    ? '<div class="ec-delivery"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Livraison estimée : <strong>'+formatDate(proj.date_livraison)+'</strong></div>'
+    : '';
+
+  return '<div class="ec-project-card">'+
+    '<div class="ec-proj-header">'+
+      '<div>'+
+        '<div class="ec-proj-name">'+escHtml(proj.nom)+'</div>'+
+        '<div class="ec-proj-meta">Créé le '+formatDate(proj.created_at)+'</div>'+
+      '</div>'+
+      preview+
+    '</div>'+
+    '<div class="ec-stepper">'+buildStepper(proj.statut)+'</div>'+
+    delivery+
+  '</div>';
+}
+
+function buildDocItem(doc){
+  return '<div class="ec-doc-item">'+
+    '<div class="ec-doc-left">'+
+      '<div class="ec-doc-icon">'+
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'+
+      '</div>'+
+      '<div>'+
+        '<div class="ec-doc-name">'+escHtml(doc.nom)+'</div>'+
+        '<div class="ec-doc-date">Ajouté le '+formatDate(doc.created_at)+'</div>'+
+      '</div>'+
+    '</div>'+
+    '<a class="ec-doc-dl" href="'+encodeURI(doc.url)+'" target="_blank" rel="noopener" download>'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'+
+      'Télécharger'+
+    '</a>'+
+  '</div>';
+}
+
+function escHtml(str){
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ─── Profile section ─── */
+async function loadProfile(userId){
+  var {data:profile}=await window.sb.from('profiles').select('*').eq('id',userId).single();
+  var card=document.getElementById('ec-profile-card');
+  if(!card) return;
+
+  var prenom=profile?escHtml(profile.prenom||''):'';
+  var nom=profile?escHtml(profile.nom||''):'';
+  var tel=profile?(profile.telephone||''):'';
+  var ent=profile?(profile.entreprise||''):'';
+  var incomplete=!profile||!profile.telephone||!profile.entreprise;
+
+  var banner=incomplete
+    ?'<div class="ec-profile-banner"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Complétez votre profil pour mieux vous accompagner.</div>'
+    :'';
+
+  card.innerHTML=banner+
+    '<div id="profile-view">'+
+      '<div class="ec-profile-grid">'+
+        '<div class="ec-profile-field"><span class="ec-profile-label">Prénom</span><span class="ec-profile-value">'+prenom+'</span></div>'+
+        '<div class="ec-profile-field"><span class="ec-profile-label">Nom</span><span class="ec-profile-value">'+nom+'</span></div>'+
+        '<div class="ec-profile-field"><span class="ec-profile-label">Téléphone</span><span class="ec-profile-value">'+(escHtml(tel)||'<em style="color:var(--muted);font-style:normal">Non renseigné</em>')+'</span></div>'+
+        '<div class="ec-profile-field"><span class="ec-profile-label">Entreprise</span><span class="ec-profile-value">'+(escHtml(ent)||'<em style="color:var(--muted);font-style:normal">Non renseignée</em>')+'</span></div>'+
+      '</div>'+
+      '<div class="ec-profile-actions"><button class="ec-profile-edit-btn" id="profile-edit-btn">Modifier</button></div>'+
+    '</div>'+
+    '<div id="profile-edit" style="display:none">'+
+      '<div class="ec-profile-grid">'+
+        '<div class="ec-profile-field"><span class="ec-profile-label">Téléphone</span><input class="ec-profile-input" id="prof-tel" type="tel" value="'+escHtml(tel)+'" placeholder="+33 6 …"></div>'+
+        '<div class="ec-profile-field"><span class="ec-profile-label">Entreprise</span><input class="ec-profile-input" id="prof-ent" type="text" value="'+escHtml(ent)+'" placeholder="Votre entreprise"></div>'+
+      '</div>'+
+      '<div class="ec-profile-actions">'+
+        '<button class="ec-profile-save-btn" id="profile-save-btn">Enregistrer</button>'+
+        '<button class="ec-profile-cancel-btn" id="profile-cancel-btn">Annuler</button>'+
+      '</div>'+
+      '<p class="ec-profile-saved" id="profile-saved">✓ Profil mis à jour</p>'+
+    '</div>';
+
+  document.getElementById('profile-edit-btn').addEventListener('click',function(){
+    document.getElementById('profile-view').style.display='none';
+    document.getElementById('profile-edit').style.display='block';
+    document.getElementById('prof-tel').focus();
+  });
+  document.getElementById('profile-cancel-btn').addEventListener('click',function(){
+    document.getElementById('profile-edit').style.display='none';
+    document.getElementById('profile-view').style.display='block';
+  });
+  document.getElementById('profile-save-btn').addEventListener('click',async function(){
+    var btn=this;
+    btn.disabled=true; btn.textContent='Enregistrement…';
+    var newTel=document.getElementById('prof-tel').value.trim();
+    var newEnt=document.getElementById('prof-ent').value.trim();
+    var {error}=await window.sb.from('profiles')
+      .update({telephone:newTel||null,entreprise:newEnt||null})
+      .eq('id',userId);
+    if(error){
+      showError('Erreur lors de la sauvegarde du profil.');
+      btn.disabled=false; btn.textContent='Enregistrer';
+    } else {
+      await loadProfile(userId);
+    }
+  });
+}
+
+/* ─── Main: auth guard + load data ─── */
+(async function(){
+  if(!window.sb){
+    showError('Impossible de charger le client Supabase. Rechargez la page.');
+    return;
+  }
+
+  /* Session guard */
+  var {data:{session}, error:sessErr} = await window.sb.auth.getSession();
+  if(sessErr || !session){
+    window.location.replace('login.html');
+    return;
+  }
+
+  /* Listen for sign-out or token expiry */
+  window.sb.auth.onAuthStateChange(function(event){
+    if(event==='SIGNED_OUT') window.location.replace('login.html');
+  });
+
+  /* Logout button */
+  document.getElementById('logout-btn').addEventListener('click',async function(){
+    await window.sb.auth.signOut();
+    window.location.replace('login.html');
+  });
+
+  /* Populate welcome section */
+  var user=session.user;
+  var email=user.email||'';
+  var name=user.user_metadata&&user.user_metadata.full_name
+    ? user.user_metadata.full_name
+    : email.split('@')[0];
+
+  document.getElementById('ec-avatar').textContent=initials(name);
+  document.getElementById('ec-name').textContent='Bonjour, '+escHtml(name)+' !';
+  document.getElementById('ec-email').textContent=email;
+
+  /* Load profile (non-blocking) */
+  loadProfile(user.id);
+
+  /* Load projects */
+  var {data:projets, error:projErr} = await window.sb
+    .from('projets')
+    .select('*')
+    .order('created_at',{ascending:false});
+
+  var projContainer=document.getElementById('ec-projects-list');
+  if(projErr){
+    projContainer.innerHTML='<div class="ec-empty">Erreur lors du chargement des projets.</div>';
+  } else if(!projets||projets.length===0){
+    projContainer.innerHTML=
+      '<div class="ec-new-user">'+
+        '<div class="ec-new-user-icon"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>'+
+        '<h3>Bienvenue dans votre espace !</h3>'+
+        '<p>Vous n\'avez pas encore de projet. Parlons de ce que vous avez en tête.</p>'+
+        '<div class="ec-new-user-actions">'+
+          '<a href="devis.html" class="ec-cta-btn">Démarrer un projet →</a>'+
+          '<a href="contact.html" class="ec-ghost-btn">Nous contacter</a>'+
+        '</div>'+
+      '</div>';
+  } else {
+    projContainer.innerHTML=projets.map(buildProjectCard).join('');
+  }
+
+  /* Load documents */
+  var {data:docs, error:docErr} = await window.sb
+    .from('documents')
+    .select('*')
+    .order('created_at',{ascending:false});
+
+  var docContainer=document.getElementById('ec-docs-list');
+  if(docErr){
+    docContainer.innerHTML='<div class="ec-empty">Erreur lors du chargement des documents.</div>';
+  } else if(!docs||docs.length===0){
+    docContainer.innerHTML='<div class="ec-empty">Aucun document disponible pour le moment.</div>';
+  } else {
+    docContainer.innerHTML=docs.map(buildDocItem).join('');
+  }
+})();
+</script>
+
+</body>
+</html>
