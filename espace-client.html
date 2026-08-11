@@ -680,12 +680,13 @@ function formatDate(iso){
 }
 
 /* ─── Status stepper ─── */
-var STATUS_STEPS=['devis','design','développement','livré'];
+var STATUS_STEPS=['devis','design','developpement','livre'];
 var STATUS_LABELS=['Devis','Design','Développement','Livré'];
 
 function buildStepper(currentStatus){
+  console.log('[espace-client] statut projet reçu :', JSON.stringify(currentStatus));
   var idx=STATUS_STEPS.indexOf(currentStatus);
-  if(idx===-1) idx=0;
+  if(idx===-1){ console.warn('[espace-client] statut inconnu, fallback étape 0'); idx=0; }
   return STATUS_STEPS.map(function(s,i){
     var cls=i<idx?'done':i===idx?'active':'';
     var icon=i<idx
