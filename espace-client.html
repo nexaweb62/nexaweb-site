@@ -743,7 +743,8 @@ function escHtml(str){
 
 /* ─── Profile section ─── */
 async function loadProfile(userId){
-  var {data:profile}=await window.sb.from('profiles').select('*').eq('id',userId).single();
+  var {data:profile, error:profErr}=await window.sb.from('profiles').select('*').eq('id',userId).single();
+  if(profErr) console.error('[espace-client] profiles —', profErr.code, '|', profErr.message);
   var card=document.getElementById('ec-profile-card');
   if(!card) return;
 
@@ -822,6 +823,9 @@ async function loadProfile(userId){
      where queries fire before the access token is ready. */
   var initialized = false;
   window.sb.auth.onAuthStateChange(async function(event, session){
+    console.log('[espace-client] authStateChange:', event,
+      session ? '✓ '+session.user.email : '✗ absent');
+
     if(event === 'SIGNED_OUT'){
       window.location.replace('login.html');
       return;
@@ -830,9 +834,11 @@ async function loadProfile(userId){
     initialized = true;
 
     if(!session){
+      console.log('[espace-client] INITIAL_SESSION sans session — redirection login');
       window.location.replace('login.html');
       return;
     }
+    console.log('[espace-client] Session confirmée, chargement des données…');
 
     /* Populate welcome section */
     var user = session.user;

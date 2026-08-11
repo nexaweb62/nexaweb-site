@@ -1477,5 +1477,37 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
   },{passive:true});
 })();
 </script>
+
+<!-- Supabase — traitement du callback OAuth quand Supabase redirige ici après Google -->
+<script>
+(function(){
+  /* Ne charge le SDK que si un callback OAuth est détecté dans l'URL */
+  var hasCode  = window.location.search.indexOf('code=')         !== -1;
+  var hasToken = window.location.hash.indexOf('access_token=')   !== -1;
+  if(!hasCode && !hasToken) return;
+
+  console.log('[NexaWeb] index.html — callback OAuth détecté, chargement SDK…');
+
+  function loadScript(src, cb){
+    var s=document.createElement('script');
+    s.src=src; s.onload=cb; document.head.appendChild(s);
+  }
+
+  loadScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2', function(){
+    loadScript('supabase-client.js', function(){
+      if(!window.sb) return;
+      /* Supabase détecte le code/token dans l'URL et établit la session */
+      window.sb.auth.onAuthStateChange(function(event, session){
+        console.log('[NexaWeb] index.html — authStateChange:', event,
+          session ? '('+session.user.email+')' : '(sans session)');
+        if((event==='SIGNED_IN'||event==='INITIAL_SESSION') && session){
+          console.log('[NexaWeb] index.html — session établie, redirection espace-client');
+          window.location.replace('/espace-client.html');
+        }
+      });
+    });
+  });
+})();
+</script>
 </body>
 </html>
