@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-page="contact">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Contact — Nexa Web</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <script>(function(){var t=localStorage.getItem('nw-theme');if(t)document.documentElement.setAttribute('data-theme',t);}());</script>
+<script src="i18n.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
 <style>
 /* ── TOKENS ── */
@@ -221,7 +222,7 @@ button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
 <!-- Loading -->
 <div id="globe-loading">
   <div class="gl-spinner"></div>
-  <span class="gl-loading-text">Chargement du globe…</span>
+  <span class="gl-loading-text" data-i18n="contact.loading">Chargement du globe…</span>
 </div>
 
 <!-- Globe -->
@@ -231,12 +232,16 @@ button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
 <header class="hdr">
   <a href="index.html" class="nav-logo">NEXA<span>WEB</span></a>
   <div class="nav-r">
-    <button class="menu-btn" id="menu-btn" aria-label="Ouvrir la navigation" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
-    <button class="theme-btn" id="theme-btn" aria-label="Basculer le thème">○</button>
-    <a href="login.html" class="login-btn" aria-label="Connexion">
+    <div class="lang-sel" role="group" aria-label="Language">
+      <button class="lang-opt" data-lang="fr">FR</button>
+      <button class="lang-opt" data-lang="en">EN</button>
+    </div>
+    <button class="menu-btn" id="menu-btn" aria-label="Ouvrir la navigation" aria-expanded="false" data-i18n-aria="nav.menu.open.aria"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
+    <button class="theme-btn" id="theme-btn" aria-label="Basculer le thème" data-i18n-aria="nav.theme.aria">○</button>
+    <a href="login.html" class="login-btn" aria-label="Connexion" data-i18n-aria="nav.login.aria">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
     </a>
-    <a href="devis.html" class="btn-nav">Démarrer un projet</a>
+    <a href="devis.html" class="btn-nav" data-i18n="contact.cta">Démarrer un projet</a>
   </div>
 </header>
 
@@ -244,27 +249,27 @@ button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
 <div class="cnav" id="cnav" role="dialog" aria-modal="true" aria-label="Navigation">
   <div class="cnav-ring" id="cnav-ring">
     <button class="cnav-close" id="cnav-close" aria-label="Fermer"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-    <div class="cnav-item"><a href="index.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12L12 3l9 9"/><path d="M9 21V12h6v9"/></svg><span class="cnav-name">Accueil</span></a></div>
-    <div class="cnav-item"><a href="index.html#services" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span class="cnav-name">Services</span></a></div>
-    <div class="cnav-item"><a href="index.html#projets" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span class="cnav-name">Projets</span></a></div>
-    <div class="cnav-item"><a href="index.html#about" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span class="cnav-name">À propos</span></a></div>
-    <div class="cnav-item"><a href="tarifs.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg><span class="cnav-name">Tarifs</span></a></div>
-    <div class="cnav-item"><a href="index.html#faq" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg><span class="cnav-name">FAQ</span></a></div>
-    <div class="cnav-item"><a href="contact.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="cnav-name">Contact</span></a></div>
-    <div class="cnav-item"><a href="rendez-vous.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span class="cnav-name">RDV</span></a></div>
-    <div class="cnav-item"><a href="equipe.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="cnav-name">Équipe</span></a></div>
+    <div class="cnav-item"><a href="index.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12L12 3l9 9"/><path d="M9 21V12h6v9"/></svg><span class="cnav-name" data-i18n="nav.home">Accueil</span></a></div>
+    <div class="cnav-item"><a href="index.html#services" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span class="cnav-name" data-i18n="nav.services">Services</span></a></div>
+    <div class="cnav-item"><a href="index.html#projets" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span class="cnav-name" data-i18n="nav.projects">Projets</span></a></div>
+    <div class="cnav-item"><a href="index.html#about" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span class="cnav-name" data-i18n="nav.about">À propos</span></a></div>
+    <div class="cnav-item"><a href="tarifs.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg><span class="cnav-name" data-i18n="nav.pricing">Tarifs</span></a></div>
+    <div class="cnav-item"><a href="index.html#faq" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg><span class="cnav-name" data-i18n="nav.faq">FAQ</span></a></div>
+    <div class="cnav-item"><a href="contact.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="cnav-name" data-i18n="nav.contact">Contact</span></a></div>
+    <div class="cnav-item"><a href="rendez-vous.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span class="cnav-name" data-i18n="nav.rdv">RDV</span></a></div>
+    <div class="cnav-item"><a href="equipe.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="cnav-name" data-i18n="nav.team">Équipe</span></a></div>
   </div>
 </div>
 
 <!-- Page title -->
 <div class="contact-head" aria-label="Contact Nexa Web">
-  <div class="contact-eyebrow">Nous contacter</div>
-  <h1 class="contact-title">On est à<br><em>Carvin.</em></h1>
+  <div class="contact-eyebrow" data-i18n="contact.eyebrow">Nous contacter</div>
+  <h1 class="contact-title" data-i18n-html="contact.title">On est à<br><em>Carvin.</em></h1>
 </div>
 
 <!-- Carvin marker (DOM, positionné par JS) -->
 <div id="carvin-pin" role="presentation">
-  <div class="carvin-badge">Carvin, France</div>
+  <div class="carvin-badge" data-i18n="contact.badge">Carvin, France</div>
   <div class="carvin-line"></div>
   <div class="carvin-dot"></div>
 </div>

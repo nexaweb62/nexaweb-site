@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-page="index">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,6 +13,7 @@ if(!window.matchMedia('(max-width:768px)').matches){
   document.head.appendChild(_sp);
 }
 </script>
+<script src="i18n.js"></script>
 <title>Nexa Web — Agence Web Premium · Carvin</title>
 <style>
 :root {
@@ -602,24 +603,28 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
     <nav class="nav" aria-label="Navigation principale">
       <a href="#accueil" class="nav-logo" aria-label="Nexa Web — Accueil">NEXA<span>WEB</span></a>
       <ul class="nav-links" role="list">
-        <li><a href="#accueil"  class="nav-link on">Accueil</a></li>
-        <li><a href="#services" class="nav-link">Services</a></li>
-        <li><a href="#projets"  class="nav-link">Projets</a></li>
-        <li><a href="#apropos"  class="nav-link">À propos</a></li>
-        <li><a href="tarifs.html"  class="nav-link">Tarifs</a></li>
-        <li><a href="#faq"       class="nav-link">FAQ</a></li>
-        <li><a href="contact.html" class="nav-link">Contact</a></li>
-        <li><a href="rendez-vous.html" class="nav-link">Rendez-vous</a></li>
+        <li><a href="#accueil"  class="nav-link on" data-i18n="nav.home">Accueil</a></li>
+        <li><a href="#services" class="nav-link" data-i18n="nav.services">Services</a></li>
+        <li><a href="#projets"  class="nav-link" data-i18n="nav.projects">Projets</a></li>
+        <li><a href="#apropos"  class="nav-link" data-i18n="nav.about">À propos</a></li>
+        <li><a href="tarifs.html"  class="nav-link" data-i18n="nav.pricing">Tarifs</a></li>
+        <li><a href="#faq"       class="nav-link" data-i18n="nav.faq">FAQ</a></li>
+        <li><a href="contact.html" class="nav-link" data-i18n="nav.contact">Contact</a></li>
+        <li><a href="rendez-vous.html" class="nav-link" data-i18n="nav.appointment">Rendez-vous</a></li>
       </ul>
       <div class="nav-r">
-        <button class="menu-btn" id="menu-btn" aria-label="Ouvrir la navigation" aria-expanded="false">
+        <div class="lang-sel" role="group" aria-label="Language">
+          <button class="lang-opt" data-lang="fr">FR</button>
+          <button class="lang-opt" data-lang="en">EN</button>
+        </div>
+        <button class="menu-btn" id="menu-btn" aria-label="Ouvrir la navigation" aria-expanded="false" data-i18n-aria="nav.menu.open.aria">
           <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
         </button>
-        <button class="theme-btn" id="theme-btn" aria-label="Basculer le thème">○</button>
-        <a href="login.html" class="login-btn" aria-label="Connexion">
+        <button class="theme-btn" id="theme-btn" aria-label="Basculer le thème" data-i18n-aria="nav.theme.aria">○</button>
+        <a href="login.html" class="login-btn" aria-label="Connexion" data-i18n-aria="nav.login.aria">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
         </a>
-        <a href="devis.html" class="btn">Démarrer un projet</a>
+        <a href="devis.html" class="btn" data-i18n="nav.cta">Démarrer un projet</a>
       </div>
     </nav>
   </div>
@@ -634,55 +639,55 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
     <div class="cnav-item">
       <a href="#accueil" class="cnav-link">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        <span class="cnav-name">Accueil</span>
+        <span class="cnav-name" data-i18n="nav.home">Accueil</span>
       </a>
     </div>
     <div class="cnav-item">
       <a href="#services" class="cnav-link">
         <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-        <span class="cnav-name">Services</span>
+        <span class="cnav-name" data-i18n="nav.services">Services</span>
       </a>
     </div>
     <div class="cnav-item">
       <a href="#projets" class="cnav-link">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-        <span class="cnav-name">Projets</span>
+        <span class="cnav-name" data-i18n="nav.projects">Projets</span>
       </a>
     </div>
     <div class="cnav-item">
       <a href="#apropos" class="cnav-link">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        <span class="cnav-name">À propos</span>
+        <span class="cnav-name" data-i18n="nav.about">À propos</span>
       </a>
     </div>
     <div class="cnav-item">
       <a href="tarifs.html" class="cnav-link">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-        <span class="cnav-name">Tarifs</span>
+        <span class="cnav-name" data-i18n="nav.pricing">Tarifs</span>
       </a>
     </div>
     <div class="cnav-item">
       <a href="#faq" class="cnav-link">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        <span class="cnav-name">FAQ</span>
+        <span class="cnav-name" data-i18n="nav.faq">FAQ</span>
       </a>
     </div>
     <div class="cnav-item">
       <a href="contact.html" class="cnav-link">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        <span class="cnav-name">Contact</span>
+        <span class="cnav-name" data-i18n="nav.contact">Contact</span>
       </a>
     </div>
     <div class="cnav-item">
       <a href="rendez-vous.html" class="cnav-link">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        <span class="cnav-name">RDV</span>
+        <span class="cnav-name" data-i18n="nav.rdv">RDV</span>
       </a>
     </div>
     <div class="cnav-item">
       <a href="equipe.html" class="cnav-link">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        <span class="cnav-name">Équipe</span>
+        <span class="cnav-name" data-i18n="nav.team">Équipe</span>
       </a>
     </div>
   </div>
@@ -694,19 +699,19 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
     <div class="hero-main">
       <div class="hero-eye" aria-hidden="true">
         <div class="hero-dot"></div>
-        <span class="label">Agence web premium · Carvin</span>
+        <span class="label" data-i18n="index.hero.eyebrow">Agence web premium · Carvin</span>
       </div>
       <h1 class="h-xl hero-hl">
-        <span class="ln"><span class="li">Des sites web qui</span></span>
-        <span class="ln"><span class="li">donnent une <em>nouvelle</em></span></span>
-        <span class="ln"><span class="li">dimension à votre marque.</span></span>
+        <span class="ln"><span class="li" data-i18n="index.hero.line1">Des sites web qui</span></span>
+        <span class="ln"><span class="li" data-i18n-html="index.hero.line2">donnent une <em>nouvelle</em></span></span>
+        <span class="ln"><span class="li" data-i18n="index.hero.line3">dimension à votre marque.</span></span>
       </h1>
-      <p class="body hero-sub" style="max-width:480px">
+      <p class="body hero-sub" style="max-width:480px" data-i18n="index.hero.sub">
         Nexa Web conçoit des expériences digitales modernes, rapides et sur mesure pour les entreprises qui veulent se démarquer.
       </p>
       <div class="hero-ctas">
-        <a href="devis.html" class="btn">Démarrer un projet <span aria-hidden="true">→</span></a>
-        <a href="#projets"  class="btn-g">Voir nos réalisations</a>
+        <a href="devis.html" class="btn"><span data-i18n="index.hero.cta1">Démarrer un projet</span> <span aria-hidden="true">→</span></a>
+        <a href="#projets"  class="btn-g" data-i18n="index.hero.cta2">Voir nos réalisations</a>
       </div>
     </div>
     <!-- Robot 3D Spline -->
@@ -722,7 +727,7 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
   <div class="wrap">
     <div class="hero-foot" aria-hidden="true">
       <div class="hero-line"></div>
-      <span class="label">Défiler pour découvrir</span>
+      <span class="label" data-i18n="index.hero.scroll">Défiler pour découvrir</span>
     </div>
   </div>
 </section>
@@ -731,8 +736,8 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
 <section class="s-phil" style="padding:var(--sec) 0" id="apropos" aria-labelledby="phil-h">
   <div class="wrap">
     <div class="phil-in">
-      <div class="r"><span class="label" id="phil-h">Notre vision</span></div>
-      <p class="phil-txt r d1">
+      <div class="r"><span class="label" id="phil-h" data-i18n="index.phil.label">Notre vision</span></div>
+      <p class="phil-txt r d1" data-i18n-html="index.phil.text">
         Votre site n'est pas simplement une vitrine. C'est le <span>premier contact</span> entre votre marque et votre futur client. Chaque détail compte. Chaque pixel est une décision.
       </p>
     </div>
@@ -744,36 +749,36 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
   <div class="wrap">
     <div class="svc-hdr r">
       <div>
-        <span class="label" id="svc-h">Ce que nous créons</span>
-        <h2 class="h-lg" style="margin-top:14px">Nos services</h2>
+        <span class="label" id="svc-h" data-i18n="index.svc.label">Ce que nous créons</span>
+        <h2 class="h-lg" style="margin-top:14px" data-i18n="index.svc.title">Nos services</h2>
       </div>
-      <p class="body" style="max-width:300px;text-align:right">Chaque prestation est pensée pour maximiser l'impact de votre présence en ligne.</p>
+      <p class="body" style="max-width:300px;text-align:right" data-i18n="index.svc.sub">Chaque prestation est pensée pour maximiser l'impact de votre présence en ligne.</p>
     </div>
     <div class="svc-list">
       <a href="site-vitrine.html" class="svc-row r">
         <span class="svc-n" aria-hidden="true">01</span>
-        <span class="svc-name">Site vitrine</span>
-        <div class="svc-meta"><span class="svc-tag">Essentiel</span><span class="svc-arr" aria-hidden="true">→</span></div>
+        <span class="svc-name" data-i18n="index.svc.01">Site vitrine</span>
+        <div class="svc-meta"><span class="svc-tag" data-i18n="index.svc.01.tag">Essentiel</span><span class="svc-arr" aria-hidden="true">→</span></div>
       </a>
       <a href="ecommerce.html" class="svc-row r d1">
         <span class="svc-n" aria-hidden="true">02</span>
-        <span class="svc-name">Site e-commerce</span>
-        <div class="svc-meta"><span class="svc-tag">Conversion</span><span class="svc-arr" aria-hidden="true">→</span></div>
+        <span class="svc-name" data-i18n="index.svc.02">Site e-commerce</span>
+        <div class="svc-meta"><span class="svc-tag" data-i18n="index.svc.02.tag">Conversion</span><span class="svc-arr" aria-hidden="true">→</span></div>
       </a>
       <a href="refonte.html" class="svc-row r d2">
         <span class="svc-n" aria-hidden="true">03</span>
-        <span class="svc-name">Refonte de site</span>
-        <div class="svc-meta"><span class="svc-tag">Modernisation</span><span class="svc-arr" aria-hidden="true">→</span></div>
+        <span class="svc-name" data-i18n="index.svc.03">Refonte de site</span>
+        <div class="svc-meta"><span class="svc-tag" data-i18n="index.svc.03.tag">Modernisation</span><span class="svc-arr" aria-hidden="true">→</span></div>
       </a>
       <a href="design-uiux.html" class="svc-row r d3">
         <span class="svc-n" aria-hidden="true">04</span>
-        <span class="svc-name">Design UI/UX</span>
-        <div class="svc-meta"><span class="svc-tag">Expérience</span><span class="svc-arr" aria-hidden="true">→</span></div>
+        <span class="svc-name" data-i18n="index.svc.04">Design UI/UX</span>
+        <div class="svc-meta"><span class="svc-tag" data-i18n="index.svc.04.tag">Expérience</span><span class="svc-arr" aria-hidden="true">→</span></div>
       </a>
       <a href="seo.html" class="svc-row r d4">
         <span class="svc-n" aria-hidden="true">05</span>
-        <span class="svc-name">Optimisation SEO &amp; Performance</span>
-        <div class="svc-meta"><span class="svc-tag">Visibilité</span><span class="svc-arr" aria-hidden="true">→</span></div>
+        <span class="svc-name" data-i18n="index.svc.05">Optimisation SEO &amp; Performance</span>
+        <div class="svc-meta"><span class="svc-tag" data-i18n="index.svc.05.tag">Visibilité</span><span class="svc-arr" aria-hidden="true">→</span></div>
       </a>
     </div>
   </div>
@@ -783,8 +788,8 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
 <section class="s-port" style="padding:var(--sec) 0" id="projets" aria-labelledby="port-h">
   <div class="wrap">
     <div class="port-hdr r">
-      <span class="label" id="port-h">Des expériences conçues pour être remarquées</span>
-      <h2 class="h-lg" style="margin-top:14px">Réalisations</h2>
+      <span class="label" id="port-h" data-i18n="index.port.label">Des expériences conçues pour être remarquées</span>
+      <h2 class="h-lg" style="margin-top:14px" data-i18n="index.port.title">Réalisations</h2>
     </div>
     <div class="cs-stage" id="cs-stage" tabindex="0" aria-label="Carrousel des réalisations" style="height:440px">
       <div class="cs-inner" id="cs-inner">
@@ -792,7 +797,7 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
         <div class="cs-card" data-idx="0">
           <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=900&h=560&fit=crop&crop=center&q=90" alt="Aaron Cunningham" loading="eager" draggable="false">
           <button class="cs-cta" data-url="https://www.aaronjcunningham.com/" data-name="Aaron Cunningham" type="button">
-            Voir le projet
+            <span data-i18n="index.port.cta">Voir le projet</span>
             <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           </button>
           <div class="cs-card-info">
@@ -804,7 +809,7 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
         <div class="cs-card" data-idx="1">
           <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=900&h=560&fit=crop&crop=center&q=90" alt="Namaha Healthcare" loading="eager" draggable="false">
           <button class="cs-cta" data-url="https://www.namaha.healthcare/" data-name="Namaha Healthcare" type="button">
-            Voir le projet
+            <span data-i18n="index.port.cta">Voir le projet</span>
             <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           </button>
           <div class="cs-card-info">
@@ -816,7 +821,7 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
         <div class="cs-card" data-idx="2">
           <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=900&h=560&fit=crop&crop=top&q=90" alt="Dolce Gabbana" loading="eager" draggable="false">
           <button class="cs-cta" data-url="https://beautytools.dolcegabbana.com/it-fr/gift-finder" data-name="Dolce &amp; Gabbana Beauty" type="button">
-            Voir le projet
+            <span data-i18n="index.port.cta">Voir le projet</span>
             <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           </button>
           <div class="cs-card-info">
@@ -828,7 +833,7 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
         <div class="cs-card" data-idx="3">
           <img src="https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=900&h=560&fit=crop&crop=center&q=90" alt="Oobex XR" loading="eager" draggable="false">
           <button class="cs-cta" data-url="https://oobexr.zerotredici.app/en" data-name="Oobex XR" type="button">
-            Voir le projet
+            <span data-i18n="index.port.cta">Voir le projet</span>
             <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           </button>
           <div class="cs-card-info">
@@ -840,7 +845,7 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
         <div class="cs-card" data-idx="4">
           <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=900&h=560&fit=crop&crop=top&q=90" alt="Alethia Earth" loading="eager" draggable="false">
           <button class="cs-cta" data-url="https://www.alethia.earth/" data-name="Alethia Earth" type="button">
-            Voir le projet
+            <span data-i18n="index.port.cta">Voir le projet</span>
             <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           </button>
           <div class="cs-card-info">
@@ -865,7 +870,7 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
   <div class="pmod-hdr">
     <span class="pmod-title" id="pmod-title">Projet</span>
     <div class="pmod-actions">
-      <a class="pmod-ext" id="pmod-ext" href="#" target="_blank" rel="noopener">Ouvrir dans un nouvel onglet ↗</a>
+      <a class="pmod-ext" id="pmod-ext" href="#" target="_blank" rel="noopener" data-i18n="index.modal.open">Ouvrir dans un nouvel onglet ↗</a>
       <button class="pmod-close" id="pmod-close" aria-label="Fermer">
         <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
@@ -882,14 +887,14 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
 <section class="s-proc" style="padding:var(--sec) 0" aria-labelledby="proc-h">
   <div class="wrap">
     <div class="proc-hdr r">
-      <span class="label" id="proc-h">De l'idée au site en ligne</span>
-      <h2 class="h-lg" style="margin-top:14px">Notre méthode</h2>
+      <span class="label" id="proc-h" data-i18n="index.proc.label">De l'idée au site en ligne</span>
+      <h2 class="h-lg" style="margin-top:14px" data-i18n="index.proc.title">Notre méthode</h2>
     </div>
     <div class="proc-grid">
-      <div class="proc-step r"><div class="proc-n">01</div><div class="proc-title">Découverte</div><p class="proc-desc">Nous apprenons à connaître votre activité, vos objectifs et votre audience pour concevoir une stratégie digitale sur mesure.</p></div>
-      <div class="proc-step r d1"><div class="proc-n">02</div><div class="proc-title">Direction artistique</div><p class="proc-desc">Création d'une identité visuelle cohérente, des maquettes aux prototypes interactifs, validés à chaque étape.</p></div>
-      <div class="proc-step r d2"><div class="proc-n">03</div><div class="proc-title">Développement</div><p class="proc-desc">Code propre, performant et maintenable. Optimisé pour la vitesse, le référencement et tous les appareils.</p></div>
-      <div class="proc-step r d3"><div class="proc-n">04</div><div class="proc-title">Mise en ligne</div><p class="proc-desc">Déploiement soigné, tests complets et formation à la gestion de votre site. Nous restons disponibles après le lancement.</p></div>
+      <div class="proc-step r"><div class="proc-n">01</div><div class="proc-title" data-i18n="index.proc.01.title">Découverte</div><p class="proc-desc" data-i18n="index.proc.01.desc">Nous apprenons à connaître votre activité, vos objectifs et votre audience pour concevoir une stratégie digitale sur mesure.</p></div>
+      <div class="proc-step r d1"><div class="proc-n">02</div><div class="proc-title" data-i18n="index.proc.02.title">Direction artistique</div><p class="proc-desc" data-i18n="index.proc.02.desc">Création d'une identité visuelle cohérente, des maquettes aux prototypes interactifs, validés à chaque étape.</p></div>
+      <div class="proc-step r d2"><div class="proc-n">03</div><div class="proc-title" data-i18n="index.proc.03.title">Développement</div><p class="proc-desc" data-i18n="index.proc.03.desc">Code propre, performant et maintenable. Optimisé pour la vitesse, le référencement et tous les appareils.</p></div>
+      <div class="proc-step r d3"><div class="proc-n">04</div><div class="proc-title" data-i18n="index.proc.04.title">Mise en ligne</div><p class="proc-desc" data-i18n="index.proc.04.desc">Déploiement soigné, tests complets et formation à la gestion de votre site. Nous restons disponibles après le lancement.</p></div>
     </div>
   </div>
 </section>
@@ -899,15 +904,15 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
   <div class="wrap">
     <div class="why-in">
       <div>
-        <span class="label r" id="why-h">Pourquoi Nexa Web</span>
-        <h2 class="h-lg r d1" style="margin-top:14px">La différence qui<br>fait la différence.</h2>
-        <p class="body r d2" style="margin-top:22px;max-width:380px">Nous ne faisons pas dans la quantité. Chaque projet reçoit une attention totale, de la stratégie à la mise en ligne.</p>
+        <span class="label r" id="why-h" data-i18n="index.why.label">Pourquoi Nexa Web</span>
+        <h2 class="h-lg r d1" style="margin-top:14px" data-i18n-html="index.why.title">La différence qui<br>fait la différence.</h2>
+        <p class="body r d2" style="margin-top:22px;max-width:380px" data-i18n="index.why.sub">Nous ne faisons pas dans la quantité. Chaque projet reçoit une attention totale, de la stratégie à la mise en ligne.</p>
       </div>
       <div class="why-feats">
-        <div class="why-feat r"><div class="why-ico" aria-hidden="true">✦</div><div><div class="why-ttl">Design 100% sur mesure</div><p class="why-dsc">Zéro template, zéro compromis. Chaque site est conçu spécifiquement pour votre marque et vos objectifs.</p></div></div>
-        <div class="why-feat r d1"><div class="why-ico" aria-hidden="true">◎</div><div><div class="why-ttl">Responsive &amp; mobile-first</div><p class="why-dsc">Vos visiteurs utilisent leurs smartphones. Votre site s'adapte parfaitement à chaque écran, sans exception.</p></div></div>
-        <div class="why-feat r d2"><div class="why-ico" aria-hidden="true">⚡</div><div><div class="why-ttl">Performance &amp; vitesse</div><p class="why-dsc">Score Core Web Vitals optimal. Un site rapide améliore l'expérience utilisateur et votre classement Google.</p></div></div>
-        <div class="why-feat r d3"><div class="why-ico" aria-hidden="true">↗</div><div><div class="why-ttl">SEO &amp; conversion</div><p class="why-dsc">Optimisé pour les moteurs de recherche dès la conception. Votre site attire et convertit.</p></div></div>
+        <div class="why-feat r"><div class="why-ico" aria-hidden="true">✦</div><div><div class="why-ttl" data-i18n="index.why.01.title">Design 100% sur mesure</div><p class="why-dsc" data-i18n="index.why.01.desc">Zéro template, zéro compromis. Chaque site est conçu spécifiquement pour votre marque et vos objectifs.</p></div></div>
+        <div class="why-feat r d1"><div class="why-ico" aria-hidden="true">◎</div><div><div class="why-ttl" data-i18n="index.why.02.title">Responsive &amp; mobile-first</div><p class="why-dsc" data-i18n="index.why.02.desc">Vos visiteurs utilisent leurs smartphones. Votre site s'adapte parfaitement à chaque écran, sans exception.</p></div></div>
+        <div class="why-feat r d2"><div class="why-ico" aria-hidden="true">⚡</div><div><div class="why-ttl" data-i18n="index.why.03.title">Performance &amp; vitesse</div><p class="why-dsc" data-i18n="index.why.03.desc">Score Core Web Vitals optimal. Un site rapide améliore l'expérience utilisateur et votre classement Google.</p></div></div>
+        <div class="why-feat r d3"><div class="why-ico" aria-hidden="true">↗</div><div><div class="why-ttl" data-i18n="index.why.04.title">SEO &amp; conversion</div><p class="why-dsc" data-i18n="index.why.04.desc">Optimisé pour les moteurs de recherche dès la conception. Votre site attire et convertit.</p></div></div>
       </div>
     </div>
   </div>
@@ -917,9 +922,9 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
 <section class="s-stats" style="padding:var(--sec) 0" aria-label="Chiffres clés">
   <div class="wrap">
     <div class="stats-grid">
-      <div class="stat r"><div class="stat-val">100%</div><div class="stat-lbl">Sur mesure</div></div>
-      <div class="stat r d1"><div class="stat-val">24/7</div><div class="stat-lbl">Présence digitale</div></div>
-      <div class="stat r d2"><div class="stat-val">∞</div><div class="stat-lbl">Possibilités</div></div>
+      <div class="stat r"><div class="stat-val">100%</div><div class="stat-lbl" data-i18n="index.stats.01">Sur mesure</div></div>
+      <div class="stat r d1"><div class="stat-val">24/7</div><div class="stat-lbl" data-i18n="index.stats.02">Présence digitale</div></div>
+      <div class="stat r d2"><div class="stat-val">∞</div><div class="stat-lbl" data-i18n="index.stats.03">Possibilités</div></div>
     </div>
   </div>
 </section>
@@ -929,32 +934,32 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
   <div class="wrap">
     <div class="faq-in">
       <div>
-        <span class="label r" id="faq-h">Questions fréquentes</span>
-        <h2 class="h-md r d1" style="margin-top:14px">On répond à vos questions.</h2>
-        <p class="body faq-side r d2" style="margin-top:18px;font-size:13px">Une question absente de cette liste&nbsp;? Contactez-nous directement.</p>
-        <a href="#contact" class="btn-g r d3" style="margin-top:28px;display:inline-flex">Nous contacter</a>
+        <span class="label r" id="faq-h" data-i18n="index.faq.label">Questions fréquentes</span>
+        <h2 class="h-md r d1" style="margin-top:14px" data-i18n="index.faq.title">On répond à vos questions.</h2>
+        <p class="body faq-side r d2" style="margin-top:18px;font-size:13px" data-i18n="index.faq.sub">Une question absente de cette liste&nbsp;? Contactez-nous directement.</p>
+        <a href="#contact" class="btn-g r d3" style="margin-top:28px;display:inline-flex" data-i18n="index.faq.cta">Nous contacter</a>
       </div>
       <div>
         <ul class="faq-list" aria-label="Foire aux questions">
           <li class="faq-item r">
-            <button class="faq-q" aria-expanded="false">Quel est le coût d'un site web&nbsp;?<span class="faq-ind" aria-hidden="true">+</span></button>
-            <div class="faq-a" role="region"><div class="faq-a-in">Chaque projet étant unique, nos tarifs sont établis après analyse de vos besoins. Un site vitrine démarre à partir de 900&nbsp;€. Nous proposons également des facilités de paiement pour vous accompagner sereinement.</div></div>
+            <button class="faq-q" aria-expanded="false"><span data-i18n="index.faq.q1">Quel est le coût d'un site web&nbsp;?</span><span class="faq-ind" aria-hidden="true">+</span></button>
+            <div class="faq-a" role="region"><div class="faq-a-in" data-i18n="index.faq.a1">Chaque projet étant unique, nos tarifs sont établis après analyse de vos besoins. Un site vitrine démarre à partir de 900&nbsp;€. Nous proposons également des facilités de paiement pour vous accompagner sereinement.</div></div>
           </li>
           <li class="faq-item r d1">
-            <button class="faq-q" aria-expanded="false">Quel est le délai de livraison&nbsp;?<span class="faq-ind" aria-hidden="true">+</span></button>
-            <div class="faq-a" role="region"><div class="faq-a-in">Un site vitrine est livré entre 1 et 3 semaines selon la complexité. Un projet e-commerce peut nécessiter 4 à 8 semaines. Nous établissons un calendrier précis dès le départ.</div></div>
+            <button class="faq-q" aria-expanded="false"><span data-i18n="index.faq.q2">Quel est le délai de livraison&nbsp;?</span><span class="faq-ind" aria-hidden="true">+</span></button>
+            <div class="faq-a" role="region"><div class="faq-a-in" data-i18n="index.faq.a2">Un site vitrine est livré entre 1 et 3 semaines selon la complexité. Un projet e-commerce peut nécessiter 4 à 8 semaines. Nous établissons un calendrier précis dès le départ.</div></div>
           </li>
           <li class="faq-item r d2">
-            <button class="faq-q" aria-expanded="false">Mon site sera-t-il bien référencé sur Google&nbsp;?<span class="faq-ind" aria-hidden="true">+</span></button>
-            <div class="faq-a" role="region"><div class="faq-a-in">Oui. Le SEO technique est intégré dès la conception&nbsp;: structure sémantique, vitesse de chargement, balises optimisées, données structurées. Nous proposons aussi un accompagnement éditorial pour aller plus loin.</div></div>
+            <button class="faq-q" aria-expanded="false"><span data-i18n="index.faq.q3">Mon site sera-t-il bien référencé sur Google&nbsp;?</span><span class="faq-ind" aria-hidden="true">+</span></button>
+            <div class="faq-a" role="region"><div class="faq-a-in" data-i18n="index.faq.a3">Oui. Le SEO technique est intégré dès la conception&nbsp;: structure sémantique, vitesse de chargement, balises optimisées, données structurées. Nous proposons aussi un accompagnement éditorial pour aller plus loin.</div></div>
           </li>
           <li class="faq-item r d3">
-            <button class="faq-q" aria-expanded="false">Proposez-vous de la maintenance après livraison&nbsp;?<span class="faq-ind" aria-hidden="true">+</span></button>
-            <div class="faq-a" role="region"><div class="faq-a-in">Absolument. Nos contrats de maintenance incluent les mises à jour de sécurité, les sauvegardes régulières et les petites modifications. Votre site reste performant dans la durée.</div></div>
+            <button class="faq-q" aria-expanded="false"><span data-i18n="index.faq.q4">Proposez-vous de la maintenance après livraison&nbsp;?</span><span class="faq-ind" aria-hidden="true">+</span></button>
+            <div class="faq-a" role="region"><div class="faq-a-in" data-i18n="index.faq.a4">Absolument. Nos contrats de maintenance incluent les mises à jour de sécurité, les sauvegardes régulières et les petites modifications. Votre site reste performant dans la durée.</div></div>
           </li>
           <li class="faq-item r d4">
-            <button class="faq-q" aria-expanded="false">Je n'ai aucune connaissance technique, est-ce un problème&nbsp;?<span class="faq-ind" aria-hidden="true">+</span></button>
-            <div class="faq-a" role="region"><div class="faq-a-in">Pas du tout. Nous gérons l'intégralité du projet et vous formons à la gestion de votre site à la livraison. L'interface est pensée pour être intuitive, même sans expérience technique.</div></div>
+            <button class="faq-q" aria-expanded="false"><span data-i18n="index.faq.q5">Je n'ai aucune connaissance technique, est-ce un problème&nbsp;?</span><span class="faq-ind" aria-hidden="true">+</span></button>
+            <div class="faq-a" role="region"><div class="faq-a-in" data-i18n="index.faq.a5">Pas du tout. Nous gérons l'intégralité du projet et vous formons à la gestion de votre site à la livraison. L'interface est pensée pour être intuitive, même sans expérience technique.</div></div>
           </li>
         </ul>
       </div>
@@ -966,10 +971,10 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
 <section class="s-cta" id="contact" aria-labelledby="cta-h">
   <div class="wrap">
     <div class="cta-in">
-      <div class="cta-super r">Passons à l'action</div>
-      <h2 class="cta-hl r d1" id="cta-h">Votre prochain<br>site commence <em>ici.</em></h2>
+      <div class="cta-super r" data-i18n="index.cta.super">Passons à l'action</div>
+      <h2 class="cta-hl r d1" id="cta-h" data-i18n-html="index.cta.title">Votre prochain<br>site commence <em>ici.</em></h2>
       <div class="r d2">
-        <a href="devis.html" class="cta-btn">Démarrer un projet <span class="cta-arr" aria-hidden="true">→</span></a>
+        <a href="devis.html" class="cta-btn"><span data-i18n="index.cta.btn">Démarrer un projet</span> <span class="cta-arr" aria-hidden="true">→</span></a>
       </div>
     </div>
   </div>
@@ -981,7 +986,7 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
     <div class="foot-in">
       <div>
         <div class="foot-logo">NEXA<span>WEB</span></div>
-        <p class="foot-tag">Agence web premium · Carvin, Hauts-de-France</p>
+        <p class="foot-tag" data-i18n="index.foot.tagline">Agence web premium · Carvin, Hauts-de-France</p>
         <div class="foot-socials" aria-label="Réseaux sociaux">
           <a href="https://www.tiktok.com/@nexaweb1" class="foot-soc tiktok" aria-label="TikTok" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/></svg>
@@ -995,7 +1000,7 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
         </div>
       </div>
       <div>
-        <div class="foot-col-title">Navigation</div>
+        <div class="foot-col-title" data-i18n="index.foot.nav">Navigation</div>
         <nav aria-label="Liens de navigation">
           <ul class="foot-links">
             <li><a href="#accueil"  class="foot-lnk">Accueil</a></li>
@@ -1006,16 +1011,16 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
         </nav>
       </div>
       <div>
-        <div class="foot-col-title">L'équipe</div>
-        <p class="foot-tag" style="margin-bottom:14px">Trois passionnés du digital derrière chaque projet Nexa Web.</p>
-        <a href="equipe.html" class="foot-team-lnk">Découvrir l'équipe →</a>
+        <div class="foot-col-title" data-i18n="index.foot.team.title">L'équipe</div>
+        <p class="foot-tag" style="margin-bottom:14px" data-i18n="index.foot.team.desc">Trois passionnés du digital derrière chaque projet Nexa Web.</p>
+        <a href="equipe.html" class="foot-team-lnk" data-i18n="index.foot.team.link">Découvrir l'équipe →</a>
       </div>
     </div>
     <div class="foot-bot">
-      <span class="foot-copy">© 2026 Nexa Web. Tous droits réservés.</span>
+      <span class="foot-copy" data-i18n="index.foot.copy">© 2026 Nexa Web. Tous droits réservés.</span>
       <nav class="foot-legal" aria-label="Liens légaux">
-        <a href="#">Mentions légales</a>
-        <a href="#">Confidentialité</a>
+        <a href="#" data-i18n="index.foot.legal">Mentions légales</a>
+        <a href="#" data-i18n="index.foot.privacy">Confidentialité</a>
       </nav>
     </div>
   </div>

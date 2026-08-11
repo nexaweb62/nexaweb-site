@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-page="login">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Connexion — Nexa Web</title>
 <script>(function(){var t=localStorage.getItem('nw-theme');if(t)document.documentElement.setAttribute('data-theme',t);}());</script>
+<script src="i18n.js"></script>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
@@ -369,10 +370,14 @@ spline-viewer{
     <div class="lf-top">
       <a href="index.html" class="lf-logo">NEXA<span>WEB</span></a>
       <div style="display:flex;align-items:center;gap:12px">
-        <button id="theme-btn" aria-label="Basculer le thème" style="width:28px;height:28px;border:1px solid var(--border-hi);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text-muted);background:none;cursor:pointer;transition:border-color .2s,color .2s">○</button>
+        <div class="lang-sel" role="group" aria-label="Language">
+          <button class="lang-opt" data-lang="fr">FR</button>
+          <button class="lang-opt" data-lang="en">EN</button>
+        </div>
+        <button id="theme-btn" aria-label="Basculer le thème" data-i18n-aria="nav.theme.aria" style="width:28px;height:28px;border:1px solid var(--border-hi);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text-muted);background:none;cursor:pointer;transition:border-color .2s,color .2s">○</button>
         <a href="index.html" class="lf-back" aria-label="Retour au site">
         <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
-        Retour
+        <span data-i18n="login.back">Retour</span>
       </a>
       </div>
     </div>
@@ -380,7 +385,7 @@ spline-viewer{
     <div class="lf-body">
       <div class="lf-form-wrap">
 
-        <h1 class="lf-headline">
+        <h1 class="lf-headline" data-i18n-html="login.headline">
           Bienvenue,<br>
           connectez-vous<br>
           à votre <em>espace.</em>
@@ -394,10 +399,10 @@ spline-viewer{
             <path style="fill:#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
             <path style="fill:#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
           </svg>
-          Continuer avec Google
+          <span data-i18n="login.google">Continuer avec Google</span>
         </button>
 
-        <div class="lf-divider"><span>ou</span></div>
+        <div class="lf-divider"><span data-i18n="login.divider">ou</span></div>
 
         <form id="login-form" novalidate>
 
@@ -420,6 +425,7 @@ spline-viewer{
               id="email"
               name="email"
               placeholder="Adresse e-mail"
+              data-i18n-ph="login.email.ph"
               autocomplete="email"
               required>
           </div>
@@ -432,6 +438,7 @@ spline-viewer{
               id="password"
               name="password"
               placeholder="Mot de passe"
+              data-i18n-ph="login.password.ph"
               autocomplete="current-password"
               required>
             <button type="button" class="lf-eye" id="pwd-toggle" aria-label="Afficher le mot de passe">
@@ -443,16 +450,16 @@ spline-viewer{
           <div class="h-captcha" data-sitekey="5a7ee49c-3bac-4284-a130-5d76459a0fd2" style="margin-bottom:16px"></div>
 
           <button type="submit" class="lf-btn" id="submit-btn">
-            <span class="lf-btn-label">Se connecter</span>
+            <span class="lf-btn-label" data-i18n="login.submit">Se connecter</span>
             <span class="lf-btn-spinner" aria-hidden="true"></span>
           </button>
 
           <!-- Mot de passe oublié -->
           <div class="lf-foot" style="margin-top:18px">
             <p class="lf-magic">
-              <a href="#" id="forgot-link">Mot de passe oublié ?</a>
+              <a href="#" id="forgot-link" data-i18n="login.forgot">Mot de passe oublié ?</a>
             </p>
-            <p class="lf-register">Pas encore de compte ? <a href="inscription.html">Créer un compte</a></p>
+            <p class="lf-register"><span data-i18n="login.register.text">Pas encore de compte ?</span> <a href="inscription.html" data-i18n="login.register.link">Créer un compte</a></p>
           </div>
 
           <!-- Reset form (caché par défaut) -->
@@ -586,14 +593,14 @@ document.getElementById('login-form').addEventListener('submit',async function(e
   var password=document.getElementById('password').value;
 
   if(!email || !password){
-    showError('Veuillez remplir tous les champs.');
+    showError(window.i18n.t('login.err.empty','Veuillez remplir tous les champs.'));
     return;
   }
 
   /* Captcha */
   var captchaToken = window.hcaptcha ? window.hcaptcha.getResponse() : '';
   if(!captchaToken){
-    showError('Merci de valider le captcha avant de continuer.');
+    showError(window.i18n.t('login.err.captcha','Merci de valider le captcha avant de continuer.'));
     return;
   }
 

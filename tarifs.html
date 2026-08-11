@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-page="tarifs">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tarifs — Nexa Web</title>
 <script>(function(){var t=localStorage.getItem('nw-theme');if(t)document.documentElement.setAttribute('data-theme',t);}());</script>
+<script src="i18n.js"></script>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <style>
 /* ── TOKENS ── */
@@ -341,14 +342,18 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
     <nav class="nav" aria-label="Navigation principale">
       <a href="index.html" class="nav-logo">NEXA<span>WEB</span></a>
       <div class="nav-r">
-        <button class="menu-btn" id="menu-btn" aria-label="Ouvrir la navigation" aria-expanded="false">
+        <div class="lang-sel" role="group" aria-label="Language">
+          <button class="lang-opt" data-lang="fr">FR</button>
+          <button class="lang-opt" data-lang="en">EN</button>
+        </div>
+        <button class="menu-btn" id="menu-btn" aria-label="Ouvrir la navigation" aria-expanded="false" data-i18n-aria="nav.menu.open.aria">
           <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
         </button>
-        <button class="theme-btn" id="theme-btn" aria-label="Basculer le thème">○</button>
-        <a href="login.html" class="login-btn" aria-label="Connexion">
+        <button class="theme-btn" id="theme-btn" aria-label="Basculer le thème" data-i18n-aria="nav.theme.aria">○</button>
+        <a href="login.html" class="login-btn" aria-label="Connexion" data-i18n-aria="nav.login.aria">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
         </a>
-        <a href="index.html#contact" class="btn">Démarrer un projet</a>
+        <a href="index.html#contact" class="btn" data-i18n="tarifs.cta">Démarrer un projet</a>
       </div>
     </nav>
   </div>
@@ -360,15 +365,15 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
     <button class="cnav-close" id="cnav-close" aria-label="Fermer la navigation">
       <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
-    <div class="cnav-item"><a href="index.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span class="cnav-name">Accueil</span></a></div>
-    <div class="cnav-item"><a href="index.html#services" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg><span class="cnav-name">Services</span></a></div>
-    <div class="cnav-item"><a href="index.html#projets" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><span class="cnav-name">Projets</span></a></div>
-    <div class="cnav-item"><a href="index.html#apropos" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="cnav-name">À propos</span></a></div>
-    <div class="cnav-item"><a href="tarifs.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg><span class="cnav-name">Tarifs</span></a></div>
-    <div class="cnav-item"><a href="index.html#faq" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span class="cnav-name">FAQ</span></a></div>
-    <div class="cnav-item"><a href="contact.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span class="cnav-name">Contact</span></a></div>
-    <div class="cnav-item"><a href="rendez-vous.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span class="cnav-name">RDV</span></a></div>
-    <div class="cnav-item"><a href="equipe.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="cnav-name">Équipe</span></a></div>
+    <div class="cnav-item"><a href="index.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span class="cnav-name" data-i18n="nav.home">Accueil</span></a></div>
+    <div class="cnav-item"><a href="index.html#services" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg><span class="cnav-name" data-i18n="nav.services">Services</span></a></div>
+    <div class="cnav-item"><a href="index.html#projets" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><span class="cnav-name" data-i18n="nav.projects">Projets</span></a></div>
+    <div class="cnav-item"><a href="index.html#apropos" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="cnav-name" data-i18n="nav.about">À propos</span></a></div>
+    <div class="cnav-item"><a href="tarifs.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg><span class="cnav-name" data-i18n="nav.pricing">Tarifs</span></a></div>
+    <div class="cnav-item"><a href="index.html#faq" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span class="cnav-name" data-i18n="nav.faq">FAQ</span></a></div>
+    <div class="cnav-item"><a href="contact.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span class="cnav-name" data-i18n="nav.contact">Contact</span></a></div>
+    <div class="cnav-item"><a href="rendez-vous.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span class="cnav-name" data-i18n="nav.rdv">RDV</span></a></div>
+    <div class="cnav-item"><a href="equipe.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="cnav-name" data-i18n="nav.team">Équipe</span></a></div>
   </div>
 </div>
 
@@ -376,13 +381,13 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
 
   <!-- Hero -->
   <div class="tarifs-hero">
-    <span class="tarifs-label">Tarification claire &amp; transparente</span>
-    <h1 class="tarifs-title">Des prix honnêtes,<br><em>zéro mauvaise surprise.</em></h1>
-    <p class="tarifs-sub">Paiement unique, livraison en 7 jours. Pas d'abonnement caché, pas de frais supplémentaires.</p>
+    <span class="tarifs-label" data-i18n="tarifs.badge">Tarification claire &amp; transparente</span>
+    <h1 class="tarifs-title" data-i18n-html="tarifs.title">Des prix honnêtes,<br><em>zéro mauvaise surprise.</em></h1>
+    <p class="tarifs-sub" data-i18n="tarifs.sub">Paiement unique, livraison en 7 jours. Pas d'abonnement caché, pas de frais supplémentaires.</p>
 
     <div class="guarantee-band" role="note" aria-label="Garantie satisfait ou remboursé 30 jours">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-      <span>Garantie satisfait ou remboursé — 30 jours</span>
+      <span data-i18n="tarifs.guarantee.band">Garantie satisfait ou remboursé — 30 jours</span>
     </div>
   </div>
 
@@ -392,70 +397,70 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
     <!-- Vitrine -->
     <div class="prix-card">
       <div class="card-top">
-        <div class="card-name">Vitrine</div>
+        <div class="card-name" data-i18n="tarifs.vitrine.name">Vitrine</div>
         <div class="card-price">
           <span class="price-currency">€</span>
           <span class="price-amount">790</span>
         </div>
-        <div class="price-note">Paiement unique · TVA non applicable</div>
-        <p class="card-desc">Parfait pour lancer votre présence en ligne rapidement avec un site élégant et professionnel.</p>
+        <div class="price-note" data-i18n="tarifs.price.note">Paiement unique · TVA non applicable</div>
+        <p class="card-desc" data-i18n="tarifs.vitrine.desc">Parfait pour lancer votre présence en ligne rapidement avec un site élégant et professionnel.</p>
       </div>
       <ul class="card-features">
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Site vitrine 3 à 5 pages</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Design 100 % sur-mesure &amp; responsive</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>SEO de base (balises, sitemap, robots)</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Formulaire de contact</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Livraison en 7 jours ouvrés</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>1 mois de support inclus</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.vitrine.f1">Site vitrine 3 à 5 pages</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.vitrine.f2">Design 100 % sur-mesure &amp; responsive</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.vitrine.f3">SEO de base (balises, sitemap, robots)</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.vitrine.f4">Formulaire de contact</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.vitrine.f5">Livraison en 7 jours ouvrés</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.vitrine.f6">1 mois de support inclus</span></li>
       </ul>
-      <button class="card-cta ghost" onclick="window.location='devis.html?plan=vitrine'">Choisir Vitrine</button>
+      <button class="card-cta ghost" onclick="window.location='devis.html?plan=vitrine'" data-i18n="tarifs.vitrine.cta">Choisir Vitrine</button>
     </div>
 
     <!-- Business (featured) -->
     <div class="prix-card featured">
-      <div class="card-popular">★ Le plus choisi</div>
+      <div class="card-popular" data-i18n="tarifs.popular">★ Le plus choisi</div>
       <div class="card-top">
-        <div class="card-name">Business</div>
+        <div class="card-name" data-i18n="tarifs.business.name">Business</div>
         <div class="card-price">
           <span class="price-currency">€</span>
           <span class="price-amount">1 490</span>
         </div>
-        <div class="price-note">Paiement unique · TVA non applicable</div>
-        <p class="card-desc">Pour les entreprises qui veulent un site complet, gérable en autonomie, avec un référencement solide.</p>
+        <div class="price-note" data-i18n="tarifs.price.note">Paiement unique · TVA non applicable</div>
+        <p class="card-desc" data-i18n="tarifs.business.desc">Pour les entreprises qui veulent un site complet, gérable en autonomie, avec un référencement solide.</p>
       </div>
       <ul class="card-features">
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Site jusqu'à 10 pages</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>CMS intégré (modifiable sans code)</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>SEO avancé + Google Analytics 4</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Blog / actualités intégré</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Livraison en 7 jours ouvrés</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>3 mois de support prioritaire inclus</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Formation à la prise en main</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.business.f1">Site jusqu'à 10 pages</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.business.f2">CMS intégré (modifiable sans code)</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.business.f3">SEO avancé + Google Analytics 4</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.business.f4">Blog / actualités intégré</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.business.f5">Livraison en 7 jours ouvrés</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.business.f6">3 mois de support prioritaire inclus</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.business.f7">Formation à la prise en main</span></li>
       </ul>
-      <button class="card-cta primary" onclick="window.location='devis.html?plan=business'">Choisir Business</button>
+      <button class="card-cta primary" onclick="window.location='devis.html?plan=business'" data-i18n="tarifs.business.cta">Choisir Business</button>
     </div>
 
     <!-- Premium -->
     <div class="prix-card">
       <div class="card-top">
-        <div class="card-name">Premium</div>
+        <div class="card-name" data-i18n="tarifs.premium.name">Premium</div>
         <div class="card-price">
           <span class="price-currency">€</span>
           <span class="price-amount">2 490</span>
         </div>
-        <div class="price-note">Paiement unique · TVA non applicable</div>
-        <p class="card-desc">Pour les boutiques en ligne et projets ambitieux qui ont besoin de fonctionnalités sur-mesure.</p>
+        <div class="price-note" data-i18n="tarifs.price.note">Paiement unique · TVA non applicable</div>
+        <p class="card-desc" data-i18n="tarifs.premium.desc">Pour les boutiques en ligne et projets ambitieux qui ont besoin de fonctionnalités sur-mesure.</p>
       </div>
       <ul class="card-features">
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Pages illimitées</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Boutique e-commerce complète</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Intégration API &amp; outils tiers</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Tableau de bord analytics avancé</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Livraison en 7 jours ouvrés</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>6 mois de support prioritaire 24/7</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Audit SEO &amp; rapport mensuel</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.premium.f1">Pages illimitées</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.premium.f2">Boutique e-commerce complète</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.premium.f3">Intégration API &amp; outils tiers</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.premium.f4">Tableau de bord analytics avancé</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.premium.f5">Livraison en 7 jours ouvrés</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.premium.f6">6 mois de support prioritaire 24/7</span></li>
+        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.premium.f7">Audit SEO &amp; rapport mensuel</span></li>
       </ul>
-      <button class="card-cta ghost" onclick="window.location='devis.html?plan=premium'">Choisir Premium</button>
+      <button class="card-cta ghost" onclick="window.location='devis.html?plan=premium'" data-i18n="tarifs.premium.cta">Choisir Premium</button>
     </div>
 
   </div>
@@ -466,8 +471,8 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
       <div class="guarantee-icon">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
       </div>
-      <div class="guarantee-title">Garantie satisfait ou remboursé — 30 jours</div>
-      <p class="guarantee-text">
+      <div class="guarantee-title" data-i18n="tarifs.guarantee.title">Garantie satisfait ou remboursé — 30 jours</div>
+      <p class="guarantee-text" data-i18n-html="tarifs.guarantee.text">
         Vous avez <strong>30 jours après la livraison</strong> pour tester votre site. Si le résultat ne vous convient pas, nous vous remboursons intégralement, sans question. Votre satisfaction est notre seule priorité.
       </p>
     </div>
@@ -475,7 +480,7 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
 
 </main>
 
-<span class="neon-hint" aria-hidden="true">Cliquez pour changer les couleurs du fond</span>
+<span class="neon-hint" aria-hidden="true" data-i18n="tarifs.hint">Cliquez pour changer les couleurs du fond</span>
 
 <script type="module">
 /* ── NEON FLOW ── */

@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-page="devis">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Demande de devis — Nexa Web</title>
 <script>(function(){var t=localStorage.getItem('nw-theme');if(t)document.documentElement.setAttribute('data-theme',t);}());</script>
+<script src="i18n.js"></script>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -397,12 +398,16 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
     <nav class="nav" aria-label="Navigation principale">
       <a href="index.html" class="nav-logo">NEXA<span>WEB</span></a>
       <div class="nav-r">
-        <button class="menu-btn" id="menu-btn" aria-label="Ouvrir la navigation" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
-        <button class="theme-btn" id="theme-btn" aria-label="Basculer le thème">○</button>
-        <a href="login.html" class="login-btn" aria-label="Connexion">
+        <div class="lang-sel" role="group" aria-label="Language">
+          <button class="lang-opt" data-lang="fr">FR</button>
+          <button class="lang-opt" data-lang="en">EN</button>
+        </div>
+        <button class="menu-btn" id="menu-btn" aria-label="Ouvrir la navigation" aria-expanded="false" data-i18n-aria="nav.menu.open.aria"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
+        <button class="theme-btn" id="theme-btn" aria-label="Basculer le thème" data-i18n-aria="nav.theme.aria">○</button>
+        <a href="login.html" class="login-btn" aria-label="Connexion" data-i18n-aria="nav.login.aria">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
         </a>
-        <a href="devis.html" class="btn-nav">Démarrer un projet</a>
+        <a href="devis.html" class="btn-nav" data-i18n="devis.cta">Démarrer un projet</a>
       </div>
     </nav>
   </div>
@@ -411,15 +416,15 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
 <div class="cnav" id="cnav" role="dialog" aria-modal="true" aria-label="Navigation">
   <div class="cnav-ring" id="cnav-ring">
     <button class="cnav-close" id="cnav-close" aria-label="Fermer la navigation"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-    <div class="cnav-item"><a href="index.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span class="cnav-name">Accueil</span></a></div>
-    <div class="cnav-item"><a href="index.html#services" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg><span class="cnav-name">Services</span></a></div>
-    <div class="cnav-item"><a href="index.html#projets" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><span class="cnav-name">Projets</span></a></div>
-    <div class="cnav-item"><a href="index.html#apropos" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="cnav-name">À propos</span></a></div>
-    <div class="cnav-item"><a href="tarifs.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg><span class="cnav-name">Tarifs</span></a></div>
-    <div class="cnav-item"><a href="index.html#faq" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span class="cnav-name">FAQ</span></a></div>
-    <div class="cnav-item"><a href="contact.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span class="cnav-name">Contact</span></a></div>
-    <div class="cnav-item"><a href="rendez-vous.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span class="cnav-name">RDV</span></a></div>
-    <div class="cnav-item"><a href="equipe.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="cnav-name">Équipe</span></a></div>
+    <div class="cnav-item"><a href="index.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span class="cnav-name" data-i18n="nav.home">Accueil</span></a></div>
+    <div class="cnav-item"><a href="index.html#services" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg><span class="cnav-name" data-i18n="nav.services">Services</span></a></div>
+    <div class="cnav-item"><a href="index.html#projets" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><span class="cnav-name" data-i18n="nav.projects">Projets</span></a></div>
+    <div class="cnav-item"><a href="index.html#apropos" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="cnav-name" data-i18n="nav.about">À propos</span></a></div>
+    <div class="cnav-item"><a href="tarifs.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg><span class="cnav-name" data-i18n="nav.pricing">Tarifs</span></a></div>
+    <div class="cnav-item"><a href="index.html#faq" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span class="cnav-name" data-i18n="nav.faq">FAQ</span></a></div>
+    <div class="cnav-item"><a href="contact.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span class="cnav-name" data-i18n="nav.contact">Contact</span></a></div>
+    <div class="cnav-item"><a href="rendez-vous.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span class="cnav-name" data-i18n="nav.rdv">RDV</span></a></div>
+    <div class="cnav-item"><a href="equipe.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="cnav-name" data-i18n="nav.team">Équipe</span></a></div>
   </div>
 </div>
 
@@ -432,13 +437,13 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
         <div class="success-icon">
           <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
-        <h2 class="success-title">Devis envoyé !</h2>
-        <p class="success-text">
+        <h2 class="success-title" data-i18n="devis.success.title">Devis envoyé !</h2>
+        <p class="success-text" data-i18n-html="devis.success.text">
           Merci pour votre demande. Nous avons bien reçu vos informations et vous recontacterons sous <strong>24 heures ouvrées</strong> avec une proposition personnalisée.
         </p>
         <button class="success-back" onclick="window.location='index.html'">
           <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" style="stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round"><polyline points="15 18 9 12 15 6"/></svg>
-          Retour à l'accueil
+          <span data-i18n="devis.success.back">Retour à l'accueil</span>
         </button>
       </div>
 
@@ -457,14 +462,14 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
         </div>
 
         <div class="card-head">
-          <div class="card-eyebrow">Demande de devis gratuit</div>
-          <h1 class="card-title">Parlons de<br><em>votre projet.</em></h1>
-          <p class="card-sub">Répondez sous 24 h · Devis gratuit &amp; sans engagement</p>
+          <div class="card-eyebrow" data-i18n="devis.eyebrow">Demande de devis gratuit</div>
+          <h1 class="card-title" data-i18n-html="devis.title">Parlons de<br><em>votre projet.</em></h1>
+          <p class="card-sub" data-i18n="devis.sub">Répondez sous 24 h · Devis gratuit &amp; sans engagement</p>
         </div>
 
         <!-- PLAN SELECTOR -->
         <div class="form-section">
-          <span class="section-label">1 — Choisissez votre formule</span>
+          <span class="section-label" data-i18n="devis.step1">1 — Choisissez votre formule</span>
           <div class="plan-grid" role="radiogroup" aria-label="Formule souhaitée">
 
             <label class="plan-opt" id="opt-vitrine" tabindex="0">
@@ -493,29 +498,29 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
 
         <!-- CONTACT INFO -->
         <div class="form-section">
-          <span class="section-label">2 — Vos coordonnées</span>
+          <span class="section-label" data-i18n="devis.step2">2 — Vos coordonnées</span>
           <div class="field-grid">
             <div class="field">
-              <label for="prenom">Prénom <span class="req">*</span></label>
+              <label for="prenom"><span data-i18n="devis.prenom">Prénom</span> <span class="req">*</span></label>
               <input type="text" id="prenom" name="prenom" placeholder="Jean" autocomplete="given-name" required>
               <span class="field-err" id="err-prenom"></span>
             </div>
             <div class="field">
-              <label for="nom">Nom <span class="req">*</span></label>
+              <label for="nom"><span data-i18n="devis.nom">Nom</span> <span class="req">*</span></label>
               <input type="text" id="nom" name="nom" placeholder="Dupont" autocomplete="family-name" required>
               <span class="field-err" id="err-nom"></span>
             </div>
             <div class="field">
-              <label for="email">E-mail <span class="req">*</span></label>
+              <label for="email"><span data-i18n="devis.email">E-mail</span> <span class="req">*</span></label>
               <input type="email" id="email" name="email" placeholder="jean@entreprise.fr" autocomplete="email" required>
               <span class="field-err" id="err-email"></span>
             </div>
             <div class="field">
-              <label for="tel">Téléphone</label>
+              <label for="tel" data-i18n="devis.tel">Téléphone</label>
               <input type="tel" id="tel" name="tel" placeholder="+33 6 00 00 00 00" autocomplete="tel">
             </div>
             <div class="field field-full">
-              <label for="entreprise">Entreprise / Activité</label>
+              <label for="entreprise" data-i18n="devis.entreprise">Entreprise / Activité</label>
               <input type="text" id="entreprise" name="entreprise" placeholder="Ma Boulangerie, Auto-entrepreneur…" autocomplete="organization">
             </div>
           </div>
@@ -523,50 +528,50 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
 
         <!-- PROJECT DETAILS -->
         <div class="form-section">
-          <span class="section-label">3 — Votre projet</span>
+          <span class="section-label" data-i18n="devis.step3">3 — Votre projet</span>
           <div class="field-grid">
             <div class="field">
-              <label for="type">Type de site <span class="req">*</span></label>
+              <label for="type"><span data-i18n="devis.type.label">Type de site</span> <span class="req">*</span></label>
               <select id="type" name="type" required>
-                <option value="" disabled selected>Sélectionner…</option>
-                <option value="vitrine">Site vitrine</option>
-                <option value="portfolio">Portfolio</option>
-                <option value="ecommerce">Boutique e-commerce</option>
-                <option value="blog">Blog / Magazine</option>
-                <option value="app">Application web</option>
-                <option value="refonte">Refonte de site existant</option>
-                <option value="autre">Autre</option>
+                <option value="" disabled selected data-i18n="devis.type.select">Sélectionner…</option>
+                <option value="vitrine" data-i18n="devis.type.vitrine">Site vitrine</option>
+                <option value="portfolio" data-i18n="devis.type.portfolio">Portfolio</option>
+                <option value="ecommerce" data-i18n="devis.type.ecommerce">Boutique e-commerce</option>
+                <option value="blog" data-i18n="devis.type.blog">Blog / Magazine</option>
+                <option value="app" data-i18n="devis.type.app">Application web</option>
+                <option value="refonte" data-i18n="devis.type.refonte">Refonte de site existant</option>
+                <option value="autre" data-i18n="devis.type.autre">Autre</option>
               </select>
               <span class="field-err" id="err-type"></span>
             </div>
             <div class="field">
-              <label for="delai">Délai souhaité</label>
+              <label for="delai" data-i18n="devis.delai.label">Délai souhaité</label>
               <select id="delai" name="delai">
-                <option value="" disabled selected>Sélectionner…</option>
-                <option value="urgent">Dès que possible</option>
-                <option value="1mois">Dans 1 mois</option>
-                <option value="3mois">Dans 2 à 3 mois</option>
-                <option value="flexible">Flexible</option>
+                <option value="" disabled selected data-i18n="devis.delai.select">Sélectionner…</option>
+                <option value="urgent" data-i18n="devis.delai.urgent">Dès que possible</option>
+                <option value="1mois" data-i18n="devis.delai.1mois">Dans 1 mois</option>
+                <option value="3mois" data-i18n="devis.delai.3mois">Dans 2 à 3 mois</option>
+                <option value="flexible" data-i18n="devis.delai.flexible">Flexible</option>
               </select>
             </div>
             <div class="field field-full">
-              <label>Budget estimé</label>
+              <label data-i18n="devis.budget.label">Budget estimé</label>
               <div class="budget-pills" role="radiogroup" aria-label="Budget estimé">
-                <label class="budget-pill"><input type="radio" name="budget" value="<500">Moins de 500 €</label>
-                <label class="budget-pill"><input type="radio" name="budget" value="500-1000">500 – 1 000 €</label>
-                <label class="budget-pill"><input type="radio" name="budget" value="1000-2000">1 000 – 2 000 €</label>
-                <label class="budget-pill"><input type="radio" name="budget" value="2000+">2 000 € +</label>
-                <label class="budget-pill"><input type="radio" name="budget" value="nsp">Je ne sais pas encore</label>
+                <label class="budget-pill"><input type="radio" name="budget" value="<500"><span data-i18n="devis.budget.500">Moins de 500 €</span></label>
+                <label class="budget-pill"><input type="radio" name="budget" value="500-1000"><span data-i18n="devis.budget.5001000">500 – 1 000 €</span></label>
+                <label class="budget-pill"><input type="radio" name="budget" value="1000-2000"><span data-i18n="devis.budget.10002000">1 000 – 2 000 €</span></label>
+                <label class="budget-pill"><input type="radio" name="budget" value="2000+"><span data-i18n="devis.budget.2000">2 000 € +</span></label>
+                <label class="budget-pill"><input type="radio" name="budget" value="nsp"><span data-i18n="devis.budget.nsp">Je ne sais pas encore</span></label>
               </div>
             </div>
             <div class="field field-full">
-              <label for="description">Décrivez votre projet <span class="req">*</span></label>
-              <textarea id="description" name="description" placeholder="Parlez-nous de votre activité, de vos objectifs, de l'inspiration que vous avez, des fonctionnalités souhaitées…" required></textarea>
+              <label for="description"><span data-i18n="devis.desc.label">Décrivez votre projet</span> <span class="req">*</span></label>
+              <textarea id="description" name="description" placeholder="Parlez-nous de votre activité, de vos objectifs, de l'inspiration que vous avez, des fonctionnalités souhaitées…" data-i18n-ph="devis.desc.ph" required></textarea>
               <span class="field-err" id="err-desc"></span>
             </div>
             <div class="field field-full">
-              <label for="site-actuel">Avez-vous un site existant ?</label>
-              <input type="url" id="site-actuel" name="site-actuel" placeholder="https://monsite-actuel.fr (optionnel)">
+              <label for="site-actuel" data-i18n="devis.site.label">Avez-vous un site existant ?</label>
+              <input type="url" id="site-actuel" name="site-actuel" placeholder="https://monsite-actuel.fr (optionnel)" data-i18n-ph="devis.site.ph">
             </div>
           </div>
         </div>
@@ -575,7 +580,7 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
         <div class="field field-full rgpd-row">
           <label class="rgpd-label">
             <input type="checkbox" id="rgpd-consent" name="rgpd-consent" required>
-            <span>J'accepte que mes données (nom, e-mail, téléphone, description du projet) soient utilisées par Nexa Web dans le seul but de traiter ma demande de devis et de me recontacter. Aucune donnée n'est revendue ou utilisée à des fins commerciales tierces. <span class="req">*</span></span>
+            <span><span data-i18n="devis.rgpd">J'accepte que mes données (nom, e-mail, téléphone, description du projet) soient utilisées par Nexa Web dans le seul but de traiter ma demande de devis et de me recontacter. Aucune donnée n'est revendue ou utilisée à des fins commerciales tierces.</span> <span class="req">*</span></span>
           </label>
           <span class="field-err" id="err-rgpd"></span>
         </div>
@@ -584,10 +589,10 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
         <div class="submit-row">
           <p class="submit-note">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-            Garantie 30 jours · Réponse sous 24 h · Devis 100 % gratuit
+            <span data-i18n="devis.note">Garantie 30 jours · Réponse sous 24 h · Devis 100 % gratuit</span>
           </p>
           <button type="submit" class="submit-btn" id="submit-btn">
-            <span class="submit-btn-label">Envoyer ma demande</span>
+            <span class="submit-btn-label" data-i18n="devis.submit">Envoyer ma demande</span>
             <span class="submit-btn-spinner" aria-hidden="true"></span>
             <svg class="submit-btn-icon" viewBox="0 0 24 24" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           </button>
@@ -827,7 +832,7 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
 
     /* ── Rate limit ── */
     if(!canSubmit()){
-      showBanner('Une demande a déjà été envoyée. Attendez une minute avant de réessayer.');
+      showBanner(window.i18n.t('devis.err.rate', 'Une demande a déjà été envoyée. Attendez une minute avant de réessayer.'));
       return;
     }
 
@@ -849,25 +854,25 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
 
     /* ── Validation ── */
     var ok = true;
-    if(!prenom){ setFieldErr('err-prenom','Le prénom est requis.'); ok=false; }
-    if(!nom)   { setFieldErr('err-nom',   'Le nom est requis.');    ok=false; }
+    if(!prenom){ setFieldErr('err-prenom',window.i18n.t('devis.err.prenom','Le prénom est requis.')); ok=false; }
+    if(!nom)   { setFieldErr('err-nom',   window.i18n.t('devis.err.nom','Le nom est requis.'));    ok=false; }
     if(!emailVal){
-      setFieldErr('err-email','L\'e-mail est requis.'); ok=false;
+      setFieldErr('err-email',window.i18n.t('devis.err.email.required','L\'e-mail est requis.')); ok=false;
     } else if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(emailVal)){
-      setFieldErr('err-email','Adresse e-mail invalide.'); ok=false;
+      setFieldErr('err-email',window.i18n.t('devis.err.email.invalid','Adresse e-mail invalide.')); ok=false;
     }
-    if(!type){ setFieldErr('err-type','Veuillez sélectionner un type de site.'); ok=false; }
+    if(!type){ setFieldErr('err-type',window.i18n.t('devis.err.type','Veuillez sélectionner un type de site.')); ok=false; }
     if(!desc){
-      setFieldErr('err-desc','La description est requise.'); ok=false;
+      setFieldErr('err-desc',window.i18n.t('devis.err.desc.required','La description est requise.')); ok=false;
     } else if(desc.length < 20){
-      setFieldErr('err-desc','Décrivez votre projet en au moins 20 caractères.'); ok=false;
+      setFieldErr('err-desc',window.i18n.t('devis.err.desc.short','Décrivez votre projet en au moins 20 caractères.')); ok=false;
     }
-    if(!rgpd){ setFieldErr('err-rgpd','Vous devez accepter le traitement de vos données pour continuer.'); ok=false; }
+    if(!rgpd){ setFieldErr('err-rgpd',window.i18n.t('devis.err.rgpd','Vous devez accepter le traitement de vos données pour continuer.')); ok=false; }
     if(!ok) return;
 
     /* ── Client Supabase ── */
     if(!window.sb){
-      showBanner('Erreur de connexion. Rechargez la page ou écrivez-nous à contact.nexaweb62@gmail.com');
+      showBanner(window.i18n.t('devis.err.conn','Erreur de connexion. Rechargez la page ou écrivez-nous à contact.nexaweb62@gmail.com'));
       return;
     }
 
@@ -893,7 +898,7 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
 
       if(insertErr){
         console.error('[devis] insert error:', insertErr);
-        showBanner('Erreur lors de l\'enregistrement. Contactez-nous directement à contact.nexaweb62@gmail.com');
+        showBanner(window.i18n.t('devis.err.insert','Erreur lors de l\'enregistrement. Contactez-nous directement à contact.nexaweb62@gmail.com'));
         return;
       }
 
@@ -928,7 +933,7 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
 
     } catch(err){
       console.error('[devis] unexpected error:', err);
-      showBanner('Une erreur inattendue est survenue. Vos données n\'ont pas été enregistrées. Écrivez-nous à contact.nexaweb62@gmail.com');
+      showBanner(window.i18n.t('devis.err.unexpected','Une erreur inattendue est survenue. Vos données n\'ont pas été enregistrées. Écrivez-nous à contact.nexaweb62@gmail.com'));
     } finally {
       setLoading(false);
     }
