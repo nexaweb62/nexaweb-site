@@ -60,11 +60,36 @@ Deno.serve(async (req) => {
     premium:  "Premium — 2 490 €",
   };
 
+  const typeSiteLabels: Record<string, string> = {
+    vitrine:   "Site vitrine",
+    portfolio: "Portfolio",
+    ecommerce: "Boutique e-commerce",
+    blog:      "Blog / Magazine",
+    app:       "Application web",
+    refonte:   "Refonte de site existant",
+    autre:     "Autre",
+  };
+
+  const delaiLabels: Record<string, string> = {
+    urgent:   "Dès que possible",
+    "1mois":  "Dans 1 mois",
+    "3mois":  "Dans 2 à 3 mois",
+    flexible: "Flexible",
+  };
+
+  const budgetLabels: Record<string, string> = {
+    "<500":      "Moins de 500 €",
+    "500-1000":  "500 – 1 000 €",
+    "1000-2000": "1 000 – 2 000 €",
+    "2000+":     "2 000 € et plus",
+    nsp:         "Non défini pour l'instant",
+  };
+
   const subject = `Nouvelle demande de devis — ${prenom} ${nom} — ${
     formuleLabels[data.formule] ?? (data.formule || "Formule non précisée")
   }`;
 
-  const html = buildEmailHtml(data, formuleLabels);
+  const html = buildEmailHtml(data, formuleLabels, typeSiteLabels, delaiLabels, budgetLabels);
 
   const resendRes = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -103,7 +128,10 @@ Deno.serve(async (req) => {
 ───────────────────────────────────────────────────────── */
 function buildEmailHtml(
   d: Record<string, string>,
-  formuleLabels: Record<string, string>
+  formuleLabels: Record<string, string>,
+  typeSiteLabels: Record<string, string>,
+  delaiLabels: Record<string, string>,
+  budgetLabels: Record<string, string>,
 ): string {
   const row = (label: string, value: string | undefined | null) => {
     if (!value) return "";
@@ -181,9 +209,9 @@ function buildEmailHtml(
              style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;margin-bottom:20px">
         <tbody>
           ${row("Formule", esc(formuleLabels[d.formule] ?? d.formule))}
-          ${row("Type de site", esc(d.type_site))}
-          ${row("Délai souhaité", esc(d.delai_souhaite))}
-          ${row("Budget estimé", esc(d.budget_estime))}
+          ${row("Type de site", esc(typeSiteLabels[d.type_site] ?? d.type_site))}
+          ${row("Délai souhaité", esc(delaiLabels[d.delai_souhaite] ?? d.delai_souhaite))}
+          ${row("Budget estimé", esc(budgetLabels[d.budget_estime] ?? d.budget_estime))}
           ${row("Site existant", siteLink)}
         </tbody>
       </table>
