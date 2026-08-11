@@ -514,7 +514,7 @@ document.getElementById('google-btn').addEventListener('click',async function(){
   try {
     var result=await window.sb.auth.signInWithOAuth({
       provider:'google',
-      options:{redirectTo:window.location.origin+'/espace-client.html'}
+      options:{redirectTo:'https://nexaaweb.com/'}
     });
     if(result.error) showError('Erreur Google : '+result.error.message);
   } catch(err) {
