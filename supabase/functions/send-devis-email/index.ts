@@ -98,9 +98,7 @@ Deno.serve(async (req) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      /* ⚠️ Passer à "Nexa Web <devis@nexaaweb.com>" après vérification DNS Resend
-         Tant que le domaine n'est pas vérifié, laisser onboarding@resend.dev */
-      from:     "Nexa Web <onboarding@resend.dev>",
+      from:     "Nexa Web <contact@nexaaweb.com>",
       to:       [TO_EMAIL],
       reply_to: email,
       subject,
