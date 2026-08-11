@@ -7,6 +7,7 @@
 <script>(function(){var t=localStorage.getItem('nw-theme');if(t)document.documentElement.setAttribute('data-theme',t);}());</script>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
 <script type="module" src="https://cdn.jsdelivr.net/npm/@splinetool/viewer/build/spline-viewer.js"></script>
 <style>
 /* ── TOKENS ── */
@@ -432,6 +433,8 @@ spline-viewer{
             </button>
           </div>
 
+          <div class="h-captcha" data-sitekey="20c4c49e-b0ae-4932-9862-07cc33f4823e" style="margin-bottom:16px"></div>
+
           <button type="submit" class="lf-btn" id="submit-btn">
             <span class="lf-btn-label">Se connecter</span>
             <span class="lf-btn-spinner" aria-hidden="true"></span>
@@ -580,16 +583,29 @@ document.getElementById('login-form').addEventListener('submit',async function(e
     return;
   }
 
+  /* Captcha */
+  var captchaToken = window.hcaptcha ? window.hcaptcha.getResponse() : '';
+  if(!captchaToken){
+    showError('Merci de valider le captcha avant de continuer.');
+    return;
+  }
+
   setLoading(true);
   try {
-    var result = await window.sb.auth.signInWithPassword({ email: email, password: password });
+    var result = await window.sb.auth.signInWithPassword({
+      email: email,
+      password: password,
+      options: { captchaToken: captchaToken }
+    });
     if(result.error) {
+      if(window.hcaptcha) window.hcaptcha.reset();
       showError(translateError(result.error));
     } else {
       /* Connexion réussie — redirection espace client */
       window.location.replace('espace-client.html');
     }
   } catch(err) {
+    if(window.hcaptcha) window.hcaptcha.reset();
     showError(translateError(err));
   } finally {
     setLoading(false);
