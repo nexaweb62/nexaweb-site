@@ -394,6 +394,10 @@ body{
   border:1px dashed var(--border);
   border-radius:var(--radius);
 }
+.ec-empty.ec-error-state{
+  border-color:rgba(239,68,68,.30);
+  color:var(--error);
+}
 .ec-spinner{
   display:inline-block;
   width:18px;height:18px;
@@ -802,82 +806,99 @@ async function loadProfile(userId){
 }
 
 /* ─── Main: auth guard + load data ─── */
-(async function(){
+(function(){
   if(!window.sb){
     showError('Impossible de charger le client Supabase. Rechargez la page.');
     return;
   }
 
-  /* Session guard */
-  var {data:{session}, error:sessErr} = await window.sb.auth.getSession();
-  if(sessErr || !session){
-    window.location.replace('login.html');
-    return;
-  }
-
-  /* Listen for sign-out or token expiry */
-  window.sb.auth.onAuthStateChange(function(event){
-    if(event==='SIGNED_OUT') window.location.replace('login.html');
-  });
-
-  /* Logout button */
-  document.getElementById('logout-btn').addEventListener('click',async function(){
+  document.getElementById('logout-btn').addEventListener('click', async function(){
     await window.sb.auth.signOut();
     window.location.replace('login.html');
   });
 
-  /* Populate welcome section */
-  var user=session.user;
-  var email=user.email||'';
-  var name=user.user_metadata&&user.user_metadata.full_name
-    ? user.user_metadata.full_name
-    : email.split('@')[0];
+  /* onAuthStateChange(INITIAL_SESSION) fires after Supabase has restored
+     and refreshed the token from localStorage — avoids the race condition
+     where queries fire before the access token is ready. */
+  var initialized = false;
+  window.sb.auth.onAuthStateChange(async function(event, session){
+    if(event === 'SIGNED_OUT'){
+      window.location.replace('login.html');
+      return;
+    }
+    if(event !== 'INITIAL_SESSION' || initialized) return;
+    initialized = true;
 
-  document.getElementById('ec-avatar').textContent=initials(name);
-  document.getElementById('ec-name').textContent='Bonjour, '+escHtml(name)+' !';
-  document.getElementById('ec-email').textContent=email;
+    if(!session){
+      window.location.replace('login.html');
+      return;
+    }
 
-  /* Load profile (non-blocking) */
-  loadProfile(user.id);
+    /* Populate welcome section */
+    var user = session.user;
+    var email = user.email || '';
+    var name = (user.user_metadata && user.user_metadata.full_name)
+      ? user.user_metadata.full_name
+      : email.split('@')[0];
 
-  /* Load projects */
-  var {data:projets, error:projErr} = await window.sb
-    .from('projets')
-    .select('*')
-    .order('created_at',{ascending:false});
+    document.getElementById('ec-avatar').textContent = initials(name);
+    document.getElementById('ec-name').textContent = 'Bonjour, ' + escHtml(name) + ' !';
+    document.getElementById('ec-email').textContent = email;
 
-  var projContainer=document.getElementById('ec-projects-list');
-  if(projErr){
-    projContainer.innerHTML='<div class="ec-empty">Erreur lors du chargement des projets.</div>';
-  } else if(!projets||projets.length===0){
-    projContainer.innerHTML=
-      '<div class="ec-new-user">'+
-        '<div class="ec-new-user-icon"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>'+
-        '<h3>Bienvenue dans votre espace !</h3>'+
-        '<p>Vous n\'avez pas encore de projet. Parlons de ce que vous avez en tête.</p>'+
-        '<div class="ec-new-user-actions">'+
-          '<a href="devis.html" class="ec-cta-btn">Démarrer un projet →</a>'+
-          '<a href="contact.html" class="ec-ghost-btn">Nous contacter</a>'+
-        '</div>'+
-      '</div>';
-  } else {
-    projContainer.innerHTML=projets.map(buildProjectCard).join('');
-  }
+    /* Load profile (non-blocking) */
+    loadProfile(user.id);
 
-  /* Load documents */
-  var {data:docs, error:docErr} = await window.sb
-    .from('documents')
-    .select('*')
-    .order('created_at',{ascending:false});
+    /* ── Projects ── */
+    var projContainer = document.getElementById('ec-projects-list');
+    var {data:projets, error:projErr} = await window.sb
+      .from('projets')
+      .select('*')
+      .order('created_at', {ascending:false});
 
-  var docContainer=document.getElementById('ec-docs-list');
-  if(docErr){
-    docContainer.innerHTML='<div class="ec-empty">Erreur lors du chargement des documents.</div>';
-  } else if(!docs||docs.length===0){
-    docContainer.innerHTML='<div class="ec-empty">Aucun document disponible pour le moment.</div>';
-  } else {
-    docContainer.innerHTML=docs.map(buildDocItem).join('');
-  }
+    if(projErr){
+      console.error('[espace-client] projets —', projErr.code, '|', projErr.message, '|', projErr.details);
+      projContainer.innerHTML =
+        '<div class="ec-empty ec-error-state">'+
+          '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:8px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'+
+          '<div>Erreur lors du chargement des projets.</div>'+
+          '<small style="opacity:.65;margin-top:4px;display:block">'+escHtml(projErr.message)+'</small>'+
+        '</div>';
+    } else if(!projets || projets.length === 0){
+      projContainer.innerHTML =
+        '<div class="ec-new-user">'+
+          '<div class="ec-new-user-icon"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>'+
+          '<h3>Bienvenue dans votre espace !</h3>'+
+          '<p>Vous n\'avez pas encore de projet. Parlons de ce que vous avez en tête.</p>'+
+          '<div class="ec-new-user-actions">'+
+            '<a href="devis.html" class="ec-cta-btn">Démarrer un projet →</a>'+
+            '<a href="contact.html" class="ec-ghost-btn">Nous contacter</a>'+
+          '</div>'+
+        '</div>';
+    } else {
+      projContainer.innerHTML = projets.map(buildProjectCard).join('');
+    }
+
+    /* ── Documents ── */
+    var docContainer = document.getElementById('ec-docs-list');
+    var {data:docs, error:docErr} = await window.sb
+      .from('documents')
+      .select('*')
+      .order('created_at', {ascending:false});
+
+    if(docErr){
+      console.error('[espace-client] documents —', docErr.code, '|', docErr.message, '|', docErr.details);
+      docContainer.innerHTML =
+        '<div class="ec-empty ec-error-state">'+
+          '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:8px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'+
+          '<div>Erreur lors du chargement des documents.</div>'+
+          '<small style="opacity:.65;margin-top:4px;display:block">'+escHtml(docErr.message)+'</small>'+
+        '</div>';
+    } else if(!docs || docs.length === 0){
+      docContainer.innerHTML = '<div class="ec-empty">Aucun document disponible pour le moment.</div>';
+    } else {
+      docContainer.innerHTML = docs.map(buildDocItem).join('');
+    }
+  });
 })();
 </script>
 
