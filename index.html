@@ -5,7 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Nexa Web conçoit des sites internet sur-mesure pour commerçants et artisans. Livraison en 7 jours. Carvin, Hauts-de-France.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<script type="module" src="https://cdn.jsdelivr.net/npm/@splinetool/viewer/build/spline-viewer.js"></script>
+<script>
+/* Spline — desktop uniquement. Sur mobile : SDK non chargé (économise GPU + réseau) */
+if(!window.matchMedia('(max-width:768px)').matches){
+  var _sp=document.createElement('script');_sp.type='module';
+  _sp.src='https://cdn.jsdelivr.net/npm/@splinetool/viewer/build/spline-viewer.js';
+  document.head.appendChild(_sp);
+}
+</script>
 <title>Nexa Web — Agence Web Premium · Carvin</title>
 <style>
 :root {
@@ -368,6 +375,9 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
   .hero-cols .hero-main{width:100%}
   .hero-robot-col{width:80%;right:-10%;opacity:.35}
   .hero-robot{height:clamp(280px,60vw,420px)}
+}
+@media(max-width:768px){
+  .hero-robot-col{display:none}
 }
 @media(prefers-reduced-motion:reduce){
   .robot-float,.hero-robot{animation:none!important;opacity:1!important;transform:none!important}
@@ -1018,7 +1028,8 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
   var ld=document.getElementById('loader');
   if(!ld)return;
   if(sessionStorage.getItem('nxa-ld')){ld.remove();return;}
-  if(window.matchMedia('(prefers-reduced-motion:reduce)').matches){
+  if(window.matchMedia('(prefers-reduced-motion:reduce)').matches||
+     window.matchMedia('(max-width:768px)').matches){
     sessionStorage.setItem('nxa-ld','1');ld.remove();return;
   }
 
@@ -1112,6 +1123,7 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
 (function(){
   'use strict';
   var PRM=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var IS_MOBILE=window.matchMedia('(max-width:768px)').matches;
 
   /* ── Header scroll ── */
   var hdr=document.getElementById('hdr');
@@ -1144,7 +1156,7 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
   }
 
   /* ── Scroll-linked: hero fade/drift + neon parallax ── */
-  if(!PRM){
+  if(!PRM && !IS_MOBILE){
     var heroMain=document.querySelector('.hero-main');
     var heroFoot=document.querySelector('.hero-foot');
     var heroSec=document.getElementById('accueil');
@@ -1218,7 +1230,7 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
 (function(){
   'use strict';
   var PRM=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
-  if(PRM)return;
+  if(PRM||window.matchMedia('(max-width:768px)').matches)return;
   var robotCol=document.querySelector('.hero-robot-col');
   var heroSec=document.getElementById('accueil');
   var rDirty=false;

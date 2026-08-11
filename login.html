@@ -8,7 +8,14 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
-<script type="module" src="https://cdn.jsdelivr.net/npm/@splinetool/viewer/build/spline-viewer.js"></script>
+<script>
+/* Spline — desktop uniquement. Sur mobile : SDK non chargé (économise GPU + réseau) */
+if(!window.matchMedia('(max-width:768px)').matches){
+  var _sp=document.createElement('script');_sp.type='module';
+  _sp.src='https://cdn.jsdelivr.net/npm/@splinetool/viewer/build/spline-viewer.js';
+  document.head.appendChild(_sp);
+}
+</script>
 <style>
 /* ── TOKENS ── */
 :root{
