@@ -266,5 +266,28 @@
   "insc.err.google":        "Erreur Google :",
   "insc.err.google2":       "Erreur Google. Réessayez dans quelques instants.",
   "insc.pwd.show":          "Afficher le mot de passe",
-  "insc.pwd.hide":          "Masquer le mot de passe"
+  "insc.pwd.hide":          "Masquer le mot de passe",
+
+  "equipe.page.title":      "L'Équipe — Nexa Web",
+  "equipe.hero.label":      "L'agence",
+  "equipe.hero.title":      "L'équipe qui donne<br>vie à votre <em>vision.</em>",
+  "equipe.hero.sub":        "Trois passionnés du digital réunis autour d'une mission : vous offrir une présence en ligne qui vous ressemble et qui convertit.",
+  "equipe.role":            "Co-fondateur",
+  "equipe.member1.title":   "Développement web & Architecture",
+  "equipe.member2.title":   "Design UI/UX & Stratégie digitale",
+  "equipe.member3.title":   "Conseil & Stratégie web",
+  "equipe.contact.btn":     "Prendre contact",
+  "equipe.cta.super":       "On travaille ensemble ?",
+  "equipe.cta.title":       "Votre projet mérite<br>une équipe <em>investie.</em>",
+
+  "rdv.page.title":         "Rendez-vous — Nexa Web",
+  "rdv.hero.label":         "Consultation gratuite",
+  "rdv.hero.title":         "Prenons<br><em>rendez-vous.</em>",
+  "rdv.hero.sub":           "30 minutes pour cadrer votre projet. Visio ou téléphone, à votre convenance. Zéro engagement.",
+  "rdv.badge.free":         "100 % gratuit",
+  "rdv.badge.duration":     "30 minutes",
+  "rdv.badge.format":       "Visio ou téléphone",
+  "rdv.badge.commitment":   "Zéro engagement",
+  "rdv.card.title":         "Choisissez un créneau",
+  "rdv.card.status":        "Disponible"
 }

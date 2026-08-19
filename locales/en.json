@@ -266,5 +266,28 @@
   "insc.err.google":        "Google error:",
   "insc.err.google2":       "Google error. Please try again shortly.",
   "insc.pwd.show":          "Show password",
-  "insc.pwd.hide":          "Hide password"
+  "insc.pwd.hide":          "Hide password",
+
+  "equipe.page.title":      "The Team — Nexa Web",
+  "equipe.hero.label":      "The agency",
+  "equipe.hero.title":      "The team that brings<br>your <em>vision</em> to life.",
+  "equipe.hero.sub":        "Three digital enthusiasts united around one mission: to give you an online presence that reflects you and converts.",
+  "equipe.role":            "Co-founder",
+  "equipe.member1.title":   "Web Development & Architecture",
+  "equipe.member2.title":   "UI/UX Design & Digital Strategy",
+  "equipe.member3.title":   "Web Strategy & Consulting",
+  "equipe.contact.btn":     "Get in touch",
+  "equipe.cta.super":       "Shall we work together?",
+  "equipe.cta.title":       "Your project deserves<br>a <em>dedicated</em> team.",
+
+  "rdv.page.title":         "Book a call — Nexa Web",
+  "rdv.hero.label":         "Free consultation",
+  "rdv.hero.title":         "Let's schedule<br><em>a call.</em>",
+  "rdv.hero.sub":           "30 minutes to scope your project. Video or phone, at your convenience. No commitment.",
+  "rdv.badge.free":         "100% free",
+  "rdv.badge.duration":     "30 minutes",
+  "rdv.badge.format":       "Video or phone",
+  "rdv.badge.commitment":   "No commitment",
+  "rdv.card.title":         "Choose a time slot",
+  "rdv.card.status":        "Available"
 }

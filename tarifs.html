@@ -137,101 +137,128 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
 .tarifs-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:22px;
-  max-width:980px;
+  gap:24px;
+  max-width:1040px;
   margin:0 auto;
   padding:0 var(--pad-x) clamp(80px,12vh,140px);
   align-items:start;
 }
-@media(max-width:900px){.tarifs-grid{grid-template-columns:1fr;max-width:420px}}
+@media(max-width:900px){.tarifs-grid{grid-template-columns:1fr;max-width:380px}}
 
+/* ── 3D TILT CARD ── */
 .prix-card{
   position:relative;
   display:flex;flex-direction:column;
-  background:rgba(16,16,30,.84);
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:30px 26px 26px;
-  backdrop-filter:blur(16px);
-  -webkit-backdrop-filter:blur(16px);
-  transition:border-color .3s,transform .3s,box-shadow .3s;
+  border-radius:22px;
+  overflow:hidden;
+  transform-style:preserve-3d;
+  will-change:transform;
+  box-shadow:0 24px 64px rgba(0,0,0,.42);
+  transition:box-shadow .3s;
 }
-.prix-card:hover{border-color:var(--border-hi);transform:translateY(-4px);box-shadow:0 24px 52px rgba(0,0,0,.45)}
+.prix-card:hover{box-shadow:0 36px 88px rgba(0,0,0,.58)}
 .prix-card.featured{
-  border-color:var(--accent-ring);
-  box-shadow:0 0 0 1px var(--accent-ring),0 24px 60px rgba(139,92,246,.18);
+  box-shadow:0 0 0 2px var(--accent-ring),0 28px 72px rgba(139,92,246,.30);
   transform:scale(1.04);
-  background:rgba(20,14,38,.92);
   z-index:2;
 }
-.prix-card.featured:hover{transform:scale(1.04) translateY(-4px)}
 
 /* Popular ribbon */
 .card-popular{
-  position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  position:absolute;top:-1px;left:50%;transform:translateX(-50%);
   font-size:8px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;
   background:linear-gradient(135deg,var(--accent),#a78bfa);
-  color:#fff;
-  padding:4px 16px;border-radius:100px;
-  white-space:nowrap;
-  box-shadow:0 4px 18px rgba(139,92,246,.42);
+  color:#fff;padding:5px 18px;border-radius:0 0 10px 10px;
+  white-space:nowrap;box-shadow:0 4px 18px rgba(139,92,246,.42);z-index:4;
 }
 
-/* Card top */
-.card-top{
-  padding-bottom:22px;
-  border-bottom:1px solid var(--border);
-  margin-bottom:22px;
+/* ── IMAGE HEADER ── */
+.card-img-wrap{
+  position:relative;height:210px;
+  flex-shrink:0;overflow:hidden;
 }
-.card-name{
-  font-size:9px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;
-  color:var(--text-dim);
-  margin-bottom:18px;
-  display:flex;align-items:center;gap:8px;
+.card-bg-img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform .6s ease;
+  transform:scale(1.08);
 }
-.prix-card.featured .card-name{color:var(--accent)}
+.prix-card:hover .card-bg-img{transform:scale(1.15)}
+.card-img-grad{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(0,0,0,.75) 0%,rgba(0,0,0,.18) 55%,transparent 100%);
+}
+.card-glass-top{
+  position:absolute;top:14px;left:12px;right:12px;
+  display:flex;align-items:flex-start;justify-content:space-between;gap:10px;
+  background:rgba(255,255,255,.09);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:12px;padding:11px 14px;
+}
+.card-glass-name{
+  font-size:15px;font-weight:800;color:#fff;
+  letter-spacing:-.02em;line-height:1.1;
+}
+.card-glass-sub{font-size:10px;color:rgba(255,255,255,.58);margin-top:3px}
+.card-logo-icon{flex-shrink:0;font-size:18px;line-height:1}
+.card-price-pill{
+  position:absolute;bottom:42px;left:12px;
+  background:rgba(0,0,0,.50);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border-radius:100px;padding:5px 14px;
+  font-size:13px;font-weight:700;color:#fff;white-space:nowrap;
+}
+.prix-card.featured .card-price-pill{background:rgba(139,92,246,.65)}
+.card-img-dots{
+  position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:5px;
+}
+.card-img-dots span{
+  display:block;width:5px;height:5px;border-radius:50%;
+  background:rgba(255,255,255,.28);
+  transition:all .25s;
+}
+.card-img-dots span.on{background:#fff;width:14px;border-radius:2px}
 
-.card-price{
-  display:flex;align-items:baseline;gap:5px;
-  margin-bottom:6px;
+/* ── CARD BODY ── */
+.card-body{
+  flex:1;display:flex;flex-direction:column;
+  padding:20px 20px 20px;
+  background:rgba(14,14,28,.90);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
 }
+.prix-card.featured .card-body{background:rgba(18,10,38,.94)}
+.card-price-row{display:flex;align-items:baseline;gap:4px;margin-bottom:4px}
+.price-currency{font-size:1.2rem;font-weight:700;color:var(--text-muted);align-self:flex-start;margin-top:6px}
 .price-amount{
-  font-size:clamp(2.4rem,4vw,3.2rem);
-  font-weight:900;
-  letter-spacing:-.05em;
-  line-height:1;
-  color:var(--text);
+  font-size:clamp(2rem,3.2vw,2.6rem);
+  font-weight:900;letter-spacing:-.05em;line-height:1;color:var(--text);
 }
 .prix-card.featured .price-amount{
   background:linear-gradient(135deg,#fff 30%,rgba(167,139,250,.8));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
-.price-currency{font-size:1.4rem;font-weight:700;color:var(--text-muted);align-self:flex-start;margin-top:8px}
-.price-note{font-size:11px;color:var(--text-dim);font-weight:400}
-.card-desc{font-size:12.5px;color:var(--text-muted);line-height:1.58;margin-top:12px}
-
-/* Features */
+.price-note{font-size:10.5px;color:var(--text-dim);font-weight:400;margin-bottom:12px}
+.card-desc{
+  font-size:12px;color:var(--text-muted);line-height:1.58;
+  margin-bottom:15px;padding-bottom:15px;
+  border-bottom:1px solid var(--border);
+}
 .card-features{
-  flex:1;
-  display:flex;flex-direction:column;gap:11px;
-  margin-bottom:26px;
+  flex:1;display:flex;flex-direction:column;gap:10px;margin-bottom:18px;
 }
 .card-feat{
-  display:flex;align-items:flex-start;gap:10px;
-  font-size:12.5px;color:var(--text-muted);line-height:1.4;
+  display:flex;align-items:flex-start;gap:9px;
+  font-size:12px;color:var(--text-muted);line-height:1.4;
 }
 .feat-check{
-  width:15px;height:15px;flex-shrink:0;margin-top:2px;
+  width:14px;height:14px;flex-shrink:0;margin-top:2px;
   stroke:var(--accent);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;
 }
 .prix-card:not(.featured) .feat-check{stroke:var(--text-dim)}
-
-/* CTA button */
 .card-cta{
   display:flex;align-items:center;justify-content:center;
-  width:100%;padding:14px 20px;
-  border-radius:5px;
+  width:100%;padding:13px 20px;border-radius:6px;
   font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
   transition:opacity .2s,transform .2s,box-shadow .2s;
   cursor:pointer;border:none;
@@ -240,8 +267,7 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
 .card-cta.ghost:hover{color:var(--text);border-color:var(--border-hi);transform:translateY(-1px)}
 .card-cta.primary{
   background:linear-gradient(135deg,var(--accent) 0%,#a78bfa 100%);
-  color:#fff;
-  box-shadow:0 6px 22px rgba(139,92,246,.38);
+  color:#fff;box-shadow:0 6px 22px rgba(139,92,246,.38);
 }
 .card-cta.primary:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 8px 28px rgba(139,92,246,.5)}
 
@@ -296,40 +322,22 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
 
 /* ── LIGHT MODE OVERRIDES ── */
 @media(prefers-color-scheme:light){
-  :root:not([data-theme="dark"]) .prix-card{
-    background:rgba(255,255,255,.93);
-    box-shadow:0 8px 28px rgba(0,0,0,.07);
-  }
-  :root:not([data-theme="dark"]) .prix-card:hover{
-    box-shadow:0 18px 44px rgba(0,0,0,.11);
-  }
-  :root:not([data-theme="dark"]) .prix-card.featured{
-    background:rgba(250,248,255,.97);
-    box-shadow:0 0 0 1px var(--accent-ring),0 16px 48px rgba(139,92,246,.13);
-  }
+  :root:not([data-theme="dark"]) .card-body{background:rgba(255,255,255,.96)}
+  :root:not([data-theme="dark"]) .prix-card.featured .card-body{background:rgba(250,248,255,.98)}
   :root:not([data-theme="dark"]) .prix-card.featured .price-amount{
     background:linear-gradient(135deg,var(--accent) 20%,#7c3aed 100%);
     -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   }
-  :root:not([data-theme="dark"]) .card-top{border-bottom-color:rgba(18,18,22,.09)}
+  :root:not([data-theme="dark"]) .card-desc{border-bottom-color:rgba(18,18,22,.09)}
   :root:not([data-theme="dark"]) .guarantee-box{backdrop-filter:blur(10px)}
 }
-:root[data-theme="light"] .prix-card{
-  background:rgba(255,255,255,.93);
-  box-shadow:0 8px 28px rgba(0,0,0,.07);
-}
-:root[data-theme="light"] .prix-card:hover{
-  box-shadow:0 18px 44px rgba(0,0,0,.11);
-}
-:root[data-theme="light"] .prix-card.featured{
-  background:rgba(250,248,255,.97);
-  box-shadow:0 0 0 1px var(--accent-ring),0 16px 48px rgba(139,92,246,.13);
-}
+:root[data-theme="light"] .card-body{background:rgba(255,255,255,.96)}
+:root[data-theme="light"] .prix-card.featured .card-body{background:rgba(250,248,255,.98)}
 :root[data-theme="light"] .prix-card.featured .price-amount{
   background:linear-gradient(135deg,var(--accent) 20%,#7c3aed 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
-:root[data-theme="light"] .card-top{border-bottom-color:rgba(18,18,22,.09)}
+:root[data-theme="light"] .card-desc{border-bottom-color:rgba(18,18,22,.09)}
 </style>
 </head>
 <body>
@@ -374,6 +382,7 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
     <div class="cnav-item"><a href="contact.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span class="cnav-name" data-i18n="nav.contact">Contact</span></a></div>
     <div class="cnav-item"><a href="rendez-vous.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span class="cnav-name" data-i18n="nav.rdv">RDV</span></a></div>
     <div class="cnav-item"><a href="equipe.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="cnav-name" data-i18n="nav.team">Équipe</span></a></div>
+    <div class="cnav-item"><a href="avis.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span class="cnav-name">Avis</span></a></div>
   </div>
 </div>
 
@@ -396,71 +405,113 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
 
     <!-- Vitrine -->
     <div class="prix-card">
-      <div class="card-top">
-        <div class="card-name" data-i18n="tarifs.vitrine.name">Vitrine</div>
-        <div class="card-price">
+      <div class="card-img-wrap">
+        <img class="card-bg-img" src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=700&h=420&fit=crop&crop=center&q=85" alt="Site vitrine" loading="lazy">
+        <div class="card-img-grad"></div>
+        <div class="card-glass-top">
+          <div>
+            <div class="card-glass-name" data-i18n="tarifs.vitrine.name">Vitrine</div>
+            <div class="card-glass-sub">Présence en ligne</div>
+          </div>
+          <span class="card-logo-icon" aria-hidden="true">🌐</span>
+        </div>
+        <div class="card-price-pill">790 €</div>
+        <div class="card-img-dots" aria-hidden="true">
+          <span class="on"></span><span></span><span></span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-price-row">
           <span class="price-currency">€</span>
           <span class="price-amount">790</span>
         </div>
         <div class="price-note" data-i18n="tarifs.price.note">Paiement unique · TVA non applicable</div>
         <p class="card-desc" data-i18n="tarifs.vitrine.desc">Parfait pour lancer votre présence en ligne rapidement avec un site élégant et professionnel.</p>
+        <ul class="card-features">
+          <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.vitrine.f1">Site vitrine 3 à 5 pages</span></li>
+          <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.vitrine.f2">Design 100 % sur-mesure &amp; responsive</span></li>
+          <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.vitrine.f3">SEO de base (balises, sitemap, robots)</span></li>
+          <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.vitrine.f4">Formulaire de contact</span></li>
+          <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.vitrine.f5">Livraison en 7 jours ouvrés</span></li>
+          <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.vitrine.f6">1 mois de support inclus</span></li>
+        </ul>
+        <button class="card-cta ghost" onclick="window.location='devis.html?plan=vitrine'" data-i18n="tarifs.vitrine.cta">Choisir Vitrine</button>
       </div>
-      <ul class="card-features">
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.vitrine.f1">Site vitrine 3 à 5 pages</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.vitrine.f2">Design 100 % sur-mesure &amp; responsive</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.vitrine.f3">SEO de base (balises, sitemap, robots)</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.vitrine.f4">Formulaire de contact</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.vitrine.f5">Livraison en 7 jours ouvrés</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.vitrine.f6">1 mois de support inclus</span></li>
-      </ul>
-      <button class="card-cta ghost" onclick="window.location='devis.html?plan=vitrine'" data-i18n="tarifs.vitrine.cta">Choisir Vitrine</button>
     </div>
 
     <!-- Business (featured) -->
     <div class="prix-card featured">
       <div class="card-popular" data-i18n="tarifs.popular">★ Le plus choisi</div>
-      <div class="card-top">
-        <div class="card-name" data-i18n="tarifs.business.name">Business</div>
-        <div class="card-price">
+      <div class="card-img-wrap">
+        <img class="card-bg-img" src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=700&h=420&fit=crop&crop=center&q=85" alt="Business" loading="lazy">
+        <div class="card-img-grad"></div>
+        <div class="card-glass-top">
+          <div>
+            <div class="card-glass-name" data-i18n="tarifs.business.name">Business</div>
+            <div class="card-glass-sub">Site complet &amp; autonome</div>
+          </div>
+          <span class="card-logo-icon" aria-hidden="true">⚡</span>
+        </div>
+        <div class="card-price-pill">1 490 €</div>
+        <div class="card-img-dots" aria-hidden="true">
+          <span></span><span class="on"></span><span></span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-price-row">
           <span class="price-currency">€</span>
           <span class="price-amount">1 490</span>
         </div>
         <div class="price-note" data-i18n="tarifs.price.note">Paiement unique · TVA non applicable</div>
         <p class="card-desc" data-i18n="tarifs.business.desc">Pour les entreprises qui veulent un site complet, gérable en autonomie, avec un référencement solide.</p>
+        <ul class="card-features">
+          <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.business.f1">Site jusqu'à 10 pages</span></li>
+          <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.business.f2">CMS intégré (modifiable sans code)</span></li>
+          <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.business.f3">SEO avancé + Google Analytics 4</span></li>
+          <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.business.f4">Blog / actualités intégré</span></li>
+          <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.business.f5">Livraison en 7 jours ouvrés</span></li>
+          <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.business.f6">3 mois de support prioritaire inclus</span></li>
+          <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.business.f7">Formation à la prise en main</span></li>
+        </ul>
+        <button class="card-cta primary" onclick="window.location='devis.html?plan=business'" data-i18n="tarifs.business.cta">Choisir Business</button>
       </div>
-      <ul class="card-features">
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.business.f1">Site jusqu'à 10 pages</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.business.f2">CMS intégré (modifiable sans code)</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.business.f3">SEO avancé + Google Analytics 4</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.business.f4">Blog / actualités intégré</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.business.f5">Livraison en 7 jours ouvrés</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.business.f6">3 mois de support prioritaire inclus</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.business.f7">Formation à la prise en main</span></li>
-      </ul>
-      <button class="card-cta primary" onclick="window.location='devis.html?plan=business'" data-i18n="tarifs.business.cta">Choisir Business</button>
     </div>
 
     <!-- Premium -->
     <div class="prix-card">
-      <div class="card-top">
-        <div class="card-name" data-i18n="tarifs.premium.name">Premium</div>
-        <div class="card-price">
+      <div class="card-img-wrap">
+        <img class="card-bg-img" src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=700&h=420&fit=crop&crop=center&q=85" alt="Premium" loading="lazy">
+        <div class="card-img-grad"></div>
+        <div class="card-glass-top">
+          <div>
+            <div class="card-glass-name" data-i18n="tarifs.premium.name">Premium</div>
+            <div class="card-glass-sub">E-commerce &amp; sur-mesure</div>
+          </div>
+          <span class="card-logo-icon" aria-hidden="true">💎</span>
+        </div>
+        <div class="card-price-pill">2 490 €</div>
+        <div class="card-img-dots" aria-hidden="true">
+          <span></span><span></span><span class="on"></span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-price-row">
           <span class="price-currency">€</span>
           <span class="price-amount">2 490</span>
         </div>
         <div class="price-note" data-i18n="tarifs.price.note">Paiement unique · TVA non applicable</div>
         <p class="card-desc" data-i18n="tarifs.premium.desc">Pour les boutiques en ligne et projets ambitieux qui ont besoin de fonctionnalités sur-mesure.</p>
+        <ul class="card-features">
+          <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.premium.f1">Pages illimitées</span></li>
+          <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.premium.f2">Boutique e-commerce complète</span></li>
+          <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.premium.f3">Intégration API &amp; outils tiers</span></li>
+          <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.premium.f4">Tableau de bord analytics avancé</span></li>
+          <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.premium.f5">Livraison en 7 jours ouvrés</span></li>
+          <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.premium.f6">6 mois de support prioritaire 24/7</span></li>
+          <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.premium.f7">Audit SEO &amp; rapport mensuel</span></li>
+        </ul>
+        <button class="card-cta ghost" onclick="window.location='devis.html?plan=premium'" data-i18n="tarifs.premium.cta">Choisir Premium</button>
       </div>
-      <ul class="card-features">
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.premium.f1">Pages illimitées</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.premium.f2">Boutique e-commerce complète</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.premium.f3">Intégration API &amp; outils tiers</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.premium.f4">Tableau de bord analytics avancé</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.premium.f5">Livraison en 7 jours ouvrés</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.premium.f6">6 mois de support prioritaire 24/7</span></li>
-        <li class="card-feat"><svg class="feat-check" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tarifs.premium.f7">Audit SEO &amp; rapport mensuel</span></li>
-      </ul>
-      <button class="card-cta ghost" onclick="window.location='devis.html?plan=premium'" data-i18n="tarifs.premium.cta">Choisir Premium</button>
     </div>
 
   </div>
@@ -541,6 +592,29 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&overlay.classList.contains('open'))close();});
   ring.querySelectorAll('.cnav-link').forEach(function(l){l.addEventListener('click',close);});
   window.addEventListener('resize',function(){if(overlay.classList.contains('open'))pos();},{passive:true});
+})();
+</script>
+<script>
+/* ── 3D TILT ── */
+(function(){
+  var cards=document.querySelectorAll('.prix-card');
+  cards.forEach(function(card){
+    var featured=card.classList.contains('featured');
+    card.addEventListener('mousemove',function(e){
+      var r=card.getBoundingClientRect();
+      var x=e.clientX-r.left,y=e.clientY-r.top;
+      var rx=(y-r.height/2)/(r.height/2)*-7;
+      var ry=(x-r.width/2)/(r.width/2)*7;
+      var sc=featured?1.08:1.05;
+      card.style.transform='perspective(1000px) rotateX('+rx+'deg) rotateY('+ry+'deg) scale3d('+sc+','+sc+','+sc+')';
+      card.style.transition='transform 0.1s ease-out';
+    });
+    card.addEventListener('mouseleave',function(){
+      var reset=featured?'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1.04)':'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+      card.style.transform=reset;
+      card.style.transition='transform 0.45s ease-in-out';
+    });
+  });
 })();
 </script>
 

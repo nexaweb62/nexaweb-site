@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-page="rdv">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +7,7 @@
 <meta name="description" content="Réservez une consultation gratuite de 30 min avec Nexa Web. Visio ou téléphone. Zéro engagement.">
 <script>(function(){var t=localStorage.getItem('nw-theme');if(t)document.documentElement.setAttribute('data-theme',t);}());</script>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<script src="i18n.js"></script>
 <style>
 /* ── TOKENS ── */
 :root{
@@ -59,6 +60,9 @@ ul{list-style:none}
 .nav-link{font-size:10.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);transition:color .2s}
 .nav-link:hover,.nav-link.on{color:var(--text)}
 .nav-r{display:flex;align-items:center;gap:14px;margin-left:auto}
+.back-btn{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:600;letter-spacing:.10em;text-transform:uppercase;color:var(--text-muted);border:1px solid var(--border-hi);border-radius:2px;padding:8px 14px;transition:color .2s,border-color .2s;white-space:nowrap}
+.back-btn:hover{color:var(--text);border-color:var(--text-muted)}
+.back-btn svg{width:11px;height:11px;stroke:currentColor;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .theme-btn,.login-btn{width:30px;height:30px;border:1px solid var(--border-hi);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:13px;transition:border-color .2s,color .2s}
 .theme-btn:hover,.login-btn:hover{border-color:var(--text-muted);color:var(--text)}
 .login-btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
@@ -209,6 +213,14 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
     <nav class="nav" aria-label="Navigation principale">
       <a href="index.html" class="nav-logo">NEXA<span>WEB</span></a>
       <div class="nav-r">
+        <a href="index.html" class="back-btn" aria-label="Retour à l'accueil">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+          Accueil
+        </a>
+        <div class="lang-sel" role="group" aria-label="Language">
+          <button class="lang-opt" data-lang="fr">FR</button>
+          <button class="lang-opt" data-lang="en">EN</button>
+        </div>
         <button class="menu-btn" id="menu-btn" aria-label="Ouvrir la navigation" aria-expanded="false">
           <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
         </button>
@@ -234,6 +246,7 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
     <div class="cnav-item"><a href="contact.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span class="cnav-name">Contact</span></a></div>
     <div class="cnav-item"><a href="rendez-vous.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span class="cnav-name">RDV</span></a></div>
     <div class="cnav-item"><a href="equipe.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="cnav-name">Équipe</span></a></div>
+    <div class="cnav-item"><a href="avis.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span class="cnav-name">Avis</span></a></div>
   </div>
 </div>
 
@@ -241,25 +254,25 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
 
   <!-- Hero -->
   <div class="rdv-hero">
-    <span class="rdv-label">Consultation gratuite</span>
-    <h1 class="rdv-title">Prenons<br><em>rendez-vous.</em></h1>
-    <p class="rdv-sub">30 minutes pour cadrer votre projet. Visio ou téléphone, à votre convenance. Zéro engagement.</p>
+    <span class="rdv-label" data-i18n="rdv.hero.label">Consultation gratuite</span>
+    <h1 class="rdv-title" data-i18n-html="rdv.hero.title">Prenons<br><em>rendez-vous.</em></h1>
+    <p class="rdv-sub" data-i18n="rdv.hero.sub">30 minutes pour cadrer votre projet. Visio ou téléphone, à votre convenance. Zéro engagement.</p>
     <div class="rdv-badges">
       <span class="rdv-badge">
         <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-        100 % gratuit
+        <span data-i18n="rdv.badge.free">100 % gratuit</span>
       </span>
       <span class="rdv-badge">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        30 minutes
+        <span data-i18n="rdv.badge.duration">30 minutes</span>
       </span>
       <span class="rdv-badge">
         <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
-        Visio ou téléphone
+        <span data-i18n="rdv.badge.format">Visio ou téléphone</span>
       </span>
       <span class="rdv-badge">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        Zéro engagement
+        <span data-i18n="rdv.badge.commitment">Zéro engagement</span>
       </span>
     </div>
   </div>
@@ -268,8 +281,8 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
   <div class="rdv-section">
     <div class="rdv-card">
       <div class="rdv-card-header">
-        <span class="rdv-card-title">Choisissez un créneau</span>
-        <span class="rdv-live">Disponible</span>
+        <span class="rdv-card-title" data-i18n="rdv.card.title">Choisissez un créneau</span>
+        <span class="rdv-live" data-i18n="rdv.card.status">Disponible</span>
       </div>
       <div class="calendly-inline-widget"
            data-url="https://calendly.com/contact-nexaweb62/30min?background_color=080811&text_color=e8e8f2&primary_color=8b5cf6"

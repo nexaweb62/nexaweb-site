@@ -66,6 +66,9 @@ ul{list-style:none}
 .btn-nav{display:inline-flex;align-items:center;gap:9px;background:var(--btn-bg);color:var(--btn-text);font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;padding:12px 24px;border-radius:2px;transition:opacity .2s;white-space:nowrap}
 .btn-nav:hover{opacity:.82}
 @media(max-width:768px){.nav-links{display:none}}
+.back-btn{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:600;letter-spacing:.10em;text-transform:uppercase;color:var(--text-muted);border:1px solid var(--border-hi);border-radius:2px;padding:8px 14px;transition:color .2s,border-color .2s;white-space:nowrap}
+.back-btn:hover{color:var(--text);border-color:var(--text-muted)}
+.back-btn svg{width:11px;height:11px;stroke:currentColor;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .menu-btn{width:36px;height:36px;border:1px solid var(--border-hi);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text-muted);cursor:pointer;transition:border-color .2s,color .2s,background .2s;flex-shrink:0}
 .menu-btn:hover{border-color:rgba(139,92,246,.55);color:var(--text);background:rgba(139,92,246,.09)}
 .menu-btn svg{width:15px;height:15px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round}
@@ -398,6 +401,10 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
     <nav class="nav" aria-label="Navigation principale">
       <a href="index.html" class="nav-logo">NEXA<span>WEB</span></a>
       <div class="nav-r">
+        <a href="index.html" class="back-btn" aria-label="Retour à l'accueil">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+          Accueil
+        </a>
         <div class="lang-sel" role="group" aria-label="Language">
           <button class="lang-opt" data-lang="fr">FR</button>
           <button class="lang-opt" data-lang="en">EN</button>
@@ -425,6 +432,7 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
     <div class="cnav-item"><a href="contact.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span class="cnav-name" data-i18n="nav.contact">Contact</span></a></div>
     <div class="cnav-item"><a href="rendez-vous.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span class="cnav-name" data-i18n="nav.rdv">RDV</span></a></div>
     <div class="cnav-item"><a href="equipe.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="cnav-name" data-i18n="nav.team">Équipe</span></a></div>
+    <div class="cnav-item"><a href="avis.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span class="cnav-name">Avis</span></a></div>
   </div>
 </div>
 
@@ -653,7 +661,7 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
     }
   }
 
-  function connect(){
+  function connect(light){
     var threshold = (canvas.width/7)*(canvas.height/7);
     for(var a=0; a<particles.length; a++){
       for(var b=a; b<particles.length; b++){
@@ -666,8 +674,8 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
           var dym = particles[a].y - (mouse.y||0);
           var dm  = Math.sqrt(dxm*dxm + dym*dym);
           ctx.strokeStyle = (mouse.x && dm < mouse.radius)
-            ? 'rgba(255,255,255,'+op+')'
-            : 'rgba(167,139,250,'+op+')';
+            ? (light ? 'rgba(17,17,22,'+op+')' : 'rgba(255,255,255,'+op+')')
+            : 'rgba(139,92,246,'+op+')';
           ctx.lineWidth = 1;
           ctx.beginPath();
           ctx.moveTo(particles[a].x, particles[a].y);
@@ -680,10 +688,12 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
 
   function animate(){
     raf = requestAnimationFrame(animate);
-    ctx.fillStyle = 'rgba(8,8,17,1)';
+    var t = document.documentElement.getAttribute('data-theme');
+    var light = t === 'light' || (!t && window.matchMedia('(prefers-color-scheme:light)').matches);
+    ctx.fillStyle = light ? 'rgba(244,244,240,1)' : 'rgba(8,8,17,1)';
     ctx.fillRect(0,0,canvas.width,canvas.height);
     for(var i=0; i<particles.length; i++) particles[i].update();
-    connect();
+    connect(light);
   }
 
   function resize(){

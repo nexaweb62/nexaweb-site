@@ -11,7 +11,7 @@
 <style>
 /* ── TOKENS ── */
 :root{
-  --bg:#080811;--text:#E8E8F2;--muted:rgba(232,232,242,.44);
+  --bg:#080811;--text:#E8E8F2;--muted:rgba(232,232,242,.44);--text-muted:rgba(232,232,242,.44);
   --accent:#8B5CF6;--accent-dim:rgba(139,92,246,.15);--accent-ring:rgba(139,92,246,.35);
   --border:rgba(232,232,242,.08);--border-hi:rgba(232,232,242,.14);
   --btn-bg:#E8E8F2;--btn-text:#080811;
@@ -19,12 +19,12 @@
   --hdr:80px;
 }
 @media(prefers-color-scheme:light){:root:not([data-theme="dark"]){
-  --bg:#F4F4F0;--text:#111118;--muted:rgba(17,17,22,.50);
+  --bg:#F4F4F0;--text:#111118;--muted:rgba(17,17,22,.50);--text-muted:rgba(17,17,22,.50);
   --border:rgba(18,18,22,.09);--border-hi:rgba(18,18,22,.16);
   --btn-bg:#111118;--btn-text:#F4F4F0;
 }}
 :root[data-theme="light"]{
-  --bg:#F4F4F0;--text:#111118;--muted:rgba(17,17,22,.50);
+  --bg:#F4F4F0;--text:#111118;--muted:rgba(17,17,22,.50);--text-muted:rgba(17,17,22,.50);
   --border:rgba(18,18,22,.09);--border-hi:rgba(18,18,22,.16);
   --btn-bg:#111118;--btn-text:#F4F4F0;
 }
@@ -63,8 +63,8 @@ button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
 .gl-loading-text{font-size:9px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-.menu-btn{width:36px;height:36px;border:1px solid rgba(232,232,242,.14);border-radius:50%;display:flex;align-items:center;justify-content:center;color:rgba(232,232,242,.44);cursor:pointer;transition:border-color .2s,color .2s,background .2s;flex-shrink:0;background:none}
-.menu-btn:hover{border-color:rgba(139,92,246,.55);color:#E8E8F2;background:rgba(139,92,246,.09)}
+.menu-btn{width:36px;height:36px;border:1px solid var(--border-hi);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;transition:border-color .2s,color .2s,background .2s;flex-shrink:0;background:none}
+.menu-btn:hover{border-color:rgba(139,92,246,.55);color:var(--text);background:rgba(139,92,246,.09)}
 .menu-btn svg{width:15px;height:15px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round}
 .cnav{position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;background:rgba(4,3,14,.90);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:0;pointer-events:none;transition:opacity .32s cubic-bezier(.16,1,.3,1)}
 .cnav.open{opacity:1;pointer-events:all}
@@ -94,6 +94,9 @@ button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
 .nav-logo{font-size:14px;font-weight:900;letter-spacing:.08em;color:var(--text)}
 .nav-logo span{color:var(--muted)}
 .nav-r{display:flex;align-items:center;gap:14px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:600;letter-spacing:.10em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border-hi);border-radius:2px;padding:8px 14px;transition:color .2s,border-color .2s;white-space:nowrap}
+.back-btn:hover{color:var(--text);border-color:var(--muted)}
+.back-btn svg{width:11px;height:11px;stroke:currentColor;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .theme-btn,.login-btn{
   width:30px;height:30px;
   border:1px solid var(--border-hi);border-radius:50%;
@@ -232,6 +235,10 @@ button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
 <header class="hdr">
   <a href="index.html" class="nav-logo">NEXA<span>WEB</span></a>
   <div class="nav-r">
+    <a href="index.html" class="back-btn" aria-label="Retour à l'accueil">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+      Accueil
+    </a>
     <div class="lang-sel" role="group" aria-label="Language">
       <button class="lang-opt" data-lang="fr">FR</button>
       <button class="lang-opt" data-lang="en">EN</button>
@@ -258,6 +265,7 @@ button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
     <div class="cnav-item"><a href="contact.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="cnav-name" data-i18n="nav.contact">Contact</span></a></div>
     <div class="cnav-item"><a href="rendez-vous.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span class="cnav-name" data-i18n="nav.rdv">RDV</span></a></div>
     <div class="cnav-item"><a href="equipe.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="cnav-name" data-i18n="nav.team">Équipe</span></a></div>
+    <div class="cnav-item"><a href="avis.html" class="cnav-link"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span class="cnav-name">Avis</span></a></div>
   </div>
 </div>
 

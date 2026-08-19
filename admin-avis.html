@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<title>Modération des avis — Nexa Web</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --bg:#080811;--bg-alt:#0c0c18;--bg-card:#10101e;
+  --border:rgba(220,220,242,0.08);--border-hi:rgba(220,220,242,0.16);
+  --text:#E8E8F2;--text-muted:rgba(232,232,242,0.44);--text-dim:rgba(232,232,242,0.18);
+  --btn-bg:#E8E8F2;--btn-text:#080811;
+  --accent:#8B5CF6;--star:#F59E0B;--green:#22C55E;--red:#EF4444;
+  --font:"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--font);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;border:none;font:inherit;color:inherit}
+
+/* ── TOP BAR ── */
+.topbar{height:60px;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 clamp(16px,3vw,40px);gap:20px;background:var(--bg-alt);position:sticky;top:0;z-index:100}
+.topbar-logo{font-size:13px;font-weight:900;letter-spacing:.08em}
+.topbar-logo span{color:var(--text-muted)}
+.topbar-title{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);padding-left:20px;border-left:1px solid var(--border-hi)}
+.topbar-r{margin-left:auto;display:flex;align-items:center;gap:12px}
+.topbar-user{font-size:11px;color:var(--text-muted)}
+.topbar-logout{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);border:1px solid var(--border-hi);border-radius:2px;padding:7px 14px;transition:color .2s,border-color .2s;background:none}
+.topbar-logout:hover{color:var(--text);border-color:var(--text-muted)}
+.back-home{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);display:flex;align-items:center;gap:5px;transition:color .2s}
+.back-home:hover{color:var(--text)}
+.back-home svg{width:10px;height:10px;stroke:currentColor;stroke-width:2.5;fill:none;stroke-linecap:round}
+
+/* ── AUTH SCREEN ── */
+.auth-screen{min-height:calc(100vh - 60px);display:flex;align-items:center;justify-content:center}
+.auth-box{border:1px solid var(--border-hi);border-radius:12px;padding:40px;text-align:center;max-width:360px;width:100%}
+.auth-icon{font-size:32px;margin-bottom:16px;opacity:.5}
+.auth-title{font-size:1.1rem;font-weight:700;margin-bottom:8px}
+.auth-sub{font-size:.85rem;color:var(--text-muted);margin-bottom:24px;line-height:1.6}
+.auth-btn{display:inline-flex;align-items:center;gap:8px;background:var(--btn-bg);color:var(--btn-text);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:13px 24px;border-radius:2px;border:none;cursor:pointer;transition:opacity .2s}
+.auth-btn:hover{opacity:.85}
+
+/* ── MAIN ── */
+.main{max-width:1100px;margin:0 auto;padding:clamp(24px,4vw,48px) clamp(16px,3vw,40px)}
+
+/* ── STATS ROW ── */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:36px}
+.stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:20px 24px}
+.stat-num{font-size:2rem;font-weight:900;letter-spacing:-.04em}
+.stat-label{font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--text-dim);margin-top:4px}
+@media(max-width:560px){.stats{grid-template-columns:1fr 1fr}.stats .stat-card:last-child{grid-column:1/-1}}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:6px;margin-bottom:24px;border-bottom:1px solid var(--border);padding-bottom:0}
+.tab-btn{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);background:none;border:none;padding:10px 18px 12px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .2s,border-color .2s}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-btn:hover:not(.active){color:var(--text)}
+.tab-badge{display:inline-block;background:var(--accent);color:#fff;font-size:9px;font-weight:700;border-radius:10px;padding:1px 7px;margin-left:6px}
+
+/* ── REVIEW LIST ── */
+.reviews-list{display:flex;flex-direction:column;gap:14px}
+
+.rv-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:20px 24px;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start}
+.rv-card:hover{border-color:var(--border-hi)}
+.rv-stars{font-size:14px;color:var(--star);margin-bottom:8px}
+.rv-msg{font-size:.88rem;font-weight:300;color:var(--text-muted);line-height:1.65;margin-bottom:12px}
+.rv-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.rv-name{font-size:.82rem;font-weight:700}
+.rv-company{font-size:.76rem;color:var(--text-dim)}
+.rv-date{font-size:.72rem;color:var(--text-dim)}
+.rv-status{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:20px}
+.rv-status.pending{background:rgba(245,158,11,.12);color:#F59E0B;border:1px solid rgba(245,158,11,.3)}
+.rv-status.published{background:rgba(34,197,94,.12);color:#22C55E;border:1px solid rgba(34,197,94,.3)}
+.rv-status.rejected{background:rgba(239,68,68,.08);color:#EF4444;border:1px solid rgba(239,68,68,.2)}
+
+.rv-actions{display:flex;flex-direction:column;gap:8px;flex-shrink:0}
+.action-btn{font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:8px 14px;border-radius:4px;border:1px solid;cursor:pointer;transition:opacity .15s,transform .15s;white-space:nowrap;background:none}
+.action-btn:hover{opacity:.8;transform:translateY(-1px)}
+.action-btn.publish{color:var(--green);border-color:rgba(34,197,94,.35)}
+.action-btn.publish:hover{background:rgba(34,197,94,.08)}
+.action-btn.unpublish{color:var(--text-muted);border-color:var(--border-hi)}
+.action-btn.delete{color:var(--red);border-color:rgba(239,68,68,.3)}
+.action-btn.delete:hover{background:rgba(239,68,68,.06)}
+.action-btn:disabled{opacity:.35;pointer-events:none}
+
+/* ── EMPTY ── */
+.empty-state{text-align:center;padding:60px 20px;color:var(--text-muted)}
+.empty-state-icon{font-size:36px;opacity:.3;margin-bottom:14px}
+.empty-state-text{font-size:.9rem;font-weight:300}
+
+/* ── LOADING ── */
+.loader{text-align:center;padding:60px 20px;color:var(--text-dim);font-size:.85rem;letter-spacing:.06em}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <a href="index.html" class="topbar-logo" aria-label="Accueil">NEXA<span>WEB</span></a>
+  <span class="topbar-title">Modération des avis</span>
+  <div class="topbar-r">
+    <a href="avis.html" class="back-home">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+      Page avis
+    </a>
+    <span class="topbar-user" id="topbar-user"></span>
+    <button class="topbar-logout" id="logout-btn">Déconnexion</button>
+  </div>
+</div>
+
+<!-- AUTH SCREEN (shown when not logged in) -->
+<div class="auth-screen" id="auth-screen" style="display:none">
+  <div class="auth-box">
+    <div class="auth-icon">🔒</div>
+    <div class="auth-title">Accès restreint</div>
+    <div class="auth-sub">Connectez-vous avec votre compte Nexa Web pour accéder à la modération des avis.</div>
+    <a href="login.html" class="auth-btn">Se connecter</a>
+  </div>
+</div>
+
+<!-- MAIN CONTENT (shown when logged in) -->
+<div class="main" id="main-content" style="display:none">
+  <!-- Stats -->
+  <div class="stats" id="stats-row">
+    <div class="stat-card"><div class="stat-num" id="stat-pending">—</div><div class="stat-label">En attente</div></div>
+    <div class="stat-card"><div class="stat-num" id="stat-published">—</div><div class="stat-label">Publiés</div></div>
+    <div class="stat-card"><div class="stat-num" id="stat-total">—</div><div class="stat-label">Total reçus</div></div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs" role="tablist">
+    <button class="tab-btn active" role="tab" data-tab="pending" id="tab-pending">
+      En attente <span class="tab-badge" id="badge-pending">0</span>
+    </button>
+    <button class="tab-btn" role="tab" data-tab="published" id="tab-published">Publiés</button>
+    <button class="tab-btn" role="tab" data-tab="all" id="tab-all">Tous</button>
+  </div>
+
+  <!-- List -->
+  <div id="reviews-list" class="reviews-list">
+    <div class="loader" id="loader">Chargement…</div>
+  </div>
+</div>
+
+<script src="supabase-client.js"></script>
+<script>
+(function(){
+  'use strict';
+
+  var currentTab='pending';
+  var allReviews=[];
+
+  /* ── AUTH CHECK ── */
+  function init(){
+    if(!window.sb){
+      document.getElementById('auth-screen').style.display='flex';
+      return;
+    }
+    window.sb.auth.getSession().then(function(r){
+      var session=r.data&&r.data.session;
+      if(!session){
+        document.getElementById('auth-screen').style.display='flex';
+        return;
+      }
+      document.getElementById('topbar-user').textContent=session.user.email||'';
+      document.getElementById('main-content').style.display='block';
+      loadAllReviews();
+    });
+  }
+
+  /* ── LOGOUT ── */
+  document.getElementById('logout-btn').addEventListener('click',function(){
+    if(window.sb) window.sb.auth.signOut().then(function(){window.location.href='login.html';});
+  });
+
+  /* ── LOAD ── */
+  function loadAllReviews(){
+    document.getElementById('loader').style.display='block';
+    window.sb.from('reviews').select('*').order('created_at',{ascending:false}).then(function(res){
+      document.getElementById('loader').style.display='none';
+      if(res.error){renderError();return;}
+      allReviews=res.data||[];
+      updateStats();
+      renderTab(currentTab);
+    });
+  }
+
+  function updateStats(){
+    var pending=allReviews.filter(function(r){return r.status==='pending';}).length;
+    var published=allReviews.filter(function(r){return r.status==='published';}).length;
+    document.getElementById('stat-pending').textContent=pending;
+    document.getElementById('stat-published').textContent=published;
+    document.getElementById('stat-total').textContent=allReviews.length;
+    document.getElementById('badge-pending').textContent=pending;
+  }
+
+  /* ── TABS ── */
+  document.querySelectorAll('.tab-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+      btn.classList.add('active');
+      currentTab=btn.dataset.tab;
+      renderTab(currentTab);
+    });
+  });
+
+  function renderTab(tab){
+    var filtered;
+    if(tab==='pending') filtered=allReviews.filter(function(r){return r.status==='pending';});
+    else if(tab==='published') filtered=allReviews.filter(function(r){return r.status==='published';});
+    else filtered=allReviews;
+    renderList(filtered,tab);
+  }
+
+  /* ── RENDER ── */
+  function starsHtml(n){
+    var s='';
+    for(var i=1;i<=5;i++) s+='<span style="color:'+(i<=n?'var(--star)':'var(--text-dim)')+'">★</span>';
+    return s;
+  }
+  function formatDate(iso){
+    return new Date(iso).toLocaleDateString('fr-FR',{year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+  }
+  function escHtml(s){
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function statusLabel(s){
+    if(s==='pending') return '<span class="rv-status pending">En attente</span>';
+    if(s==='published') return '<span class="rv-status published">Publié</span>';
+    return '<span class="rv-status rejected">Refusé</span>';
+  }
+
+  function renderList(reviews,tab){
+    var list=document.getElementById('reviews-list');
+    if(!reviews.length){
+      list.innerHTML='<div class="empty-state"><div class="empty-state-icon">✓</div><div class="empty-state-text">Aucun avis dans cette catégorie.</div></div>';
+      return;
+    }
+    list.innerHTML='';
+    reviews.forEach(function(rv){
+      var card=document.createElement('div');
+      card.className='rv-card';
+      card.dataset.id=rv.id;
+
+      var actionsHtml='<div class="rv-actions">';
+      if(rv.status!=='published'){
+        actionsHtml+='<button class="action-btn publish" data-action="publish" data-id="'+rv.id+'">✓ Publier</button>';
+      } else {
+        actionsHtml+='<button class="action-btn unpublish" data-action="unpublish" data-id="'+rv.id+'">↩ Dépublier</button>';
+      }
+      actionsHtml+='<button class="action-btn delete" data-action="delete" data-id="'+rv.id+'">✕ Supprimer</button>';
+      actionsHtml+='</div>';
+
+      card.innerHTML='<div>'
+        +'<div class="rv-stars">'+starsHtml(rv.rating)+'</div>'
+        +'<p class="rv-msg">'+escHtml(rv.message)+'</p>'
+        +'<div class="rv-meta">'
+        +'<span class="rv-name">'+escHtml(rv.author_name)+'</span>'
+        +(rv.company?'<span class="rv-company">'+escHtml(rv.company)+'</span>':'')
+        +'<span class="rv-date">'+formatDate(rv.created_at)+'</span>'
+        +statusLabel(rv.status)
+        +'</div></div>'
+        +actionsHtml;
+
+      list.appendChild(card);
+    });
+
+    /* action listeners */
+    list.querySelectorAll('.action-btn').forEach(function(b){
+      b.addEventListener('click',function(){
+        var action=b.dataset.action;
+        var id=b.dataset.id;
+        b.disabled=true;
+        b.textContent='…';
+        if(action==='publish'||action==='unpublish'){
+          var newStatus=action==='publish'?'published':'pending';
+          window.sb.from('reviews').update({status:newStatus}).eq('id',id).then(function(res){
+            if(res.error){alert('Erreur: '+res.error.message);loadAllReviews();return;}
+            var rv=allReviews.find(function(r){return r.id===id;});
+            if(rv) rv.status=newStatus;
+            updateStats();
+            renderTab(currentTab);
+          });
+        } else if(action==='delete'){
+          if(!confirm('Supprimer cet avis définitivement ?')){loadAllReviews();return;}
+          window.sb.from('reviews').delete().eq('id',id).then(function(res){
+            if(res.error){alert('Erreur: '+res.error.message);loadAllReviews();return;}
+            allReviews=allReviews.filter(function(r){return r.id!==id;});
+            updateStats();
+            renderTab(currentTab);
+          });
+        }
+      });
+    });
+  }
+
+  function renderError(){
+    document.getElementById('reviews-list').innerHTML='<div class="empty-state"><div class="empty-state-icon">⚠</div><div class="empty-state-text">Impossible de charger les avis. Vérifiez votre connexion Supabase.</div></div>';
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
