@@ -249,12 +249,11 @@ img{display:block;max-width:100%}
 /* ── WHY ── */
 .s-why{border-top:1px solid var(--border);background:var(--bg-alt)}
 .why-in{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,8vw,120px);align-items:start}
-.why-feats{margin-top:0}
-.why-feat{display:flex;gap:16px;padding:18px 0;border-bottom:1px solid var(--border)}
-.why-feat:last-child{border-bottom:none}
-.why-ico{flex-shrink:0;width:34px;height:34px;border:1px solid var(--border-hi);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:15px}
-.why-ttl{font-size:13px;font-weight:600;letter-spacing:-.01em;margin-bottom:3px}
-.why-dsc{font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.62}
+.why-bio{display:flex;flex-direction:column;gap:18px;padding:4px 0}
+.why-bio-lead{font-size:clamp(1.35rem,2.4vw,1.9rem);font-weight:800;line-height:1.18;letter-spacing:-.03em;color:var(--text)}
+.why-bio-body{font-size:13px;font-weight:300;line-height:1.72;color:var(--text-muted)}
+.why-bio-cta{display:inline-flex;align-items:center;gap:8px;margin-top:8px;font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--text);border-bottom:1px solid var(--border-hi);padding-bottom:4px;transition:color .2s,border-color .2s;align-self:flex-start}
+.why-bio-cta:hover{color:var(--text);border-color:var(--text)}
 @media(max-width:720px){.why-in{grid-template-columns:1fr}}
 
 /* ── STATS ── */
@@ -803,11 +802,12 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
         <h2 class="h-lg r d1" style="margin-top:14px" data-i18n-html="index.why.title">La différence qui<br>fait la différence.</h2>
         <p class="body r d2" style="margin-top:22px;max-width:380px" data-i18n="index.why.sub">Nous ne faisons pas dans la quantité. Chaque projet reçoit une attention totale, de la stratégie à la mise en ligne.</p>
       </div>
-      <div class="why-feats">
-        <div class="why-feat r"><div class="why-ico" aria-hidden="true">✦</div><div><div class="why-ttl" data-i18n="index.why.01.title">Design 100% sur mesure</div><p class="why-dsc" data-i18n="index.why.01.desc">Zéro template, zéro compromis. Chaque site est conçu spécifiquement pour votre marque et vos objectifs.</p></div></div>
-        <div class="why-feat r d1"><div class="why-ico" aria-hidden="true">◎</div><div><div class="why-ttl" data-i18n="index.why.02.title">Responsive &amp; mobile-first</div><p class="why-dsc" data-i18n="index.why.02.desc">Vos visiteurs utilisent leurs smartphones. Votre site s'adapte parfaitement à chaque écran, sans exception.</p></div></div>
-        <div class="why-feat r d2"><div class="why-ico" aria-hidden="true">⚡</div><div><div class="why-ttl" data-i18n="index.why.03.title">Performance &amp; vitesse</div><p class="why-dsc" data-i18n="index.why.03.desc">Score Core Web Vitals optimal. Un site rapide améliore l'expérience utilisateur et votre classement Google.</p></div></div>
-        <div class="why-feat r d3"><div class="why-ico" aria-hidden="true">↗</div><div><div class="why-ttl" data-i18n="index.why.04.title">SEO &amp; conversion</div><p class="why-dsc" data-i18n="index.why.04.desc">Optimisé pour les moteurs de recherche dès la conception. Votre site attire et convertit.</p></div></div>
+      <div class="why-bio r d1">
+        <p class="why-bio-lead">Une agence jeune.<br>Des ambitions sérieuses.</p>
+        <p class="why-bio-body">Nexa Web est née de la conviction de trois passionnés du web que les petites entreprises méritent des sites aussi soignés que ceux des grandes marques — sans les prix prohibitifs.</p>
+        <p class="why-bio-body">Nous démarrons notre aventure sans catalogue de réalisations. Pas parce que nous manquons de compétences, mais parce que nous avons choisi de ne pas gonfler un portfolio avec des projets fictifs. Ce que nous offrons à la place, c'est une implication totale : chaque ligne de code, chaque détail de design, pensés uniquement pour vous.</p>
+        <p class="why-bio-body">Nos premiers clients bénéficient d'une attention rare — celle qu'une agence qui n'a pas encore cent projets en parallèle peut vraiment offrir.</p>
+        <a href="devis.html" class="why-bio-cta">Être parmi les premiers →</a>
       </div>
     </div>
   </div>
