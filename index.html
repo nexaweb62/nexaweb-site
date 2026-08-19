@@ -21,7 +21,6 @@
 <meta name="twitter:image" content="https://nexaaweb.com/img/fondateur1.jpg">
 <!-- Preconnect -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="preconnect" href="https://prod.spline.design" crossorigin>
 <link rel="preconnect" href="https://abbplzlczwpqmyelopxo.supabase.co" crossorigin>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <!-- Structured data -->
@@ -58,21 +57,6 @@
     "https://www.facebook.com/people/Nexaweb/61593685250868/"
   ],
   "priceRange": "€€"
-}
-</script>
-<script>
-/* Spline — desktop uniquement, chargé après l'idle post-load pour ne pas bloquer le thread */
-if(!window.matchMedia('(max-width:768px)').matches){
-  function _loadSpline(){
-    var _sp=document.createElement('script');_sp.type='module';
-    _sp.src='https://cdn.jsdelivr.net/npm/@splinetool/viewer/build/spline-viewer.js';
-    document.head.appendChild(_sp);
-  }
-  window.addEventListener('load',function(){
-    'requestIdleCallback' in window
-      ? requestIdleCallback(_loadSpline,{timeout:4000})
-      : setTimeout(_loadSpline,3000);
-  });
 }
 </script>
 <script src="i18n.js" defer></script>
@@ -365,21 +349,59 @@ img{display:block;max-width:100%}
 .hero-robot{
   position:relative;
   width:100%;height:clamp(420px,74vh,720px);
-  opacity:0;
-  animation:robot-enter 1.2s cubic-bezier(.16,1,.3,1) 1.4s forwards;
-  will-change:opacity,transform;
+  display:flex;align-items:center;justify-content:center;
 }
-@keyframes robot-enter{to{opacity:1;transform:none}}
 .robot-float{animation:robot-float 5s ease-in-out infinite;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
-@keyframes robot-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-.robot-glow{
-  position:absolute;inset:-56px;
-  background:radial-gradient(ellipse at 50% 56%,rgba(139,92,246,.42) 0%,rgba(99,102,241,.18) 44%,transparent 70%);
-  filter:blur(40px);pointer-events:none;z-index:0;
+@keyframes robot-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+/* ── CSS Hero Visual (remplace Spline) ── */
+.hv-wrap{position:relative;width:clamp(220px,30vw,400px);height:clamp(220px,30vw,400px)}
+.hv-glow{position:absolute;inset:-18%;background:radial-gradient(circle,rgba(139,92,246,.20) 0%,transparent 65%)}
+.hv-grid{
+  position:absolute;inset:0;border-radius:50%;
+  background-image:radial-gradient(circle,rgba(139,92,246,.28) 1px,transparent 1px);
+  background-size:26px 26px;
+  mask-image:radial-gradient(circle,black 40%,transparent 70%);
+  -webkit-mask-image:radial-gradient(circle,black 40%,transparent 70%);
+  opacity:.65;
 }
-[data-theme="light"] .robot-glow{opacity:.55;background:radial-gradient(ellipse at 50% 56%,rgba(99,102,241,.35) 0%,rgba(139,92,246,.15) 44%,transparent 70%)}
-@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .robot-glow{opacity:.55;background:radial-gradient(ellipse at 50% 56%,rgba(99,102,241,.35) 0%,rgba(139,92,246,.15) 44%,transparent 70%)}}
-spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
+.hv-core{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:clamp(60px,9vw,110px);height:clamp(60px,9vw,110px);
+  border-radius:50%;
+  background:radial-gradient(circle at 36% 36%,#c4b5fd,#6366f1 52%,#3b82f6 85%);
+  box-shadow:0 0 28px rgba(139,92,246,.72),0 0 60px rgba(99,102,241,.28);
+}
+.hv-ring{position:absolute;top:50%;left:50%;border-radius:50%}
+.hv-ring-a{
+  width:clamp(140px,19vw,240px);height:clamp(140px,19vw,240px);
+  transform:translate(-50%,-50%);
+  border:1px solid rgba(139,92,246,.32);
+  animation:hv-spin 20s linear infinite;
+}
+.hv-ring-a::before{
+  content:'';position:absolute;top:0;left:50%;
+  transform:translate(-50%,-50%);
+  width:8px;height:8px;border-radius:50%;
+  background:#a78bfa;box-shadow:0 0 10px rgba(167,139,250,.9);
+}
+.hv-ring-b{
+  width:clamp(200px,27vw,360px);height:clamp(200px,27vw,360px);
+  transform:translate(-50%,-50%);
+  border:1px solid rgba(59,130,246,.20);
+  animation:hv-spin 34s linear infinite reverse;
+}
+.hv-ring-b::after{
+  content:'';position:absolute;top:50%;right:0;
+  transform:translate(50%,-50%);
+  width:5px;height:5px;border-radius:50%;
+  background:#60a5fa;box-shadow:0 0 9px rgba(96,165,250,.8);
+}
+@keyframes hv-spin{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){
+  .hv-ring-a,.hv-ring-b{animation:none!important}
+  .robot-float,.hero-robot{animation:none!important;opacity:1!important;transform:none!important}
+}
 @media(max-width:900px){
   .hero-cols .hero-main{width:100%}
   .hero-robot-col{width:80%;right:-10%;opacity:.35}
@@ -387,9 +409,6 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
 }
 @media(max-width:768px){
   .hero-robot-col{display:none}
-}
-@media(prefers-reduced-motion:reduce){
-  .robot-float,.hero-robot{animation:none!important;opacity:1!important;transform:none!important}
 }
 
 /* ── NEON FLOW v2 — ribbons lumineux ─────────────
@@ -490,9 +509,9 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
 
 /* ── Mobile ── */
 @media(max-width:768px){
-  .nf-r1 {width:600px;height:100px;filter:blur(38px)}
-  .nf-r1b{width:700px;height:380px;filter:blur(110px)}
-  .nf-r2 {width:500px;height:72px;filter:blur(34px)}
+  .nf-r1 {width:600px;height:100px}
+  .nf-r1b{width:700px;height:380px}
+  .nf-r2 {width:500px;height:72px}
   .nf-r3,.nf-r5{display:none}
   .nf-r4 {width:800px;height:420px}
 }
@@ -506,7 +525,6 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
   background:#050509;
   z-index:9999;
   display:flex;align-items:center;justify-content:center;
-  will-change:opacity,transform;
 }
 #loader.ld-exit{
   opacity:0;transform:scale(1.06);
@@ -563,7 +581,6 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
 .ld-bar-fill{
   height:100%;width:0%;
   background:linear-gradient(90deg,#8B5CF6 0%,#6366F1 52%,#3B82F6 100%);
-  will-change:width;
 }
 .ld-caption{
   font-size:8.5px;font-weight:500;letter-spacing:.26em;text-transform:uppercase;
@@ -722,12 +739,17 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
         <a href="avis.html" class="btn-g" data-i18n="index.hero.cta2">Nos avis clients</a>
       </div>
     </div>
-    <!-- Robot 3D Spline — inert masque du DOM d'accessibilité et retire la focusabilité -->
+    <!-- Hero visual CSS — aucun WebGL -->
     <div class="hero-robot-col" aria-hidden="true" inert>
       <div class="hero-robot" id="hero-robot">
         <div class="robot-float">
-          <div class="robot-glow"></div>
-          <spline-viewer url="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode" background="transparent" loading-anim-type="spinner-big-dark"></spline-viewer>
+          <div class="hv-wrap">
+            <div class="hv-glow"></div>
+            <div class="hv-grid"></div>
+            <div class="hv-core"></div>
+            <div class="hv-ring hv-ring-a"></div>
+            <div class="hv-ring hv-ring-b"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -953,7 +975,7 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
   var pctEl=document.getElementById('ld-pct');
   var barEl=document.getElementById('ld-bar');
   var rafP,tStart;
-  var DURATION=1400;
+  var DURATION=380;
 
   function ease(t){return t<.5?2*t*t:-1+(4-2*t)*t;}
 
@@ -1037,8 +1059,11 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
       if(neonFlow)neonFlow.style.transform='translateY('+(sy*.055).toFixed(1)+'px)';
     }
 
-    window.addEventListener('scroll',function(){dirty=true},{passive:true});
-    (function loop(){if(dirty){dirty=false;applyFX()}requestAnimationFrame(loop)})();
+    var _rAF=null;
+    window.addEventListener('scroll',function(){
+      if(!_rAF)_rAF=requestAnimationFrame(function(){_rAF=null;dirty=false;applyFX();});
+      dirty=true;
+    },{passive:true});
     applyFX();
   }
 
