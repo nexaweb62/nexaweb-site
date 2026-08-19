@@ -122,17 +122,16 @@ img{display:block;max-width:100%}
 .wrap{max-width:var(--max-w);margin:0 auto;padding:0 var(--pad-x)}
 
 /* ── SCROLL REVEAL — bidirectionnel ── */
-.r{opacity:0;transform:translateY(28px);filter:blur(5px);transition:opacity .72s cubic-bezier(.16,1,.3,1),transform .72s cubic-bezier(.16,1,.3,1),filter .72s cubic-bezier(.16,1,.3,1);will-change:transform,opacity}
-.r.v{opacity:1;transform:none;filter:none}
+.r{opacity:0;transform:translateY(24px);transition:opacity .65s cubic-bezier(.16,1,.3,1),transform .65s cubic-bezier(.16,1,.3,1)}
+.r.v{opacity:1;transform:none}
 .r.d1{transition-delay:.09s}.r.d2{transition-delay:.18s}.r.d3{transition-delay:.27s}.r.d4{transition-delay:.36s}.r.d5{transition-delay:.45s}
 /* Port items — scale enter/exit */
 .port-item.r{transform:translateY(20px) scale(1.04);filter:none}
 .port-item.r.v{transform:none}
 /* Hero main — scroll-linked fade layer */
-.hero-main{will-change:opacity,transform}
 /* Mobile — mouvement réduit, pas de blur */
-@media(max-width:768px){.r{transform:translateY(18px);filter:none}.port-item.r{transform:translateY(14px) scale(1.02)}}
-@media(prefers-reduced-motion:reduce){.r{opacity:1;transform:none;filter:none;transition:none}}
+@media(max-width:768px){.r{transform:translateY(14px)}.port-item.r{transform:translateY(10px) scale(1.02)}}
+@media(prefers-reduced-motion:reduce){.r{opacity:1;transform:none;transition:none}}
 
 /* ── TYPE ── */
 .label{font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--text-muted)}
@@ -150,8 +149,8 @@ img{display:block;max-width:100%}
 .btn-g:focus-visible{outline:2px solid var(--text);outline-offset:3px}
 
 /* ── HEADER ── */
-.hdr{position:fixed;inset:0 0 auto;height:var(--hdr);z-index:100;border-bottom:1px solid transparent;transition:background .4s,border-color .4s,backdrop-filter .4s}
-.hdr.on{border-bottom-color:var(--border);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.hdr{position:fixed;inset:0 0 auto;height:var(--hdr);z-index:100;border-bottom:1px solid transparent;transition:background .4s,border-color .4s}
+.hdr.on{border-bottom-color:var(--border);background:rgba(8,8,17,.92)}
 .hdr.on{background:rgba(8,8,17,.88)}
 @media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .hdr.on{background:rgba(244,244,240,.92)}}
 :root[data-theme="light"] .hdr.on{background:rgba(244,244,240,.92)}
@@ -402,7 +401,7 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
 :root[data-theme="light"]{--neon-opacity:0.14}
 
 .neon-flow{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;opacity:var(--neon-opacity)}
-.nf-r{position:absolute;border-radius:50%;will-change:transform}
+.nf-r{position:absolute;border-radius:50%}
 
 /* ─── COUCHE 1 : Halo ambiant indigo (base profonde) ─── */
 .nf-r4{
