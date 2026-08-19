@@ -21,7 +21,7 @@
 <meta name="twitter:image" content="https://nexaaweb.com/img/fondateur1.jpg">
 <!-- Preconnect -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+<link rel="preconnect" href="https://prod.spline.design" crossorigin>
 <link rel="preconnect" href="https://abbplzlczwpqmyelopxo.supabase.co" crossorigin>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <!-- Structured data -->
@@ -61,11 +61,18 @@
 }
 </script>
 <script>
-/* Spline — desktop uniquement. Sur mobile : SDK non chargé (économise GPU + réseau) */
+/* Spline — desktop uniquement, chargé après l'idle post-load pour ne pas bloquer le thread */
 if(!window.matchMedia('(max-width:768px)').matches){
-  var _sp=document.createElement('script');_sp.type='module';
-  _sp.src='https://cdn.jsdelivr.net/npm/@splinetool/viewer/build/spline-viewer.js';
-  document.head.appendChild(_sp);
+  function _loadSpline(){
+    var _sp=document.createElement('script');_sp.type='module';
+    _sp.src='https://cdn.jsdelivr.net/npm/@splinetool/viewer/build/spline-viewer.js';
+    document.head.appendChild(_sp);
+  }
+  window.addEventListener('load',function(){
+    'requestIdleCallback' in window
+      ? requestIdleCallback(_loadSpline,{timeout:4000})
+      : setTimeout(_loadSpline,3000);
+  });
 }
 </script>
 <script src="i18n.js" defer></script>
@@ -151,7 +158,9 @@ img{display:block;max-width:100%}
 
 .nav{display:flex;align-items:center;height:var(--hdr);position:relative}
 .nav-logo{font-size:14px;font-weight:900;letter-spacing:.08em}
-.nav-logo span{color:var(--text-muted)}
+.nav-logo span{color:rgba(232,232,242,.68)}
+:root[data-theme="light"] .nav-logo span{color:rgba(17,17,22,.68)}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .nav-logo span{color:rgba(17,17,22,.68)}}
 .nav-links{display:flex;gap:clamp(16px,3vw,40px);position:absolute;left:50%;transform:translateX(-50%)}
 .nav-link{font-size:10.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);transition:color .2s}
 .nav-link:hover,.nav-link.on{color:var(--text)}
@@ -302,8 +311,8 @@ img{display:block;max-width:100%}
 .foot-team-lnk{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(139,92,246,.8);border:1px solid rgba(139,92,246,.25);padding:9px 16px;border-radius:4px;margin-top:6px;transition:background .2s,border-color .2s,color .2s}
 .foot-team-lnk:hover{background:rgba(139,92,246,.12);border-color:rgba(139,92,246,.5);color:#a78bfa}
 .foot-logo{font-size:1.15rem;font-weight:900;letter-spacing:.08em;margin-bottom:10px}
-.foot-logo span{color:var(--text-muted)}
-.foot-tag{font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.65;max-width:230px}
+.foot-logo span{color:rgba(232,232,242,.72)}
+.foot-tag{font-size:12px;font-weight:300;color:rgba(232,232,242,.72);line-height:1.65;max-width:230px}
 .foot-socials{display:flex;gap:14px;margin-top:20px;flex-wrap:wrap}
 .foot-soc{width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);box-shadow:0 8px 24px rgba(0,0,0,.30);display:flex;align-items:center;justify-content:center;color:rgba(232,232,242,.65);transition:transform .3s ease,background .3s ease,box-shadow .3s ease,color .3s ease;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);flex-shrink:0}
 .foot-soc svg{width:20px;height:20px;fill:currentColor;transition:transform .3s ease}
@@ -317,15 +326,22 @@ img{display:block;max-width:100%}
 :root[data-theme="light"] .foot-soc{background:rgba(17,17,22,.06);border-color:rgba(17,17,22,.12);color:rgba(17,17,22,.55)}
 @media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .foot-soc{background:rgba(17,17,22,.06);border-color:rgba(17,17,22,.12);color:rgba(17,17,22,.55)}}
 .foot-soc:focus-visible{outline:2px solid var(--text);outline-offset:3px}
-.foot-col-title{font-size:9px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);margin-bottom:14px}
+/* Overrides light pour le contraste footer */
+:root[data-theme="light"] .foot-logo span,:root[data-theme="light"] .foot-tag{color:rgba(17,17,22,.72)}
+:root[data-theme="light"] .foot-col-title,:root[data-theme="light"] .foot-lnk{color:rgba(17,17,22,.72)}
+:root[data-theme="light"] .foot-copy,:root[data-theme="light"] .foot-legal a{color:rgba(17,17,22,.55)}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .foot-logo span,:root:not([data-theme="dark"]) .foot-tag{color:rgba(17,17,22,.72)}}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .foot-col-title,:root:not([data-theme="dark"]) .foot-lnk{color:rgba(17,17,22,.72)}}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .foot-copy,:root:not([data-theme="dark"]) .foot-legal a{color:rgba(17,17,22,.55)}}
+.foot-col-title{font-size:9px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(232,232,242,.72);margin-bottom:14px}
 .foot-links{display:flex;flex-direction:column;gap:9px}
-.foot-lnk{font-size:13px;font-weight:300;color:var(--text-muted);transition:color .2s}
+.foot-lnk{font-size:13px;font-weight:300;color:rgba(232,232,242,.72);transition:color .2s}
 .foot-lnk:hover{color:var(--text)}
 .foot-lnk:focus-visible{outline:2px solid var(--text);border-radius:2px}
 .foot-bot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding:18px 0}
-.foot-copy{font-size:11px;color:var(--text-dim);letter-spacing:.03em}
+.foot-copy{font-size:11px;color:rgba(232,232,242,.55);letter-spacing:.03em}
 .foot-legal{display:flex;gap:20px}
-.foot-legal a{font-size:11px;color:var(--text-dim);transition:color .2s}
+.foot-legal a{font-size:11px;color:rgba(232,232,242,.55);transition:color .2s}
 .foot-legal a:hover{color:var(--text-muted)}
 .foot-legal a:focus-visible{outline:2px solid var(--text)}
 @media(max-width:860px){
@@ -686,6 +702,7 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
   </div>
 </div>
 
+<main id="main-content">
 <!-- HERO -->
 <section class="s-hero" id="accueil" aria-label="Accueil">
   <div class="wrap hero-cols">
@@ -707,8 +724,8 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
         <a href="avis.html" class="btn-g" data-i18n="index.hero.cta2">Nos avis clients</a>
       </div>
     </div>
-    <!-- Robot 3D Spline -->
-    <div class="hero-robot-col" aria-hidden="true">
+    <!-- Robot 3D Spline — inert masque du DOM d'accessibilité et retire la focusabilité -->
+    <div class="hero-robot-col" aria-hidden="true" inert>
       <div class="hero-robot" id="hero-robot">
         <div class="robot-float">
           <div class="robot-glow"></div>
@@ -874,6 +891,8 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
     </div>
   </div>
 </section>
+
+</main>
 
 <!-- FOOTER -->
 <footer class="s-foot" aria-label="Pied de page">
