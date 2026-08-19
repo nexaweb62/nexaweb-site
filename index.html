@@ -225,67 +225,6 @@ img{display:block;max-width:100%}
 .svc-arr{font-size:1.1rem;transition:transform .3s cubic-bezier(.16,1,.3,1);color:var(--text-muted)}
 .svc-row:hover .svc-arr{transform:translateX(7px)}
 @media(max-width:600px){.svc-tag{display:none}}
-
-/* ── CARD-STACK (Réalisations) ── */
-.s-port{border-top:1px solid var(--border);background:var(--bg-alt)}
-.port-hdr{margin-bottom:clamp(40px,7vh,88px)}
-.cs-stage{position:relative;width:100%;outline:none;user-select:none;touch-action:pan-y}
-.cs-inner{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;perspective:1100px;overflow:visible}
-.cs-card{
-  position:absolute;bottom:0;
-  border-radius:16px;overflow:hidden;
-  border:3px solid rgba(255,255,255,.09);
-  box-shadow:0 20px 56px rgba(0,0,0,.50);
-  transform-style:preserve-3d;
-  will-change:transform,opacity;
-  cursor:pointer;-webkit-user-drag:none;
-  transition:transform .52s cubic-bezier(.16,1,.3,1),opacity .4s ease;
-}
-.cs-card.active{cursor:grab}
-.cs-card.active:active{cursor:grabbing}
-.cs-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;pointer-events:none;-webkit-user-drag:none;transition:transform .5s ease}
-.cs-card.active img{transform:scale(1.04)}
-.cs-card::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.70) 0%,transparent 55%);z-index:1;pointer-events:none}
-.cs-card-info{position:absolute;bottom:0;left:0;right:0;padding:20px 22px;z-index:2}
-.cs-title{font-size:clamp(.95rem,2vw,1.2rem);font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1.2}
-.cs-type{font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.48);margin-top:5px}
-.cs-cta{
-  display:none;position:absolute;top:14px;right:14px;z-index:4;
-  font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
-  color:#fff;padding:7px 14px;border-radius:3px;
-  border:1px solid rgba(255,255,255,.32);background:rgba(255,255,255,.10);
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  cursor:pointer;align-items:center;gap:6px;
-  transition:background .2s,border-color .2s;white-space:nowrap;
-}
-.cs-cta svg{width:12px;height:12px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
-.cs-cta:hover{background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.68)}
-.cs-card.active .cs-cta{display:inline-flex}
-.cs-dots{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:28px}
-.cs-dot{width:8px;height:8px;border-radius:50%;background:rgba(232,232,242,.22);border:none;cursor:pointer;padding:0;transition:background .25s,transform .25s}
-.cs-dot.on{background:rgba(232,232,242,.88);transform:scale(1.3)}
-[data-theme="light"] .cs-dot{background:rgba(17,17,22,.18)}
-[data-theme="light"] .cs-dot.on{background:rgba(17,17,22,.80);transform:scale(1.3)}
-@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .cs-dot{background:rgba(17,17,22,.18)}}
-@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .cs-dot.on{background:rgba(17,17,22,.80);transform:scale(1.3)}}
-@media(max-width:768px){.cs-cta{font-size:8px;padding:5px 10px}}
-@media(prefers-reduced-motion:reduce){.cs-card{transition:none!important}}
-/* ── PROJECT MODAL ── */
-.pmod{position:fixed;inset:0;z-index:9500;background:rgba(4,3,14,.93);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:0;pointer-events:none;transition:opacity .3s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column}
-.pmod.open{opacity:1;pointer-events:all}
-.pmod-hdr{display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,3vw,32px);height:60px;border-bottom:1px solid rgba(220,220,242,.09);flex-shrink:0;gap:14px}
-.pmod-title{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(232,232,242,.44);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pmod-actions{display:flex;align-items:center;gap:10px;flex-shrink:0}
-.pmod-ext{font-size:9.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(232,232,242,.44);border:1px solid rgba(232,232,242,.12);padding:7px 13px;border-radius:2px;transition:color .2s,border-color .2s;white-space:nowrap}
-.pmod-ext:hover{color:#e8e8f2;border-color:rgba(232,232,242,.36)}
-.pmod-close{width:32px;height:32px;border-radius:50%;border:1px solid rgba(232,232,242,.18);display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(232,232,242,.6);background:none;transition:border-color .2s,color .2s,background .2s;flex-shrink:0}
-.pmod-close:hover{border-color:rgba(139,92,246,.6);color:#fff;background:rgba(139,92,246,.12)}
-.pmod-close svg{width:14px;height:14px;stroke:currentColor;stroke-width:2.5;fill:none;stroke-linecap:round}
-.pmod-body{flex:1;position:relative;overflow:hidden}
-.pmod-iframe{width:100%;height:100%;border:none;display:block}
-.pmod-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;pointer-events:none}
-.pmod-spin{width:36px;height:36px;border:2px solid var(--border);border-top-color:rgba(139,92,246,.8);border-radius:50%;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
 /* ── PROCESS ── */
 .s-proc{border-top:1px solid var(--border)}
 .proc-hdr{margin-bottom:clamp(36px,6vh,72px)}
@@ -660,7 +599,7 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
       <ul class="nav-links" role="list">
         <li><a href="#accueil"  class="nav-link on" data-i18n="nav.home">Accueil</a></li>
         <li><a href="#services" class="nav-link" data-i18n="nav.services">Services</a></li>
-        <li><a href="#projets"  class="nav-link" data-i18n="nav.projects">Projets</a></li>
+
         <li><a href="#apropos"  class="nav-link" data-i18n="nav.about">À propos</a></li>
         <li><a href="tarifs.html"  class="nav-link" data-i18n="nav.pricing">Tarifs</a></li>
         <li><a href="#faq"       class="nav-link" data-i18n="nav.faq">FAQ</a></li>
@@ -701,12 +640,6 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
       <a href="#services" class="cnav-link">
         <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
         <span class="cnav-name" data-i18n="nav.services">Services</span>
-      </a>
-    </div>
-    <div class="cnav-item">
-      <a href="#projets" class="cnav-link">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-        <span class="cnav-name" data-i18n="nav.projects">Projets</span>
       </a>
     </div>
     <div class="cnav-item">
@@ -772,7 +705,7 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
       </p>
       <div class="hero-ctas">
         <a href="devis.html" class="btn"><span data-i18n="index.hero.cta1">Démarrer un projet</span> <span aria-hidden="true">→</span></a>
-        <a href="#projets"  class="btn-g" data-i18n="index.hero.cta2">Voir nos réalisations</a>
+        <a href="avis.html" class="btn-g" data-i18n="index.hero.cta2">Nos avis clients</a>
       </div>
     </div>
     <!-- Robot 3D Spline -->
@@ -845,105 +778,6 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
   </div>
 </section>
 
-<!-- PORTFOLIO -->
-<section class="s-port" style="padding:var(--sec) 0" id="projets" aria-labelledby="port-h">
-  <div class="wrap">
-    <div class="port-hdr r">
-      <span class="label" id="port-h" data-i18n="index.port.label">Des expériences conçues pour être remarquées</span>
-      <h2 class="h-lg" style="margin-top:14px" data-i18n="index.port.title">Réalisations</h2>
-    </div>
-    <div class="cs-stage" id="cs-stage" tabindex="0" aria-label="Carrousel des réalisations" style="height:440px">
-      <div class="cs-inner" id="cs-inner">
-
-        <div class="cs-card" data-idx="0">
-          <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=900&h=560&fit=crop&crop=center&q=90" alt="Aaron Cunningham" loading="lazy" width="900" height="560" draggable="false">
-          <button class="cs-cta" data-url="https://www.aaronjcunningham.com/" data-name="Aaron Cunningham" type="button">
-            <span data-i18n="index.port.cta">Voir le projet</span>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          </button>
-          <div class="cs-card-info">
-            <div class="cs-title">Aaron Cunningham</div>
-            <div class="cs-type">Identité digitale &amp; Portfolio</div>
-          </div>
-        </div>
-
-        <div class="cs-card" data-idx="1">
-          <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=900&h=560&fit=crop&crop=center&q=90" alt="Namaha Healthcare" loading="lazy" width="900" height="560" draggable="false">
-          <button class="cs-cta" data-url="https://www.namaha.healthcare/" data-name="Namaha Healthcare" type="button">
-            <span data-i18n="index.port.cta">Voir le projet</span>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          </button>
-          <div class="cs-card-info">
-            <div class="cs-title">Namaha Healthcare</div>
-            <div class="cs-type">Site médical &amp; Santé</div>
-          </div>
-        </div>
-
-        <div class="cs-card" data-idx="2">
-          <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=900&h=560&fit=crop&crop=top&q=90" alt="Dolce Gabbana" loading="lazy" width="900" height="560" draggable="false">
-          <button class="cs-cta" data-url="https://beautytools.dolcegabbana.com/it-fr/gift-finder" data-name="Dolce &amp; Gabbana Beauty" type="button">
-            <span data-i18n="index.port.cta">Voir le projet</span>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          </button>
-          <div class="cs-card-info">
-            <div class="cs-title">Dolce &amp; Gabbana Beauty</div>
-            <div class="cs-type">E-commerce luxe &amp; Beauté</div>
-          </div>
-        </div>
-
-        <div class="cs-card" data-idx="3">
-          <img src="https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=900&h=560&fit=crop&crop=center&q=90" alt="Oobex XR" loading="lazy" width="900" height="560" draggable="false">
-          <button class="cs-cta" data-url="https://oobexr.zerotredici.app/en" data-name="Oobex XR" type="button">
-            <span data-i18n="index.port.cta">Voir le projet</span>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          </button>
-          <div class="cs-card-info">
-            <div class="cs-title">Oobex XR</div>
-            <div class="cs-type">Application XR &amp; Immersif</div>
-          </div>
-        </div>
-
-        <div class="cs-card" data-idx="4">
-          <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=900&h=560&fit=crop&crop=top&q=90" alt="Alethia Earth" loading="lazy" width="900" height="560" draggable="false">
-          <button class="cs-cta" data-url="https://www.alethia.earth/" data-name="Alethia Earth" type="button">
-            <span data-i18n="index.port.cta">Voir le projet</span>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          </button>
-          <div class="cs-card-info">
-            <div class="cs-title">Alethia Earth</div>
-            <div class="cs-type">Plateforme durable &amp; Écologie</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-    <div class="cs-dots" id="cs-dots">
-      <button class="cs-dot on" data-idx="0" aria-label="Aaron Cunningham"></button>
-      <button class="cs-dot" data-idx="1" aria-label="Namaha Healthcare"></button>
-      <button class="cs-dot" data-idx="2" aria-label="Dolce &amp; Gabbana"></button>
-      <button class="cs-dot" data-idx="3" aria-label="Oobex XR"></button>
-      <button class="cs-dot" data-idx="4" aria-label="Alethia Earth"></button>
-    </div>
-  </div>
-</section>
-<!-- PROJECT MODAL -->
-<div class="pmod" id="pmod" role="dialog" aria-modal="true" aria-labelledby="pmod-title">
-  <div class="pmod-hdr">
-    <span class="pmod-title" id="pmod-title">Projet</span>
-    <div class="pmod-actions">
-      <a class="pmod-ext" id="pmod-ext" href="#" target="_blank" rel="noopener" data-i18n="index.modal.open">Ouvrir dans un nouvel onglet ↗</a>
-      <button class="pmod-close" id="pmod-close" aria-label="Fermer">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-  </div>
-  <div class="pmod-body">
-    <div class="pmod-loading" id="pmod-loading">
-      <div class="pmod-spin"></div>
-    </div>
-    <iframe class="pmod-iframe" id="pmod-iframe" src="" title="Aperçu du projet" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
-  </div>
-</div>
 <!-- PROCESS -->
 <section class="s-proc" style="padding:var(--sec) 0" aria-labelledby="proc-h">
   <div class="wrap">
@@ -1066,7 +900,7 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
           <ul class="foot-links">
             <li><a href="#accueil"  class="foot-lnk">Accueil</a></li>
             <li><a href="#services" class="foot-lnk">Services</a></li>
-            <li><a href="#projets"  class="foot-lnk">Projets</a></li>
+
             <li><a href="#faq"      class="foot-lnk">FAQ</a></li>
           </ul>
         </nav>
@@ -1198,7 +1032,7 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
 
   /* ── Active nav link ── */
   var navLinks=Array.from(document.querySelectorAll('.nav-link'));
-  var secIds=['accueil','services','projets','apropos','faq','contact'];
+  var secIds=['accueil','services','apropos','faq','contact'];
   function setActive(){
     var mid=window.scrollY+window.innerHeight*.35;
     var cur='accueil';
@@ -1318,180 +1152,6 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
 })();
 </script>
 
-<script>
-/* ── PROJECT MODAL ── */
-(function(){
-  'use strict';
-  var modal=document.getElementById('pmod');
-  var iframe=document.getElementById('pmod-iframe');
-  var titleEl=document.getElementById('pmod-title');
-  var extLink=document.getElementById('pmod-ext');
-  var closeBtn=document.getElementById('pmod-close');
-  var loading=document.getElementById('pmod-loading');
-  if(!modal)return;
-  var hideTimer=null;
-
-  window.openPmod=function(url,name){
-    titleEl.textContent=name;
-    extLink.href=url;
-    iframe.src='';
-    loading.style.display='flex';
-    modal.classList.add('open');
-    document.body.style.overflow='hidden';
-    clearTimeout(hideTimer);
-    setTimeout(function(){
-      iframe.src=url;
-      hideTimer=setTimeout(function(){loading.style.display='none';},4000);
-    },120);
-  };
-
-  function closePmod(){
-    modal.classList.remove('open');
-    document.body.style.overflow='';
-    clearTimeout(hideTimer);
-    setTimeout(function(){iframe.src='';},350);
-  }
-
-  iframe.addEventListener('load',function(){loading.style.display='none';});
-  closeBtn.addEventListener('click',closePmod);
-  modal.addEventListener('click',function(e){if(e.target===modal)closePmod();});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&modal.classList.contains('open'))closePmod();});
-})();
-</script>
-
-<script>
-/* ── CARD-STACK PORTFOLIO ── */
-(function(){
-  'use strict';
-  var PRM=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
-  var stage=document.getElementById('cs-stage');
-  if(!stage)return;
-  var cards=Array.from(stage.querySelectorAll('.cs-card'));
-  var dots=Array.from(document.querySelectorAll('.cs-dot'));
-  var len=cards.length;
-  if(!len)return;
-
-  var active=0;
-  var hovering=false;
-
-  function cfg(){
-    var mob=window.innerWidth<=768;
-    var W=mob?290:520;
-    var H=mob?190:320;
-    var maxOff=mob?2:3;
-    return{
-      W:W,H:H,
-      spacing:Math.round(W*0.52),
-      maxOff:maxOff,
-      stepDeg:maxOff>0?48/maxOff:0,
-      depthPx:mob?80:140,
-      liftPx:mob?14:22,
-      scaleA:mob?1.02:1.03,
-      scaleI:mob?0.92:0.94,
-      tiltX:mob?8:12,
-      stageH:mob?310:440
-    };
-  }
-
-  function wrap(n){return((n%len)+len)%len;}
-
-  function signedOff(i,act){
-    var raw=i-act;
-    var alt=raw>0?raw-len:raw+len;
-    return Math.abs(alt)<Math.abs(raw)?alt:raw;
-  }
-
-  function render(){
-    var c=cfg();
-    stage.style.height=c.stageH+'px';
-    cards.forEach(function(card,i){
-      var off=signedOff(i,active);
-      var abs=Math.abs(off);
-      var vis=abs<=c.maxOff;
-      card.style.zIndex=vis?String(100-abs):'0';
-      card.style.opacity=vis?'1':'0';
-      card.style.pointerEvents=vis?'':'none';
-      var isA=off===0;
-      card.classList.toggle('active',isA);
-      card.style.width=c.W+'px';
-      card.style.height=c.H+'px';
-      if(!PRM){
-        var tx=off*c.spacing;
-        var ty=abs*10+(isA?-c.liftPx:0);
-        var tz=-abs*c.depthPx;
-        var rz=off*c.stepDeg;
-        var rx=isA?0:c.tiltX;
-        var sc=isA?c.scaleA:c.scaleI;
-        card.style.transform='translateX('+tx+'px) translateY('+ty+'px) translateZ('+tz+'px) rotateZ('+rz+'deg) rotateX('+rx+'deg) scale('+sc+')';
-      }
-    });
-    dots.forEach(function(d,i){d.classList.toggle('on',i===active);});
-  }
-
-  /* click card → activate */
-  cards.forEach(function(card,i){
-    card.addEventListener('click',function(e){
-      if(e.target.closest('.cs-cta'))return;
-      if(i!==active){active=i;render();}
-    });
-  });
-
-  /* dots */
-  dots.forEach(function(d,i){
-    d.addEventListener('click',function(){active=i;render();});
-  });
-
-  /* drag / swipe (pointer events) */
-  var px0=null,dragged=false;
-  stage.addEventListener('pointerdown',function(e){
-    if(e.target.closest('.cs-cta'))return; /* laisser le clic CTA passer */
-    var card=e.target.closest('.cs-card');
-    if(!card||!card.classList.contains('active'))return;
-    px0=e.clientX;dragged=false;
-    try{stage.setPointerCapture(e.pointerId);}catch(_){}
-  });
-  stage.addEventListener('pointermove',function(e){
-    if(px0===null)return;
-    if(Math.abs(e.clientX-px0)>6)dragged=true;
-  });
-  stage.addEventListener('pointerup',function(e){
-    if(px0===null)return;
-    var dx=e.clientX-px0;px0=null;
-    if(!dragged)return;dragged=false;
-    var thresh=Math.min(160,cfg().W*0.22);
-    if(dx>thresh){active=wrap(active-1);render();}
-    else if(dx<-thresh){active=wrap(active+1);render();}
-  });
-
-  /* keyboard */
-  stage.addEventListener('keydown',function(e){
-    if(e.key==='ArrowLeft'){active=wrap(active-1);render();}
-    if(e.key==='ArrowRight'){active=wrap(active+1);render();}
-  });
-
-  /* hover → pause auto */
-  stage.addEventListener('mouseenter',function(){hovering=true;});
-  stage.addEventListener('mouseleave',function(){hovering=false;});
-
-  /* auto-advance */
-  if(!PRM){
-    setInterval(function(){
-      if(!hovering){active=wrap(active+1);render();}
-    },2800);
-  }
-
-  /* CTA → modal */
-  stage.querySelectorAll('.cs-cta').forEach(function(btn){
-    btn.addEventListener('click',function(e){
-      e.stopPropagation();
-      if(window.openPmod)window.openPmod(btn.dataset.url,btn.dataset.name);
-    });
-  });
-
-  window.addEventListener('resize',render,{passive:true});
-  render();
-})();
-</script>
 
 <script>
 /* ── CIRCULAR NAV ── */
