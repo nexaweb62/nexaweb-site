@@ -23,12 +23,12 @@
 
     document.querySelectorAll('[data-i18n]').forEach(function (el) {
       var k = el.getAttribute('data-i18n');
-      if (strings[k] !== undefined) el.textContent = strings[k];
+      if (strings[k] !== undefined && el.textContent !== strings[k]) el.textContent = strings[k];
     });
 
     document.querySelectorAll('[data-i18n-html]').forEach(function (el) {
       var k = el.getAttribute('data-i18n-html');
-      if (strings[k] !== undefined) el.innerHTML = strings[k];
+      if (strings[k] !== undefined && el.innerHTML !== strings[k]) el.innerHTML = strings[k];
     });
 
     document.querySelectorAll('[data-i18n-ph]').forEach(function (el) {

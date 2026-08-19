@@ -22,6 +22,7 @@
 <!-- Preconnect -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preconnect" href="https://abbplzlczwpqmyelopxo.supabase.co" crossorigin>
+<link rel="preload" href="/locales/fr.json" as="fetch" crossorigin>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <!-- Structured data -->
 <script type="application/ld+json">
@@ -1042,6 +1043,9 @@ img{display:block;max-width:100%}
     var heroSec=document.getElementById('accueil');
     var neonFlow=document.querySelector('.neon-flow');
     var dirty=false;
+    /* Cache offsetHeight once at setup to avoid forced layout on each scroll */
+    var heroSecH=heroSec?heroSec.offsetHeight:800;
+    window.addEventListener('resize',function(){if(heroSec)heroSecH=heroSec.offsetHeight;},{passive:true});
 
     function applyFX(){
       var sy=window.scrollY;
@@ -1049,7 +1053,7 @@ img{display:block;max-width:100%}
       /* Hero content fades out + drifts up as user scrolls down;
          reverses completely on scroll-up */
       if(heroMain&&heroSec){
-        var prog=Math.min(Math.max(sy/(heroSec.offsetHeight*.62),0),1);
+        var prog=Math.min(Math.max(sy/(heroSecH*.62),0),1);
         heroMain.style.opacity=Math.max(0,1-prog*1.2).toFixed(3);
         heroMain.style.transform='translateY('+(-50*prog).toFixed(1)+'px)';
         if(heroFoot)heroFoot.style.opacity=Math.max(0,1-prog*2.5).toFixed(3);
