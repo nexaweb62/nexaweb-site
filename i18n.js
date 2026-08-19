@@ -12,7 +12,7 @@
     '.lang-opt{font-size:10px;font-weight:700;letter-spacing:.1em;' +
     'padding:4px 7px;border:1px solid transparent;border-radius:3px;' +
     'color:var(--text-muted,rgba(232,232,242,.44));background:none;cursor:pointer;' +
-    'transition:color .15s,border-color .15s}' +
+    'transition:color .15s}' +
     '.lang-opt:hover{color:var(--text,#E8E8F2)}' +
     '.lang-opt.active{color:var(--text,#E8E8F2);border-color:var(--border-hi,rgba(220,220,242,.14))}';
   document.head.appendChild(_style);
