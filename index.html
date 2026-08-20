@@ -21,7 +21,6 @@
 <meta name="twitter:image" content="https://nexaaweb.com/img/fondateur1.jpg">
 <!-- Preconnect -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="dns-prefetch" href="https://prod.spline.design">
 <link rel="preconnect" href="https://abbplzlczwpqmyelopxo.supabase.co" crossorigin>
 <link rel="preload" href="/locales/fr.json" as="fetch" crossorigin>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -59,26 +58,6 @@
     "https://www.facebook.com/people/Nexaweb/61593685250868/"
   ],
   "priceRange": "€€"
-}
-</script>
-<script>
-if(!window.matchMedia('(max-width:768px)').matches){
-  var _spDone=false;
-  function _loadSpline(){
-    if(_spDone)return;_spDone=true;
-    var s=document.createElement('script');s.type='module';
-    s.src='https://cdn.jsdelivr.net/npm/@splinetool/viewer/build/spline-viewer.js';
-    document.head.appendChild(s);
-  }
-  function _idleLoad(){
-    if('requestIdleCallback' in window){
-      requestIdleCallback(_loadSpline,{timeout:2000});
-    } else {
-      setTimeout(_loadSpline,300);
-    }
-  }
-  if(document.readyState==='complete'){ _idleLoad(); }
-  else { window.addEventListener('load',_idleLoad); }
 }
 </script>
 <script src="i18n.js" defer></script>
@@ -354,47 +333,11 @@ img{display:block;max-width:100%}
 }
 @media(max-width:440px){.foot-in{grid-template-columns:1fr}.foot-bot{flex-direction:column;align-items:flex-start}}
 
-/* ── HERO — texte au premier plan, robot en fond absolu ── */
+/* ── HERO ── */
 .hero-cols{flex:1;display:flex;align-items:center;position:relative}
 .hero-cols .hero-main{flex:0 0 auto;width:clamp(340px,52%,640px);position:relative;z-index:1;min-width:0}
-.hero-robot-col{
-  position:absolute;
-  right:clamp(-100px,-8vw,-20px);
-  top:50%;
-  transform:translateY(-50%);
-  width:54%;
-  max-width:660px;
-  z-index:0;
-  display:flex;align-items:center;justify-content:flex-end;
-  pointer-events:none;
-}
-.hero-robot{
-  position:relative;
-  width:100%;height:clamp(420px,74vh,720px);
-  opacity:0;
-  animation:robot-enter 1.2s cubic-bezier(.16,1,.3,1) 1.4s forwards;
-}
-@keyframes robot-enter{to{opacity:1;transform:none}}
-.robot-float{animation:robot-float 5s ease-in-out infinite;width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
-@keyframes robot-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-.robot-glow{
-  position:absolute;inset:-56px;
-  background:radial-gradient(ellipse at 50% 56%,rgba(139,92,246,.42) 0%,rgba(99,102,241,.18) 44%,transparent 70%);
-  pointer-events:none;z-index:0;
-}
-/* Canvas WebGL physiquement à 80%×80% → clientWidth/Height = 80% → 36% moins de pixels par frame.
-   scale(1.25) compense visuellement sans affecter le calcul GPU. */
-spline-viewer{display:block;position:relative;z-index:1;width:80%;height:80%;transform:scale(1.25);transform-origin:center center;flex-shrink:0}
-@media(prefers-reduced-motion:reduce){
-  .robot-float,.hero-robot{animation:none!important;opacity:1!important;transform:none!important}
-}
 @media(max-width:900px){
   .hero-cols .hero-main{width:100%}
-  .hero-robot-col{width:80%;right:-10%;opacity:.35}
-  .hero-robot{height:clamp(280px,60vw,420px)}
-}
-@media(max-width:768px){
-  .hero-robot-col{display:none}
 }
 
 /* ── NEON FLOW v2 — ribbons lumineux ─────────────
@@ -715,15 +658,6 @@ spline-viewer{display:block;position:relative;z-index:1;width:80%;height:80%;tra
       <div class="hero-ctas">
         <a href="devis.html" class="btn"><span data-i18n="index.hero.cta1">Démarrer un projet</span> <span aria-hidden="true">→</span></a>
         <a href="avis.html" class="btn-g" data-i18n="index.hero.cta2">Nos avis clients</a>
-      </div>
-    </div>
-    <!-- Robot 3D Spline -->
-    <div class="hero-robot-col" aria-hidden="true" inert>
-      <div class="hero-robot" id="hero-robot">
-        <div class="robot-float">
-          <div class="robot-glow"></div>
-          <spline-viewer url="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode" background="transparent" loading-anim-type="spinner-big-dark"></spline-viewer>
-        </div>
       </div>
     </div>
   </div>
