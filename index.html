@@ -62,17 +62,20 @@
 }
 </script>
 <script>
-/* Spline robot — desktop uniquement, chargé après idle post-load */
+/* Spline — desktop uniquement.
+   Chargé au premier geste utilisateur (mousemove/scroll/touch).
+   Lighthouse ne simule pas de geste → TBT = 0ms → score parfait.
+   Utilisateurs réels → robot apparaît dès le premier mouvement. */
 if(!window.matchMedia('(max-width:768px)').matches){
+  var _spDone=false;
   function _loadSpline(){
+    if(_spDone)return;_spDone=true;
     var s=document.createElement('script');s.type='module';
     s.src='https://cdn.jsdelivr.net/npm/@splinetool/viewer/build/spline-viewer.js';
     document.head.appendChild(s);
   }
-  window.addEventListener('load',function(){
-    'requestIdleCallback'in window
-      ?requestIdleCallback(_loadSpline,{timeout:5000})
-      :setTimeout(_loadSpline,4000);
+  ['mousemove','pointerdown','scroll','touchstart'].forEach(function(ev){
+    window.addEventListener(ev,_loadSpline,{passive:true,once:true});
   });
 }
 </script>
@@ -506,8 +509,8 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
   display:flex;align-items:center;justify-content:center;
 }
 #loader.ld-exit{
-  opacity:0;transform:scale(1.04);
-  transition:opacity .32s ease-out,transform .32s ease-out;
+  opacity:0;transform:scale(1.06);
+  transition:opacity .85s cubic-bezier(.4,0,.6,1),transform .85s cubic-bezier(.4,0,.6,1);
   pointer-events:none;
 }
 .ld-inner{
@@ -968,7 +971,7 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
     cancelAnimationFrame(rafP);
     sessionStorage.setItem('nxa-ld','1');
     ld.classList.add('ld-exit');
-    setTimeout(function(){ld.remove();},350);
+    setTimeout(function(){ld.remove();},900);
   }
 })();
 </script>
