@@ -80,6 +80,9 @@ ul{list-style:none}
 .btn{display:inline-flex;align-items:center;gap:9px;background:var(--btn-bg);color:var(--btn-text);font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;padding:14px 28px;border-radius:2px;transition:opacity .2s,transform .2s;white-space:nowrap}
 .btn:hover{opacity:.82;transform:translateY(-1px)}
 @media(max-width:768px){.nav-links{display:none}}
+.back-btn{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:600;letter-spacing:.10em;text-transform:uppercase;color:var(--text-muted);border:1px solid var(--border-hi);border-radius:2px;padding:8px 14px;transition:color .2s,border-color .2s;white-space:nowrap}
+.back-btn:hover{color:var(--text);border-color:var(--text-muted)}
+.back-btn svg{width:11px;height:11px;stroke:currentColor;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
 
 /* ── MENU BUTTON ── */
 .menu-btn{width:36px;height:36px;border:1px solid var(--border-hi);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text-muted);cursor:pointer;transition:border-color .2s,color .2s,background .2s;flex-shrink:0}
@@ -363,10 +366,11 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
   <div class="wrap">
     <nav class="nav" aria-label="Navigation principale">
       <a href="index.html" class="nav-logo">NEXA<span>WEB</span></a>
-      <ul class="nav-links" role="list">
-        <li><a href="index.html" class="nav-link" data-i18n="nav.home">Accueil</a></li>
-      </ul>
       <div class="nav-r">
+        <a href="index.html" class="back-btn" aria-label="Retour à l'accueil">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+          Accueil
+        </a>
         <div class="lang-sel" role="group" aria-label="Language">
           <button class="lang-opt" data-lang="fr">FR</button>
           <button class="lang-opt" data-lang="en">EN</button>
