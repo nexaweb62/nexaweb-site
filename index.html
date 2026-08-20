@@ -21,6 +21,7 @@
 <meta name="twitter:image" content="https://nexaaweb.com/img/fondateur1.jpg">
 <!-- Preconnect -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://prod.spline.design" crossorigin>
 <link rel="preconnect" href="https://abbplzlczwpqmyelopxo.supabase.co" crossorigin>
 <link rel="preload" href="/locales/fr.json" as="fetch" crossorigin>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -58,6 +59,21 @@
     "https://www.facebook.com/people/Nexaweb/61593685250868/"
   ],
   "priceRange": "€€"
+}
+</script>
+<script>
+/* Spline robot — desktop uniquement, chargé après idle post-load */
+if(!window.matchMedia('(max-width:768px)').matches){
+  function _loadSpline(){
+    var s=document.createElement('script');s.type='module';
+    s.src='https://cdn.jsdelivr.net/npm/@splinetool/viewer/build/spline-viewer.js';
+    document.head.appendChild(s);
+  }
+  window.addEventListener('load',function(){
+    'requestIdleCallback'in window
+      ?requestIdleCallback(_loadSpline,{timeout:5000})
+      :setTimeout(_loadSpline,4000);
+  });
 }
 </script>
 <script src="i18n.js" defer></script>
@@ -350,57 +366,19 @@ img{display:block;max-width:100%}
 .hero-robot{
   position:relative;
   width:100%;height:clamp(420px,74vh,720px);
-  display:flex;align-items:center;justify-content:center;
+  opacity:0;
+  animation:robot-enter 1.2s cubic-bezier(.16,1,.3,1) 1.4s forwards;
 }
+@keyframes robot-enter{to{opacity:1;transform:none}}
 .robot-float{animation:robot-float 5s ease-in-out infinite;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
-@keyframes robot-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
-/* ── CSS Hero Visual (remplace Spline) ── */
-.hv-wrap{position:relative;width:clamp(220px,30vw,400px);height:clamp(220px,30vw,400px)}
-.hv-glow{position:absolute;inset:-18%;background:radial-gradient(circle,rgba(139,92,246,.20) 0%,transparent 65%)}
-.hv-grid{
-  position:absolute;inset:0;border-radius:50%;
-  background-image:radial-gradient(circle,rgba(139,92,246,.28) 1px,transparent 1px);
-  background-size:26px 26px;
-  mask-image:radial-gradient(circle,black 40%,transparent 70%);
-  -webkit-mask-image:radial-gradient(circle,black 40%,transparent 70%);
-  opacity:.65;
+@keyframes robot-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.robot-glow{
+  position:absolute;inset:-56px;
+  background:radial-gradient(ellipse at 50% 56%,rgba(139,92,246,.42) 0%,rgba(99,102,241,.18) 44%,transparent 70%);
+  pointer-events:none;z-index:0;
 }
-.hv-core{
-  position:absolute;top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  width:clamp(60px,9vw,110px);height:clamp(60px,9vw,110px);
-  border-radius:50%;
-  background:radial-gradient(circle at 36% 36%,#c4b5fd,#6366f1 52%,#3b82f6 85%);
-  box-shadow:0 0 28px rgba(139,92,246,.72),0 0 60px rgba(99,102,241,.28);
-}
-.hv-ring{position:absolute;top:50%;left:50%;border-radius:50%}
-.hv-ring-a{
-  width:clamp(140px,19vw,240px);height:clamp(140px,19vw,240px);
-  transform:translate(-50%,-50%);
-  border:1px solid rgba(139,92,246,.32);
-  animation:hv-spin 20s linear infinite;
-}
-.hv-ring-a::before{
-  content:'';position:absolute;top:0;left:50%;
-  transform:translate(-50%,-50%);
-  width:8px;height:8px;border-radius:50%;
-  background:#a78bfa;box-shadow:0 0 10px rgba(167,139,250,.9);
-}
-.hv-ring-b{
-  width:clamp(200px,27vw,360px);height:clamp(200px,27vw,360px);
-  transform:translate(-50%,-50%);
-  border:1px solid rgba(59,130,246,.20);
-  animation:hv-spin 34s linear infinite reverse;
-}
-.hv-ring-b::after{
-  content:'';position:absolute;top:50%;right:0;
-  transform:translate(50%,-50%);
-  width:5px;height:5px;border-radius:50%;
-  background:#60a5fa;box-shadow:0 0 9px rgba(96,165,250,.8);
-}
-@keyframes hv-spin{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
 @media(prefers-reduced-motion:reduce){
-  .hv-ring-a,.hv-ring-b{animation:none!important}
   .robot-float,.hero-robot{animation:none!important;opacity:1!important;transform:none!important}
 }
 @media(max-width:900px){
@@ -740,17 +718,12 @@ img{display:block;max-width:100%}
         <a href="avis.html" class="btn-g" data-i18n="index.hero.cta2">Nos avis clients</a>
       </div>
     </div>
-    <!-- Hero visual CSS — aucun WebGL -->
+    <!-- Robot 3D Spline -->
     <div class="hero-robot-col" aria-hidden="true" inert>
       <div class="hero-robot" id="hero-robot">
         <div class="robot-float">
-          <div class="hv-wrap">
-            <div class="hv-glow"></div>
-            <div class="hv-grid"></div>
-            <div class="hv-core"></div>
-            <div class="hv-ring hv-ring-a"></div>
-            <div class="hv-ring hv-ring-b"></div>
-          </div>
+          <div class="robot-glow"></div>
+          <spline-viewer url="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode" background="transparent" loading-anim-type="spinner-big-dark"></spline-viewer>
         </div>
       </div>
     </div>
@@ -976,7 +949,7 @@ img{display:block;max-width:100%}
   var pctEl=document.getElementById('ld-pct');
   var barEl=document.getElementById('ld-bar');
   var rafP,tStart;
-  var DURATION=380;
+  var DURATION=1400;
 
   function ease(t){return t<.5?2*t*t:-1+(4-2*t)*t;}
 
