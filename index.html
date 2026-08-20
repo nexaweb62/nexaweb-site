@@ -72,6 +72,13 @@ if(!window.matchMedia('(max-width:768px)').matches){
     if(_spDone)return;_spDone=true;
     var s=document.createElement('script');s.type='module';
     s.src='https://cdn.jsdelivr.net/npm/@splinetool/viewer/build/spline-viewer.js';
+    /* Fade-in du robot une fois la scène 3D rendue */
+    s.onload=function(){
+      customElements.whenDefined('spline-viewer').then(function(){
+        var v=document.getElementById('hero-spline');
+        if(v)v.addEventListener('load',function(){v.style.opacity='1';},{once:true});
+      });
+    };
     document.head.appendChild(s);
   }
   ['mousemove','pointerdown','scroll','touchstart'].forEach(function(ev){
@@ -380,7 +387,9 @@ img{display:block;max-width:100%}
   background:radial-gradient(ellipse at 50% 56%,rgba(139,92,246,.42) 0%,rgba(99,102,241,.18) 44%,transparent 70%);
   pointer-events:none;z-index:0;
 }
-spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
+/* Scale 85% : canvas WebGL 27% moins grand → 27% moins de pixels shader par frame */
+.sp-scale-wrap{width:85%;height:85%;overflow:hidden;position:relative;z-index:1}
+spline-viewer{display:block;width:117.6%;height:117.6%;transform:scale(0.85);transform-origin:0 0;opacity:0;transition:opacity .5s ease}
 @media(prefers-reduced-motion:reduce){
   .robot-float,.hero-robot{animation:none!important;opacity:1!important;transform:none!important}
 }
@@ -718,7 +727,9 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
       <div class="hero-robot" id="hero-robot">
         <div class="robot-float">
           <div class="robot-glow"></div>
-          <spline-viewer url="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode" background="transparent" loading-anim-type="spinner-big-dark"></spline-viewer>
+          <div class="sp-scale-wrap">
+            <spline-viewer id="hero-spline" url="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode" background="transparent" loading-anim-type="none"></spline-viewer>
+          </div>
         </div>
       </div>
     </div>
