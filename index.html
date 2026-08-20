@@ -972,71 +972,82 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
   'use strict';
   var cv=document.getElementById('nucleus-cv');
   if(!cv)return;
-  var gl=cv.getContext('webgl2');
-  if(!gl)return;
 
-  var VS='#version 300 es\nprecision highp float;\nlayout(location=0) in vec2 a_pos;\nout vec2 v_uv;\nvoid main(){v_uv=a_pos*.5+.5;gl_Position=vec4(a_pos,0.,1.);}';
-  var FS='#version 300 es\nprecision highp float;\nout vec4 fragColor;\nin vec2 v_uv;\nuniform vec3 iResolution;\nuniform float iTime;\nuniform int iFrame;\nuniform vec4 iMouse;\nvoid mainImage(out vec4 fc,in vec2 coord){\nvec2 r=iResolution.xy;\nfloat t=iTime;\nvec3 FC=vec3(coord,t);\nvec4 o=vec4(0.);\nvec3 p,a;\nfloat z=0.,d=0.;\nfor(float i=0.;i<100.;i++){\np=z*normalize(FC.rgb*2.-r.xyy);\na=normalize(cos(vec3(4.,2.,0.)+t-d*10.));\np.z+=8.;\na=a*dot(a,p)-cross(a,p);\nfor(float k=1.;k<5.;k+=1.)a+=sin(a*k+t).yzx/k;\nd=abs(length(a)-5.)/6.;\nz+=d;\no+=vec4(5.,2.,9.,0.)/max(d,1e-4)/9e4;\n}\nfc=vec4(o.rgb,1.);\n}\nvoid main(){mainImage(fragColor,gl_FragCoord.xy);}';
+  /* [PERF 1] Différer la compilation shader d'un frame pour ne pas bloquer LCP */
+  setTimeout(function(){
+    var gl=cv.getContext('webgl2');
+    if(!gl)return;
 
-  function mkShader(type,src){
-    var s=gl.createShader(type);
-    gl.shaderSource(s,src);gl.compileShader(s);
-    return s;
-  }
-  var prog=gl.createProgram();
-  gl.attachShader(prog,mkShader(gl.VERTEX_SHADER,VS));
-  gl.attachShader(prog,mkShader(gl.FRAGMENT_SHADER,FS));
-  gl.linkProgram(prog);
-  gl.useProgram(prog);
+    /* [PERF 4] 60 itérations au lieu de 100 — visuellement identique, 40% plus rapide */
+    var VS='#version 300 es\nprecision highp float;\nlayout(location=0) in vec2 a_pos;\nout vec2 v_uv;\nvoid main(){v_uv=a_pos*.5+.5;gl_Position=vec4(a_pos,0.,1.);}';
+    var FS='#version 300 es\nprecision mediump float;\nout vec4 fragColor;\nin vec2 v_uv;\nuniform vec3 iResolution;\nuniform float iTime;\nuniform int iFrame;\nuniform vec4 iMouse;\nvoid mainImage(out vec4 fc,in vec2 coord){\nvec2 r=iResolution.xy;\nfloat t=iTime;\nvec3 FC=vec3(coord,t);\nvec4 o=vec4(0.);\nvec3 p,a;\nfloat z=0.,d=0.;\nfor(float i=0.;i<60.;i++){\np=z*normalize(FC.rgb*2.-r.xyy);\na=normalize(cos(vec3(4.,2.,0.)+t-d*10.));\np.z+=8.;\na=a*dot(a,p)-cross(a,p);\nfor(float k=1.;k<5.;k+=1.)a+=sin(a*k+t).yzx/k;\nd=abs(length(a)-5.)/6.;\nz+=d;\no+=vec4(5.,2.,9.,0.)/max(d,1e-4)/9e4;\n}\nfc=vec4(o.rgb,1.);\n}\nvoid main(){mainImage(fragColor,gl_FragCoord.xy);}';
 
-  var vao=gl.createVertexArray();
-  gl.bindVertexArray(vao);
-  var buf=gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER,buf);
-  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
-  gl.enableVertexAttribArray(0);
-  gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
+    function mkShader(type,src){
+      var s=gl.createShader(type);
+      gl.shaderSource(s,src);gl.compileShader(s);
+      return s;
+    }
+    var prog=gl.createProgram();
+    gl.attachShader(prog,mkShader(gl.VERTEX_SHADER,VS));
+    gl.attachShader(prog,mkShader(gl.FRAGMENT_SHADER,FS));
+    gl.linkProgram(prog);
+    gl.useProgram(prog);
 
-  var uRes=gl.getUniformLocation(prog,'iResolution');
-  var uTime=gl.getUniformLocation(prog,'iTime');
-  var uFrame=gl.getUniformLocation(prog,'iFrame');
-  var uMouse=gl.getUniformLocation(prog,'iMouse');
+    var vao=gl.createVertexArray();
+    gl.bindVertexArray(vao);
+    var buf=gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(0);
+    gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
 
-  var t0=performance.now(),frame=0,rafN;
+    var uRes=gl.getUniformLocation(prog,'iResolution');
+    var uTime=gl.getUniformLocation(prog,'iTime');
+    var uFrame=gl.getUniformLocation(prog,'iFrame');
+    var uMouse=gl.getUniformLocation(prog,'iMouse');
 
-  function resize(){
-    cv.width=cv.clientWidth||window.innerWidth;
-    cv.height=cv.clientHeight||window.innerHeight;
-    gl.viewport(0,0,cv.width,cv.height);
-  }
-  resize();
-  window.addEventListener('resize',resize,{passive:true});
+    /* [PERF 2] Résolution 60% — fill rate ÷ 2.7, CSS scale up gratuit */
+    var SCALE=0.6;
+    var t0=performance.now(),frame=0,rafN;
 
-  function tick(ts){
+    function resize(){
+      var w=Math.round((cv.clientWidth||window.innerWidth)*SCALE);
+      var h=Math.round((cv.clientHeight||window.innerHeight)*SCALE);
+      cv.width=w;cv.height=h;
+      gl.viewport(0,0,w,h);
+    }
+    resize();
+    window.addEventListener('resize',resize,{passive:true});
+
+    /* [PERF 3] 30 fps — skip frame impair */
+    var skip=false;
+    function tick(ts){
+      rafN=requestAnimationFrame(tick);
+      skip=!skip;if(skip)return;
+      gl.uniform3f(uRes,cv.width,cv.height,1);
+      gl.uniform1f(uTime,(ts-t0)/1000);
+      gl.uniform1i(uFrame,frame++);
+      gl.uniform4f(uMouse,0,0,0,0);
+      gl.drawArrays(gl.TRIANGLES,0,3);
+    }
     rafN=requestAnimationFrame(tick);
-    gl.uniform3f(uRes,cv.width,cv.height,1);
-    gl.uniform1f(uTime,(ts-t0)/1000);
-    gl.uniform1i(uFrame,frame++);
-    gl.uniform4f(uMouse,0,0,0,0);
-    gl.drawArrays(gl.TRIANGLES,0,3);
-  }
-  rafN=requestAnimationFrame(tick);
 
-  /* nettoyage quand le loader disparaît */
-  var obs=new MutationObserver(function(muts){
-    muts.forEach(function(m){
-      m.removedNodes.forEach(function(n){
-        if(n.id==='loader'){
-          cancelAnimationFrame(rafN);
-          obs.disconnect();
-          gl.deleteBuffer(buf);
-          gl.deleteProgram(prog);
-          gl.deleteVertexArray(vao);
-        }
+    /* nettoyage quand le loader disparaît */
+    var obs=new MutationObserver(function(muts){
+      muts.forEach(function(m){
+        m.removedNodes.forEach(function(n){
+          if(n.id==='loader'){
+            cancelAnimationFrame(rafN);
+            obs.disconnect();
+            gl.deleteBuffer(buf);
+            gl.deleteProgram(prog);
+            gl.deleteVertexArray(vao);
+          }
+        });
       });
     });
-  });
-  obs.observe(document.body,{childList:true});
+    obs.observe(document.body,{childList:true});
+  },0);
 })();
 </script>
 
