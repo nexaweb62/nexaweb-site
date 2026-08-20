@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import RobotScene from '../components/RobotScene';
+import { HeroRobot } from '../components/HeroRobot';
 import '../styles/global.css';
 ---
 <BaseLayout title="Nexa Web — Agence Web Premium · Carvin">
@@ -118,7 +118,7 @@ footer{padding:clamp(48px,8vh,96px) 0 32px;border-top:1px solid var(--border)}
 
       <!-- Robot 3D React -->
       <div class="hero-robot-col" aria-hidden="true">
-        <RobotScene client:visible />
+        <HeroRobot client:visible />
       </div>
     </div>
   </div>
