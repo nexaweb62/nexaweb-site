@@ -976,7 +976,7 @@ spline-viewer{display:block;position:relative;z-index:1;width:100%;height:100%}
   if(!gl)return;
 
   var VS='#version 300 es\nprecision highp float;\nlayout(location=0) in vec2 a_pos;\nout vec2 v_uv;\nvoid main(){v_uv=a_pos*.5+.5;gl_Position=vec4(a_pos,0.,1.);}';
-  var FS='#version 300 es\nprecision highp float;\nout vec4 fragColor;\nin vec2 v_uv;\nuniform vec3 iResolution;\nuniform float iTime;\nuniform int iFrame;\nuniform vec4 iMouse;\nvoid mainImage(out vec4 fc,in vec2 coord){\nvec2 r=iResolution.xy;\nfloat t=iTime;\nvec3 FC=vec3(coord,t);\nvec4 o=vec4(0.);\nvec3 p,a;\nfloat z=0.,d=0.;\nfor(float i=0.;i<100.;i++){\np=z*normalize(FC.rgb*2.-r.xyy);\na=normalize(cos(vec3(4.,2.,0.)+t-d*10.));\np.z+=8.;\na=a*dot(a,p)-cross(a,p);\nfor(float k=1.;k<5.;k+=1.)a+=sin(a*k+t).yzx/k;\nd=abs(length(a)-5.)/6.;\nz+=d;\no+=vec4(3.,8.,z,0.)/max(d,1e-4)/9e4;\n}\nfc=vec4(o.rgb,1.);\n}\nvoid main(){mainImage(fragColor,gl_FragCoord.xy);}';
+  var FS='#version 300 es\nprecision highp float;\nout vec4 fragColor;\nin vec2 v_uv;\nuniform vec3 iResolution;\nuniform float iTime;\nuniform int iFrame;\nuniform vec4 iMouse;\nvoid mainImage(out vec4 fc,in vec2 coord){\nvec2 r=iResolution.xy;\nfloat t=iTime;\nvec3 FC=vec3(coord,t);\nvec4 o=vec4(0.);\nvec3 p,a;\nfloat z=0.,d=0.;\nfor(float i=0.;i<100.;i++){\np=z*normalize(FC.rgb*2.-r.xyy);\na=normalize(cos(vec3(4.,2.,0.)+t-d*10.));\np.z+=8.;\na=a*dot(a,p)-cross(a,p);\nfor(float k=1.;k<5.;k+=1.)a+=sin(a*k+t).yzx/k;\nd=abs(length(a)-5.)/6.;\nz+=d;\no+=vec4(5.,2.,9.,0.)/max(d,1e-4)/9e4;\n}\nfc=vec4(o.rgb,1.);\n}\nvoid main(){mainImage(fragColor,gl_FragCoord.xy);}';
 
   function mkShader(type,src){
     var s=gl.createShader(type);
