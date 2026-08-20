@@ -62,10 +62,6 @@
 }
 </script>
 <script>
-/* Spline — desktop uniquement.
-   Chargé au premier geste utilisateur (mousemove/scroll/touch).
-   Lighthouse ne simule pas de geste → TBT = 0ms → score parfait.
-   Utilisateurs réels → robot apparaît dès le premier mouvement. */
 if(!window.matchMedia('(max-width:768px)').matches){
   var _spDone=false;
   function _loadSpline(){
@@ -74,9 +70,15 @@ if(!window.matchMedia('(max-width:768px)').matches){
     s.src='https://cdn.jsdelivr.net/npm/@splinetool/viewer/build/spline-viewer.js';
     document.head.appendChild(s);
   }
-  ['mousemove','pointerdown','scroll','touchstart'].forEach(function(ev){
-    window.addEventListener(ev,_loadSpline,{passive:true,once:true});
-  });
+  function _idleLoad(){
+    if('requestIdleCallback' in window){
+      requestIdleCallback(_loadSpline,{timeout:2000});
+    } else {
+      setTimeout(_loadSpline,300);
+    }
+  }
+  if(document.readyState==='complete'){ _idleLoad(); }
+  else { window.addEventListener('load',_idleLoad); }
 }
 </script>
 <script src="i18n.js" defer></script>
