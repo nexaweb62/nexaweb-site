@@ -1,0 +1,296 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import RobotScene from '../components/RobotScene';
+import '../styles/global.css';
+---
+<BaseLayout title="Nexa Web — Agence Web Premium · Carvin">
+<style>
+/* ── NEON CANVAS ── */
+#neon-canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.55}
+
+/* ── SECTIONS ── */
+.s-svc,.s-proc,.s-why,.s-stats,.s-faq,.s-cta,footer{content-visibility:auto;contain-intrinsic-size:0 500px}
+.section-tag{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted);margin-bottom:16px}
+.section-title{font-size:clamp(28px,4vw,48px);font-weight:700;letter-spacing:-.02em;line-height:1.1;margin-bottom:clamp(16px,2.5vh,28px)}
+.section-sub{font-size:clamp(14px,1.2vw,17px);color:var(--text-muted);line-height:1.65;max-width:520px}
+.section-head{margin-bottom:clamp(40px,6vh,72px)}
+
+/* ── SERVICES ── */
+.s-svc{padding:clamp(64px,10vh,120px) 0}
+.svc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;border:1px solid var(--border)}
+.svc-card{padding:clamp(28px,3vw,40px);border-right:1px solid var(--border);border-bottom:1px solid var(--border);transition:background .2s}
+.svc-card:hover{background:var(--bg-alt)}
+.svc-icon{width:36px;height:36px;margin-bottom:20px;color:var(--accent)}
+.svc-icon svg{width:100%;height:100%;stroke:currentColor;stroke-width:1.5;fill:none}
+.svc-card h3{font-size:17px;font-weight:700;margin-bottom:10px}
+.svc-card p{font-size:13px;color:var(--text-muted);line-height:1.6}
+.svc-card .svc-link{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-top:16px;transition:gap .2s}
+.svc-card:hover .svc-link{gap:10px}
+
+/* ── STATS ── */
+.s-stats{padding:clamp(48px,8vh,96px) 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px}
+.stat{text-align:center;padding:32px 20px}
+.stat-n{font-size:clamp(36px,5vw,64px);font-weight:700;letter-spacing:-.03em;color:var(--text)}
+.stat-n span{color:var(--accent)}
+.stat-l{font-size:12px;font-weight:600;letter-spacing:.10em;text-transform:uppercase;color:var(--text-muted);margin-top:6px}
+@media(max-width:640px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* ── PROCESS ── */
+.s-proc{padding:clamp(64px,10vh,120px) 0}
+.proc-list{display:flex;flex-direction:column;gap:0}
+.proc-item{display:grid;grid-template-columns:60px 1fr;gap:24px;padding:32px 0;border-bottom:1px solid var(--border);align-items:start}
+.proc-num{font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--text-dim);padding-top:4px}
+.proc-body h3{font-size:18px;font-weight:700;margin-bottom:8px}
+.proc-body p{font-size:14px;color:var(--text-muted);line-height:1.65;max-width:560px}
+
+/* ── CTA ── */
+.s-cta{padding:clamp(80px,12vh,140px) 0;text-align:center}
+.cta-inner{max-width:560px;margin:0 auto}
+.cta-inner .section-title{margin-bottom:12px}
+.cta-inner .section-sub{margin:0 auto clamp(28px,4vh,48px)}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* ── FOOTER ── */
+footer{padding:clamp(48px,8vh,96px) 0 32px;border-top:1px solid var(--border)}
+.foot-in{display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px;margin-bottom:40px}
+.foot-brand p{font-size:13px;color:var(--text-muted);line-height:1.6;margin-top:12px;max-width:240px}
+.foot-col h4{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px}
+.foot-col ul{display:flex;flex-direction:column;gap:8px}
+.foot-col ul a{font-size:13px;color:var(--text-dim);transition:color .2s}
+.foot-col ul a:hover{color:var(--text-muted)}
+.foot-bot{padding-top:24px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.foot-copy{font-size:11px;color:var(--text-dim)}
+.foot-legal{display:flex;gap:20px}
+.foot-legal a{font-size:11px;color:var(--text-dim);transition:color .2s}
+.foot-legal a:hover{color:var(--text-muted)}
+@media(max-width:640px){.foot-in{grid-template-columns:1fr}}
+</style>
+
+<canvas id="neon-canvas" aria-hidden="true"></canvas>
+
+<!-- HEADER -->
+<header class="hdr" id="hdr">
+  <div class="wrap">
+    <nav class="nav" aria-label="Navigation principale">
+      <a href="/" class="nav-logo">NEXA<span>WEB</span></a>
+      <div class="nav-links" aria-label="Sections">
+        <a href="#services">Services</a>
+        <a href="#process">Process</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="nav-r">
+        <div class="lang-sel" role="group" aria-label="Language">
+          <button class="lang-opt active" data-lang="fr">FR</button>
+          <button class="lang-opt" data-lang="en">EN</button>
+        </div>
+        <button class="theme-btn" id="theme-btn" aria-label="Basculer le thème">○</button>
+        <a href="/login" class="login-btn" aria-label="Connexion">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        </a>
+        <a href="/devis" class="btn">Démarrer un projet →</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="accueil">
+  <div class="wrap">
+    <div class="hero-cols">
+      <div class="hero-main">
+        <div class="hero-eyebrow">
+          <span class="hero-dot" aria-hidden="true"></span>
+          <span class="label">Agence Web · Carvin</span>
+        </div>
+        <h1 class="hero-hl">
+          Sites web<br>qui donnent à votre<br>marque une <em>nouvelle</em><br>dimension.
+        </h1>
+        <p class="hero-sub">
+          Nous créons des sites internet sur-mesure, livrés en&nbsp;7&nbsp;jours,
+          pour commerçants et artisans des Hauts-de-France.
+        </p>
+        <div class="hero-ctas">
+          <a href="/devis" class="btn">Démarrer un projet →</a>
+          <a href="/avis" class="btn-g">Nos avis clients</a>
+        </div>
+      </div>
+
+      <!-- Robot 3D React -->
+      <div class="hero-robot-col" aria-hidden="true">
+        <RobotScene client:visible />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="s-stats" id="stats">
+  <div class="wrap">
+    <div class="stats-grid">
+      <div class="stat"><div class="stat-n">+<span>120</span></div><div class="stat-l">Sites livrés</div></div>
+      <div class="stat"><div class="stat-n"><span>7</span> j</div><div class="stat-l">Délai moyen</div></div>
+      <div class="stat"><div class="stat-n"><span>98</span>%</div><div class="stat-l">Clients satisfaits</div></div>
+      <div class="stat"><div class="stat-n"><span>4.9</span>★</div><div class="stat-l">Note moyenne</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="s-svc" id="services">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="section-tag">Ce qu'on fait</p>
+      <h2 class="section-title">Nos services</h2>
+      <p class="section-sub">De la vitrine au e-commerce, on construit le site adapté à votre activité.</p>
+    </div>
+    <div class="svc-grid">
+      <div class="svc-card">
+        <div class="svc-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg></div>
+        <h3>Site vitrine</h3>
+        <p>Un site professionnel, rapide et responsive pour présenter votre activité et capter de nouveaux clients.</p>
+        <a href="/site-vitrine" class="svc-link">En savoir plus →</a>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
+        <h3>E-commerce</h3>
+        <p>Boutique en ligne complète avec paiement sécurisé, gestion des stocks et tableau de bord.</p>
+        <a href="/ecommerce" class="svc-link">En savoir plus →</a>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        <h3>SEO</h3>
+        <p>Optimisation pour les moteurs de recherche afin d'attirer du trafic qualifié et local.</p>
+        <a href="/seo" class="svc-link">En savoir plus →</a>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon"><svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
+        <h3>Refonte</h3>
+        <p>Modernisez votre site existant pour améliorer les performances, l'esthétique et le taux de conversion.</p>
+        <a href="/refonte" class="svc-link">En savoir plus →</a>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+        <h3>Design UI/UX</h3>
+        <p>Maquettes, identité visuelle et expérience utilisateur pensés pour convertir vos visiteurs.</p>
+        <a href="/design-uiux" class="svc-link">En savoir plus →</a>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h3>Maintenance</h3>
+        <p>Mises à jour, sauvegardes, sécurité et support mensuel pour garder votre site en parfait état.</p>
+        <a href="/tarifs" class="svc-link">Voir les formules →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="s-proc" id="process">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="section-tag">Comment on travaille</p>
+      <h2 class="section-title">Notre process</h2>
+    </div>
+    <div class="proc-list">
+      <div class="proc-item"><span class="proc-num">01</span><div class="proc-body"><h3>Appel découverte</h3><p>On échange sur votre activité, vos objectifs et votre cible. 30 minutes suffisent pour cadrer le projet.</p></div></div>
+      <div class="proc-item"><span class="proc-num">02</span><div class="proc-body"><h3>Devis &amp; planning</h3><p>Vous recevez un devis détaillé et un planning précis. Pas de mauvaises surprises.</p></div></div>
+      <div class="proc-item"><span class="proc-num">03</span><div class="proc-body"><h3>Design &amp; développement</h3><p>On crée votre site en 7 jours ouvrés. Vous validez chaque étape.</p></div></div>
+      <div class="proc-item"><span class="proc-num">04</span><div class="proc-body"><h3>Mise en ligne</h3><p>Déploiement, configuration DNS, tests finaux. Votre site est live et référencé.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="s-cta" id="contact">
+  <div class="wrap">
+    <div class="cta-inner">
+      <p class="section-tag">Prêt à démarrer ?</p>
+      <h2 class="section-title">Votre projet mérite un site à la hauteur.</h2>
+      <p class="section-sub">Devis gratuit en 24h — réponse garantie.</p>
+      <div class="cta-btns">
+        <a href="/devis" class="btn">Demander un devis gratuit →</a>
+        <a href="/tarifs" class="btn-g">Voir les tarifs</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-in">
+      <div class="foot-brand">
+        <a href="/" class="nav-logo">NEXA<span style="color:var(--accent)">WEB</span></a>
+        <p>Agence web spécialisée pour commerçants et artisans. Carvin, Hauts-de-France.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="/site-vitrine">Site vitrine</a></li>
+          <li><a href="/ecommerce">E-commerce</a></li>
+          <li><a href="/seo">SEO</a></li>
+          <li><a href="/design-uiux">Design UI/UX</a></li>
+          <li><a href="/refonte">Refonte</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Entreprise</h4>
+        <ul>
+          <li><a href="/equipe">Notre équipe</a></li>
+          <li><a href="/avis">Avis clients</a></li>
+          <li><a href="/tarifs">Tarifs</a></li>
+          <li><a href="/devis">Devis gratuit</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <span class="foot-copy">© 2026 Nexa Web. Tous droits réservés.</span>
+      <nav class="foot-legal" aria-label="Liens légaux">
+        <a href="/mentions-legales">Mentions légales</a>
+        <a href="/politique-confidentialite">Confidentialité</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<!-- Neon canvas background -->
+<script>
+(function(){
+  var cv = document.getElementById('neon-canvas') as HTMLCanvasElement;
+  if(!cv) return;
+  var ctx = cv.getContext('2d');
+  if(!ctx) return;
+  function resize(){cv.width=window.innerWidth;cv.height=window.innerHeight;}
+  resize();
+  window.addEventListener('resize',resize,{passive:true});
+  var lines: {x:number;y:number;vx:number;vy:number;l:number;a:number}[]=[];
+  for(var i=0;i<6;i++){
+    lines.push({x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,l:Math.random()*200+80,a:Math.random()*Math.PI*2});
+  }
+  var colors=['rgba(139,92,246,','rgba(99,102,241,','rgba(139,92,246,'];
+  function draw(){
+    if(!ctx) return;
+    ctx.clearRect(0,0,cv.width,cv.height);
+    lines.forEach(function(ln,i){
+      ln.x+=ln.vx; ln.y+=ln.vy; ln.a+=.005;
+      if(ln.x<0||ln.x>cv.width)ln.vx*=-1;
+      if(ln.y<0||ln.y>cv.height)ln.vy*=-1;
+      var g=ctx.createLinearGradient(ln.x,ln.y,ln.x+Math.cos(ln.a)*ln.l,ln.y+Math.sin(ln.a)*ln.l);
+      g.addColorStop(0,colors[i%3]+'0)');
+      g.addColorStop(.5,colors[i%3]+'.18)');
+      g.addColorStop(1,colors[i%3]+'0)');
+      ctx.beginPath();
+      ctx.strokeStyle=g;
+      ctx.lineWidth=1.5;
+      ctx.moveTo(ln.x,ln.y);
+      ctx.lineTo(ln.x+Math.cos(ln.a)*ln.l,ln.y+Math.sin(ln.a)*ln.l);
+      ctx.stroke();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+</BaseLayout>
