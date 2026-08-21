@@ -29,14 +29,11 @@ import '../styles/global.css';
 @media(max-width:860px){.form-grid{grid-template-columns:1fr}}
 
 /* Star rating */
---star:#F59E0B;
 .star-field{margin-bottom:24px}
 .field-label{display:block;font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px}
 .stars{display:flex;gap:4px}
 .star-btn{font-size:26px;color:var(--text-dim);background:none;border:none;cursor:pointer;padding:0 2px;line-height:1;transition:color .12s,transform .12s}
-.stars:not(:hover) .star-btn.on{color:#F59E0B}
-.stars:hover .star-btn{color:#F59E0B}
-.stars:hover .star-btn~.star-btn{color:var(--text-dim)}
+.star-btn.on,.star-btn.hov{color:#F59E0B}
 .star-btn:hover{transform:scale(1.2)}
 
 /* Form fields */
@@ -199,12 +196,22 @@ import '../styles/global.css';
 
   /* Star rating */
   var starBtns = Array.from(document.querySelectorAll('.star-btn'));
+  var starsContainer = document.getElementById('stars');
   var rating = 0;
   function setRating(val){
     rating = val;
     starBtns.forEach(function(s){ s.classList.toggle('on', parseInt(s.dataset.val) <= val); });
   }
-  starBtns.forEach(function(s){ s.addEventListener('click', function(){ setRating(parseInt(s.dataset.val)); }); });
+  starBtns.forEach(function(s){
+    s.addEventListener('click', function(){ setRating(parseInt(s.dataset.val)); });
+    s.addEventListener('mouseenter', function(){
+      var hov = parseInt(s.dataset.val);
+      starBtns.forEach(function(b){ b.classList.toggle('hov', parseInt(b.dataset.val) <= hov); });
+    });
+  });
+  starsContainer.addEventListener('mouseleave', function(){
+    starBtns.forEach(function(b){ b.classList.remove('hov'); });
+  });
 
   /* Form submit */
   var form = document.getElementById('review-form');
