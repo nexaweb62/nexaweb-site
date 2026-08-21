@@ -7,32 +7,172 @@ export interface Props {
 const { backBtn = false, cta = 'Démarrer un projet', ctaHref = '/devis' } = Astro.props;
 ---
 <header class="hdr" id="hdr">
-  <div class="wrap" style="max-width:1280px">
+  <div class="wrap">
     <nav class="nav" aria-label="Navigation principale">
-      <a href="/" class="nav-logo">NEXA<span>WEB</span></a>
+      <a href="/" class="nav-logo" aria-label="Nexa Web — Accueil">NEXA<span>WEB</span></a>
+      {backBtn ? (
+        <ul class="nav-links" role="list">
+          <li><a href="/" class="nav-link">Accueil</a></li>
+        </ul>
+      ) : (
+        <ul class="nav-links" role="list">
+          <li><a href="/#accueil"  class="nav-link">Accueil</a></li>
+          <li><a href="/#services" class="nav-link">Services</a></li>
+          <li><a href="/#apropos"  class="nav-link">À propos</a></li>
+          <li><a href="/tarifs"    class="nav-link">Tarifs</a></li>
+          <li><a href="/#faq"     class="nav-link">FAQ</a></li>
+          <li><a href="/contact"  class="nav-link">Contact</a></li>
+        </ul>
+      )}
       <div class="nav-r">
-        {backBtn ? (
-          <a href="javascript:history.back()" class="back-btn">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
-            Retour
-          </a>
-        ) : (
-          <div class="nav-links">
-            <a href="/#services">Services</a>
-            <a href="/tarifs">Tarifs</a>
-            <a href="/contact">Contact</a>
-          </div>
-        )}
         <div class="lang-sel" role="group" aria-label="Language">
           <button class="lang-opt" data-lang="fr">FR</button>
           <button class="lang-opt" data-lang="en">EN</button>
         </div>
+        <button class="menu-btn" id="menu-btn" aria-label="Ouvrir la navigation" aria-expanded="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
+        </button>
         <button class="theme-btn" id="theme-btn" aria-label="Basculer le thème">○</button>
         <a href="/login" class="login-btn" aria-label="Connexion">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
         </a>
-        <a href={ctaHref} class="btn">{cta} →</a>
+        <a href={ctaHref} class="btn">{cta}</a>
       </div>
     </nav>
   </div>
 </header>
+
+<!-- CIRCULAR NAV OVERLAY -->
+<div class="cnav" id="cnav" role="dialog" aria-modal="true" aria-label="Navigation">
+  <div class="cnav-ring" id="cnav-ring">
+    <button class="cnav-close" id="cnav-close" aria-label="Fermer la navigation">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="cnav-item">
+      <a href="/" class="cnav-link">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span class="cnav-name">Accueil</span>
+      </a>
+    </div>
+    <div class="cnav-item">
+      <a href="/#services" class="cnav-link">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        <span class="cnav-name">Services</span>
+      </a>
+    </div>
+    <div class="cnav-item">
+      <a href="/#apropos" class="cnav-link">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span class="cnav-name">À propos</span>
+      </a>
+    </div>
+    <div class="cnav-item">
+      <a href="/tarifs" class="cnav-link">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+        <span class="cnav-name">Tarifs</span>
+      </a>
+    </div>
+    <div class="cnav-item">
+      <a href="/#faq" class="cnav-link">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span class="cnav-name">FAQ</span>
+      </a>
+    </div>
+    <div class="cnav-item">
+      <a href="/contact" class="cnav-link">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <span class="cnav-name">Contact</span>
+      </a>
+    </div>
+    <div class="cnav-item">
+      <a href="/rendez-vous" class="cnav-link">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span class="cnav-name">RDV</span>
+      </a>
+    </div>
+    <div class="cnav-item">
+      <a href="/equipe" class="cnav-link">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span class="cnav-name">Équipe</span>
+      </a>
+    </div>
+    <div class="cnav-item">
+      <a href="/avis" class="cnav-link">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <span class="cnav-name">Avis</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+(function(){
+  'use strict';
+
+  /* ── Header scroll ── */
+  var hdr=document.getElementById('hdr');
+  if(hdr){
+    function chkHdr(){hdr.classList.toggle('on',window.scrollY>40)}
+    window.addEventListener('scroll',chkHdr,{passive:true});
+    chkHdr();
+  }
+
+  /* ── Theme toggle ── */
+  var root=document.documentElement;
+  var tbtn=document.getElementById('theme-btn');
+  if(tbtn){
+    function isDark(){return root.getAttribute('data-theme')==='dark'||(!root.getAttribute('data-theme')&&window.matchMedia('(prefers-color-scheme:dark)').matches)}
+    function updBtn(){tbtn.textContent=isDark()?'◐':'○';tbtn.title=isDark()?'Mode clair':'Mode sombre'}
+    updBtn();
+    tbtn.addEventListener('click',function(){
+      var next=isDark()?'light':'dark';
+      root.setAttribute('data-theme',next);
+      localStorage.setItem('nw-theme',next);
+      updBtn();
+    });
+  }
+
+  /* ── Circular nav ── */
+  var overlay=document.getElementById('cnav');
+  var ring=document.getElementById('cnav-ring');
+  var menuBtn=document.getElementById('menu-btn');
+  var closeBtn=document.getElementById('cnav-close');
+  if(!overlay||!ring||!menuBtn)return;
+
+  var items=Array.from(ring.querySelectorAll('.cnav-item'));
+  var n=items.length;
+
+  function positionItems(){
+    var size=ring.offsetWidth;
+    var r=size*0.368;
+    items.forEach(function(item,i){
+      var angle=((360/n)*i-90)*Math.PI/180;
+      var x=Math.cos(angle)*r;
+      var y=Math.sin(angle)*r;
+      item.style.transform='translate(calc(-50% + '+x.toFixed(1)+'px), calc(-50% + '+y.toFixed(1)+'px))';
+    });
+  }
+
+  function openNav(){
+    overlay.classList.add('open');
+    menuBtn.setAttribute('aria-expanded','true');
+    document.body.style.overflow='hidden';
+    positionItems();
+    closeBtn.focus();
+  }
+
+  function closeNav(){
+    overlay.classList.remove('open');
+    menuBtn.setAttribute('aria-expanded','false');
+    document.body.style.overflow='';
+    menuBtn.focus();
+  }
+
+  menuBtn.addEventListener('click',openNav);
+  closeBtn.addEventListener('click',closeNav);
+  overlay.addEventListener('click',function(e){if(e.target===overlay)closeNav();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&overlay.classList.contains('open'))closeNav();});
+  ring.querySelectorAll('.cnav-link').forEach(function(link){link.addEventListener('click',closeNav);});
+  window.addEventListener('resize',function(){if(overlay.classList.contains('open'))positionItems();},{passive:true});
+})();
+</script>

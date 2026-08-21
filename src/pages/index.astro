@@ -1,248 +1,399 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { HeroRobot } from '../components/HeroRobot';
+import Header from '../components/Header.astro';
 import '../styles/global.css';
 ---
-<BaseLayout title="Nexa Web — Agence Web Premium · Carvin">
+<BaseLayout title="Nexa Web — Agence Web Premium · Carvin" description="Nexa Web conçoit des sites internet sur-mesure pour commerçants et artisans. Livraison en 7 jours. Carvin, Hauts-de-France.">
 <style>
-/* ── NEON CANVAS ── */
-#neon-canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.55}
+/* ── NEON FLOW v2 ── */
+:root{--neon-opacity:0.60}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]){--neon-opacity:0.14}}
+:root[data-theme="light"]{--neon-opacity:0.14}
+.neon-flow{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;opacity:var(--neon-opacity)}
+.nf-r{position:absolute;border-radius:50%}
+.nf-r4{width:1400px;height:700px;background:radial-gradient(ellipse at 52% 42%,rgba(99,102,241,.20) 0%,rgba(139,92,246,.08) 46%,transparent 68%);top:-250px;right:-320px;animation:r4 45s ease-in-out infinite 18s}
+.nf-r1b{width:1300px;height:650px;background:radial-gradient(ellipse at 58% 42%,rgba(139,92,246,.32) 0%,rgba(99,102,241,.11) 48%,transparent 70%);top:-150px;right:-280px;animation:r1b 40s ease-in-out infinite 5s}
+.nf-r5{width:800px;height:480px;background:radial-gradient(ellipse,rgba(224,231,255,.12) 0%,rgba(59,130,246,.07) 46%,transparent 66%);bottom:-80px;right:12%;animation:r5 42s ease-in-out infinite 26s}
+.nf-r1{width:1100px;height:155px;background:radial-gradient(ellipse at 50% 50%,rgba(139,92,246,.90) 0%,rgba(99,102,241,.55) 32%,rgba(99,102,241,.18) 62%,transparent 80%);top:4vh;right:-220px;animation:r1 30s ease-in-out infinite}
+.nf-r2{width:900px;height:100px;background:radial-gradient(ellipse at 50% 50%,rgba(59,130,246,.82) 0%,rgba(37,99,235,.48) 35%,rgba(99,102,241,.16) 65%,transparent 82%);top:30vh;right:-120px;animation:r2 38s ease-in-out infinite 9s}
+.nf-r3{width:460px;height:68px;background:radial-gradient(ellipse at 50% 50%,rgba(217,70,239,.62) 0%,rgba(139,92,246,.28) 48%,transparent 72%);top:8vh;right:6vw;animation:r3 22s ease-in-out infinite 2s}
+@keyframes r1{0%,100%{transform:translate3d(0,0,0) rotate(-32deg) scaleX(1)}25%{transform:translate3d(-52px,44px,0) rotate(-29deg) scaleX(1.06)}50%{transform:translate3d(-82px,-18px,0) rotate(-35deg) scaleX(.96)}75%{transform:translate3d(28px,58px,0) rotate(-30deg) scaleX(1.04)}}
+@keyframes r1b{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(-65px,42px,0) scale(1.07)}}
+@keyframes r2{0%,100%{transform:translate3d(0,0,0) rotate(-18deg) scaleX(1)}33%{transform:translate3d(62px,-72px,0) rotate(-15deg) scaleX(1.12)}66%{transform:translate3d(-42px,52px,0) rotate(-21deg) scaleX(.91)}}
+@keyframes r3{0%,100%{transform:translate3d(0,0,0) rotate(-44deg) scaleX(1)}40%{transform:translate3d(-38px,-62px,0) rotate(-40deg) scaleX(1.22)}80%{transform:translate3d(22px,28px,0) rotate(-47deg) scaleX(.86)}}
+@keyframes r4{0%,100%{transform:translate3d(0,0,0) scale(1)}45%{transform:translate3d(-52px,-32px,0) scale(1.05)}80%{transform:translate3d(42px,52px,0) scale(.96)}}
+@keyframes r5{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(52px,-42px,0) scale(1.10)}}
+@media(max-width:768px){.nf-r1{width:600px;height:100px}.nf-r1b{width:700px;height:380px}.nf-r2{width:500px;height:72px}.nf-r3,.nf-r5{display:none}.nf-r4{width:800px;height:420px}}
+@media(prefers-reduced-motion:reduce){.nf-r1,.nf-r1b,.nf-r2,.nf-r3,.nf-r4,.nf-r5{animation:none!important}}
 
-/* ── SECTIONS ── */
-.s-svc,.s-proc,.s-why,.s-stats,.s-faq,.s-cta,footer{content-visibility:auto;contain-intrinsic-size:0 500px}
-.section-tag{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted);margin-bottom:16px}
-.section-title{font-size:clamp(28px,4vw,48px);font-weight:700;letter-spacing:-.02em;line-height:1.1;margin-bottom:clamp(16px,2.5vh,28px)}
-.section-sub{font-size:clamp(14px,1.2vw,17px);color:var(--text-muted);line-height:1.65;max-width:520px}
-.section-head{margin-bottom:clamp(40px,6vh,72px)}
+/* ── LOADING SCREEN ── */
+#loader{position:fixed;inset:0;background:#050509;z-index:9999;display:flex;align-items:center;justify-content:center}
+#loader.ld-exit{opacity:0;transform:scale(1.06);transition:opacity .85s cubic-bezier(.4,0,.6,1),transform .85s cubic-bezier(.4,0,.6,1);pointer-events:none}
+.ld-inner{display:flex;flex-direction:column;align-items:center;text-align:center;user-select:none;gap:0}
+.ld-brand{font-size:11px;font-weight:700;letter-spacing:.30em;text-transform:uppercase;color:rgba(232,232,242,.82);margin-bottom:52px;opacity:0;transform:translateY(10px);animation:ldfade .55s cubic-bezier(.16,1,.3,1) .08s forwards}
+.ld-brand b{color:rgba(232,232,242,.30);font-weight:700}
+.ld-nucleus-wrap{position:fixed;inset:0;z-index:0}
+#nucleus-cv{display:block;width:100%;height:100%}
+.ld-inner{position:relative;z-index:1}
+.ld-status{font-size:8.5px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:rgba(232,232,242,.40);margin-bottom:14px;opacity:0;animation:ldfade .55s cubic-bezier(.16,1,.3,1) .30s forwards}
+.ld-pct{font-size:clamp(2.2rem,8vw,3.4rem);font-weight:900;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:rgba(232,232,242,.92);margin-bottom:18px;line-height:1;opacity:0;animation:ldfade .55s cubic-bezier(.16,1,.3,1) .36s forwards}
+.ld-bar-track{width:180px;height:1px;background:rgba(255,255,255,.07);margin-bottom:30px;overflow:hidden;opacity:0;animation:ldfade .55s cubic-bezier(.16,1,.3,1) .42s forwards}
+.ld-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,#8B5CF6 0%,#6366F1 52%,#3B82F6 100%)}
+.ld-caption{font-size:8.5px;font-weight:500;letter-spacing:.26em;text-transform:uppercase;color:rgba(232,232,242,.20);opacity:0;animation:ldfade .5s cubic-bezier(.16,1,.3,1) .48s forwards}
+@keyframes ldfade{to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){#loader{display:none}}
+
+/* ── HERO ── */
+.s-hero{min-height:100svh;display:flex;flex-direction:column;padding-top:var(--hdr)}
+.hero-main{flex:1;display:flex;flex-direction:column;justify-content:center;padding:clamp(40px,8vh,100px) 0}
+.hero-eye{display:flex;align-items:center;gap:12px;margin-bottom:clamp(24px,4vh,48px);opacity:0;transform:translateY(14px);animation:fu .6s cubic-bezier(.16,1,.3,1) .2s forwards}
+.hero-dot{width:6px;height:6px;border-radius:50%;background:var(--text-muted)}
+.h-xl em{font-style:italic;font-weight:800;color:var(--text-muted)}
+.hero-hl{margin-bottom:clamp(24px,4vh,52px);overflow:hidden;width:100%;text-wrap:wrap;overflow-wrap:anywhere}
+.hero-hl .ln{display:block;overflow:hidden}
+.hero-hl .li{display:block;transform:translateY(110%);animation:su .85s cubic-bezier(.16,1,.3,1) forwards}
+.hero-hl .ln:nth-child(1) .li{animation-delay:.4s}
+.hero-hl .ln:nth-child(2) .li{animation-delay:.56s}
+.hero-hl .ln:nth-child(3) .li{animation-delay:.72s}
+.hero-sub{margin-bottom:clamp(28px,5vh,52px);opacity:0;animation:fu .6s cubic-bezier(.16,1,.3,1) .95s forwards}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:12px;opacity:0;animation:fu .6s cubic-bezier(.16,1,.3,1) 1.1s forwards}
+.hero-foot{display:flex;align-items:center;gap:12px;padding:22px 0;border-top:1px solid var(--border);opacity:0;animation:fu .5s cubic-bezier(.16,1,.3,1) 1.3s forwards}
+.hero-line{width:40px;height:1px;background:var(--text-dim)}
+.hero-cols .hero-main{flex:0 0 auto;width:clamp(340px,52%,640px);min-width:0}
+@media(max-width:900px){.hero-cols .hero-main{width:100%}}
+@keyframes su{to{transform:translateY(0)}}
+@keyframes fu{to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.hero-eye,.hero-hl .li,.hero-sub,.hero-ctas,.hero-foot{animation:none!important;opacity:1!important;transform:none!important}}
+
+/* ── PHILOSOPHY ── */
+.s-phil{border-top:1px solid var(--border)}
+.phil-in{display:grid;grid-template-columns:1fr 2fr;gap:clamp(32px,6vw,120px);align-items:start}
+.phil-txt{font-size:clamp(1.5rem,3.5vw,3.4rem);font-weight:700;line-height:1.15;letter-spacing:-.025em}
+.phil-txt span{color:var(--text-muted)}
+@media(max-width:700px){.phil-in{grid-template-columns:1fr;gap:22px}}
 
 /* ── SERVICES ── */
-.s-svc{padding:clamp(64px,10vh,120px) 0}
-.svc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;border:1px solid var(--border)}
-.svc-card{padding:clamp(28px,3vw,40px);border-right:1px solid var(--border);border-bottom:1px solid var(--border);transition:background .2s}
-.svc-card:hover{background:var(--bg-alt)}
-.svc-icon{width:36px;height:36px;margin-bottom:20px;color:var(--accent)}
-.svc-icon svg{width:100%;height:100%;stroke:currentColor;stroke-width:1.5;fill:none}
-.svc-card h3{font-size:17px;font-weight:700;margin-bottom:10px}
-.svc-card p{font-size:13px;color:var(--text-muted);line-height:1.6}
-.svc-card .svc-link{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-top:16px;transition:gap .2s}
-.svc-card:hover .svc-link{gap:10px}
-
-/* ── STATS ── */
-.s-stats{padding:clamp(48px,8vh,96px) 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px}
-.stat{text-align:center;padding:32px 20px}
-.stat-n{font-size:clamp(36px,5vw,64px);font-weight:700;letter-spacing:-.03em;color:var(--text)}
-.stat-n span{color:var(--accent)}
-.stat-l{font-size:12px;font-weight:600;letter-spacing:.10em;text-transform:uppercase;color:var(--text-muted);margin-top:6px}
-@media(max-width:640px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+.s-svc{border-top:1px solid var(--border)}
+.svc-hdr{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:24px;margin-bottom:clamp(36px,6vh,72px)}
+.svc-list{border-top:1px solid var(--border)}
+.svc-row{display:grid;grid-template-columns:52px 1fr auto;align-items:center;gap:20px;padding:clamp(16px,2.5vh,26px) 0;border-bottom:1px solid var(--border);position:relative;overflow:hidden;cursor:pointer;text-decoration:none;color:inherit}
+.svc-row::before{content:'';position:absolute;inset:0;background:var(--bg-alt);transform:translateX(-100%);transition:transform .45s cubic-bezier(.16,1,.3,1);z-index:0}
+.svc-row:hover::before{transform:translateX(0)}
+.svc-row>*{position:relative;z-index:1}
+.svc-n{font-size:9.5px;font-weight:500;letter-spacing:.12em;color:var(--text-dim);font-variant-numeric:tabular-nums}
+.svc-name{font-size:clamp(1rem,2.5vw,2rem);font-weight:700;letter-spacing:-.02em}
+.svc-meta{display:flex;align-items:center;gap:16px;color:var(--text-muted)}
+.svc-tag{font-size:9px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim)}
+.svc-arr{font-size:1.1rem;transition:transform .3s cubic-bezier(.16,1,.3,1);color:var(--text-muted)}
+.svc-row:hover .svc-arr{transform:translateX(7px)}
+@media(max-width:600px){.svc-tag{display:none}}
 
 /* ── PROCESS ── */
-.s-proc{padding:clamp(64px,10vh,120px) 0}
-.proc-list{display:flex;flex-direction:column;gap:0}
-.proc-item{display:grid;grid-template-columns:60px 1fr;gap:24px;padding:32px 0;border-bottom:1px solid var(--border);align-items:start}
-.proc-num{font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--text-dim);padding-top:4px}
-.proc-body h3{font-size:18px;font-weight:700;margin-bottom:8px}
-.proc-body p{font-size:14px;color:var(--text-muted);line-height:1.65;max-width:560px}
+.s-proc{border-top:1px solid var(--border)}
+.proc-hdr{margin-bottom:clamp(36px,6vh,72px)}
+.proc-grid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border)}
+.proc-step{padding:clamp(22px,4vw,48px);border-right:1px solid var(--border)}
+.proc-step:last-child{border-right:none}
+.proc-n{font-size:9.5px;font-weight:500;letter-spacing:.14em;color:var(--text-dim);margin-bottom:36px;font-variant-numeric:tabular-nums}
+.proc-title{font-size:clamp(.95rem,1.8vw,1.4rem);font-weight:700;letter-spacing:-.02em;margin-bottom:10px}
+.proc-desc{font-size:13px;font-weight:300;line-height:1.68;color:var(--text-muted)}
+@media(max-width:860px){.proc-grid{grid-template-columns:repeat(2,1fr)}.proc-step:nth-child(2){border-right:none}.proc-step:nth-child(n+3){border-top:1px solid var(--border)}.proc-step:nth-child(4){border-right:none}}
+@media(max-width:480px){.proc-grid{grid-template-columns:1fr}.proc-step{border-right:none;border-top:1px solid var(--border)}.proc-step:first-child{border-top:none}}
+
+/* ── WHY ── */
+.s-why{border-top:1px solid var(--border);background:var(--bg-alt)}
+.why-in{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,8vw,120px);align-items:start}
+.why-bio{display:flex;flex-direction:column;gap:18px;padding:4px 0}
+.why-bio-lead{font-size:clamp(1.35rem,2.4vw,1.9rem);font-weight:800;line-height:1.18;letter-spacing:-.03em;color:var(--text)}
+.why-bio-body{font-size:13px;font-weight:300;line-height:1.72;color:var(--text-muted)}
+.why-bio-cta{display:inline-flex;align-items:center;gap:8px;margin-top:8px;font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--text);border-bottom:1px solid var(--border-hi);padding-bottom:4px;transition:color .2s,border-color .2s;align-self:flex-start}
+.why-bio-cta:hover{color:var(--text);border-color:var(--text)}
+@media(max-width:720px){.why-in{grid-template-columns:1fr}}
+
+/* ── STATS ── */
+.s-stats{border-top:1px solid var(--border)}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border)}
+.stat{padding:clamp(28px,6vw,64px);border-right:1px solid var(--border);text-align:center}
+.stat:last-child{border-right:none}
+.stat-val{font-size:clamp(2.8rem,6vw,6rem);font-weight:900;letter-spacing:-.04em;line-height:1;margin-bottom:10px;font-variant-numeric:tabular-nums}
+.stat-lbl{font-size:10.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted)}
+@media(max-width:500px){.stats-grid{grid-template-columns:1fr}.stat{border-right:none;border-bottom:1px solid var(--border)}.stat:last-child{border-bottom:none}}
+
+/* ── FAQ ── */
+.s-faq{border-top:1px solid var(--border)}
+.faq-in{display:grid;grid-template-columns:1fr 1.8fr;gap:clamp(40px,8vw,120px)}
+.faq-side p{margin-top:20px;font-size:13px}
+.faq-list{border-top:1px solid var(--border)}
+.faq-item{border-bottom:1px solid var(--border)}
+.faq-q{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;padding:21px 0;font-size:clamp(.88rem,1.4vw,1.02rem);font-weight:600;letter-spacing:-.01em;gap:16px;cursor:pointer;color:var(--text)}
+.faq-q:focus-visible{outline:2px solid var(--text);border-radius:2px}
+.faq-ind{flex-shrink:0;width:23px;height:23px;border:1px solid var(--border-hi);border-radius:50%;font-size:14px;display:flex;align-items:center;justify-content:center;color:var(--text-muted);transition:transform .3s,border-color .3s}
+.faq-item.open .faq-ind{transform:rotate(45deg);border-color:var(--text-muted)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.16,1,.3,1)}
+.faq-a-in{padding-bottom:22px;font-size:13.5px;font-weight:300;line-height:1.75;color:var(--text-muted)}
+@media(max-width:700px){.faq-in{grid-template-columns:1fr}}
 
 /* ── CTA ── */
-.s-cta{padding:clamp(80px,12vh,140px) 0;text-align:center}
-.cta-inner{max-width:560px;margin:0 auto}
-.cta-inner .section-title{margin-bottom:12px}
-.cta-inner .section-sub{margin:0 auto clamp(28px,4vh,48px)}
-.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.s-cta{border-top:1px solid var(--border);text-align:center}
+.cta-in{max-width:900px;margin:0 auto;padding:clamp(80px,15vw,180px) 0}
+.cta-super{font-size:clamp(.6rem,1vw,.75rem);font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--text-dim);margin-bottom:32px}
+.cta-hl{font-size:clamp(3rem,8vw,9.5rem);font-weight:900;line-height:.92;letter-spacing:-.04em;margin-bottom:48px;text-wrap:balance}
+.cta-hl em{font-style:italic;font-weight:800}
+.cta-btn{display:inline-flex;align-items:center;gap:12px;background:var(--btn-bg);color:var(--btn-text);font-size:12px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:18px 40px;border-radius:2px;transition:opacity .2s,transform .3s cubic-bezier(.16,1,.3,1)}
+.cta-btn:hover{opacity:.84;transform:translateY(-2px)}
+.cta-btn:focus-visible{outline:2px solid var(--text);outline-offset:4px}
+.cta-arr{display:inline-block;transition:transform .25s}
+.cta-btn:hover .cta-arr{transform:translateX(5px)}
 
-/* ── FOOTER ── */
-footer{padding:clamp(48px,8vh,96px) 0 32px;border-top:1px solid var(--border)}
-.foot-in{display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px;margin-bottom:40px}
-.foot-brand p{font-size:13px;color:var(--text-muted);line-height:1.6;margin-top:12px;max-width:240px}
-.foot-col h4{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px}
-.foot-col ul{display:flex;flex-direction:column;gap:8px}
-.foot-col ul a{font-size:13px;color:var(--text-dim);transition:color .2s}
-.foot-col ul a:hover{color:var(--text-muted)}
-.foot-bot{padding-top:24px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.foot-copy{font-size:11px;color:var(--text-dim)}
-.foot-legal{display:flex;gap:20px}
-.foot-legal a{font-size:11px;color:var(--text-dim);transition:color .2s}
-.foot-legal a:hover{color:var(--text-muted)}
-@media(max-width:640px){.foot-in{grid-template-columns:1fr}}
+/* ── SECTIONS skip render ── */
+.s-phil,.s-svc,.s-proc,.s-why,.s-stats,.s-faq,.s-cta,.s-foot{content-visibility:auto;contain-intrinsic-size:0 500px}
 </style>
 
-<canvas id="neon-canvas" aria-hidden="true"></canvas>
+<!-- Neon Flow -->
+<div class="neon-flow" aria-hidden="true" role="presentation">
+  <div class="nf-r nf-r4"></div>
+  <div class="nf-r nf-r1b"></div>
+  <div class="nf-r nf-r5"></div>
+  <div class="nf-r nf-r1"></div>
+  <div class="nf-r nf-r2"></div>
+  <div class="nf-r nf-r3"></div>
+</div>
 
-<!-- HEADER -->
-<header class="hdr" id="hdr">
-  <div class="wrap">
-    <nav class="nav" aria-label="Navigation principale">
-      <a href="/" class="nav-logo">NEXA<span>WEB</span></a>
-      <div class="nav-links" aria-label="Sections">
-        <a href="#services">Services</a>
-        <a href="#process">Process</a>
-        <a href="#contact">Contact</a>
-      </div>
-      <div class="nav-r">
-        <div class="lang-sel" role="group" aria-label="Language">
-          <button class="lang-opt active" data-lang="fr">FR</button>
-          <button class="lang-opt" data-lang="en">EN</button>
-        </div>
-        <button class="theme-btn" id="theme-btn" aria-label="Basculer le thème">○</button>
-        <a href="/login" class="login-btn" aria-label="Connexion">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-        </a>
-        <a href="/devis" class="btn">Démarrer un projet →</a>
-      </div>
-    </nav>
+<!-- Loading Screen -->
+<div id="loader" role="status" aria-live="polite" aria-label="Chargement Nexa Web">
+  <div class="ld-nucleus-wrap" aria-hidden="true">
+    <canvas id="nucleus-cv"></canvas>
   </div>
-</header>
+  <div class="ld-inner">
+    <div class="ld-brand">NEXA<b>WEB</b></div>
+    <p class="ld-status">INITIALISATION...</p>
+    <div class="ld-pct" id="ld-pct" aria-hidden="true">00%</div>
+    <div class="ld-bar-track" aria-hidden="true">
+      <div class="ld-bar-fill" id="ld-bar"></div>
+    </div>
+    <div class="ld-caption" aria-hidden="true">CRAFTING DIGITAL EXPERIENCES</div>
+  </div>
+</div>
+
+<Header />
+
+<main id="main-content">
 
 <!-- HERO -->
-<section class="hero" id="accueil">
-  <div class="wrap">
-    <div class="hero-cols">
-      <div class="hero-main">
-        <div class="hero-eyebrow">
-          <span class="hero-dot" aria-hidden="true"></span>
-          <span class="label">Agence Web · Carvin</span>
-        </div>
-        <h1 class="hero-hl">
-          Sites web<br>qui donnent à votre<br>marque une <em>nouvelle</em><br>dimension.
-        </h1>
-        <p class="hero-sub">
-          Nous créons des sites internet sur-mesure, livrés en&nbsp;7&nbsp;jours,
-          pour commerçants et artisans des Hauts-de-France.
-        </p>
-        <div class="hero-ctas">
-          <a href="/devis" class="btn">Démarrer un projet →</a>
-          <a href="/avis" class="btn-g">Nos avis clients</a>
-        </div>
+<section class="s-hero" id="accueil" aria-label="Accueil">
+  <div class="wrap hero-cols">
+    <div class="hero-main">
+      <div class="hero-eye" aria-hidden="true">
+        <div class="hero-dot"></div>
+        <span class="label">Agence web premium · Carvin</span>
       </div>
+      <h1 class="h-xl hero-hl">
+        <span class="ln"><span class="li">Des sites web qui</span></span>
+        <span class="ln"><span class="li">donnent une <em>nouvelle</em></span></span>
+        <span class="ln"><span class="li">dimension à votre marque.</span></span>
+      </h1>
+      <p class="body hero-sub" style="max-width:480px">
+        Nexa Web conçoit des expériences digitales modernes, rapides et sur mesure pour les entreprises qui veulent se démarquer.
+      </p>
+      <div class="hero-ctas">
+        <a href="/devis" class="btn">Démarrer un projet <span aria-hidden="true">→</span></a>
+        <a href="/avis" class="btn-g">Nos avis clients</a>
+      </div>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="hero-foot" aria-hidden="true">
+      <div class="hero-line"></div>
+      <span class="label">Défiler pour découvrir</span>
+    </div>
+  </div>
+</section>
 
-      <!-- Robot 3D React -->
-      <div class="hero-robot-col" aria-hidden="true">
-        <HeroRobot client:visible />
+<!-- PHILOSOPHY -->
+<section class="s-phil" style="padding:var(--sec) 0" id="apropos" aria-labelledby="phil-h">
+  <div class="wrap">
+    <div class="phil-in">
+      <div class="r"><span class="label" id="phil-h">Notre vision</span></div>
+      <p class="phil-txt r d1">
+        Votre site n'est pas simplement une vitrine. C'est le <span>premier contact</span> entre votre marque et votre futur client. Chaque détail compte. Chaque pixel est une décision.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="s-svc" style="padding:var(--sec) 0" id="services" aria-labelledby="svc-h">
+  <div class="wrap">
+    <div class="svc-hdr r">
+      <div>
+        <span class="label" id="svc-h">Ce que nous créons</span>
+        <h2 class="h-lg" style="margin-top:14px">Nos services</h2>
+      </div>
+      <p class="body" style="max-width:300px;text-align:right">Chaque prestation est pensée pour maximiser l'impact de votre présence en ligne.</p>
+    </div>
+    <div class="svc-list">
+      <a href="/site-vitrine" class="svc-row r">
+        <span class="svc-n" aria-hidden="true">01</span>
+        <span class="svc-name">Site vitrine</span>
+        <div class="svc-meta"><span class="svc-tag">Essentiel</span><span class="svc-arr" aria-hidden="true">→</span></div>
+      </a>
+      <a href="/ecommerce" class="svc-row r d1">
+        <span class="svc-n" aria-hidden="true">02</span>
+        <span class="svc-name">Site e-commerce</span>
+        <div class="svc-meta"><span class="svc-tag">Conversion</span><span class="svc-arr" aria-hidden="true">→</span></div>
+      </a>
+      <a href="/refonte" class="svc-row r d2">
+        <span class="svc-n" aria-hidden="true">03</span>
+        <span class="svc-name">Refonte de site</span>
+        <div class="svc-meta"><span class="svc-tag">Modernisation</span><span class="svc-arr" aria-hidden="true">→</span></div>
+      </a>
+      <a href="/design-uiux" class="svc-row r d3">
+        <span class="svc-n" aria-hidden="true">04</span>
+        <span class="svc-name">Design UI/UX</span>
+        <div class="svc-meta"><span class="svc-tag">Expérience</span><span class="svc-arr" aria-hidden="true">→</span></div>
+      </a>
+      <a href="/seo" class="svc-row r d4">
+        <span class="svc-n" aria-hidden="true">05</span>
+        <span class="svc-name">Optimisation SEO &amp; Performance</span>
+        <div class="svc-meta"><span class="svc-tag">Visibilité</span><span class="svc-arr" aria-hidden="true">→</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="s-proc" style="padding:var(--sec) 0" aria-labelledby="proc-h">
+  <div class="wrap">
+    <div class="proc-hdr r">
+      <span class="label" id="proc-h">De l'idée au site en ligne</span>
+      <h2 class="h-lg" style="margin-top:14px">Notre méthode</h2>
+    </div>
+    <div class="proc-grid">
+      <div class="proc-step r"><div class="proc-n">01</div><div class="proc-title">Découverte</div><p class="proc-desc">Nous apprenons à connaître votre activité, vos objectifs et votre audience pour concevoir une stratégie digitale sur mesure.</p></div>
+      <div class="proc-step r d1"><div class="proc-n">02</div><div class="proc-title">Direction artistique</div><p class="proc-desc">Création d'une identité visuelle cohérente, des maquettes aux prototypes interactifs, validés à chaque étape.</p></div>
+      <div class="proc-step r d2"><div class="proc-n">03</div><div class="proc-title">Développement</div><p class="proc-desc">Code propre, performant et maintenable. Optimisé pour la vitesse, le référencement et tous les appareils.</p></div>
+      <div class="proc-step r d3"><div class="proc-n">04</div><div class="proc-title">Mise en ligne</div><p class="proc-desc">Déploiement soigné, tests complets et formation à la gestion de votre site. Nous restons disponibles après le lancement.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="s-why" style="padding:var(--sec) 0" id="apropos2" aria-labelledby="why-h">
+  <div class="wrap">
+    <div class="why-in">
+      <div>
+        <span class="label r" id="why-h">Pourquoi Nexa Web</span>
+        <h2 class="h-lg r d1" style="margin-top:14px">La différence qui<br>fait la différence.</h2>
+        <p class="body r d2" style="margin-top:22px;max-width:380px">Nous ne faisons pas dans la quantité. Chaque projet reçoit une attention totale, de la stratégie à la mise en ligne.</p>
+      </div>
+      <div class="why-bio r d1">
+        <p class="why-bio-lead">Une agence jeune, des ambitions sérieuses.</p>
+        <p class="why-bio-body">Nexa Web est née de la conviction de trois passionnés du web que les petites entreprises méritent des sites aussi soignés que ceux des grandes marques — sans les prix prohibitifs.</p>
+        <p class="why-bio-body">Nous démarrons notre aventure sans catalogue de réalisations. Pas parce que nous manquons de compétences, mais parce que nous avons choisi de ne pas gonfler un portfolio avec des projets fictifs. Ce que nous offrons à la place, c'est une implication totale : chaque ligne de code, chaque détail de design, pensés uniquement pour vous.</p>
+        <p class="why-bio-body">Nos premiers clients bénéficient d'une attention rare — celle qu'une agence qui n'a pas encore cent projets en parallèle peut vraiment offrir.</p>
+        <a href="/devis" class="why-bio-cta">Être parmi les premiers →</a>
       </div>
     </div>
   </div>
 </section>
 
 <!-- STATS -->
-<section class="s-stats" id="stats">
+<section class="s-stats" style="padding:var(--sec) 0" aria-label="Chiffres clés">
   <div class="wrap">
     <div class="stats-grid">
-      <div class="stat"><div class="stat-n">+<span>120</span></div><div class="stat-l">Sites livrés</div></div>
-      <div class="stat"><div class="stat-n"><span>7</span> j</div><div class="stat-l">Délai moyen</div></div>
-      <div class="stat"><div class="stat-n"><span>98</span>%</div><div class="stat-l">Clients satisfaits</div></div>
-      <div class="stat"><div class="stat-n"><span>4.9</span>★</div><div class="stat-l">Note moyenne</div></div>
+      <div class="stat r"><div class="stat-val">100%</div><div class="stat-lbl">Sur mesure</div></div>
+      <div class="stat r d1"><div class="stat-val">24/7</div><div class="stat-lbl">Présence digitale</div></div>
+      <div class="stat r d2"><div class="stat-val">∞</div><div class="stat-lbl">Possibilités</div></div>
     </div>
   </div>
 </section>
 
-<!-- SERVICES -->
-<section class="s-svc" id="services">
+<!-- FAQ -->
+<section class="s-faq" style="padding:var(--sec) 0" id="faq" aria-labelledby="faq-h">
   <div class="wrap">
-    <div class="section-head">
-      <p class="section-tag">Ce qu'on fait</p>
-      <h2 class="section-title">Nos services</h2>
-      <p class="section-sub">De la vitrine au e-commerce, on construit le site adapté à votre activité.</p>
-    </div>
-    <div class="svc-grid">
-      <div class="svc-card">
-        <div class="svc-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg></div>
-        <h3>Site vitrine</h3>
-        <p>Un site professionnel, rapide et responsive pour présenter votre activité et capter de nouveaux clients.</p>
-        <a href="/site-vitrine" class="svc-link">En savoir plus →</a>
+    <div class="faq-in">
+      <div>
+        <span class="label r" id="faq-h">Questions fréquentes</span>
+        <h2 class="h-md r d1" style="margin-top:14px">On répond à vos questions.</h2>
+        <p class="body faq-side r d2" style="margin-top:18px;font-size:13px">Une question absente de cette liste ? Contactez-nous directement.</p>
+        <a href="/contact" class="btn-g r d3" style="margin-top:28px;display:inline-flex">Nous contacter</a>
       </div>
-      <div class="svc-card">
-        <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
-        <h3>E-commerce</h3>
-        <p>Boutique en ligne complète avec paiement sécurisé, gestion des stocks et tableau de bord.</p>
-        <a href="/ecommerce" class="svc-link">En savoir plus →</a>
-      </div>
-      <div class="svc-card">
-        <div class="svc-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
-        <h3>SEO</h3>
-        <p>Optimisation pour les moteurs de recherche afin d'attirer du trafic qualifié et local.</p>
-        <a href="/seo" class="svc-link">En savoir plus →</a>
-      </div>
-      <div class="svc-card">
-        <div class="svc-icon"><svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
-        <h3>Refonte</h3>
-        <p>Modernisez votre site existant pour améliorer les performances, l'esthétique et le taux de conversion.</p>
-        <a href="/refonte" class="svc-link">En savoir plus →</a>
-      </div>
-      <div class="svc-card">
-        <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
-        <h3>Design UI/UX</h3>
-        <p>Maquettes, identité visuelle et expérience utilisateur pensés pour convertir vos visiteurs.</p>
-        <a href="/design-uiux" class="svc-link">En savoir plus →</a>
-      </div>
-      <div class="svc-card">
-        <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-        <h3>Maintenance</h3>
-        <p>Mises à jour, sauvegardes, sécurité et support mensuel pour garder votre site en parfait état.</p>
-        <a href="/tarifs" class="svc-link">Voir les formules →</a>
+      <div>
+        <ul class="faq-list" aria-label="Foire aux questions">
+          <li class="faq-item r">
+            <button class="faq-q" aria-expanded="false"><span>Quel est le coût d'un site web ?</span><span class="faq-ind" aria-hidden="true">+</span></button>
+            <div class="faq-a" role="region"><div class="faq-a-in">Chaque projet étant unique, nos tarifs sont établis après analyse de vos besoins. Un site vitrine démarre à partir de 800 €. Nous proposons également des facilités de paiement pour vous accompagner sereinement.</div></div>
+          </li>
+          <li class="faq-item r d1">
+            <button class="faq-q" aria-expanded="false"><span>Quel est le délai de livraison ?</span><span class="faq-ind" aria-hidden="true">+</span></button>
+            <div class="faq-a" role="region"><div class="faq-a-in">Un site vitrine est livré entre 1 et 3 semaines selon la complexité. Un projet e-commerce peut nécessiter 4 à 8 semaines. Nous établissons un calendrier précis dès le départ.</div></div>
+          </li>
+          <li class="faq-item r d2">
+            <button class="faq-q" aria-expanded="false"><span>Mon site sera-t-il bien référencé sur Google ?</span><span class="faq-ind" aria-hidden="true">+</span></button>
+            <div class="faq-a" role="region"><div class="faq-a-in">Oui. Le SEO technique est intégré dès la conception : structure sémantique, vitesse de chargement, balises optimisées, données structurées. Nous proposons aussi un accompagnement éditorial pour aller plus loin.</div></div>
+          </li>
+          <li class="faq-item r d3">
+            <button class="faq-q" aria-expanded="false"><span>Proposez-vous de la maintenance après livraison ?</span><span class="faq-ind" aria-hidden="true">+</span></button>
+            <div class="faq-a" role="region"><div class="faq-a-in">Absolument. Nos contrats de maintenance incluent les mises à jour de sécurité, les sauvegardes régulières et les petites modifications. Votre site reste performant dans la durée.</div></div>
+          </li>
+          <li class="faq-item r d4">
+            <button class="faq-q" aria-expanded="false"><span>Je n'ai aucune connaissance technique, est-ce un problème ?</span><span class="faq-ind" aria-hidden="true">+</span></button>
+            <div class="faq-a" role="region"><div class="faq-a-in">Pas du tout. Nous gérons l'intégralité du projet et vous formons à la gestion de votre site à la livraison. L'interface est pensée pour être intuitive, même sans expérience technique.</div></div>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PROCESS -->
-<section class="s-proc" id="process">
+<!-- FINAL CTA -->
+<section class="s-cta" id="contact" aria-labelledby="cta-h">
   <div class="wrap">
-    <div class="section-head">
-      <p class="section-tag">Comment on travaille</p>
-      <h2 class="section-title">Notre process</h2>
-    </div>
-    <div class="proc-list">
-      <div class="proc-item"><span class="proc-num">01</span><div class="proc-body"><h3>Appel découverte</h3><p>On échange sur votre activité, vos objectifs et votre cible. 30 minutes suffisent pour cadrer le projet.</p></div></div>
-      <div class="proc-item"><span class="proc-num">02</span><div class="proc-body"><h3>Devis &amp; planning</h3><p>Vous recevez un devis détaillé et un planning précis. Pas de mauvaises surprises.</p></div></div>
-      <div class="proc-item"><span class="proc-num">03</span><div class="proc-body"><h3>Design &amp; développement</h3><p>On crée votre site en 7 jours ouvrés. Vous validez chaque étape.</p></div></div>
-      <div class="proc-item"><span class="proc-num">04</span><div class="proc-body"><h3>Mise en ligne</h3><p>Déploiement, configuration DNS, tests finaux. Votre site est live et référencé.</p></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA -->
-<section class="s-cta" id="contact">
-  <div class="wrap">
-    <div class="cta-inner">
-      <p class="section-tag">Prêt à démarrer ?</p>
-      <h2 class="section-title">Votre projet mérite un site à la hauteur.</h2>
-      <p class="section-sub">Devis gratuit en 24h — réponse garantie.</p>
-      <div class="cta-btns">
-        <a href="/devis" class="btn">Demander un devis gratuit →</a>
-        <a href="/tarifs" class="btn-g">Voir les tarifs</a>
+    <div class="cta-in">
+      <div class="cta-super r">Passons à l'action</div>
+      <h2 class="cta-hl r d1" id="cta-h">Votre prochain<br>site commence <em>ici.</em></h2>
+      <div class="r d2">
+        <a href="/devis" class="cta-btn">Démarrer un projet <span class="cta-arr" aria-hidden="true">→</span></a>
       </div>
     </div>
   </div>
 </section>
+
+</main>
 
 <!-- FOOTER -->
-<footer>
+<footer class="s-foot" aria-label="Pied de page">
   <div class="wrap">
     <div class="foot-in">
-      <div class="foot-brand">
-        <a href="/" class="nav-logo">NEXA<span style="color:var(--accent)">WEB</span></a>
-        <p>Agence web spécialisée pour commerçants et artisans. Carvin, Hauts-de-France.</p>
+      <div>
+        <div class="foot-logo">NEXA<span>WEB</span></div>
+        <p class="foot-tag">Agence web premium · Carvin, Hauts-de-France</p>
+        <div class="foot-socials" aria-label="Réseaux sociaux">
+          <a href="https://www.linkedin.com/in/ahmed-chteoui-049211429/" class="foot-soc linkedin" aria-label="LinkedIn" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="https://www.facebook.com/people/Nexaweb/61593685250868/" class="foot-soc facebook" aria-label="Facebook" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="https://wa.me/33641467898" class="foot-soc whatsapp" aria-label="WhatsApp" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          </a>
+        </div>
       </div>
-      <div class="foot-col">
-        <h4>Services</h4>
-        <ul>
-          <li><a href="/site-vitrine">Site vitrine</a></li>
-          <li><a href="/ecommerce">E-commerce</a></li>
-          <li><a href="/seo">SEO</a></li>
-          <li><a href="/design-uiux">Design UI/UX</a></li>
-          <li><a href="/refonte">Refonte</a></li>
-        </ul>
+      <div>
+        <div class="foot-col-title">Navigation</div>
+        <nav aria-label="Liens de navigation">
+          <ul class="foot-links">
+            <li><a href="/#accueil"  class="foot-lnk">Accueil</a></li>
+            <li><a href="/#services" class="foot-lnk">Services</a></li>
+            <li><a href="/#faq"      class="foot-lnk">FAQ</a></li>
+          </ul>
+        </nav>
       </div>
-      <div class="foot-col">
-        <h4>Entreprise</h4>
-        <ul>
-          <li><a href="/equipe">Notre équipe</a></li>
-          <li><a href="/avis">Avis clients</a></li>
-          <li><a href="/tarifs">Tarifs</a></li>
-          <li><a href="/devis">Devis gratuit</a></li>
-          <li><a href="/contact">Contact</a></li>
-        </ul>
+      <div>
+        <div class="foot-col-title">L'équipe</div>
+        <p class="foot-tag" style="margin-bottom:14px">Trois passionnés du digital derrière chaque projet Nexa Web.</p>
+        <a href="/equipe" class="foot-team-lnk">Découvrir l'équipe →</a>
       </div>
     </div>
     <div class="foot-bot">
@@ -255,42 +406,177 @@ footer{padding:clamp(48px,8vh,96px) 0 32px;border-top:1px solid var(--border)}
   </div>
 </footer>
 
-<!-- Neon canvas background -->
-<script>
-(function(){
-  var cv = document.getElementById('neon-canvas') as HTMLCanvasElement;
-  if(!cv) return;
-  var ctx = cv.getContext('2d');
-  if(!ctx) return;
-  function resize(){cv.width=window.innerWidth;cv.height=window.innerHeight;}
-  resize();
-  window.addEventListener('resize',resize,{passive:true});
-  var lines: {x:number;y:number;vx:number;vy:number;l:number;a:number}[]=[];
-  for(var i=0;i<6;i++){
-    lines.push({x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,l:Math.random()*200+80,a:Math.random()*Math.PI*2});
+<script is:inline>
+/* ── LOADING SCREEN ── */
+(function initLoader(){
+  'use strict';
+  var ld=document.getElementById('loader');
+  if(!ld)return;
+  if(sessionStorage.getItem('nxa-ld')){ld.remove();return;}
+  if(window.matchMedia('(prefers-reduced-motion:reduce)').matches||
+     window.matchMedia('(max-width:768px)').matches){
+    sessionStorage.setItem('nxa-ld','1');ld.remove();return;
   }
-  var colors=['rgba(139,92,246,','rgba(99,102,241,','rgba(139,92,246,'];
-  function draw(){
-    if(!ctx) return;
-    ctx.clearRect(0,0,cv.width,cv.height);
-    lines.forEach(function(ln,i){
-      ln.x+=ln.vx; ln.y+=ln.vy; ln.a+=.005;
-      if(ln.x<0||ln.x>cv.width)ln.vx*=-1;
-      if(ln.y<0||ln.y>cv.height)ln.vy*=-1;
-      var g=ctx.createLinearGradient(ln.x,ln.y,ln.x+Math.cos(ln.a)*ln.l,ln.y+Math.sin(ln.a)*ln.l);
-      g.addColorStop(0,colors[i%3]+'0)');
-      g.addColorStop(.5,colors[i%3]+'.18)');
-      g.addColorStop(1,colors[i%3]+'0)');
-      ctx.beginPath();
-      ctx.strokeStyle=g;
-      ctx.lineWidth=1.5;
-      ctx.moveTo(ln.x,ln.y);
-      ctx.lineTo(ln.x+Math.cos(ln.a)*ln.l,ln.y+Math.sin(ln.a)*ln.l);
-      ctx.stroke();
-    });
-    requestAnimationFrame(draw);
+  var pctEl=document.getElementById('ld-pct');
+  var barEl=document.getElementById('ld-bar');
+  var rafP,tStart;
+  var DURATION=1400;
+  function ease(t){return t<.5?2*t*t:-1+(4-2*t)*t;}
+  function stepProgress(ts){
+    if(!tStart)tStart=ts;
+    var raw=Math.min((ts-tStart)/DURATION,1);
+    var pct=Math.round(ease(raw)*100);
+    pctEl.textContent=(pct<10?'0':'')+pct+'%';
+    barEl.style.width=pct+'%';
+    if(raw<1){rafP=requestAnimationFrame(stepProgress);}
+    else{setTimeout(exitLoader,180);}
   }
-  draw();
+  setTimeout(function(){rafP=requestAnimationFrame(stepProgress);},100);
+  function exitLoader(){
+    cancelAnimationFrame(rafP);
+    sessionStorage.setItem('nxa-ld','1');
+    ld.classList.add('ld-exit');
+    setTimeout(function(){ld.remove();},900);
+  }
 })();
 </script>
+
+<script is:inline>
+/* ── NUCLEUS WebGL2 SHADER ── */
+(function(){
+  'use strict';
+  var cv=document.getElementById('nucleus-cv');
+  if(!cv)return;
+  setTimeout(function(){
+    var gl=cv.getContext('webgl2');
+    if(!gl)return;
+    var VS='#version 300 es\nprecision highp float;\nlayout(location=0) in vec2 a_pos;\nout vec2 v_uv;\nvoid main(){v_uv=a_pos*.5+.5;gl_Position=vec4(a_pos,0.,1.);}';
+    var FS='#version 300 es\nprecision lowp float;\nout vec4 fragColor;\nin vec2 v_uv;\nuniform vec3 iResolution;\nuniform float iTime;\nuniform int iFrame;\nuniform vec4 iMouse;\nvoid mainImage(out vec4 fc,in vec2 coord){\nvec2 r=iResolution.xy;\nfloat t=iTime;\nvec3 FC=vec3(coord,t);\nvec4 o=vec4(0.);\nvec3 p,a;\nfloat z=0.,d=0.;\nfor(float i=0.;i<20.;i++){\np=z*normalize(FC.rgb*2.-r.xyy);\na=normalize(cos(vec3(4.,2.,0.)+t-d*10.));\np.z+=8.;\na=a*dot(a,p)-cross(a,p);\nfor(float k=1.;k<4.;k+=1.)a+=sin(a*k+t).yzx/k;\nd=abs(length(a)-5.)/6.;\nz+=d;\no+=vec4(5.,2.,9.,0.)/max(d,1e-4)/9e4;\n}\nfc=vec4(o.rgb,1.);\n}\nvoid main(){mainImage(fragColor,gl_FragCoord.xy);}';
+    function mkShader(type,src){var s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);return s;}
+    var prog=gl.createProgram();
+    gl.attachShader(prog,mkShader(gl.VERTEX_SHADER,VS));
+    gl.attachShader(prog,mkShader(gl.FRAGMENT_SHADER,FS));
+    gl.linkProgram(prog);gl.useProgram(prog);
+    var vao=gl.createVertexArray();gl.bindVertexArray(vao);
+    var buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
+    var uRes=gl.getUniformLocation(prog,'iResolution');
+    var uTime=gl.getUniformLocation(prog,'iTime');
+    var uFrame=gl.getUniformLocation(prog,'iFrame');
+    var uMouse=gl.getUniformLocation(prog,'iMouse');
+    var SCALE=0.4,t0=performance.now(),frame=0,rafN;
+    function resize(){var w=Math.round((cv.clientWidth||window.innerWidth)*SCALE);var h=Math.round((cv.clientHeight||window.innerHeight)*SCALE);cv.width=w;cv.height=h;gl.viewport(0,0,w,h);}
+    resize();window.addEventListener('resize',resize,{passive:true});
+    var skipCount=0;
+    function tick(ts){
+      rafN=requestAnimationFrame(tick);
+      skipCount=(skipCount+1)%3;if(skipCount!==0)return;
+      gl.uniform3f(uRes,cv.width,cv.height,1);
+      gl.uniform1f(uTime,(ts-t0)/1000);
+      gl.uniform1i(uFrame,frame++);
+      gl.uniform4f(uMouse,0,0,0,0);
+      gl.drawArrays(gl.TRIANGLES,0,3);
+    }
+    rafN=requestAnimationFrame(tick);
+    var obs=new MutationObserver(function(muts){
+      muts.forEach(function(m){m.removedNodes.forEach(function(n){
+        if(n.id==='loader'){cancelAnimationFrame(rafN);obs.disconnect();gl.deleteBuffer(buf);gl.deleteProgram(prog);gl.deleteVertexArray(vao);}
+      });});
+    });
+    obs.observe(document.body,{childList:true});
+  },0);
+})();
+</script>
+
+<script is:inline>
+(function(){
+  'use strict';
+  var PRM=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var IS_MOBILE=window.matchMedia('(max-width:768px)').matches;
+
+  /* ── Bidirectional scroll reveal ── */
+  var revEls=document.querySelectorAll('.r');
+  if(PRM){
+    revEls.forEach(function(el){el.classList.add('v')});
+  } else if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){e.target.classList.toggle('v',e.isIntersecting)});
+    },{threshold:0.1,rootMargin:'0px 0px -60px 0px'});
+    revEls.forEach(function(el){io.observe(el)});
+  } else {
+    revEls.forEach(function(el){el.classList.add('v')});
+  }
+
+  /* ── Scroll-linked: hero fade/drift + neon parallax ── */
+  if(!PRM && !IS_MOBILE){
+    var heroMain=document.querySelector('.hero-main');
+    var heroFoot=document.querySelector('.hero-foot');
+    var heroSec=document.getElementById('accueil');
+    var neonFlow=document.querySelector('.neon-flow');
+    var heroSecH=heroSec?heroSec.offsetHeight:800;
+    window.addEventListener('resize',function(){if(heroSec)heroSecH=heroSec.offsetHeight;},{passive:true});
+    function applyFX(){
+      var sy=window.scrollY;
+      if(heroMain&&heroSec){
+        var prog=Math.min(Math.max(sy/(heroSecH*.62),0),1);
+        heroMain.style.opacity=Math.max(0,1-prog*1.2).toFixed(3);
+        heroMain.style.transform='translateY('+(-50*prog).toFixed(1)+'px)';
+        if(heroFoot)heroFoot.style.opacity=Math.max(0,1-prog*2.5).toFixed(3);
+      }
+      if(neonFlow)neonFlow.style.transform='translateY('+(sy*.055).toFixed(1)+'px)';
+    }
+    var _rAF=null;
+    window.addEventListener('scroll',function(){
+      if(!_rAF)_rAF=requestAnimationFrame(function(){_rAF=null;applyFX();});
+    },{passive:true});
+    applyFX();
+  }
+
+  /* ── FAQ accordion ── */
+  document.querySelectorAll('.faq-q').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var item=btn.closest('.faq-item');
+      var ans=item.querySelector('.faq-a');
+      var open=item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(function(o){
+        if(o!==item){o.classList.remove('open');o.querySelector('.faq-q').setAttribute('aria-expanded','false');o.querySelector('.faq-a').style.maxHeight='0'}
+      });
+      if(open){item.classList.remove('open');btn.setAttribute('aria-expanded','false');ans.style.maxHeight='0'}
+      else{item.classList.add('open');btn.setAttribute('aria-expanded','true');ans.style.maxHeight=ans.scrollHeight+'px'}
+    });
+  });
+
+  /* ── Smooth anchor scroll ── */
+  document.addEventListener('click',function(e){
+    var a=e.target.closest('a[href^="#"]');
+    if(!a)return;
+    var tgt=document.querySelector(a.getAttribute('href'));
+    if(!tgt)return;
+    e.preventDefault();
+    window.scrollTo({top:tgt.getBoundingClientRect().top+window.scrollY-80,behavior:'smooth'});
+  });
+})();
+</script>
+
+<script is:inline>
+/* ── OAuth callback (Supabase redirect) ── */
+(function(){
+  var hasCode=window.location.search.indexOf('code=')!==-1;
+  var hasToken=window.location.hash.indexOf('access_token=')!==-1;
+  if(!hasCode&&!hasToken)return;
+  function loadScript(src,cb){var s=document.createElement('script');s.src=src;s.onload=cb;document.head.appendChild(s);}
+  loadScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2',function(){
+    loadScript('/supabase-client.js',function(){
+      if(!window.sb)return;
+      window.sb.auth.onAuthStateChange(function(event,session){
+        if((event==='SIGNED_IN'||event==='INITIAL_SESSION')&&session){
+          window.location.replace('/espace-client');
+        }
+      });
+    });
+  });
+})();
+</script>
+
 </BaseLayout>

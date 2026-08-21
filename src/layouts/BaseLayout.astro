@@ -11,30 +11,15 @@ const { title, description = "Nexa Web conçoit des sites internet sur-mesure po
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content={description} />
+  <meta name="robots" content="index, follow" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <title>{title}</title>
+  <!-- Prevent FOUC — apply saved theme before paint -->
   <script is:inline>
     (function(){var t=localStorage.getItem('nw-theme');if(t)document.documentElement.setAttribute('data-theme',t);}());
   </script>
 </head>
 <body>
   <slot />
-  <script is:inline>
-    (function(){
-      var btn=document.getElementById('theme-btn');
-      if(!btn)return;
-      function applyTheme(t){
-        document.documentElement.setAttribute('data-theme',t);
-        localStorage.setItem('nw-theme',t);
-        btn.textContent=t==='dark'?'●':'○';
-      }
-      var saved=localStorage.getItem('nw-theme');
-      if(saved)applyTheme(saved);
-      btn.addEventListener('click',function(){
-        var cur=document.documentElement.getAttribute('data-theme');
-        applyTheme(cur==='dark'?'light':'dark');
-      });
-    })();
-  </script>
 </body>
 </html>
