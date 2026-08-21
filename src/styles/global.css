@@ -145,3 +145,17 @@ img{display:block;max-width:100%}
 .hdr-back{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);transition:color .2s;background:none;border:none;cursor:pointer;padding:0;white-space:nowrap}
 .hdr-back:hover{color:var(--text)}
 .hdr-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+
+/* ── MOBILE HEADER ── */
+@media(max-width:640px){
+  /* Cache le bouton CTA "Démarrer" — accessible via le menu hamburger */
+  .nav-r .btn{display:none}
+  .nav-r{gap:10px}
+}
+@media(max-width:420px){
+  .nav-r{gap:7px}
+  /* Cache le label "Retour" sur très petit écran, garde juste l'icône */
+  .hdr-back .back-label{display:none}
+  .lang-sel{gap:1px}
+  .lang-opt{padding:2px 3px}
+}
