@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+---
+<BaseLayout title="Mentions légales — Nexa Web">
+<style>
+.legal-hero{padding:clamp(48px,8vh,96px) 0 clamp(32px,4vh,56px)}
+.legal-tag{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
+.legal-title{font-size:clamp(28px,5vw,48px);font-weight:700;letter-spacing:-.02em;line-height:1.1;margin-bottom:16px}
+.legal-date{font-size:12px;color:var(--text-muted)}
+.legal-body{padding-bottom:clamp(64px,10vh,120px)}
+.legal-body section{margin-bottom:40px}
+.legal-body h2{font-size:16px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--text-muted);border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:16px}
+.legal-body p{font-size:15px;line-height:1.75;opacity:.85;margin-bottom:12px}
+.legal-body ul{font-size:15px;line-height:1.75;opacity:.85;padding-left:20px;list-style:disc;margin-bottom:12px}
+.legal-body ul li{margin-bottom:4px}
+.legal-body a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+.legal-body strong{opacity:1;font-weight:600}
+.site-footer{border-top:1px solid var(--border);padding:24px 0}
+.site-footer .foot-in{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.foot-copy{font-size:11px;color:var(--text-dim)}
+.foot-legal{display:flex;gap:20px}
+.foot-legal a{font-size:11px;color:var(--text-dim);transition:color .2s}
+.foot-legal a:hover{color:var(--text-muted)}
+</style>
+
+<Header backBtn={true} />
+
+<main>
+  <div class="wrap" style="max-width:800px">
+    <div class="legal-hero">
+      <p class="legal-tag">Informations légales</p>
+      <h1 class="legal-title">Mentions<br>légales</h1>
+      <p class="legal-date">Dernière mise à jour : août 2026</p>
+    </div>
+    <div class="legal-body">
+      <section>
+        <h2>1. Éditeur du site</h2>
+        <p><strong>Nexa Web</strong><br>Carvin, Hauts-de-France, France<br>E-mail : <a href="mailto:contact.nexaweb62@gmail.com">contact.nexaweb62@gmail.com</a><br>Site : <a href="https://nexaaweb.com">nexaaweb.com</a></p>
+        <p>Directeur de la publication : le responsable de Nexa Web.</p>
+      </section>
+      <section>
+        <h2>2. Hébergement</h2>
+        <p>Le site est hébergé par :<br><strong>Cloudflare, Inc.</strong><br>101 Townsend St, San Francisco, CA 94107, États-Unis<br><a href="https://www.cloudflare.com" target="_blank" rel="noopener">www.cloudflare.com</a></p>
+        <p>Les données utilisateurs (base de données, authentification) sont gérées par <strong>Supabase Inc.</strong>, avec des serveurs localisés dans l'Union européenne.</p>
+      </section>
+      <section>
+        <h2>3. Propriété intellectuelle</h2>
+        <p>L'ensemble du contenu du site nexaaweb.com — textes, graphismes, logos, icônes, images, code source — est la propriété exclusive de Nexa Web ou de ses partenaires, et est protégé par les lois françaises et internationales relatives à la propriété intellectuelle.</p>
+        <p>Toute reproduction, distribution, modification ou utilisation à des fins commerciales, totale ou partielle, sans autorisation écrite préalable est strictement interdite.</p>
+      </section>
+      <section>
+        <h2>4. Données personnelles</h2>
+        <p>Les traitements de données à caractère personnel effectués via ce site sont décrits dans notre <a href="/politique-confidentialite">Politique de confidentialité</a>, conforme au RGPD (UE 2016/679).</p>
+      </section>
+      <section>
+        <h2>5. Responsabilité</h2>
+        <p>Nexa Web s'efforce de maintenir les informations publiées à jour et exactes. Toutefois, nous ne pouvons garantir l'exactitude, l'exhaustivité ou l'actualité des contenus. Des liens hypertextes peuvent renvoyer vers des sites tiers dont nous déclinons toute responsabilité.</p>
+      </section>
+      <section>
+        <h2>6. Droit applicable</h2>
+        <p>Le présent site et les présentes mentions légales sont soumis au droit français. Tout litige relève de la compétence exclusive des tribunaux français.</p>
+      </section>
+      <section>
+        <h2>7. Contact</h2>
+        <p><a href="mailto:contact.nexaweb62@gmail.com">contact.nexaweb62@gmail.com</a></p>
+      </section>
+    </div>
+  </div>
+</main>
+
+<Footer />
+</BaseLayout>

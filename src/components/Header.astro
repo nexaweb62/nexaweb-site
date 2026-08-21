@@ -1,0 +1,38 @@
+---
+export interface Props {
+  backBtn?: boolean;
+  cta?: string;
+  ctaHref?: string;
+}
+const { backBtn = false, cta = 'Démarrer un projet', ctaHref = '/devis' } = Astro.props;
+---
+<header class="hdr" id="hdr">
+  <div class="wrap" style="max-width:1280px">
+    <nav class="nav" aria-label="Navigation principale">
+      <a href="/" class="nav-logo">NEXA<span>WEB</span></a>
+      <div class="nav-r">
+        {backBtn ? (
+          <a href="javascript:history.back()" class="back-btn">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+            Retour
+          </a>
+        ) : (
+          <div class="nav-links">
+            <a href="/#services">Services</a>
+            <a href="/tarifs">Tarifs</a>
+            <a href="/contact">Contact</a>
+          </div>
+        )}
+        <div class="lang-sel" role="group" aria-label="Language">
+          <button class="lang-opt" data-lang="fr">FR</button>
+          <button class="lang-opt" data-lang="en">EN</button>
+        </div>
+        <button class="theme-btn" id="theme-btn" aria-label="Basculer le thème">○</button>
+        <a href="/login" class="login-btn" aria-label="Connexion">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        </a>
+        <a href={ctaHref} class="btn">{cta} →</a>
+      </div>
+    </nav>
+  </div>
+</header>
