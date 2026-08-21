@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
-import { HeroRobot } from '../components/HeroRobot';
 import '../styles/global.css';
 ---
 <BaseLayout title="Nexa Web — Agence Web Premium · Carvin" description="Nexa Web conçoit des sites internet sur-mesure pour commerçants et artisans. Livraison en 7 jours. Carvin, Hauts-de-France.">
@@ -97,9 +96,8 @@ import '../styles/global.css';
 .hero-foot{display:flex;align-items:center;gap:12px;padding:22px 0;border-top:1px solid var(--border);opacity:0;animation:fu .5s cubic-bezier(.16,1,.3,1) 1.3s forwards}
 .hero-line{width:40px;height:1px;background:var(--text-dim)}
 .hero-cols{display:flex;align-items:center;gap:clamp(24px,5vw,80px)}
-.hero-cols .hero-main{flex:0 0 auto;width:clamp(340px,52%,640px);min-width:0}
-.hero-robot{flex:1;min-width:0;min-height:560px;display:flex;align-items:center;justify-content:center}
-@media(max-width:900px){.hero-cols{flex-direction:column}.hero-robot{display:none}}
+.hero-cols .hero-main{flex:0 0 auto;min-width:0}
+@media(max-width:900px){.hero-cols{flex-direction:column}}
 @keyframes su{to{transform:translateY(0)}}
 @keyframes fu{to{opacity:1;transform:translateY(0)}}
 @media(prefers-reduced-motion:reduce){.hero-eye,.hero-hl .li,.hero-sub,.hero-ctas,.hero-foot{animation:none!important;opacity:1!important;transform:none!important}}
@@ -248,9 +246,6 @@ import '../styles/global.css';
         <a href="/devis" class="btn" data-i18n="idx-cta1">Démarrer un projet <span aria-hidden="true">→</span></a>
         <a href="/avis" class="btn-g" data-i18n="idx-cta2">Nos avis clients</a>
       </div>
-    </div>
-    <div class="hero-robot" aria-hidden="true">
-      <HeroRobot client:visible />
     </div>
   </div>
   <div class="wrap">
