@@ -139,7 +139,7 @@ img{display:block;max-width:100%}
 /* ── TOOLTIPS HEADER ── */
 .hdr-tip{position:relative}
 .hdr-tip::after{content:attr(data-tip);position:absolute;top:calc(100% + 7px);left:50%;transform:translateX(-50%);font-size:7.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .18s}
-.hdr-tip:hover::after{opacity:1}
+.hdr-tip:hover::after,.hdr-tip.tip-active::after{opacity:1}
 
 /* ── BACK BTN HEADER ── */
 .hdr-back{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);transition:color .2s;background:none;border:none;cursor:pointer;padding:0;white-space:nowrap}
