@@ -1,0 +1,106 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+---
+<BaseLayout title="Rendez-vous — Nexa Web" description="Réservez une consultation gratuite de 30 min avec Nexa Web. Visio ou téléphone. Zéro engagement.">
+<style>
+/* Neon canvas background */
+#neon-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.48}
+
+main{position:relative;z-index:1;padding-top:var(--hdr)}
+
+/* Hero */
+.rdv-hero{text-align:center;padding:clamp(64px,11vh,130px) var(--pad-x) clamp(48px,7vh,80px)}
+.rdv-label{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent-ring);border-radius:100px;padding:5px 16px;margin-bottom:26px;background:var(--accent-dim)}
+.rdv-title{font-size:clamp(2.4rem,5.5vw,5rem);font-weight:900;line-height:.93;letter-spacing:-.04em;margin-bottom:20px;text-wrap:balance}
+.rdv-title em{font-style:italic;color:var(--text-muted)}
+.rdv-sub{font-size:clamp(.88rem,1.3vw,1.05rem);color:var(--text-muted);font-weight:300;line-height:1.65;max-width:480px;margin:0 auto 32px}
+.rdv-badges{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px}
+.rdv-badge{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border-hi);border-radius:100px;padding:7px 16px;font-size:11px;font-weight:500;color:var(--text-muted);letter-spacing:.04em}
+.rdv-badge svg{width:13px;height:13px;stroke:var(--accent);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+
+/* Calendly section */
+.rdv-section{max-width:900px;margin:0 auto;padding:0 var(--pad-x) clamp(80px,12vh,140px)}
+.rdv-card{background:rgba(16,16,30,.84);border:1px solid var(--border);border-radius:16px;overflow:hidden;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 0 0 1px var(--accent-ring),0 32px 80px rgba(139,92,246,.12)}
+.rdv-card-header{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--border)}
+.rdv-card-title{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted)}
+.rdv-live{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:500;color:#22c55e}
+.rdv-live::before{content:'';width:7px;height:7px;border-radius:50%;background:#22c55e;animation:pulse-dot 2s ease-in-out infinite}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.75)}}
+.calendly-inline-widget{min-width:320px;height:700px}
+@media(max-width:600px){.calendly-inline-widget{height:580px}}
+.rdv-fallback{padding:16px 24px;border-top:1px solid var(--border);text-align:center;font-size:12px;color:var(--text-dim)}
+.rdv-fallback a{color:var(--accent)}
+.rdv-fallback a:hover{text-decoration:underline}
+
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .rdv-card{background:rgba(255,255,255,.93);box-shadow:0 0 0 1px var(--accent-ring),0 24px 60px rgba(139,92,246,.09)}}
+:root[data-theme="light"] .rdv-card{background:rgba(255,255,255,.93);box-shadow:0 0 0 1px var(--accent-ring),0 24px 60px rgba(139,92,246,.09)}
+</style>
+
+<Header />
+
+<canvas id="neon-canvas" aria-hidden="true"></canvas>
+
+<main>
+  <!-- Hero -->
+  <div class="rdv-hero">
+    <span class="rdv-label">Consultation gratuite</span>
+    <h1 class="rdv-title">Prenons<br><em>rendez-vous.</em></h1>
+    <p class="rdv-sub">30 minutes pour cadrer votre projet. Visio ou téléphone, à votre convenance. Zéro engagement.</p>
+    <div class="rdv-badges">
+      <span class="rdv-badge">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+        100 % gratuit
+      </span>
+      <span class="rdv-badge">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        30 minutes
+      </span>
+      <span class="rdv-badge">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+        Visio ou téléphone
+      </span>
+      <span class="rdv-badge">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Zéro engagement
+      </span>
+    </div>
+  </div>
+
+  <!-- Calendly -->
+  <div class="rdv-section">
+    <div class="rdv-card">
+      <div class="rdv-card-header">
+        <span class="rdv-card-title">Choisissez un créneau</span>
+        <span class="rdv-live">Disponible</span>
+      </div>
+      <div class="calendly-inline-widget"
+           data-url="https://calendly.com/contact-nexaweb62/30min?background_color=080811&text_color=e8e8f2&primary_color=8b5cf6"
+           aria-label="Calendrier de réservation Nexa Web"></div>
+      <div class="rdv-fallback">
+        Si le calendrier ne s'affiche pas —
+        <a href="/devis">remplissez le formulaire de devis</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<Footer />
+
+<script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async is:inline></script>
+
+<script is:inline type="module">
+(async function(){
+  var canvas = document.getElementById('neon-canvas');
+  try {
+    var mod = await import('https://cdn.jsdelivr.net/npm/threejs-components@0.0.19/build/cursors/tubes1.min.js');
+    var TubesCursor = mod.default;
+    TubesCursor(canvas, {
+      tubes: { colors: ['#8B5CF6','#6366f1','#a78bfa'], lights: { intensity: 180, colors: ['#8B5CF6','#60aed5','#ff008a','#53bc28'] } }
+    });
+  } catch(err) { console.warn('Neon flow:', err); }
+})();
+</script>
+</BaseLayout>

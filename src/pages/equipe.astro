@@ -1,0 +1,179 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+---
+<BaseLayout title="L'Équipe — Nexa Web" description="Découvrez l'équipe Nexa Web — trois passionnés du digital au service de votre présence en ligne. Carvin, Hauts-de-France.">
+<style>
+/* Scroll reveal */
+.r{opacity:0;transform:translateY(28px);filter:blur(5px);transition:opacity .72s cubic-bezier(.16,1,.3,1),transform .72s cubic-bezier(.16,1,.3,1),filter .72s cubic-bezier(.16,1,.3,1)}
+.r.v{opacity:1;transform:none;filter:none}
+.r.d1{transition-delay:.09s}.r.d2{transition-delay:.18s}.r.d3{transition-delay:.27s}
+@media(max-width:768px){.r{transform:translateY(18px);filter:none}}
+@media(prefers-reduced-motion:reduce){.r{opacity:1;transform:none;filter:none;transition:none}}
+
+/* Type */
+.h-xl{font-size:clamp(2rem,4vw,5.5rem);font-weight:900;line-height:.92;letter-spacing:-.04em;text-wrap:balance}
+.h-xl em{font-style:italic;font-weight:800;color:var(--text-muted)}
+.body-text{font-size:clamp(.9rem,1.4vw,1.05rem);font-weight:300;line-height:1.72;color:var(--text-muted)}
+
+/* Hero */
+.s-eq-hero{padding-top:var(--hdr);border-bottom:1px solid var(--border)}
+.eq-hero-in{padding:clamp(60px,10vh,130px) 0 clamp(48px,8vh,100px)}
+
+/* Team cards */
+.s-team{padding:clamp(80px,12vw,160px) 0}
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.team-card{height:540px}
+.tc-inner{position:relative;display:block;width:100%;height:100%;border-radius:20px;overflow:hidden;cursor:default;transition:transform .52s cubic-bezier(.16,1,.3,1),box-shadow .52s cubic-bezier(.16,1,.3,1)}
+.tc-inner:hover{transform:scale(1.035)}
+.tc-bg{position:absolute;inset:0;background-size:cover;background-position:center 18%;transition:transform .52s cubic-bezier(.16,1,.3,1)}
+.tc-inner:hover .tc-bg{transform:scale(1.08)}
+.tc-overlay{position:absolute;inset:0}
+.tc-content{position:absolute;bottom:0;left:0;right:0;padding:28px;color:#fff}
+.tc-role{font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.62);margin-bottom:6px}
+.tc-name{font-size:clamp(1.4rem,2.8vw,2rem);font-weight:900;letter-spacing:-.03em;line-height:1.05}
+.tc-title{font-size:11px;font-weight:300;color:rgba(255,255,255,.58);margin-top:4px;letter-spacing:.04em}
+.tc-btn{display:flex;align-items:center;justify-content:space-between;margin-top:22px;padding:13px 17px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);border-radius:10px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#fff;transition:background .3s,border-color .3s;text-decoration:none}
+.tc-inner:hover .tc-btn{background:rgba(255,255,255,.17);border-color:rgba(255,255,255,.30)}
+.tc-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .3s cubic-bezier(.16,1,.3,1);flex-shrink:0}
+.tc-inner:hover .tc-btn svg{transform:translateX(5px)}
+.tc-phone{display:flex;align-items:center;gap:7px;margin-top:10px;font-size:11.5px;font-weight:500;color:rgba(255,255,255,.55);letter-spacing:.03em;text-decoration:none;transition:color .2s}
+.tc-phone:hover{color:rgba(255,255,255,.9)}
+.tc-phone svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+@media(max-width:900px){.team-grid{grid-template-columns:1fr 1fr}.team-card:nth-child(3){grid-column:1 / -1;max-width:440px;margin:0 auto;width:100%}}
+@media(max-width:540px){.team-grid{grid-template-columns:1fr}.team-card:nth-child(3){grid-column:1;max-width:none}.team-card{height:460px}}
+
+/* CTA */
+.s-eq-cta{border-top:1px solid var(--border);text-align:center}
+.eq-cta-in{padding:clamp(60px,10vw,120px) 0}
+.eq-cta-super{font-size:clamp(.6rem,1vw,.75rem);font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--text-dim);margin-bottom:28px}
+.eq-cta-hl{font-size:clamp(2.2rem,5.5vw,6rem);font-weight:900;line-height:.94;letter-spacing:-.035em;margin-bottom:40px;text-wrap:balance}
+.eq-cta-hl em{font-style:italic}
+</style>
+
+<Header />
+
+<main>
+  <!-- HERO -->
+  <section class="s-eq-hero" aria-labelledby="eq-hero-h">
+    <div class="wrap">
+      <div class="eq-hero-in">
+        <span class="label r">L'agence</span>
+        <h1 class="h-xl r d1" id="eq-hero-h" style="margin-top:18px">
+          L'équipe qui donne<br>vie à votre <em>vision.</em>
+        </h1>
+        <p class="body-text r d2" style="margin-top:26px;max-width:520px">
+          Trois passionnés du digital réunis autour d'une mission : vous offrir une présence en ligne qui vous ressemble et qui convertit.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAM CARDS -->
+  <section class="s-team" aria-labelledby="team-h">
+    <div class="wrap">
+      <div class="team-grid">
+
+        <!-- Membre 1 -->
+        <div class="team-card r">
+          <div class="tc-inner" style="box-shadow:0 24px 70px hsl(220 70% 12% / .5)">
+            <div class="tc-bg" style="background-image:url(/img/membre1.jpg);background-position:center 15%"></div>
+            <div class="tc-overlay" style="background:linear-gradient(to top,hsl(220 70% 8% / .95),hsl(220 60% 14% / .65) 40%,transparent 68%)"></div>
+            <div class="tc-content">
+              <p class="tc-role">Co-fondateur</p>
+              <h2 class="tc-name">Imad Torchi</h2>
+              <p class="tc-title">Développement web & Architecture</p>
+              <a href="/contact" class="tc-btn">
+                <span>Prendre contact</span>
+                <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+              <a href="tel:+330641467898" class="tc-phone">
+                <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.51 9.74 19.79 19.79 0 01.44 1.15 2 2 0 012.42 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.9a16 16 0 006.09 6.09l1.27-.76a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                +33 06 41 46 78 98
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Membre 2 -->
+        <div class="team-card r d1">
+          <div class="tc-inner" style="box-shadow:0 24px 70px hsl(260 40% 10% / .5)">
+            <div class="tc-bg" style="background-image:url(/img/membre2.jpg);background-position:center 12%"></div>
+            <div class="tc-overlay" style="background:linear-gradient(to top,hsl(260 40% 6% / .95),hsl(260 35% 12% / .65) 40%,transparent 68%)"></div>
+            <div class="tc-content">
+              <p class="tc-role">Co-fondateur</p>
+              <h2 class="tc-name">Ahmed Chteoui</h2>
+              <p class="tc-title">Design UI/UX & Stratégie digitale</p>
+              <a href="/contact" class="tc-btn">
+                <span>Prendre contact</span>
+                <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+              <a href="tel:+330698840194" class="tc-phone">
+                <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.51 9.74 19.79 19.79 0 01.44 1.15 2 2 0 012.42 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.9a16 16 0 006.09 6.09l1.27-.76a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                +33 06 98 84 01 94
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Membre 3 -->
+        <div class="team-card r d2">
+          <div class="tc-inner" style="box-shadow:0 24px 70px hsl(345 55% 12% / .5)">
+            <div class="tc-bg" style="background-image:url(/img/membre3.jpg);background-position:center 10%"></div>
+            <div class="tc-overlay" style="background:linear-gradient(to top,hsl(345 55% 7% / .95),hsl(345 50% 14% / .65) 40%,transparent 68%)"></div>
+            <div class="tc-content">
+              <p class="tc-role">Co-fondateur</p>
+              <h2 class="tc-name">Killian Mordacq</h2>
+              <p class="tc-title">Conseil & Stratégie web</p>
+              <a href="/contact" class="tc-btn">
+                <span>Prendre contact</span>
+                <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+              <a href="tel:+330669530635" class="tc-phone">
+                <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.51 9.74 19.79 19.79 0 01.44 1.15 2 2 0 012.42 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.9a16 16 0 006.09 6.09l1.27-.76a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                +33 06 69 53 06 35
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="s-eq-cta" aria-labelledby="eq-cta-h">
+    <div class="wrap">
+      <div class="eq-cta-in r">
+        <div class="eq-cta-super">On travaille ensemble ?</div>
+        <h2 class="eq-cta-hl r d1" id="eq-cta-h">Votre projet mérite<br>une équipe <em>investie.</em></h2>
+        <div class="r d2">
+          <a href="/devis" class="btn">Démarrer un projet</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<Footer />
+
+<script>
+(function(){
+  'use strict';
+  /* Scroll reveal */
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('v'); io.unobserve(en.target); } });
+  },{threshold:0.12});
+  document.querySelectorAll('.r').forEach(function(el){ io.observe(el); });
+
+  /* Card hover glow */
+  document.querySelectorAll('.tc-inner').forEach(function(card){
+    var base = card.style.boxShadow;
+    card.addEventListener('mouseenter', function(){ card.style.boxShadow = base.replace('0.5)','0.7)'); });
+    card.addEventListener('mouseleave', function(){ card.style.boxShadow = base; });
+  });
+})();
+</script>
+</BaseLayout>

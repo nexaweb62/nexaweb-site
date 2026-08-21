@@ -1,0 +1,306 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import '../styles/global.css';
+---
+<BaseLayout title="Contact — Nexa Web" description="Contactez Nexa Web — agence web à Carvin. Répondons à toutes vos questions sur votre projet digital.">
+<style>
+/* Page override — full-screen globe */
+html,body{overflow:hidden;height:100%}
+
+/* Globe canvas */
+#globe-canvas{position:fixed;inset:0;width:100%;height:100%;cursor:grab;z-index:0;display:block}
+#globe-canvas:active{cursor:grabbing}
+
+/* Loading */
+#globe-loading{position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:var(--bg);transition:opacity .6s}
+#globe-loading.out{opacity:0;pointer-events:none}
+.gl-spinner{width:28px;height:28px;border:2px solid var(--border-hi);border-top-color:var(--accent);border-radius:50%;animation:spin .75s linear infinite}
+.gl-loading-text{font-size:9px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--text-muted)}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Page title */
+.contact-head{position:fixed;top:calc(var(--hdr) + 40px);left:clamp(20px,5vw,80px);z-index:10;pointer-events:none}
+.contact-eyebrow{font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.contact-title{font-size:clamp(1.7rem,3.8vw,3rem);font-weight:900;letter-spacing:-.04em;line-height:.96;color:var(--text)}
+.contact-title em{font-style:italic;color:var(--text-muted)}
+
+/* Carvin marker */
+#carvin-pin{position:fixed;z-index:30;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:4px;transform:translate(-50%,-100%) translateY(-10px);opacity:0;transition:opacity .4s}
+#carvin-pin.visible{opacity:1}
+.carvin-badge{font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--text);background:rgba(8,8,17,.72);border:1px solid var(--accent-ring);padding:3px 9px;border-radius:4px;backdrop-filter:blur(8px);white-space:nowrap}
+:root[data-theme="light"] .carvin-badge{background:rgba(244,244,240,.85)}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .carvin-badge{background:rgba(244,244,240,.85)}}
+.carvin-line{width:1px;height:12px;background:linear-gradient(to bottom,var(--accent),transparent)}
+.carvin-dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 rgba(139,92,246,.6);animation:carvin-beat 2s ease-out infinite}
+@keyframes carvin-beat{0%{box-shadow:0 0 0 0 rgba(139,92,246,.7)}70%{box-shadow:0 0 0 14px rgba(139,92,246,0)}100%{box-shadow:0 0 0 0 rgba(139,92,246,0)}}
+
+/* Floating contact buttons */
+.c-btn{position:fixed;z-index:50;display:inline-flex;align-items:center;gap:10px;padding:11px 20px;background:rgba(10,10,20,.22);border:1px solid rgba(232,232,242,.13);border-radius:100px;color:var(--text);font-family:var(--font);font-size:12px;font-weight:500;letter-spacing:.03em;text-decoration:none;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);white-space:nowrap;cursor:pointer;transition:background .25s,border-color .25s,transform .25s;user-select:none}
+.c-btn:hover{background:rgba(139,92,246,.18);border-color:rgba(139,92,246,.40);transform:translateY(-3px) !important}
+.c-btn svg{width:14px;height:14px;flex-shrink:0;color:var(--accent)}
+:root[data-theme="light"] .c-btn{background:rgba(255,255,255,.35);border-color:rgba(18,18,22,.14)}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .c-btn{background:rgba(255,255,255,.35);border-color:rgba(18,18,22,.14)}}
+.c-btn-1{bottom:30%;left:7%;animation:fl1 5.2s ease-in-out infinite}
+.c-btn-2{bottom:36%;right:7%;animation:fl2 6.0s ease-in-out infinite}
+.c-btn-3{bottom:12%;left:50%;transform:translateX(-50%);animation:fl3 4.8s ease-in-out infinite}
+.c-btn-4{bottom:20%;right:7%;animation:fl2 5.6s ease-in-out infinite 1.2s}
+@keyframes fl1{0%,100%{transform:translateY(0)}50%{transform:translateY(-11px)}}
+@keyframes fl2{0%,100%{transform:translateY(-7px)}50%{transform:translateY(7px)}}
+@keyframes fl3{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-9px)}}
+.c-btn-3:hover{transform:translateX(-50%) translateY(-3px) !important}
+@media(max-width:600px){.c-btn{font-size:11px;padding:9px 15px;gap:8px}.c-btn-1{bottom:28%;left:4%}.c-btn-2{bottom:34%;right:4%}.c-btn-3{bottom:10%}.c-btn-4{bottom:22%;right:4%}}
+</style>
+
+<Header />
+
+<!-- Loading -->
+<div id="globe-loading">
+  <div class="gl-spinner"></div>
+  <span class="gl-loading-text">Chargement du globe…</span>
+</div>
+
+<!-- Globe -->
+<canvas id="globe-canvas" aria-hidden="true"></canvas>
+
+<!-- Page title -->
+<div class="contact-head" aria-label="Contact Nexa Web">
+  <div class="contact-eyebrow">Nous contacter</div>
+  <h1 class="contact-title">On est à<br><em>Carvin.</em></h1>
+</div>
+
+<!-- Carvin marker -->
+<div id="carvin-pin" role="presentation">
+  <div class="carvin-badge">Carvin, France</div>
+  <div class="carvin-line"></div>
+  <div class="carvin-dot"></div>
+</div>
+
+<!-- Floating contact buttons -->
+<a href="tel:+330698840194" class="c-btn c-btn-1" aria-label="Appeler le +33 06 98 84 01 94">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+  +33 06 98 84 01 94
+</a>
+
+<a href="tel:+330641457898" class="c-btn c-btn-2" aria-label="Appeler le +33 06 41 45 78 98">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+  +33 06 41 45 78 98
+</a>
+
+<a href="tel:+330669530635" class="c-btn c-btn-4" aria-label="Appeler le +33 06 69 53 06 35">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+  +33 06 69 53 06 35
+</a>
+
+<a href="mailto:contact.nexaweb62@gmail.com" class="c-btn c-btn-3" aria-label="Envoyer un email">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+  contact.nexaweb62@gmail.com
+</a>
+
+<script is:inline src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script is:inline>
+(function(){
+  var CARVIN   = [2.9598, 50.4914];
+  var GEOJSON  = 'https://raw.githubusercontent.com/martynafford/natural-earth-geojson/refs/heads/master/110m/physical/ne_110m_land.json';
+  var DOT_STEP = 1.8;
+
+  var canvas   = document.getElementById('globe-canvas');
+  var ctx      = canvas.getContext('2d');
+  var loadEl   = document.getElementById('globe-loading');
+  var pinEl    = document.getElementById('carvin-pin');
+
+  var W, H, radius, DPR;
+  var rotation = [-2, -25];
+  var autoRotate  = true;
+  var rotSpeed    = 0.12;
+  var landFeatures = null;
+  var allDots      = [];
+  var rafId;
+
+  var projection = d3.geoOrthographic().clipAngle(90);
+  var geoPath    = d3.geoPath().projection(projection).context(ctx);
+  var graticule  = d3.geoGraticule()();
+
+  function setProjection(){ projection.scale(radius).translate([W/2, H/2]).rotate(rotation); }
+
+  function resize(){
+    DPR    = Math.min(window.devicePixelRatio||1, 2);
+    W      = window.innerWidth;
+    H      = window.innerHeight;
+    radius = Math.min(W, H) * 0.44;
+    canvas.width  = Math.round(W * DPR);
+    canvas.height = Math.round(H * DPR);
+    canvas.style.width  = W + 'px';
+    canvas.style.height = H + 'px';
+    setProjection();
+  }
+
+  function ptInPoly(pt, ring){
+    var x=pt[0], y=pt[1], inside=false;
+    for(var i=0, j=ring.length-1; i<ring.length; j=i++){
+      var xi=ring[i][0], yi=ring[i][1], xj=ring[j][0], yj=ring[j][1];
+      if((yi>y)!==(yj>y) && x<((xj-xi)*(y-yi))/(yj-yi)+xi) inside=!inside;
+    }
+    return inside;
+  }
+
+  function ptInFeature(pt, f){
+    var g=f.geometry;
+    if(g.type==='Polygon'){
+      if(!ptInPoly(pt,g.coordinates[0])) return false;
+      for(var i=1;i<g.coordinates.length;i++) if(ptInPoly(pt,g.coordinates[i])) return false;
+      return true;
+    }
+    if(g.type==='MultiPolygon'){
+      for(var p=0;p<g.coordinates.length;p++){
+        var poly=g.coordinates[p];
+        if(ptInPoly(pt,poly[0])){
+          var hole=false;
+          for(var h=1;h<poly.length;h++) if(ptInPoly(pt,poly[h])){hole=true;break;}
+          if(!hole) return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  function buildDots(features){
+    var dots=[];
+    features.forEach(function(f){
+      var b=d3.geoBounds(f);
+      var minLng=b[0][0], minLat=b[0][1], maxLng=b[1][0], maxLat=b[1][1];
+      for(var lng=minLng; lng<=maxLng; lng+=DOT_STEP){
+        for(var lat=minLat; lat<=maxLat; lat+=DOT_STEP){
+          var pt=[lng,lat];
+          if(ptInFeature(pt,f)) dots.push(pt);
+        }
+      }
+    });
+    return dots;
+  }
+
+  function render(ts){
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    ctx.clearRect(0,0,W,H);
+    ctx.beginPath();
+    ctx.arc(W/2, H/2, radius, 0, Math.PI*2);
+    ctx.fillStyle='rgba(6,5,15,1)';
+    ctx.fill();
+    ctx.strokeStyle='rgba(139,92,246,.30)';
+    ctx.lineWidth=1.2;
+    ctx.stroke();
+    ctx.beginPath();
+    geoPath(graticule);
+    ctx.strokeStyle='rgba(139,92,246,.09)';
+    ctx.lineWidth=0.5;
+    ctx.stroke();
+    if(landFeatures){
+      ctx.beginPath();
+      landFeatures.features.forEach(function(f){ geoPath(f); });
+      ctx.strokeStyle='rgba(139,92,246,.25)';
+      ctx.lineWidth=0.7;
+      ctx.stroke();
+    }
+    ctx.fillStyle='rgba(139,92,246,.60)';
+    allDots.forEach(function(dot){
+      var p=projection(dot);
+      if(!p) return;
+      ctx.beginPath();
+      ctx.arc(p[0], p[1], 1.1, 0, Math.PI*2);
+      ctx.fill();
+    });
+    var cp=projection(CARVIN);
+    if(cp){
+      var cx=cp[0], cy=cp[1];
+      var t=(ts||0)/1000;
+      [0, 1].forEach(function(offset){
+        var phase=((t+offset)%2)/2;
+        var r=5+phase*18;
+        var a=(1-phase)*0.55;
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI*2);
+        ctx.strokeStyle='rgba(139,92,246,'+a+')';
+        ctx.lineWidth=1.5;
+        ctx.stroke();
+      });
+      ctx.beginPath();
+      ctx.arc(cx, cy, 4.5, 0, Math.PI*2);
+      ctx.fillStyle='#8B5CF6';
+      ctx.shadowColor='rgba(139,92,246,.9)';
+      ctx.shadowBlur=10;
+      ctx.fill();
+      ctx.shadowBlur=0;
+      ctx.beginPath();
+      ctx.arc(cx, cy, 2, 0, Math.PI*2);
+      ctx.fillStyle='#fff';
+      ctx.fill();
+      pinEl.style.left = cx+'px';
+      pinEl.style.top  = (cy-8)+'px';
+      pinEl.classList.add('visible');
+    } else {
+      pinEl.classList.remove('visible');
+    }
+  }
+
+  function tick(ts){
+    if(autoRotate){ rotation[0]+=rotSpeed; setProjection(); }
+    render(ts);
+    rafId=requestAnimationFrame(tick);
+  }
+
+  function startDrag(startX, startY){
+    autoRotate=false;
+    var r0=[rotation[0], rotation[1]];
+    return function move(dx, dy){
+      rotation[0]=r0[0]+dx*0.38;
+      rotation[1]=Math.max(-90,Math.min(90, r0[1]-dy*0.38));
+      setProjection();
+    };
+  }
+
+  canvas.addEventListener('mousedown',function(e){
+    var move=startDrag(e.clientX, e.clientY);
+    var sx=e.clientX, sy=e.clientY;
+    function mm(e){ move(e.clientX-sx, e.clientY-sy); }
+    function mu(){ document.removeEventListener('mousemove',mm); document.removeEventListener('mouseup',mu); setTimeout(function(){autoRotate=true;},1200); }
+    document.addEventListener('mousemove',mm);
+    document.addEventListener('mouseup',mu);
+  });
+
+  canvas.addEventListener('touchstart',function(e){
+    var t0=e.touches[0];
+    var move=startDrag(t0.clientX, t0.clientY);
+    var sx=t0.clientX, sy=t0.clientY;
+    function tm(e){ var t=e.touches[0]; move(t.clientX-sx, t.clientY-sy); }
+    function te(){ canvas.removeEventListener('touchmove',tm); canvas.removeEventListener('touchend',te); setTimeout(function(){autoRotate=true;},1200); }
+    canvas.addEventListener('touchmove',tm,{passive:true});
+    canvas.addEventListener('touchend',te);
+  },{passive:true});
+
+  canvas.addEventListener('wheel',function(e){
+    e.preventDefault();
+    var f=e.deltaY>0?0.92:1.09;
+    radius=Math.max(Math.min(W,H)*0.28, Math.min(Math.min(W,H)*0.72, radius*f));
+    setProjection();
+  },{passive:false});
+
+  resize();
+  window.addEventListener('resize', resize, {passive:true});
+
+  fetch(GEOJSON)
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      landFeatures=data;
+      allDots=buildDots(data.features);
+      loadEl.classList.add('out');
+      setTimeout(function(){ loadEl.remove(); }, 700);
+      rafId=requestAnimationFrame(tick);
+    })
+    .catch(function(){
+      loadEl.classList.add('out');
+      setTimeout(function(){ loadEl.remove(); }, 700);
+      rafId=requestAnimationFrame(tick);
+    });
+})();
+</script>
+</BaseLayout>

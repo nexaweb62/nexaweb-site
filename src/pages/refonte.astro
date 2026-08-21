@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+---
+<BaseLayout title="Refonte de Site — Nexa Web" description="Refonte complète de site web — design moderne, performance et SEO améliorés. Nexa Web, Carvin.">
+<style>
+:root{ --accent:#f97316 }
+
+main{padding-top:var(--hdr)}
+
+.svc-hero{padding:80px var(--pad-x) 60px;max-width:1100px;margin:0 auto;position:relative}
+.svc-hero::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse 70% 50% at 60% 20%,rgba(249,115,22,.10) 0%,transparent 70%);pointer-events:none;z-index:0}
+.svc-eyebrow{font-size:10px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:20px;display:flex;align-items:center;gap:8px;position:relative;z-index:1}
+.svc-eyebrow::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.svc-title{font-size:clamp(2.8rem,7vw,5.5rem);font-weight:900;letter-spacing:-.03em;line-height:1;margin-bottom:28px;position:relative;z-index:1}
+.svc-title span{color:var(--accent)}
+.svc-desc{font-size:clamp(1rem,1.8vw,1.15rem);color:var(--text-muted);line-height:1.75;max-width:640px;margin-bottom:40px;position:relative;z-index:1}
+.svc-cta{display:inline-flex;align-items:center;gap:10px;background:var(--btn-bg);color:var(--btn-text);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:16px 32px;border-radius:2px;transition:opacity .2s,transform .2s;position:relative;z-index:1}
+.svc-cta:hover{opacity:.82;transform:translateY(-2px)}
+
+.svc-features{padding:60px var(--pad-x);max-width:1100px;margin:0 auto}
+.svc-section-label{font-size:10px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:40px;display:block}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.feat-item{background:var(--bg);padding:32px 28px}
+.feat-num{font-size:11px;font-weight:600;color:var(--accent);letter-spacing:.1em;margin-bottom:14px}
+.feat-title{font-size:1rem;font-weight:700;letter-spacing:-.01em;margin-bottom:10px}
+.feat-desc{font-size:.875rem;color:var(--text-muted);line-height:1.65}
+
+.svc-divider{height:1px;background:var(--border);margin:0 var(--pad-x)}
+
+.svc-band{padding:60px var(--pad-x);max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap}
+.svc-band-text h2{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:800;letter-spacing:-.02em;margin-bottom:8px}
+.svc-band-text p{font-size:.9rem;color:var(--text-muted);line-height:1.6}
+
+@media(max-width:700px){.feat-grid{grid-template-columns:1fr}.svc-band{flex-direction:column;align-items:flex-start}}
+</style>
+
+<Header backBtn={true} />
+
+<main>
+  <div class="svc-hero">
+    <p class="svc-eyebrow">Service · Modernisation</p>
+    <h1 class="svc-title">Refonte <span>de site</span></h1>
+    <p class="svc-desc">Votre site actuel donne une mauvaise image ou est trop lent ? On le reconstruit de zéro — nouveau design, nouvelles performances, même contenu. Aucune perte de données, aucune interruption de service.</p>
+    <a href="/devis" class="svc-cta">Obtenir un devis gratuit →</a>
+  </div>
+
+  <div class="svc-divider"></div>
+
+  <div class="svc-features">
+    <span class="svc-section-label">Ce qui est inclus</span>
+    <div class="feat-grid">
+      <div class="feat-item">
+        <div class="feat-num">01</div>
+        <h3 class="feat-title">Audit complet</h3>
+        <p class="feat-desc">Analyse de votre site actuel : vitesse, SEO, UX, accessibilité, concurrents. On identifie tous les points à améliorer avant de commencer.</p>
+      </div>
+      <div class="feat-item">
+        <div class="feat-num">02</div>
+        <h3 class="feat-title">Nouveau design sur mesure</h3>
+        <p class="feat-desc">Interface entièrement repensée pour 2025. Typographie moderne, animations fluides, identité visuelle forte et cohérente.</p>
+      </div>
+      <div class="feat-item">
+        <div class="feat-num">03</div>
+        <h3 class="feat-title">Migration des contenus</h3>
+        <p class="feat-desc">Tous vos textes, images et pages sont transférés sans perte. Aucune coupure de service pendant la transition.</p>
+      </div>
+      <div class="feat-item">
+        <div class="feat-num">04</div>
+        <h3 class="feat-title">SEO préservé</h3>
+        <p class="feat-desc">Redirections 301 pour chaque ancienne URL, balises méta migrées, sitemap mis à jour. Votre référencement Google est protégé.</p>
+      </div>
+      <div class="feat-item">
+        <div class="feat-num">05</div>
+        <h3 class="feat-title">Performance x3</h3>
+        <p class="feat-desc">Score Lighthouse 90+ garanti. Code optimisé, images compressées, chargement en moins de 2 secondes.</p>
+      </div>
+      <div class="feat-item">
+        <div class="feat-num">06</div>
+        <h3 class="feat-title">Livraison en 7 jours</h3>
+        <p class="feat-desc">Bascule DNS propre, redirections SEO activées et formation à la prise en main — tout en une semaine.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="svc-divider"></div>
+
+  <div class="svc-band">
+    <div class="svc-band-text">
+      <h2>Prêt à moderniser votre site ?</h2>
+      <p>Audit gratuit offert. On commence dès cette semaine.</p>
+    </div>
+    <a href="/devis" class="btn">Démarrer ma refonte →</a>
+  </div>
+</main>
+
+<Footer />
+</BaseLayout>

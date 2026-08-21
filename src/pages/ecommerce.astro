@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+---
+<BaseLayout title="Site E-commerce — Nexa Web" description="Boutiques e-commerce performantes et sécurisées. Nexa Web conçoit votre shop en ligne à Carvin.">
+<style>
+:root{ --accent:#10b981 }
+
+main{padding-top:var(--hdr)}
+
+.svc-hero{padding:80px var(--pad-x) 60px;max-width:1100px;margin:0 auto;position:relative}
+.svc-hero::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse 70% 50% at 60% 20%,rgba(16,185,129,.10) 0%,transparent 70%);pointer-events:none;z-index:0}
+.svc-eyebrow{font-size:10px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:20px;display:flex;align-items:center;gap:8px;position:relative;z-index:1}
+.svc-eyebrow::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.svc-title{font-size:clamp(2.8rem,7vw,5.5rem);font-weight:900;letter-spacing:-.03em;line-height:1;margin-bottom:28px;position:relative;z-index:1}
+.svc-title span{color:var(--accent)}
+.svc-desc{font-size:clamp(1rem,1.8vw,1.15rem);color:var(--text-muted);line-height:1.75;max-width:640px;margin-bottom:40px;position:relative;z-index:1}
+.svc-cta{display:inline-flex;align-items:center;gap:10px;background:var(--btn-bg);color:var(--btn-text);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:16px 32px;border-radius:2px;transition:opacity .2s,transform .2s;position:relative;z-index:1}
+.svc-cta:hover{opacity:.82;transform:translateY(-2px)}
+
+.svc-features{padding:60px var(--pad-x);max-width:1100px;margin:0 auto}
+.svc-section-label{font-size:10px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:40px;display:block}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.feat-item{background:var(--bg);padding:32px 28px}
+.feat-num{font-size:11px;font-weight:600;color:var(--accent);letter-spacing:.1em;margin-bottom:14px}
+.feat-title{font-size:1rem;font-weight:700;letter-spacing:-.01em;margin-bottom:10px}
+.feat-desc{font-size:.875rem;color:var(--text-muted);line-height:1.65}
+
+.svc-divider{height:1px;background:var(--border);margin:0 var(--pad-x)}
+
+.svc-band{padding:60px var(--pad-x);max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap}
+.svc-band-text h2{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:800;letter-spacing:-.02em;margin-bottom:8px}
+.svc-band-text p{font-size:.9rem;color:var(--text-muted);line-height:1.6}
+
+@media(max-width:700px){.feat-grid{grid-template-columns:1fr}.svc-band{flex-direction:column;align-items:flex-start}}
+</style>
+
+<Header backBtn={true} />
+
+<main>
+  <div class="svc-hero">
+    <p class="svc-eyebrow">Service · Conversion</p>
+    <h1 class="svc-title">Site <span>E-commerce</span></h1>
+    <p class="svc-desc">Vendez en ligne 24h/24 avec une boutique qui inspire confiance et pousse à l'achat. Paiement sécurisé, gestion des stocks, fiches produits optimisées — tout est inclus pour maximiser vos ventes dès le premier jour.</p>
+    <a href="/devis" class="svc-cta">Obtenir un devis gratuit →</a>
+  </div>
+
+  <div class="svc-divider"></div>
+
+  <div class="svc-features">
+    <span class="svc-section-label">Ce qui est inclus</span>
+    <div class="feat-grid">
+      <div class="feat-item">
+        <div class="feat-num">01</div>
+        <h3 class="feat-title">Catalogue produits complet</h3>
+        <p class="feat-desc">Fiches produits détaillées avec galeries photos, variantes (taille, couleur), descriptions SEO et gestion des stocks en temps réel.</p>
+      </div>
+      <div class="feat-item">
+        <div class="feat-num">02</div>
+        <h3 class="feat-title">Paiement sécurisé</h3>
+        <p class="feat-desc">Intégration Stripe, PayPal ou autre solution. Paiement par carte, virement, et possibilité de paiement en plusieurs fois.</p>
+      </div>
+      <div class="feat-item">
+        <div class="feat-num">03</div>
+        <h3 class="feat-title">Gestion des commandes</h3>
+        <p class="feat-desc">Tableau de bord pour suivre chaque commande, gérer les expéditions, envoyer des confirmations automatiques par email.</p>
+      </div>
+      <div class="feat-item">
+        <div class="feat-num">04</div>
+        <h3 class="feat-title">SEO e-commerce avancé</h3>
+        <p class="feat-desc">URLs optimisées, balisage schema.org pour les produits, sitemap automatique. Vos produits remontent sur Google.</p>
+      </div>
+      <div class="feat-item">
+        <div class="feat-num">05</div>
+        <h3 class="feat-title">Design sur mesure</h3>
+        <p class="feat-desc">Une boutique à votre image, pas un thème générique. Chaque page est pensée pour guider le visiteur vers l'achat.</p>
+      </div>
+      <div class="feat-item">
+        <div class="feat-num">06</div>
+        <h3 class="feat-title">Livraison en 7 jours</h3>
+        <p class="feat-desc">Votre boutique en ligne, complète et fonctionnelle, livrée en une semaine. Formation à la prise en main incluse.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="svc-divider"></div>
+
+  <div class="svc-band">
+    <div class="svc-band-text">
+      <h2>Prêt à vendre en ligne ?</h2>
+      <p>Devis gratuit en 24h. On commence dès cette semaine.</p>
+    </div>
+    <a href="/devis" class="btn">Démarrer mon projet →</a>
+  </div>
+</main>
+
+<Footer />
+</BaseLayout>

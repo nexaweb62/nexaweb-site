@@ -1,0 +1,109 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+---
+<BaseLayout title="Site Vitrine — Nexa Web" description="Création de sites vitrines sur mesure, rapides et élégants. Nexa Web, agence web à Carvin.">
+<style>
+:root{ --accent:#4C72FF }
+
+main{padding-top:var(--hdr)}
+
+.svc-hero{padding:80px var(--pad-x) 60px;max-width:1100px;margin:0 auto;position:relative}
+.svc-hero::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse 70% 50% at 60% 20%,rgba(76,114,255,.12) 0%,transparent 70%);pointer-events:none;z-index:0}
+.svc-eyebrow{font-size:10px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:20px;display:flex;align-items:center;gap:8px;position:relative;z-index:1}
+.svc-eyebrow::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.svc-title{font-size:clamp(2.8rem,7vw,5.5rem);font-weight:900;letter-spacing:-.03em;line-height:1;margin-bottom:28px;position:relative;z-index:1}
+.svc-title span{color:var(--accent)}
+.svc-desc{font-size:clamp(1rem,1.8vw,1.15rem);color:var(--text-muted);line-height:1.75;max-width:640px;margin-bottom:40px;position:relative;z-index:1}
+.svc-cta{display:inline-flex;align-items:center;gap:10px;background:var(--btn-bg);color:var(--btn-text);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:16px 32px;border-radius:2px;transition:opacity .2s,transform .2s;position:relative;z-index:1}
+.svc-cta:hover{opacity:.82;transform:translateY(-2px)}
+
+.svc-features{padding:60px var(--pad-x);max-width:1100px;margin:0 auto}
+.svc-section-label{font-size:10px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:40px;display:block}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.feat-item{background:var(--bg);padding:32px 28px}
+.feat-num{font-size:11px;font-weight:600;color:var(--accent);letter-spacing:.1em;margin-bottom:14px}
+.feat-title{font-size:1rem;font-weight:700;letter-spacing:-.01em;margin-bottom:10px}
+.feat-desc{font-size:.875rem;color:var(--text-muted);line-height:1.65}
+
+.svc-divider{height:1px;background:var(--border);margin:0 var(--pad-x)}
+
+.svc-band{padding:60px var(--pad-x);max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap}
+.svc-band-text h2{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:800;letter-spacing:-.02em;margin-bottom:8px}
+.svc-band-text p{font-size:.9rem;color:var(--text-muted);line-height:1.6}
+
+@media(max-width:700px){.feat-grid{grid-template-columns:1fr}.svc-band{flex-direction:column;align-items:flex-start}}
+</style>
+
+<Header backBtn={true} />
+
+<main>
+  <div class="svc-hero">
+    <p class="svc-eyebrow">Service · Essentiel</p>
+    <h1 class="svc-title">Site <span>Vitrine</span></h1>
+    <p class="svc-desc">Votre vitrine digitale, pensée pour impressionner dès les premières secondes. Un site élégant, rapide et optimisé SEO — livré en 7 jours, entièrement sur mesure, sans abonnement caché.</p>
+    <a href="/devis" class="svc-cta">Obtenir un devis gratuit →</a>
+  </div>
+
+  <div class="svc-divider"></div>
+
+  <div class="svc-features">
+    <span class="svc-section-label">Ce qui est inclus</span>
+    <div class="feat-grid">
+      <div class="feat-item">
+        <div class="feat-num">01</div>
+        <h3 class="feat-title">Design 100 % sur mesure</h3>
+        <p class="feat-desc">Chaque pixel est pensé pour votre marque. Pas de template, pas de thème générique — un design unique qui vous ressemble.</p>
+      </div>
+      <div class="feat-item">
+        <div class="feat-num">02</div>
+        <h3 class="feat-title">Responsive & mobile-first</h3>
+        <p class="feat-desc">Votre site s'adapte parfaitement à tous les écrans. Tablette, smartphone, desktop — une expérience irréprochable partout.</p>
+      </div>
+      <div class="feat-item">
+        <div class="feat-num">03</div>
+        <h3 class="feat-title">SEO technique inclus</h3>
+        <p class="feat-desc">Balises méta, sitemap, schema.org, vitesse optimisée. Votre site est prêt pour Google dès le premier jour.</p>
+      </div>
+      <div class="feat-item">
+        <div class="feat-num">04</div>
+        <h3 class="feat-title">Formulaire de contact</h3>
+        <p class="feat-desc">Un formulaire fonctionnel et sécurisé pour que vos prospects puissent vous joindre directement depuis le site.</p>
+      </div>
+      <div class="feat-item">
+        <div class="feat-num">05</div>
+        <h3 class="feat-title">Livraison en 7 jours</h3>
+        <p class="feat-desc">De la validation du brief à la mise en ligne, tout se fait en une semaine. Délai garanti, sans rallonge de dernière minute.</p>
+      </div>
+      <div class="feat-item">
+        <div class="feat-num">06</div>
+        <h3 class="feat-title">1 mois de support</h3>
+        <p class="feat-desc">Après la livraison, on reste disponibles. Corrections, ajustements, questions — on est là pendant 30 jours.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="svc-divider"></div>
+
+  <div class="svc-band">
+    <div class="svc-band-text">
+      <h2>Prêt à lancer votre site ?</h2>
+      <p>Devis gratuit en 24h. On commence dès cette semaine.</p>
+    </div>
+    <a href="/devis" class="btn">Démarrer mon projet →</a>
+  </div>
+</main>
+
+<Footer />
+
+<script>
+(function(){
+  var hdr = document.getElementById('hdr');
+  if(!hdr) return;
+  window.addEventListener('scroll', function(){ hdr.classList.toggle('on', window.scrollY > 8); }, {passive:true});
+  if(window.scrollY > 8) hdr.classList.add('on');
+})();
+</script>
+</BaseLayout>

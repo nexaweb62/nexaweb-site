@@ -1,0 +1,278 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+---
+<BaseLayout title="Avis clients — Nexa Web" description="Avis clients Nexa Web — découvrez ce que nos clients pensent de nos prestations web. Carvin, Hauts-de-France.">
+<style>
+/* Scroll reveal */
+.r{opacity:0;transform:translateY(28px);filter:blur(5px);transition:opacity .72s cubic-bezier(.16,1,.3,1),transform .72s cubic-bezier(.16,1,.3,1),filter .72s cubic-bezier(.16,1,.3,1)}
+.r.v{opacity:1;transform:none;filter:none}
+.r.d1{transition-delay:.09s}.r.d2{transition-delay:.18s}.r.d3{transition-delay:.27s}
+@media(max-width:768px){.r{transform:translateY(18px);filter:none}}
+@media(prefers-reduced-motion:reduce){.r{opacity:1;transform:none;filter:none;transition:none}}
+
+/* Type */
+.h-xl{font-size:clamp(2rem,4vw,5.5rem);font-weight:900;line-height:.92;letter-spacing:-.04em;text-wrap:balance}
+.h-xl em{font-style:italic;font-weight:800;color:var(--text-muted)}
+.body-text{font-size:clamp(.9rem,1.4vw,1.05rem);font-weight:300;line-height:1.72;color:var(--text-muted)}
+
+/* Sections */
+.s-hero{padding-top:var(--hdr);border-bottom:1px solid var(--border)}
+.hero-in{padding:clamp(60px,10vh,130px) 0 clamp(48px,8vh,100px)}
+.s-form{padding:clamp(80px,12vw,160px) 0;border-bottom:1px solid var(--border)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,100px);align-items:start}
+.form-lede-h{font-size:clamp(1.6rem,3vw,3rem);font-weight:900;letter-spacing:-.03em;line-height:1;margin-bottom:16px;text-wrap:balance}
+.form-lede-h em{font-style:italic;color:var(--text-muted)}
+.form-lede-p{font-size:.9rem;font-weight:300;color:var(--text-muted);line-height:1.7}
+@media(max-width:860px){.form-grid{grid-template-columns:1fr}}
+
+/* Star rating */
+--star:#F59E0B;
+.star-field{margin-bottom:24px}
+.field-label{display:block;font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px}
+.stars{display:flex;gap:4px}
+.star-btn{font-size:26px;color:var(--text-dim);background:none;border:none;cursor:pointer;padding:0 2px;line-height:1;transition:color .12s,transform .12s}
+.stars:not(:hover) .star-btn.on{color:#F59E0B}
+.stars:hover .star-btn{color:#F59E0B}
+.stars:hover .star-btn~.star-btn{color:var(--text-dim)}
+.star-btn:hover{transform:scale(1.2)}
+
+/* Form fields */
+.field{margin-bottom:18px}
+.field input,.field textarea{width:100%;background:var(--bg-card);border:1px solid var(--border-hi);border-radius:4px;padding:13px 16px;font-family:var(--font);font-size:.9rem;font-weight:300;color:var(--text);outline:none;transition:border-color .2s}
+.field input::placeholder,.field textarea::placeholder{color:var(--text-dim)}
+.field input:focus,.field textarea:focus{border-color:var(--accent)}
+.field textarea{resize:vertical;min-height:120px}
+.fields-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:480px){.fields-row{grid-template-columns:1fr}}
+.form-submit{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:8px}
+.form-note{font-size:11px;color:var(--text-dim)}
+.form-success{display:none;padding:20px 24px;border:1px solid rgba(139,92,246,.3);border-radius:6px;background:rgba(139,92,246,.06);text-align:center}
+.form-success.show{display:block}
+.form-success-icon{font-size:28px;margin-bottom:8px}
+.form-success-title{font-size:.95rem;font-weight:700;margin-bottom:4px}
+.form-success-sub{font-size:.83rem;color:var(--text-muted)}
+
+/* Reviews grid */
+.s-reviews{padding:clamp(80px,12vw,160px) 0}
+.reviews-top{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:clamp(36px,6vw,64px);flex-wrap:wrap}
+.reviews-hl{font-size:clamp(1.4rem,3vw,2.8rem);font-weight:900;letter-spacing:-.03em;line-height:1}
+.reviews-count{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim)}
+.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:900px){.reviews-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.reviews-grid{grid-template-columns:1fr}}
+.rv-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:14px;transition:border-color .25s}
+.rv-card:hover{border-color:var(--border-hi)}
+.rv-stars{display:flex;gap:3px;color:#F59E0B;font-size:14px}
+.rv-msg{font-size:.88rem;font-weight:300;color:var(--text-muted);line-height:1.7;flex:1}
+.rv-footer{display:flex;align-items:center;gap:10px;padding-top:12px;border-top:1px solid var(--border)}
+.rv-avatar{width:34px;height:34px;border-radius:50%;background:rgba(139,92,246,.18);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--accent);flex-shrink:0;text-transform:uppercase}
+.rv-name{font-size:.82rem;font-weight:600}
+.rv-company{font-size:.75rem;color:var(--text-dim)}
+.rv-date{font-size:.72rem;color:var(--text-dim);margin-left:auto}
+.empty-wrap{display:flex;flex-direction:column;align-items:center;text-align:center;gap:20px;padding:clamp(60px,10vw,100px) 0}
+.empty-stars-row{display:flex;gap:8px;opacity:.15;font-size:28px;color:var(--text)}
+.empty-title{font-size:1.1rem;font-weight:700;color:var(--text-muted)}
+.empty-sub{font-size:.85rem;color:var(--text-dim);max-width:340px;line-height:1.7}
+
+/* CTA */
+.s-cta{border-top:1px solid var(--border);text-align:center}
+.cta-in{padding:clamp(60px,10vw,120px) 0}
+.cta-super{font-size:clamp(.6rem,1vw,.75rem);font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--text-dim);margin-bottom:28px}
+.cta-hl{font-size:clamp(2.2rem,5.5vw,6rem);font-weight:900;line-height:.94;letter-spacing:-.035em;margin-bottom:40px;text-wrap:balance}
+.cta-hl em{font-style:italic;color:var(--text-muted)}
+.cta-btns{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}
+</style>
+
+<Header />
+
+<main>
+  <!-- HERO -->
+  <section class="s-hero" aria-labelledby="avis-hero-h">
+    <div class="wrap">
+      <div class="hero-in">
+        <span class="label r">Les clients</span>
+        <h1 class="h-xl r d1" id="avis-hero-h" style="margin-top:18px">
+          Ce que nos clients<br>pensent de <em>nous.</em>
+        </h1>
+        <p class="body-text r d2" style="margin-top:26px;max-width:480px">
+          Chaque projet est unique. Chaque retour compte. Partagez votre expérience ou découvrez ce que nos clients disent de Nexa Web.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORM -->
+  <section class="s-form" aria-labelledby="form-h">
+    <div class="wrap">
+      <div class="form-grid">
+        <div class="form-lede r">
+          <span class="label">Votre expérience</span>
+          <h2 class="form-lede-h" id="form-h" style="margin-top:18px">Laissez<br>votre <em>avis.</em></h2>
+          <p class="form-lede-p" style="margin-top:16px">Votre retour est précieux. Il sera examiné avant publication — généralement sous 24h.</p>
+        </div>
+        <div class="r d1">
+          <form id="review-form" novalidate>
+            <div class="star-field">
+              <span class="field-label" id="star-label">Votre note</span>
+              <div class="stars" role="group" aria-labelledby="star-label" id="stars">
+                <button class="star-btn" type="button" data-val="1" aria-label="1 étoile">★</button>
+                <button class="star-btn" type="button" data-val="2" aria-label="2 étoiles">★</button>
+                <button class="star-btn" type="button" data-val="3" aria-label="3 étoiles">★</button>
+                <button class="star-btn" type="button" data-val="4" aria-label="4 étoiles">★</button>
+                <button class="star-btn" type="button" data-val="5" aria-label="5 étoiles">★</button>
+              </div>
+            </div>
+            <div class="fields-row">
+              <div class="field">
+                <label class="field-label" for="rv-name">Votre nom *</label>
+                <input id="rv-name" type="text" placeholder="Jean Dupont" required maxlength="80">
+              </div>
+              <div class="field">
+                <label class="field-label" for="rv-company">Entreprise (optionnel)</label>
+                <input id="rv-company" type="text" placeholder="Acme SAS" maxlength="80">
+              </div>
+            </div>
+            <div class="field">
+              <label class="field-label" for="rv-msg">Votre avis *</label>
+              <textarea id="rv-msg" placeholder="Décrivez votre expérience avec Nexa Web…" required maxlength="600"></textarea>
+            </div>
+            <div class="form-submit">
+              <button type="submit" class="btn" id="rv-submit">
+                Envoyer mon avis
+                <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+              <span class="form-note">Modéré avant publication</span>
+            </div>
+          </form>
+          <div class="form-success" id="form-success" role="alert">
+            <div class="form-success-icon">✓</div>
+            <div class="form-success-title">Merci pour votre avis !</div>
+            <div class="form-success-sub">Il sera examiné et publié sous 24h si tout est conforme.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section class="s-reviews" aria-labelledby="reviews-h">
+    <div class="wrap">
+      <div class="reviews-top r">
+        <h2 class="reviews-hl" id="reviews-h">Avis publiés</h2>
+        <span class="reviews-count" id="reviews-count">Chargement…</span>
+      </div>
+      <div id="reviews-container"></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="s-cta" aria-labelledby="avis-cta-h">
+    <div class="wrap">
+      <div class="cta-in r">
+        <div class="cta-super">Travaillons ensemble</div>
+        <h2 class="cta-hl r d1" id="avis-cta-h">Votre projet mérite<br>une présence <em>remarquable.</em></h2>
+        <div class="cta-btns r d2">
+          <a href="/devis" class="btn">Démarrer un projet</a>
+          <a href="/tarifs" class="btn-g">Voir les tarifs</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<Footer />
+
+<script is:inline src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script is:inline src="/supabase-client.js"></script>
+<script>
+(function(){
+  'use strict';
+
+  /* Scroll reveal */
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('v'); io.unobserve(en.target); } });
+  },{threshold:0.12});
+  document.querySelectorAll('.r').forEach(function(el){ io.observe(el); });
+
+  /* Star rating */
+  var starBtns = Array.from(document.querySelectorAll('.star-btn'));
+  var rating = 0;
+  function setRating(val){
+    rating = val;
+    starBtns.forEach(function(s){ s.classList.toggle('on', parseInt(s.dataset.val) <= val); });
+  }
+  starBtns.forEach(function(s){ s.addEventListener('click', function(){ setRating(parseInt(s.dataset.val)); }); });
+
+  /* Form submit */
+  var form = document.getElementById('review-form');
+  var submitBtn = document.getElementById('rv-submit');
+  var successEl = document.getElementById('form-success');
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var name = document.getElementById('rv-name').value.trim();
+    var company = document.getElementById('rv-company').value.trim();
+    var msg = document.getElementById('rv-msg').value.trim();
+    if(!name || !msg){ alert('Veuillez remplir votre nom et votre avis.'); return; }
+    if(rating === 0){ alert('Veuillez sélectionner une note.'); return; }
+    if(!window.sb){ alert('Erreur de connexion. Réessayez dans un instant.'); return; }
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Envoi…';
+    window.sb.from('reviews').insert({ author_name: name, company: company||null, rating: rating, message: msg, status: 'pending' }).then(function(res){
+      if(res.error){
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Envoyer mon avis <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+        alert('Une erreur est survenue. Veuillez réessayer.'); return;
+      }
+      form.style.display = 'none';
+      successEl.classList.add('show');
+    });
+  });
+
+  /* Load published reviews */
+  function starsHtml(n){ var s=''; for(var i=1;i<=5;i++) s+='<span style="color:'+(i<=n?'#F59E0B':'var(--text-dim)')+'">★</span>'; return s; }
+  function initials(name){ return name.split(' ').map(function(w){ return w[0]; }).join('').slice(0,2); }
+  function formatDate(iso){ var d=new Date(iso); return d.toLocaleDateString('fr-FR',{year:'numeric',month:'long',day:'numeric'}); }
+  function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  function loadReviews(){
+    var container = document.getElementById('reviews-container');
+    var countEl = document.getElementById('reviews-count');
+    if(!window.sb){
+      countEl.textContent = '';
+      container.innerHTML = '<div class="empty-wrap"><div class="empty-stars-row">★★★★★</div><p class="empty-title">Aucun avis pour l\'instant.</p><p class="empty-sub">Soyez le premier à partager votre expérience !</p></div>';
+      return;
+    }
+    window.sb.from('reviews').select('*').eq('status','published').order('created_at',{ascending:false}).then(function(res){
+      if(res.error || !res.data || res.data.length === 0){
+        countEl.textContent = 'Aucun avis';
+        container.innerHTML = '<div class="empty-wrap"><div class="empty-stars-row">★★★★★</div><p class="empty-title">Aucun avis pour l\'instant.</p><p class="empty-sub">Soyez le premier à partager votre expérience !</p></div>';
+        return;
+      }
+      var reviews = res.data;
+      countEl.textContent = reviews.length + ' avis';
+      var grid = document.createElement('div');
+      grid.className = 'reviews-grid';
+      reviews.forEach(function(rv){
+        var card = document.createElement('div');
+        card.className = 'rv-card r';
+        card.innerHTML = '<div class="rv-stars">'+starsHtml(rv.rating)+'</div>'
+          +'<p class="rv-msg">'+escHtml(rv.message)+'</p>'
+          +'<div class="rv-footer"><div class="rv-avatar">'+escHtml(initials(rv.author_name))+'</div>'
+          +'<div><div class="rv-name">'+escHtml(rv.author_name)+'</div>'
+          +(rv.company?'<div class="rv-company">'+escHtml(rv.company)+'</div>':'')
+          +'</div><div class="rv-date">'+formatDate(rv.created_at)+'</div></div>';
+        grid.appendChild(card);
+      });
+      container.appendChild(grid);
+      grid.querySelectorAll('.r').forEach(function(el){ io.observe(el); });
+    });
+  }
+
+  loadReviews();
+})();
+</script>
+</BaseLayout>

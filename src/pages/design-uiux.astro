@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+---
+<BaseLayout title="Design UI/UX — Nexa Web" description="Design UI/UX soigné pour interfaces web et apps mobiles. Maquettes Figma, prototypes interactifs — Nexa Web.">
+<style>
+:root{ --accent:#d946ef }
+
+main{padding-top:var(--hdr)}
+
+.svc-hero{padding:80px var(--pad-x) 60px;max-width:1100px;margin:0 auto;position:relative}
+.svc-hero::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse 70% 50% at 60% 20%,rgba(217,70,239,.10) 0%,transparent 70%);pointer-events:none;z-index:0}
+.svc-eyebrow{font-size:10px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:20px;display:flex;align-items:center;gap:8px;position:relative;z-index:1}
+.svc-eyebrow::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.svc-title{font-size:clamp(2.8rem,7vw,5.5rem);font-weight:900;letter-spacing:-.03em;line-height:1;margin-bottom:28px;position:relative;z-index:1}
+.svc-title span{color:var(--accent)}
+.svc-desc{font-size:clamp(1rem,1.8vw,1.15rem);color:var(--text-muted);line-height:1.75;max-width:640px;margin-bottom:40px;position:relative;z-index:1}
+.svc-cta{display:inline-flex;align-items:center;gap:10px;background:var(--btn-bg);color:var(--btn-text);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:16px 32px;border-radius:2px;transition:opacity .2s,transform .2s;position:relative;z-index:1}
+.svc-cta:hover{opacity:.82;transform:translateY(-2px)}
+
+.svc-features{padding:60px var(--pad-x);max-width:1100px;margin:0 auto}
+.svc-section-label{font-size:10px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:40px;display:block}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.feat-item{background:var(--bg);padding:32px 28px}
+.feat-num{font-size:11px;font-weight:600;color:var(--accent);letter-spacing:.1em;margin-bottom:14px}
+.feat-title{font-size:1rem;font-weight:700;letter-spacing:-.01em;margin-bottom:10px}
+.feat-desc{font-size:.875rem;color:var(--text-muted);line-height:1.65}
+
+.svc-divider{height:1px;background:var(--border);margin:0 var(--pad-x)}
+
+.svc-band{padding:60px var(--pad-x);max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap}
+.svc-band-text h2{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:800;letter-spacing:-.02em;margin-bottom:8px}
+.svc-band-text p{font-size:.9rem;color:var(--text-muted);line-height:1.6}
+
+@media(max-width:700px){.feat-grid{grid-template-columns:1fr}.svc-band{flex-direction:column;align-items:flex-start}}
+</style>
+
+<Header backBtn={true} />
+
+<main>
+  <div class="svc-hero">
+    <p class="svc-eyebrow">Service · Expérience</p>
+    <h1 class="svc-title">Design <span>UI/UX</span></h1>
+    <p class="svc-desc">Un beau design, ça s'admire. Un bon design UI/UX, ça convertit. On crée des interfaces pensées pour vos utilisateurs — wireframes, maquettes haute fidélité, prototype interactif — avec une attention obsessionnelle aux détails.</p>
+    <a href="/devis" class="svc-cta">Obtenir un devis gratuit →</a>
+  </div>
+
+  <div class="svc-divider"></div>
+
+  <div class="svc-features">
+    <span class="svc-section-label">Ce qui est inclus</span>
+    <div class="feat-grid">
+      <div class="feat-item">
+        <div class="feat-num">01</div>
+        <h3 class="feat-title">Wireframes & zoning</h3>
+        <p class="feat-desc">Structure de chaque page définie avant le design : hiérarchie de l'information, parcours utilisateur, zones de conversion et calls-to-action.</p>
+      </div>
+      <div class="feat-item">
+        <div class="feat-num">02</div>
+        <h3 class="feat-title">Maquettes haute fidélité</h3>
+        <p class="feat-desc">Design pixel-perfect avec charte graphique complète : couleurs, typographies, espacements, icônes et composants prêts à intégrer.</p>
+      </div>
+      <div class="feat-item">
+        <div class="feat-num">03</div>
+        <h3 class="feat-title">Prototype interactif</h3>
+        <p class="feat-desc">Simulation cliquable de votre futur site. Vous testez le parcours utilisateur en conditions réelles avant la moindre ligne de code.</p>
+      </div>
+      <div class="feat-item">
+        <div class="feat-num">04</div>
+        <h3 class="feat-title">Design system</h3>
+        <p class="feat-desc">Bibliothèque de composants réutilisables : boutons, formulaires, cartes, navigation. Votre identité visuelle reste cohérente sur toutes les pages.</p>
+      </div>
+      <div class="feat-item">
+        <div class="feat-num">05</div>
+        <h3 class="feat-title">Mobile-first</h3>
+        <p class="feat-desc">Conçu d'abord pour mobile puis adapté au desktop. Chaque geste et chaque élément optimisé pour l'écran de votre client.</p>
+      </div>
+      <div class="feat-item">
+        <div class="feat-num">06</div>
+        <h3 class="feat-title">Révisions illimitées</h3>
+        <p class="feat-desc">On itère jusqu'à ce que le résultat soit parfait. Fichiers sources Figma livrés avec le design system complet.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="svc-divider"></div>
+
+  <div class="svc-band">
+    <div class="svc-band-text">
+      <h2>Prêt à créer votre interface ?</h2>
+      <p>Brief gratuit. On démarre cette semaine.</p>
+    </div>
+    <a href="/devis" class="btn">Démarrer mon design →</a>
+  </div>
+</main>
+
+<Footer />
+</BaseLayout>
