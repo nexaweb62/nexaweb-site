@@ -123,12 +123,14 @@ import '../styles/global.css';
   padding:4px 14px;border-radius:100px;box-shadow:0 2px 8px rgba(0,0,0,.3);
 }
 .plan-name{font-size:13px;font-weight:600;color:var(--text-muted);margin-bottom:16px}
-.plan-range{display:flex;align-items:baseline;gap:8px}
-.plan-from{font-size:clamp(28px,3.5vw,38px);font-weight:700;letter-spacing:-.03em;line-height:1}
-.plan-sep{font-size:18px;color:var(--text-dim)}
-.plan-to{font-size:clamp(28px,3.5vw,38px);font-weight:700;letter-spacing:-.03em;line-height:1;color:var(--text-muted)}
-.plan-amount{font-size:clamp(32px,4vw,44px);font-weight:700;letter-spacing:-.04em;line-height:1}
+.plan-range{display:flex;align-items:baseline;gap:8px;flex-wrap:nowrap}
+.plan-from{font-size:clamp(28px,3.5vw,38px);font-weight:700;letter-spacing:-.03em;line-height:1;white-space:nowrap}
+.plan-sep{font-size:18px;color:var(--text-dim);flex-shrink:0}
+.plan-to{font-size:clamp(28px,3.5vw,38px);font-weight:700;letter-spacing:-.03em;line-height:1;color:var(--text-muted);white-space:nowrap}
+.plan-amount{font-size:clamp(32px,4vw,44px);font-weight:700;letter-spacing:-.04em;line-height:1;white-space:nowrap}
 .plan-desc{font-size:11.5px;color:var(--text-dim);margin-top:6px;line-height:1.5}
+.plan-spots{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--accent);padding:5px 10px;background:var(--accent-dim);border:1px solid var(--accent-ring);border-radius:6px;margin-bottom:18px}
+.plan-spots-num{font-size:14px;font-weight:700;line-height:1}
 .plan-divider{border:none;border-top:1px dashed var(--border-hi);margin:20px 0}
 .plan-features{list-style:none;padding:0;margin:0 0 24px;display:flex;flex-direction:column;gap:10px;flex:1}
 .plan-feature{display:flex;align-items:flex-start;gap:9px;font-size:12.5px;color:var(--text-muted);line-height:1.45}
@@ -148,10 +150,10 @@ import '../styles/global.css';
 .cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 
 /* ── CANVAS ── */
-#neon-bg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.35}
+#neuro-bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.72}
 </style>
 
-<canvas id="neon-bg" aria-hidden="true"></canvas>
+<canvas id="neuro-bg" aria-hidden="true"></canvas>
 <Header cta="Devis gratuit" ctaHref="/devis" />
 
 <main style="position:relative;z-index:1">
@@ -225,14 +227,18 @@ import '../styles/global.css';
         </div>
 
         <!-- Vitrine Pro — populaire -->
-        <div class="plan-card plan-featured">
+        <div class="plan-card plan-featured" id="plan-vitrine">
           <div class="plan-badge"><span data-i18n="trf-p2-badge">Populaire</span></div>
           <p class="plan-name" data-i18n="trf-p2-name">Vitrine Pro</p>
           <div>
             <div class="plan-range">
-              <span class="plan-amount" data-i18n="trf-p2-price">1 000 €</span>
+              <span class="plan-amount" data-i18n="trf-p2-price">1&nbsp;000&nbsp;€</span>
             </div>
             <p class="plan-desc" data-i18n="trf-p2-desc">Offre de lancement · places limitées</p>
+          </div>
+          <div class="plan-spots">
+            <span class="plan-spots-num" id="vp-spots-num">3</span>
+            <span data-i18n="trf-spots">places restantes</span>
           </div>
           <hr class="plan-divider">
           <ul class="plan-features">
@@ -261,7 +267,7 @@ import '../styles/global.css';
               <span data-i18n="trf-p2-f6">1 mois de support inclus</span>
             </li>
           </ul>
-          <a href="/devis" class="btn plan-cta" data-i18n="trf-p2-cta">Démarrer mon projet</a>
+          <a href="/devis?plan=vitrine-pro" class="btn plan-cta" data-i18n="trf-p2-cta">Démarrer mon projet</a>
         </div>
 
         <!-- Entreprise -->
@@ -428,76 +434,172 @@ import '../styles/global.css';
 <Footer />
 
 <script is:inline>
-/* ── NEON TUBES BACKGROUND ── */
 (function(){
-  'use strict';
-  var c=document.getElementById('neon-bg');
-  if(!c)return;
-  var g=c.getContext('2d');
-  var W=0,H=0,t=0,tubes=[];
-  var PALETTES=[
-    {h:265,s:'80%',l:'62%'},{h:248,s:'76%',l:'67%'},
-    {h:280,s:'70%',l:'58%'},{h:220,s:'72%',l:'64%'},
-    {h:300,s:'65%',l:'56%'},{h:240,s:'80%',l:'70%'},
-    {h:258,s:'78%',l:'60%'},{h:275,s:'68%',l:'65%'},
-  ];
-  function rand(a,b){return a+(b-a)*Math.random()}
-  function hsl(p){return'hsl('+p.h+','+p.s+','+p.l+')'}
-  function mkCtrl(){return{x:rand(0,W),y:rand(0,H)}}
-  function mkTube(){
-    var pal=PALETTES[Math.floor(rand(0,PALETTES.length))];
-    return{
-      p0:mkCtrl(),p1:mkCtrl(),p2:mkCtrl(),p3:mkCtrl(),
-      vp0:{x:rand(-.15,.15),y:rand(-.15,.15)},
-      vp1:{x:rand(-.12,.12),y:rand(-.12,.12)},
-      color:hsl(pal),
-      w:rand(.6,2.2),gw:rand(14,36),
-      alpha:rand(.5,.9),sp:rand(.0003,.0008),phase:rand(0,Math.PI*2)
-    };
-  }
-  function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight}
-  function init(){resize();tubes=[];for(var i=0;i<8;i++)tubes.push(mkTube())}
+'use strict';
 
-  function wrap(p,v,lim){
-    p.x+=v.x;p.y+=v.y;
-    if(p.x<-0.1*lim)p.x=1.1*lim;if(p.x>1.1*lim)p.x=-0.1*lim;
-    if(p.y<-0.1*H)p.y=1.1*H;if(p.y>1.1*H)p.y=-0.1*H;
-  }
+/* ── Vitrine Pro : spots restants depuis Supabase ── */
+function initSpots(){
+  if(!window.sb)return;
+  window.sb.from('nw_config').select('value').eq('key','vitrine_pro_spots').single()
+    .then(function(r){
+      if(r.error||!r.data)return;
+      var n=parseInt(r.data.value,10);
+      if(isNaN(n))return;
+      var card=document.getElementById('plan-vitrine');
+      if(!card)return;
+      if(n<=0){card.remove();return;}
+      var el=document.getElementById('vp-spots-num');
+      if(el)el.textContent=n;
+    });
+}
+setTimeout(initSpots,500);
 
-  function drawTube(tb){
-    wrap(tb.p0,tb.vp0,W);wrap(tb.p1,tb.vp1,W);
-    var x0=tb.p0.x,y0=tb.p0.y,x1=tb.p1.x,y1=tb.p1.y,x2=tb.p2.x,y2=tb.p2.y,x3=tb.p3.x,y3=tb.p3.y;
-    var pulse=0.7+0.3*Math.sin(t*1.8+tb.phase);
-    var alpha=tb.alpha*pulse;
-    /* outer glow */
-    g.save();
-    g.shadowColor=tb.color;
-    g.shadowBlur=tb.gw*2.2;
-    g.beginPath();g.moveTo(x0,y0);g.bezierCurveTo(x1,y1,x2,y2,x3,y3);
-    g.strokeStyle=tb.color;g.lineWidth=tb.w*2.5;g.globalAlpha=alpha*.25;g.stroke();
-    g.restore();
-    /* mid glow */
-    g.save();
-    g.shadowColor=tb.color;g.shadowBlur=tb.gw;
-    g.beginPath();g.moveTo(x0,y0);g.bezierCurveTo(x1,y1,x2,y2,x3,y3);
-    g.strokeStyle=tb.color;g.lineWidth=tb.w*1.4;g.globalAlpha=alpha*.55;g.stroke();
-    g.restore();
-    /* core line */
-    g.save();
-    g.beginPath();g.moveTo(x0,y0);g.bezierCurveTo(x1,y1,x2,y2,x3,y3);
-    g.strokeStyle='rgba(255,255,255,.85)';g.lineWidth=tb.w*.4;g.globalAlpha=alpha*.7;g.stroke();
-    g.restore();
-  }
+/* ── Neuro Noise — WebGL1 ── */
+/* Adapted from Paper Shaders https://shaders.paper.design/neuro-noise — Apache-2.0 */
+var cv=document.getElementById('neuro-bg');
+if(!cv)return;
+var gl=cv.getContext('webgl')||cv.getContext('experimental-webgl');
+if(!gl)return;
 
-  function draw(){
-    t+=0.016;
-    g.clearRect(0,0,W,H);
-    for(var i=0;i<tubes.length;i++)drawTube(tubes[i]);
-    requestAnimationFrame(draw);
-  }
+var VS='attribute vec2 a;void main(){gl_Position=vec4(a,0.0,1.0);}';
+var FS=`#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+uniform vec3 u_colors[8];
+uniform vec4 u_scene;
+uniform vec4 u_shape;
+uniform vec4 u_surface;
+uniform vec4 u_finish;
+uniform vec4 u_transform;
+uniform vec4 u_space;
+uniform vec4 u_cursor;
+#define u_resolution u_scene.xy
+#define u_time u_scene.z
+#define u_colorCount u_scene.w
+#define u_scale u_shape.x
+#define u_intensity u_shape.y
+#define u_paramA u_shape.z
+#define u_warp u_shape.w
+#define u_detail u_surface.x
+#define u_contrast u_surface.y
+#define u_brightness u_surface.z
+#define u_saturation u_surface.w
+#define u_hue u_finish.x
+#define u_vignette u_finish.y
+#define u_blur u_finish.z
+#define u_grain u_finish.w
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+#define u_seed u_transform.x
+#else
+#define u_seed mod(u_transform.x,31.0)
+#endif
+#define u_rotate u_transform.y
+#define u_drift u_transform.z
+#define u_oklab u_transform.w
+#define u_offset u_space.xy
+#define u_mouse u_space.zw
+#define u_cursorPresence u_cursor.x
+#define u_cursorEffect u_cursor.y
+#define u_cursorStrength u_cursor.z
+#define u_cursorRadius u_cursor.w
+float hash21(vec2 p){
+#ifndef GL_FRAGMENT_PRECISION_HIGH
+  p=mod(p,31.0);
+#endif
+  p=fract(p*vec2(234.34,435.345));p+=dot(p,p+34.23);return fract(p.x*p.y);}
+float grainHash(vec2 p){vec3 p3=fract(vec3(p.xyx)*0.1031);p3+=dot(p3,p3.yzx+33.33);return fract((p3.x+p3.y)*p3.z);}
+float noise(vec2 p){vec2 i=floor(p);vec2 f=fract(p);vec2 u=f*f*(3.0-2.0*f);return mix(mix(hash21(i),hash21(i+vec2(1.0,0.0)),u.x),mix(hash21(i+vec2(0.0,1.0)),hash21(i+vec2(1.0,1.0)),u.x),u.y);}
+float fbm(vec2 p){float v=0.0;float a=0.5;for(int i=0;i<5;i++){v+=a*noise(p);p=p*2.03+vec2(17.0,9.2);a*=0.5;}return v;}
+vec3 srgbToLinear(vec3 c){return mix(c/12.92,pow((c+0.055)/1.055,vec3(2.4)),step(0.04045,c));}
+vec3 linearToSrgb(vec3 c){return mix(c*12.92,1.055*pow(max(c,vec3(0.0)),vec3(1.0/2.4))-0.055,step(0.0031308,c));}
+vec3 linToOklab(vec3 c){float l=0.4122214708*c.r+0.5363325363*c.g+0.0514459929*c.b;float m=0.2119034982*c.r+0.6806995451*c.g+0.1073969566*c.b;float s=0.0883024619*c.r+0.2817188376*c.g+0.6299787005*c.b;l=pow(max(l,0.0),1.0/3.0);m=pow(max(m,0.0),1.0/3.0);s=pow(max(s,0.0),1.0/3.0);return vec3(0.2104542553*l+0.7936177850*m-0.0040720468*s,1.9779984951*l-2.4285922050*m+0.4505937099*s,0.0259040371*l+0.7827717662*m-0.8086757660*s);}
+vec3 oklabToLin(vec3 c){float l=c.x+0.3963377774*c.y+0.2158037573*c.z;float m=c.x-0.1055613458*c.y-0.0638541728*c.z;float s=c.x-0.0894841775*c.y-1.2914855480*c.z;l=l*l*l;m=m*m*m;s=s*s*s;return vec3(4.0767416621*l-3.3077115913*m+0.2309699292*s,-1.2684380046*l+2.6097574011*m-0.3413193965*s,-0.0041960863*l-0.7034186147*m+1.7076147010*s);}
+vec3 mixColour(vec3 a,vec3 b,float t){if(u_oklab>0.5){vec3 la=linToOklab(srgbToLinear(a));vec3 lb=linToOklab(srgbToLinear(b));return clamp(linearToSrgb(oklabToLin(mix(la,lb,t))),0.0,1.0);}return mix(a,b,t);}
+vec3 palette(float x){float n=max(u_colorCount-1.0,1.0);float f=clamp(x,0.0,1.0)*n;vec3 col=u_colors[0];for(int i=0;i<7;i++){if(float(i)<n)col=mixColour(col,u_colors[i+1],smoothstep(0.0,1.0,clamp(f-float(i),0.0,1.0)));}return col;}
+vec3 hueRotate(vec3 col,float a){const mat3 toYIQ=mat3(0.299,0.596,0.211,0.587,-0.274,-0.523,0.114,-0.322,0.312);const mat3 toRGB=mat3(1.0,1.0,1.0,0.956,-0.272,-1.106,0.621,-0.647,1.703);vec3 yiq=toYIQ*col;float ca=cos(a),sa=sin(a);yiq=vec3(yiq.x,yiq.y*ca-yiq.z*sa,yiq.y*sa+yiq.z*ca);return toRGB*yiq;}
+vec3 shade(vec2 uv,vec2 p,float t){vec2 q=p*(1.6+u_intensity*2.4);float field=0.0;float weight=0.55;for(int i=0;i<6;i++){float fi=float(i);q+=vec2(sin(q.y*(1.7+fi*0.09)+t*(0.35+fi*0.04)+u_seed),cos(q.x*(1.5+fi*0.11)-t*(0.28+fi*0.03)))*(0.22+u_intensity*0.14);float filaments=abs(sin(q.x+q.y+fi*0.72));field+=weight/(0.08+filaments);weight*=0.62;q=q.yx*vec2(-1.08,1.04);}float glow=1.0-exp(-field*(0.018+u_paramA*0.04));return palette(clamp(glow,0.0,1.0));}
+void main(){
+  vec2 uv=gl_FragCoord.xy/u_resolution.xy;
+  vec2 screenUv=uv;
+  vec2 p=(gl_FragCoord.xy-0.5*u_resolution.xy)/min(u_resolution.x,u_resolution.y);
+  uv=p*min(u_resolution.x,u_resolution.y)/u_resolution.xy+0.5;
+  p*=u_scale;
+  if(abs(u_rotate)>0.0001){float cr=cos(u_rotate),sr=sin(u_rotate);p=mat2(cr,-sr,sr,cr)*p;}
+  p+=u_offset;
+  if(u_drift>0.0001)p+=u_drift*vec2(sin(u_time*0.31),cos(u_time*0.23));
+  if(u_warp>0.0){p+=u_warp*(vec2(fbm(p*u_detail+u_seed),fbm(p*u_detail+vec2(5.2,1.3)))-0.5);}
+  vec3 col=shade(uv,p,u_time);
+  if(abs(u_contrast-1.0)>0.0001)col=(col-0.5)*u_contrast+0.5;
+  if(abs(u_saturation-1.0)>0.0001){float luma=dot(col,vec3(0.299,0.587,0.114));col=mix(vec3(luma),col,u_saturation);}
+  if(abs(u_hue)>0.0001)col=hueRotate(col,u_hue);
+  if(abs(u_brightness)>0.0001)col+=u_brightness;
+  if(u_vignette>0.0001){float vd=length(screenUv-0.5)*1.41421356;col*=1.0-u_vignette*smoothstep(0.35,1.0,vd);}
+  if(u_grain>0.0001)col+=(grainHash(gl_FragCoord.xy+vec2(u_seed*17.0,u_seed*31.0))-0.5)*u_grain;
+  gl_FragColor=vec4(clamp(col,0.0,1.0),1.0);
+}`;
 
-  window.addEventListener('resize',function(){resize();init()},{passive:true});
-  init();draw();
+function mkSh(t,s){var sh=gl.createShader(t);gl.shaderSource(sh,s);gl.compileShader(sh);if(!gl.getShaderParameter(sh,gl.COMPILE_STATUS)){console.error('Shader:',gl.getShaderInfoLog(sh));return null;}return sh;}
+var vs=mkSh(gl.VERTEX_SHADER,VS);
+var fs=mkSh(gl.FRAGMENT_SHADER,FS);
+if(!vs||!fs)return;
+var prog=gl.createProgram();
+gl.attachShader(prog,vs);gl.attachShader(prog,fs);gl.linkProgram(prog);
+if(!gl.getProgramParameter(prog,gl.LINK_STATUS)){console.error('Link:',gl.getProgramInfoLog(prog));return;}
+gl.useProgram(prog);
+
+var buf=gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+var aPos=gl.getAttribLocation(prog,'a');
+gl.enableVertexAttribArray(aPos);
+gl.vertexAttribPointer(aPos,2,gl.FLOAT,false,0,0);
+
+var L={
+  colors:gl.getUniformLocation(prog,'u_colors[0]'),
+  scene: gl.getUniformLocation(prog,'u_scene'),
+  shape: gl.getUniformLocation(prog,'u_shape'),
+  surf:  gl.getUniformLocation(prog,'u_surface'),
+  fin:   gl.getUniformLocation(prog,'u_finish'),
+  xfm:   gl.getUniformLocation(prog,'u_transform'),
+  spc:   gl.getUniformLocation(prog,'u_space'),
+  cur:   gl.getUniformLocation(prog,'u_cursor')
+};
+
+/* 4 couleurs + 4 zeroes de padding */
+gl.uniform3fv(L.colors,[
+  0.027,0.012,0.051, 0.165,0.039,0.282,
+  0.839,0.161,0.463, 1.000,0.855,0.475,
+  0,0,0, 0,0,0, 0,0,0, 0,0,0
+]);
+/* uniforms statiques calés sur les paramètres du prompt */
+gl.uniform4f(L.shape, 1.26, 0.35, 0.28, 0.00); /* scale intensity paramA warp */
+gl.uniform4f(L.surf,  1.82, 1.00, 0.00, 1.00); /* detail contrast brightness saturation */
+gl.uniform4f(L.fin,   0.00, 0.00, 0.00, 0.04); /* hue vignette blur grain */
+gl.uniform4f(L.xfm,   1.00, 0.00, 0.00, 0.00); /* seed rotation drift oklab */
+gl.uniform4f(L.spc,   0.00, 0.00, 0.00, 0.00); /* offset.xy pointer.xy */
+gl.uniform4f(L.cur,   0.00, 2.00, 0.65, 0.46); /* cursor off */
+
+var W=0,H=0,t0=null;
+function resize(){
+  var dpr=Math.min(devicePixelRatio||1,2);
+  W=cv.width=window.innerWidth*dpr|0;
+  H=cv.height=window.innerHeight*dpr|0;
+  gl.viewport(0,0,W,H);
+}
+function frame(ts){
+  if(!document.hidden){
+    if(!t0)t0=ts;
+    /* time*0.57 = spec speed 25/100 */
+    gl.uniform4f(L.scene,W,H,(ts-t0)*0.00057,4.0);
+    gl.drawArrays(gl.TRIANGLES,0,3);
+  }
+  requestAnimationFrame(frame);
+}
+resize();
+window.addEventListener('resize',resize,{passive:true});
+requestAnimationFrame(frame);
 })();
 </script>
 </BaseLayout>

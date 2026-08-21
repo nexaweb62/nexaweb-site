@@ -324,13 +324,18 @@ import '../styles/global.css';
 
     setLoading(true);
     try{
+      var planParam=new URLSearchParams(location.search).get('plan')||null;
       const{error:insertErr}=await window.sb.from('demandes_devis').insert({
         prenom,nom,email:emailVal,telephone:tel||null,entreprise:entreprise||null,
         type_site:type||null,delai_souhaite:delai||null,budget_estime:budget||null,
-        description:desc,site_existant:siteActuel||null,formule:null
+        description:desc,site_existant:siteActuel||null,formule:planParam
       });
       if(insertErr){showBanner("Erreur lors de l'enregistrement. Contactez-nous directement à contact.nexaweb62@gmail.com");return}
       stampSubmit();
+      /* Décrémente les places Vitrine Pro si applicable */
+      if(planParam==='vitrine-pro'){
+        try{await window.sb.rpc('decrement_vitrine_spots');}catch(e){console.warn('[spots]',e);}
+      }
       try{await window.sb.functions.invoke('send-devis-email',{body:{prenom,nom,email:emailVal,telephone:tel,entreprise,type_site:type,delai_souhaite:delai,budget_estime:budget,description:desc,site_existant:siteActuel}})}
       catch(e){console.warn('[devis] email failed (data saved):',e)}
       form.classList.add('hide');overlay.classList.add('show');window.scrollTo({top:0,behavior:'smooth'});
