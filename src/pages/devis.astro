@@ -443,10 +443,7 @@ import '../styles/global.css';
   }
 
   applyLang(cur);
-
-  document.querySelectorAll('.lang-opt').forEach(function(b){
-    b.addEventListener('click',function(){applyLang(b.getAttribute('data-lang'))});
-  });
+  document.addEventListener('nw-lang',function(e){applyLang(e.detail);});
 })();
 </script>
 </BaseLayout>

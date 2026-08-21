@@ -154,11 +154,20 @@ const { cta = 'Démarrer un projet', ctaHref = '/devis', back = true } = Astro.p
   /* ── Bouton Retour ── */
   var backBtn=document.getElementById('hdr-back');
   if(backBtn){
-    backBtn.addEventListener('click',function(){
-      if(history.length>1)history.back();
-      else window.location.href='/';
-    });
+    backBtn.addEventListener('click',function(){window.location.href='/';});
   }
+
+  /* ── Lang FR/EN ── */
+  var savedLang=localStorage.getItem('nw-lang')||'fr';
+  document.querySelectorAll('.lang-opt').forEach(function(b){
+    b.classList.toggle('active',b.getAttribute('data-lang')===savedLang);
+    b.addEventListener('click',function(){
+      var lang=b.getAttribute('data-lang');
+      localStorage.setItem('nw-lang',lang);
+      document.querySelectorAll('.lang-opt').forEach(function(x){x.classList.toggle('active',x.getAttribute('data-lang')===lang);});
+      document.dispatchEvent(new CustomEvent('nw-lang',{detail:lang}));
+    });
+  });
 
   /* ── Circular nav ── */
   var overlay=document.getElementById('cnav');
