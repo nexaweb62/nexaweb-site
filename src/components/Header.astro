@@ -1,41 +1,53 @@
 ---
 export interface Props {
-  backBtn?: boolean;
   cta?: string;
   ctaHref?: string;
 }
-const { backBtn = false, cta = 'Démarrer un projet', ctaHref = '/devis' } = Astro.props;
+const { cta = 'Démarrer un projet', ctaHref = '/devis' } = Astro.props;
 ---
 <header class="hdr" id="hdr">
   <div class="wrap">
     <nav class="nav" aria-label="Navigation principale">
       <a href="/" class="nav-logo" aria-label="Nexa Web — Accueil">NEXA<span>WEB</span></a>
-      {backBtn ? (
-        <ul class="nav-links" role="list">
-          <li><a href="/" class="nav-link">Accueil</a></li>
-        </ul>
-      ) : (
-        <ul class="nav-links" role="list">
-          <li><a href="/#accueil"  class="nav-link">Accueil</a></li>
-          <li><a href="/#services" class="nav-link">Services</a></li>
-          <li><a href="/#apropos"  class="nav-link">À propos</a></li>
-          <li><a href="/tarifs"    class="nav-link">Tarifs</a></li>
-          <li><a href="/#faq"     class="nav-link">FAQ</a></li>
-          <li><a href="/contact"  class="nav-link">Contact</a></li>
-        </ul>
-      )}
+      <ul class="nav-links" role="list">
+        <li><a href="/#accueil"  class="nav-link">Accueil</a></li>
+        <li><a href="/#services" class="nav-link">Services</a></li>
+        <li><a href="/#apropos"  class="nav-link">À propos</a></li>
+        <li><a href="/tarifs"    class="nav-link">Tarifs</a></li>
+        <li><a href="/#faq"     class="nav-link">FAQ</a></li>
+        <li><a href="/contact"  class="nav-link">Contact</a></li>
+      </ul>
       <div class="nav-r">
         <div class="lang-sel" role="group" aria-label="Language">
           <button class="lang-opt" data-lang="fr">FR</button>
           <button class="lang-opt" data-lang="en">EN</button>
         </div>
-        <button class="menu-btn" id="menu-btn" aria-label="Ouvrir la navigation" aria-expanded="false">
+
+        <!-- Bouton Menu -->
+        <button class="menu-btn hdr-tip" id="menu-btn"
+          aria-label="Ouvrir la navigation" aria-expanded="false"
+          data-tip="MENU">
           <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
         </button>
-        <button class="theme-btn" id="theme-btn" aria-label="Basculer le thème">○</button>
-        <a href="/login" class="login-btn" aria-label="Connexion">
+
+        <!-- Bouton Thème -->
+        <button class="theme-btn hdr-tip" id="theme-btn"
+          aria-label="Basculer le thème"
+          data-tip="MODE SOMBRE">○</button>
+
+        <!-- Bouton Espace Client -->
+        <a href="/login" class="login-btn hdr-tip"
+          aria-label="Espace client"
+          data-tip="ESPACE CLIENT">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
         </a>
+
+        <!-- Bouton Retour -->
+        <button class="hdr-back" id="hdr-back" aria-label="Page précédente">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+          Retour
+        </button>
+
         <a href={ctaHref} class="btn">{cta}</a>
       </div>
     </nav>
@@ -122,13 +134,26 @@ const { backBtn = false, cta = 'Démarrer un projet', ctaHref = '/devis' } = Ast
   var tbtn=document.getElementById('theme-btn');
   if(tbtn){
     function isDark(){return root.getAttribute('data-theme')==='dark'||(!root.getAttribute('data-theme')&&window.matchMedia('(prefers-color-scheme:dark)').matches)}
-    function updBtn(){tbtn.textContent=isDark()?'◐':'○';tbtn.title=isDark()?'Mode clair':'Mode sombre'}
-    updBtn();
+    function updTheme(){
+      tbtn.textContent=isDark()?'◐':'○';
+      tbtn.title=isDark()?'Mode clair':'Mode sombre';
+      tbtn.setAttribute('data-tip',isDark()?'MODE CLAIR':'MODE SOMBRE');
+    }
+    updTheme();
     tbtn.addEventListener('click',function(){
       var next=isDark()?'light':'dark';
       root.setAttribute('data-theme',next);
       localStorage.setItem('nw-theme',next);
-      updBtn();
+      updTheme();
+    });
+  }
+
+  /* ── Bouton Retour ── */
+  var backBtn=document.getElementById('hdr-back');
+  if(backBtn){
+    backBtn.addEventListener('click',function(){
+      if(history.length>1)history.back();
+      else window.location.href='/';
     });
   }
 
