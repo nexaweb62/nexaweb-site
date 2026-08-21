@@ -42,7 +42,10 @@ import '../styles/global.css';
   font:inherit;font-size:13px;color:var(--text);outline:none;
   transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;appearance:none;
 }
-:root[data-theme="light"] .field input:not([type=checkbox]),.field textarea,.field select{background:rgba(244,244,240,.9);border-color:rgba(18,18,22,.14)}
+:root[data-theme="light"] .field input:not([type=checkbox]),:root[data-theme="light"] .field textarea,:root[data-theme="light"] .field select{background:rgba(244,244,240,.9);border-color:rgba(18,18,22,.14)}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .field input:not([type=checkbox]),:root:not([data-theme="dark"]) .field textarea,:root:not([data-theme="dark"]) .field select{background:rgba(244,244,240,.9);border-color:rgba(18,18,22,.14)}}
+:root[data-theme="light"] .field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(18,18,22,.4)' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(18,18,22,.4)' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}}
 .field input::placeholder,.field textarea::placeholder{color:var(--text-dim)}
 .field input:focus,.field textarea:focus,.field select:focus{border-color:rgba(139,92,246,.5);box-shadow:0 0 0 3px rgba(139,92,246,.1)}
 .field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(232,232,242,.3)' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;cursor:pointer}
@@ -97,8 +100,13 @@ import '../styles/global.css';
 .success-back{display:inline-flex;align-items:center;gap:8px;font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);border:1px solid var(--ghost-border);border-radius:4px;padding:11px 22px;transition:color .2s,border-color .2s;cursor:pointer;background:none}
 .success-back:hover{color:var(--text);border-color:var(--border-hi)}
 :focus-visible{outline:2px solid var(--accent-ring);outline-offset:3px;border-radius:3px}
+
+/* ── AETHER CANVAS ── */
+#aether-cv{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.devis-page{position:relative;z-index:1}
 </style>
 
+<canvas id="aether-cv" aria-hidden="true"></canvas>
 <Header backBtn={true} />
 
 <main>
@@ -139,35 +147,35 @@ import '../styles/global.css';
         </div>
 
         <!-- HEAD -->
-        <div class="card-eyebrow">Demande de devis gratuit</div>
-        <h1 class="card-title">Parlons de<br><em>votre projet.</em></h1>
-        <p class="card-sub">Réponse sous 24 h · Devis gratuit &amp; sans engagement</p>
+        <div class="card-eyebrow" data-i18n="eyebrow">Demande de devis gratuit</div>
+        <h1 class="card-title" data-i18n="title">Parlons de<br><em>votre projet.</em></h1>
+        <p class="card-sub" data-i18n="sub">Réponse sous 24 h · Devis gratuit &amp; sans engagement</p>
 
         <!-- CONTACT -->
         <div class="form-section">
-          <span class="section-label">1 — Vos coordonnées</span>
+          <span class="section-label" data-i18n="sec1">1 — Vos coordonnées</span>
           <div class="field-grid">
             <div class="field">
-              <label for="prenom">Prénom <span class="req">*</span></label>
+              <label for="prenom"><span data-i18n="prenom">Prénom</span> <span class="req">*</span></label>
               <input type="text" id="prenom" name="prenom" placeholder="Jean" autocomplete="given-name" required>
               <span class="field-err" id="err-prenom"></span>
             </div>
             <div class="field">
-              <label for="nom">Nom <span class="req">*</span></label>
+              <label for="nom"><span data-i18n="nom">Nom</span> <span class="req">*</span></label>
               <input type="text" id="nom" name="nom" placeholder="Dupont" autocomplete="family-name" required>
               <span class="field-err" id="err-nom"></span>
             </div>
             <div class="field">
-              <label for="email">E-mail <span class="req">*</span></label>
+              <label for="email"><span data-i18n="email">E-mail</span> <span class="req">*</span></label>
               <input type="email" id="email" name="email" placeholder="jean@entreprise.fr" autocomplete="email" required>
               <span class="field-err" id="err-email"></span>
             </div>
             <div class="field">
-              <label for="tel">Téléphone</label>
+              <label for="tel"><span data-i18n="tel">Téléphone</span></label>
               <input type="tel" id="tel" name="tel" placeholder="+33 6 00 00 00 00" autocomplete="tel">
             </div>
             <div class="field field-full">
-              <label for="entreprise">Entreprise / Activité</label>
+              <label for="entreprise"><span data-i18n="entreprise">Entreprise / Activité</span></label>
               <input type="text" id="entreprise" name="entreprise" placeholder="Ma Boulangerie, Auto-entrepreneur…" autocomplete="organization">
             </div>
           </div>
@@ -175,10 +183,10 @@ import '../styles/global.css';
 
         <!-- PROJECT -->
         <div class="form-section">
-          <span class="section-label">2 — Votre projet</span>
+          <span class="section-label" data-i18n="sec2">2 — Votre projet</span>
           <div class="field-grid">
             <div class="field">
-              <label for="type">Type de site <span class="req">*</span></label>
+              <label for="type"><span data-i18n="type">Type de site</span> <span class="req">*</span></label>
               <select id="type" name="type" required>
                 <option value="" disabled selected>Sélectionner…</option>
                 <option value="vitrine">Site vitrine</option>
@@ -192,7 +200,7 @@ import '../styles/global.css';
               <span class="field-err" id="err-type"></span>
             </div>
             <div class="field">
-              <label for="delai">Délai souhaité</label>
+              <label for="delai"><span data-i18n="delai">Délai souhaité</span></label>
               <select id="delai" name="delai">
                 <option value="" disabled selected>Sélectionner…</option>
                 <option value="urgent">Dès que possible</option>
@@ -202,7 +210,7 @@ import '../styles/global.css';
               </select>
             </div>
             <div class="field field-full">
-              <label>Budget estimé</label>
+              <label><span data-i18n="budget">Budget estimé</span></label>
               <div class="budget-pills" role="radiogroup" aria-label="Budget estimé">
                 <label class="budget-pill"><input type="radio" name="budget" value="1000"><span>1 000 € (offre lancement)</span></label>
                 <label class="budget-pill"><input type="radio" name="budget" value="800-1500"><span>800 – 1 500 €</span></label>
@@ -212,12 +220,12 @@ import '../styles/global.css';
               </div>
             </div>
             <div class="field field-full">
-              <label for="description">Décrivez votre projet <span class="req">*</span></label>
+              <label for="description"><span data-i18n="desc">Décrivez votre projet</span> <span class="req">*</span></label>
               <textarea id="description" name="description" placeholder="Parlez-nous de votre activité, de vos objectifs, des fonctionnalités souhaitées… Plus vous êtes précis, plus notre devis sera juste." required></textarea>
               <span class="field-err" id="err-desc"></span>
             </div>
             <div class="field field-full">
-              <label for="site-actuel">Avez-vous un site existant ?</label>
+              <label for="site-actuel"><span data-i18n="siteActuel">Avez-vous un site existant ?</span></label>
               <input type="url" id="site-actuel" name="site-actuel" placeholder="https://monsite-actuel.fr (optionnel)">
             </div>
           </div>
@@ -239,7 +247,7 @@ import '../styles/global.css';
             Garantie 30 jours · Réponse sous 24 h · 100 % gratuit
           </p>
           <button type="submit" class="submit-btn" id="submit-btn">
-            <span class="submit-btn-label">Envoyer ma demande</span>
+            <span class="submit-btn-label" data-i18n="submit">Envoyer ma demande</span>
             <span class="submit-btn-spinner" aria-hidden="true"></span>
             <svg class="submit-btn-icon" viewBox="0 0 24 24" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           </button>
@@ -330,6 +338,114 @@ import '../styles/global.css';
       console.error('[devis] unexpected:',err);
       showBanner("Une erreur inattendue est survenue. Écrivez-nous à contact.nexaweb62@gmail.com");
     }finally{setLoading(false)}
+  });
+})();
+</script>
+
+<script is:inline>
+/* ── AETHER FLOW — particle network ── */
+(function(){
+  'use strict';
+  var cv=document.getElementById('aether-cv');
+  if(!cv)return;
+  var ctx=cv.getContext('2d');
+  var W,H,mx=9999,my=9999,pts=[];
+  var N=70,MAX_D=130,ACCEL=0.012;
+  var isDark=function(){return document.documentElement.getAttribute('data-theme')==='dark'||(document.documentElement.getAttribute('data-theme')!=='light'&&window.matchMedia('(prefers-color-scheme:dark)').matches)};
+
+  function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight}
+  function mk(){return{x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.45,vy:(Math.random()-.5)*.45,r:Math.random()*1.5+.8}}
+
+  function init(){resize();pts=[];for(var i=0;i<N;i++)pts.push(mk())}
+
+  function tick(){
+    ctx.clearRect(0,0,W,H);
+    var dark=isDark();
+    var dotAlpha=dark?.55:.3;
+    var lineBase=dark?'139,92,246':'100,60,220';
+    for(var i=0;i<N;i++){
+      var p=pts[i];
+      /* mouse attraction */
+      var dx=mx-p.x,dy=my-p.y,dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<200&&dist>1){p.vx+=dx/dist*ACCEL;p.vy+=dy/dist*ACCEL}
+      /* drift */
+      var speed=Math.sqrt(p.vx*p.vx+p.vy*p.vy);
+      if(speed>1.2){p.vx*=1.2/speed;p.vy*=1.2/speed}
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0)p.x=W;if(p.x>W)p.x=0;
+      if(p.y<0)p.y=H;if(p.y>H)p.y=0;
+      /* links */
+      for(var j=i+1;j<N;j++){
+        var q=pts[j];
+        var ex=p.x-q.x,ey=p.y-q.y,d=Math.sqrt(ex*ex+ey*ey);
+        if(d<MAX_D){
+          ctx.beginPath();
+          ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);
+          ctx.strokeStyle='rgba('+lineBase+','+(1-d/MAX_D)*.18*(dark?1:.5)+')';
+          ctx.lineWidth=.5;ctx.stroke();
+        }
+      }
+      /* dot */
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle='rgba('+lineBase+','+dotAlpha+')';ctx.fill();
+    }
+    requestAnimationFrame(tick);
+  }
+
+  window.addEventListener('resize',init,{passive:true});
+  window.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY},{passive:true});
+  window.addEventListener('mouseleave',function(){mx=9999;my=9999});
+  init();tick();
+})();
+</script>
+
+<script is:inline>
+/* ── i18n EN/FR ── */
+(function(){
+  var dict={
+    en:{
+      eyebrow:'Free quote request',
+      title:'Let\'s talk about<br><em>your project.</em>',
+      sub:'Response in 24 h · Free &amp; no commitment',
+      sec1:'1 — Your details',
+      prenom:'First name',nom:'Last name',email:'E-mail',tel:'Phone',entreprise:'Company / Activity',
+      sec2:'2 — Your project',
+      type:'Site type',delai:'Desired timeline',budget:'Estimated budget',
+      desc:'Describe your project',siteActuel:'Do you have an existing site?',
+      submit:'Send my request'
+    },
+    fr:{
+      eyebrow:'Demande de devis gratuit',
+      title:'Parlons de<br><em>votre projet.</em>',
+      sub:'Réponse sous 24 h · Devis gratuit &amp; sans engagement',
+      sec1:'1 — Vos coordonnées',
+      prenom:'Prénom',nom:'Nom',email:'E-mail',tel:'Téléphone',entreprise:'Entreprise / Activité',
+      sec2:'2 — Votre projet',
+      type:'Type de site',delai:'Délai souhaité',budget:'Budget estimé',
+      desc:'Décrivez votre projet',siteActuel:'Avez-vous un site existant ?',
+      submit:'Envoyer ma demande'
+    }
+  };
+
+  var cur=localStorage.getItem('nw-lang')||'fr';
+
+  function applyLang(lang){
+    var t=dict[lang]||dict.fr;
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      var k=el.getAttribute('data-i18n');
+      if(t[k]!==undefined)el.innerHTML=t[k];
+    });
+    document.querySelectorAll('.lang-opt').forEach(function(b){
+      b.classList.toggle('active',b.getAttribute('data-lang')===lang);
+    });
+    cur=lang;
+    localStorage.setItem('nw-lang',lang);
+  }
+
+  applyLang(cur);
+
+  document.querySelectorAll('.lang-opt').forEach(function(b){
+    b.addEventListener('click',function(){applyLang(b.getAttribute('data-lang'))});
   });
 })();
 </script>

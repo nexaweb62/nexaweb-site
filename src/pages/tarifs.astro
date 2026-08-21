@@ -114,7 +114,7 @@ import '../styles/global.css';
 .cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 
 /* ── CANVAS ── */
-#neon-bg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.2}
+#neon-bg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.35}
 </style>
 
 <canvas id="neon-bg" aria-hidden="true"></canvas>
@@ -265,45 +265,76 @@ import '../styles/global.css';
 
 <Footer />
 
-<script>
+<script is:inline>
+/* ── NEON TUBES BACKGROUND ── */
 (function(){
-  const c=document.getElementById('neon-bg');
+  'use strict';
+  var c=document.getElementById('neon-bg');
   if(!c)return;
-  const g=c.getContext('2d');
-  let W=0,H=0;
-  const tubes=[];
-  function resize(){W=c.width=innerWidth;H=c.height=innerHeight}
-  function rand(a,b){return a+Math.random()*(b-a)}
+  var g=c.getContext('2d');
+  var W=0,H=0,t=0,tubes=[];
+  var PALETTES=[
+    {h:265,s:'80%',l:'62%'},{h:248,s:'76%',l:'67%'},
+    {h:280,s:'70%',l:'58%'},{h:220,s:'72%',l:'64%'},
+    {h:300,s:'65%',l:'56%'},{h:240,s:'80%',l:'70%'},
+    {h:258,s:'78%',l:'60%'},{h:275,s:'68%',l:'65%'},
+  ];
+  function rand(a,b){return a+(b-a)*Math.random()}
+  function hsl(p){return'hsl('+p.h+','+p.s+','+p.l+')'}
+  function mkCtrl(){return{x:rand(0,W),y:rand(0,H)}}
   function mkTube(){
-    const pts=[];const n=Math.floor(rand(4,8));
-    for(let i=0;i<n;i++)pts.push({x:rand(0,W),y:rand(0,H)});
-    return{pts,color:`hsl(${rand(250,290)},80%,60%)`,w:rand(.5,1.5),t:0,sp:rand(.002,.005),alpha:rand(.3,.7)};
+    var pal=PALETTES[Math.floor(rand(0,PALETTES.length))];
+    return{
+      p0:mkCtrl(),p1:mkCtrl(),p2:mkCtrl(),p3:mkCtrl(),
+      vp0:{x:rand(-.15,.15),y:rand(-.15,.15)},
+      vp1:{x:rand(-.12,.12),y:rand(-.12,.12)},
+      color:hsl(pal),
+      w:rand(.6,2.2),gw:rand(14,36),
+      alpha:rand(.5,.9),sp:rand(.0003,.0008),phase:rand(0,Math.PI*2)
+    };
   }
-  function init(){resize();tubes.length=0;for(let i=0;i<10;i++)tubes.push(mkTube())}
-  function catmull(pts,t){
-    const n=pts.length;const seg=Math.min(Math.floor(t*(n-1)),n-2);
-    const lt=(t*(n-1))-seg;
-    const p0=pts[Math.max(seg-1,0)],p1=pts[seg],p2=pts[Math.min(seg+1,n-1)],p3=pts[Math.min(seg+2,n-1)];
-    const t2=lt*lt,t3=t2*lt;
-    return{x:.5*((2*p1.x)+(-p0.x+p2.x)*lt+(2*p0.x-5*p1.x+4*p2.x-p3.x)*t2+(-p0.x+3*p1.x-3*p2.x+p3.x)*t3),
-           y:.5*((2*p1.y)+(-p0.y+p2.y)*lt+(2*p0.y-5*p1.y+4*p2.y-p3.y)*t2+(-p0.y+3*p1.y-3*p2.y+p3.y)*t3)};
+  function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight}
+  function init(){resize();tubes=[];for(var i=0;i<8;i++)tubes.push(mkTube())}
+
+  function wrap(p,v,lim){
+    p.x+=v.x;p.y+=v.y;
+    if(p.x<-0.1*lim)p.x=1.1*lim;if(p.x>1.1*lim)p.x=-0.1*lim;
+    if(p.y<-0.1*H)p.y=1.1*H;if(p.y>1.1*H)p.y=-0.1*H;
   }
+
+  function drawTube(tb){
+    wrap(tb.p0,tb.vp0,W);wrap(tb.p1,tb.vp1,W);
+    var x0=tb.p0.x,y0=tb.p0.y,x1=tb.p1.x,y1=tb.p1.y,x2=tb.p2.x,y2=tb.p2.y,x3=tb.p3.x,y3=tb.p3.y;
+    var pulse=0.7+0.3*Math.sin(t*1.8+tb.phase);
+    var alpha=tb.alpha*pulse;
+    /* outer glow */
+    g.save();
+    g.shadowColor=tb.color;
+    g.shadowBlur=tb.gw*2.2;
+    g.beginPath();g.moveTo(x0,y0);g.bezierCurveTo(x1,y1,x2,y2,x3,y3);
+    g.strokeStyle=tb.color;g.lineWidth=tb.w*2.5;g.globalAlpha=alpha*.25;g.stroke();
+    g.restore();
+    /* mid glow */
+    g.save();
+    g.shadowColor=tb.color;g.shadowBlur=tb.gw;
+    g.beginPath();g.moveTo(x0,y0);g.bezierCurveTo(x1,y1,x2,y2,x3,y3);
+    g.strokeStyle=tb.color;g.lineWidth=tb.w*1.4;g.globalAlpha=alpha*.55;g.stroke();
+    g.restore();
+    /* core line */
+    g.save();
+    g.beginPath();g.moveTo(x0,y0);g.bezierCurveTo(x1,y1,x2,y2,x3,y3);
+    g.strokeStyle='rgba(255,255,255,.85)';g.lineWidth=tb.w*.4;g.globalAlpha=alpha*.7;g.stroke();
+    g.restore();
+  }
+
   function draw(){
+    t+=0.016;
     g.clearRect(0,0,W,H);
-    for(const tb of tubes){
-      tb.t=(tb.t+tb.sp)%1;
-      g.beginPath();
-      for(let i=0;i<=60;i++){const p=catmull(tb.pts,i/60);i===0?g.moveTo(p.x,p.y):g.lineTo(p.x,p.y)}
-      g.strokeStyle=tb.color;g.lineWidth=tb.w;g.globalAlpha=tb.alpha*.25;g.stroke();
-      const head=catmull(tb.pts,tb.t);
-      const gl=g.createRadialGradient(head.x,head.y,0,head.x,head.y,20);
-      gl.addColorStop(0,tb.color);gl.addColorStop(1,'transparent');
-      g.beginPath();g.arc(head.x,head.y,20,0,Math.PI*2);g.fillStyle=gl;g.globalAlpha=tb.alpha*.55;g.fill();
-      g.globalAlpha=1;
-    }
+    for(var i=0;i<tubes.length;i++)drawTube(tubes[i]);
     requestAnimationFrame(draw);
   }
-  window.addEventListener('resize',()=>{resize();init()},{passive:true});
+
+  window.addEventListener('resize',function(){resize();init()},{passive:true});
   init();draw();
 })();
 </script>

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
+import { HeroRobot } from '../components/HeroRobot';
 import '../styles/global.css';
 ---
 <BaseLayout title="Nexa Web — Agence Web Premium · Carvin" description="Nexa Web conçoit des sites internet sur-mesure pour commerçants et artisans. Livraison en 7 jours. Carvin, Hauts-de-France.">
@@ -59,8 +60,10 @@ import '../styles/global.css';
 .hero-ctas{display:flex;flex-wrap:wrap;gap:12px;opacity:0;animation:fu .6s cubic-bezier(.16,1,.3,1) 1.1s forwards}
 .hero-foot{display:flex;align-items:center;gap:12px;padding:22px 0;border-top:1px solid var(--border);opacity:0;animation:fu .5s cubic-bezier(.16,1,.3,1) 1.3s forwards}
 .hero-line{width:40px;height:1px;background:var(--text-dim)}
+.hero-cols{display:flex;align-items:center;gap:clamp(24px,5vw,80px)}
 .hero-cols .hero-main{flex:0 0 auto;width:clamp(340px,52%,640px);min-width:0}
-@media(max-width:900px){.hero-cols .hero-main{width:100%}}
+.hero-robot{flex:1;min-width:0;min-height:480px;display:flex;align-items:center;justify-content:center}
+@media(max-width:900px){.hero-cols{flex-direction:column}.hero-robot{display:none}}
 @keyframes su{to{transform:translateY(0)}}
 @keyframes fu{to{opacity:1;transform:translateY(0)}}
 @media(prefers-reduced-motion:reduce){.hero-eye,.hero-hl .li,.hero-sub,.hero-ctas,.hero-foot{animation:none!important;opacity:1!important;transform:none!important}}
@@ -199,6 +202,9 @@ import '../styles/global.css';
         <a href="/devis" class="btn">Démarrer un projet <span aria-hidden="true">→</span></a>
         <a href="/avis" class="btn-g">Nos avis clients</a>
       </div>
+    </div>
+    <div class="hero-robot" aria-hidden="true">
+      <HeroRobot client:visible />
     </div>
   </div>
   <div class="wrap">
@@ -451,7 +457,7 @@ import '../styles/global.css';
     var gl=cv.getContext('webgl2');
     if(!gl)return;
     var VS='#version 300 es\nprecision highp float;\nlayout(location=0) in vec2 a_pos;\nout vec2 v_uv;\nvoid main(){v_uv=a_pos*.5+.5;gl_Position=vec4(a_pos,0.,1.);}';
-    var FS='#version 300 es\nprecision lowp float;\nout vec4 fragColor;\nin vec2 v_uv;\nuniform vec3 iResolution;\nuniform float iTime;\nuniform int iFrame;\nuniform vec4 iMouse;\nvoid mainImage(out vec4 fc,in vec2 coord){\nvec2 r=iResolution.xy;\nfloat t=iTime;\nvec3 FC=vec3(coord,t);\nvec4 o=vec4(0.);\nvec3 p,a;\nfloat z=0.,d=0.;\nfor(float i=0.;i<20.;i++){\np=z*normalize(FC.rgb*2.-r.xyy);\na=normalize(cos(vec3(4.,2.,0.)+t-d*10.));\np.z+=8.;\na=a*dot(a,p)-cross(a,p);\nfor(float k=1.;k<4.;k+=1.)a+=sin(a*k+t).yzx/k;\nd=abs(length(a)-5.)/6.;\nz+=d;\no+=vec4(5.,2.,9.,0.)/max(d,1e-4)/9e4;\n}\nfc=vec4(o.rgb,1.);\n}\nvoid main(){mainImage(fragColor,gl_FragCoord.xy);}';
+    var FS='#version 300 es\nprecision mediump float;\nout vec4 fragColor;\nin vec2 v_uv;\nuniform vec3 iResolution;\nuniform float iTime;\nuniform int iFrame;\nuniform vec4 iMouse;\nvoid mainImage(out vec4 fc,in vec2 coord){\nvec2 r=iResolution.xy;\nfloat t=iTime;\nvec3 FC=vec3(coord,t);\nvec4 o=vec4(0.);\nvec3 p,a;\nfloat z=0.,d=0.;\nfor(float i=0.;i<50.;i++){\np=z*normalize(FC.rgb*2.-r.xyy);\na=normalize(cos(vec3(4.,2.,0.)+t-d*10.));\np.z+=8.;\na=a*dot(a,p)-cross(a,p);\nfor(float k=1.;k<4.;k+=1.)a+=sin(a*k+t).yzx/k;\nd=abs(length(a)-5.)/6.;\nz+=d;\nfloat si=i/50.;\no+=vec4(4.+sin(si*6.28+t)*.8,1.2+cos(si*4.+t*.7)*.4,10.+sin(si*3.14-t*.5)*.6,0.)/max(d,1e-4)/9e4;\n}\nfc=vec4(o.rgb,1.);\n}\nvoid main(){mainImage(fragColor,gl_FragCoord.xy);}';
     function mkShader(type,src){var s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);return s;}
     var prog=gl.createProgram();
     gl.attachShader(prog,mkShader(gl.VERTEX_SHADER,VS));
@@ -465,13 +471,13 @@ import '../styles/global.css';
     var uTime=gl.getUniformLocation(prog,'iTime');
     var uFrame=gl.getUniformLocation(prog,'iFrame');
     var uMouse=gl.getUniformLocation(prog,'iMouse');
-    var SCALE=0.4,t0=performance.now(),frame=0,rafN;
+    var SCALE=0.45,t0=performance.now(),frame=0,rafN;
     function resize(){var w=Math.round((cv.clientWidth||window.innerWidth)*SCALE);var h=Math.round((cv.clientHeight||window.innerHeight)*SCALE);cv.width=w;cv.height=h;gl.viewport(0,0,w,h);}
     resize();window.addEventListener('resize',resize,{passive:true});
     var skipCount=0;
     function tick(ts){
       rafN=requestAnimationFrame(tick);
-      skipCount=(skipCount+1)%3;if(skipCount!==0)return;
+      skipCount=(skipCount+1)%2;if(skipCount!==0)return;
       gl.uniform3f(uRes,cv.width,cv.height,1);
       gl.uniform1f(uTime,(ts-t0)/1000);
       gl.uniform1i(uFrame,frame++);
