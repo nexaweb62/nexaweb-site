@@ -102,6 +102,40 @@ import '../styles/global.css';
 .rb-icon-up{background:var(--accent-dim);border:1px solid var(--accent-ring)}
 .rb-icon-up svg{width:10px;height:10px;stroke:var(--accent);stroke-width:2.5;fill:none}
 
+/* ── FORMULES ── */
+.plans-section{padding:clamp(32px,5vh,56px) 0 clamp(48px,7vh,72px);position:relative;z-index:1}
+.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:clamp(32px,5vw,52px)}
+@media(max-width:900px){.plans-grid{grid-template-columns:1fr;max-width:480px;margin-left:auto;margin-right:auto}}
+.plan-card{
+  position:relative;display:flex;flex-direction:column;
+  background:var(--bg-card);border:1px solid var(--border-hi);border-radius:16px;
+  padding:clamp(24px,3vw,36px);transition:border-color .25s,transform .25s;
+}
+.plan-card:hover{border-color:var(--accent-ring);transform:translateY(-3px)}
+.plan-card.plan-featured{
+  border-color:var(--accent);
+  box-shadow:0 0 0 1px var(--accent-ring),0 24px 60px rgba(139,92,246,.18);
+}
+.plan-badge{position:absolute;inset-x:0;top:-13px;display:flex;justify-content:center}
+.plan-badge span{
+  background:linear-gradient(135deg,#a78bfa,#f59e0b);
+  color:#1a0a00;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  padding:4px 14px;border-radius:100px;box-shadow:0 2px 8px rgba(0,0,0,.3);
+}
+.plan-name{font-size:13px;font-weight:600;color:var(--text-muted);margin-bottom:16px}
+.plan-range{display:flex;align-items:baseline;gap:8px}
+.plan-from{font-size:clamp(28px,3.5vw,38px);font-weight:700;letter-spacing:-.03em;line-height:1}
+.plan-sep{font-size:18px;color:var(--text-dim)}
+.plan-to{font-size:clamp(28px,3.5vw,38px);font-weight:700;letter-spacing:-.03em;line-height:1;color:var(--text-muted)}
+.plan-amount{font-size:clamp(32px,4vw,44px);font-weight:700;letter-spacing:-.04em;line-height:1}
+.plan-desc{font-size:11.5px;color:var(--text-dim);margin-top:6px;line-height:1.5}
+.plan-divider{border:none;border-top:1px dashed var(--border-hi);margin:20px 0}
+.plan-features{list-style:none;padding:0;margin:0 0 24px;display:flex;flex-direction:column;gap:10px;flex:1}
+.plan-feature{display:flex;align-items:flex-start;gap:9px;font-size:12.5px;color:var(--text-muted);line-height:1.45}
+.plan-feature-icon{width:16px;height:16px;border-radius:50%;background:var(--green-dim);border:1px solid var(--green-ring);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.plan-feature-icon svg{width:8px;height:8px;stroke:var(--green);stroke-width:2.5;fill:none}
+.plan-cta{display:block;text-align:center;margin-top:auto}
+
 /* ── CTA ── */
 .cta-section{padding:clamp(32px,5vh,64px) 0 clamp(64px,10vh,120px);text-align:center;position:relative;z-index:1}
 .cta-inner{
@@ -143,6 +177,134 @@ import '../styles/global.css';
           <span class="launch-num">3</span>
           <span class="launch-num-label" data-i18n="trf-spots">places restantes</span>
         </div>
+      </div>
+    </div>
+
+    <!-- FORMULES -->
+    <div class="plans-section">
+      <p class="section-tag" data-i18n="trf-plans-tag">Choisissez votre formule</p>
+      <h2 class="section-title" data-i18n="trf-plans-h">La formule<br>adaptée à votre profil.</h2>
+
+      <div class="plans-grid">
+
+        <!-- Étudiant -->
+        <div class="plan-card">
+          <p class="plan-name" data-i18n="trf-p1-name">Étudiant</p>
+          <div>
+            <div class="plan-range">
+              <span class="plan-from" data-i18n="trf-p1-from">100 €</span>
+              <span class="plan-sep">—</span>
+              <span class="plan-to" data-i18n="trf-p1-to">200 €</span>
+            </div>
+            <p class="plan-desc" data-i18n="trf-p1-desc">Portfolio ou projet académique</p>
+          </div>
+          <hr class="plan-divider">
+          <ul class="plan-features">
+            <li class="plan-feature">
+              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span data-i18n="trf-p1-f1">Page unique ou portfolio</span>
+            </li>
+            <li class="plan-feature">
+              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span data-i18n="trf-p1-f2">Design responsive inclus</span>
+            </li>
+            <li class="plan-feature">
+              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span data-i18n="trf-p1-f3">Formulaire de contact</span>
+            </li>
+            <li class="plan-feature">
+              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span data-i18n="trf-p1-f4">Livraison rapide 7 jours</span>
+            </li>
+            <li class="plan-feature">
+              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span data-i18n="trf-p1-f5">Hébergement guidé</span>
+            </li>
+          </ul>
+          <a href="/devis" class="btn-g plan-cta" data-i18n="trf-p1-cta">Demander un devis</a>
+        </div>
+
+        <!-- Vitrine Pro — populaire -->
+        <div class="plan-card plan-featured">
+          <div class="plan-badge"><span data-i18n="trf-p2-badge">Populaire</span></div>
+          <p class="plan-name" data-i18n="trf-p2-name">Vitrine Pro</p>
+          <div>
+            <div class="plan-range">
+              <span class="plan-amount" data-i18n="trf-p2-price">1 000 €</span>
+            </div>
+            <p class="plan-desc" data-i18n="trf-p2-desc">Offre de lancement · places limitées</p>
+          </div>
+          <hr class="plan-divider">
+          <ul class="plan-features">
+            <li class="plan-feature">
+              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span data-i18n="trf-p2-f1">Site vitrine complet (jusqu'à 5 pages)</span>
+            </li>
+            <li class="plan-feature">
+              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span data-i18n="trf-p2-f2">Design sur mesure</span>
+            </li>
+            <li class="plan-feature">
+              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span data-i18n="trf-p2-f3">Responsive mobile &amp; tablette</span>
+            </li>
+            <li class="plan-feature">
+              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span data-i18n="trf-p2-f4">SEO de base inclus</span>
+            </li>
+            <li class="plan-feature">
+              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span data-i18n="trf-p2-f5">Formulaire de contact</span>
+            </li>
+            <li class="plan-feature">
+              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span data-i18n="trf-p2-f6">1 mois de support inclus</span>
+            </li>
+          </ul>
+          <a href="/devis" class="btn plan-cta" data-i18n="trf-p2-cta">Démarrer mon projet</a>
+        </div>
+
+        <!-- Entreprise -->
+        <div class="plan-card">
+          <p class="plan-name" data-i18n="trf-p3-name">Entreprise</p>
+          <div>
+            <div class="plan-range">
+              <span class="plan-from" data-i18n="trf-p3-from">1 200 €</span>
+              <span class="plan-sep">—</span>
+              <span class="plan-to" data-i18n="trf-p3-to">3 100 €</span>
+            </div>
+            <p class="plan-desc" data-i18n="trf-p3-desc">Site professionnel ou e-commerce</p>
+          </div>
+          <hr class="plan-divider">
+          <ul class="plan-features">
+            <li class="plan-feature">
+              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span data-i18n="trf-p3-f1">Tout du plan Vitrine Pro</span>
+            </li>
+            <li class="plan-feature">
+              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span data-i18n="trf-p3-f2">E-commerce ou espace client</span>
+            </li>
+            <li class="plan-feature">
+              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span data-i18n="trf-p3-f3">SEO avancé &amp; stratégie de contenu</span>
+            </li>
+            <li class="plan-feature">
+              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span data-i18n="trf-p3-f4">Blog &amp; CMS intégré</span>
+            </li>
+            <li class="plan-feature">
+              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span data-i18n="trf-p3-f5">Intégrations sur mesure</span>
+            </li>
+            <li class="plan-feature">
+              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span data-i18n="trf-p3-f6">Support étendu</span>
+            </li>
+          </ul>
+          <a href="/devis" class="btn-g plan-cta" data-i18n="trf-p3-cta">Obtenir un devis</a>
+        </div>
+
       </div>
     </div>
 
