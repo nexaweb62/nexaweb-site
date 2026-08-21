@@ -1,0 +1,336 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import '../styles/global.css';
+---
+<BaseLayout title="Devis gratuit — Nexa Web">
+<style>
+/* ── PAGE ── */
+.devis-page{min-height:calc(100vh - var(--hdr));display:flex;align-items:flex-start;justify-content:center;padding:clamp(48px,8vh,96px) var(--pad-x) clamp(64px,10vh,120px)}
+
+/* ── CARD ── */
+.devis-card{width:100%;max-width:760px;background:var(--bg-card);border:1px solid var(--border-hi);border-radius:16px;padding:clamp(32px,5vw,56px) clamp(24px,5vw,52px);box-shadow:0 32px 80px rgba(0,0,0,.35)}
+:root[data-theme="light"] .devis-card{background:rgba(255,255,255,.97);border-color:rgba(18,18,22,.12)}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .devis-card{background:rgba(255,255,255,.97);border-color:rgba(18,18,22,.12)}}
+
+/* ── LAUNCH NOTICE ── */
+.launch-notice{display:flex;align-items:center;gap:12px;background:rgba(34,197,94,.1);border:1px solid var(--green-ring);border-radius:10px;padding:14px 18px;margin-bottom:32px}
+.launch-notice svg{width:18px;height:18px;stroke:var(--green);stroke-width:2;fill:none;flex-shrink:0}
+.launch-notice p{font-size:12.5px;color:var(--text-muted);line-height:1.55}
+.launch-notice strong{color:var(--green)}
+
+/* ── CARD HEAD ── */
+.card-eyebrow{font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.card-title{font-size:clamp(1.6rem,3vw,2.4rem);font-weight:900;letter-spacing:-.04em;line-height:.95;margin-bottom:10px}
+.card-title em{font-style:italic;color:var(--text-muted)}
+.card-sub{font-size:13px;color:var(--text-muted);line-height:1.6;margin-bottom:36px}
+
+/* ── SECTION LABEL ── */
+.form-section{margin-bottom:28px}
+.section-label{font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border);display:block}
+:root[data-theme="light"] .section-label{border-bottom-color:rgba(18,18,22,.09)}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .section-label{border-bottom-color:rgba(18,18,22,.09)}}
+
+/* ── FIELDS ── */
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:560px){.field-grid{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:6px}
+.field-full{grid-column:1/-1}
+.field label{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim)}
+.field input:not([type=checkbox]):not([type=radio]),.field textarea,.field select{
+  width:100%;padding:12px 15px;background:var(--bg-alt);border:1px solid var(--border);border-radius:5px;
+  font:inherit;font-size:13px;color:var(--text);outline:none;
+  transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;appearance:none;
+}
+:root[data-theme="light"] .field input:not([type=checkbox]),.field textarea,.field select{background:rgba(244,244,240,.9);border-color:rgba(18,18,22,.14)}
+.field input::placeholder,.field textarea::placeholder{color:var(--text-dim)}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:rgba(139,92,246,.5);box-shadow:0 0 0 3px rgba(139,92,246,.1)}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(232,232,242,.3)' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;cursor:pointer}
+.field select option{background:var(--bg-card);color:var(--text)}
+.field textarea{resize:vertical;min-height:110px;line-height:1.6}
+
+/* ── BUDGET PILLS ── */
+.budget-pills{display:flex;flex-wrap:wrap;gap:8px}
+.budget-pill{position:relative;font-size:10.5px;font-weight:600;letter-spacing:.08em;padding:8px 16px;border:1px solid var(--border);border-radius:100px;cursor:pointer;transition:border-color .2s,background .2s,color .2s;color:var(--text-muted);user-select:none}
+.budget-pill input{position:absolute;opacity:0;width:0;height:0}
+.budget-pill:hover{border-color:var(--border-hi);color:var(--text)}
+.budget-pill.selected{border-color:var(--accent-ring);background:var(--accent-dim);color:var(--accent)}
+
+/* ── SUBMIT ── */
+.submit-row{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:32px;padding-top:24px;border-top:1px solid var(--border)}
+:root[data-theme="light"] .submit-row{border-top-color:rgba(18,18,22,.09)}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .submit-row{border-top-color:rgba(18,18,22,.09)}}
+.submit-note{font-size:11px;color:var(--text-dim);line-height:1.55}
+.submit-note svg{display:inline;width:12px;height:12px;stroke:var(--green);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;margin-right:4px;vertical-align:-1px}
+.submit-btn{display:inline-flex;align-items:center;gap:10px;padding:15px 32px;background:linear-gradient(135deg,var(--accent),#a78bfa);color:#fff;border-radius:5px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;border:none;cursor:pointer;box-shadow:0 6px 24px rgba(139,92,246,.4);transition:opacity .2s,transform .2s;white-space:nowrap}
+.submit-btn:hover{opacity:.9;transform:translateY(-2px)}
+.submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none!important}
+.submit-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.submit-btn-spinner{display:none;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+.submit-btn.loading .submit-btn-icon{display:none}
+.submit-btn.loading .submit-btn-spinner{display:block}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── RGPD ── */
+.rgpd-row{padding:14px 16px;margin-top:6px;background:rgba(139,92,246,.07);border:1px solid rgba(139,92,246,.18);border-radius:8px}
+.rgpd-label{display:flex;align-items:flex-start;gap:10px;cursor:pointer}
+.rgpd-label input[type=checkbox]{width:15px;height:15px;flex-shrink:0;margin-top:2px;accent-color:var(--accent);cursor:pointer}
+.rgpd-label span{font-size:11.5px;line-height:1.65;color:var(--text-muted)}
+.rgpd-label a{color:var(--accent);text-decoration:underline}
+.req{color:var(--accent)}
+.field-err{font-size:11px;color:#ef4444;min-height:14px;display:block;margin-top:3px;line-height:1.4}
+
+/* ── FORM BANNER ── */
+.form-banner{display:none;align-items:flex-start;gap:10px;padding:12px 16px;border-radius:9px;font-size:12.5px;line-height:1.55;margin-bottom:20px}
+.form-banner.show{display:flex}
+.form-banner.error{background:rgba(239,68,68,.10);border:1px solid rgba(239,68,68,.28);color:#ef4444}
+.form-banner svg{flex-shrink:0;margin-top:1px}
+
+/* ── SUCCESS ── */
+.success-overlay{display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;padding:40px;min-height:360px}
+.success-overlay.show{display:flex}
+.devis-form.hide{display:none}
+.success-icon{width:64px;height:64px;border-radius:50%;background:var(--green-dim);border:1px solid var(--green-ring);display:flex;align-items:center;justify-content:center}
+.success-icon svg{width:30px;height:30px;stroke:var(--green);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.success-title{font-size:1.5rem;font-weight:800;letter-spacing:-.03em}
+.success-text{font-size:13px;color:var(--text-muted);line-height:1.65;max-width:380px}
+.success-back{display:inline-flex;align-items:center;gap:8px;font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);border:1px solid var(--ghost-border);border-radius:4px;padding:11px 22px;transition:color .2s,border-color .2s;cursor:pointer;background:none}
+.success-back:hover{color:var(--text);border-color:var(--border-hi)}
+:focus-visible{outline:2px solid var(--accent-ring);outline-offset:3px;border-radius:3px}
+</style>
+
+<Header backBtn={true} />
+
+<main>
+  <div class="devis-page">
+    <div class="devis-card">
+
+      <!-- SUCCESS STATE -->
+      <div class="success-overlay" id="success-overlay" role="alert" aria-live="polite">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h2 class="success-title">Devis envoyé !</h2>
+        <p class="success-text">Merci pour votre demande. Nous vous recontacterons sous <strong>24 heures ouvrées</strong> avec une proposition personnalisée.</p>
+        <button class="success-back" id="success-back-btn">
+          <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" style="stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round"><polyline points="15 18 9 12 15 6"/></svg>
+          Retour à l'accueil
+        </button>
+      </div>
+
+      <!-- FORM -->
+      <form class="devis-form" id="devis-form" novalidate>
+
+        <!-- Honeypot -->
+        <div style="position:absolute;left:-9999px;opacity:0;pointer-events:none" aria-hidden="true">
+          <input type="text" name="website_url" id="website_url" tabindex="-1" autocomplete="new-password">
+        </div>
+
+        <!-- Error banner -->
+        <div class="form-banner error" id="form-error" role="alert">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span id="form-error-text"></span>
+        </div>
+
+        <!-- OFFRE LANCEMENT -->
+        <div class="launch-notice">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          <p><strong>Offre de lancement :</strong> les 3 premiers clients bénéficient d'un site complet à <strong>1 000 €</strong> tout inclus. Mentionnez-le dans votre description.</p>
+        </div>
+
+        <!-- HEAD -->
+        <div class="card-eyebrow">Demande de devis gratuit</div>
+        <h1 class="card-title">Parlons de<br><em>votre projet.</em></h1>
+        <p class="card-sub">Réponse sous 24 h · Devis gratuit &amp; sans engagement</p>
+
+        <!-- CONTACT -->
+        <div class="form-section">
+          <span class="section-label">1 — Vos coordonnées</span>
+          <div class="field-grid">
+            <div class="field">
+              <label for="prenom">Prénom <span class="req">*</span></label>
+              <input type="text" id="prenom" name="prenom" placeholder="Jean" autocomplete="given-name" required>
+              <span class="field-err" id="err-prenom"></span>
+            </div>
+            <div class="field">
+              <label for="nom">Nom <span class="req">*</span></label>
+              <input type="text" id="nom" name="nom" placeholder="Dupont" autocomplete="family-name" required>
+              <span class="field-err" id="err-nom"></span>
+            </div>
+            <div class="field">
+              <label for="email">E-mail <span class="req">*</span></label>
+              <input type="email" id="email" name="email" placeholder="jean@entreprise.fr" autocomplete="email" required>
+              <span class="field-err" id="err-email"></span>
+            </div>
+            <div class="field">
+              <label for="tel">Téléphone</label>
+              <input type="tel" id="tel" name="tel" placeholder="+33 6 00 00 00 00" autocomplete="tel">
+            </div>
+            <div class="field field-full">
+              <label for="entreprise">Entreprise / Activité</label>
+              <input type="text" id="entreprise" name="entreprise" placeholder="Ma Boulangerie, Auto-entrepreneur…" autocomplete="organization">
+            </div>
+          </div>
+        </div>
+
+        <!-- PROJECT -->
+        <div class="form-section">
+          <span class="section-label">2 — Votre projet</span>
+          <div class="field-grid">
+            <div class="field">
+              <label for="type">Type de site <span class="req">*</span></label>
+              <select id="type" name="type" required>
+                <option value="" disabled selected>Sélectionner…</option>
+                <option value="vitrine">Site vitrine</option>
+                <option value="portfolio">Portfolio</option>
+                <option value="ecommerce">Boutique e-commerce</option>
+                <option value="blog">Blog / Magazine</option>
+                <option value="app">Application web</option>
+                <option value="refonte">Refonte de site existant</option>
+                <option value="autre">Autre</option>
+              </select>
+              <span class="field-err" id="err-type"></span>
+            </div>
+            <div class="field">
+              <label for="delai">Délai souhaité</label>
+              <select id="delai" name="delai">
+                <option value="" disabled selected>Sélectionner…</option>
+                <option value="urgent">Dès que possible</option>
+                <option value="1mois">Dans 1 mois</option>
+                <option value="3mois">Dans 2 à 3 mois</option>
+                <option value="flexible">Flexible</option>
+              </select>
+            </div>
+            <div class="field field-full">
+              <label>Budget estimé</label>
+              <div class="budget-pills" role="radiogroup" aria-label="Budget estimé">
+                <label class="budget-pill"><input type="radio" name="budget" value="1000"><span>1 000 € (offre lancement)</span></label>
+                <label class="budget-pill"><input type="radio" name="budget" value="800-1500"><span>800 – 1 500 €</span></label>
+                <label class="budget-pill"><input type="radio" name="budget" value="1500-2500"><span>1 500 – 2 500 €</span></label>
+                <label class="budget-pill"><input type="radio" name="budget" value="2500+"><span>2 500 € +</span></label>
+                <label class="budget-pill"><input type="radio" name="budget" value="nsp"><span>Je ne sais pas encore</span></label>
+              </div>
+            </div>
+            <div class="field field-full">
+              <label for="description">Décrivez votre projet <span class="req">*</span></label>
+              <textarea id="description" name="description" placeholder="Parlez-nous de votre activité, de vos objectifs, des fonctionnalités souhaitées… Plus vous êtes précis, plus notre devis sera juste." required></textarea>
+              <span class="field-err" id="err-desc"></span>
+            </div>
+            <div class="field field-full">
+              <label for="site-actuel">Avez-vous un site existant ?</label>
+              <input type="url" id="site-actuel" name="site-actuel" placeholder="https://monsite-actuel.fr (optionnel)">
+            </div>
+          </div>
+        </div>
+
+        <!-- RGPD -->
+        <div class="field field-full rgpd-row">
+          <label class="rgpd-label">
+            <input type="checkbox" id="rgpd-consent" name="rgpd-consent" required>
+            <span>J'accepte que mes données (nom, e-mail, téléphone, description du projet) soient utilisées par Nexa Web dans le seul but de traiter ma demande de devis et de me recontacter. Aucune donnée n'est revendue. <span class="req">*</span></span>
+          </label>
+          <span class="field-err" id="err-rgpd"></span>
+        </div>
+
+        <!-- SUBMIT -->
+        <div class="submit-row">
+          <p class="submit-note">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+            Garantie 30 jours · Réponse sous 24 h · 100 % gratuit
+          </p>
+          <button type="submit" class="submit-btn" id="submit-btn">
+            <span class="submit-btn-label">Envoyer ma demande</span>
+            <span class="submit-btn-spinner" aria-hidden="true"></span>
+            <svg class="submit-btn-icon" viewBox="0 0 24 24" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</main>
+
+<script is:inline src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script is:inline src="/supabase-client.js"></script>
+
+<script>
+/* ── BUDGET PILLS ── */
+(function(){
+  document.querySelectorAll('.budget-pill').forEach(function(pill){
+    const radio = pill.querySelector('input');
+    pill.addEventListener('click',function(){
+      document.querySelectorAll('.budget-pill').forEach(p=>p.classList.remove('selected'));
+      pill.classList.add('selected');
+      radio.checked=true;
+    });
+  });
+})();
+
+/* ── FORM SUBMIT ── */
+(function(){
+  const form=document.getElementById('devis-form');
+  const overlay=document.getElementById('success-overlay');
+  const btn=document.getElementById('submit-btn');
+  document.getElementById('success-back-btn').addEventListener('click',()=>window.location.href='/');
+
+  function canSubmit(){var last=sessionStorage.getItem('nw_devis_ts');return !last||(Date.now()-parseInt(last,10))>60000}
+  function stampSubmit(){sessionStorage.setItem('nw_devis_ts',String(Date.now()))}
+
+  function setErr(id,msg){var el=document.getElementById(id);if(el)el.textContent=msg}
+  function clearErrors(){['err-prenom','err-nom','err-email','err-type','err-desc','err-rgpd'].forEach(id=>setErr(id,''));hideBanner()}
+  function showBanner(msg){var b=document.getElementById('form-error');document.getElementById('form-error-text').textContent=msg;b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'})}
+  function hideBanner(){document.getElementById('form-error').classList.remove('show')}
+  function setLoading(on){btn.classList.toggle('loading',on);btn.disabled=on}
+
+  form.addEventListener('submit',async function(e){
+    e.preventDefault();clearErrors();
+
+    if(document.getElementById('website_url').value.length>0){form.classList.add('hide');overlay.classList.add('show');return}
+    if(!canSubmit()){showBanner('Une demande a déjà été envoyée. Attendez une minute avant de réessayer.');return}
+
+    const prenom=document.getElementById('prenom').value.trim();
+    const nom=document.getElementById('nom').value.trim();
+    const emailVal=document.getElementById('email').value.trim();
+    const type=document.getElementById('type').value;
+    const desc=document.getElementById('description').value.trim();
+    const tel=document.getElementById('tel').value.trim();
+    const entreprise=document.getElementById('entreprise').value.trim();
+    const delai=document.getElementById('delai').value;
+    const siteActuel=document.getElementById('site-actuel').value.trim();
+    const rgpd=document.getElementById('rgpd-consent').checked;
+    const budgetEl=document.querySelector('input[name="budget"]:checked');
+    const budget=budgetEl?budgetEl.value:'';
+
+    let ok=true;
+    if(!prenom){setErr('err-prenom','Le prénom est requis.');ok=false}
+    if(!nom){setErr('err-nom','Le nom est requis.');ok=false}
+    if(!emailVal){setErr('err-email',"L'e-mail est requis.");ok=false}
+    else if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(emailVal)){setErr('err-email','Adresse e-mail invalide.');ok=false}
+    if(!type){setErr('err-type','Veuillez sélectionner un type de site.');ok=false}
+    if(!desc){setErr('err-desc','La description est requise.');ok=false}
+    else if(desc.length<20){setErr('err-desc','Décrivez votre projet en au moins 20 caractères.');ok=false}
+    if(!rgpd){setErr('err-rgpd','Vous devez accepter le traitement de vos données pour continuer.');ok=false}
+    if(!ok)return;
+
+    if(!window.sb){showBanner('Erreur de connexion. Écrivez-nous à contact.nexaweb62@gmail.com');return}
+
+    setLoading(true);
+    try{
+      const{error:insertErr}=await window.sb.from('demandes_devis').insert({
+        prenom,nom,email:emailVal,telephone:tel||null,entreprise:entreprise||null,
+        type_site:type||null,delai_souhaite:delai||null,budget_estime:budget||null,
+        description:desc,site_existant:siteActuel||null,formule:null
+      });
+      if(insertErr){showBanner("Erreur lors de l'enregistrement. Contactez-nous directement à contact.nexaweb62@gmail.com");return}
+      stampSubmit();
+      try{await window.sb.functions.invoke('send-devis-email',{body:{prenom,nom,email:emailVal,telephone:tel,entreprise,type_site:type,delai_souhaite:delai,budget_estime:budget,description:desc,site_existant:siteActuel}})}
+      catch(e){console.warn('[devis] email failed (data saved):',e)}
+      form.classList.add('hide');overlay.classList.add('show');window.scrollTo({top:0,behavior:'smooth'});
+    }catch(err){
+      console.error('[devis] unexpected:',err);
+      showBanner("Une erreur inattendue est survenue. Écrivez-nous à contact.nexaweb62@gmail.com");
+    }finally{setLoading(false)}
+  });
+})();
+</script>
+</BaseLayout>
