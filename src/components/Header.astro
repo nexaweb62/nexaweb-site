@@ -2,8 +2,9 @@
 export interface Props {
   cta?: string;
   ctaHref?: string;
+  back?: boolean;
 }
-const { cta = 'Démarrer un projet', ctaHref = '/devis' } = Astro.props;
+const { cta = 'Démarrer un projet', ctaHref = '/devis', back = true } = Astro.props;
 ---
 <header class="hdr" id="hdr">
   <div class="wrap">
@@ -43,10 +44,12 @@ const { cta = 'Démarrer un projet', ctaHref = '/devis' } = Astro.props;
         </a>
 
         <!-- Bouton Retour -->
-        <button class="hdr-back" id="hdr-back" aria-label="Page précédente">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
-          Retour
-        </button>
+        {back && (
+          <button class="hdr-back" id="hdr-back" aria-label="Page précédente">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+            Retour
+          </button>
+        )}
 
         <a href={ctaHref} class="btn">{cta}</a>
       </div>
