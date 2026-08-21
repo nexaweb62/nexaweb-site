@@ -30,17 +30,53 @@ import '../styles/global.css';
 /* ── LOADING SCREEN ── */
 #loader{position:fixed;inset:0;background:#050509;z-index:9999;display:flex;align-items:center;justify-content:center}
 #loader.ld-exit{opacity:0;transform:scale(1.06);transition:opacity .85s cubic-bezier(.4,0,.6,1),transform .85s cubic-bezier(.4,0,.6,1);pointer-events:none}
-.ld-inner{display:flex;flex-direction:column;align-items:center;text-align:center;user-select:none;gap:0}
-.ld-brand{font-size:11px;font-weight:700;letter-spacing:.30em;text-transform:uppercase;color:rgba(232,232,242,.82);margin-bottom:52px;opacity:0;transform:translateY(10px);animation:ldfade .55s cubic-bezier(.16,1,.3,1) .08s forwards}
-.ld-brand b{color:rgba(232,232,242,.30);font-weight:700}
 .ld-nucleus-wrap{position:fixed;inset:0;z-index:0}
 #nucleus-cv{display:block;width:100%;height:100%}
-.ld-inner{position:relative;z-index:1}
-.ld-status{font-size:8.5px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:rgba(232,232,242,.40);margin-bottom:14px;opacity:0;animation:ldfade .55s cubic-bezier(.16,1,.3,1) .30s forwards}
-.ld-pct{font-size:clamp(2.2rem,8vw,3.4rem);font-weight:900;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:rgba(232,232,242,.92);margin-bottom:18px;line-height:1;opacity:0;animation:ldfade .55s cubic-bezier(.16,1,.3,1) .36s forwards}
-.ld-bar-track{width:180px;height:1px;background:rgba(255,255,255,.07);margin-bottom:30px;overflow:hidden;opacity:0;animation:ldfade .55s cubic-bezier(.16,1,.3,1) .42s forwards}
-.ld-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,#8B5CF6 0%,#6366F1 52%,#3B82F6 100%)}
-.ld-caption{font-size:8.5px;font-weight:500;letter-spacing:.26em;text-transform:uppercase;color:rgba(232,232,242,.20);opacity:0;animation:ldfade .5s cubic-bezier(.16,1,.3,1) .48s forwards}
+.ld-inner{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;text-align:center;user-select:none;gap:0}
+.ld-brand{font-size:11px;font-weight:700;letter-spacing:.30em;text-transform:uppercase;color:rgba(232,232,242,.82);margin-bottom:56px;opacity:0;transform:translateY(10px);animation:ldfade .55s cubic-bezier(.16,1,.3,1) .08s forwards}
+.ld-brand b{color:rgba(232,232,242,.30);font-weight:700}
+/* ── Enter Button (Liquid Glass) ── */
+.enter-btn{
+  position:relative;padding:20px 64px;border-radius:100px;cursor:pointer;
+  background:transparent;color:rgba(232,232,242,.92);border:none;
+  font-size:11px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;
+  overflow:hidden;
+  box-shadow:
+    0 0 8px rgba(0,0,0,.03),0 2px 6px rgba(0,0,0,.08),
+    inset 3px 3px .5px -3.5px rgba(255,255,255,.09),
+    inset -3px -3px .5px -3.5px rgba(255,255,255,.85),
+    inset 1px 1px 1px -.5px rgba(255,255,255,.6),
+    inset -1px -1px 1px -.5px rgba(255,255,255,.6),
+    inset 0 0 6px 6px rgba(255,255,255,.12),
+    inset 0 0 2px 2px rgba(255,255,255,.06),
+    0 0 12px rgba(0,0,0,.15);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  opacity:0;transform:translateY(12px);
+  animation:ldfade .65s cubic-bezier(.16,1,.3,1) .55s forwards;
+  transition:transform .3s cubic-bezier(.16,1,.3,1),filter .3s,box-shadow .3s;
+}
+.enter-btn::before{
+  content:'';position:absolute;inset:0;border-radius:100px;
+  background:linear-gradient(135deg,rgba(139,92,246,.18),rgba(99,102,241,.08),transparent 60%);
+  pointer-events:none;
+}
+.enter-btn-glow{
+  position:absolute;inset:0;border-radius:100px;
+  -webkit-backdrop-filter:url("#glass-filter");backdrop-filter:url("#glass-filter");
+  pointer-events:none;z-index:-1;
+}
+.enter-btn:hover{transform:scale(1.06);filter:brightness(1.12);
+  box-shadow:
+    0 0 8px rgba(0,0,0,.03),0 2px 6px rgba(0,0,0,.08),
+    inset 3px 3px .5px -3.5px rgba(255,255,255,.09),
+    inset -3px -3px .5px -3.5px rgba(255,255,255,.85),
+    inset 1px 1px 1px -.5px rgba(255,255,255,.6),
+    inset -1px -1px 1px -.5px rgba(255,255,255,.6),
+    inset 0 0 6px 6px rgba(255,255,255,.18),
+    inset 0 0 2px 2px rgba(255,255,255,.1),
+    0 0 32px rgba(139,92,246,.25);
+}
+.enter-btn:active{transform:scale(.97);filter:brightness(.9)}
 @keyframes ldfade{to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){#loader{display:none}}
 
@@ -163,18 +199,28 @@ import '../styles/global.css';
 </div>
 
 <!-- Loading Screen -->
-<div id="loader" role="status" aria-live="polite" aria-label="Chargement Nexa Web">
+<div id="loader" role="dialog" aria-modal="true" aria-label="Écran d'accueil Nexa Web">
   <div class="ld-nucleus-wrap" aria-hidden="true">
     <canvas id="nucleus-cv"></canvas>
   </div>
+  <!-- SVG Glass Filter -->
+  <svg style="display:none" aria-hidden="true">
+    <defs>
+      <filter id="glass-filter" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.05 0.05" numOctaves="1" seed="1" result="turbulence"/>
+        <feGaussianBlur in="turbulence" stdDeviation="2" result="blurredNoise"/>
+        <feDisplacementMap in="SourceGraphic" in2="blurredNoise" scale="70" xChannelSelector="R" yChannelSelector="B" result="displaced"/>
+        <feGaussianBlur in="displaced" stdDeviation="4" result="finalBlur"/>
+        <feComposite in="finalBlur" in2="finalBlur" operator="over"/>
+      </filter>
+    </defs>
+  </svg>
   <div class="ld-inner">
     <div class="ld-brand">NEXA<b>WEB</b></div>
-    <p class="ld-status">INITIALISATION...</p>
-    <div class="ld-pct" id="ld-pct" aria-hidden="true">00%</div>
-    <div class="ld-bar-track" aria-hidden="true">
-      <div class="ld-bar-fill" id="ld-bar"></div>
-    </div>
-    <div class="ld-caption" aria-hidden="true">CRAFTING DIGITAL EXPERIENCES</div>
+    <button class="enter-btn" id="enter-btn" aria-label="Entrer dans le site">
+      <div class="enter-btn-glow" aria-hidden="true"></div>
+      Entrer
+    </button>
   </div>
 </div>
 
@@ -419,30 +465,14 @@ import '../styles/global.css';
   var ld=document.getElementById('loader');
   if(!ld)return;
   if(sessionStorage.getItem('nxa-ld')){ld.remove();return;}
-  if(window.matchMedia('(prefers-reduced-motion:reduce)').matches||
-     window.matchMedia('(max-width:768px)').matches){
-    sessionStorage.setItem('nxa-ld','1');ld.remove();return;
-  }
-  var pctEl=document.getElementById('ld-pct');
-  var barEl=document.getElementById('ld-bar');
-  var rafP,tStart;
-  var DURATION=1400;
-  function ease(t){return t<.5?2*t*t:-1+(4-2*t)*t;}
-  function stepProgress(ts){
-    if(!tStart)tStart=ts;
-    var raw=Math.min((ts-tStart)/DURATION,1);
-    var pct=Math.round(ease(raw)*100);
-    pctEl.textContent=(pct<10?'0':'')+pct+'%';
-    barEl.style.width=pct+'%';
-    if(raw<1){rafP=requestAnimationFrame(stepProgress);}
-    else{setTimeout(exitLoader,180);}
-  }
-  setTimeout(function(){rafP=requestAnimationFrame(stepProgress);},100);
-  function exitLoader(){
-    cancelAnimationFrame(rafP);
-    sessionStorage.setItem('nxa-ld','1');
-    ld.classList.add('ld-exit');
-    setTimeout(function(){ld.remove();},900);
+  if(window.matchMedia('(prefers-reduced-motion:reduce)').matches){ld.remove();return;}
+  var enterBtn=document.getElementById('enter-btn');
+  if(enterBtn){
+    enterBtn.addEventListener('click',function(){
+      sessionStorage.setItem('nxa-ld','1');
+      ld.classList.add('ld-exit');
+      setTimeout(function(){ld.remove();},900);
+    });
   }
 })();
 </script>
