@@ -98,7 +98,7 @@ import '../styles/global.css';
 .hero-line{width:40px;height:1px;background:var(--text-dim)}
 .hero-cols{display:flex;align-items:center;gap:clamp(24px,5vw,80px)}
 .hero-cols .hero-main{flex:0 0 auto;width:clamp(340px,52%,640px);min-width:0}
-.hero-robot{flex:1;min-width:0;min-height:480px;display:flex;align-items:center;justify-content:center}
+.hero-robot{flex:1;min-width:0;min-height:560px;display:flex;align-items:center;justify-content:center}
 @media(max-width:900px){.hero-cols{flex-direction:column}.hero-robot{display:none}}
 @keyframes su{to{transform:translateY(0)}}
 @keyframes fu{to{opacity:1;transform:translateY(0)}}
@@ -219,7 +219,7 @@ import '../styles/global.css';
     <div class="ld-brand">NEXA<b>WEB</b></div>
     <button class="enter-btn" id="enter-btn" aria-label="Entrer dans le site">
       <div class="enter-btn-glow" aria-hidden="true"></div>
-      Entrer
+      <span data-i18n="idx-enter">Entrer</span>
     </button>
   </div>
 </div>
@@ -234,19 +234,19 @@ import '../styles/global.css';
     <div class="hero-main">
       <div class="hero-eye" aria-hidden="true">
         <div class="hero-dot"></div>
-        <span class="label">Agence web premium · Carvin</span>
+        <span class="label" data-i18n="idx-eye">Agence web premium · Carvin</span>
       </div>
       <h1 class="h-xl hero-hl">
-        <span class="ln"><span class="li">Des sites web qui</span></span>
-        <span class="ln"><span class="li">donnent une <em>nouvelle</em></span></span>
-        <span class="ln"><span class="li">dimension à votre marque.</span></span>
+        <span class="ln"><span class="li" data-i18n="idx-hl1">Des sites web qui</span></span>
+        <span class="ln"><span class="li" data-i18n="idx-hl2">donnent une <em>nouvelle</em></span></span>
+        <span class="ln"><span class="li" data-i18n="idx-hl3">dimension à votre marque.</span></span>
       </h1>
-      <p class="body hero-sub" style="max-width:480px">
+      <p class="body hero-sub" style="max-width:480px" data-i18n="idx-sub">
         Nexa Web conçoit des expériences digitales modernes, rapides et sur mesure pour les entreprises qui veulent se démarquer.
       </p>
       <div class="hero-ctas">
-        <a href="/devis" class="btn">Démarrer un projet <span aria-hidden="true">→</span></a>
-        <a href="/avis" class="btn-g">Nos avis clients</a>
+        <a href="/devis" class="btn" data-i18n="idx-cta1">Démarrer un projet <span aria-hidden="true">→</span></a>
+        <a href="/avis" class="btn-g" data-i18n="idx-cta2">Nos avis clients</a>
       </div>
     </div>
     <div class="hero-robot" aria-hidden="true">
@@ -256,7 +256,7 @@ import '../styles/global.css';
   <div class="wrap">
     <div class="hero-foot" aria-hidden="true">
       <div class="hero-line"></div>
-      <span class="label">Défiler pour découvrir</span>
+      <span class="label" data-i18n="idx-scroll">Défiler pour découvrir</span>
     </div>
   </div>
 </section>
@@ -265,8 +265,8 @@ import '../styles/global.css';
 <section class="s-phil" style="padding:var(--sec) 0" id="apropos" aria-labelledby="phil-h">
   <div class="wrap">
     <div class="phil-in">
-      <div class="r"><span class="label" id="phil-h">Notre vision</span></div>
-      <p class="phil-txt r d1">
+      <div class="r"><span class="label" id="phil-h" data-i18n="idx-phil-lbl">Notre vision</span></div>
+      <p class="phil-txt r d1" data-i18n="idx-phil-txt">
         Votre site n'est pas simplement une vitrine. C'est le <span>premier contact</span> entre votre marque et votre futur client. Chaque détail compte. Chaque pixel est une décision.
       </p>
     </div>
@@ -278,36 +278,36 @@ import '../styles/global.css';
   <div class="wrap">
     <div class="svc-hdr r">
       <div>
-        <span class="label" id="svc-h">Ce que nous créons</span>
-        <h2 class="h-lg" style="margin-top:14px">Nos services</h2>
+        <span class="label" id="svc-h" data-i18n="idx-svc-lbl">Ce que nous créons</span>
+        <h2 class="h-lg" style="margin-top:14px" data-i18n="idx-svc-h">Nos services</h2>
       </div>
-      <p class="body" style="max-width:300px;text-align:right">Chaque prestation est pensée pour maximiser l'impact de votre présence en ligne.</p>
+      <p class="body" style="max-width:300px;text-align:right" data-i18n="idx-svc-sub">Chaque prestation est pensée pour maximiser l'impact de votre présence en ligne.</p>
     </div>
     <div class="svc-list">
       <a href="/site-vitrine" class="svc-row r">
         <span class="svc-n" aria-hidden="true">01</span>
-        <span class="svc-name">Site vitrine</span>
-        <div class="svc-meta"><span class="svc-tag">Essentiel</span><span class="svc-arr" aria-hidden="true">→</span></div>
+        <span class="svc-name" data-i18n="idx-svc1">Site vitrine</span>
+        <div class="svc-meta"><span class="svc-tag" data-i18n="idx-tag1">Essentiel</span><span class="svc-arr" aria-hidden="true">→</span></div>
       </a>
       <a href="/ecommerce" class="svc-row r d1">
         <span class="svc-n" aria-hidden="true">02</span>
-        <span class="svc-name">Site e-commerce</span>
-        <div class="svc-meta"><span class="svc-tag">Conversion</span><span class="svc-arr" aria-hidden="true">→</span></div>
+        <span class="svc-name" data-i18n="idx-svc2">Site e-commerce</span>
+        <div class="svc-meta"><span class="svc-tag" data-i18n="idx-tag2">Conversion</span><span class="svc-arr" aria-hidden="true">→</span></div>
       </a>
       <a href="/refonte" class="svc-row r d2">
         <span class="svc-n" aria-hidden="true">03</span>
-        <span class="svc-name">Refonte de site</span>
-        <div class="svc-meta"><span class="svc-tag">Modernisation</span><span class="svc-arr" aria-hidden="true">→</span></div>
+        <span class="svc-name" data-i18n="idx-svc3">Refonte de site</span>
+        <div class="svc-meta"><span class="svc-tag" data-i18n="idx-tag3">Modernisation</span><span class="svc-arr" aria-hidden="true">→</span></div>
       </a>
       <a href="/design-uiux" class="svc-row r d3">
         <span class="svc-n" aria-hidden="true">04</span>
-        <span class="svc-name">Design UI/UX</span>
-        <div class="svc-meta"><span class="svc-tag">Expérience</span><span class="svc-arr" aria-hidden="true">→</span></div>
+        <span class="svc-name" data-i18n="idx-svc4">Design UI/UX</span>
+        <div class="svc-meta"><span class="svc-tag" data-i18n="idx-tag4">Expérience</span><span class="svc-arr" aria-hidden="true">→</span></div>
       </a>
       <a href="/seo" class="svc-row r d4">
         <span class="svc-n" aria-hidden="true">05</span>
-        <span class="svc-name">Optimisation SEO &amp; Performance</span>
-        <div class="svc-meta"><span class="svc-tag">Visibilité</span><span class="svc-arr" aria-hidden="true">→</span></div>
+        <span class="svc-name" data-i18n="idx-svc5">Optimisation SEO &amp; Performance</span>
+        <div class="svc-meta"><span class="svc-tag" data-i18n="idx-tag5">Visibilité</span><span class="svc-arr" aria-hidden="true">→</span></div>
       </a>
     </div>
   </div>
@@ -317,14 +317,14 @@ import '../styles/global.css';
 <section class="s-proc" style="padding:var(--sec) 0" aria-labelledby="proc-h">
   <div class="wrap">
     <div class="proc-hdr r">
-      <span class="label" id="proc-h">De l'idée au site en ligne</span>
-      <h2 class="h-lg" style="margin-top:14px">Notre méthode</h2>
+      <span class="label" id="proc-h" data-i18n="idx-proc-lbl">De l'idée au site en ligne</span>
+      <h2 class="h-lg" style="margin-top:14px" data-i18n="idx-proc-h">Notre méthode</h2>
     </div>
     <div class="proc-grid">
-      <div class="proc-step r"><div class="proc-n">01</div><div class="proc-title">Découverte</div><p class="proc-desc">Nous apprenons à connaître votre activité, vos objectifs et votre audience pour concevoir une stratégie digitale sur mesure.</p></div>
-      <div class="proc-step r d1"><div class="proc-n">02</div><div class="proc-title">Direction artistique</div><p class="proc-desc">Création d'une identité visuelle cohérente, des maquettes aux prototypes interactifs, validés à chaque étape.</p></div>
-      <div class="proc-step r d2"><div class="proc-n">03</div><div class="proc-title">Développement</div><p class="proc-desc">Code propre, performant et maintenable. Optimisé pour la vitesse, le référencement et tous les appareils.</p></div>
-      <div class="proc-step r d3"><div class="proc-n">04</div><div class="proc-title">Mise en ligne</div><p class="proc-desc">Déploiement soigné, tests complets et formation à la gestion de votre site. Nous restons disponibles après le lancement.</p></div>
+      <div class="proc-step r"><div class="proc-n">01</div><div class="proc-title" data-i18n="idx-proc-t1">Découverte</div><p class="proc-desc" data-i18n="idx-proc-d1">Nous apprenons à connaître votre activité, vos objectifs et votre audience pour concevoir une stratégie digitale sur mesure.</p></div>
+      <div class="proc-step r d1"><div class="proc-n">02</div><div class="proc-title" data-i18n="idx-proc-t2">Direction artistique</div><p class="proc-desc" data-i18n="idx-proc-d2">Création d'une identité visuelle cohérente, des maquettes aux prototypes interactifs, validés à chaque étape.</p></div>
+      <div class="proc-step r d2"><div class="proc-n">03</div><div class="proc-title" data-i18n="idx-proc-t3">Développement</div><p class="proc-desc" data-i18n="idx-proc-d3">Code propre, performant et maintenable. Optimisé pour la vitesse, le référencement et tous les appareils.</p></div>
+      <div class="proc-step r d3"><div class="proc-n">04</div><div class="proc-title" data-i18n="idx-proc-t4">Mise en ligne</div><p class="proc-desc" data-i18n="idx-proc-d4">Déploiement soigné, tests complets et formation à la gestion de votre site. Nous restons disponibles après le lancement.</p></div>
     </div>
   </div>
 </section>
@@ -334,16 +334,16 @@ import '../styles/global.css';
   <div class="wrap">
     <div class="why-in">
       <div>
-        <span class="label r" id="why-h">Pourquoi Nexa Web</span>
-        <h2 class="h-lg r d1" style="margin-top:14px">La différence qui<br>fait la différence.</h2>
-        <p class="body r d2" style="margin-top:22px;max-width:380px">Nous ne faisons pas dans la quantité. Chaque projet reçoit une attention totale, de la stratégie à la mise en ligne.</p>
+        <span class="label r" id="why-h" data-i18n="idx-why-lbl">Pourquoi Nexa Web</span>
+        <h2 class="h-lg r d1" style="margin-top:14px" data-i18n="idx-why-h">La différence qui<br>fait la différence.</h2>
+        <p class="body r d2" style="margin-top:22px;max-width:380px" data-i18n="idx-why-sub">Nous ne faisons pas dans la quantité. Chaque projet reçoit une attention totale, de la stratégie à la mise en ligne.</p>
       </div>
       <div class="why-bio r d1">
-        <p class="why-bio-lead">Une agence jeune, des ambitions sérieuses.</p>
-        <p class="why-bio-body">Nexa Web est née de la conviction de trois passionnés du web que les petites entreprises méritent des sites aussi soignés que ceux des grandes marques — sans les prix prohibitifs.</p>
-        <p class="why-bio-body">Nous démarrons notre aventure sans catalogue de réalisations. Pas parce que nous manquons de compétences, mais parce que nous avons choisi de ne pas gonfler un portfolio avec des projets fictifs. Ce que nous offrons à la place, c'est une implication totale : chaque ligne de code, chaque détail de design, pensés uniquement pour vous.</p>
-        <p class="why-bio-body">Nos premiers clients bénéficient d'une attention rare — celle qu'une agence qui n'a pas encore cent projets en parallèle peut vraiment offrir.</p>
-        <a href="/devis" class="why-bio-cta">Être parmi les premiers →</a>
+        <p class="why-bio-lead" data-i18n="idx-why-lead">Une agence jeune, des ambitions sérieuses.</p>
+        <p class="why-bio-body" data-i18n="idx-why-b1">Nexa Web est née de la conviction de trois passionnés du web que les petites entreprises méritent des sites aussi soignés que ceux des grandes marques — sans les prix prohibitifs.</p>
+        <p class="why-bio-body" data-i18n="idx-why-b2">Nous démarrons notre aventure sans catalogue de réalisations. Pas parce que nous manquons de compétences, mais parce que nous avons choisi de ne pas gonfler un portfolio avec des projets fictifs. Ce que nous offrons à la place, c'est une implication totale : chaque ligne de code, chaque détail de design, pensés uniquement pour vous.</p>
+        <p class="why-bio-body" data-i18n="idx-why-b3">Nos premiers clients bénéficient d'une attention rare — celle qu'une agence qui n'a pas encore cent projets en parallèle peut vraiment offrir.</p>
+        <a href="/devis" class="why-bio-cta" data-i18n="idx-why-cta">Être parmi les premiers →</a>
       </div>
     </div>
   </div>
@@ -353,9 +353,9 @@ import '../styles/global.css';
 <section class="s-stats" style="padding:var(--sec) 0" aria-label="Chiffres clés">
   <div class="wrap">
     <div class="stats-grid">
-      <div class="stat r"><div class="stat-val">100%</div><div class="stat-lbl">Sur mesure</div></div>
-      <div class="stat r d1"><div class="stat-val">24/7</div><div class="stat-lbl">Présence digitale</div></div>
-      <div class="stat r d2"><div class="stat-val">∞</div><div class="stat-lbl">Possibilités</div></div>
+      <div class="stat r"><div class="stat-val">100%</div><div class="stat-lbl" data-i18n="idx-stat1">Sur mesure</div></div>
+      <div class="stat r d1"><div class="stat-val">24/7</div><div class="stat-lbl" data-i18n="idx-stat2">Présence digitale</div></div>
+      <div class="stat r d2"><div class="stat-val">∞</div><div class="stat-lbl" data-i18n="idx-stat3">Possibilités</div></div>
     </div>
   </div>
 </section>
@@ -365,32 +365,32 @@ import '../styles/global.css';
   <div class="wrap">
     <div class="faq-in">
       <div>
-        <span class="label r" id="faq-h">Questions fréquentes</span>
-        <h2 class="h-md r d1" style="margin-top:14px">On répond à vos questions.</h2>
-        <p class="body faq-side r d2" style="margin-top:18px;font-size:13px">Une question absente de cette liste ? Contactez-nous directement.</p>
-        <a href="/contact" class="btn-g r d3" style="margin-top:28px;display:inline-flex">Nous contacter</a>
+        <span class="label r" id="faq-h" data-i18n="idx-faq-lbl">Questions fréquentes</span>
+        <h2 class="h-md r d1" style="margin-top:14px" data-i18n="idx-faq-h">On répond à vos questions.</h2>
+        <p class="body faq-side r d2" style="margin-top:18px;font-size:13px" data-i18n="idx-faq-sub">Une question absente de cette liste ? Contactez-nous directement.</p>
+        <a href="/contact" class="btn-g r d3" style="margin-top:28px;display:inline-flex" data-i18n="idx-faq-contact">Nous contacter</a>
       </div>
       <div>
         <ul class="faq-list" aria-label="Foire aux questions">
           <li class="faq-item r">
-            <button class="faq-q" aria-expanded="false"><span>Quel est le coût d'un site web ?</span><span class="faq-ind" aria-hidden="true">+</span></button>
-            <div class="faq-a" role="region"><div class="faq-a-in">Chaque projet étant unique, nos tarifs sont établis après analyse de vos besoins. Un site vitrine démarre à partir de 800 €. Nous proposons également des facilités de paiement pour vous accompagner sereinement.</div></div>
+            <button class="faq-q" aria-expanded="false"><span data-i18n="idx-faq-q1">Quel est le coût d'un site web ?</span><span class="faq-ind" aria-hidden="true">+</span></button>
+            <div class="faq-a" role="region"><div class="faq-a-in" data-i18n="idx-faq-a1">Chaque projet étant unique, nos tarifs sont établis après analyse de vos besoins. Un site vitrine démarre à partir de 800 €. Nous proposons également des facilités de paiement pour vous accompagner sereinement.</div></div>
           </li>
           <li class="faq-item r d1">
-            <button class="faq-q" aria-expanded="false"><span>Quel est le délai de livraison ?</span><span class="faq-ind" aria-hidden="true">+</span></button>
-            <div class="faq-a" role="region"><div class="faq-a-in">Un site vitrine est livré entre 1 et 3 semaines selon la complexité. Un projet e-commerce peut nécessiter 4 à 8 semaines. Nous établissons un calendrier précis dès le départ.</div></div>
+            <button class="faq-q" aria-expanded="false"><span data-i18n="idx-faq-q2">Quel est le délai de livraison ?</span><span class="faq-ind" aria-hidden="true">+</span></button>
+            <div class="faq-a" role="region"><div class="faq-a-in" data-i18n="idx-faq-a2">Un site vitrine est livré entre 1 et 3 semaines selon la complexité. Un projet e-commerce peut nécessiter 4 à 8 semaines. Nous établissons un calendrier précis dès le départ.</div></div>
           </li>
           <li class="faq-item r d2">
-            <button class="faq-q" aria-expanded="false"><span>Mon site sera-t-il bien référencé sur Google ?</span><span class="faq-ind" aria-hidden="true">+</span></button>
-            <div class="faq-a" role="region"><div class="faq-a-in">Oui. Le SEO technique est intégré dès la conception : structure sémantique, vitesse de chargement, balises optimisées, données structurées. Nous proposons aussi un accompagnement éditorial pour aller plus loin.</div></div>
+            <button class="faq-q" aria-expanded="false"><span data-i18n="idx-faq-q3">Mon site sera-t-il bien référencé sur Google ?</span><span class="faq-ind" aria-hidden="true">+</span></button>
+            <div class="faq-a" role="region"><div class="faq-a-in" data-i18n="idx-faq-a3">Oui. Le SEO technique est intégré dès la conception : structure sémantique, vitesse de chargement, balises optimisées, données structurées. Nous proposons aussi un accompagnement éditorial pour aller plus loin.</div></div>
           </li>
           <li class="faq-item r d3">
-            <button class="faq-q" aria-expanded="false"><span>Proposez-vous de la maintenance après livraison ?</span><span class="faq-ind" aria-hidden="true">+</span></button>
-            <div class="faq-a" role="region"><div class="faq-a-in">Absolument. Nos contrats de maintenance incluent les mises à jour de sécurité, les sauvegardes régulières et les petites modifications. Votre site reste performant dans la durée.</div></div>
+            <button class="faq-q" aria-expanded="false"><span data-i18n="idx-faq-q4">Proposez-vous de la maintenance après livraison ?</span><span class="faq-ind" aria-hidden="true">+</span></button>
+            <div class="faq-a" role="region"><div class="faq-a-in" data-i18n="idx-faq-a4">Absolument. Nos contrats de maintenance incluent les mises à jour de sécurité, les sauvegardes régulières et les petites modifications. Votre site reste performant dans la durée.</div></div>
           </li>
           <li class="faq-item r d4">
-            <button class="faq-q" aria-expanded="false"><span>Je n'ai aucune connaissance technique, est-ce un problème ?</span><span class="faq-ind" aria-hidden="true">+</span></button>
-            <div class="faq-a" role="region"><div class="faq-a-in">Pas du tout. Nous gérons l'intégralité du projet et vous formons à la gestion de votre site à la livraison. L'interface est pensée pour être intuitive, même sans expérience technique.</div></div>
+            <button class="faq-q" aria-expanded="false"><span data-i18n="idx-faq-q5">Je n'ai aucune connaissance technique, est-ce un problème ?</span><span class="faq-ind" aria-hidden="true">+</span></button>
+            <div class="faq-a" role="region"><div class="faq-a-in" data-i18n="idx-faq-a5">Pas du tout. Nous gérons l'intégralité du projet et vous formons à la gestion de votre site à la livraison. L'interface est pensée pour être intuitive, même sans expérience technique.</div></div>
           </li>
         </ul>
       </div>
@@ -402,10 +402,10 @@ import '../styles/global.css';
 <section class="s-cta" id="contact" aria-labelledby="cta-h">
   <div class="wrap">
     <div class="cta-in">
-      <div class="cta-super r">Passons à l'action</div>
-      <h2 class="cta-hl r d1" id="cta-h">Votre prochain<br>site commence <em>ici.</em></h2>
+      <div class="cta-super r" data-i18n="idx-cta-super">Passons à l'action</div>
+      <h2 class="cta-hl r d1" id="cta-h" data-i18n="idx-cta-h">Votre prochain<br>site commence <em>ici.</em></h2>
       <div class="r d2">
-        <a href="/devis" class="cta-btn">Démarrer un projet <span class="cta-arr" aria-hidden="true">→</span></a>
+        <a href="/devis" class="cta-btn" data-i18n="idx-cta-btn">Démarrer un projet <span class="cta-arr" aria-hidden="true">→</span></a>
       </div>
     </div>
   </div>
@@ -419,7 +419,7 @@ import '../styles/global.css';
     <div class="foot-in">
       <div>
         <div class="foot-logo">NEXA<span>WEB</span></div>
-        <p class="foot-tag">Agence web premium · Carvin, Hauts-de-France</p>
+        <p class="foot-tag" data-i18n="ftr-tag">Agence web premium · Carvin, Hauts-de-France</p>
         <div class="foot-socials" aria-label="Réseaux sociaux">
           <a href="https://www.linkedin.com/in/ahmed-chteoui-049211429/" class="foot-soc linkedin" aria-label="LinkedIn" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
@@ -433,23 +433,23 @@ import '../styles/global.css';
         </div>
       </div>
       <div>
-        <div class="foot-col-title">Navigation</div>
+        <div class="foot-col-title" data-i18n="ftr-nav">Navigation</div>
         <nav aria-label="Liens de navigation">
           <ul class="foot-links">
-            <li><a href="/#accueil"  class="foot-lnk">Accueil</a></li>
-            <li><a href="/#services" class="foot-lnk">Services</a></li>
-            <li><a href="/#faq"      class="foot-lnk">FAQ</a></li>
+            <li><a href="/#accueil"  class="foot-lnk" data-i18n="ftr-home">Accueil</a></li>
+            <li><a href="/#services" class="foot-lnk" data-i18n="ftr-services">Services</a></li>
+            <li><a href="/#faq"      class="foot-lnk" data-i18n="ftr-faq">FAQ</a></li>
           </ul>
         </nav>
       </div>
       <div>
-        <div class="foot-col-title">L'équipe</div>
-        <p class="foot-tag" style="margin-bottom:14px">Trois passionnés du digital derrière chaque projet Nexa Web.</p>
-        <a href="/equipe" class="foot-team-lnk">Découvrir l'équipe →</a>
+        <div class="foot-col-title" data-i18n="ftr-team-h">L'équipe</div>
+        <p class="foot-tag" style="margin-bottom:14px" data-i18n="ftr-team-tag">Trois passionnés du digital derrière chaque projet Nexa Web.</p>
+        <a href="/equipe" class="foot-team-lnk" data-i18n="ftr-team-lnk">Découvrir l'équipe →</a>
       </div>
     </div>
     <div class="foot-bot">
-      <span class="foot-copy">© 2026 Nexa Web. Tous droits réservés.</span>
+      <span class="foot-copy" data-i18n="ftr-copy">© 2026 Nexa Web. Tous droits réservés.</span>
       <nav class="foot-legal" aria-label="Liens légaux">
         <a href="/mentions-legales">Mentions légales</a>
         <a href="/politique-confidentialite">Confidentialité</a>

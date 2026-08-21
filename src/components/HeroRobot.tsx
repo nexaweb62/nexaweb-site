@@ -5,7 +5,7 @@ import { Spotlight } from '@/components/ui/spotlight'
 
 export function HeroRobot() {
   return (
-    <div className="relative w-full h-full min-h-[480px]">
+    <div className="relative w-full h-full min-h-[560px]">
       <Spotlight
         className="-top-20 left-1/4"
         size={320}

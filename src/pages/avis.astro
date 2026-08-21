@@ -93,11 +93,11 @@ import '../styles/global.css';
   <section class="s-hero" aria-labelledby="avis-hero-h">
     <div class="wrap">
       <div class="hero-in">
-        <span class="label r">Les clients</span>
-        <h1 class="h-xl r d1" id="avis-hero-h" style="margin-top:18px">
+        <span class="label r" data-i18n="av-lbl">Les clients</span>
+        <h1 class="h-xl r d1" id="avis-hero-h" style="margin-top:18px" data-i18n="av-h">
           Ce que nos clients<br>pensent de <em>nous.</em>
         </h1>
-        <p class="body-text r d2" style="margin-top:26px;max-width:480px">
+        <p class="body-text r d2" style="margin-top:26px;max-width:480px" data-i18n="av-sub">
           Chaque projet est unique. Chaque retour compte. Partagez votre expérience ou découvrez ce que nos clients disent de Nexa Web.
         </p>
       </div>
@@ -109,14 +109,14 @@ import '../styles/global.css';
     <div class="wrap">
       <div class="form-grid">
         <div class="form-lede r">
-          <span class="label">Votre expérience</span>
-          <h2 class="form-lede-h" id="form-h" style="margin-top:18px">Laissez<br>votre <em>avis.</em></h2>
-          <p class="form-lede-p" style="margin-top:16px">Votre retour est précieux. Il sera examiné avant publication — généralement sous 24h.</p>
+          <span class="label" data-i18n="av-form-lbl">Votre expérience</span>
+          <h2 class="form-lede-h" id="form-h" style="margin-top:18px" data-i18n="av-form-h">Laissez<br>votre <em>avis.</em></h2>
+          <p class="form-lede-p" style="margin-top:16px" data-i18n="av-form-sub">Votre retour est précieux. Il sera examiné avant publication — généralement sous 24h.</p>
         </div>
         <div class="r d1">
           <form id="review-form" novalidate>
             <div class="star-field">
-              <span class="field-label" id="star-label">Votre note</span>
+              <span class="field-label" id="star-label" data-i18n="av-star-lbl">Votre note</span>
               <div class="stars" role="group" aria-labelledby="star-label" id="stars">
                 <button class="star-btn" type="button" data-val="1" aria-label="1 étoile">★</button>
                 <button class="star-btn" type="button" data-val="2" aria-label="2 étoiles">★</button>
@@ -127,30 +127,30 @@ import '../styles/global.css';
             </div>
             <div class="fields-row">
               <div class="field">
-                <label class="field-label" for="rv-name">Votre nom *</label>
+                <label class="field-label" for="rv-name" data-i18n="av-nom-label">Votre nom *</label>
                 <input id="rv-name" type="text" placeholder="Jean Dupont" required maxlength="80">
               </div>
               <div class="field">
-                <label class="field-label" for="rv-company">Entreprise (optionnel)</label>
+                <label class="field-label" for="rv-company" data-i18n="av-entreprise-label">Entreprise (optionnel)</label>
                 <input id="rv-company" type="text" placeholder="Acme SAS" maxlength="80">
               </div>
             </div>
             <div class="field">
-              <label class="field-label" for="rv-msg">Votre avis *</label>
+              <label class="field-label" for="rv-msg" data-i18n="av-msg-label">Votre avis *</label>
               <textarea id="rv-msg" placeholder="Décrivez votre expérience avec Nexa Web…" required maxlength="600"></textarea>
             </div>
             <div class="form-submit">
               <button type="submit" class="btn" id="rv-submit">
-                Envoyer mon avis
+                <span data-i18n="av-submit">Envoyer mon avis</span>
                 <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
               </button>
-              <span class="form-note">Modéré avant publication</span>
+              <span class="form-note" data-i18n="av-note">Modéré avant publication</span>
             </div>
           </form>
           <div class="form-success" id="form-success" role="alert">
             <div class="form-success-icon">✓</div>
-            <div class="form-success-title">Merci pour votre avis !</div>
-            <div class="form-success-sub">Il sera examiné et publié sous 24h si tout est conforme.</div>
+            <div class="form-success-title" data-i18n="av-success-title">Merci pour votre avis !</div>
+            <div class="form-success-sub" data-i18n="av-success-sub">Il sera examiné et publié sous 24h si tout est conforme.</div>
           </div>
         </div>
       </div>
@@ -161,7 +161,7 @@ import '../styles/global.css';
   <section class="s-reviews" aria-labelledby="reviews-h">
     <div class="wrap">
       <div class="reviews-top r">
-        <h2 class="reviews-hl" id="reviews-h">Avis publiés</h2>
+        <h2 class="reviews-hl" id="reviews-h" data-i18n="av-reviews-h">Avis publiés</h2>
         <span class="reviews-count" id="reviews-count">Chargement…</span>
       </div>
       <div id="reviews-container"></div>
@@ -172,11 +172,11 @@ import '../styles/global.css';
   <section class="s-cta" aria-labelledby="avis-cta-h">
     <div class="wrap">
       <div class="cta-in r">
-        <div class="cta-super">Travaillons ensemble</div>
-        <h2 class="cta-hl r d1" id="avis-cta-h">Votre projet mérite<br>une présence <em>remarquable.</em></h2>
+        <div class="cta-super" data-i18n="av-cta-super">Travaillons ensemble</div>
+        <h2 class="cta-hl r d1" id="avis-cta-h" data-i18n="av-cta-h">Votre projet mérite<br>une présence <em>remarquable.</em></h2>
         <div class="cta-btns r d2">
-          <a href="/devis" class="btn">Démarrer un projet</a>
-          <a href="/tarifs" class="btn-g">Voir les tarifs</a>
+          <a href="/devis" class="btn" data-i18n="av-cta-btn1">Démarrer un projet</a>
+          <a href="/tarifs" class="btn-g" data-i18n="av-cta-btn2">Voir les tarifs</a>
         </div>
       </div>
     </div>
