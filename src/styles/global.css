@@ -703,6 +703,20 @@ ul, ol { list-style: none; }
 }
 .team-text { margin-top: 16px; max-width: 56ch; font-size: 15px; line-height: 1.68; color: var(--muted); }
 
+/* ── Fil d'Ariane ────────────────────────────────────────────────────────── */
+.fil {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: clamp(18px, 2.4vw, 26px);
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+.fil a { text-decoration: underline; text-underline-offset: 3px; }
+.fil a:hover { color: #fff; }
+.fil span[aria-current] { color: var(--dim); }
+
 /* ── Renvoi vers une maquette de demonstration ───────────────────────────────
    Le seul aplat de la page, et il est la pour ca : c'est un aparte, pas une
    section. Le texte dit que l'etablissement est fictif — une demonstration

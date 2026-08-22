@@ -2,6 +2,8 @@
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import ActionBar from '../components/ActionBar.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
 import { SITE, CALENDLY, TEAM, TEAM_INTRO } from '../config/site';
 
 const title = "L'équipe — Nexa Web, Carvin";
@@ -42,6 +44,7 @@ const description =
   <main>
     <section class="section" style="border-top:0">
       <div class="container">
+        <Breadcrumb label="L'équipe" path="/equipe" />
         <p class="eyebrow">L'équipe</p>
         <h1 class="section-title">Trois personnes, à {SITE.city}</h1>
         <div class="team-intro">
@@ -72,7 +75,7 @@ const description =
       </div>
     </section>
 
-    <section class="section">
+    <section class="section" id="contact">
       <div class="container">
         <div class="contact-panel">
           <h2 class="section-title" style="max-width:none;margin-inline:auto">
@@ -91,6 +94,8 @@ const description =
       </div>
     </section>
   </main>
+
+  <ActionBar cible="/#contact" />
 
   <Footer />
 </Base>

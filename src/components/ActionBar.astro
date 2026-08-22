@@ -1,0 +1,53 @@
+---
+import { SITE } from '../config/site';
+
+interface Props {
+  /** Ancre du formulaire de la page. Toutes les pages de vente en ont un. */
+  cible?: string;
+}
+const { cible = '#contact' } = Astro.props;
+---
+
+{/* Barre d'action mobile. Sous 720 px, le formulaire est en bas de page : un
+    visiteur convaincu au milieu de la lecture n'a rien sous la main. Masquee
+    par CSS au-dessus de 720 px, et par JavaScript sur le premier ecran et sur
+    la section de contact, ou les memes actions sont deja presentes. Sans
+    JavaScript elle reste affichee : degrade acceptable, jamais bloquant. */}
+<div class="actionbar" id="actionbar" aria-label="Contact rapide">
+  <a class="actionbar-call" href={SITE.phoneHref}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z" />
+    </svg>
+    Appeler
+  </a>
+  <a class="actionbar-cta" href={cible}>Être rappelé</a>
+</div>
+
+<script>
+  const bar = document.getElementById('actionbar');
+  /* Le hero n'existe que sur l'accueil ; ailleurs, seule la section de contact
+     efface la barre. */
+  const zones = [document.querySelector('.page'), document.getElementById('contact')].filter(
+    (el): el is Element => Boolean(el),
+  );
+
+  if (bar && zones.length && 'IntersectionObserver' in window) {
+    const couvrant = new Set<Element>();
+    const sync = () => bar.setAttribute('data-hidden', String(couvrant.size > 0));
+
+    const observateur = new IntersectionObserver(
+      (entrees) => {
+        entrees.forEach((e) => (e.isIntersecting ? couvrant.add(e.target) : couvrant.delete(e.target)));
+        sync();
+      },
+      { threshold: 0.12 },
+    );
+
+    /* La page s'ouvre en haut : sur l'accueil le hero couvre l'ecran, ailleurs
+       la barre n'a pas de raison d'apparaitre avant le premier defilement. */
+    const depart = document.querySelector('.page') ?? zones[0];
+    couvrant.add(depart);
+    sync();
+    zones.forEach((z) => observateur.observe(z));
+  }
+</script>
