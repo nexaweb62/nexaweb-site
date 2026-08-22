@@ -33,12 +33,12 @@ const canonical = new URL(path, Astro.site).href;
     <meta property="og:image" content={new URL('/assets/hero-poster.webp', Astro.site).href} />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Cormorant:ital,wght@0,400..600;1,400..500&display=swap"
-      rel="stylesheet"
-    />
+    {/* Polices servies par le site lui-meme (voir src/styles/fonts.css).
+        Seules les deux faces du titre sont prechargees : c'est le plus grand
+        element de la page, donc celui qui decide du LCP. Archivo suit par la
+        feuille de style, son texte est plus petit et moins penalisant. */}
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/cormorant-latin.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/cormorant-italic-latin.woff2" crossorigin />
   </head>
   <body>
     <slot />
