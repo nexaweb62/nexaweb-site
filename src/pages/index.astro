@@ -288,15 +288,36 @@ const description =
               <input id="telephone" name="telephone" type="tel" inputmode="tel" autocomplete="tel" required />
             </div>
 
+            <div class="field">
+              <label for="moment">Quand vous rappeler ?</label>
+              <select id="moment" name="moment">
+                <option>Dès que possible</option>
+                <option>En matinée — 9h à 11h30</option>
+                <option>L'après-midi — 14h30 à 17h30</option>
+                <option>En soirée, après le service — après 21h30</option>
+              </select>
+            </div>
+
             <button class="cta" type="submit">Être rappelé</button>
             <p class="form-note">On vous rappelle sous 24 h ouvrées. Aucun démarchage ensuite.</p>
           </form>
 
-          <p class="contact-alt">
-            Vous préférez choisir votre créneau ?
-            <a href={CALENDLY} target="_blank" rel="noopener">Réserver directement</a>
-            · ou appelez le <a href={SITE.phoneHref}>{SITE.phone}</a>
-          </p>
+          <div class="contact-alt">
+            <p>Vous préférez choisir votre créneau vous-même ?</p>
+            <div class="quickbook">
+              <div class="quickbook-row">
+                <label class="visually-hidden" for="jour">Jour souhaité</label>
+                <input id="jour" type="date" />
+                <a id="book-link" class="btn-ghost" href={CALENDLY} target="_blank" rel="noopener">
+                  Voir les créneaux
+                </a>
+              </div>
+              <p class="form-note">
+                Les horaires proposés sont ceux réellement disponibles à cette date.
+              </p>
+            </div>
+            <p>Ou appelez directement le <a href={SITE.phoneHref}>{SITE.phone}</a>.</p>
+          </div>
         </div>
       </div>
     </section>
@@ -328,6 +349,30 @@ const description =
 
     maybeLoad();
     window.addEventListener('resize', maybeLoad, { passive: true });
+  }
+
+  /* --- Raccourci Calendly : le jour choisi devient un parametre d'URL.
+         Si Calendly ignore ces parametres, le lien ouvre la page normale :
+         aucune regression possible. --- */
+  const jour = document.getElementById('jour') as HTMLInputElement | null;
+  const lien = document.getElementById('book-link') as HTMLAnchorElement | null;
+
+  if (jour && lien) {
+    const base = lien.href;
+    const now = new Date();
+    const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+    jour.min = local.toISOString().slice(0, 10);
+
+    jour.addEventListener('change', () => {
+      if (!jour.value) {
+        lien.href = base;
+        return;
+      }
+      const url = new URL(base);
+      url.searchParams.set('month', jour.value.slice(0, 7));
+      url.searchParams.set('date', jour.value);
+      lien.href = url.toString();
+    });
   }
 
   /* --- Compteurs du bandeau de chiffres --- */

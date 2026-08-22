@@ -56,6 +56,13 @@ ul, ol { list-style: none; }
 
 :focus-visible { outline: 2px solid var(--text); outline-offset: 3px; border-radius: 4px; }
 
+/* Libelle lisible par un lecteur d'ecran mais retire du flux visuel. */
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
 /* ── FOND VIDEO (premier ecran uniquement) ───────────────────────────────── */
 .bg {
   position: absolute;
@@ -788,7 +795,8 @@ body.menu-open { overflow: hidden; }
   text-transform: uppercase;
   color: var(--muted);
 }
-.field input {
+.field input,
+.field select {
   width: 100%;
   padding: 13px 15px;
   background: rgba(255, 255, 255, 0.04);
@@ -802,8 +810,11 @@ body.menu-open { overflow: hidden; }
 /* Le texte indicatif porte une information reelle (les metiers vises) :
    il doit etre lisible. 0.28 donnait 2,26:1, 0.48 donne 5,42:1. */
 .field input::placeholder { color: rgba(255, 255, 255, 0.48); }
-.field input:hover { border-color: var(--hair-strong); }
-.field input:focus { outline: none; border-color: #fff; background: rgba(255, 255, 255, 0.07); }
+.field input:hover, .field select:hover { border-color: var(--hair-strong); }
+.field input:focus, .field select:focus { outline: none; border-color: #fff; background: rgba(255, 255, 255, 0.07); }
+/* Le selecteur natif et le calendrier natif doivent suivre le fond sombre. */
+.field select, .quickbook input { color-scheme: dark; }
+.field select option { background: #16161a; color: #fff; }
 .form .cta { justify-content: center; width: 100%; margin-top: 4px; }
 .form-hp { position: absolute; left: -9999px; }
 .form-note { margin-top: 4px; font-size: 12.5px; line-height: 1.6; color: var(--muted); text-align: center; }
@@ -816,3 +827,23 @@ body.menu-open { overflow: hidden; }
   color: var(--muted);
 }
 .contact-alt a { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+
+/* ── Raccourci vers Calendly ─────────────────────────────────────────────────
+   Un jour choisi ici ouvre Calendly directement sur cette date. L'heure, elle,
+   se choisit chez Calendly : c'est le seul endroit qui connaisse les creneaux
+   reellement libres. Proposer une heure ici reviendrait a promettre un
+   rendez-vous qu'on ne peut pas tenir. */
+.quickbook { display: grid; gap: 8px; margin-top: 14px; }
+.quickbook-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: center; }
+.quickbook input {
+  padding: 11px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--hair);
+  border-radius: 12px;
+  color: #fff;
+  font: inherit;
+  font-size: 14.5px;
+}
+.quickbook input:hover { border-color: var(--hair-strong); }
+.quickbook input:focus { outline: none; border-color: #fff; }
+.contact-alt p + p { margin-top: 14px; }

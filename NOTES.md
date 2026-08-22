@@ -111,12 +111,28 @@ page « qui sommes-nous » sera ajoutée — c'est la recommandation P7 de
 
 ## À faire
 
-1. **Renseigner les montants** dans `src/config/site.ts` (`PRICING.setup` et
+1. **Activer et brancher le formulaire côté Netlify.** Trois étapes, sans
+   lesquelles les demandes n'arrivent nulle part :
+   `Forms → Enable form detection`, puis redéployer, puis
+   `Configuration → Notifications → Form submission notifications → Add notification`
+   vers `contact.nexaweb62@gmail.com`. **Aucun e-mail n'est envoyé par défaut** :
+   sans cette dernière étape, les envois dorment dans le tableau de bord.
+2. **Vérifier le raccourci Calendly.** Le champ « jour souhaité » construit une
+   URL `?month=…&date=…`. Ces paramètres sont réputés supportés par Calendly
+   mais je n'ai pas pu le confirmer depuis leur documentation : cliquez une fois
+   avec une date pour vérifier que la page s'ouvre bien sur ce jour. Si elle
+   l'ignore, le lien reste fonctionnel, il ouvre la page normale.
+3. **Renseigner les montants** dans `src/config/site.ts` (`PRICING.setup` et
    `PRICING.monthly`). Tant qu'ils valent `null`, la mise en production est
    bloquée. Recommandation chiffrée dans `docs/analysis.md` § 4.
-2. **Révoquer la clé Anthropic** du worker Cloudflare (voir plus haut).
-3. **Décider du sort des deux maquettes** `public/demo-*.html` : elles ne sont
+4. **Révoquer la clé Anthropic** du worker Cloudflare (voir plus haut).
+5. **Décider du sort des deux maquettes** `public/demo-*.html` : elles ne sont
    plus liées depuis le site, mais restent accessibles par leur URL pour la
    prospection.
-4. **Ajouter une page « qui sommes-nous »** — pour un artisan qui achète à un
+6. **Ajouter une page « qui sommes-nous »** — pour un artisan qui achète à un
    artisan, ne pas savoir qui est derrière est un frein direct.
+7. **Corriger les champs de `public/demo-le-grenier.html`** si les maquettes
+   sont conservées : ses cinq champs de formulaire n'ont ni `id` ni `label`,
+   seulement un `placeholder`. Reprise telle quelle de l'ancien site, non
+   corrigée parce que le sort des maquettes n'est pas tranché — mais une
+   démonstration montrée à des prospects ne devrait pas traîner ce défaut.
