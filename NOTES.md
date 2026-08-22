@@ -26,11 +26,13 @@ doit jamais partir en ligne avec un placeholder.
 
 | Chemin | Rôle |
 |---|---|
-| `src/pages/index.astro` | La page unique : hero vidéo, constat, offre, premiers projets, tarifs, questions, contact |
+| `src/pages/index.astro` | La page d'accueil : hero vidéo, constat, offre, premiers projets, tarifs, questions, contact |
+| `src/pages/[metier].astro` | Les trois pages d'entrée par métier, générées depuis `src/config/metiers.ts` |
 | `src/pages/equipe.astro` | Qui est derrière Nexa Web : les trois associés, photos et rôles |
 | `src/pages/{mentions-legales,politique-confidentialite,merci,404}.astro` | Pages annexes |
 | `src/config/site.ts` | **Tout le contenu et les coordonnées.** Un seul fichier à dupliquer le jour où l'anglais arrive |
 | `src/components/{Header,Footer}.astro` | Navigation, menu mobile, pied de page |
+| `src/components/{ContactForm,ActionBar,Breadcrumb}.astro` | Formulaire mutualisé, barre d'action mobile, fil d'Ariane |
 | `src/styles/global.css` | Feuille unique. Premier écran repris d'un spec fourni, sections suivantes en extension |
 | `src/layouts/Base.astro` | `<head>`, métadonnées, polices |
 | `public/assets/` | Vidéo de fond, affiche, image de partage, logo, portraits de l'équipe |
@@ -42,6 +44,7 @@ doit jamais partir en ligne avec un placeholder.
 | `public/_headers` | En-têtes de sécurité et cache des médias |
 | `functions/api/contact.js` | Réception du formulaire, envoi via Resend |
 | `scripts/check-build.mjs` | Garde-fou de mise en production |
+| `docs/conclusions.md` | **Point d'entrée** : la synthèse en une page, les chiffres et ce qu'il faut faire |
 | `docs/analysis.md` | Analyse économique, audit conversion, journal des cycles |
 | `docs/production/` | Questionnaire de démarrage et checklist de mise en ligne, pour les sites clients |
 | `docs/modele-economique.mjs` | Le calcul derrière les chiffres du document |

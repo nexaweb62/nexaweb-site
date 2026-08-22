@@ -1,6 +1,7 @@
 # Nexa Web — analyse économique et analyse du site
 
-> Document de travail, mis à jour au fil des cycles.
+> Document de travail, mis à jour au fil des cycles. **La synthèse est dans
+> [`conclusions.md`](conclusions.md)** ; ce document-ci porte le détail.
 > Dernière mise à jour : 22 août 2026, après le cycle `v2.5`.
 > Les chiffres chiffrés proviennent de `docs/modele-economique.mjs`, ré-exécutable
 > par `node docs/modele-economique.mjs`. Toute hypothèse y est nommée en tête de
@@ -532,3 +533,6 @@ le vrai message de cette analyse.
 | `v2.3` | 22/08/2026 | Trois pages métier, formulaire mutualisé et instrumenté, `npm run audit`, `npm run test:contact` | L'acquisition est le goulot du modèle, pas la production. Une page unique ne se positionne que sur une requête |
 | `v2.4` | 22/08/2026 | Feuille de style posée dans la page, vidéo repoussée au temps mort | 1,2 Mo décoratifs en concurrence avec le premier écran, et une requête bloquante avant le premier rendu |
 | `v2.5` | 22/08/2026 | Analyse mise à jour : coût API mesuré, section industrialisation, audit conversion réactualisé | Le coût de l'IA était modélisé ; il est désormais relevé sur les transcripts — 128,80 $, dix fois l'estimation par site |
+| `v2.6` | 22/08/2026 | Questionnaire de démarrage et checklist de mise en ligne | Le levier d'industrialisation identifié depuis le début n'avait aucune traduction opérationnelle |
+| `v2.7` | 22/08/2026 | Maquettes corrigées et liées depuis les pages métier | Deux démonstrations existaient, n'étaient liées de nulle part, et leurs champs n'avaient pas de label |
+| `v2.8` | 22/08/2026 | Barre d'action et fil d'Ariane sur les pages d'atterrissage | La barre n'existait que sur l'accueil, alors que les pages métier sont celles où l'on arrive depuis Google |
