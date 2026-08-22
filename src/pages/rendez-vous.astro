@@ -44,10 +44,16 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
 .cal-head span{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-dim);padding:4px 0}
 .cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
 .cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:13px;border-radius:8px;cursor:default;position:relative;user-select:none;transition:background .12s,color .12s,border-color .12s;color:var(--text);border:1px solid transparent}
+button.cal-day{appearance:none;-webkit-appearance:none;background:transparent;padding:0;font:inherit;outline:none}
+button.cal-day:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .cal-day.other-month{visibility:hidden;pointer-events:none}
 .cal-day.disabled{color:var(--text-dim);opacity:.28;cursor:not-allowed}
+button.cal-day:not(.selected){border-color:rgba(255,255,255,.1)}
+button.cal-day:hover{background:rgba(139,92,246,.16)!important;color:#a78bfa!important;border-color:rgba(139,92,246,.5)!important}
 .cal-day:not(.disabled):not(.other-month){cursor:pointer;font-weight:500}
 .cal-day:not(.disabled):not(.other-month):hover{background:rgba(139,92,246,.16);color:#a78bfa;border-color:rgba(139,92,246,.35)}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) button.cal-day:not(.selected){border-color:rgba(0,0,0,.12)}}
+:root[data-theme="light"] button.cal-day:not(.selected){border-color:rgba(0,0,0,.12)}
 .cal-day.today{font-weight:700}
 .cal-day.today::after{content:'';position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:currentColor}
 .cal-day.selected{background:var(--accent)!important;color:#fff!important;font-weight:700;border-color:var(--accent)!important}
@@ -325,18 +331,15 @@ textarea.bk-input{resize:vertical;min-height:90px}
     for(var d=1;d<=ld;d++){
       var dt=new Date(viewY,viewM,d);
       var dis=dt<today||isWknd(dt);
-      var cls='cal-day'+(sameDay(dt,today)?' today':'')+(sameDay(dt,selDate)?' selected':'')+(dis?' disabled':'');
+      var extra=(sameDay(dt,today)?' today':'')+(sameDay(dt,selDate)?' selected':'');
       var ds=viewY+'-'+p2(viewM+1)+'-'+p2(d);
-      h+='<div class="'+cls+'"'+(dis?'':' data-date="'+ds+'"')+'>'+d+'</div>';
+      if(dis){
+        h+='<div class="cal-day disabled'+extra+'">'+d+'</div>';
+      }else{
+        h+='<button type="button" class="cal-day'+extra+'" data-date="'+ds+'">'+d+'</button>';
+      }
     }
     calDaysEl.innerHTML=h;
-    calDaysEl.querySelectorAll('.cal-day[data-date]').forEach(function(el){
-      el.addEventListener('click',function(){
-        var p=el.dataset.date.split('-');
-        selDate=new Date(+p[0],+p[1]-1,+p[2]);
-        renderCal();renderSlots();updateFooter();
-      });
-    });
   }
 
   /* ── Slots ── */
@@ -352,15 +355,9 @@ textarea.bk-input{resize:vertical;min-height:90px}
         dis=s<=new Date(now.getTime()+60*60000);
       }
       var sel=t===selTime;
-      h+='<button class="slot-btn'+(sel?' selected':'')+(dis?' disabled':'')+'"'+(dis?' disabled':' data-time="'+t+'"')+'>'+t+'</button>';
+      h+='<button type="button" class="slot-btn'+(sel?' selected':'')+(dis?' disabled':'')+'"'+(dis?' disabled':' data-time="'+t+'"')+'>'+t+'</button>';
     });
     slotsEl.innerHTML=h;
-    slotsEl.querySelectorAll('.slot-btn[data-time]').forEach(function(btn){
-      btn.addEventListener('click',function(){
-        selTime=btn.dataset.time;
-        renderSlots();updateFooter();
-      });
-    });
   }
 
   /* ── Footer ── */
@@ -372,6 +369,23 @@ textarea.bk-input{resize:vertical;min-height:90px}
     }
     contBtn.disabled=!(selDate&&selTime);
   }
+
+  /* ── Delegated click: calendar days ── */
+  calDaysEl.addEventListener('click',function(e){
+    var el=e.target.closest('button[data-date]');
+    if(!el)return;
+    var p=el.dataset.date.split('-');
+    selDate=new Date(+p[0],+p[1]-1,+p[2]);
+    renderCal();renderSlots();updateFooter();
+  });
+
+  /* ── Delegated click: time slots ── */
+  slotsEl.addEventListener('click',function(e){
+    var btn=e.target.closest('button[data-time]');
+    if(!btn)return;
+    selTime=btn.dataset.time;
+    renderSlots();updateFooter();
+  });
 
   /* ── Navigation ── */
   prevBtn.addEventListener('click',function(){
