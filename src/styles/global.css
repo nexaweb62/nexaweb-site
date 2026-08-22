@@ -61,7 +61,7 @@ img{display:block;max-width:100%}
 .btn-g:focus-visible{outline:2px solid var(--text);outline-offset:3px}
 
 /* ── HEADER ── */
-.hdr{position:fixed;inset:0 0 auto;height:var(--hdr);z-index:100;border-bottom:1px solid transparent;transition:background .4s,border-color .4s}
+.hdr{position:fixed;inset:0 0 auto;height:var(--hdr);z-index:100;border-bottom:1px solid transparent;transition:background .4s,border-color .4s;isolation:isolate;will-change:transform}
 .hdr.on{border-bottom-color:var(--border);background:rgba(8,8,17,.92)}
 @media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .hdr.on{background:rgba(244,244,240,.92)}}
 :root[data-theme="light"] .hdr.on{background:rgba(244,244,240,.92)}

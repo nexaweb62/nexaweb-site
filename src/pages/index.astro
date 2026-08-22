@@ -182,8 +182,19 @@ import '../styles/global.css';
 .cta-arr{display:inline-block;transition:transform .25s}
 .cta-btn:hover .cta-arr{transform:translateX(5px)}
 
+/* ── POUR QUI ── */
+.s-who{border-top:1px solid var(--border)}
+.who-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-top:clamp(36px,6vh,72px)}
+.who-card{background:var(--bg);padding:clamp(28px,4vw,48px);display:flex;flex-direction:column;gap:16px}
+.who-marker{font-size:9.5px;font-weight:500;letter-spacing:.14em;color:var(--text-dim);margin-bottom:6px;font-variant-numeric:tabular-nums}
+.who-target{font-size:clamp(1.1rem,2.2vw,1.7rem);font-weight:800;letter-spacing:-.025em;line-height:1.12}
+.who-desc{font-size:13px;font-weight:300;line-height:1.72;color:var(--text-muted);flex:1}
+.who-price{font-size:clamp(1.7rem,3.2vw,2.6rem);font-weight:900;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.who-price-sub{font-size:9.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);margin-top:6px}
+@media(max-width:600px){.who-grid{grid-template-columns:1fr;gap:0}.who-card:not(:last-child){border-bottom:1px solid var(--border)}}
+
 /* ── SECTIONS skip render ── */
-.s-phil,.s-svc,.s-proc,.s-why,.s-stats,.s-faq,.s-cta,.s-foot{content-visibility:auto;contain-intrinsic-size:0 500px}
+.s-phil,.s-svc,.s-who,.s-proc,.s-why,.s-stats,.s-faq,.s-cta,.s-foot{content-visibility:auto;contain-intrinsic-size:0 500px}
 </style>
 
 <!-- Neon Flow -->
@@ -308,6 +319,41 @@ import '../styles/global.css';
   </div>
 </section>
 
+<!-- POUR QUI -->
+<section class="s-who" style="padding:var(--sec) 0" id="pour-qui" aria-labelledby="who-h">
+  <div class="wrap">
+    <div class="svc-hdr r">
+      <div>
+        <span class="label" id="who-h">Fait pour vous</span>
+        <h2 class="h-lg" style="margin-top:14px">Une formule pour<br>chaque profil.</h2>
+      </div>
+      <p class="body" style="max-width:300px;text-align:right">Étudiant, artisan ou commerçant — chaque budget a sa réponse ici.</p>
+    </div>
+    <div class="who-grid">
+      <div class="who-card r">
+        <div class="who-marker">01</div>
+        <h3 class="who-target">Étudiant &amp; autoentrepreneur</h3>
+        <p class="who-desc">Vous lancez une petite activité ou avez besoin d'un portfolio professionnel. On s'adapte à votre budget, on livre en 7 jours — sans superflu ni frais cachés.</p>
+        <div>
+          <div class="who-price">100 — 200 €</div>
+          <p class="who-price-sub">Page unique · responsive · formulaire de contact</p>
+        </div>
+        <a href="/tarifs" class="btn-g" style="align-self:flex-start;margin-top:8px">Voir la formule →</a>
+      </div>
+      <div class="who-card r d1">
+        <div class="who-marker">02</div>
+        <h3 class="who-target">Commerçant &amp; artisan local</h3>
+        <p class="who-desc">Vous avez une activité locale — restaurant, boutique, artisan — mais aucune présence en ligne convaincante. On vous donne un site qui attire et qui rassure.</p>
+        <div>
+          <div class="who-price">à partir de 1 000 €</div>
+          <p class="who-price-sub">Offre de lancement · places limitées · SEO local inclus</p>
+        </div>
+        <a href="/tarifs" class="btn-g" style="align-self:flex-start;margin-top:8px">Voir les formules →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- PROCESS -->
 <section class="s-proc" style="padding:var(--sec) 0" aria-labelledby="proc-h">
   <div class="wrap">
@@ -369,7 +415,7 @@ import '../styles/global.css';
         <ul class="faq-list" aria-label="Foire aux questions">
           <li class="faq-item r">
             <button class="faq-q" aria-expanded="false"><span data-i18n="idx-faq-q1">Quel est le coût d'un site web ?</span><span class="faq-ind" aria-hidden="true">+</span></button>
-            <div class="faq-a" role="region"><div class="faq-a-in" data-i18n="idx-faq-a1">Chaque projet étant unique, nos tarifs sont établis après analyse de vos besoins. Un site vitrine démarre à partir de 800 €. Nous proposons également des facilités de paiement pour vous accompagner sereinement.</div></div>
+            <div class="faq-a" role="region"><div class="faq-a-in" data-i18n="idx-faq-a1">Nos tarifs varient selon le projet. Pour un portfolio ou une page unique (formule Étudiant), nous démarrons à 100 €. Un site vitrine complet avec SEO et support (offre Vitrine Pro) est à 1 000 € en tarif de lancement — places limitées. Les projets Entreprise (e-commerce, multi-pages) débutent à 1 200 €. Facilités de paiement disponibles sur demande.</div></div>
           </li>
           <li class="faq-item r d1">
             <button class="faq-q" aria-expanded="false"><span data-i18n="idx-faq-q2">Quel est le délai de livraison ?</span><span class="faq-ind" aria-hidden="true">+</span></button>

@@ -134,7 +134,7 @@ import '../styles/global.css';
           <p class="launch-desc" data-i18n="trf-launch-d">Site vitrine complet, design sur mesure, responsive, SEO de base et 1 mois de support — à prix de lancement. Places très limitées.</p>
         </div>
         <div class="launch-spots">
-          <span class="launch-num">3</span>
+          <span class="launch-num" id="launch-num">3</span>
           <span class="launch-num-label" data-i18n="trf-spots">places restantes</span>
         </div>
       </div>
@@ -306,6 +306,8 @@ function initSpots(){
       if(n<=0){card.remove();return;}
       var el=document.getElementById('vp-spots-num');
       if(el)el.textContent=n;
+      var launchNum=document.getElementById('launch-num');
+      if(launchNum)launchNum.textContent=n;
     });
 }
 setTimeout(initSpots,500);
