@@ -571,7 +571,8 @@ ul, ol { list-style: none; }
 .footer-row { display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between; }
 .footer-links { display: flex; flex-wrap: wrap; gap: clamp(14px, 2vw, 26px); font-size: 13.5px; color: var(--muted); }
 .footer-links a:hover { color: #fff; }
-.footer-legal { margin-top: 28px; font-size: 12.5px; color: rgba(255, 255, 255, 0.32); line-height: 1.7; }
+/* 0.32 donnait 2,69:1 sur noir — sous le seuil AA. #8e8e8e monte a 6,41:1. */
+.footer-legal { margin-top: 28px; font-size: 12.5px; color: var(--muted); line-height: 1.7; }
 .footer-legal a { text-decoration: underline; text-underline-offset: 2px; }
 
 /* ── Menu mobile ─────────────────────────────────────────────────────────── */
@@ -799,7 +800,9 @@ body.menu-open { overflow: hidden; }
   font-size: 15px;
   transition: border-color 0.2s ease, background 0.2s ease;
 }
-.field input::placeholder { color: rgba(255, 255, 255, 0.28); }
+/* Le texte indicatif porte une information reelle (les metiers vises) :
+   il doit etre lisible. 0.28 donnait 2,26:1, 0.48 donne 5,42:1. */
+.field input::placeholder { color: rgba(255, 255, 255, 0.48); }
 .field input:hover { border-color: var(--hair-strong); }
 .field input:focus { outline: none; border-color: #fff; background: rgba(255, 255, 255, 0.07); }
 .form .cta { justify-content: center; width: 100%; margin-top: 4px; }

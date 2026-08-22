@@ -289,6 +289,17 @@ devisées séparément — reportage photo (250–450 €), rédaction longue
 
 État analysé : commit `v1`.
 
+### 5.0 Accessibilité — état vérifié
+
+Contrôle automatisé sur les 7 pages générées : un seul `h1` par page,
+hiérarchie de titres sans saut, toutes les images pourvues d'un `alt`, tous les
+champs associés à un `label`, `lang="fr"` et `<title>` présents partout.
+
+Contrastes mesurés sur fond noir : texte courant `#8e8e8e` à 6,41:1, chapeaux à
+8,63:1, pilule de confiance à 8,30:1 — tous conformes AA. Deux échecs ont été
+relevés et corrigés en `v1.3` : mentions du pied de page (2,69:1) et texte
+indicatif des champs (2,26:1).
+
 ### 5.1 Ce qui fonctionne
 
 - **Proposition de valeur lisible en cinq secondes.** « Votre commerce mérite
@@ -368,4 +379,5 @@ Restant à corriger :
 |---|---|---|---|
 | `v1` | 22/08/2026 | Refonte Astro, suppression du portfolio, typographie Fraunces/Archivo | Aucune réalisation à montrer ; la fonte dot-matrix et Inter signalaient un gabarit générique |
 | `v1.1` | 22/08/2026 | JSON-LD `ProfessionalService`, ville en toutes lettres, section « constat » sortie du gabarit de cartes | Le référencement local était invisible ; les trois cartes étaient le motif le plus banal de la page |
+| `v1.3` | 22/08/2026 | Contrastes du pied de page et du texte indicatif portés au niveau AA | 2,69:1 et 2,26:1 mesurés, sous le seuil de 4,5:1 |
 | `v1.2` | 22/08/2026 | Formulaire de rappel à trois champs, page `/merci`, dégradé radial supprimé, politique de confidentialité corrigée | Seul chemin de conversion : Calendly ou téléphone, inutilisable le soir. La politique affirmait « aucun formulaire » — devenu faux |
