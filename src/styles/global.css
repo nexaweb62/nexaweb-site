@@ -558,6 +558,44 @@ ul, ol { list-style: none; }
 }
 .price-notes li::before { content: "+"; color: var(--muted); }
 
+/* ── Seuil de rentabilite ────────────────────────────────────────────────────
+   Pas une carte de plus : un encadre discret sous les prix, du meme gabarit que
+   .demo-note. Le champ est le seul element interactif de la section — il doit
+   se voir, sans devenir le sujet. */
+.seuil {
+  margin-top: clamp(28px, 3.6vw, 40px);
+  padding: clamp(22px, 2.8vw, 30px);
+  background: var(--surface);
+  border: 1px solid var(--hair);
+  border-radius: 18px;
+}
+.seuil-titre { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; color: #fff; }
+.seuil-ligne {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-top: 14px;
+  font-size: 15px;
+  color: var(--muted);
+}
+.seuil-champ { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
+.seuil-champ input {
+  width: 92px;
+  padding: 9px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--hair-strong);
+  border-radius: 10px;
+  color: #fff;
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  color-scheme: dark;
+}
+.seuil-champ input:focus { outline: none; border-color: #fff; background: rgba(255, 255, 255, 0.08); }
+.seuil-resultat { margin-top: 12px; font-size: 15px; line-height: 1.6; color: var(--muted); }
+.seuil-resultat strong { color: #fff; font-weight: 600; }
+.seuil .form-note { margin-top: 14px; }
+
 /* ── FAQ ─────────────────────────────────────────────────────────────────── */
 .faq { margin-top: clamp(32px, 5vw, 56px); border-top: 1px solid var(--hair); }
 .faq details { border-bottom: 1px solid var(--hair); }

@@ -312,6 +312,32 @@ const description =
         <ul class="price-notes">
           {PRICING_NOTES.map((n) => <li><span>{n}</span></li>)}
         </ul>
+
+        {/* Seuil de rentabilite. L'analyse economique est formelle : vendu comme
+            un cout technique, l'abonnement est trop cher ; ramene a ce qu'il
+            doit rapporter, il est bon marche. Le calcul est une division, pas
+            une promesse — et la note dit explicitement qu'il s'agit de chiffre
+            d'affaires et non de marge. Sans JavaScript, l'exemple par defaut
+            reste lisible et exact. */}
+        <div class="seuil" id="seuil" data-mensuel={PRICING.monthly}>
+          <p class="seuil-titre">Ce que l'abonnement doit rapporter pour être remboursé</p>
+          <p class="seuil-ligne">
+            <label for="panier">Si un client vous laisse en moyenne</label>
+            <span class="seuil-champ">
+              <input id="panier" type="number" min="1" max="10000" step="1" value="25" inputmode="numeric" />
+              <span aria-hidden="true">€</span>
+            </span>
+          </p>
+          <p class="seuil-resultat" id="seuil-resultat" aria-live="polite">
+            il faut <strong>4 clients de plus par mois</strong> pour couvrir les {PRICING.monthly} €,
+            soit environ <strong>1 par semaine</strong>.
+          </p>
+          <p class="form-note" style="text-align:left">
+            Calcul en chiffre d'affaires, pas en marge : selon votre activité, comptez deux à
+            trois fois plus pour le bénéfice net. Et les frais de lancement s'amortissent à
+            part, sur la première année.
+          </p>
+        </div>
       </div>
     </section>
 
@@ -419,6 +445,33 @@ const description =
       url.searchParams.set('date', jour.value);
       lien.href = url.toString();
     });
+  }
+
+
+  /* --- Seuil de rentabilite : une division, mise a jour a la frappe.
+         Le montant vient du HTML (data-mensuel), lui-meme rempli depuis
+         PRICING : changer le prix dans la configuration change le calcul. --- */
+  const bloc = document.getElementById('seuil');
+  const panier = document.getElementById('panier') as HTMLInputElement | null;
+  const resultat = document.getElementById('seuil-resultat');
+  const mensuel = Number(bloc?.dataset.mensuel ?? 0);
+
+  if (bloc && panier && resultat && mensuel > 0) {
+    const calcule = () => {
+      const valeur = Number(panier.value);
+      if (!Number.isFinite(valeur) || valeur <= 0) {
+        resultat.textContent = 'Indiquez un montant pour voir le calcul.';
+        return;
+      }
+      const parMois = Math.ceil(mensuel / valeur);
+      const parSemaine = Math.max(1, Math.round(parMois / 4.33));
+      resultat.innerHTML =
+        `il faut <strong>${parMois} client${parMois > 1 ? 's' : ''} de plus par mois</strong> ` +
+        `pour couvrir les ${mensuel} €, soit environ <strong>${parSemaine} par semaine</strong>.`;
+    };
+
+    panier.addEventListener('input', calcule);
+    calcule();
   }
 
   /* --- Compteurs du bandeau de chiffres --- */
