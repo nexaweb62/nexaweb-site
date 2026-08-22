@@ -123,6 +123,29 @@ export const PRICING: { setup: number | null; monthly: number | null } = {
   monthly: 99,
 };
 
+/* Engagements affiches juste avant le prix (recommandation P6 de docs/analysis.md :
+   aucune objection n'etait levee avant l'annonce des montants).
+   Rien d'invente ici : chaque ligne reprend un engagement deja pris ailleurs sur
+   la page — STATS, FAQ, PRICING_NOTES, LAUNCH.terms — regroupe au bon endroit. */
+export const PLEDGES = [
+  {
+    title: 'Le site et le domaine sont à vous',
+    text: "Le nom de domaine est déposé à votre nom dès le départ. Si vous arrêtez, vous partez avec le site.",
+  },
+  {
+    title: 'Sans engagement de durée',
+    text: "L'abonnement s'arrête quand vous le décidez, et nous vous aidons à transférer le site chez l'hébergeur de votre choix.",
+  },
+  {
+    title: 'En ligne en 7 jours ouvrés',
+    text: 'Une fois les textes et les photos validés. Le délai est annoncé à la commande, pas découvert en cours de route.',
+  },
+  {
+    title: 'Un seul interlocuteur',
+    text: "Celui qui prend votre appel est celui qui conçoit le site, et celui qui répond six mois plus tard. Réponse sous 24 h ouvrées.",
+  },
+] as const;
+
 export const PRICING_NOTES = [
   "Le budget publicitaire est payé directement par vous à Google ou Meta. Nous ne prenons aucune marge dessus.",
   'Les prestations supplémentaires — photos, rédaction, campagne, page additionnelle — sont devisées à part.',

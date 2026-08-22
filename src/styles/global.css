@@ -477,6 +477,33 @@ ul, ol { list-style: none; }
   color: #fff;
 }
 
+/* ── Engagements, juste avant le prix ─────────────────────────────────────────
+   Recommandation P6 de docs/analysis.md : le montant arrivait sans qu'aucune
+   objection ait ete levee. Meme gabarit de filets que .points, en deux colonnes,
+   pour ne pas introduire un enieme motif visuel. */
+.pledges {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(28px, 4vw, 56px);
+  margin-top: clamp(28px, 4vw, 44px);
+  border-top: 1px solid var(--hair);
+}
+.pledges li {
+  padding: clamp(14px, 1.7vw, 18px) 0;
+  border-bottom: 1px solid var(--hair);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.pledges strong {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+
 /* ── Prix ────────────────────────────────────────────────────────────────── */
 .price-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(14px, 1.8vw, 20px); margin-top: clamp(32px, 5vw, 56px); }
 .price-card { padding: clamp(26px, 3vw, 38px); background: var(--surface); border: 1px solid var(--hair); border-radius: 22px; }
@@ -572,6 +599,59 @@ ul, ol { list-style: none; }
   transition: border-color 0.25s ease, background 0.25s ease;
 }
 .btn-ghost:hover { border-color: #fff; background: rgba(255, 255, 255, 0.06); }
+
+/* ── Barre d'action mobile ───────────────────────────────────────────────────
+   Sous 720 px, le seul chemin de conversion etait le formulaire en bas de page :
+   un visiteur convaincu au milieu de l'offre n'avait rien sous la main. La barre
+   n'apparait qu'apres le premier ecran et s'efface sur la section contact, ou
+   les memes actions sont deja la. Sans JavaScript elle reste visible : degrade
+   acceptable, jamais bloquant. */
+.actionbar { display: none; }
+
+@media (max-width: 720px) {
+  .actionbar {
+    position: fixed;
+    z-index: 60;
+    left: 12px;
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px;
+    padding: 8px;
+    background: rgba(18, 18, 20, 0.86);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--hair-strong);
+    border-radius: 999px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    transition: transform 0.35s var(--ease), opacity 0.35s var(--ease);
+  }
+  .actionbar[data-hidden="true"] {
+    transform: translateY(140%);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .actionbar a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 46px;
+    padding: 0 20px;
+    border-radius: 999px;
+    font-size: 14.5px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .actionbar-call { color: #fff; border: 1px solid var(--hair-strong); }
+  .actionbar-call svg { width: 17px; height: 17px; }
+  .actionbar-cta { background: #fff; color: #111; }
+
+  /* La barre flotte au-dessus du pied de page : on lui laisse la place. */
+  body { padding-bottom: 74px; }
+  body.menu-open .actionbar { display: none; }
+}
 
 /* ── Pied de page ────────────────────────────────────────────────────────── */
 .site-footer { padding: clamp(40px, 6vw, 64px) 0; border-top: 1px solid var(--hair); }
@@ -697,6 +777,7 @@ body.menu-open { overflow: hidden; }
   .headline { letter-spacing: -0.004em; line-height: 1.02; }
   .stats { grid-template-columns: repeat(2, 1fr); gap: 18px 12px; }
   .offer-item { grid-template-columns: 1fr; gap: 6px; }
+  .pledges { grid-template-columns: 1fr; }
   .footer-row { flex-direction: column; align-items: flex-start; }
 }
 
