@@ -34,6 +34,17 @@ import '../styles/global.css';
 /* ── FIELDS ── */
 .field-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:560px){.field-grid{grid-template-columns:1fr}}
+@media(max-width:600px){
+  .devis-page{padding-top:32px;padding-bottom:40px}
+  .devis-card{padding:22px 18px}
+  .card-title{font-size:1.35rem}
+  .card-sub{font-size:12px;margin-bottom:24px}
+  .field label{font-size:9px}
+  .field input:not([type=checkbox]):not([type=radio]),.field textarea,.field select{font-size:12px;padding:10px 13px}
+  .section-label{font-size:8px}
+  .submit-btn{font-size:10px;padding:12px 22px}
+  .budget-pill{font-size:10px;padding:7px 13px}
+}
 .field{display:flex;flex-direction:column;gap:6px}
 .field-full{grid-column:1/-1}
 .field label{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim)}
@@ -241,7 +252,7 @@ import '../styles/global.css';
         <div class="submit-row">
           <p class="submit-note">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-            Garantie 30 jours · Réponse sous 24 h · 100 % gratuit
+            Garantie 14 jours · Réponse sous 24 h · 100 % gratuit
           </p>
           <button type="submit" class="submit-btn" id="submit-btn">
             <span class="submit-btn-label" data-i18n="submit">Envoyer ma demande</span>
