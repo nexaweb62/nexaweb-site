@@ -4,6 +4,8 @@
   --border:rgba(220,220,242,.07);--border-hi:rgba(220,220,242,.14);
   --text:#E8E8F2;--text-muted:rgba(232,232,242,.44);--text-dim:rgba(232,232,242,.18);
   --btn-bg:#E8E8F2;--btn-text:#080811;--ghost-border:rgba(232,232,242,.22);
+  --accent:#8B5CF6;--accent-ring:rgba(139,92,246,.5);--accent-dim:rgba(139,92,246,.12);
+  --green:#22c55e;--green-ring:rgba(34,197,94,.3);--green-dim:rgba(34,197,94,.1);
   --font:"Helvetica Neue",Helvetica,Arial,sans-serif;
   --max-w:1280px;--pad-x:clamp(20px,5vw,80px);--sec:clamp(80px,12vw,160px);--hdr:80px;
 }
