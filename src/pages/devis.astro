@@ -270,14 +270,24 @@ import '../styles/global.css';
 <script is:inline src="/supabase-client.js"></script>
 
 <script>
-/* ── BUDGET PILLS ── */
+/* ── BUDGET PILLS — désélectionnable au reclique ── */
 (function(){
-  document.querySelectorAll('.budget-pill').forEach(function(pill){
-    const radio = pill.querySelector('input');
-    pill.addEventListener('click',function(){
-      document.querySelectorAll('.budget-pill').forEach(p=>p.classList.remove('selected'));
-      pill.classList.add('selected');
-      radio.checked=true;
+  var pills = Array.from(document.querySelectorAll('.budget-pill'));
+  pills.forEach(function(pill){
+    var radio = pill.querySelector('input');
+    pill.addEventListener('click', function(e){
+      e.preventDefault(); // empêche le navigateur de cocher le radio nativement
+      var wasChecked = radio.checked; // état AVANT modification
+      // tout décocher
+      pills.forEach(function(p){
+        p.classList.remove('selected');
+        p.querySelector('input').checked = false;
+      });
+      // ne re-cocher que si ce n'était pas déjà sélectionné
+      if(!wasChecked){
+        radio.checked = true;
+        pill.classList.add('selected');
+      }
     });
   });
 })();
