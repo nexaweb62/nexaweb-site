@@ -62,12 +62,12 @@ img{display:block;max-width:100%}
 
 /* ── HEADER ── */
 .hdr{position:fixed;inset:0 0 auto;height:var(--hdr);z-index:100;border-bottom:1px solid transparent;transition:background .4s,border-color .4s;isolation:isolate;will-change:transform}
-.hdr.on{border-bottom-color:var(--border);background:rgba(8,8,17,.92)}
-@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .hdr.on{background:rgba(244,244,240,.92)}}
-:root[data-theme="light"] .hdr.on{background:rgba(244,244,240,.92)}
+.hdr.on{border-bottom-color:var(--border);background:var(--bg)}
 .nav{display:flex;align-items:center;height:var(--hdr);position:relative}
 .nav-logo{display:flex;align-items:center;color:var(--text);text-decoration:none}
 .nav-logo-svg{flex-shrink:0;overflow:visible}
+.nav-logo-svg .logo-nexa{fill:var(--text)}
+.nav-logo-svg .logo-web{fill:var(--text-muted)}
 .nav-links{display:none;gap:clamp(16px,3vw,40px);position:absolute;left:50%;transform:translateX(-50%)}
 .nav-link{font-size:10.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);transition:color .2s}
 .nav-link:hover,.nav-link.on{color:var(--text)}
