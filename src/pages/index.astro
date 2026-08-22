@@ -102,7 +102,7 @@ const description =
         muted
         loop
         playsinline
-        preload="none"
+        preload="metadata"
         aria-hidden="true"></video>
     </div>
 
@@ -384,12 +384,13 @@ const description =
 </Base>
 
 <script>
-  /* --- Fond video : 1,2 Mo qui ne servent qu'a decorer. Quatre conditions
-         avant de le telecharger — au-dessus de 720 px, hors reduced-motion,
-         hors mode economie de donnees, et seulement une fois la page chargee
-         et le navigateur au repos. Le chargement immediat entrait en
-         concurrence avec les polices et l'affiche du premier ecran, c'est-a-dire
-         avec ce que le visiteur regarde vraiment. --- */
+  /* --- Fond video : lance des que le script s'execute. Il avait ete repousse
+         au premier temps mort du navigateur en v2.4 pour proteger le premier
+         rendu ; le fond mettait alors une a deux secondes a s'animer, ce qui se
+         voit et qui n'etait pas le but. Il repart donc immediatement.
+         Les trois protections qui comptent restent en place : rien sous 720 px
+         (l'affiche suffit et economise 1,2 Mo), rien en reduced-motion, rien en
+         mode economie de donnees ou en 2G. --- */
   const video = document.querySelector<HTMLVideoElement>('.bg-video');
   const calm = window.matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -410,16 +411,7 @@ const description =
       });
     };
 
-    /* Apres le chargement de la page, et pendant un temps mort du navigateur. */
-    const auRepos = () => {
-      const idle = (window as any).requestIdleCallback;
-      if (typeof idle === 'function') idle(maybeLoad, { timeout: 2500 });
-      else setTimeout(maybeLoad, 900);
-    };
-
-    if (document.readyState === 'complete') auRepos();
-    else window.addEventListener('load', auRepos, { once: true });
-
+    maybeLoad();
     window.addEventListener('resize', maybeLoad, { passive: true });
   }
 

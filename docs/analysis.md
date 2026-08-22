@@ -412,8 +412,10 @@ Corrigé en `v1` :
   Cormorant en `v1.5`). Le style « terminal
   rétro » est un signal fort de gabarit technologique recopié, et il n'avait
   aucun rapport avec des restaurants.
-- ~~Inter en police d'interface~~ → Archivo. Inter est devenue la police par
-  défaut de tout site généré.
+- ~~Inter en police d'interface~~ → Archivo en `v1`, puis **Bricolage Grotesque
+  en `v4.5`**. Le remplacement d'Inter par Archivo ne réglait qu'à moitié le
+  problème : Archivo appartient à la même famille de grotesques neutres et se
+  confond avec elle à l'œil nu. Bricolage a un dessin qu'on reconnaît.
 - ~~« Trusted by 2000+ Enterprises » avec les logos Microsoft, Amazon,
   Google~~ → ancrage local réel. C'était une affirmation fausse.
 - ~~Chiffres décoratifs `< % * #`~~ → supprimés. Des glyphes sans signification
@@ -571,3 +573,4 @@ le vrai message de cette analyse.
 | `v4.2` | 22/08/2026 | Modèle économique recalibré sur la mesure, double comptage du cache corrigé | Le script surestimait de 16 % : il comptait l'écriture de cache deux fois. Il se contrôle désormais contre la facture réelle |
 | `v4.3` | 22/08/2026 | `README.md` | Le dépôt s'ouvrait sur rien : ni NOTES.md ni docs/ ne disent lequel ouvrir en premier |
 | `v4.4` | 22/08/2026 | `npm run cout` : le coût de l'IA se mesure au lieu de se recopier | Le chiffre change à chaque session ; livrer l'outil vaut mieux que livrer la photographie |
+| `v4.5` | 22/08/2026 | Vidéo relancée immédiatement, Bricolage Grotesque en interface, contraste vérifié sur toutes les règles | Le report au temps mort se voyait ; Archivo se confondait avec Inter ; et le contrôle à cinq paires ignorait les opacités — la navigation principale était à 2,94:1 |

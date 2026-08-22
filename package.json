@@ -13,10 +13,11 @@
     "astro": "astro",
     "check": "node scripts/check-build.mjs",
     "og": "node scripts/make-og.mjs",
-    "audit": "node scripts/audit.mjs",
+    "audit": "node scripts/audit.mjs && node scripts/contraste.mjs",
     "test:contact": "node scripts/test-contact.mjs",
     "poster": "node scripts/make-poster.mjs",
-    "cout": "node scripts/cout-ia.mjs"
+    "cout": "node scripts/cout-ia.mjs",
+    "contraste": "node scripts/contraste.mjs"
   },
   "dependencies": {
     "astro": "^7.2.4"

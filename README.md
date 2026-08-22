@@ -11,7 +11,8 @@ npm install
 npm run dev            # serveur de développement
 npm run build          # build + sitemap + garde-fous de production
 npm run audit          # relit dist/ : titres, alt, labels, liens et ancres morts,
-                       # contrastes, montants, vocabulaire
+                       # montants, vocabulaire, puis tous les contrastes
+npm run contraste      # contraste de chaque règle de couleur, opacités comprises
 npm run test:contact   # la fonction du formulaire, sans navigateur
 npm run cout           # ce que Claude Code a coûté sur ce projet, à ce jour
 npx astro check        # typage

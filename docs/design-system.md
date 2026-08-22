@@ -23,6 +23,7 @@ aparté, pas une section.
 | Fond | `#000000` | Partout. Le site est noir, pas « sombre » |
 | Texte | `#ffffff` | Titres, mots mis en avant |
 | Texte courant | `#8e8e8e` (`--muted`) | Paragraphes, listes. **6,41:1** sur noir |
+| Navigation | `#2e2e2e` à 68 % (`--nav-text`) | Sur la pastille blanche. **4,89:1** — était à 2,94:1 avant `v4.5` |
 | Prose | `#d0d0d0` (`--dim`) | Pages légales, chapeaux |
 | Filet | `rgba(255,255,255,.12)` (`--hair`) | Toutes les séparations |
 | Filet appuyé | `rgba(255,255,255,.24)` | Bordures de champs |
@@ -33,8 +34,13 @@ aparté, pas une section.
 Les deux accents sont prélevés sur la vidéo de fond. Ils ne servent jamais à
 signaler une action : le seul bouton primaire du site est blanc sur noir.
 
-`npm run audit` recalcule les contrastes à chaque exécution et refuse tout ce
-qui passe sous 4,5:1.
+`npm run contraste`, inclus dans `npm run audit`, parcourt **toutes** les règles
+de couleur de la feuille — 64 au dernier passage — résout les variables,
+applique les opacités, compose les couleurs semi-transparentes sur leur fond
+réel, et refuse tout ce qui passe sous 4,5:1 (3:1 pour le gros texte). Les
+maquettes de démonstration, qui portent leur propre feuille, y sont incluses.
+Les fonds ne se déduisant pas d'une feuille sans moteur de rendu, ils sont
+déclarés zone par zone en tête du script : le site n'en compte que six.
 
 ## Typographie
 
@@ -42,7 +48,16 @@ Deux familles, auto-hébergées depuis `v2.0` (voir `src/styles/fonts.css`).
 
 - **Cormorant** — affichage. Serif à très haut contraste, hauteur d'x de
   0,386 em. Titres, chiffres, prix.
-- **Archivo** — interface. Tout le reste : texte courant, navigation, champs.
+- **Bricolage Grotesque** — interface. Tout le reste : texte courant,
+  navigation, champs. Elle a remplacé Archivo en `v4.5`, qui était une grotesque
+  neutre de la même famille visuelle qu'Inter — c'est-à-dire la police par
+  défaut de tout site généré depuis trois ans. Bricolage assume des largeurs
+  irrégulières et des terminaisons coupées : on la reconnaît, ce qui est le but.
+
+> Métriques comparées avant la bascule, sur un rendu réel : hauteur d'x
+> 0,515 em contre 0,525 pour Archivo, soit 1,9 % d'écart. Aucun corps n'a eu
+> besoin d'être recalculé — contrairement à Cormorant, qui avait imposé
+> 12 % de majoration.
 
 > **Si vous changez de serif, refaites le calcul.** Cormorant a remplacé
 > Fraunces en `v1.5` : sa hauteur d'x étant 20 % plus basse, tous les corps
@@ -102,7 +117,9 @@ laisse alors la place à l'affiche.
 
 - Une carte pour présenter trois idées côte à côte.
 - Un dégradé radial derrière un bloc (retiré en `v1.2`).
-- Inter comme police d'interface — devenue la signature de tout site généré.
+- Inter, ou toute grotesque neutre du même genre, comme police d'interface :
+  c'est la signature de tout site généré. C'est ce qui a coûté sa place à
+  Archivo.
 - Un interlettrage négatif marqué sur les grands titres.
 - Une couleur d'accent sur un bouton.
 - Un mot qu'on ne dirait pas au téléphone à un boulanger. `npm run audit`

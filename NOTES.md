@@ -36,7 +36,7 @@ doit jamais partir en ligne avec un placeholder.
 | `src/styles/global.css` | Feuille unique. Premier écran repris d'un spec fourni, sections suivantes en extension |
 | `src/layouts/Base.astro` | `<head>`, métadonnées, polices |
 | `public/assets/` | Vidéo de fond, affiche, image de partage, logo, portraits de l'équipe |
-| `public/fonts/` | Archivo et Cormorant, auto-hébergées. Régénérées à la main, voir `src/styles/fonts.css` |
+| `public/fonts/` | Bricolage Grotesque et Cormorant, auto-hébergées. Régénérées à la main, voir `src/styles/fonts.css` |
 | `scripts/build-sitemap.mjs` | Sitemap déduit de `dist/` après le build |
 | `scripts/make-og.mjs`, `scripts/make-portraits.mjs` | Génération des images (`npm run og`) |
 | `public/demo-*.html` | Deux maquettes de démonstration, en `noindex`, autonomes |
@@ -52,11 +52,14 @@ doit jamais partir en ligne avec un placeholder.
 
 ## Choix techniques
 
-- **Polices** : Cormorant (affichage) et Archivo (interface), via Google Fonts.
+- **Polices** : Cormorant (affichage) et Bricolage Grotesque (interface),
+  auto-hébergées depuis `v2.0`.
   Cormorant a une hauteur d'x très basse — 0,386 em contre 0,482 pour Fraunces,
   qu'elle remplace : tous les corps d'affichage sont majorés d'environ 12 %,
   facteur mesuré sur la hauteur de capitale. Si vous changez encore de serif,
-  refaites ce calcul plutôt que de garder les corps en l'état.
+  refaites ce calcul plutôt que de garder les corps en l'état. Bricolage
+  Grotesque, elle, est à 1,9 % d'Archivo : la bascule n'a demandé aucun
+  réglage. Le détail est dans `docs/design-system.md`.
 - **Vidéo de fond** : ré-encodée de 13,86 Mo à 1,24 Mo, auto-hébergée. Chargée
   par JavaScript uniquement au-dessus de 720 px et hors `prefers-reduced-motion` :
   sur mobile, seule l'affiche de 95 Ko est téléchargée.

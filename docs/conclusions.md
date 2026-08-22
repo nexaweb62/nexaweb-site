@@ -136,6 +136,8 @@ Ce qui a été corrigé aujourd'hui, dans l'ordre de valeur :
 | `v3.3`–`v3.4` | Politique de confidentialité exacte, mentions légales obligatoires nommées et bloquantes |
 | `v3.5` | Premier écran mobile à 56 Ko, vocabulaire d'agence contrôlé automatiquement |
 | `v3.6`–`v3.7` | Seuil de rentabilité sous les prix, focus piégé dans le menu mobile |
+| `v4.0`–`v4.4` | Prix injectés depuis une source unique, démarrage d'un site client documenté, modèle économique recalibré, `npm run cout` |
+| `v4.5` | Bricolage Grotesque en interface, vidéo relancée immédiatement, contraste vérifié sur les 64 règles de couleur — la navigation était à 2,94:1 |
 
 **Ce qui reste ouvert** (détail en [`analysis.md`](analysis.md) § 5.2) :
 

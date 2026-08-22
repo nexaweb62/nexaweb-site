@@ -21,8 +21,17 @@
   /* Cormorant : serif de tres haut contraste, taille pour le grand corps.
      Sa hauteur d'x vaut 0,386 em contre 0,482 pour Fraunces — soit 20 % de
      moins — donc tous les corps d'affichage sont majores d'environ 12 %,
-     facteur mesure sur la hauteur de capitale. Archivo pour l'interface. */
-  --font-sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
+     facteur mesure sur la hauteur de capitale.
+
+     Bricolage Grotesque pour l'interface. Elle remplace Archivo, qui etait une
+     grotesque neutre de la meme famille visuelle qu'Inter — c'est-a-dire la
+     police par defaut de tout site genere depuis trois ans. Bricolage assume
+     des largeurs irregulieres et des terminaisons coupees : on la reconnait,
+     ce qui est exactement le but. Ses metriques sont assez proches d'Archivo
+     (hauteur d'x 0,515 em contre 0,525, soit 1,9 % d'ecart) pour qu'aucun corps
+     n'ait eu besoin d'etre recalcule — mesure faite avant la bascule, comme
+     pour Cormorant. */
+  --font-sans: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
   --font-display: "Cormorant", "Cormorant Garamond", Garamond, Georgia, serif;
 
   /* Extension : sections sous le premier ecran. Teintes prelevees sur la video. */
@@ -157,10 +166,14 @@ ul, ol { list-style: none; }
   font-weight: 500;
   letter-spacing: -0.01em;
   color: var(--nav-text);
-  opacity: 0.5;
+  /* 0,68 et non 0,5 : a 50 %, #2e2e2e compose sur la pastille blanche tombait a
+     2,94:1, sous le seuil AA de 4,5:1 — sur la navigation principale. Le seuil
+     est atteint a 0,653 ; 0,68 laisse une marge et garde l'entree active
+     nettement plus dense. Verifie par `npm run contraste`. */
+  opacity: 0.68;
   transition: opacity 0.25s ease;
 }
-.nav-link:hover { opacity: 0.75; }
+.nav-link:hover { opacity: 0.88; }
 .nav-link.is-active { opacity: 1; }
 
 /* Indicateur actif : trois carres de 3px, obtenus par box-shadow lateral. */
