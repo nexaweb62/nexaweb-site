@@ -1,0 +1,87 @@
+---
+import { NAV, CALENDLY } from '../config/site';
+
+interface Props {
+  /** href de l'entree de nav a marquer active */
+  active?: string;
+}
+const { active = '/' } = Astro.props;
+---
+
+<header class="site-header">
+  <a class="logo" href="/" aria-label="Nexa Web — accueil">
+    <img src="/assets/logo.svg" alt="" width="52" height="52" />
+  </a>
+
+  <nav class="nav-pill" aria-label="Navigation principale">
+    <ul>
+      {
+        NAV.map((item) => (
+          <li>
+            <a class:list={['nav-link', { 'is-active': item.href === active }]} href={item.href}>
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  <a class="header-cta" href={CALENDLY} target="_blank" rel="noopener">Prendre rendez-vous</a>
+
+  <button class="burger" type="button" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobile-menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<div id="mobile-menu" hidden>
+  <div class="menu-overlay" data-menu-close></div>
+  <div class="menu-sheet" role="dialog" aria-modal="true" aria-label="Menu">
+    <ul>
+      {
+        NAV.map((item, i) => (
+          <li>
+            <a
+              class:list={['menu-link', { 'is-active': item.href === active }]}
+              href={item.href}
+              style={`--d:${60 + i * 55}ms`}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <a class="menu-cta" href={CALENDLY} target="_blank" rel="noopener" style={`--d:${60 + NAV.length * 55}ms`}>
+      Prendre rendez-vous
+    </a>
+  </div>
+</div>
+
+<script>
+  const burger = document.getElementById('burger');
+  const menu = document.getElementById('mobile-menu');
+
+  if (burger && menu) {
+    let open = false;
+
+    const setOpen = (next: boolean) => {
+      open = next;
+      menu.hidden = !open;
+      document.body.classList.toggle('menu-open', open);
+      burger.setAttribute('aria-expanded', String(open));
+      burger.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+    };
+
+    burger.addEventListener('click', () => setOpen(!open));
+    menu.querySelectorAll('[data-menu-close], .menu-link, .menu-cta').forEach((el) => {
+      el.addEventListener('click', () => setOpen(false));
+    });
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && open) setOpen(false);
+    });
+    window.addEventListener('resize', () => {
+      if (open && window.innerWidth > 720) setOpen(false);
+    });
+  }
+</script>

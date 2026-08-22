@@ -1,0 +1,316 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import {
+  SITE, CALENDLY, HERO, STATS, PROBLEMS, OFFER, LAUNCH, PRICING, PRICING_NOTES, FAQ,
+} from '../config/site';
+
+const title = 'Nexa Web — Sites internet pour restaurants et commerces · Carvin';
+const description =
+  "Nexa Web met votre restaurant ou votre commerce en ligne : site, nom de domaine, réservations, suivi des visites et formation. Frais de lancement puis abonnement, sans engagement. Carvin, Hauts-de-France.";
+---
+
+<Base title={title} description={description} path="/">
+  <div class="page">
+    <div class="bg">
+      <video
+        class="bg-video"
+        data-src="/assets/hero.mp4"
+        poster="/assets/hero-poster.webp"
+        muted
+        loop
+        playsinline
+        aria-hidden="true"></video>
+    </div>
+
+    <Header active="/" />
+
+    <div class="hero">
+      <div class="trust anim" style="--d:0.05s">
+        <span class="trust-badge">
+          <span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" />
+            </svg>
+          </span>
+        </span>
+        <span class="trust-badge">
+          <span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" />
+            </svg>
+          </span>
+        </span>
+        <span class="trust-badge">
+          <span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 3l7 3v6c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6l7-3Z" /><path d="m9 12 2 2 4-4" />
+            </svg>
+          </span>
+        </span>
+        <span class="trust-pill">{HERO.trustPill}</span>
+      </div>
+
+      <h1 class="headline">
+        <span class="l1">{HERO.headline[0]}</span>
+        <span class="l2">{HERO.headline[1]}</span>
+      </h1>
+
+      <p class="subhead anim" style="--d:0.28s">{HERO.subhead}</p>
+
+      <a class="cta anim anim-pulse" style="--d:0.4s" href={HERO.ctaHref}>
+        {HERO.ctaLabel}
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 5v14" /><path d="m19 12-7 7-7-7" />
+        </svg>
+      </a>
+    </div>
+
+    <div class="stats" id="stats">
+      {
+        STATS.map((s, i) => (
+          <div class="stat anim" style={`--d:${0.5 + i * 0.08}s`}>
+            <div
+              class="stat-value"
+              data-count={s.value}
+              data-decimals={s.decimals}
+              data-suffix={s.suffix}
+            >
+              0{s.suffix}
+            </div>
+            <div class="stat-label">{s.label}</div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <main>
+    <!-- Le constat -->
+    <section class="section" id="constat">
+      <div class="container">
+        <p class="eyebrow">Le constat</p>
+        <h2 class="section-title">Vos clients vous cherchent en ligne. Ils trouvent quoi ?</h2>
+        <p class="lede">
+          Avant de pousser la porte d'un restaurant ou d'une boutique, on regarde le téléphone.
+          Ce qui s'affiche à ce moment-là décide de la visite.
+        </p>
+        <div class="grid grid-3">
+          {
+            PROBLEMS.map((p) => (
+              <article class="card">
+                <div class="card-num">{p.num}</div>
+                <h3>{p.title}</h3>
+                <p>{p.text}</p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- L'offre -->
+    <section class="section" id="offre">
+      <div class="container">
+        <p class="eyebrow">L'offre</p>
+        <h2 class="section-title">Lancement digital</h2>
+        <p class="lede">
+          Une seule offre, pensée pour les restaurants et les commerces de proximité.
+          Tout ce qu'il faut pour exister en ligne — et rien de plus.
+        </p>
+        <div class="offer-list">
+          {
+            OFFER.map((o) => (
+              <article class="offer-item">
+                <span aria-hidden="true">{o.num}</span>
+                <div>
+                  <h3>{o.title}</h3>
+                  <p>{o.text}</p>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Premiers projets : pourquoi aucune référence n'est encore affichée -->
+    <section class="section" id="lancement">
+      <div class="container">
+        <p class="eyebrow">{LAUNCH.eyebrow}</p>
+        <h2 class="section-title">Nous ouvrons avec un <em>nombre limité</em> de commerces</h2>
+        <div class="launch">
+          <div>
+            {LAUNCH.notes.map((n) => <p class="launch-note">{n}</p>)}
+          </div>
+          <ul class="launch-terms">
+            {
+              LAUNCH.terms.map((t) => (
+                <li>
+                  <strong>{t.title}</strong>
+                  {t.text}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tarifs -->
+    <section class="section" id="tarifs">
+      <div class="container">
+        <p class="eyebrow">Tarifs</p>
+        <h2 class="section-title">Des frais de lancement, puis un abonnement</h2>
+        <p class="lede">
+          Le lancement est facturé une fois. L'abonnement couvre l'hébergement, les mises à jour,
+          les modifications et l'accompagnement.
+        </p>
+
+        <div class="price-grid">
+          <div class="price-card">
+            <p class="price-kicker">Frais de lancement</p>
+            <p class:list={['price-figure', { 'price-todo': PRICING.setup === null }]}>
+              {PRICING.setup === null ? '— — —' : `${PRICING.setup} €`}
+              <small>une fois</small>
+            </p>
+            {PRICING.setup === null && <span class="price-todo-note">Montant à définir</span>}
+            <p>
+              Conception, contenus, mise en ligne, configuration des outils et formation.
+              Facturé au démarrage du projet.
+            </p>
+          </div>
+
+          <div class="price-card">
+            <p class="price-kicker">Abonnement</p>
+            <p class:list={['price-figure', { 'price-todo': PRICING.monthly === null }]}>
+              {PRICING.monthly === null ? '— — —' : `${PRICING.monthly} €`}
+              <small>par mois</small>
+            </p>
+            {PRICING.monthly === null && <span class="price-todo-note">Montant à définir</span>}
+            <p>
+              Hébergement, nom de domaine, sauvegardes, mises à jour, modifications courantes
+              et accompagnement.
+            </p>
+          </div>
+        </div>
+
+        <ul class="price-notes">
+          {PRICING_NOTES.map((n) => <li><span>{n}</span></li>)}
+        </ul>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section" id="faq">
+      <div class="container">
+        <p class="eyebrow">Questions</p>
+        <h2 class="section-title">Ce qu'on nous demande le plus</h2>
+        <div class="faq">
+          {
+            FAQ.map((f) => (
+              <details>
+                <summary>{f.q}</summary>
+                <p>{f.a}</p>
+              </details>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="section" id="contact">
+      <div class="container">
+        <div class="contact-panel">
+          <p class="eyebrow" style="justify-content:center">Prendre contact</p>
+          <h2 class="section-title" style="max-width:none;margin-inline:auto">
+            Un appel de 30 minutes, sans engagement
+          </h2>
+          <p class="lede" style="margin-inline:auto">
+            On regarde ensemble ce que donnent votre site et votre fiche Google aujourd'hui,
+            et ce qu'il faudrait pour faire mieux. Vous repartez avec un avis clair,
+            même si on ne travaille pas ensemble.
+          </p>
+          <div class="contact-actions">
+            <a class="cta" href={CALENDLY} target="_blank" rel="noopener">Réserver un créneau</a>
+            <a class="btn-ghost" href={SITE.phoneHref}>{SITE.phone}</a>
+            <a class="btn-ghost" href={`mailto:${SITE.email}`}>Écrire un e-mail</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Base>
+
+<script>
+  /* --- Fond video : charge seulement au-dessus de 720px et hors reduced-motion.
+         Sur mobile, l'affiche suffit et on economise 1,2 Mo. --- */
+  const video = document.querySelector<HTMLVideoElement>('.bg-video');
+  const calm = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  if (video) {
+    const src = video.dataset.src;
+    let loaded = false;
+
+    const maybeLoad = () => {
+      if (loaded || !src) return;
+      if (window.innerWidth <= 720 || calm.matches) return;
+      loaded = true;
+      video.src = src;
+      video.load();
+      video.play().catch(() => {
+        /* Autoplay refuse : l'affiche reste, rien de casse. */
+      });
+    };
+
+    maybeLoad();
+    window.addEventListener('resize', maybeLoad, { passive: true });
+  }
+
+  /* --- Compteurs du bandeau de chiffres --- */
+  const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+
+  const values = Array.from(document.querySelectorAll<HTMLElement>('.stat-value'));
+  const stats = document.getElementById('stats');
+
+  const runCount = (el: HTMLElement, index: number) => {
+    const target = Number(el.dataset.count ?? 0);
+    const decimals = Number(el.dataset.decimals ?? 0);
+    const suffix = el.dataset.suffix ?? '';
+    const duration = 1500 + index * 80;
+    const startAt = performance.now() + 480 + index * 90;
+
+    const frame = (now: number) => {
+      if (now < startAt) return requestAnimationFrame(frame);
+      const t = Math.min((now - startAt) / duration, 1);
+      el.textContent = (target * easeOutCubic(t)).toFixed(decimals) + suffix;
+      if (t < 1) requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+  };
+
+  if (stats && values.length) {
+    if (calm.matches) {
+      values.forEach((el) => {
+        const decimals = Number(el.dataset.decimals ?? 0);
+        el.textContent = Number(el.dataset.count ?? 0).toFixed(decimals) + (el.dataset.suffix ?? '');
+      });
+    } else {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            observer.disconnect();
+            values.forEach(runCount);
+          });
+        },
+        { threshold: 0.25 },
+      );
+      observer.observe(stats);
+    }
+  }
+</script>

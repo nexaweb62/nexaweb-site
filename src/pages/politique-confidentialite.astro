@@ -1,0 +1,95 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE, CALENDLY } from '../config/site';
+---
+
+<Base
+  title="Politique de confidentialité — Nexa Web"
+  description="Comment nexaaweb.com traite vos données personnelles : ce qui est collecté, par qui, pendant combien de temps, et comment exercer vos droits."
+  path="/politique-confidentialite"
+>
+  <div class="page-simple">
+    <Header />
+  </div>
+
+  <main class="container doc">
+    <h1 class="doc-title">Politique de confidentialité</h1>
+    <p class="doc-meta">Dernière mise à jour : août 2026</p>
+
+    <div class="prose">
+      <p>
+        Cette politique décrit ce que devient une donnée personnelle lorsque vous utilisez le site
+        {SITE.domain}. Elle correspond à ce que le site fait réellement aujourd'hui — pas à un modèle
+        générique. Elle sera mise à jour si de nouveaux outils sont ajoutés.
+      </p>
+
+      <h2>1. Responsable du traitement</h2>
+      <p>
+        {SITE.name}, {SITE.city}, {SITE.region}, France.
+        Contact : <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+      </p>
+
+      <h2>2. Ce que le site collecte de lui-même</h2>
+      <p>
+        <strong>Rien.</strong> Ce site ne contient aucun formulaire, aucun compte, aucun cookie
+        déposé par nos soins, et aucun outil de mesure d'audience. Aucun traceur publicitaire
+        n'est utilisé, et aucune donnée n'est revendue ni transmise à des courtiers en données.
+      </p>
+
+      <h2>3. Ce que collectent les services que nous utilisons</h2>
+      <ul>
+        <li>
+          <strong>Netlify</strong> (hébergement) enregistre des journaux techniques de connexion,
+          incluant l'adresse IP et le navigateur utilisé. Ces journaux servent à la sécurité et au
+          fonctionnement du service, et sont conservés par Netlify selon sa propre politique.
+        </li>
+        <li>
+          <strong>Calendly</strong> intervient uniquement si vous cliquez sur un lien de prise de
+          rendez-vous. Vous quittez alors ce site pour <a href={CALENDLY} target="_blank" rel="noopener nofollow">calendly.com</a>,
+          où vous fournissez vous-même votre nom, votre e-mail et le créneau choisi.
+          Ce traitement relève de Calendly et de la présente politique pour ce que nous en recevons.
+        </li>
+        <li>
+          <strong>Google Fonts</strong> et <strong>OnlineWebFonts</strong> fournissent les polices
+          d'affichage. Le chargement d'une police transmet votre adresse IP à ces services.
+        </li>
+      </ul>
+
+      <h2>4. Ce que nous faisons de ce que vous nous envoyez</h2>
+      <p>
+        Si vous nous écrivez par e-mail, appelez, ou réservez un créneau, nous conservons les
+        informations transmises pour répondre à votre demande et suivre le projet éventuel.
+        Elles servent uniquement à cela.
+      </p>
+
+      <h2>5. Durée de conservation</h2>
+      <ul>
+        <li>Demande sans suite : <strong>3 ans</strong> à compter du dernier échange.</li>
+        <li>Client : durée de la relation contractuelle, puis <strong>10 ans</strong> pour les documents comptables, conformément au Code de commerce.</li>
+        <li>Journaux techniques d'hébergement : selon la politique de conservation de Netlify.</li>
+      </ul>
+
+      <h2>6. Vos droits</h2>
+      <p>
+        Conformément au RGPD (UE 2016/679), vous disposez d'un droit d'accès, de rectification,
+        d'effacement, de limitation, d'opposition et de portabilité sur vos données.
+        Écrivez à <a href={`mailto:${SITE.email}`}>{SITE.email}</a> : nous répondons sous 30 jours.
+      </p>
+      <p>
+        Si la réponse ne vous convient pas, vous pouvez saisir la CNIL —
+        <a href="https://www.cnil.fr" target="_blank" rel="noopener nofollow">www.cnil.fr</a>.
+      </p>
+
+      <h2>7. Cookies</h2>
+      <p>
+        Ce site ne dépose aucun cookie. Aucune bannière de consentement n'est donc affichée :
+        il n'y a rien à consentir. Les services tiers que vous rejoignez volontairement
+        (Calendly notamment) appliquent leur propre politique de cookies.
+      </p>
+    </div>
+  </main>
+
+  <Footer />
+</Base>

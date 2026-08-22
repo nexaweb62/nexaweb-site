@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta name="robots" content="noindex, nofollow" />
+
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>La Fournée d'Or — Boulangerie Artisanale</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--bg:#160e04;--acc:#d97706;--acc2:#92400e;--tx:#fef9f0;--mu:rgba(254,249,240,.46);--cb:rgba(255,255,255,.04)}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'Source Sans 3',sans-serif;background:var(--bg);color:var(--tx);overflow-x:hidden}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 2.5rem;background:rgba(22,14,4,.88);backdrop-filter:blur(20px);border-bottom:1px solid rgba(217,119,6,.15)}
+    .nl{font-family:'Libre Baskerville',serif;font-size:1.3rem;color:var(--tx);text-decoration:none}.nl span{color:var(--acc)}
+    nav ul{display:flex;gap:2rem;list-style:none}nav ul a{color:var(--mu);text-decoration:none;font-size:.88rem;transition:color .3s}nav ul a:hover{color:var(--tx)}
+    .nc{padding:.5rem 1.4rem;border-radius:8px;background:var(--acc);color:#fff;text-decoration:none;font-size:.85rem;font-weight:600;transition:opacity .3s}.nc:hover{opacity:.85}
+    .hero{min-height:100vh;display:flex;align-items:center;padding:8rem 2.5rem 5rem;position:relative;overflow:hidden}
+    .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 60% at 70% 30%,rgba(217,119,6,.18),transparent 70%),linear-gradient(160deg,#160e04,#1f1208)}
+    .dec{position:absolute;right:8%;top:50%;transform:translateY(-50%);font-size:clamp(6rem,15vw,13rem);opacity:.05;user-select:none;animation:rot 30s linear infinite}
+    @keyframes rot{to{transform:translateY(-50%) rotate(360deg)}}
+    .hi{position:relative;z-index:1;max-width:640px}
+    .lbl{display:inline-block;margin-bottom:1.5rem;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);border:1px solid rgba(217,119,6,.28);padding:.35rem 1rem;border-radius:6px}
+    h1{font-family:'Libre Baskerville',serif;font-size:clamp(2.8rem,7.5vw,5.5rem);line-height:1.08;margin-bottom:1.5rem}
+    h1 em{font-style:italic;color:var(--acc)}
+    .sub{font-size:1.08rem;line-height:1.78;color:var(--mu);margin-bottom:2.5rem;max-width:490px}
+    .btns{display:flex;gap:1rem;flex-wrap:wrap}
+    .bp{padding:.85rem 2rem;border-radius:8px;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;text-decoration:none;font-weight:700;font-size:.92rem;box-shadow:0 8px 30px rgba(217,119,6,.25);transition:transform .3s,box-shadow .3s}.bp:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(217,119,6,.4)}
+    .bg{padding:.85rem 2rem;border-radius:8px;border:1px solid rgba(254,249,240,.17);color:var(--tx);text-decoration:none;font-size:.92rem;transition:border-color .3s}.bg:hover{border-color:var(--acc)}
+    .stats{display:flex;gap:2.5rem;margin-top:3.5rem;padding-top:2rem;border-top:1px solid rgba(254,249,240,.07)}
+    .sn{font-family:'Libre Baskerville',serif;font-size:2.2rem;color:var(--acc);display:block}.sl{font-size:.75rem;color:var(--mu);letter-spacing:.06em}
+    section.sec{padding:6rem 2.5rem}
+    .sl2{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin-bottom:.75rem}
+    h2{font-family:'Libre Baskerville',serif;font-size:clamp(1.8rem,4.5vw,3rem);line-height:1.18;margin-bottom:.9rem}
+    .desc{color:var(--mu);font-size:.96rem;line-height:1.75;max-width:520px;margin-bottom:3rem}
+    .prods{background:rgba(255,255,255,.018)}
+    .pg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem}
+    .pc{background:var(--cb);border:1px solid rgba(217,119,6,.1);border-radius:16px;padding:1.8rem 1.6rem;transition:transform .4s,border-color .4s,background .4s}
+    .pc:hover{transform:translateY(-5px);border-color:rgba(217,119,6,.35);background:rgba(217,119,6,.05)}
+    .pi{font-size:2.4rem;margin-bottom:1rem}.pn{font-family:'Libre Baskerville',serif;font-size:1.15rem;margin-bottom:.5rem}.pd{color:var(--mu);font-size:.85rem;line-height:1.6}.pp{margin-top:.9rem;font-size:.84rem;color:var(--acc);font-weight:700}
+    .story{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+    .story-img{border-radius:20px;height:380px;display:flex;align-items:center;justify-content:center;font-size:8rem;background:linear-gradient(135deg,#1f1208,#2d1a08);border:1px solid rgba(217,119,6,.1)}
+    .story-text h2{margin-bottom:1.2rem}.story-text p{color:var(--mu);line-height:1.8;margin-bottom:1.1rem;font-size:.95rem}
+    .badge{display:inline-flex;align-items:center;gap:.6rem;background:rgba(217,119,6,.1);border:1px solid rgba(217,119,6,.2);border-radius:100px;padding:.4rem 1rem;font-size:.8rem;color:var(--acc);margin-top:.6rem}
+    .hrs{background:rgba(255,255,255,.018);text-align:center}
+    .hr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-top:2rem;max-width:700px;margin-left:auto;margin-right:auto}
+    .hr-item{background:var(--cb);border:1px solid rgba(217,119,6,.1);border-radius:12px;padding:1.2rem;text-align:center}
+    .hr-day{font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-bottom:.3rem}
+    .hr-time{font-family:'Libre Baskerville',serif;font-size:1.05rem;color:var(--acc)}.hr-off{color:rgba(254,249,240,.28);font-size:.85rem}
+    footer{padding:3rem 2.5rem;text-align:center;border-top:1px solid rgba(217,119,6,.1)}
+    .fl{font-family:'Libre Baskerville',serif;font-size:1.6rem;margin-bottom:.4rem}.fl span{color:var(--acc)}
+    .fs{color:var(--mu);font-size:.84rem;margin-bottom:1.8rem}
+    .fls{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;margin-bottom:1.5rem}
+    .fls a{color:var(--mu);text-decoration:none;font-size:.84rem;transition:color .3s}.fls a:hover{color:var(--acc)}
+    .fc{color:rgba(254,249,240,.2);font-size:.73rem}
+    @media(max-width:900px){.story{grid-template-columns:1fr}.story-img{height:220px}}
+    @media(max-width:768px){nav{padding:1rem 1.2rem}nav ul{display:none}.hero{padding:6rem 1.5rem 4rem}section.sec{padding:4rem 1.5rem}}
+  </style>
+</head>
+<body>
+<div style="position:fixed;top:0;left:0;right:0;z-index:9999;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px clamp(12px,3vw,28px);background:#000;border-bottom:1px solid rgba(255,255,255,.14);font-family:'Inter','Segoe UI',system-ui,sans-serif;font-size:12.5px;color:#c4c2c3">
+  <span>Projet de <strong style="color:#fff;font-weight:600">démonstration</strong> — ce commerce n'existe pas.</span>
+  <a href="/#realisations" style="flex-shrink:0;padding:6px 14px;border:1px solid rgba(255,255,255,.28);border-radius:999px;color:#fff;text-decoration:none">Retour à Nexa Web</a>
+</div>
+<div style="height:37px"></div>
+
+<nav>
+  <a href="#" class="nl">La Fournée<span> d'Or</span></a>
+  <ul><li><a href="#produits">Produits</a></li><li><a href="#histoire">Histoire</a></li><li><a href="#horaires">Horaires</a></li><li><a href="#contact">Contact</a></li></ul>
+  <a href="#horaires" class="nc">Nous trouver</a>
+</nav>
+<main>
+<section class="hero">
+  <div class="dec">🥐</div>
+  <div class="hi">
+    <span class="lbl">Boulangerie Artisanale · Depuis 1987</span>
+    <h1>Le goût d'<em>autrefois</em>,<br>chaque matin.</h1>
+    <p class="sub">Pains au levain, viennoiseries feuilletées, pâtisseries maison. Tout est pétri à la main, cuit à l'aube pour votre bonheur.</p>
+    <div class="btns">
+      <a href="#produits" class="bp">Découvrir nos créations</a>
+      <a href="#histoire" class="bg">Notre savoir-faire</a>
+    </div>
+    <div class="stats">
+      <div><span class="sn">1987</span><span class="sl">Fondée en</span></div>
+      <div><span class="sn">4.8★</span><span class="sl">Note Google</span></div>
+      <div><span class="sn">100%</span><span class="sl">Artisanal</span></div>
+    </div>
+  </div>
+</section>
+<section id="produits" class="sec prods">
+  <p class="sl2">Nos créations</p>
+  <h2>De la farine à votre<br>table, avec amour</h2>
+  <p class="desc">Des recettes transmises de génération en génération, avec les meilleurs ingrédients de la région.</p>
+  <div class="pg">
+    <div class="pc"><div class="pi">🍞</div><div class="pn">Pains au Levain</div><div class="pd">Tradition, seigle, noix, céréales. Fermentation longue 24h pour un goût et une digestibilité incomparables.</div><div class="pp">Dès 2,80 €</div></div>
+    <div class="pc"><div class="pi">🥐</div><div class="pn">Viennoiseries</div><div class="pd">Croissants pur beurre, pains au chocolat, brioches tressées. Feuilletage réalisé chaque matin à 4h.</div><div class="pp">Dès 1,40 €</div></div>
+    <div class="pc"><div class="pi">🎂</div><div class="pn">Pâtisseries</div><div class="pd">Paris-Brest, tartes aux fruits, éclairs, mille-feuilles. Des créations qui honorent la tradition française.</div><div class="pp">Dès 3,50 €</div></div>
+    <div class="pc"><div class="pi">🥪</div><div class="pn">Snacking Maison</div><div class="pd">Quiches, sandwichs baguette, salades préparés chaque matin avec des produits locaux et de saison.</div><div class="pp">Dès 4,20 €</div></div>
+  </div>
+</section>
+<section id="histoire" class="sec">
+  <div class="story">
+    <div class="story-img">🌾</div>
+    <div class="story-text">
+      <p class="sl2">Notre histoire</p>
+      <h2>Trois générations<br>de passion</h2>
+      <p>Fondée en 1987 par Henri Dumont, La Fournée d'Or est aujourd'hui tenue par ses petits-enfants Thomas et Claire. Le secret ? Une farine locale moulue à la pierre, des levains naturels cultivés depuis 30 ans.</p>
+      <p>Nous farinons nos plans de travail à la nuit tombée et enfournons dès 4h du matin pour que votre baguette soit croustillante dès l'ouverture à 6h30.</p>
+      <span class="badge">🏆 Meilleure baguette du Pas-de-Calais 2023</span>
+    </div>
+  </div>
+</section>
+<section id="horaires" class="sec hrs">
+  <p class="sl2">Horaires d'ouverture</p>
+  <h2>On vous attend<br>tous les matins</h2>
+  <p style="color:var(--mu);font-size:.95rem">Du pain chaud vous attend chaque jour sauf le mercredi, notre journée de repos.</p>
+  <div class="hr-grid">
+    <div class="hr-item"><div class="hr-day">Lundi</div><div class="hr-time">6h30 – 19h30</div></div>
+    <div class="hr-item"><div class="hr-day">Mardi</div><div class="hr-time">6h30 – 19h30</div></div>
+    <div class="hr-item"><div class="hr-day">Mercredi</div><div class="hr-time hr-off">Fermé</div></div>
+    <div class="hr-item"><div class="hr-day">Jeudi</div><div class="hr-time">6h30 – 19h30</div></div>
+    <div class="hr-item"><div class="hr-day">Vendredi</div><div class="hr-time">6h30 – 19h30</div></div>
+    <div class="hr-item"><div class="hr-day">Samedi</div><div class="hr-time">6h30 – 19h00</div></div>
+    <div class="hr-item"><div class="hr-day">Dimanche</div><div class="hr-time">7h00 – 13h00</div></div>
+  </div>
+</section>
+</main>
+<footer>
+  <div class="fl">La Fournée<span> d'Or</span></div>
+  <p class="fs">12 Rue du Général de Gaulle, Carvin · 03 21 XX XX XX</p>
+  <div class="fls"><a href="#">Produits</a><a href="#">Histoire</a><a href="#">Horaires</a><a href="#">Contact</a><a href="#">Mentions légales</a></div>
+  <p class="fc">© 2025 La Fournée d'Or — Site réalisé par <strong>Nexa Web</strong></p>
+</footer>
+</body>
+</html>
+

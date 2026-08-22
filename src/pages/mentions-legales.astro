@@ -1,0 +1,87 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE } from '../config/site';
+---
+
+<Base
+  title="Mentions légales — Nexa Web"
+  description="Mentions légales du site nexaaweb.com : éditeur, hébergement, propriété intellectuelle, responsabilité et droit applicable."
+  path="/mentions-legales"
+>
+  <div class="page-simple">
+    <Header />
+  </div>
+
+  <main class="container doc">
+    <h1 class="doc-title">Mentions légales</h1>
+    <p class="doc-meta">Dernière mise à jour : août 2026</p>
+
+    <div class="prose">
+      <h2>1. Éditeur du site</h2>
+      <p>
+        <strong>{SITE.name}</strong><br />
+        {SITE.city}, {SITE.region}, France<br />
+        E-mail : <a href={`mailto:${SITE.email}`}>{SITE.email}</a><br />
+        Site : <a href={`https://${SITE.domain}`}>{SITE.domain}</a>
+      </p>
+      <p>Directeur de la publication : le responsable de {SITE.name}.</p>
+
+      <h2>2. Hébergement</h2>
+      <p>
+        Le site est hébergé par <strong>Netlify, Inc.</strong> — 512 2nd Street, Suite 200,
+        San Francisco, CA 94107, États-Unis — <a href="https://www.netlify.com" rel="noopener nofollow" target="_blank">www.netlify.com</a>.
+      </p>
+
+      <h2>3. Propriété intellectuelle</h2>
+      <p>
+        L'ensemble du contenu du site {SITE.domain} — textes, graphismes, logos, icônes, images,
+        code source — est la propriété exclusive de {SITE.name} ou de ses partenaires, et est protégé
+        par les lois françaises et internationales relatives à la propriété intellectuelle.
+      </p>
+      <p>
+        Toute reproduction, distribution, modification ou utilisation à des fins commerciales,
+        totale ou partielle, sans autorisation écrite préalable, est strictement interdite.
+      </p>
+      <p>
+        Les pages de démonstration accessibles depuis leur adresse directe sont des projets fictifs,
+        créés à titre d'illustration. Les établissements qui y figurent n'existent pas.
+      </p>
+
+      <h2>4. Données personnelles</h2>
+      <p>
+        Les traitements de données à caractère personnel effectués via ce site sont décrits dans notre
+        <a href="/politique-confidentialite">politique de confidentialité</a>, conforme au Règlement
+        Général sur la Protection des Données (RGPD — UE 2016/679).
+      </p>
+
+      <h2>5. Responsabilité</h2>
+      <p>
+        {SITE.name} s'efforce de maintenir les informations publiées à jour et exactes. Toutefois,
+        nous ne pouvons garantir l'exactitude, l'exhaustivité ou l'actualité des contenus.
+        {SITE.name} ne saurait être tenu responsable des dommages directs ou indirects résultant
+        de l'utilisation du site.
+      </p>
+      <p>
+        Des liens hypertextes peuvent renvoyer vers des sites tiers. {SITE.name} n'exerce aucun
+        contrôle sur ces sites et décline toute responsabilité quant à leur contenu.
+      </p>
+
+      <h2>6. Droit applicable</h2>
+      <p>
+        Le présent site et les présentes mentions légales sont soumis au droit français.
+        Tout litige relatif à l'utilisation du site relève de la compétence exclusive
+        des tribunaux français.
+      </p>
+
+      <h2>7. Contact</h2>
+      <p>
+        Pour toute question relative aux mentions légales ou à l'utilisation du site :
+        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+      </p>
+    </div>
+  </main>
+
+  <Footer />
+</Base>

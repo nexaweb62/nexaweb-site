@@ -1,6 +1,11 @@
 # Claude
 .claude/
 
+# Node / Astro
+node_modules/
+dist/
+.astro/
+
 # Temporaires
 .tmp_*
 *.local

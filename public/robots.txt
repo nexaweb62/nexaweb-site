@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Pages de demonstration : volontairement hors index (etablissements fictifs)
+Disallow: /demo-le-grenier
+Disallow: /demo-la-fournee-dor
+
+Sitemap: https://nexaaweb.com/sitemap.xml

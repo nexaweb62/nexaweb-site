@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Base
+  title="Page introuvable — Nexa Web"
+  description="Cette page n'existe pas ou a été déplacée."
+  path="/404"
+>
+  <div class="page-simple">
+    <Header />
+  </div>
+
+  <main class="container notfound">
+    <div>
+      <p class="notfound-code" aria-hidden="true">404</p>
+      <h1 class="section-title" style="max-width:none;margin-top:18px">Cette page n'existe pas</h1>
+      <p class="lede" style="margin-inline:auto">
+        Le lien est peut-être ancien : le site a été refait. Tout se trouve désormais
+        sur une seule page.
+      </p>
+      <div class="contact-actions">
+        <a class="cta" href="/">Retour à l'accueil</a>
+        <a class="btn-ghost" href="/#offre">Voir l'offre</a>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Base>

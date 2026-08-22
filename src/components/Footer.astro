@@ -1,0 +1,29 @@
+---
+import { SITE, CALENDLY } from '../config/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-row">
+      <a class="logo" href="/" aria-label="Nexa Web — accueil">
+        <img src="/assets/logo.svg" alt="" width="52" height="52" />
+      </a>
+
+      <nav class="footer-links" aria-label="Pied de page">
+        <a href="/#offre">L'offre</a>
+        <a href="/#tarifs">Tarifs</a>
+        <a href="/#faq">Questions</a>
+        <a href={CALENDLY} target="_blank" rel="noopener">Rendez-vous</a>
+        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+        <a href={SITE.phoneHref}>{SITE.phone}</a>
+      </nav>
+    </div>
+
+    <p class="footer-legal">
+      © {year} {SITE.name} — {SITE.city}, {SITE.region}.
+      <a href="/mentions-legales">Mentions légales</a> ·
+      <a href="/politique-confidentialite">Politique de confidentialité</a>
+    </p>
+  </div>
+</footer>
