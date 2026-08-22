@@ -66,12 +66,18 @@ doit jamais partir en ligne avec un placeholder.
   économie de données, et lecture automatique acceptée par le navigateur. Sur
   mobile, seule l'affiche de 56 Ko est téléchargée.
 
-  **Si le fond reste fixe**, ouvrez la console : chaque mise à l'écart y est
-  écrite avec sa raison. Et **`?video=1` dans l'URL force le chargement** en
-  levant les quatre conditions, y compris le `display: none` appliqué en
-  animations réduites — c'est le moyen de vérifier en deux secondes que le
-  fichier lui-même est bon. Si la lecture automatique est refusée, elle est
-  relancée au premier clic, appui de touche ou défilement.
+  **Si le fond reste fixe**, un témoin s'affiche en bas à gauche **en
+  développement uniquement** (`npm run dev`) et donne l'état : en lecture,
+  écarté avec sa raison, ou lecture refusée. Il porte un lien « forcer ». La
+  même information part dans la console. Le témoin est supprimé à la
+  construction — `import.meta.env.DEV` vaut alors `false` — et n'existe donc
+  pas sur le site publié.
+
+  **`?video=1` dans l'URL force le chargement** en levant les quatre
+  conditions, y compris le `display: none` appliqué en animations réduites :
+  c'est le moyen de vérifier en deux secondes que le fichier est bon. Si la
+  lecture automatique est refusée, elle est relancée au premier clic, appui de
+  touche ou défilement.
 - **Formulaire** : fonction Cloudflare Pages `functions/api/contact.js`, qui
   envoie un e-mail via Resend. Aucun service de formulaire tiers. Le POST est du
   HTML classique : il fonctionne sans JavaScript côté client. Honeypot

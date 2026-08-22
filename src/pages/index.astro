@@ -429,6 +429,42 @@ const description =
       );
     };
 
+    /* Temoin de diagnostic, en developpement uniquement : `import.meta.env.DEV`
+       est remplace par `false` a la construction, et tout ce bloc disparait du
+       site publie. Il existe parce que la panne precedente n'etait visible ni a
+       l'ecran ni dans la console — et qu'on ne lit pas la console d'un poste
+       distant aussi facilement qu'un bandeau. */
+    const temoin = (etat: string, ok: boolean) => {
+      console[ok ? 'info' : 'warn'](`[nexa] fond video : ${etat}`);
+      if (!import.meta.env.DEV) return;
+
+      let boite = document.getElementById('temoin-video');
+      if (!boite) {
+        boite = document.createElement('div');
+        boite.id = 'temoin-video';
+        boite.style.cssText =
+          'position:fixed;left:12px;bottom:12px;z-index:9999;max-width:min(420px,90vw);' +
+          'padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.22);' +
+          'background:rgba(12,12,14,.92);color:#fff;font:500 12.5px/1.5 system-ui,sans-serif;' +
+          '-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)';
+        document.body.appendChild(boite);
+      }
+
+      const largeur = window.innerWidth;
+      const detail = [
+        `fenetre ${largeur} px`,
+        `animations ${calm.matches ? 'reduites' : 'normales'}`,
+        force ? 'force' : null,
+      ]
+        .filter(Boolean)
+        .join(' · ');
+
+      boite.innerHTML =
+        `<span style="color:${ok ? '#7ee081' : '#e8926a'}">●</span> fond video : ${etat}` +
+        `<br><span style="opacity:.6">${detail} — dev seulement</span>` +
+        (ok ? '' : ' <a href="?video=1" style="color:#fff;text-decoration:underline">forcer</a>');
+    };
+
     const charger = () => {
       if (charge || !src) return;
       const bloquant = raison();
@@ -440,11 +476,12 @@ const description =
       video.load();
 
       video.addEventListener('error', () => {
-        console.warn(`[nexa] fond video : ${src} n'a pas pu etre charge (fichier absent ou codec refuse).`);
+        temoin(`${src} n'a pas pu etre charge (fichier absent ou codec refuse)`, false);
       });
+      video.addEventListener('playing', () => temoin('en lecture', true), { once: true });
 
       video.play().catch((e) => {
-        console.info(`[nexa] fond video : lecture automatique refusee (${e?.name ?? 'erreur'}), relance au premier geste.`);
+        temoin(`lecture automatique refusee (${e?.name ?? 'erreur'}) — relance au premier geste`, false);
         relanceAuGeste();
       });
     };
@@ -453,7 +490,7 @@ const description =
 
     if (!charge) {
       const bloquant = raison();
-      if (bloquant) console.info(`[nexa] fond video ecarte — ${bloquant}. Forcer avec ?video=1`);
+      if (bloquant) temoin(`ecarte — ${bloquant}`, false);
     }
 
     /* Un agrandissement de fenetre repasse au-dessus de 720 px. */
