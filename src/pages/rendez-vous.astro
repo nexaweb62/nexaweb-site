@@ -316,9 +316,8 @@ textarea.bk-input{resize:vertical;min-height:90px}
     calLblEl.textContent=FRM[viewM]+' '+viewY;
     var tf=new Date(today.getFullYear(),today.getMonth(),1);
     var vf=new Date(viewY,viewM,1);
-    var mf=new Date(today.getFullYear(),today.getMonth()+3,1);
     prevBtn.disabled=vf<=tf;
-    nextBtn.disabled=vf>=mf;
+    nextBtn.disabled=viewY>=2035&&viewM>=11;
     var fw=wd(vf);
     var ld=new Date(viewY,viewM+1,0).getDate();
     var h='';
