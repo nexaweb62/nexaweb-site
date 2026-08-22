@@ -1,0 +1,276 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+---
+<BaseLayout title="Site Internet pour Artisan — Nexa Web" description="Un site pour artisan avec galerie réalisations, formulaire de devis et SEO local. 490 € lancement, 39 €/mois. Livraison en 7 jours.">
+<style>
+main { padding-top: var(--hdr) }
+
+/* Hero */
+.hero { padding: clamp(80px,14vh,160px) 0 clamp(60px,10vh,120px); text-align: center; position: relative; overflow: hidden; }
+.hero::before { content:''; position:absolute; inset:0; background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(139,92,246,.18) 0%, transparent 70%); pointer-events:none; }
+.hero-tag { font-size:10px; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); margin-bottom:20px; display:inline-block; }
+.hero-title { font-size:clamp(2.2rem,5vw,4.5rem); font-weight:900; letter-spacing:-.04em; line-height:1; text-wrap:balance; margin-bottom:24px; }
+.hero-sub { font-size:clamp(.95rem,1.6vw,1.1rem); color:var(--text-muted); line-height:1.7; max-width:560px; margin:0 auto 40px; }
+
+/* Sections */
+.s { padding: var(--sec) 0; border-top: 1px solid var(--border); }
+.s-title { font-size:clamp(1.6rem,3.5vw,2.8rem); font-weight:900; letter-spacing:-.03em; line-height:1.1; text-wrap:balance; margin-bottom:16px; }
+.s-sub { font-size:clamp(.9rem,1.4vw,1rem); color:var(--text-muted); line-height:1.7; max-width:580px; margin-bottom:clamp(40px,6vw,72px); }
+
+/* Constat */
+.constat-list { display:flex; flex-direction:column; gap:16px; max-width:760px; }
+.constat-item { display:flex; gap:20px; align-items:flex-start; padding:24px; background:var(--bg-card); border:1px solid var(--border); border-radius:4px; }
+.constat-num { font-size:11px; font-weight:700; color:var(--accent); letter-spacing:.1em; flex-shrink:0; padding-top:2px; }
+.constat-text strong { display:block; font-size:1rem; font-weight:700; margin-bottom:6px; }
+.constat-text p { font-size:.9rem; color:var(--text-muted); line-height:1.65; }
+
+/* Cards livrables */
+.cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1px; background:var(--border); margin-top:clamp(32px,5vw,60px); }
+.card { background:var(--bg); padding:32px 28px; }
+.card-icon { width:36px; height:36px; background:var(--accent-dim); border-radius:8px; display:flex; align-items:center; justify-content:center; margin-bottom:20px; }
+.card-icon svg { width:18px; height:18px; stroke:var(--accent); stroke-width:1.8; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+.card-title { font-size:1rem; font-weight:700; margin-bottom:8px; }
+.card-desc { font-size:.875rem; color:var(--text-muted); line-height:1.65; }
+
+/* Tarif */
+.tarif-box { max-width:540px; border:1px solid var(--border-hi); border-radius:8px; padding:clamp(32px,5vw,56px); background:var(--bg-card); }
+.tarif-price { font-size:clamp(2.8rem,6vw,4rem); font-weight:900; letter-spacing:-.04em; margin-bottom:4px; }
+.tarif-price span { font-size:1.1rem; font-weight:400; color:var(--text-muted); }
+.tarif-mensuel { font-size:.95rem; color:var(--text-muted); margin-bottom:28px; }
+.tarif-list { display:flex; flex-direction:column; gap:10px; margin-bottom:32px; }
+.tarif-list li { font-size:.9rem; display:flex; gap:10px; align-items:flex-start; }
+.tarif-list li::before { content:'✓'; color:var(--accent); font-weight:700; flex-shrink:0; }
+
+/* FAQ */
+.faq-list { display:flex; flex-direction:column; gap:0; max-width:760px; }
+.faq-item { border-top:1px solid var(--border); padding:24px 0; }
+.faq-item:last-child { border-bottom:1px solid var(--border); }
+.faq-q { font-size:1rem; font-weight:700; margin-bottom:10px; }
+.faq-a { font-size:.9rem; color:var(--text-muted); line-height:1.7; }
+
+/* Contact */
+.contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:clamp(40px,7vw,100px); align-items:start; }
+.contact-form { display:flex; flex-direction:column; gap:14px; }
+.contact-form input, .contact-form select, .contact-form textarea { width:100%; background:var(--bg-card); border:1px solid var(--border-hi); color:var(--text); font:inherit; font-size:.9rem; padding:12px 16px; border-radius:4px; outline:none; transition:border-color .2s; }
+.contact-form input:focus, .contact-form select:focus, .contact-form textarea:focus { border-color:var(--accent); }
+.contact-form select option { background:var(--bg); }
+.contact-aside { display:flex; flex-direction:column; gap:20px; }
+.contact-link { display:flex; align-items:center; gap:12px; font-size:.9rem; font-weight:600; color:var(--text-muted); transition:color .2s; }
+.contact-link:hover { color:var(--text); }
+.contact-link svg { width:18px; height:18px; stroke:currentColor; stroke-width:1.8; fill:none; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
+.other-pages { margin-top:8px; }
+.other-pages p { font-size:.82rem; color:var(--text-dim); margin-bottom:10px; font-weight:500; letter-spacing:.06em; text-transform:uppercase; }
+.other-pages a { display:inline-block; margin-right:12px; margin-bottom:8px; font-size:.82rem; color:var(--text-muted); border:1px solid var(--border-hi); padding:5px 12px; border-radius:3px; transition:color .2s,border-color .2s; }
+.other-pages a:hover { color:var(--text); border-color:var(--text-muted); }
+
+/* Breadcrumb */
+.breadcrumb { font-size:.78rem; color:var(--text-dim); padding:clamp(16px,3vw,24px) 0 0; }
+.breadcrumb a { color:var(--text-dim); transition:color .2s; }
+.breadcrumb a:hover { color:var(--text-muted); }
+.breadcrumb span { margin:0 6px; }
+
+@media(max-width:768px) {
+  .contact-grid { grid-template-columns:1fr; }
+  .cards { grid-template-columns:1fr; background:none; gap:1px; }
+  .card { border:1px solid var(--border); }
+}
+</style>
+
+<Header backBtn={true} />
+
+<main>
+  <!-- 1. Fil d'Ariane -->
+  <div class="wrap">
+    <nav class="breadcrumb">
+      <a href="/">Accueil</a><span>›</span>
+      <a href="/#services">Services</a><span>›</span>
+      Site internet artisan
+    </nav>
+  </div>
+
+  <!-- 2. Hero -->
+  <section class="hero">
+    <div class="wrap">
+      <span class="hero-tag r">Artisans &amp; TPE</span>
+      <h1 class="hero-title r r.d1">Vous dépendez du bouche-à-oreille<br>et les chantiers se font rares.</h1>
+      <p class="hero-sub r r.d2">8 artisans sur 10 n'ont pas de site. Résultat : le client appelle le premier qui sort sur Google — et ce n'est pas vous.</p>
+      <a href="#contact" class="btn r r.d3">Avoir mon site artisan →</a>
+    </div>
+  </section>
+
+  <!-- 3. Le constat -->
+  <section class="s">
+    <div class="wrap">
+      <h2 class="s-title r">Ce que vous perdez sans présence en ligne</h2>
+      <p class="s-sub r r.d1">Le bouche-à-oreille ne suffit plus. Voici pourquoi.</p>
+      <ul class="constat-list">
+        <li class="constat-item r r.d1">
+          <span class="constat-num">8/10</span>
+          <div class="constat-text">
+            <strong>Des artisans n'ont pas de site internet</strong>
+            <p>C'est votre avantage concurrentiel immédiat. Les clients qui cherchent un artisan sérieux voient un site professionnel comme un gage de confiance. Sans site, vous n'existez pas pour eux.</p>
+          </div>
+        </li>
+        <li class="constat-item r r.d2">
+          <span class="constat-num">N°1</span>
+          <div class="constat-text">
+            <strong>Les clients Google "plombier [ville]" et appellent le premier résultat</strong>
+            <p>Ils ne font pas le tour des avis PagesJaunes. Ils tapent, ils cliquent, ils appellent. Si ce n'est pas vous qui apparaissez, c'est votre concurrent qui décroche.</p>
+          </div>
+        </li>
+        <li class="constat-item r r.d3">
+          <span class="constat-num">−</span>
+          <div class="constat-text">
+            <strong>Sans galerie de réalisations, impossible de convaincre à distance</strong>
+            <p>Un client veut voir avant de vous faire confiance. Sans photos de vos chantiers, il hésite, compare, et finit par choisir quelqu'un qui montre son travail — même s'il est moins bon que vous.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 4. Ce que vous recevez -->
+  <section class="s">
+    <div class="wrap">
+      <h2 class="s-title r">Ce que vous recevez</h2>
+      <p class="s-sub r r.d1">Cinq livrables pour transformer votre réputation locale en chantiers réguliers.</p>
+      <div class="cards">
+        <div class="card r r.d1">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          </div>
+          <h3 class="card-title">Galerie réalisations avant / après</h3>
+          <p class="card-desc">Vos photos de chantiers présentées de façon professionnelle. Le client voit la qualité de votre travail avant de vous appeler.</p>
+        </div>
+        <div class="card r r.d2">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <h3 class="card-title">Formulaire de demande de devis en ligne</h3>
+          <p class="card-desc">Le client décrit son projet directement depuis le site. Vous recevez sa demande par e-mail, prête à traiter.</p>
+        </div>
+        <div class="card r r.d3">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <h3 class="card-title">Zones d'intervention clairement affichées</h3>
+          <p class="card-desc">Villes et communes où vous intervenez listées sur le site. Moins d'appels hors zone, plus de prospects qualifiés.</p>
+        </div>
+        <div class="card r r.d1">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <h3 class="card-title">Avis clients intégrés</h3>
+          <p class="card-desc">Vos meilleurs avis Google affichés sur le site. La preuve sociale qui rassure le prospect hésitant.</p>
+        </div>
+        <div class="card r r.d2">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          </div>
+          <h3 class="card-title">SEO local "artisan [ville] [métier]"</h3>
+          <p class="card-desc">Optimisé pour ressortir quand un habitant cherche votre corps de métier dans votre zone — sans payer de publicité.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Tarif -->
+  <section class="s">
+    <div class="wrap">
+      <h2 class="s-title r">Un seul investissement, des chantiers en continu</h2>
+      <p class="s-sub r r.d1">Moins cher qu'une journée de pub locale. Et ça travaille 24h/24.</p>
+      <div class="tarif-box r r.d2">
+        <div class="tarif-price">490 <span>€ HT</span></div>
+        <p class="tarif-mensuel">+ 39 €/mois — hébergement, maintenance et mises à jour inclus</p>
+        <ul class="tarif-list">
+          <li>Site livré en 7 jours ouvrés</li>
+          <li>Galerie réalisations avant / après</li>
+          <li>Formulaire de demande de devis</li>
+          <li>Zones d'intervention et coordonnées</li>
+          <li>Avis clients intégrés</li>
+          <li>SEO local sur votre métier et votre ville</li>
+        </ul>
+        <a href="#contact" class="btn">Lancer mon site →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. FAQ -->
+  <section class="s">
+    <div class="wrap">
+      <h2 class="s-title r">Questions fréquentes</h2>
+      <p class="s-sub r r.d1">Les vrais freins des artisans avant de se lancer — avec des réponses directes.</p>
+      <div class="faq-list">
+        <div class="faq-item r r.d1">
+          <p class="faq-q">Je n'ai pas de photos de chantiers. Comment faire ?</p>
+          <p class="faq-a">Commencez dès maintenant à photographier vos prochains chantiers avec votre téléphone — avant et après. On vous explique comment bien cadrer. En attendant, on peut créer le site avec des visuels génériques et les remplacer au fur et à mesure.</p>
+        </div>
+        <div class="faq-item r r.d2">
+          <p class="faq-q">Est-ce que ça fonctionne pour mon corps de métier ?</p>
+          <p class="faq-a">Plombier, électricien, peintre, maçon, carreleur, menuisier, couvreur, climaticien, jardinier, serrurier — si vous faites des devis et intervenez chez des particuliers ou des professionnels, ça fonctionne.</p>
+        </div>
+        <div class="faq-item r r.d3">
+          <p class="faq-q">Les clients appellent encore, pourquoi changer ?</p>
+          <p class="faq-a">Parce que les clients qui cherchent en ligne n'appellent pas au hasard. Ils appellent en premier celui qui a un site professionnel avec des exemples de travaux. Un site ne remplace pas le téléphone — il le fait sonner plus souvent.</p>
+        </div>
+        <div class="faq-item r r.d1">
+          <p class="faq-q">J'ai déjà un profil sur PagesJaunes. Ce n'est pas suffisant ?</p>
+          <p class="faq-a">PagesJaunes vous liste avec des dizaines de concurrents sur la même page, souvent derrière ceux qui payent pour apparaître en premier. Un site à votre nom, bien référencé sur Google, vous sort seul devant le client qui cherche votre métier dans votre ville.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Contact -->
+  <section class="s" id="contact">
+    <div class="wrap">
+      <h2 class="s-title r">On regarde ensemble ce qu'on peut faire</h2>
+      <p class="s-sub r r.d1">Laissez vos coordonnées. Un appel de 15 minutes suffit pour voir si c'est adapté à votre activité.</p>
+      <div class="contact-grid">
+        <form class="contact-form r r.d1" action="" method="POST">
+          <input type="text" name="nom" placeholder="Votre nom" required />
+          <input type="text" name="activite" placeholder="Votre métier (ex : plombier, électricien…)" required />
+          <input type="tel" name="telephone" placeholder="Téléphone" required />
+          <select name="creneau">
+            <option value="" disabled selected>Créneau de rappel préféré</option>
+            <option value="matin">Matin (9h–12h)</option>
+            <option value="midi">Midi (12h–14h)</option>
+            <option value="apres-midi">Après-midi (14h–18h)</option>
+            <option value="soir">Soir (18h–20h)</option>
+          </select>
+          <button type="submit" class="btn">Envoyer ma demande →</button>
+        </form>
+        <div class="contact-aside r r.d2">
+          <a href="https://calendly.com/contact-nexaweb62/30min" target="_blank" rel="noopener" class="contact-link">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            Réserver un créneau Calendly
+          </a>
+          <a href="tel:+33641467898" class="contact-link">
+            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.48 2 2 0 0 1 3.6 1.28h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.02z"/></svg>
+            +33 6 41 46 78 98
+          </a>
+          <div class="other-pages">
+            <p>Autres pages métier</p>
+            <a href="/site-internet-restaurant">Restaurant &amp; Brasserie</a>
+            <a href="/site-internet-commerce">Commerce de proximité</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<Footer />
+
+<script is:inline>
+(function(){
+  var els=document.querySelectorAll('.r');
+  if(!els.length)return;
+  var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('v');io.unobserve(e.target);}});},{threshold:0.12});
+  els.forEach(function(el){io.observe(el);});
+})();
+</script>
+</BaseLayout>
