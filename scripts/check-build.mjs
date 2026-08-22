@@ -36,7 +36,13 @@ const html = (() => {
   }
 })();
 
-if (html.includes('price-todo')) {
+/* La feuille de style est desormais posee dans le HTML (astro.config.mjs) et
+   contient la regle `.price-todo` : chercher le mot dans la page entiere le
+   trouvait toujours, et bloquait une mise en production parfaitement valide.
+   On ne regarde donc que le corps de la page, style retire. */
+const corps = html.replace(/<style[\s\S]*?<\/style>/g, '');
+
+if (/class="[^"]*\bprice-todo\b/.test(corps)) {
   problems.push('dist/index.html contient encore un placeholder de prix (.price-todo)');
 }
 

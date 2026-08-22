@@ -96,12 +96,17 @@ for (const chemin of pages.sort()) {
 const media = ['assets/hero-poster.webp', 'assets/logo.svg']
   .map((f) => statSync(join(dist, f)).size)
   .reduce((a, b) => a + b, 0);
-const css = readdirSync(join(dist, '_astro'))
-  .filter((f) => f.endsWith('.css'))
-  .map((f) => statSync(join(dist, '_astro', f)).size)
+/* Le CSS est pose dans le HTML : on le mesure sur l'accueil plutot que dans
+   _astro/, qui n'existe plus. */
+const accueil = readFileSync(join(dist, 'index.html'), 'utf8');
+const css = [...accueil.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)]
+  .map((m) => m[1].length)
   .reduce((a, b) => a + b, 0);
 
-console.log(`audit : ${pages.length} page(s) — CSS ${(css / 1024).toFixed(0)} Ko, premier ecran ${(media / 1024).toFixed(0)} Ko de media`);
+console.log(
+  `audit : ${pages.length} page(s) — CSS ${(css / 1024).toFixed(0)} Ko dans la page, ` +
+    `premier ecran ${(media / 1024).toFixed(0)} Ko de media`,
+);
 
 if (soucis.length === 0) {
   console.log('audit : rien a signaler.');

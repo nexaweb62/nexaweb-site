@@ -101,6 +101,7 @@ const description =
         muted
         loop
         playsinline
+        preload="none"
         aria-hidden="true"></video>
     </div>
 
@@ -359,17 +360,23 @@ const description =
 </Base>
 
 <script>
-  /* --- Fond video : charge seulement au-dessus de 720px et hors reduced-motion.
-         Sur mobile, l'affiche suffit et on economise 1,2 Mo. --- */
+  /* --- Fond video : 1,2 Mo qui ne servent qu'a decorer. Quatre conditions
+         avant de le telecharger — au-dessus de 720 px, hors reduced-motion,
+         hors mode economie de donnees, et seulement une fois la page chargee
+         et le navigateur au repos. Le chargement immediat entrait en
+         concurrence avec les polices et l'affiche du premier ecran, c'est-a-dire
+         avec ce que le visiteur regarde vraiment. --- */
   const video = document.querySelector<HTMLVideoElement>('.bg-video');
   const calm = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   if (video) {
     const src = video.dataset.src;
+    const reseau = (navigator as any).connection;
+    const econome = Boolean(reseau?.saveData) || /2g/.test(reseau?.effectiveType ?? '');
     let loaded = false;
 
     const maybeLoad = () => {
-      if (loaded || !src) return;
+      if (loaded || !src || econome) return;
       if (window.innerWidth <= 720 || calm.matches) return;
       loaded = true;
       video.src = src;
@@ -379,7 +386,16 @@ const description =
       });
     };
 
-    maybeLoad();
+    /* Apres le chargement de la page, et pendant un temps mort du navigateur. */
+    const auRepos = () => {
+      const idle = (window as any).requestIdleCallback;
+      if (typeof idle === 'function') idle(maybeLoad, { timeout: 2500 });
+      else setTimeout(maybeLoad, 900);
+    };
+
+    if (document.readyState === 'complete') auRepos();
+    else window.addEventListener('load', auRepos, { once: true });
+
     window.addEventListener('resize', maybeLoad, { passive: true });
   }
 
