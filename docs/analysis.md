@@ -331,7 +331,8 @@ indicatif des champs (2,26:1).
 
 Corrigé en `v1` :
 
-- ~~Police d'affichage dot-matrix rétro~~ → Fraunces. Le style « terminal
+- ~~Police d'affichage dot-matrix rétro~~ → Cormorant (Fraunces en `v1`, puis
+  Cormorant en `v1.5`). Le style « terminal
   rétro » est un signal fort de gabarit technologique recopié, et il n'avait
   aucun rapport avec des restaurants.
 - ~~Inter en police d'interface~~ → Archivo. Inter est devenue la police par
@@ -379,5 +380,7 @@ Restant à corriger :
 |---|---|---|---|
 | `v1` | 22/08/2026 | Refonte Astro, suppression du portfolio, typographie Fraunces/Archivo | Aucune réalisation à montrer ; la fonte dot-matrix et Inter signalaient un gabarit générique |
 | `v1.1` | 22/08/2026 | JSON-LD `ProfessionalService`, ville en toutes lettres, section « constat » sortie du gabarit de cartes | Le référencement local était invisible ; les trois cartes étaient le motif le plus banal de la page |
-| `v1.3` | 22/08/2026 | Contrastes du pied de page et du texte indicatif portés au niveau AA | 2,69:1 et 2,26:1 mesurés, sous le seuil de 4,5:1 |
 | `v1.2` | 22/08/2026 | Formulaire de rappel à trois champs, page `/merci`, dégradé radial supprimé, politique de confidentialité corrigée | Seul chemin de conversion : Calendly ou téléphone, inutilisable le soir. La politique affirmait « aucun formulaire » — devenu faux |
+| `v1.3` | 22/08/2026 | Contrastes du pied de page et du texte indicatif portés au niveau AA | 2,69:1 et 2,26:1 mesurés, sous le seuil de 4,5:1 |
+| `v1.4` | 22/08/2026 | Suppression de l'ancien site : 104 fichiers, 20 108 lignes. `NOTES.md` réécrit | Le nouveau site n'appelait plus aucun de ces fichiers. `NOTES.md` était le seul inventaire des comptes : il liste désormais les services à résilier |
+| `v1.5` | 22/08/2026 | Cormorant remplace Fraunces, corps d'affichage recalculés | Choix d'Elio. La hauteur d'x plus basse de 20 % imposait de majorer les corps de 12 %, sans quoi la typographie paraissait rabougrie |

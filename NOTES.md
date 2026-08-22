@@ -40,7 +40,11 @@ doit jamais partir en ligne avec un placeholder.
 
 ## Choix techniques
 
-- **Polices** : Fraunces (affichage) et Archivo (interface), via Google Fonts.
+- **Polices** : Cormorant (affichage) et Archivo (interface), via Google Fonts.
+  Cormorant a une hauteur d'x très basse — 0,386 em contre 0,482 pour Fraunces,
+  qu'elle remplace : tous les corps d'affichage sont majorés d'environ 12 %,
+  facteur mesuré sur la hauteur de capitale. Si vous changez encore de serif,
+  refaites ce calcul plutôt que de garder les corps en l'état.
 - **Vidéo de fond** : ré-encodée de 13,86 Mo à 1,24 Mo, auto-hébergée. Chargée
   par JavaScript uniquement au-dessus de 720 px et hors `prefers-reduced-motion` :
   sur mobile, seule l'affiche de 95 Ko est téléchargée.
