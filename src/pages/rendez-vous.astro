@@ -6,9 +6,7 @@ import '../styles/global.css';
 ---
 <BaseLayout title="Rendez-vous — Nexa Web" description="Réservez une consultation gratuite de 30 min avec Nexa Web. Visio ou téléphone. Zéro engagement.">
 <style>
-/* Neon canvas background */
 #neon-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.48}
-
 main{position:relative;z-index:1;padding-top:var(--hdr)}
 
 /* Hero */
@@ -21,7 +19,7 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
 .rdv-badge{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border-hi);border-radius:100px;padding:7px 16px;font-size:11px;font-weight:500;color:var(--text-muted);letter-spacing:.04em}
 .rdv-badge svg{width:13px;height:13px;stroke:var(--accent);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 
-/* Calendly section */
+/* Card */
 .rdv-section{max-width:900px;margin:0 auto;padding:0 var(--pad-x) clamp(80px,12vh,140px)}
 .rdv-card{background:rgba(16,16,30,.84);border:1px solid var(--border);border-radius:16px;overflow:hidden;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 0 0 1px var(--accent-ring),0 32px 80px rgba(139,92,246,.12)}
 .rdv-card-header{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--border)}
@@ -29,22 +27,101 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
 .rdv-live{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:500;color:#22c55e}
 .rdv-live::before{content:'';width:7px;height:7px;border-radius:50%;background:#22c55e;animation:pulse-dot 2s ease-in-out infinite}
 @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.75)}}
-.calendly-inline-widget{min-width:320px;height:700px}
-@media(max-width:600px){.calendly-inline-widget{height:580px}}
-.rdv-fallback{padding:16px 24px;border-top:1px solid var(--border);text-align:center;font-size:12px;color:var(--text-dim)}
-.rdv-fallback a{color:var(--accent)}
-.rdv-fallback a:hover{text-decoration:underline}
 
+/* Booking layout */
+.bk-layout{display:grid;grid-template-columns:1fr 1px 1fr;align-items:start}
+.bk-divider{background:var(--border);align-self:stretch}
+.bk-left{padding:28px 28px 32px}
+.bk-right{padding:28px}
+@media(max-width:720px){
+  .bk-layout{grid-template-columns:1fr}
+  .bk-divider{height:1px;width:100%}
+  .bk-left,.bk-right{padding:22px 20px}
+}
+
+/* Calendar nav */
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.cal-nav-btn{background:none;border:1px solid var(--border-hi);border-radius:6px;width:32px;height:32px;cursor:pointer;color:var(--text-muted);display:flex;align-items:center;justify-content:center;transition:border-color .2s,color .2s;padding:0;flex-shrink:0}
+.cal-nav-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+.cal-nav-btn:disabled{opacity:.3;cursor:default;pointer-events:none}
+.cal-nav-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.cal-month-lbl{font-size:13px;font-weight:700;letter-spacing:.03em;text-transform:capitalize;color:var(--text)}
+
+/* Calendar grid */
+.cal-head{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;margin-bottom:6px}
+.cal-head span{font-size:10px;font-weight:600;letter-spacing:.08em;color:var(--text-dim);text-transform:uppercase;padding:4px 0}
+.cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:12.5px;border-radius:8px;cursor:pointer;transition:background .15s,color .15s;position:relative;user-select:none}
+.cal-day.other-month{visibility:hidden;pointer-events:none}
+.cal-day.disabled{color:var(--text-dim);cursor:default;opacity:.3;pointer-events:none}
+.cal-day:not(.disabled):not(.other-month):hover{background:var(--accent-dim);color:var(--accent)}
+.cal-day.today::after{content:'';position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--accent)}
+.cal-day.selected{background:var(--accent)!important;color:#fff!important;font-weight:700}
+.cal-day.selected::after{background:#fff!important}
+
+/* Time slots */
+.slots-section{margin-top:24px}
+.slots-head{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.slots-head::after{content:'';flex:1;height:1px;background:var(--border)}
+.slots-empty{font-size:12px;color:var(--text-dim);text-align:center;padding:14px 0}
+.slots-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.slot-btn{background:none;border:1px solid var(--border-hi);border-radius:6px;padding:9px 4px;font-size:12px;font-weight:500;color:var(--text-muted);cursor:pointer;transition:border-color .15s,color .15s,background .15s;text-align:center;font-family:var(--font)}
+.slot-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
+.slot-btn.selected{background:var(--accent)!important;border-color:var(--accent)!important;color:#fff!important;font-weight:700}
+.slot-btn:disabled{opacity:.3;cursor:default;pointer-events:none}
+
+/* Form */
+.bk-summary{display:none;align-items:center;gap:10px;background:var(--accent-dim);border:1px solid var(--accent-ring);border-radius:8px;padding:11px 14px;font-size:12.5px;color:var(--accent);font-weight:600;margin-bottom:22px}
+.bk-summary.show{display:flex}
+.bk-summary svg{flex-shrink:0;stroke:var(--accent);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.bk-field{margin-bottom:14px}
+.bk-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:480px){.bk-row{grid-template-columns:1fr}}
+.bk-label{display:block;font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:7px}
+.bk-input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border-hi);border-radius:6px;padding:11px 14px;font-size:13px;font-weight:300;color:var(--text);outline:none;transition:border-color .2s;font-family:var(--font);box-sizing:border-box}
+.bk-input::placeholder{color:var(--text-dim)}
+.bk-input:focus{border-color:var(--accent)}
+textarea.bk-input{resize:vertical;min-height:90px}
+.bk-hint{font-size:10.5px;color:var(--text-dim);margin-top:5px}
+.bk-note{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--text-dim);margin-top:14px}
+.bk-note svg{flex-shrink:0;stroke:var(--accent);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.bk-submit{width:100%;margin-top:16px;display:flex;align-items:center;justify-content:center;gap:9px;padding:14px;font-weight:700;font-size:13px;letter-spacing:.05em;cursor:pointer;border-radius:8px;border:none;background:var(--accent);color:#fff;transition:opacity .2s,transform .1s;font-family:var(--font)}
+.bk-submit:hover:not(:disabled){opacity:.9}
+.bk-submit:active:not(:disabled){transform:scale(.99)}
+.bk-submit:disabled{opacity:.38;cursor:not-allowed;pointer-events:none}
+.bk-submit svg{stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.bk-submit.loading .bk-submit-icon{display:none}
+.bk-submit.loading::after{content:'';width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.need-datetime{display:none;font-size:11px;color:var(--text-dim);text-align:center;margin-top:8px}
+.need-datetime.show{display:block}
+
+/* Success */
+.bk-success{display:none;padding:64px 32px;text-align:center;flex-direction:column;align-items:center;gap:18px}
+.bk-success.show{display:flex}
+.bk-success-icon{width:60px;height:60px;border-radius:50%;background:var(--accent-dim);border:1.5px solid var(--accent-ring);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.bk-success-icon svg{width:26px;height:26px;stroke:var(--accent);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.bk-success-title{font-size:1.35rem;font-weight:900;letter-spacing:-.025em}
+.bk-success-sub{font-size:.875rem;color:var(--text-muted);line-height:1.75;max-width:400px}
+.bk-success-date{font-size:13px;font-weight:700;color:var(--accent);background:var(--accent-dim);border:1px solid var(--accent-ring);border-radius:8px;padding:10px 22px;display:inline-flex;align-items:center;gap:8px}
+.bk-success-date svg{stroke:var(--accent);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.bk-success-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:4px}
+.bk-gcal{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:11px 22px;border-radius:7px;background:var(--accent);color:#fff;text-decoration:none;transition:opacity .2s}
+.bk-gcal:hover{opacity:.88}
+.bk-gcal svg{stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+
+/* Light mode */
 @media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .rdv-card{background:rgba(255,255,255,.93);box-shadow:0 0 0 1px var(--accent-ring),0 24px 60px rgba(139,92,246,.09)}}
 :root[data-theme="light"] .rdv-card{background:rgba(255,255,255,.93);box-shadow:0 0 0 1px var(--accent-ring),0 24px 60px rgba(139,92,246,.09)}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .bk-input{background:var(--bg-card)}}
+:root[data-theme="light"] .bk-input{background:var(--bg-card)}
 </style>
 
 <Header />
-
 <canvas id="neon-canvas" aria-hidden="true"></canvas>
 
 <main>
-  <!-- Hero -->
+  <!-- HERO -->
   <div class="rdv-hero">
     <span class="rdv-label" data-i18n="rdv-label">Consultation gratuite</span>
     <h1 class="rdv-title" data-i18n="rdv-title">Prenons<br><em>rendez-vous.</em></h1>
@@ -69,27 +146,397 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
     </div>
   </div>
 
-  <!-- Calendly -->
+  <!-- BOOKING CARD -->
   <div class="rdv-section">
     <div class="rdv-card">
       <div class="rdv-card-header">
-        <span class="rdv-card-title" data-i18n="rdv-card-title">Choisissez un créneau</span>
-        <span class="rdv-live" data-i18n="rdv-available">Disponible</span>
+        <span class="rdv-card-title">Choisissez un créneau</span>
+        <span class="rdv-live">Disponible</span>
       </div>
-      <div class="calendly-inline-widget"
-           data-url="https://calendly.com/contact-nexaweb62/30min?background_color=080811&text_color=e8e8f2&primary_color=8b5cf6"
-           aria-label="Calendrier de réservation Nexa Web"></div>
-      <div class="rdv-fallback">
-        Si le calendrier ne s'affiche pas —
-        <a href="/devis">remplissez le formulaire de devis</a>
+
+      <!-- BOOKING LAYOUT -->
+      <div class="bk-layout" id="bk-layout">
+
+        <!-- LEFT: Calendar + Slots -->
+        <div class="bk-left">
+          <div class="cal-nav">
+            <button class="cal-nav-btn" id="cal-prev" aria-label="Mois précédent">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <span class="cal-month-lbl" id="cal-month-lbl"></span>
+            <button class="cal-nav-btn" id="cal-next" aria-label="Mois suivant">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+          <div class="cal-head">
+            <span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span>
+          </div>
+          <div class="cal-days" id="cal-days"></div>
+
+          <div class="slots-section">
+            <div class="slots-head" id="slots-head">Horaires</div>
+            <div id="slots-container">
+              <p class="slots-empty">← Sélectionnez une date</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="bk-divider"></div>
+
+        <!-- RIGHT: Form -->
+        <div class="bk-right">
+          <div class="bk-summary" id="bk-summary" aria-live="polite">
+            <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span id="bk-summary-text"></span>
+          </div>
+
+          <form id="rdv-form" novalidate>
+            <div class="bk-row">
+              <div class="bk-field">
+                <label class="bk-label" for="rdv-prenom">Prénom <span style="color:var(--accent)">*</span></label>
+                <input class="bk-input" id="rdv-prenom" type="text" placeholder="Jean" autocomplete="given-name" required>
+              </div>
+              <div class="bk-field">
+                <label class="bk-label" for="rdv-nom">Nom <span style="color:var(--accent)">*</span></label>
+                <input class="bk-input" id="rdv-nom" type="text" placeholder="Dupont" autocomplete="family-name" required>
+              </div>
+            </div>
+            <div class="bk-row">
+              <div class="bk-field">
+                <label class="bk-label" for="rdv-email">E-mail <span style="color:var(--accent)">*</span></label>
+                <input class="bk-input" id="rdv-email" type="email" placeholder="jean@mail.fr" autocomplete="email" required>
+              </div>
+              <div class="bk-field">
+                <label class="bk-label" for="rdv-tel">Téléphone</label>
+                <input class="bk-input" id="rdv-tel" type="tel" placeholder="+33 6 …" autocomplete="tel">
+              </div>
+            </div>
+            <div class="bk-field">
+              <label class="bk-label" for="rdv-sujet">Type de projet</label>
+              <select class="bk-input" id="rdv-sujet">
+                <option value="">Sélectionner…</option>
+                <option value="vitrine">Site vitrine</option>
+                <option value="portfolio">Portfolio</option>
+                <option value="ecommerce">Boutique e-commerce</option>
+                <option value="app">Application web</option>
+                <option value="refonte">Refonte de site existant</option>
+                <option value="autre">Autre</option>
+              </select>
+            </div>
+            <div class="bk-field">
+              <label class="bk-label" for="rdv-message">Message (optionnel)</label>
+              <textarea class="bk-input" id="rdv-message" placeholder="Décrivez votre projet en quelques mots…" rows="3"></textarea>
+            </div>
+
+            <button type="submit" class="bk-submit" id="rdv-submit" disabled>
+              <svg class="bk-submit-icon" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+              <span class="bk-submit-lbl">Confirmer le rendez-vous</span>
+            </button>
+            <p class="need-datetime" id="need-datetime">Choisissez d'abord une date et un horaire.</p>
+
+            <p class="bk-note">
+              <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Consultation 100 % gratuite · Confirmation par e-mail sous 2 h
+            </p>
+          </form>
+        </div>
       </div>
+
+      <!-- SUCCESS STATE -->
+      <div class="bk-success" id="bk-success" role="alert" aria-live="polite">
+        <div class="bk-success-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h2 class="bk-success-title">Rendez-vous confirmé !</h2>
+        <p class="bk-success-sub">Merci <strong id="success-prenom"></strong>. Votre consultation est réservée. Nous vous enverrons un e-mail de confirmation avec le lien visio.</p>
+        <div class="bk-success-date">
+          <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span id="success-date-lbl"></span>
+        </div>
+        <div class="bk-success-btns">
+          <a href="#" id="gcal-btn" target="_blank" rel="noopener" class="bk-gcal">
+            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Ajouter à Google Agenda
+          </a>
+          <a href="/" class="btn-g">Retour à l'accueil</a>
+        </div>
+      </div>
+
     </div>
   </div>
 </main>
 
 <Footer />
 
-<script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async is:inline></script>
+<script is:inline src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script is:inline src="/supabase-client.js"></script>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ── Constants ── */
+  var SLOTS = [
+    '09:00','09:30','10:00','10:30','11:00','11:30',
+    '12:00','12:30','13:00','13:30',
+    '14:00','14:30','15:00','15:30','16:00','16:30',
+    '17:00','17:30'
+  ];
+  var FR_MONTHS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  var FR_MONTHS_GEN = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  var FR_WEEKDAYS_LONG = ['lundi','mardi','mercredi','jeudi','vendredi','samedi','dimanche'];
+
+  /* ── State ── */
+  var today = new Date(); today.setHours(0,0,0,0);
+  var viewYear = today.getFullYear();
+  var viewMonth = today.getMonth();
+  var selDate = null;
+  var selTime = null;
+
+  /* ── DOM ── */
+  var calDaysEl   = document.getElementById('cal-days');
+  var calLblEl    = document.getElementById('cal-month-lbl');
+  var prevBtn     = document.getElementById('cal-prev');
+  var nextBtn     = document.getElementById('cal-next');
+  var slotsContEl = document.getElementById('slots-container');
+  var slotsHeadEl = document.getElementById('slots-head');
+  var summaryEl   = document.getElementById('bk-summary');
+  var summaryTxt  = document.getElementById('bk-summary-text');
+  var form        = document.getElementById('rdv-form');
+  var submitBtn   = document.getElementById('rdv-submit');
+  var needDt      = document.getElementById('need-datetime');
+  var layoutEl    = document.getElementById('bk-layout');
+  var successEl   = document.getElementById('bk-success');
+
+  /* ── Helpers ── */
+  function isoWd(d){ return (d.getDay() + 6) % 7; } // Mon=0 … Sun=6
+  function isWeekend(d){ return d.getDay()===0 || d.getDay()===6; }
+  function sameDay(a,b){ return a && b && a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate(); }
+
+  function pad2(n){ return String(n).padStart(2,'0'); }
+  function dateToISO(d){ return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate()); }
+  function dateToGcal(d){ return d.getFullYear()+pad2(d.getMonth()+1)+pad2(d.getDate()); }
+
+  function formatFr(d){
+    var wd = FR_WEEKDAYS_LONG[isoWd(d)];
+    return wd.charAt(0).toUpperCase()+wd.slice(1)+' '+d.getDate()+' '+FR_MONTHS_GEN[d.getMonth()]+' '+d.getFullYear();
+  }
+
+  function addMins(time, mins){
+    var p=time.split(':'), total=parseInt(p[0])*60+parseInt(p[1])+mins;
+    return pad2(Math.floor(total/60))+':'+pad2(total%60);
+  }
+
+  /* ── Calendar ── */
+  function renderCal(){
+    calLblEl.textContent = FR_MONTHS[viewMonth]+' '+viewYear;
+
+    var todayFirst = new Date(today.getFullYear(), today.getMonth(), 1);
+    var viewFirst  = new Date(viewYear, viewMonth, 1);
+    var maxFirst   = new Date(today.getFullYear(), today.getMonth()+3, 1);
+    prevBtn.disabled = viewFirst <= todayFirst;
+    nextBtn.disabled = viewFirst >= maxFirst;
+
+    var firstWd  = isoWd(viewFirst);
+    var lastDay  = new Date(viewYear, viewMonth+1, 0).getDate();
+    var html = '';
+
+    for(var i=0;i<firstWd;i++) html += '<div class="cal-day other-month"></div>';
+    for(var d=1;d<=lastDay;d++){
+      var dt = new Date(viewYear, viewMonth, d);
+      var past = dt < today;
+      var wknd = isWeekend(dt);
+      var dis  = past || wknd;
+      var cls  = 'cal-day';
+      if(sameDay(dt,today))    cls += ' today';
+      if(sameDay(dt,selDate))  cls += ' selected';
+      if(dis)                  cls += ' disabled';
+      var ds = viewYear+'-'+pad2(viewMonth+1)+'-'+pad2(d);
+      html += '<div class="'+cls+'" '+(dis?'':'data-date="'+ds+'"')+'>'+d+'</div>';
+    }
+    calDaysEl.innerHTML = html;
+
+    calDaysEl.querySelectorAll('.cal-day:not(.disabled):not(.other-month)').forEach(function(el){
+      el.addEventListener('click',function(){
+        var p = el.dataset.date.split('-');
+        selectDate(new Date(+p[0],+p[1]-1,+p[2]));
+      });
+    });
+  }
+
+  function selectDate(d){
+    selDate = d;
+    selTime = null;
+    renderCal();
+    renderSlots();
+    updateSummary();
+    updateSubmit();
+  }
+
+  /* ── Slots ── */
+  function renderSlots(){
+    if(!selDate){ slotsContEl.innerHTML='<p class="slots-empty">← Sélectionnez une date</p>'; return; }
+    var now = new Date();
+    var isToday = sameDay(selDate,today);
+    var html = '';
+    var hasAny = false;
+    SLOTS.forEach(function(t){
+      var dis = false;
+      if(isToday){
+        var p=t.split(':'), slot=new Date(today);
+        slot.setHours(+p[0],+p[1],0,0);
+        dis = slot <= new Date(now.getTime()+60*60000); // 1h min notice
+      }
+      hasAny = hasAny || !dis;
+      var cls='slot-btn'+(t===selTime?' selected':'')+(dis?' ':' ');
+      html += '<button class="'+cls+'slot-btn"'+(dis?' disabled':' data-time="'+t+'"')+'>'+t+'</button>';
+    });
+    if(!hasAny){
+      slotsContEl.innerHTML='<p class="slots-empty">Aucun créneau disponible aujourd\'hui.</p>';
+      return;
+    }
+    slotsContEl.innerHTML='<div class="slots-grid">'+html+'</div>';
+    slotsContEl.querySelectorAll('.slot-btn:not([disabled])').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        selTime=btn.dataset.time;
+        renderSlots();
+        updateSummary();
+        updateSubmit();
+      });
+    });
+  }
+
+  /* ── Summary & submit state ── */
+  function updateSummary(){
+    if(selDate && selTime){
+      summaryTxt.textContent = formatFr(selDate)+' à '+selTime;
+      summaryEl.classList.add('show');
+    } else {
+      summaryEl.classList.remove('show');
+    }
+  }
+
+  function getFormVals(){
+    return {
+      prenom:  document.getElementById('rdv-prenom').value.trim(),
+      nom:     document.getElementById('rdv-nom').value.trim(),
+      email:   document.getElementById('rdv-email').value.trim()
+    };
+  }
+
+  function updateSubmit(){
+    var v = getFormVals();
+    var ready = selDate && selTime && v.prenom && v.nom && v.email && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.email);
+    submitBtn.disabled = !ready;
+    needDt.classList.toggle('show', !!(v.prenom && v.nom && v.email) && (!selDate || !selTime));
+  }
+
+  ['rdv-prenom','rdv-nom','rdv-email','rdv-tel','rdv-sujet','rdv-message'].forEach(function(id){
+    document.getElementById(id).addEventListener('input', updateSubmit);
+  });
+
+  /* ── Nav ── */
+  prevBtn.addEventListener('click',function(){
+    if(viewMonth===0){viewMonth=11;viewYear--;}else viewMonth--;
+    renderCal();
+  });
+  nextBtn.addEventListener('click',function(){
+    if(viewMonth===11){viewMonth=0;viewYear++;}else viewMonth++;
+    renderCal();
+  });
+
+  /* ── Submit ── */
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    if(!selDate || !selTime) return;
+    var v = getFormVals();
+    var tel     = document.getElementById('rdv-tel').value.trim();
+    var sujet   = document.getElementById('rdv-sujet').value;
+    var message = document.getElementById('rdv-message').value.trim();
+    if(!v.prenom || !v.nom || !v.email) return;
+
+    submitBtn.disabled = true;
+    submitBtn.classList.add('loading');
+    submitBtn.querySelector('.bk-submit-lbl').textContent = 'Envoi…';
+
+    if(!window.sb){
+      alert('Erreur de connexion. Contactez-nous directement.');
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('loading');
+      submitBtn.querySelector('.bk-submit-lbl').textContent = 'Confirmer le rendez-vous';
+      return;
+    }
+
+    try {
+      var { error } = await window.sb.from('rendez_vous').insert({
+        date: dateToISO(selDate),
+        heure: selTime,
+        prenom: v.prenom,
+        nom: v.nom,
+        email: v.email,
+        telephone: tel || null,
+        sujet: sujet || null,
+        message: message || null
+      });
+
+      if(error){
+        console.error('[rdv] insert:', error);
+        alert("Erreur lors de la réservation. Contactez-nous directement à contact.nexaweb62@gmail.com");
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('loading');
+        submitBtn.querySelector('.bk-submit-lbl').textContent = 'Confirmer le rendez-vous';
+        return;
+      }
+
+      // Email notification (non-blocking)
+      try {
+        await window.sb.functions.invoke('send-rdv-email', {
+          body: {
+            prenom: v.prenom, nom: v.nom, email: v.email,
+            telephone: tel, sujet, message,
+            date: dateToISO(selDate), heure: selTime
+          }
+        });
+      } catch(emailErr) { console.warn('[rdv] email notif:', emailErr); }
+
+      showSuccess(v.prenom, selDate, selTime, sujet, message);
+
+    } catch(err){
+      console.error('[rdv] unexpected:', err);
+      alert('Une erreur inattendue est survenue.');
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('loading');
+      submitBtn.querySelector('.bk-submit-lbl').textContent = 'Confirmer le rendez-vous';
+    }
+  });
+
+  /* ── Success ── */
+  function showSuccess(prenom, date, time, sujet, message){
+    layoutEl.style.display = 'none';
+    successEl.classList.add('show');
+    document.getElementById('success-prenom').textContent = prenom;
+    document.getElementById('success-date-lbl').textContent = formatFr(date)+' à '+time;
+
+    // Google Calendar URL
+    var gcDate  = dateToGcal(date);
+    var hh = time.split(':')[0], mm = time.split(':')[1];
+    var endTime = addMins(time, 30);
+    var gcStart = gcDate+'T'+hh+mm+'00';
+    var gcEnd   = gcDate+'T'+endTime.replace(':','')+'00';
+    var gcUrl = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
+      + '&text='    + encodeURIComponent('Consultation Nexa Web (30 min)')
+      + '&dates='   + gcStart + '/' + gcEnd
+      + '&details=' + encodeURIComponent('Consultation gratuite avec Nexa Web.\nSujet : '+(sujet||'Non précisé')+(message?'\n\n'+message:'')+'\n\nUn lien visio vous sera envoyé par e-mail.')
+      + '&location='+ encodeURIComponent('Visio — lien envoyé par e-mail');
+    document.getElementById('gcal-btn').href = gcUrl;
+  }
+
+  /* ── Init ── */
+  renderCal();
+  renderSlots();
+})();
+</script>
 
 <script is:inline type="module">
 (async function(){
