@@ -550,9 +550,7 @@ ul, ol { list-style: none; }
   padding: clamp(32px, 5vw, 64px);
   border: 1px solid var(--hair);
   border-radius: 24px;
-  background:
-    radial-gradient(120% 140% at 50% 0%, rgba(240, 168, 184, 0.12), transparent 60%),
-    var(--surface);
+  background: var(--surface);
   text-align: center;
 }
 .contact-actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: clamp(22px, 3vw, 30px); }
@@ -770,3 +768,49 @@ body.menu-open { overflow: hidden; }
   letter-spacing: -0.03em;
   color: rgba(255, 255, 255, 0.14);
 }
+
+/* ── Formulaire de contact ───────────────────────────────────────────────────
+   Trois champs, pas un de plus. Un commerçant qui regarde le site apres son
+   service ne prendra pas rendez-vous : il laisse son numero. Traite par
+   Netlify Forms — aucun service tiers, aucune cle, aucun JavaScript. */
+.form {
+  display: grid;
+  gap: 14px;
+  width: min(460px, 100%);
+  margin: clamp(26px, 3.5vw, 34px) auto 0;
+  text-align: left;
+}
+.field { display: grid; gap: 7px; }
+.field label {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.field input {
+  width: 100%;
+  padding: 13px 15px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--hair);
+  border-radius: 12px;
+  color: #fff;
+  font: inherit;
+  font-size: 15px;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.field input::placeholder { color: rgba(255, 255, 255, 0.28); }
+.field input:hover { border-color: var(--hair-strong); }
+.field input:focus { outline: none; border-color: #fff; background: rgba(255, 255, 255, 0.07); }
+.form .cta { justify-content: center; width: 100%; margin-top: 4px; }
+.form-hp { position: absolute; left: -9999px; }
+.form-note { margin-top: 4px; font-size: 12.5px; line-height: 1.6; color: var(--muted); text-align: center; }
+
+.contact-alt {
+  margin-top: clamp(22px, 3vw, 28px);
+  padding-top: clamp(20px, 2.6vw, 26px);
+  border-top: 1px solid var(--hair);
+  font-size: 14px;
+  color: var(--muted);
+}
+.contact-alt a { color: #fff; text-decoration: underline; text-underline-offset: 3px; }

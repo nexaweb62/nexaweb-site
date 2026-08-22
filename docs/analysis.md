@@ -308,11 +308,11 @@ devisées séparément — reportage photo (250–450 €), rédaction longue
 
 | # | Problème | Impact | Effort |
 |---|---|---|---|
-| P1 | **Aucun formulaire.** Le seul chemin de conversion est Calendly, le téléphone ou un `mailto:`. Un commerçant qui regarde le site à 23 h après le service ne prendra pas rendez-vous : il veut laisser son numéro en trois champs. | Conversion | Moyen |
+| ~~P1~~ | ~~**Aucun formulaire.**~~ Corrigé en `v1.2` : formulaire à trois champs (nom, commerce, téléphone) traité par Netlify Forms, avec honeypot et page de confirmation. | Conversion | Fait |
 | P2 | **Les prix ne sont pas renseignés.** La section affiche un placeholder. Tant que les montants manquent, la page ne peut pas convertir et le garde-fou de build bloque la mise en production. | Conversion | Bloqué — décision d'Elio |
-| P3 | **Aucun balisage structuré.** Pas de `LocalBusiness` schema.org, pas de mention d'adresse exploitable. Pour du SEO local — le seul SEO qui compte ici — c'est la première chose à corriger. | SEO local | Faible |
-| P4 | **La section « constat » est en trois cartes.** Trois cartes côte à côte, c'est exactement le motif visuel qui signale un site généré. Le contenu mérite mieux que ce gabarit. | Différenciation | Faible |
-| P5 | **Le hero ne dit pas où l'on est.** « Carvin · Hauts-de-France » est dans une pilule discrète. Pour du SEO local et pour la confiance, la ville doit être dans le `h1` ou juste en dessous, en texte. | SEO local, confiance | Faible |
+| ~~P3~~ | ~~**Aucun balisage structuré.**~~ Corrigé en `v1.1` : JSON-LD `ProfessionalService` avec ville, région et zone desservie. | SEO local | Fait |
+| ~~P4~~ | ~~**La section « constat » est en trois cartes.**~~ Corrigé en `v1.1` : bloc deux colonnes, gabarit `.card` supprimé de la feuille de style. | Différenciation | Fait |
+| ~~P5~~ | ~~**Le hero ne dit pas où l'on est.**~~ Corrigé en `v1.1` : l'accroche nomme « les commerces de Carvin et des Hauts-de-France ». | SEO local, confiance | Fait |
 | P6 | **Aucune objection traitée avant la FAQ.** Le prix arrive sans que la question « et si je ne suis pas satisfait » ait été adressée. | Conversion | Faible |
 | P7 | **Pas de `LocalBusiness` ni de page « à propos ».** On ne sait pas qui est derrière Nexa Web. Pour un artisan qui achète à un artisan, c'est un manque de confiance direct. | Crédibilité | Moyen |
 
@@ -334,9 +334,9 @@ Corrigé en `v1` :
 
 Restant à corriger :
 
-- **Les trois cartes de la section « constat »** (P4). Motif générique.
-- **Les gradients radiaux du panneau de contact.** Un dégradé rose diffus
-  derrière un bloc arrondi : à supprimer ou à justifier.
+- ~~Les trois cartes de la section « constat »~~ Supprimées en `v1.1`, ainsi
+  que le gabarit `.card` lui-même : il n'y a plus une seule carte sur le site.
+- ~~Les gradients radiaux du panneau de contact.~~ Supprimés en `v1.2`.
 - **Le vocabulaire.** « Expériences digitales », « sur-mesure » et autres mots
   d'agence n'ont aucun sens pour un boulanger. Le texte actuel est déjà
   largement corrigé sur ce point, mais chaque nouvelle section doit être relue
@@ -351,9 +351,8 @@ Restant à corriger :
    80 contacts, tout le modèle change. Tenez un simple tableau : contacté,
    réponse, rendez-vous, signé.
 2. **Renseigner les prix.** La page ne peut pas convertir sans eux.
-3. **Ajouter un formulaire court** (nom, commerce, téléphone). C'est la
-   correction qui aura le plus d'effet sur le taux de conversion.
-4. **Ajouter le balisage `LocalBusiness`** et la ville en texte visible.
+3. ~~Ajouter un formulaire court.~~ Fait en `v1.2`.
+4. ~~Ajouter le balisage `LocalBusiness`.~~ Fait en `v1.1`.
 5. **Choisir le statut juridique avec un comptable.** L'écart de cotisations
    entre micro-entreprise et société pèse plus lourd que n'importe quelle
    optimisation de production.
@@ -368,3 +367,5 @@ Restant à corriger :
 | Version | Date | Contenu | Raison |
 |---|---|---|---|
 | `v1` | 22/08/2026 | Refonte Astro, suppression du portfolio, typographie Fraunces/Archivo | Aucune réalisation à montrer ; la fonte dot-matrix et Inter signalaient un gabarit générique |
+| `v1.1` | 22/08/2026 | JSON-LD `ProfessionalService`, ville en toutes lettres, section « constat » sortie du gabarit de cartes | Le référencement local était invisible ; les trois cartes étaient le motif le plus banal de la page |
+| `v1.2` | 22/08/2026 | Formulaire de rappel à trois champs, page `/merci`, dégradé radial supprimé, politique de confidentialité corrigée | Seul chemin de conversion : Calendly ou téléphone, inutilisable le soir. La politique affirmait « aucun formulaire » — devenu faux |

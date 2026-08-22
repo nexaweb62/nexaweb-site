@@ -46,7 +46,7 @@
 
 [[redirects]] # remerciement (ancien formulaire)
   from = "/merci.html"
-  to = "/"
+  to = "/merci"
   status = 301
 
 [[redirects]] # blog supprime

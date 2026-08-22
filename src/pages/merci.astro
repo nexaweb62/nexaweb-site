@@ -1,0 +1,35 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE, CALENDLY } from '../config/site';
+---
+
+<Base
+  title="Message bien reçu — Nexa Web"
+  description="Votre demande de rappel a été enregistrée. Nous vous recontactons sous 24 heures ouvrées."
+  path="/merci"
+>
+  <div class="page-simple">
+    <Header />
+  </div>
+
+  <main class="container notfound">
+    <div>
+      <h1 class="section-title" style="max-width:none">C'est noté.</h1>
+      <p class="lede" style="margin-inline:auto">
+        On vous rappelle sous 24 heures ouvrées. En attendant, vous pouvez déjà
+        réserver un créneau si vous préférez choisir votre horaire.
+      </p>
+      <div class="contact-actions">
+        <a class="cta" href={CALENDLY} target="_blank" rel="noopener">Choisir un créneau</a>
+        <a class="btn-ghost" href="/">Retour à l'accueil</a>
+      </div>
+      <p class="contact-alt" style="max-width:46ch;margin-inline:auto">
+        Une urgence ? Appelez le <a href={SITE.phoneHref}>{SITE.phone}</a>.
+      </p>
+    </div>
+  </main>
+
+  <Footer />
+</Base>

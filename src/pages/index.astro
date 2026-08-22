@@ -260,11 +260,43 @@ const description =
             et ce qu'il faudrait pour faire mieux. Vous repartez avec un avis clair,
             même si on ne travaille pas ensemble.
           </p>
-          <div class="contact-actions">
-            <a class="cta" href={CALENDLY} target="_blank" rel="noopener">Réserver un créneau</a>
-            <a class="btn-ghost" href={SITE.phoneHref}>{SITE.phone}</a>
-            <a class="btn-ghost" href={`mailto:${SITE.email}`}>Écrire un e-mail</a>
-          </div>
+          <form
+            class="form"
+            name="contact"
+            method="POST"
+            action="/merci"
+            data-netlify="true"
+            netlify-honeypot="bot-field"
+          >
+            <input type="hidden" name="form-name" value="contact" />
+            <p class="form-hp">
+              <label>Ne remplissez pas ce champ : <input name="bot-field" tabindex="-1" /></label>
+            </p>
+
+            <div class="field">
+              <label for="nom">Votre nom</label>
+              <input id="nom" name="nom" type="text" autocomplete="name" required />
+            </div>
+
+            <div class="field">
+              <label for="commerce">Votre commerce</label>
+              <input id="commerce" name="commerce" type="text" autocomplete="organization" placeholder="Restaurant, boulangerie, salon…" required />
+            </div>
+
+            <div class="field">
+              <label for="telephone">Téléphone</label>
+              <input id="telephone" name="telephone" type="tel" inputmode="tel" autocomplete="tel" required />
+            </div>
+
+            <button class="cta" type="submit">Être rappelé</button>
+            <p class="form-note">On vous rappelle sous 24 h ouvrées. Aucun démarchage ensuite.</p>
+          </form>
+
+          <p class="contact-alt">
+            Vous préférez choisir votre créneau ?
+            <a href={CALENDLY} target="_blank" rel="noopener">Réserver directement</a>
+            · ou appelez le <a href={SITE.phoneHref}>{SITE.phone}</a>
+          </p>
         </div>
       </div>
     </section>
