@@ -80,6 +80,17 @@ for (const chemin of pages.sort()) {
     }
   }
 
+  /* Ancres : `#tarifs` doit exister dans la page visee, sinon le lien depose
+     le visiteur en haut d'une page sans qu'il comprenne pourquoi. C'est ainsi
+     qu'un `#realisations` a survecu a la suppression de sa section. */
+  for (const m of html.matchAll(/href="([^"]*#[\w-]+)"/g)) {
+    const [chemin_, ancre] = m[1].split('#');
+    const cible = chemin_ === '' ? chemin : join(dist, chemin_ === '/' ? 'index.html' : `${chemin_}.html`);
+    if (!existsSync(cible)) continue; // lien externe ou page absente, deja signale plus bas
+    const page = cible === chemin ? html : sansBalises(readFileSync(cible, 'utf8'));
+    if (!new RegExp(`id="${ancre}"`).test(page)) dire(`ancre morte : ${m[1]}`);
+  }
+
   /* Liens internes : la cible doit exister dans dist/ */
   for (const m of html.matchAll(/href="(\/[^"#?]*)"/g)) {
     const cible = m[1];
@@ -117,11 +128,23 @@ const feuille = [...accueil.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)]
   .map((m) => m[1])
   .join('\n');
 
-const definies = new Set([...feuille.matchAll(/\.(-?[_a-zA-Z][\w-]*)/g)].map((m) => m[1]));
+/* `url(…/archivo-latin.woff2)` et `format('woff2')` contiennent un point suivi
+   d'un mot : sans ce nettoyage, l'extension passe pour une classe. */
+const feuilleNette = feuille.replace(/url\([^)]*\)/g, '').replace(/format\([^)]*\)/g, '');
+const definies = new Set([...feuilleNette.matchAll(/\.(-?[_a-zA-Z][\w-]*)/g)].map((m) => m[1]));
 /* Classes sans regle propre, et c'est voulu : `menu-link` sert de point
    d'accroche au JavaScript du menu, son apparence vient de `.menu-sheet a`.
-   `menu-open` et `is-active` sont posees a l'execution. */
-const tolerees = new Set(['menu-open', 'is-active', 'menu-link', 'astro-route-announcer']);
+   `menu-open` et `is-active` sont posees a l'execution. `price-todo` et sa note
+   ne s'affichent que si un montant repasse a null : c'est le garde-fou de mise
+   en production, la regle doit rester dans la feuille. */
+const tolerees = new Set([
+  'menu-open',
+  'is-active',
+  'menu-link',
+  'price-todo',
+  'price-todo-note',
+  'astro-route-announcer',
+]);
 
 const citees = new Map();
 for (const chemin of pages) {
@@ -163,13 +186,27 @@ const PAIRES = [
   ['navigation', variable('--nav-text'), '#ffffff'],
 ];
 
+let pire = { quoi: '—', r: Infinity };
 for (const [quoi, avant, apres] of PAIRES) {
   if (!avant || !apres) {
     soucis.push(`contraste : couleur introuvable pour « ${quoi} »`);
     continue;
   }
   const r = contraste(avant, apres);
+  if (r < pire.r) pire = { quoi, r };
   if (r < 4.5) soucis.push(`contraste insuffisant — ${quoi} : ${r.toFixed(2)}:1 (seuil 4,5:1)`);
+}
+console.log(`audit : contraste le plus faible — ${pire.quoi}, ${pire.r.toFixed(2)}:1 (seuil 4,5:1)`);
+
+/* Regles definies et jamais employees. Simple information : une classe peut
+   servir a une page future ou etre posee par un script. Mais une liste qui
+   s'allonge signale un renommage a moitie fait — exactement le defaut que le
+   controle ci-dessus a trouve dans l'autre sens. */
+const orphelines = [...definies].filter(
+  (c) => !citees.has(c) && !tolerees.has(c) && !c.startsWith('astro-'),
+);
+if (orphelines.length) {
+  console.log(`audit : ${orphelines.length} regle(s) sans emploi — ${orphelines.join(', ')}`);
 }
 
 console.log(
