@@ -65,21 +65,56 @@ const { active = '/' } = Astro.props;
   if (burger && menu) {
     let open = false;
 
+    /* Le panneau se declare `aria-modal` : le clavier doit donc y rester tant
+       qu'il est ouvert, sans quoi la tabulation part visiter une page cachee
+       derriere l'overlay. */
+    const focusables = () =>
+      Array.from(
+        menu.querySelectorAll<HTMLElement>('a[href], button:not([disabled])'),
+      ).filter((el) => el.offsetParent !== null);
+
     const setOpen = (next: boolean) => {
       open = next;
       menu.hidden = !open;
       document.body.classList.toggle('menu-open', open);
       burger.setAttribute('aria-expanded', String(open));
       burger.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+      /* A la fermeture, le focus revient sur le bouton qui a ouvert : sinon il
+         retombe en haut du document et la lecture repart de zero. */
+      if (open) focusables()[0]?.focus();
+      else burger.focus();
     };
 
     burger.addEventListener('click', () => setOpen(!open));
     menu.querySelectorAll('[data-menu-close], .menu-link, .menu-cta').forEach((el) => {
       el.addEventListener('click', () => setOpen(false));
     });
+
     window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && open) setOpen(false);
+      if (!open) return;
+
+      if (e.key === 'Escape') {
+        setOpen(false);
+        return;
+      }
+
+      if (e.key !== 'Tab') return;
+      const cibles = focusables();
+      if (cibles.length === 0) return;
+
+      const premier = cibles[0];
+      const dernier = cibles[cibles.length - 1];
+      const actif = document.activeElement;
+
+      if (e.shiftKey && (actif === premier || !menu.contains(actif))) {
+        e.preventDefault();
+        dernier.focus();
+      } else if (!e.shiftKey && actif === dernier) {
+        e.preventDefault();
+        premier.focus();
+      }
     });
+
     window.addEventListener('resize', () => {
       if (open && window.innerWidth > 720) setOpen(false);
     });

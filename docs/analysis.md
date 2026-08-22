@@ -39,25 +39,25 @@ ce site, du premier commit de la refonte jusqu'au cycle `v2.5` :
 | | Valeur |
 |---|---:|
 | Sessions | 4 |
-| Tours d'assistant | 897 |
-| Tokens d'entrée | 159,8 M |
-| — dont lus en cache | **98,2 %** |
-| Tokens de sortie | 1,30 M |
+| Tours d'assistant | 1 028 |
+| Tokens d'entrée | 190,4 M |
+| — dont lus en cache | **98,0 %** |
+| Tokens de sortie | 1,46 M |
 | Modèle | Claude Opus 5 |
-| **Coût total** | **128,80 $ ≈ 118 €** |
+| **Coût total** | **154,16 $ ≈ 142 €** |
 
 Trois conclusions, et ce sont des faits, pas des hypothèses :
 
-1. **Le cache fait tout.** 98,2 % des tokens d'entrée sont des relectures de
-   cache facturées 10 % du prix normal. Sans lui, les mêmes 160 M de tokens
-   d'entrée auraient coûté environ 800 $ au lieu de 80 $. Toute pratique qui
+1. **Le cache fait tout.** 98 % des tokens d'entrée sont des relectures de
+   cache facturées 10 % du prix normal. Sans lui, les mêmes 190 M de tokens
+   d'entrée auraient coûté environ 950 $ au lieu de 96 $. Toute pratique qui
    casse le cache — changer de modèle en cours de session, réordonner le
    contexte, redémarrer sans raison — multiplie la facture par cinq.
-2. **Le coût par tour est stable : 0,144 $.** C'est le seul chiffre à retenir
+2. **Le coût par tour est stable : 0,150 $.** C'est le seul chiffre à retenir
    pour estimer un futur projet. Un site client demande 100 à 200 tours une
    fois le processus rodé, soit **15 à 30 $**.
 3. **L'abonnement est rentable dès le premier site.** Claude Max 5× coûte
-   100 $/mois. Ce seul site en a consommé 129 $ à l'usage, en une journée.
+   100 $/mois. Ce seul site en a consommé 154 $ à l'usage, en une journée.
    Le calcul « bascule à 10 sites/mois » de la modélisation ci-dessous était
    faux parce qu'il sous-estimait le nombre de tours : la bascule est en
    réalité **au premier site sérieux du mois**. Prenez l'abonnement.
@@ -87,15 +87,15 @@ Deux mécanismes changent tout sur le coût réel :
 
 #### 1.1.2 Projection pour les sites suivants
 
-Recalculée sur le coût par tour **mesuré** (0,144 $ en Opus 5), et non plus sur
+Recalculée sur le coût par tour **mesuré** (0,150 $ en Opus 5), et non plus sur
 une estimation de contexte. Le rapport Opus/Sonnet est appliqué au prorata des
 tarifs de sortie, poste dominant une fois le cache en place.
 
 | Session | Tours | Opus 5 | Sonnet 5 |
 |---|---:|---:|---:|
-| Ce site, système visuel compris — **mesuré** | 897 | **128,80 $ · 118 €** | — |
-| Site client, process rodé | 150 | 21,5 $ · **20 €** | 13,0 $ · **12 €** |
-| Site client, industrialisé (gabarit + questionnaire) | 70 | 10,1 $ · **9 €** | 6,1 $ · **6 €** |
+| Ce site, système visuel compris — **mesuré** | 1 028 | **154,16 $ · 142 €** | — |
+| Site client, process rodé | 150 | 22,5 $ · **21 €** | 13,5 $ · **12 €** |
+| Site client, industrialisé (gabarit + questionnaire) | 70 | 10,5 $ · **10 €** | 6,3 $ · **6 €** |
 
 **Conclusion, et c'est la plus importante de cette section : le coût de l'IA
 est négligeable, mais moins qu'on ne le croit.** À 9–20 € par site client
@@ -103,9 +103,9 @@ contre 810–1 125 € de temps humain, elle pèse **1 à 2 % du coût de produc
 Optimiser ce poste est une perte de temps. Le seul arbitrage qui compte est de
 savoir si elle fait gagner des heures — et la réponse est oui (section 2).
 
-**En revanche, le premier site a coûté 118 €, pas 10 €.** Un devis établi sur
+**En revanche, le premier site a coûté 142 €, pas 10 €.** Un devis établi sur
 « l'IA ne coûte rien » se trompe d'un facteur dix sur un projet inhabituel.
-Retenez plutôt : *0,144 $ par tour d'assistant, et un projet neuf en demande
+Retenez plutôt : *0,150 $ par tour d'assistant, et un projet neuf en demande
 beaucoup plus qu'un projet répété*.
 
 ### 1.2 Coût infrastructure
@@ -536,3 +536,12 @@ le vrai message de cette analyse.
 | `v2.6` | 22/08/2026 | Questionnaire de démarrage et checklist de mise en ligne | Le levier d'industrialisation identifié depuis le début n'avait aucune traduction opérationnelle |
 | `v2.7` | 22/08/2026 | Maquettes corrigées et liées depuis les pages métier | Deux démonstrations existaient, n'étaient liées de nulle part, et leurs champs n'avaient pas de label |
 | `v2.8` | 22/08/2026 | Barre d'action et fil d'Ariane sur les pages d'atterrissage | La barre n'existait que sur l'accueil, alors que les pages métier sont celles où l'on arrive depuis Google |
+| `v2.9` | 22/08/2026 | `docs/conclusions.md` : la synthèse en une page | 530 lignes d'analyse mélangeaient le détail des calculs et les décisions |
+| `v3.0` | 22/08/2026 | Audit : classes sans style, contrastes calculés. Section « premiers projets » réparée | Faute de navigateur, il fallait un contrôle qui remplace le coup d'œil. Il a trouvé une section sans mise en forme depuis `v1.1` |
+| `v3.1` | 22/08/2026 | Audit : ancres mortes et règles CSS sans emploi. Lien mort corrigé dans une maquette | Même famille de défaut : un renommage à moitié fait ne proteste jamais |
+| `v3.2` | 22/08/2026 | Guide « fiche Google Business », balisage HowTo | L'offre inclut la fiche Google, rien ne montrait qu'on sait de quoi on parle. Requête tapée avant même de chercher une agence |
+| `v3.3` | 22/08/2026 | Politique de confidentialité corrigée, sitemap daté depuis git, maillage vers le guide | La politique décrivait un appel à Google Fonts supprimé en `v2.0`, et parlait d'un seul formulaire |
+| `v3.4` | 22/08/2026 | Mentions légales obligatoires : objet `LEGAL`, pastilles visibles, blocage en production | Un site professionnel sans SIRET ni adresse de siège est en infraction (LCEN art. 6 III) |
+| `v3.5` | 22/08/2026 | Affiche du hero à 56 Ko, contrôle du vocabulaire d'agence, 404 utile | Le premier écran mobile pesait 94 Ko pour un fond flou ; la règle éditoriale n'était vérifiée que par relecture |
+| `v3.6` | 22/08/2026 | Seuil de rentabilité sous les prix | L'argument « ce que ça doit rapporter » n'existait que dans ce document |
+| `v3.7` | 22/08/2026 | Focus piégé dans le menu mobile, chiffres d'IA réactualisés | Le panneau se déclare `aria-modal` mais laissait la tabulation partir derrière l'overlay |

@@ -11,7 +11,7 @@
 
 | Question | Réponse courte |
 |---|---|
-| Combien coûte l'IA ? | **134 $ mesurés** pour construire ce site en entier. 15 à 30 $ pour un site client une fois le processus rodé. 1 à 2 % du coût de production |
+| Combien coûte l'IA ? | **154 $ mesurés** pour construire ce site en entier. 20 à 30 $ pour un site client une fois le processus rodé. 1 à 2 % du coût de production |
 | Combien de temps pour un site ? | **18 h** avec Claude Code et un processus rodé, contre 39 h sans. **10,3 h** une fois industrialisé |
 | Le modèle à trois tient-il ? | Oui à partir de 5 sites/mois, et **c'est l'acquisition qui limite, jamais la production** — 41 % de la capacité utilisée dans le scénario réaliste |
 | Les tarifs sont-ils bons ? | **1 190 € + 99 €/mois** rendent le client rentable dès la mise en ligne. C'est ce qui rend tenable le « sans engagement » affiché |
@@ -27,21 +27,21 @@ refonte à aujourd'hui :
 
 | | |
 |---|---:|
-| Tours d'assistant | 934 |
-| Tokens d'entrée | 167 M, dont **98,2 % lus en cache** |
-| Tokens de sortie | 1,36 M |
-| **Coût** | **134,41 $ ≈ 124 €** |
+| Tours d'assistant | 1 028 |
+| Tokens d'entrée | 190 M, dont **98 % lus en cache** |
+| Tokens de sortie | 1,46 M |
+| **Coût** | **154,16 $ ≈ 142 €** |
 
-**0,144 $ par tour.** C'est le seul chiffre à retenir pour estimer un projet.
+**0,150 $ par tour.** C'est le seul chiffre à retenir pour estimer un projet.
 
 Trois conséquences pratiques :
 
-- **Le cache décide de la facture.** Sans lui, ces 167 M de tokens auraient
-  coûté environ 830 $ au lieu de 84 $. Rester dans une session longue plutôt
+- **Le cache décide de la facture.** Sans lui, ces 190 M de tokens auraient
+  coûté environ 950 $ au lieu de 96 $. Rester dans une session longue plutôt
   que d'en ouvrir dix, ne pas changer de modèle en cours de route.
 - **L'abonnement bat l'API dès le premier projet sérieux.** Claude Max 5× coûte
-  100 $/mois ; ce site seul en a consommé 134 $ en une journée.
-- **Le premier site coûte dix fois un site client.** 124 € ici, 15 à 30 $
+  100 $/mois ; ce site seul en a consommé 154 $ en une journée.
+- **Le premier site coûte dix fois un site client.** 142 € ici, 20 à 30 $
   ensuite : la différence, c'est le système visuel, les impasses et les choix
   qu'on ne refait qu'une fois. Ne pas deviser un projet neuf au tarif d'un
   projet répété.
@@ -131,6 +131,11 @@ Ce qui a été corrigé aujourd'hui, dans l'ordre de valeur :
 | `v2.6` | Questionnaire de démarrage et checklist de mise en ligne |
 | `v2.7` | Maquettes remises au travail, liées depuis les pages métier |
 | `v2.8` | Barre d'action et fil d'Ariane sur les pages d'atterrissage |
+| `v3.0`–`v3.1` | Audit renforcé : classes sans style, ancres mortes, contrastes. Deux vrais défauts trouvés, dont une section sans mise en forme depuis `v1.1` |
+| `v3.2` | Guide « fiche Google Business » — la page qui rencontre le commerçant avant qu'il cherche une agence |
+| `v3.3`–`v3.4` | Politique de confidentialité exacte, mentions légales obligatoires nommées et bloquantes |
+| `v3.5` | Premier écran mobile à 56 Ko, vocabulaire d'agence contrôlé automatiquement |
+| `v3.6`–`v3.7` | Seuil de rentabilité sous les prix, focus piégé dans le menu mobile |
 
 **Ce qui reste ouvert** (détail en [`analysis.md`](analysis.md) § 5.2) :
 
