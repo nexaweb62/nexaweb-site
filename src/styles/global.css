@@ -66,10 +66,12 @@ img{display:block;max-width:100%}
 @media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .hdr.on{background:rgba(244,244,240,.92)}}
 :root[data-theme="light"] .hdr.on{background:rgba(244,244,240,.92)}
 .nav{display:flex;align-items:center;height:var(--hdr);position:relative}
-.nav-logo{font-size:14px;font-weight:900;letter-spacing:.08em}
-.nav-logo span{color:rgba(232,232,242,.68)}
-:root[data-theme="light"] .nav-logo span{color:rgba(17,17,22,.68)}
-@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .nav-logo span{color:rgba(17,17,22,.68)}}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo svg{flex-shrink:0;border-radius:50%}
+.nav-logo-txt{font-size:14px;font-weight:900;letter-spacing:.08em}
+.nav-logo-txt em{font-style:normal;color:rgba(232,232,242,.68)}
+:root[data-theme="light"] .nav-logo-txt em{color:rgba(17,17,22,.68)}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .nav-logo-txt em{color:rgba(17,17,22,.68)}}
 .nav-links{display:none;gap:clamp(16px,3vw,40px);position:absolute;left:50%;transform:translateX(-50%)}
 .nav-link{font-size:10.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);transition:color .2s}
 .nav-link:hover,.nav-link.on{color:var(--text)}
