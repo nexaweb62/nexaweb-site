@@ -20,7 +20,7 @@ var D={
     'login-trust':'Your secure space',
     /* ── Header / nav ── */
     'hdr-nav-home':'Home','hdr-nav-services':'Services','hdr-nav-about':'About',
-    'hdr-nav-pricing':'Pricing','hdr-nav-faq':'FAQ','hdr-nav-contact':'Contact',
+    'hdr-nav-pricing':'Pricing','hdr-nav-faq':'FAQ','hdr-nav-contact':'Location',
     'hdr-back':'Back',
     /* ── Loader (index) ── */
     'idx-enter':'Enter',
@@ -170,7 +170,7 @@ var D={
     'trf-cta-btn1':'Request a free quote →',
     'trf-cta-btn2':'Contact us',
     /* ── Contact ── */
-    'ctt-eyebrow':'Contact us',
+    'ctt-eyebrow':'Our location',
     'ctt-title':'We\'re in<br><em>Carvin.</em>',
     /* ── Équipe ── */
     'eq-lbl':'The agency',
@@ -231,7 +231,7 @@ var D={
     'login-trust':'Votre espace sécurisé',
     /* ── Header / nav ── */
     'hdr-nav-home':'Accueil','hdr-nav-services':'Services','hdr-nav-about':'À propos',
-    'hdr-nav-pricing':'Tarifs','hdr-nav-faq':'FAQ','hdr-nav-contact':'Contact',
+    'hdr-nav-pricing':'Tarifs','hdr-nav-faq':'FAQ','hdr-nav-contact':'Localisation',
     'hdr-back':'Retour',
     /* ── Loader (index) ── */
     'idx-enter':'Entrer',
@@ -381,7 +381,7 @@ var D={
     'trf-cta-btn1':'Demander un devis gratuit →',
     'trf-cta-btn2':'Nous contacter',
     /* ── Contact ── */
-    'ctt-eyebrow':'Nous contacter',
+    'ctt-eyebrow':'Notre localisation',
     'ctt-title':'On est à<br><em>Carvin.</em>',
     /* ── Équipe ── */
     'eq-lbl':'L\'agence',
