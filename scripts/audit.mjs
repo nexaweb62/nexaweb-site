@@ -165,6 +165,28 @@ for (const [classe, page] of citees) {
 
 
 
+
+/* ── Fond video ─────────────────────────────────────────────────────────────
+   La balise perd un attribut, le fichier disparait du dossier, et plus rien ne
+   proteste : le poster s'affiche, le fond est simplement fixe. Ce controle
+   verifie ce dont la lecture automatique depend reellement. */
+const accueilHtml = readFileSync(join(dist, 'index.html'), 'utf8');
+const balise = accueilHtml.match(/<video[^>]*class="bg-video"[^>]*>/)?.[0];
+
+if (!balise) {
+  soucis.push('index.html — la balise du fond video a disparu');
+} else {
+  for (const attendu of ['data-src=', ' muted', ' loop', ' playsinline', 'poster=']) {
+    if (!balise.includes(attendu)) {
+      soucis.push(`index.html — fond video : attribut ${attendu.trim()} manquant (la lecture automatique en depend)`);
+    }
+  }
+  const fichier = balise.match(/data-src="([^"]+)"/)?.[1];
+  if (fichier && !existsSync(join(dist, fichier.replace(/^\//, '')))) {
+    soucis.push(`index.html — fond video : ${fichier} absent de dist/`);
+  }
+}
+
 /* ── Coherence des montants ─────────────────────────────────────────────────
    Les prix ne doivent exister qu'a un seul endroit : PRICING, dans
    src/config/site.ts. Un montant ecrit en clair dans un texte survit au

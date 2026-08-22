@@ -76,11 +76,11 @@ export const LEGAL: {
   directeur: string | null;
   tva: string | null;
 } = {
-  forme: null,
-  siret: null,
-  adresse: null,
-  directeur: null,
-  tva: null,
+  forme: "SAS — À REMPLACER",
+  siret: "SIRET À RENSEIGNER",
+  adresse: "Adresse du siège social à renseigner",
+  directeur: "Nom du représentant légal à renseigner",
+  tva: "TVA À RENSEIGNER",
 };
 
 export const CALENDLY = 'https://calendly.com/contact-nexaweb62/30min';

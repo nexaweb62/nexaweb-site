@@ -384,35 +384,80 @@ const description =
 </Base>
 
 <script>
-  /* --- Fond video : lance des que le script s'execute. Il avait ete repousse
-         au premier temps mort du navigateur en v2.4 pour proteger le premier
-         rendu ; le fond mettait alors une a deux secondes a s'animer, ce qui se
-         voit et qui n'etait pas le but. Il repart donc immediatement.
-         Les trois protections qui comptent restent en place : rien sous 720 px
-         (l'affiche suffit et economise 1,2 Mo), rien en reduced-motion, rien en
-         mode economie de donnees ou en 2G. --- */
+  /* --- Fond video ------------------------------------------------------------
+     Trois conditions peuvent l'ecarter, et une quatrieme peut faire echouer la
+     lecture : ecran sous 720 px, animations reduites, mode economie de donnees,
+     et refus d'autoplay par le navigateur. Aucune ne se voyait : le fond restait
+     fixe sans que rien ne l'explique, ni a l'ecran ni dans la console.
+
+     Trois corrections :
+     - le refus d'autoplay n'est plus avale silencieusement : la lecture est
+       retentee au premier geste du visiteur (clic, touche, defilement) ;
+     - chaque mise a l'ecart est ecrite dans la console, avec sa raison ;
+     - `?video=1` dans l'URL force le chargement, quelles que soient les
+       conditions, pour verifier en deux secondes que le fichier est bon.
+     --- */
   const video = document.querySelector<HTMLVideoElement>('.bg-video');
   const calm = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   if (video) {
     const src = video.dataset.src;
-    const reseau = (navigator as any).connection;
-    const econome = Boolean(reseau?.saveData) || /2g/.test(reseau?.effectiveType ?? '');
-    let loaded = false;
+    const force = new URLSearchParams(location.search).has('video');
+    /* Marque la racine : la feuille de style s'en sert pour lever le
+       `display: none` applique en prefers-reduced-motion. */
+    if (force) document.documentElement.dataset.video = 'force';
+    let charge = false;
 
-    const maybeLoad = () => {
-      if (loaded || !src || econome) return;
-      if (window.innerWidth <= 720 || calm.matches) return;
-      loaded = true;
+    const raison = (): string | null => {
+      if (force) return null;
+      if (window.innerWidth <= 720) return "ecran de moins de 720 px : l'affiche suffit et economise 1,2 Mo";
+      if (calm.matches) return 'le systeme demande des animations reduites (prefers-reduced-motion)';
+      const reseau = (navigator as any).connection;
+      if (reseau?.saveData) return 'le navigateur est en mode economie de donnees';
+      if (/2g/.test(reseau?.effectiveType ?? '')) return 'connexion estimee en 2G';
+      return null;
+    };
+
+    /* Autoplay refuse : on retente au premier geste, ce qui leve la restriction
+       dans tous les navigateurs. Sans ca, l'echec etait definitif et muet. */
+    const relanceAuGeste = () => {
+      const relance = () => {
+        video.play().catch(() => {});
+      };
+      ['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach((evt) =>
+        window.addEventListener(evt, relance, { once: true, passive: true }),
+      );
+    };
+
+    const charger = () => {
+      if (charge || !src) return;
+      const bloquant = raison();
+      if (bloquant) return;
+
+      charge = true;
+      video.preload = 'auto';
       video.src = src;
       video.load();
-      video.play().catch(() => {
-        /* Autoplay refuse : l'affiche reste, rien de casse. */
+
+      video.addEventListener('error', () => {
+        console.warn(`[nexa] fond video : ${src} n'a pas pu etre charge (fichier absent ou codec refuse).`);
+      });
+
+      video.play().catch((e) => {
+        console.info(`[nexa] fond video : lecture automatique refusee (${e?.name ?? 'erreur'}), relance au premier geste.`);
+        relanceAuGeste();
       });
     };
 
-    maybeLoad();
-    window.addEventListener('resize', maybeLoad, { passive: true });
+    charger();
+
+    if (!charge) {
+      const bloquant = raison();
+      if (bloquant) console.info(`[nexa] fond video ecarte — ${bloquant}. Forcer avec ?video=1`);
+    }
+
+    /* Un agrandissement de fenetre repasse au-dessus de 720 px. */
+    window.addEventListener('resize', charger, { passive: true });
   }
 
   /* --- Raccourci Calendly : le jour choisi devient un parametre d'URL.

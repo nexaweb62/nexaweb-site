@@ -976,6 +976,13 @@ body.menu-open { overflow: hidden; }
   .site-header { opacity: 1; transform: none; }
   .bg-video { display: none; }
   .bg { background: #000 center / cover no-repeat url("/assets/hero-poster.webp"); }
+
+  /* `?video=1` force l'affichage meme ici : sans cette exception, un poste
+     regle sur « animations reduites » n'aurait aucun moyen de verifier que la
+     video fonctionne — elle restait masquee par cette regle apres avoir ete
+     chargee. C'est exactement ce qui rendait la panne indiagnosticable. */
+  :root[data-video="force"] .bg-video { display: block; }
+  :root[data-video="force"] .bg { background: var(--bg); }
 }
 
 /* ── Pages de contenu (legal, 404) ───────────────────────────────────────── */

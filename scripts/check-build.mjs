@@ -41,11 +41,20 @@ const legal = config.match(/export const LEGAL[^=]*=\s*\{([\s\S]*?)\n\};/);
 if (!legal) {
   problems.push("impossible de lire l'objet LEGAL dans src/config/site.ts");
 } else {
+  /* Un texte d'attente — « SIRET A RENSEIGNER », « SAS — A REMPLACER » — passe
+     le controle du null tout en etant exactement ce qu'il fallait empecher de
+     publier. Il vaut meme pire : la page affiche alors une mention legale
+     apparemment remplie, et personne ne la relit. */
+  const ATTENTE = /renseigner|remplacer|a completer|à compléter|todo|xxx|lorem|votre siret|exemple/i;
+
   for (const key of ['forme', 'siret', 'adresse', 'directeur']) {
     const m = legal[1].match(new RegExp(`\\b${key}\\s*:\\s*([^,\\n]+)`));
     const value = m ? m[1].trim().replace(/,$/, '') : null;
     if (value === null) problems.push(`LEGAL.${key} est absent de src/config/site.ts`);
     else if (value === 'null') problems.push(`LEGAL.${key} vaut null — mention legale obligatoire`);
+    else if (ATTENTE.test(value)) {
+      problems.push(`LEGAL.${key} contient un texte d'attente (${value}) — a remplacer par la vraie valeur`);
+    }
   }
 }
 
@@ -77,6 +86,13 @@ const mentions = (() => {
 
 if (/class="legal-todo"/.test(mentions)) {
   problems.push('dist/mentions-legales.html affiche encore une mention obligatoire non renseignee');
+}
+
+/* Meme filet, mais sur la page produite : il attrape un texte d'attente arrive
+   par un autre chemin que l'objet LEGAL. */
+const attenteVisible = mentions.match(/[^<>]*(?:À RENSEIGNER|A RENSEIGNER|À REMPLACER|A REMPLACER)[^<>]*/i);
+if (attenteVisible) {
+  problems.push(`dist/mentions-legales.html affiche « ${attenteVisible[0].trim()} » aux visiteurs`);
 }
 
 if (problems.length === 0) {

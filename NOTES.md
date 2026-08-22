@@ -60,9 +60,18 @@ doit jamais partir en ligne avec un placeholder.
   refaites ce calcul plutôt que de garder les corps en l'état. Bricolage
   Grotesque, elle, est à 1,9 % d'Archivo : la bascule n'a demandé aucun
   réglage. Le détail est dans `docs/design-system.md`.
-- **Vidéo de fond** : ré-encodée de 13,86 Mo à 1,24 Mo, auto-hébergée. Chargée
-  par JavaScript uniquement au-dessus de 720 px et hors `prefers-reduced-motion` :
-  sur mobile, seule l'affiche de 95 Ko est téléchargée.
+- **Vidéo de fond** : ré-encodée de 13,86 Mo à 1,24 Mo (H.264 High, 1920×1080,
+  10 s, sans piste audio), auto-hébergée. Chargée par JavaScript sous quatre
+  conditions : écran de plus de 720 px, hors `prefers-reduced-motion`, hors mode
+  économie de données, et lecture automatique acceptée par le navigateur. Sur
+  mobile, seule l'affiche de 56 Ko est téléchargée.
+
+  **Si le fond reste fixe**, ouvrez la console : chaque mise à l'écart y est
+  écrite avec sa raison. Et **`?video=1` dans l'URL force le chargement** en
+  levant les quatre conditions, y compris le `display: none` appliqué en
+  animations réduites — c'est le moyen de vérifier en deux secondes que le
+  fichier lui-même est bon. Si la lecture automatique est refusée, elle est
+  relancée au premier clic, appui de touche ou défilement.
 - **Formulaire** : fonction Cloudflare Pages `functions/api/contact.js`, qui
   envoie un e-mail via Resend. Aucun service de formulaire tiers. Le POST est du
   HTML classique : il fonctionne sans JavaScript côté client. Honeypot
