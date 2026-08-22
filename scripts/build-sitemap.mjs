@@ -8,11 +8,43 @@
    demonstration (deja en Disallow dans robots.txt). */
 
 import { readdirSync, readFileSync, writeFileSync, statSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { join, relative } from 'node:path';
 
 const dist = fileURLToPath(new URL('../dist', import.meta.url));
 const ORIGIN = 'https://nexaaweb.com';
+
+/* `lastmod` : date du dernier commit ayant touche le contenu de la page, et non
+   la date du build — sinon toutes les pages se declarent modifiees a chaque
+   deploiement, et Google cesse rapidement de tenir compte du champ. Les pages
+   generees dependent de leur gabarit *et* de leur fichier de contenu : on prend
+   la plus recente des deux. */
+const SOURCES = {
+  'index.html': ['src/pages/index.astro', 'src/config/site.ts'],
+  'equipe.html': ['src/pages/equipe.astro', 'src/config/site.ts'],
+  'fiche-google-business.html': ['src/pages/fiche-google-business.astro', 'src/config/guide.ts'],
+};
+const GENEREES = ['src/pages/[metier].astro', 'src/config/metiers.ts'];
+
+const dateGit = (fichier) => {
+  try {
+    const sortie = execFileSync('git', ['log', '-1', '--format=%cs', '--', fichier], {
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim();
+    return sortie || null;
+  } catch {
+    /* Pas de depot git (build depuis une archive) : on retombera sur le fichier. */
+    return null;
+  }
+};
+
+const derniereModif = (rel, chemin) => {
+  const sources = SOURCES[rel] ?? (rel.startsWith('site-internet-') ? GENEREES : [`src/pages/${rel.replace(/\.html$/, '.astro')}`]);
+  const dates = sources.map(dateGit).filter(Boolean).sort();
+  return dates.at(-1) ?? statSync(chemin).mtime.toISOString().slice(0, 10);
+};
 
 /* Frequence et priorite par page. La page d'accueil bouge, les mentions non. */
 const PROFILS = [
@@ -47,7 +79,7 @@ for (const chemin of pages.sort()) {
   urls.push(
     `  <url>\n` +
       `    <loc>${loc}</loc>\n` +
-      `    <lastmod>${statSync(chemin).mtime.toISOString().slice(0, 10)}</lastmod>\n` +
+      `    <lastmod>${derniereModif(rel, chemin)}</lastmod>\n` +
       `    <changefreq>${profil.changefreq}</changefreq>\n` +
       `    <priority>${profil.priority}</priority>\n` +
       `  </url>`,

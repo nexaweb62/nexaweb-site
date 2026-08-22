@@ -212,7 +212,15 @@ const description =
                 <span aria-hidden="true">{o.num}</span>
                 <div>
                   <h3>{o.title}</h3>
-                  <p>{o.text}</p>
+                  <p>
+                    {o.text}
+                    {'lien' in o && (
+                      <>
+                        {' '}
+                        <a class="inline-link" href={o.lien.href}>{o.lien.label}</a>.
+                      </>
+                    )}
+                  </p>
                 </div>
               </article>
             ))

@@ -129,6 +129,7 @@ export const OFFER = [
     num: '04',
     title: 'Configuration des outils de suivi',
     text: "Fiche Google Business, statistiques de visite, suivi des demandes. Vous voyez enfin d'où viennent vos clients.",
+    lien: { href: '/fiche-google-business', label: 'Notre guide de la fiche Google' },
   },
   {
     num: '05',
