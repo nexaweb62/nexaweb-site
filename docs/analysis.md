@@ -33,31 +33,37 @@ telle plutôt que comme une prévision.
 #### 1.1.0 Ce que ce site a réellement coûté — **mesuré**
 
 Les transcripts de Claude Code (`~/.claude/projects/…/*.jsonl`) enregistrent la
-consommation de chaque échange. Relevé sur les quatre sessions qui ont produit
-ce site, du premier commit de la refonte jusqu'au cycle `v2.5` :
+consommation de chaque échange. **`npm run cout` les additionne et applique les
+tarifs publics** : relancez-le avant toute discussion de tarif, le chiffre du
+jour vaut mieux qu'un chiffre recopié. Le tableau ci-dessous est une
+photographie datée, pas une constante.
+
+Relevé sur les quatre sessions qui ont produit ce site, du premier commit de la
+refonte au cycle `v4.4` :
 
 | | Valeur |
 |---|---:|
 | Sessions | 4 |
-| Tours d'assistant | 1 062 |
-| Tokens d'entrée | 200,5 M |
-| — dont lus en cache | **98,0 %** |
-| Tokens de sortie | 1,51 M |
+| Tours d'assistant | 1 073 |
+| Tokens d'entrée | 204,1 M |
+| — dont lus en cache | **98,1 %** |
+| Tokens de sortie | 1,52 M |
 | Modèle | Claude Opus 5 |
-| **Coût total** | **160,61 $ ≈ 148 €** |
+| **Coût total** | **162,90 $ ≈ 150 €** |
 
 Trois conclusions, et ce sont des faits, pas des hypothèses :
 
 1. **Le cache fait tout.** 98 % des tokens d'entrée sont des relectures de
-   cache facturées 10 % du prix normal. Sans lui, les mêmes 200 M de tokens
-   d'entrée auraient coûté environ 1 000 $ au lieu de 100 $. Toute pratique qui
+   cache facturées 10 % du prix normal. La même conversation sans cache aurait
+   coûté **1 058 $ au lieu de 163 $** — un facteur 6,5, que `npm run cout`
+   affiche à chaque exécution. Toute pratique qui
    casse le cache — changer de modèle en cours de session, réordonner le
    contexte, redémarrer sans raison — multiplie la facture par cinq.
-2. **Le coût par tour est stable : 0,151 $.** C'est le seul chiffre à retenir
+2. **Le coût par tour est stable : 0,152 $.** C'est le seul chiffre à retenir
    pour estimer un futur projet. Un site client demande 100 à 200 tours une
    fois le processus rodé, soit **15 à 30 $**.
 3. **L'abonnement est rentable dès le premier site.** Claude Max 5× coûte
-   100 $/mois. Ce seul site en a consommé 161 $ à l'usage, en une journée.
+   100 $/mois. Ce seul site en a consommé 163 $ à l'usage, en une journée.
    Le calcul « bascule à 10 sites/mois » de la modélisation ci-dessous était
    faux parce qu'il sous-estimait le nombre de tours : la bascule est en
    réalité **au premier site sérieux du mois**. Prenez l'abonnement.
@@ -563,3 +569,5 @@ le vrai message de cette analyse.
 | `v4.0` | 22/08/2026 | Montants injectés depuis `PRICING`, audit de cohérence tarifaire | Les descriptions des pages métier portaient les prix en clair : elles auraient menti au premier changement |
 | `v4.1` | 22/08/2026 | `production/demarrer-un-site-client.md`, note sur la vidéo de fond | Le gabarit de départ n'était décrit nulle part ; le motif de code de la vidéo reste un signal « tech » |
 | `v4.2` | 22/08/2026 | Modèle économique recalibré sur la mesure, double comptage du cache corrigé | Le script surestimait de 16 % : il comptait l'écriture de cache deux fois. Il se contrôle désormais contre la facture réelle |
+| `v4.3` | 22/08/2026 | `README.md` | Le dépôt s'ouvrait sur rien : ni NOTES.md ni docs/ ne disent lequel ouvrir en premier |
+| `v4.4` | 22/08/2026 | `npm run cout` : le coût de l'IA se mesure au lieu de se recopier | Le chiffre change à chaque session ; livrer l'outil vaut mieux que livrer la photographie |

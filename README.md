@@ -13,6 +13,7 @@ npm run build          # build + sitemap + garde-fous de production
 npm run audit          # relit dist/ : titres, alt, labels, liens et ancres morts,
                        # contrastes, montants, vocabulaire
 npm run test:contact   # la fonction du formulaire, sans navigateur
+npm run cout           # ce que Claude Code a coûté sur ce projet, à ce jour
 npx astro check        # typage
 ```
 

@@ -15,7 +15,8 @@
     "og": "node scripts/make-og.mjs",
     "audit": "node scripts/audit.mjs",
     "test:contact": "node scripts/test-contact.mjs",
-    "poster": "node scripts/make-poster.mjs"
+    "poster": "node scripts/make-poster.mjs",
+    "cout": "node scripts/cout-ia.mjs"
   },
   "dependencies": {
     "astro": "^7.2.4"

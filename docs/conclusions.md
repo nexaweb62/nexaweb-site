@@ -11,7 +11,7 @@
 
 | Question | Réponse courte |
 |---|---|
-| Combien coûte l'IA ? | **161 $ mesurés** pour construire ce site en entier. 8 à 20 $ pour un site client une fois le processus rodé. 1 à 2 % du coût de production |
+| Combien coûte l'IA ? | **163 $ mesurés** pour construire ce site en entier. 8 à 20 $ pour un site client une fois le processus rodé. 1 à 2 % du coût de production |
 | Combien de temps pour un site ? | **18 h** avec Claude Code et un processus rodé, contre 39 h sans. **10,3 h** une fois industrialisé |
 | Le modèle à trois tient-il ? | Oui à partir de 5 sites/mois, et **c'est l'acquisition qui limite, jamais la production** — 41 % de la capacité utilisée dans le scénario réaliste |
 | Les tarifs sont-ils bons ? | **1 190 € + 99 €/mois** rendent le client rentable dès la mise en ligne. C'est ce qui rend tenable le « sans engagement » affiché |
@@ -23,25 +23,25 @@
 ## 1. Coût de l'IA — mesuré, pas estimé
 
 Relevé sur les transcripts de Claude Code, quatre sessions, du début de la
-refonte à aujourd'hui :
+refonte à aujourd'hui — `npm run cout` le recalcule à la demande :
 
 | | |
 |---|---:|
-| Tours d'assistant | 1 062 |
-| Tokens d'entrée | 200 M, dont **98 % lus en cache** |
-| Tokens de sortie | 1,51 M |
-| **Coût** | **160,61 $ ≈ 148 €** |
+| Tours d'assistant | 1 073 |
+| Tokens d'entrée | 204 M, dont **98 % lus en cache** |
+| Tokens de sortie | 1,52 M |
+| **Coût** | **162,90 $ ≈ 150 €** |
 
-**0,151 $ par tour.** C'est le seul chiffre à retenir pour estimer un projet.
+**0,152 $ par tour.** C'est le seul chiffre à retenir pour estimer un projet.
 
 Trois conséquences pratiques :
 
-- **Le cache décide de la facture.** Sans lui, ces 200 M de tokens auraient
-  coûté environ 1 000 $ au lieu de 100 $. Rester dans une session longue plutôt
+- **Le cache décide de la facture.** La même conversation sans cache aurait
+  coûté 1 058 $ au lieu de 163 $, soit 6,5 fois plus. Rester dans une session longue plutôt
   que d'en ouvrir dix, ne pas changer de modèle en cours de route.
 - **L'abonnement bat l'API dès le premier projet sérieux.** Claude Max 5× coûte
-  100 $/mois ; ce site seul en a consommé 161 $ en une journée.
-- **Le premier site coûte dix fois un site client.** 148 € ici, 8 à 20 $
+  100 $/mois ; ce site seul en a consommé 163 $ en une journée.
+- **Le premier site coûte dix fois un site client.** 150 € ici, 8 à 20 $
   ensuite : la différence, c'est le système visuel, les impasses et les choix
   qu'on ne refait qu'une fois. Ne pas deviser un projet neuf au tarif d'un
   projet répété.
