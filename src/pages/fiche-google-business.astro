@@ -1,0 +1,99 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ActionBar from '../components/ActionBar.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import { SITE } from '../config/site';
+import { GUIDE } from '../config/guide';
+---
+
+<Base title={GUIDE.title} description={GUIDE.description} path={`/${GUIDE.slug}`}>
+  {/* HowTo décrit une marche à suivre en étapes ordonnées : c'est exactement
+      ce qu'est cette page, et le type le plus honnête pour elle. */}
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: 'Configurer et tenir sa fiche Google Business quand on tient un commerce',
+      description: GUIDE.description,
+      totalTime: 'PT1H',
+      estimatedCost: { '@type': 'MonetaryAmount', currency: 'EUR', value: '0' },
+      author: { '@type': 'Organization', '@id': `https://${SITE.domain}/#nexaweb`, name: SITE.name },
+      step: GUIDE.etapes.map((e, i) => ({
+        '@type': 'HowToStep',
+        position: i + 1,
+        name: e.titre,
+        text: e.texte,
+      })),
+    })}
+  />
+
+  <div class="page-simple">
+    <Header />
+  </div>
+
+  <main>
+    <section class="section" style="border-top:0">
+      <div class="container">
+        <Breadcrumb label="Fiche Google Business" path={`/${GUIDE.slug}`} />
+        <p class="eyebrow">Guide</p>
+        <h1 class="section-title">{GUIDE.h1}</h1>
+        <div class="team-intro">
+          {GUIDE.intro.map((t) => <p class="split-note">{t}</p>)}
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="offer-list">
+          {
+            GUIDE.etapes.map((e, i) => (
+              <article class="offer-item">
+                <span aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                <div>
+                  <h2>{e.titre}</h2>
+                  <p>{e.texte}</p>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+
+        <aside class="demo-note" style="margin-top:clamp(36px,5vw,52px)">
+          <p>
+            <strong>{GUIDE.ferme.titre}</strong>
+            {GUIDE.ferme.texte}
+          </p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="container">
+        <div class="contact-panel">
+          <p class="eyebrow" style="justify-content:center">Prendre contact</p>
+          <h2 class="section-title" style="max-width:none;margin-inline:auto">
+            On regarde votre fiche ensemble, en 30 minutes
+          </h2>
+          <p class="lede" style="margin-inline:auto">
+            Si vous préférez qu'on la parcoure à deux : on ouvre votre fiche, on regarde
+            ce qui manque, et vous repartez avec la liste — que vous la fassiez vous-même
+            ou non.
+          </p>
+          <div class="contact-actions">
+            <a class="cta" href="/#contact">Être rappelé</a>
+            <a class="btn-ghost" href={SITE.phoneHref}>{SITE.phone}</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <ActionBar cible="/#contact" />
+
+  <Footer />
+</Base>

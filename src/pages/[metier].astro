@@ -166,6 +166,7 @@ const autres = METIERS.filter((x) => x.slug !== m.slug);
         <nav class="metier-liens" aria-label="Autres métiers">
           <span>Vous n'êtes pas dans ce cas ?</span>
           {autres.map((a) => <a class="inline-link" href={`/${a.slug}`}>{a.nav}</a>)}
+          <a class="inline-link" href="/fiche-google-business">Guide : la fiche Google</a>
           <a class="inline-link" href="/">Voir l'offre complète</a>
         </nav>
       </div>

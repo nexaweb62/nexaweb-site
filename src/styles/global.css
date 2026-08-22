@@ -439,7 +439,9 @@ ul, ol { list-style: none; }
   color: var(--muted);
   font-variant-numeric: tabular-nums;
 }
-.offer-item h3 { font-size: clamp(17px, 1.9vw, 21px); font-weight: 600; letter-spacing: -0.015em; }
+/* h3 sur l'accueil et les pages metier, h2 sur le guide, ou les etapes sont le
+   premier niveau sous le titre de page. Meme apparence, hierarchie correcte. */
+.offer-item :is(h2, h3) { font-size: clamp(17px, 1.9vw, 21px); font-weight: 600; letter-spacing: -0.015em; }
 .offer-item p { margin-top: 8px; font-size: 14.5px; line-height: 1.62; color: var(--muted); max-width: 60ch; }
 
 /* ── Bloc en deux colonnes ───────────────────────────────────────────────────
