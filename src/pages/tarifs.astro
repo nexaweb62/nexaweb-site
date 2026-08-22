@@ -46,11 +46,14 @@ import '../styles/global.css';
 .plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:clamp(32px,5vw,52px)}
 @media(max-width:900px){.plans-grid{grid-template-columns:1fr;max-width:480px;margin-left:auto;margin-right:auto}}
 .plan-card{
-  position:relative;display:flex;flex-direction:column;
+  position:relative;display:flex;flex-direction:column;overflow:hidden;
   background:var(--bg-card);border:1px solid var(--border-hi);border-radius:16px;
-  padding:clamp(24px,3vw,36px);transition:border-color .25s,transform .25s;
+  padding:clamp(24px,3vw,36px);transition:border-color .25s,transform .2s ease-out;
+  will-change:transform;transform-style:preserve-3d;
 }
-.plan-card:hover{border-color:var(--accent-ring);transform:translateY(-3px)}
+.plan-card:hover{border-color:var(--accent-ring)}
+.plan-spotlight{position:absolute;inset:0;pointer-events:none;z-index:10;opacity:0;transition:opacity .3s;overflow:hidden}
+.plan-spotlight::after{content:'';position:absolute;width:200%;height:200%;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.13) 0%,transparent 40%);transform:translate(-50%,-50%);top:var(--sy,50%);left:var(--sx,50%)}
 .plan-card.plan-featured{
   border-color:var(--accent);
   box-shadow:0 0 0 1px var(--accent-ring),0 24px 60px rgba(139,92,246,.18);
@@ -437,6 +440,35 @@ function frame(ts){
 resize();
 window.addEventListener('resize',resize,{passive:true});
 requestAnimationFrame(frame);
+/* ── TILT CARDS ── */
+(function(){
+  var LIMIT=15,SCALE=1.05,PERSP=1200;
+  document.querySelectorAll('.plan-card').forEach(function(card){
+    /* inject spotlight */
+    var sp=document.createElement('div');
+    sp.className='plan-spotlight';
+    card.appendChild(sp);
+
+    card.addEventListener('pointerenter',function(){
+      sp.style.opacity='1';
+    });
+    card.addEventListener('pointermove',function(e){
+      var r=card.getBoundingClientRect();
+      var px=(e.clientX-r.left)/r.width;
+      var py=(e.clientY-r.top)/r.height;
+      /* effect="evade" → dir=-1 */
+      var xRot=((py-.5)*LIMIT*2*-1).toFixed(2);
+      var yRot=((px-.5)*LIMIT*2).toFixed(2);
+      card.style.transform='perspective('+PERSP+'px) rotateX('+xRot+'deg) rotateY('+yRot+'deg) scale3d('+SCALE+','+SCALE+','+SCALE+')';
+      sp.style.setProperty('--sx',(px*100)+'%');
+      sp.style.setProperty('--sy',(py*100)+'%');
+    });
+    card.addEventListener('pointerleave',function(){
+      card.style.transform='perspective('+PERSP+'px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';
+      sp.style.opacity='0';
+    });
+  });
+})();
 })();
 </script>
 </BaseLayout>
