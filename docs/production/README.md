@@ -9,6 +9,7 @@ qui ne traîne pas.
 |---|---|
 | [`questionnaire-client.md`](questionnaire-client.md) | Envoyé le jour de la signature. Le développement ne commence pas avant son retour |
 | [`checklist-mise-en-ligne.md`](checklist-mise-en-ligne.md) | Déroulée pendant tout le projet, cochée sur le site en ligne |
+| [`demarrer-un-site-client.md`](demarrer-un-site-client.md) | La manœuvre pour repartir de ce dépôt : ce qu'on retire, ce qu'on remplit, dans quel ordre |
 
 ## Le déroulé, avec les durées visées
 

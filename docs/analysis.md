@@ -416,10 +416,20 @@ Restant à corriger :
 - ~~Les trois cartes de la section « constat »~~ Supprimées en `v1.1`, ainsi
   que le gabarit `.card` lui-même : il n'y a plus une seule carte sur le site.
 - ~~Les gradients radiaux du panneau de contact.~~ Supprimés en `v1.2`.
-- **Le vocabulaire.** « Expériences digitales », « sur-mesure » et autres mots
-  d'agence n'ont aucun sens pour un boulanger. Le texte actuel est déjà
-  largement corrigé sur ce point, mais chaque nouvelle section doit être relue
-  avec cette grille.
+- ~~**Le vocabulaire.**~~ La règle est désormais vérifiée par `npm run audit`
+  sur les treize pages, avec une liste de termes indéfendables — « expérience
+  digitale », « clé en main », « à 360 », « booster votre visibilité ». Le site
+  est propre, maquettes comprises.
+
+- **La vidéo de fond, elle, reste un signal technologique.** Son motif de
+  chiffres et de code est exactement le cliché « tech » que le reste de la
+  refonte a chassé, et il n'a aucun rapport avec un restaurant ou une
+  boulangerie. Elle est belle, elle est légère (1,2 Mo, jamais chargée sur
+  mobile), et elle a été fournie avec le spec — mais un plan de rue, une
+  devanture au petit matin ou une salle qui se remplit diraient le métier au
+  lieu de dire l'agence. **Point à trancher par Elio** : le remplacement est
+  sans risque technique, l'affiche et le fond de secours suivent
+  automatiquement (`npm run poster`, `npm run og`).
 
 ---
 
@@ -454,10 +464,11 @@ le dépôt, et ce qui manque encore.
    variables d'environnement, fiche Google, redirections, test du formulaire en
    conditions réelles. Aujourd'hui, cette liste n'existe que dans `NOTES.md`, et
    seulement pour ce site-ci.
-3. **Le gabarit de départ pour un site client.** Ce dépôt en est déjà un, à
-   ceci près qu'il faut retirer à la main les pages métier, `/equipe` et les
-   maquettes. Un script `nouveau-site` qui produit le squelette propre
-   économiserait une demi-journée à chaque fois.
+3. ~~Le gabarit de départ pour un site client.~~ Documenté en `v4.1` :
+   [`production/demarrer-un-site-client.md`](production/demarrer-un-site-client.md)
+   décrit ce qu'on retire, ce qu'on remplit et dans quel ordre. **Volontairement
+   pas de script** : à trois sites au compteur, un générateur coûterait plus à
+   écrire et à corriger qu'il ne ferait gagner. À reconsidérer au cinquième.
 4. **La bibliothèque de sections.** Carte de restaurant, grille horaires,
    galerie, zone d'intervention : quatre ou cinq blocs qui reviendront dans
    presque tous les projets. À extraire au deuxième ou troisième site — pas
