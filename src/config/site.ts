@@ -27,7 +27,7 @@ export const HERO = {
   trustPill: 'Carvin · Hauts-de-France',
   headline: ['Votre commerce', "mérite d'être vu"],
   subhead:
-    "Site, nom de domaine, réservations, suivi des visites. Nexa Web met votre commerce en ligne — et s'en occupe ensuite.",
+    "Site, nom de domaine, réservations, suivi. Nexa Web met les commerces de Carvin et des Hauts-de-France en ligne — et s'en occupe ensuite.",
   ctaLabel: "Voir l'offre",
   ctaHref: '#offre',
 } as const;

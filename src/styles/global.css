@@ -411,33 +411,6 @@ ul, ol { list-style: none; }
   opacity: 0.8;
 }
 
-.grid { display: grid; gap: clamp(14px, 1.8vw, 20px); margin-top: clamp(32px, 5vw, 56px); }
-.grid-3 { grid-template-columns: repeat(3, 1fr); }
-
-.card {
-  padding: clamp(22px, 2.6vw, 30px);
-  background: var(--surface);
-  border: 1px solid var(--hair);
-  border-radius: 18px;
-  transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s var(--ease);
-}
-.card:hover { border-color: var(--hair-strong); background: rgba(255, 255, 255, 0.04); transform: translateY(-3px); }
-
-.card-num {
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: 0.14em;
-  color: var(--muted);
-  font-variant-numeric: tabular-nums;
-}
-.card h3 {
-  margin-top: 16px;
-  font-size: clamp(16px, 1.7vw, 19px);
-  font-weight: 600;
-  letter-spacing: -0.015em;
-}
-.card p { margin-top: 10px; font-size: 14.5px; line-height: 1.62; color: var(--muted); }
 
 /* ── L'offre : les cinq prestations incluses ─────────────────────────────── */
 .offer-list { margin-top: clamp(32px, 5vw, 56px); border-top: 1px solid var(--hair); }
@@ -459,35 +432,35 @@ ul, ol { list-style: none; }
 .offer-item h3 { font-size: clamp(17px, 1.9vw, 21px); font-weight: 600; letter-spacing: -0.015em; }
 .offer-item p { margin-top: 8px; font-size: 14.5px; line-height: 1.62; color: var(--muted); max-width: 60ch; }
 
-/* ── Premiers projets ────────────────────────────────────────────────────────
-   Remplace l'ancienne grille de realisations. Deux colonnes de texte separees
-   par un filet : aucune carte, aucun aplat — la section n'a rien a mettre en
-   vitrine, elle explique. */
-.launch {
+/* ── Bloc en deux colonnes ───────────────────────────────────────────────────
+   Un propos a gauche, une liste de points separes par des filets a droite.
+   Aucune carte, aucun aplat : le gabarit « trois cartes cote a cote » est le
+   signal visuel le plus banal du web genere, et il n'apporte rien ici. */
+.split {
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
   gap: clamp(28px, 4vw, 56px);
   align-items: start;
   margin-top: clamp(32px, 5vw, 52px);
 }
-.launch-note {
+.split-note {
   max-width: 48ch;
   font-size: clamp(15px, 1.5vw, 17px);
   line-height: 1.68;
   color: var(--dim);
   opacity: 0.82;
 }
-.launch-note + .launch-note { margin-top: 18px; }
+.split-note + .split-note { margin-top: 18px; }
 
-.launch-terms { border-top: 1px solid var(--hair); }
-.launch-terms li {
+.points { border-top: 1px solid var(--hair); }
+.points li {
   padding: clamp(15px, 1.9vw, 19px) 0;
   border-bottom: 1px solid var(--hair);
   font-size: 14.5px;
   line-height: 1.62;
   color: var(--muted);
 }
-.launch-terms strong {
+.points strong {
   display: block;
   margin-bottom: 5px;
   font-size: 15.5px;
@@ -678,9 +651,8 @@ body.menu-open { overflow: hidden; }
 
 /* ── RESPONSIVE ──────────────────────────────────────────────────────────── */
 @media (max-width: 900px) {
-  .grid-3 { grid-template-columns: 1fr; }
   .price-grid { grid-template-columns: 1fr; }
-  .launch { grid-template-columns: 1fr; }
+  .split { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 720px) {

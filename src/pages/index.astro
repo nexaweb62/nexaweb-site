@@ -12,6 +12,29 @@ const description =
 ---
 
 <Base title={title} description={description} path="/">
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'ProfessionalService',
+      name: SITE.name,
+      description:
+        "Création de sites internet pour les restaurants et les commerces de proximité : site, nom de domaine, réservations, suivi des visites et formation.",
+      url: `https://${SITE.domain}`,
+      email: SITE.email,
+      telephone: '+33698840194',
+      areaServed: { '@type': 'AdministrativeArea', name: SITE.region },
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: SITE.city,
+        addressRegion: SITE.region,
+        addressCountry: 'FR',
+      },
+      knowsLanguage: 'fr-FR',
+    })}
+  />
+
   <div class="page">
     <div class="bg">
       <video
@@ -92,20 +115,24 @@ const description =
       <div class="container">
         <p class="eyebrow">Le constat</p>
         <h2 class="section-title">Vos clients vous cherchent en ligne. Ils trouvent quoi ?</h2>
-        <p class="lede">
-          Avant de pousser la porte d'un restaurant ou d'une boutique, on regarde le téléphone.
-          Ce qui s'affiche à ce moment-là décide de la visite.
-        </p>
-        <div class="grid grid-3">
-          {
-            PROBLEMS.map((p) => (
-              <article class="card">
-                <div class="card-num">{p.num}</div>
-                <h3>{p.title}</h3>
-                <p>{p.text}</p>
-              </article>
-            ))
-          }
+        <div class="split">
+          <div>
+            <p class="split-note">
+              Avant de pousser la porte d'un restaurant ou d'une boutique, on regarde
+              son téléphone. Ce qui s'affiche à ce moment-là décide de la visite —
+              et la plupart du temps, ce n'est pas vous qui l'avez choisi.
+            </p>
+          </div>
+          <ul class="points">
+            {
+              PROBLEMS.map((p) => (
+                <li>
+                  <strong>{p.title}</strong>
+                  {p.text}
+                </li>
+              ))
+            }
+          </ul>
         </div>
       </div>
     </section>
