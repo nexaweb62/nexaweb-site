@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { SITE } from '../config/site';
+import { SITE, LEGAL } from '../config/site';
 ---
 
 <Base
@@ -21,12 +21,25 @@ import { SITE } from '../config/site';
     <div class="prose">
       <h2>1. Éditeur du site</h2>
       <p>
-        <strong>{SITE.name}</strong><br />
-        {SITE.city}, {SITE.region}, France<br />
+        <strong>{SITE.name}</strong>{LEGAL.forme && `, ${LEGAL.forme}`}<br />
+        {LEGAL.adresse ? LEGAL.adresse : <span class="legal-todo">Adresse du siège à renseigner</span>}<br />
+        {!LEGAL.adresse && <>{SITE.city}, {SITE.region}, France<br /></>}
+        Téléphone : <a href={SITE.phoneHref}>{SITE.phone}</a><br />
         E-mail : <a href={`mailto:${SITE.email}`}>{SITE.email}</a><br />
-        Site : <a href={`https://${SITE.domain}`}>{SITE.domain}</a>
+        Site : {SITE.domain}
       </p>
-      <p>Directeur de la publication : le responsable de {SITE.name}.</p>
+      <p>
+        {LEGAL.siret ? <>SIRET : {LEGAL.siret}</> : <span class="legal-todo">SIRET à renseigner</span>}<br />
+        {LEGAL.tva ? (
+          <>TVA intracommunautaire : {LEGAL.tva}</>
+        ) : (
+          <>TVA non applicable, article 293 B du Code général des impôts</>
+        )}
+      </p>
+      <p>
+        Directeur de la publication :{' '}
+        {LEGAL.directeur ? LEGAL.directeur : <span class="legal-todo">à renseigner</span>}.
+      </p>
 
       <h2>2. Hébergement</h2>
       <p>

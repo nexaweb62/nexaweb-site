@@ -963,6 +963,15 @@ body.menu-open { overflow: hidden; }
 .prose li::before { content: "—"; color: var(--glow); }
 .prose a { text-decoration: underline; text-underline-offset: 3px; }
 .prose strong { color: #fff; font-weight: 600; }
+/* Mention obligatoire non renseignee. Visible a dessein : `npm run build`
+   refuse la mise en production tant qu'il en reste une. */
+.legal-todo {
+  padding: 1px 8px;
+  border: 1px dashed var(--warm);
+  border-radius: 999px;
+  font-size: 12.5px;
+  color: var(--warm);
+}
 
 /* 404 */
 .notfound { min-height: 70vh; display: grid; place-items: center; text-align: center; padding: 80px 0; }

@@ -125,41 +125,50 @@ page « qui sommes-nous » sera ajoutée — c'est la recommandation P7 de
 
 ## À faire
 
-1. **Créer le projet Cloudflare Pages.** `Workers & Pages → Create → Pages →
+1. **Renseigner `LEGAL` dans `src/config/site.ts`** — forme juridique, adresse
+   du siège, SIRET, directeur de la publication, et la TVA intracommunautaire
+   si vous y êtes assujettis. **La mise en production est bloquée tant que
+   c'est vide** : un site professionnel sans ces mentions est en infraction
+   (LCEN art. 6 III), et personne d'autre que vous ne peut les fournir. Deux
+   minutes, à faire en premier. Si vous êtes en franchise en base de TVA,
+   laissez `tva` à `null` : la page affiche alors la mention de l'article 293 B.
+2. **Révoquer la clé Anthropic** du worker Cloudflare de l'ancien site
+   (voir « Services à résilier »). C'est une clé active dans un service que
+   plus personne ne surveille.
+3. **Créer le projet Cloudflare Pages.** `Workers & Pages → Create → Pages →
    Connect to Git`, dépôt `nexaweb62/nexaweb-site`, branche `redesign/nexa-2026`.
    Commande de build : `npm run build`. Dossier de sortie : `dist`. Le dossier
    `functions/` est repris automatiquement, rien à configurer pour lui.
-2. **Déclarer les variables d'environnement** (`Settings → Environment variables`) :
+4. **Déclarer les variables d'environnement** (`Settings → Environment variables`) :
    `RESEND_API_KEY` **en secret chiffré**, obligatoire. Optionnellement
    `RESEND_FROM` et `CONTACT_TO`. Tant que `nexaaweb.com` n'est pas vérifié chez
    Resend, laisser `RESEND_FROM` vide : la fonction utilise alors l'expéditeur de
    test `onboarding@resend.dev`, qui n'envoie qu'à l'adresse du compte Resend.
    **Le formulaire ne marchera vraiment qu'une fois le domaine vérifié.**
-3. **Ajouter la redirection www → apex.** Elle n'est pas dans `_redirects` :
+5. **Ajouter la redirection www → apex.** Elle n'est pas dans `_redirects` :
    Cloudflare Pages fait correspondre les sources sur le chemin, pas sur le nom
    d'hôte. À créer en `Rules → Redirect Rules` : `www.nexaaweb.com/*` vers
    `https://nexaaweb.com/$1`, code 301.
-4. **Pointer le domaine.** `Custom domains` sur le projet Pages, puis mettre à
+6. **Pointer le domaine.** `Custom domains` sur le projet Pages, puis mettre à
    jour les enregistrements chez OVH. À faire en dernier, une fois le site
    vérifié sur l'URL `*.pages.dev`.
-5. **Vérifier le raccourci Calendly.** Le champ « jour souhaité » construit une
+7. **Activer une mesure d'audience.** Cloudflare Web Analytics, dans le tableau
+   de bord du projet : sans cookie, sans script à ajouter au dépôt, sans
+   bannière de consentement. Sans elle, on sait de quelle page vient une demande
+   mais pas combien de visiteurs il a fallu — voir P9 dans `docs/analysis.md`.
+8. **Vérifier le raccourci Calendly.** Le champ « jour souhaité » construit une
    URL `?month=…&date=…`. Ces paramètres sont réputés supportés par Calendly
    mais je n'ai pas pu le confirmer depuis leur documentation : cliquez une fois
    avec une date pour vérifier que la page s'ouvre bien sur ce jour. Si elle
    l'ignore, le lien reste fonctionnel, il ouvre la page normale.
-6. **Renseigner les montants** dans `src/config/site.ts` (`PRICING.setup` et
-   `PRICING.monthly`). Tant qu'ils valent `null`, la mise en production est
-   bloquée. Recommandation chiffrée dans `docs/analysis.md` § 4.
-7. **Révoquer la clé Anthropic** du worker Cloudflare (voir plus haut).
-8. **Décider du sort des deux maquettes** `public/demo-*.html` : elles ne sont
-   plus liées depuis le site, mais restent accessibles par leur URL pour la
-   prospection.
-9. ~~Ajouter une page « qui sommes-nous ».~~ Faite en `v2.2` : `/equipe`,
-   avec les trois associés et leurs portraits. **À relire par les intéressés** —
-   les rôles sont repris de l'ancien site, mais chacun doit valider la
-   description de ce qu'il fait, et le principe même d'afficher sa photo.
-10. **Corriger les champs de `public/demo-le-grenier.html`** si les maquettes
-   sont conservées : ses cinq champs de formulaire n'ont ni `id` ni `label`,
-   seulement un `placeholder`. Reprise telle quelle de l'ancien site, non
-   corrigée parce que le sort des maquettes n'est pas tranché — mais une
-   démonstration montrée à des prospects ne devrait pas traîner ce défaut.
+9. **Faire relire `/equipe` par les trois intéressés.** Noms, rôles et photos
+   viennent de l'ancien site — donc déjà publics — mais chacun doit valider la
+   description de ce qu'il fait, et le principe d'afficher sa photo.
+
+### Fait depuis
+
+- ~~Renseigner les montants~~ — `v1.8` : 1 190 € et 99 €/mois.
+- ~~Ajouter une page « qui sommes-nous »~~ — `v2.2` : `/equipe`.
+- ~~Décider du sort des maquettes~~ — `v2.7` : conservées, corrigées, et liées
+  depuis les pages métier avec la mention « établissement fictif ».
+- ~~Corriger les champs de `demo-le-grenier.html`~~ — `v2.7`.

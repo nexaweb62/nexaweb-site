@@ -58,6 +58,31 @@ export const TEAM_INTRO = [
   "Nous ne sommes pas une agence de communication. Le constat qui nous a décidés tient en une phrase : les commerces qui remplissent leur salle ne sont pas ceux qui ont le plus beau site, ce sont ceux qu'on trouve. Une offre unique, cinq prestations, un prix affiché — c'est ce que cela cherche à corriger, et rien d'autre.",
 ] as const;
 
+/* Mentions legales obligatoires (LCEN, art. 6 III) : pour un professionnel, le
+   site doit porter la denomination, l'adresse du siege, un telephone, une
+   adresse e-mail, le numero SIRET ou RCS, et la TVA intracommunautaire si
+   l'entreprise y est assujettie.
+
+   Ces valeurs ne sont pas inventables : elles sont a null, et `npm run build`
+   refuse la mise en production tant qu'elles le restent — meme mecanisme que
+   pour les montants. Une mention legale approximative est pire qu'absente.
+   `tva` peut rester null en franchise en base de TVA ; il faut alors ajouter la
+   mention « TVA non applicable, art. 293 B du CGI », ce que la page fait
+   automatiquement. */
+export const LEGAL: {
+  forme: string | null;
+  siret: string | null;
+  adresse: string | null;
+  directeur: string | null;
+  tva: string | null;
+} = {
+  forme: null,
+  siret: null,
+  adresse: null,
+  directeur: null,
+  tva: null,
+};
+
 export const CALENDLY = 'https://calendly.com/contact-nexaweb62/30min';
 
 export const NAV = [
