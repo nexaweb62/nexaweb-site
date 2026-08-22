@@ -26,6 +26,10 @@ export type Metier = {
   /** Ce que contient le site livre, formule dans le vocabulaire du metier. */
   contenu: { title: string; text: string }[];
   faq: { q: string; a: string }[];
+  /** Maquette de demonstration a montrer, si elle existe pour ce metier.
+      Etablissement fictif, annonce comme tel sur la maquette et ici : on ne
+      fait pas passer une demonstration pour une reference. */
+  demo?: { href: string; nom: string; texte: string };
 };
 
 export const METIERS: Metier[] = [
@@ -77,6 +81,12 @@ export const METIERS: Metier[] = [
         text: "Photos, horaires, lien de réservation, catégorie exacte. C'est elle qui décide de votre place dans le classement local, bien avant le site lui-même.",
       },
     ],
+    demo: {
+      href: '/demo-le-grenier',
+      nom: 'Le Grenier',
+      texte:
+        "Une maquette de restaurant, faite pour montrer le résultat : carte, horaires, réservation, photos. L'établissement est fictif — nous n'avons pas encore de client à montrer, et nous préférons le dire.",
+    },
     faq: [
       {
         q: 'On change la carte toutes les semaines. Il faut vous appeler à chaque fois ?',
@@ -140,6 +150,12 @@ export const METIERS: Metier[] = [
         text: "Catégorie, photos, horaires spéciaux, produits. Pour un commerce de proximité, c'est la première vitrine — souvent avant même le site.",
       },
     ],
+    demo: {
+      href: '/demo-la-fournee-dor',
+      nom: "La Fournée d'Or",
+      texte:
+        "Une maquette de boulangerie, faite pour montrer le résultat : produits, horaires, itinéraire. L'établissement est fictif — nous n'avons pas encore de client à montrer, et nous préférons le dire.",
+    },
     faq: [
       {
         q: "Je n'ai pas de boutique en ligne et je n'en veux pas.",

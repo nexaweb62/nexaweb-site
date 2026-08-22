@@ -67,12 +67,13 @@
     .fc{color:rgba(253,244,231,.2);font-size:.73rem}
     @media(max-width:900px){.chef-section{grid-template-columns:1fr}.chef-img{height:260px}}
     @media(max-width:768px){nav{padding:1rem 1.2rem}nav ul{display:none}.hero{padding:6rem 1.5rem 4rem}section.sec{padding:4rem 1.5rem}.hrs-band{gap:1.5rem}}
-  </style>
+  .vh{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+</style>
 </head>
 <body>
 <div style="position:fixed;top:0;left:0;right:0;z-index:9999;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px clamp(12px,3vw,28px);background:#000;border-bottom:1px solid rgba(255,255,255,.14);font-family:'Inter','Segoe UI',system-ui,sans-serif;font-size:12.5px;color:#c4c2c3">
   <span>Projet de <strong style="color:#fff;font-weight:600">démonstration</strong> — ce commerce n'existe pas.</span>
-  <a href="/#realisations" style="flex-shrink:0;padding:6px 14px;border:1px solid rgba(255,255,255,.28);border-radius:999px;color:#fff;text-decoration:none">Retour à Nexa Web</a>
+  <a href="/site-internet-restaurant" style="flex-shrink:0;padding:6px 14px;border:1px solid rgba(255,255,255,.28);border-radius:999px;color:#fff;text-decoration:none">Retour à Nexa Web</a>
 </div>
 <div style="height:37px"></div>
 
@@ -135,11 +136,16 @@
   <h2>Réservez votre table</h2>
   <p style="color:var(--mu);font-size:.92rem">Le Grenier vous accueille du mardi au dimanche soir. Réservation obligatoire.</p>
   <form onsubmit="return false">
-    <input type="text" placeholder="Votre nom"/>
-    <input type="email" placeholder="Email"/>
-    <input type="tel" placeholder="Téléphone"/>
-    <input type="date"/>
-    <select><option>Nombre de couverts</option><option>1 personne</option><option>2 personnes</option><option>3–4 personnes</option><option>5–8 personnes</option><option>Groupe (+8)</option></select>
+    <label class="vh" for="d-nom">Votre nom</label>
+    <input id="d-nom" name="nom" type="text" autocomplete="name" placeholder="Votre nom"/>
+    <label class="vh" for="d-email">Votre e-mail</label>
+    <input id="d-email" name="email" type="email" autocomplete="email" placeholder="Email"/>
+    <label class="vh" for="d-tel">Votre téléphone</label>
+    <input id="d-tel" name="telephone" type="tel" autocomplete="tel" placeholder="Téléphone"/>
+    <label class="vh" for="d-date">Date souhaitée</label>
+    <input id="d-date" name="date" type="date"/>
+    <label class="vh" for="d-couverts">Nombre de couverts</label>
+    <select id="d-couverts" name="couverts"><option>Nombre de couverts</option><option>1 personne</option><option>2 personnes</option><option>3–4 personnes</option><option>5–8 personnes</option><option>Groupe (+8)</option></select>
     <button type="submit" class="bp" style="border:none;cursor:pointer">Confirmer la réservation</button>
   </form>
   <div class="hrs-band">

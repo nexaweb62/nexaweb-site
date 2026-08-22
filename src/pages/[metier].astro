@@ -112,6 +112,16 @@ const autres = METIERS.filter((x) => x.slug !== m.slug);
             </article>
           ))}
         </div>
+        {m.demo && (
+          <aside class="demo-note">
+            <p>
+              <strong>Voir à quoi ça ressemble : {m.demo.nom}</strong>
+              {m.demo.texte}
+            </p>
+            <a class="btn-ghost" href={m.demo.href}>Ouvrir la maquette</a>
+          </aside>
+        )}
+
         <p class="metier-price">
           <strong>{PRICING.setup?.toLocaleString('fr-FR')} €</strong> de frais de lancement,
           puis <strong>{PRICING.monthly} €</strong> par mois sans engagement de durée.

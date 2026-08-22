@@ -703,6 +703,27 @@ ul, ol { list-style: none; }
 }
 .team-text { margin-top: 16px; max-width: 56ch; font-size: 15px; line-height: 1.68; color: var(--muted); }
 
+/* ── Renvoi vers une maquette de demonstration ───────────────────────────────
+   Le seul aplat de la page, et il est la pour ca : c'est un aparte, pas une
+   section. Le texte dit que l'etablissement est fictif — une demonstration
+   presentee comme une reference serait exactement ce que le reste du site
+   s'interdit. */
+.demo-note {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px 26px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: clamp(30px, 4vw, 42px);
+  padding: clamp(20px, 2.6vw, 28px);
+  background: var(--surface);
+  border: 1px solid var(--hair);
+  border-radius: 18px;
+}
+.demo-note p { max-width: 62ch; font-size: 14px; line-height: 1.62; color: var(--muted); }
+.demo-note strong { display: block; margin-bottom: 5px; font-size: 15px; font-weight: 600; color: #fff; }
+.demo-note .btn-ghost { flex-shrink: 0; }
+
 /* ── Pages metier ────────────────────────────────────────────────────────────
    Aucun gabarit nouveau : ces pages reutilisent .points, .offer-list, .faq et
    .contact-panel de l'accueil. Seuls trois elements leur sont propres. */

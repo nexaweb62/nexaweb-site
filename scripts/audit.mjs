@@ -31,7 +31,10 @@ const sansBalises = (html) =>
 
 for (const chemin of pages.sort()) {
   const nom = relative(dist, chemin);
-  if (nom.startsWith('demo-')) continue;
+  /* Les maquettes sont hors index mais montrees a des prospects : elles sont
+     auditees comme le reste, a deux exceptions pres — elles n'ont ni canonical
+     ni meta description, et n'en ont pas besoin. */
+  const maquette = nom.startsWith('demo-');
 
   const brut = readFileSync(chemin, 'utf8');
   const html = sansBalises(brut);
@@ -41,9 +44,11 @@ for (const chemin of pages.sort()) {
   const h1 = html.match(/<h1[\s>]/g) ?? [];
   if (h1.length !== 1) dire(`${h1.length} <h1> (il en faut exactement un)`);
   if (!/<title>[^<]{10,}<\/title>/.test(html)) dire('titre absent ou trop court');
-  if (!/<meta name="description" content="[^"]{50,}"/.test(brut)) dire('meta description absente ou trop courte');
+  if (!maquette && !/<meta name="description" content="[^"]{50,}"/.test(brut)) {
+    dire('meta description absente ou trop courte');
+  }
   if (!/<html lang="fr">/.test(html)) dire('lang="fr" absent');
-  if (!/rel="canonical"/.test(brut)) dire('canonical absent');
+  if (!maquette && !/rel="canonical"/.test(brut)) dire('canonical absent');
 
   /* Titres : pas de saut de niveau */
   const niveaux = [...html.matchAll(/<h([1-6])[\s>]/g)].map((m) => Number(m[1]));
