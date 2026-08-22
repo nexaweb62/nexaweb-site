@@ -245,18 +245,34 @@ import '../styles/global.css';
   function formatDate(iso){ var d=new Date(iso); return d.toLocaleDateString('fr-FR',{year:'numeric',month:'long',day:'numeric'}); }
   function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
+  var AV_STRINGS = {
+    fr: {
+      title: 'Nous accueillons nos tout premiers clients.',
+      sub: 'Pas de faux avis, pas de témoignages inventés — votre retour pourrait être le premier ici. Partagez votre expérience dans le formulaire ci-dessus.'
+    },
+    en: {
+      title: 'We welcome our very first clients.',
+      sub: 'No fake reviews, no invented testimonials — your feedback could be the first here. Share your experience in the form above.'
+    }
+  };
+
+  function emptyStateHtml(){
+    var s = AV_STRINGS[localStorage.getItem('nw-lang') || 'fr'] || AV_STRINGS.fr;
+    return '<div class="empty-wrap"><div class="empty-stars-row">★★★★★</div><p class="empty-title">'+s.title+'</p><p class="empty-sub">'+s.sub+'</p></div>';
+  }
+
   function loadReviews(){
     var container = document.getElementById('reviews-container');
     var countEl = document.getElementById('reviews-count');
     if(!window.sb){
       countEl.textContent = '';
-      container.innerHTML = '<div class="empty-wrap"><div class="empty-stars-row">★★★★★</div><p class="empty-title">Nous accueillons nos tout premiers clients.</p><p class="empty-sub">Pas de faux avis, pas de témoignages inventés — votre retour pourrait être le premier ici. Partagez votre expérience dans le formulaire ci-dessus.</p></div>';
+      container.innerHTML = emptyStateHtml();
       return;
     }
     window.sb.from('reviews').select('*').eq('status','published').order('created_at',{ascending:false}).then(function(res){
       if(res.error || !res.data || res.data.length === 0){
         countEl.textContent = '';
-        container.innerHTML = '<div class="empty-wrap"><div class="empty-stars-row">★★★★★</div><p class="empty-title">Nous accueillons nos tout premiers clients.</p><p class="empty-sub">Pas de faux avis, pas de témoignages inventés — votre retour pourrait être le premier ici. Partagez votre expérience dans le formulaire ci-dessus.</p></div>';
+        container.innerHTML = emptyStateHtml();
         return;
       }
       var reviews = res.data;
@@ -280,6 +296,12 @@ import '../styles/global.css';
   }
 
   loadReviews();
+
+  /* Update empty state text when user switches language */
+  document.addEventListener('nw-lang', function(){
+    var c = document.getElementById('reviews-container');
+    if(c && c.querySelector('.empty-wrap')) c.innerHTML = emptyStateHtml();
+  });
 })();
 </script>
 </BaseLayout>
