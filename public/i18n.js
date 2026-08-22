@@ -5,6 +5,19 @@
 'use strict';
 var D={
   en:{
+    /* ── Login / espace client ── */
+    'login-headline':'Welcome,<br>sign in<br>to your <em>account.</em>',
+    'login-google':'Continue with Google',
+    'login-or':'or',
+    'login-email-ph':'Email address',
+    'login-pwd-ph':'Password',
+    'login-submit':'Sign in',
+    'login-forgot':'Forgot your password?',
+    'login-register':'No account yet? <a href="/inscription">Create one</a>',
+    'login-reset-note':'Enter your email to receive a reset link.',
+    'login-reset-btn':'Send',
+    'login-rgpd':'Your data is processed in compliance with GDPR. <a href="/politique-confidentialite">Privacy policy</a> · <a href="/mentions-legales">Legal notice</a>',
+    'login-trust':'Your secure space',
     /* ── Header / nav ── */
     'hdr-nav-home':'Home','hdr-nav-services':'Services','hdr-nav-about':'About',
     'hdr-nav-pricing':'Pricing','hdr-nav-faq':'FAQ','hdr-nav-contact':'Contact',
@@ -203,6 +216,19 @@ var D={
     'rdv-available':'Available'
   },
   fr:{
+    /* ── Login / espace client ── */
+    'login-headline':'Bienvenue,<br>connectez-vous<br>à votre <em>espace.</em>',
+    'login-google':'Continuer avec Google',
+    'login-or':'ou',
+    'login-email-ph':'Adresse e-mail',
+    'login-pwd-ph':'Mot de passe',
+    'login-submit':'Se connecter',
+    'login-forgot':'Mot de passe oublié ?',
+    'login-register':'Pas encore de compte ? <a href="/inscription">Créer un compte</a>',
+    'login-reset-note':'Entrez votre e-mail pour recevoir un lien de réinitialisation.',
+    'login-reset-btn':'Envoyer',
+    'login-rgpd':'Vos données sont traitées conformément au RGPD. <a href="/politique-confidentialite">Politique de confidentialité</a> · <a href="/mentions-legales">Mentions légales</a>',
+    'login-trust':'Votre espace sécurisé',
     /* ── Header / nav ── */
     'hdr-nav-home':'Accueil','hdr-nav-services':'Services','hdr-nav-about':'À propos',
     'hdr-nav-pricing':'Tarifs','hdr-nav-faq':'FAQ','hdr-nav-contact':'Contact',
@@ -407,6 +433,10 @@ function applyLang(lang){
   document.querySelectorAll('[data-i18n]').forEach(function(el){
     var k=el.getAttribute('data-i18n');
     if(t[k]!==undefined)el.innerHTML=t[k];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(function(el){
+    var k=el.getAttribute('data-i18n-ph');
+    if(t[k]!==undefined)el.placeholder=t[k];
   });
 }
 
