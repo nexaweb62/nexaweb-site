@@ -139,7 +139,7 @@ ul, ol { list-style: none; }
   display: flex;
   align-items: center;
   flex: 1;
-  max-width: 430px;
+  max-width: 500px;
   height: clamp(44px, 5.2vw, 48px);
   padding: 4px 8px;
   background: #fff;
@@ -462,6 +462,9 @@ ul, ol { list-style: none; }
 }
 .split-note + .split-note { margin-top: 18px; }
 
+.inline-link { color: #fff; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+.inline-link:hover { color: var(--warm); }
+
 .points { border-top: 1px solid var(--hair); }
 .points li {
   padding: clamp(15px, 1.9vw, 19px) 0;
@@ -655,6 +658,51 @@ ul, ol { list-style: none; }
   body.menu-open .actionbar { display: none; }
 }
 
+/* ── Page equipe ─────────────────────────────────────────────────────────────
+   Les portraits alternent gauche/droite plutot que de s'aligner en trois
+   colonnes : trois vignettes identiques cote a cote, c'est le gabarit « notre
+   equipe » de n'importe quel site d'agence, et il fait paraitre les personnes
+   interchangeables. Ici chacun a sa ligne. */
+.team-intro { max-width: 62ch; margin-top: clamp(24px, 3.5vw, 36px); display: grid; gap: 16px; }
+.team { margin-top: clamp(44px, 6vw, 72px); display: grid; gap: clamp(36px, 5vw, 56px); }
+
+.team-member {
+  display: grid;
+  grid-template-columns: clamp(150px, 21vw, 220px) minmax(0, 1fr);
+  gap: clamp(20px, 3.5vw, 44px);
+  align-items: start;
+  padding-top: clamp(28px, 4vw, 40px);
+  border-top: 1px solid var(--hair);
+}
+.team-member:first-child { padding-top: 0; border-top: 0; }
+.team-member:nth-child(even) { grid-template-columns: minmax(0, 1fr) clamp(150px, 21vw, 220px); }
+.team-member:nth-child(even) img { grid-area: 1 / 2; }
+.team-member:nth-child(even) > div { grid-area: 1 / 1; }
+
+.team-member img {
+  width: 100%;
+  height: auto;
+  border-radius: 18px;
+  /* Les sources sont en noir et blanc : la teinte tres legere du site les
+     rattache au reste de la page sans virer a l'effet de style. */
+  filter: contrast(1.02);
+}
+.team-member h2 {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 3.4vw, 38px);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+.team-role {
+  margin-top: 6px;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--warm);
+}
+.team-text { margin-top: 16px; max-width: 56ch; font-size: 15px; line-height: 1.68; color: var(--muted); }
+
 /* ── Pied de page ────────────────────────────────────────────────────────── */
 .site-footer { padding: clamp(40px, 6vw, 64px) 0; border-top: 1px solid var(--hair); }
 .footer-row { display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between; }
@@ -781,6 +829,11 @@ body.menu-open { overflow: hidden; }
   .stats { grid-template-columns: repeat(2, 1fr); gap: 18px 12px; }
   .offer-item { grid-template-columns: 1fr; gap: 6px; }
   .pledges { grid-template-columns: 1fr; }
+  .team-member { grid-template-columns: 1fr; gap: 18px; }
+  .team-member img { max-width: 220px; }
+  .team-member:nth-child(even) { grid-template-columns: 1fr; }
+  .team-member:nth-child(even) img { grid-area: auto; }
+  .team-member:nth-child(even) > div { grid-area: auto; }
   .footer-row { flex-direction: column; align-items: flex-start; }
 }
 

@@ -27,12 +27,44 @@ export const AREA = [
   'Lille',
 ] as const;
 
+/* L'equipe. Noms, roles et photos repris de la page `equipe.html` de l'ancien
+   site, toujours en ligne sur la branche `main` : ce sont des informations
+   deja publiques, rien n'est invente ici. Les descriptions disent ce que
+   chacun fait dans un projet, pas un parcours que nous n'avons pas a raconter
+   a la place des interesses. */
+export const TEAM = [
+  {
+    name: 'Imad Torchi',
+    role: 'Développement et mise en ligne',
+    photo: '/assets/equipe/imad.webp',
+    text: "Il construit le site, le met en ligne et s'occupe du nom de domaine, de l'hébergement et des sauvegardes. C'est aussi lui qui intervient quand une modification est demandée.",
+  },
+  {
+    name: 'Ahmed Chteoui',
+    role: 'Conception et interface',
+    photo: '/assets/equipe/ahmed.webp',
+    text: "Il dessine la page, choisit les images et décide de ce qui est montré en premier. L'objectif d'un site de commerce est simple : qu'un client trouve l'horaire, la carte et le chemin en moins de dix secondes.",
+  },
+  {
+    name: 'Killian Mordacq',
+    role: 'Conseil et suivi',
+    photo: '/assets/equipe/killian.webp',
+    text: "Il prend le premier appel, cadre le projet avec vous, réunit les textes et les photos, puis assure la formation et le suivi une fois le site en ligne.",
+  },
+] as const;
+
+export const TEAM_INTRO = [
+  "Nexa Web, ce sont trois personnes basées à Carvin. Pas de service commercial, pas de plateau de production à l'étranger : les trois noms ci-dessous sont ceux qui répondent au téléphone et qui écrivent le code.",
+  "Nous ne sommes pas une agence de communication. Le constat qui nous a décidés tient en une phrase : les commerces qui remplissent leur salle ne sont pas ceux qui ont le plus beau site, ce sont ceux qu'on trouve. Une offre unique, cinq prestations, un prix affiché — c'est ce que cela cherche à corriger, et rien d'autre.",
+] as const;
+
 export const CALENDLY = 'https://calendly.com/contact-nexaweb62/30min';
 
 export const NAV = [
   { href: '/', label: 'Accueil' },
   { href: '/#offre', label: "L'offre" },
   { href: '/#tarifs', label: 'Tarifs' },
+  { href: '/equipe', label: "L'équipe" },
   { href: '/#contact', label: 'Contact' },
 ] as const;
 

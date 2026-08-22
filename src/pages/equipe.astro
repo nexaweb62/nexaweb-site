@@ -1,0 +1,96 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE, CALENDLY, TEAM, TEAM_INTRO } from '../config/site';
+
+const title = "L'équipe — Nexa Web, Carvin";
+const description =
+  "Qui est derrière Nexa Web : trois personnes basées à Carvin, dans les Hauts-de-France. Développement, conception, conseil et suivi — un seul interlocuteur du premier appel aux modifications.";
+---
+
+<Base title={title} description={description} path="/equipe">
+  {/* La page « à propos » est le second appel des pages d'agence après l'accueil.
+      Le balisage la rattache explicitement a l'etablissement decrit sur l'accueil
+      (meme @id) plutot que de declarer une seconde entite concurrente. */}
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'AboutPage',
+      url: `https://${SITE.domain}/equipe`,
+      mainEntity: {
+        '@type': 'ProfessionalService',
+        '@id': `https://${SITE.domain}/#nexaweb`,
+        name: SITE.name,
+        employee: TEAM.map((p) => ({
+          '@type': 'Person',
+          name: p.name,
+          jobTitle: p.role,
+          image: `https://${SITE.domain}${p.photo}`,
+          worksFor: { '@id': `https://${SITE.domain}/#nexaweb` },
+        })),
+      },
+    })}
+  />
+
+  <div class="page-simple">
+    <Header active="/equipe" />
+  </div>
+
+  <main>
+    <section class="section" style="border-top:0">
+      <div class="container">
+        <p class="eyebrow">L'équipe</p>
+        <h1 class="section-title">Trois personnes, à {SITE.city}</h1>
+        <div class="team-intro">
+          {TEAM_INTRO.map((t) => <p class="split-note">{t}</p>)}
+        </div>
+
+        <div class="team">
+          {
+            TEAM.map((p, i) => (
+              <article class="team-member">
+                <img
+                  src={p.photo}
+                  alt={`${p.name}, ${p.role.toLowerCase()} chez Nexa Web`}
+                  width="480"
+                  height="672"
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+                <div>
+                  <h2>{p.name}</h2>
+                  <p class="team-role">{p.role}</p>
+                  <p class="team-text">{p.text}</p>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="contact-panel">
+          <h2 class="section-title" style="max-width:none;margin-inline:auto">
+            Un appel de 30 minutes, sans engagement
+          </h2>
+          <p class="lede" style="margin-inline:auto">
+            C'est Killian qui décroche. Vous repartez avec un avis clair sur votre site
+            et votre fiche Google, même si on ne travaille pas ensemble.
+          </p>
+          <div class="contact-actions">
+            <a class="cta" href="/#contact">Être rappelé</a>
+            <a class="btn-ghost" href={CALENDLY} target="_blank" rel="noopener">Voir les créneaux</a>
+          </div>
+          <p class="form-note">Ou appelez directement le <a href={SITE.phoneHref}>{SITE.phone}</a>.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Base>

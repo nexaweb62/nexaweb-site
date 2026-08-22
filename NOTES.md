@@ -27,12 +27,16 @@ doit jamais partir en ligne avec un placeholder.
 | Chemin | Rôle |
 |---|---|
 | `src/pages/index.astro` | La page unique : hero vidéo, constat, offre, premiers projets, tarifs, questions, contact |
+| `src/pages/equipe.astro` | Qui est derrière Nexa Web : les trois associés, photos et rôles |
 | `src/pages/{mentions-legales,politique-confidentialite,merci,404}.astro` | Pages annexes |
 | `src/config/site.ts` | **Tout le contenu et les coordonnées.** Un seul fichier à dupliquer le jour où l'anglais arrive |
 | `src/components/{Header,Footer}.astro` | Navigation, menu mobile, pied de page |
 | `src/styles/global.css` | Feuille unique. Premier écran repris d'un spec fourni, sections suivantes en extension |
 | `src/layouts/Base.astro` | `<head>`, métadonnées, polices |
-| `public/assets/` | Vidéo de fond, affiche, logo |
+| `public/assets/` | Vidéo de fond, affiche, image de partage, logo, portraits de l'équipe |
+| `public/fonts/` | Archivo et Cormorant, auto-hébergées. Régénérées à la main, voir `src/styles/fonts.css` |
+| `scripts/build-sitemap.mjs` | Sitemap déduit de `dist/` après le build |
+| `scripts/make-og.mjs`, `scripts/make-portraits.mjs` | Génération des images (`npm run og`) |
 | `public/demo-*.html` | Deux maquettes de démonstration, en `noindex`, autonomes |
 | `public/_redirects` | 30 redirections 301 des anciennes URLs. **Ne pas y toucher** |
 | `public/_headers` | En-têtes de sécurité et cache des médias |
@@ -146,8 +150,10 @@ page « qui sommes-nous » sera ajoutée — c'est la recommandation P7 de
 8. **Décider du sort des deux maquettes** `public/demo-*.html` : elles ne sont
    plus liées depuis le site, mais restent accessibles par leur URL pour la
    prospection.
-9. **Ajouter une page « qui sommes-nous »** — pour un artisan qui achète à un
-   artisan, ne pas savoir qui est derrière est un frein direct.
+9. ~~Ajouter une page « qui sommes-nous ».~~ Faite en `v2.2` : `/equipe`,
+   avec les trois associés et leurs portraits. **À relire par les intéressés** —
+   les rôles sont repris de l'ancien site, mais chacun doit valider la
+   description de ce qu'il fait, et le principe même d'afficher sa photo.
 10. **Corriger les champs de `public/demo-le-grenier.html`** si les maquettes
    sont conservées : ses cinq champs de formulaire n'ont ni `id` ni `label`,
    seulement un `placeholder`. Reprise telle quelle de l'ancien site, non
