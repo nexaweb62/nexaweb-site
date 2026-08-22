@@ -6,16 +6,21 @@ import '../styles/global.css';
 ---
 <BaseLayout title="Page introuvable — Nexa Web">
 <style>
+/* ── CANVAS BG ── */
+#nf-cv{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+
+/* ── LAYOUT ── */
 .nf-page{
+  position:relative;z-index:1;
   min-height:calc(100vh - var(--hdr));
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   text-align:center;padding:clamp(48px,8vh,96px) var(--pad-x);
-  position:relative;z-index:1;
   gap:0;
 }
 
+/* ── 404 ── */
 .nf-num{
-  font-size:clamp(120px,20vw,220px);
+  font-size:clamp(120px,22vw,240px);
   font-weight:900;
   letter-spacing:-.06em;
   line-height:1;
@@ -23,44 +28,45 @@ import '../styles/global.css';
   -webkit-mask-image:linear-gradient(to bottom,black 20%,transparent 80%);
   mask-image:linear-gradient(to bottom,black 20%,transparent 80%);
   user-select:none;
+  pointer-events:none;
 }
 
+/* ── DESCRIPTION ── */
 .nf-desc{
-  margin-top:-24px;
-  font-size:clamp(14px,1.5vw,17px);
-  color:var(--text-muted);
-  line-height:1.65;
-  max-width:380px;
-  margin-bottom:36px;
+  margin-top:-28px;
+  font-size:clamp(13px,1.5vw,16px);
+  color:rgba(var(--text-muted-rgb,232,232,242),.7);
+  line-height:1.7;
+  max-width:400px;
+  margin-bottom:40px;
 }
 
+/* ── BUTTONS ── */
 .nf-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
 
 .nf-btn-home{
-  display:inline-flex;align-items:center;gap:8px;
-  font-size:11px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;
+  display:inline-flex;align-items:center;gap:9px;
+  font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
   background:var(--btn-bg);color:var(--btn-text);
-  border-radius:2px;padding:12px 24px;
+  border-radius:3px;padding:13px 26px;
   transition:opacity .2s,transform .2s;
 }
-.nf-btn-home:hover{opacity:.82;transform:translateY(-1px)}
-.nf-btn-home svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.nf-btn-home:hover{opacity:.84;transform:translateY(-1px)}
+.nf-btn-home svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
 .nf-btn-explore{
-  display:inline-flex;align-items:center;gap:8px;
-  font-size:11px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;
-  border:1px solid var(--ghost-border);color:var(--text);
-  border-radius:2px;padding:12px 24px;
-  transition:border-color .2s,opacity .2s;
+  display:inline-flex;align-items:center;gap:9px;
+  font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  border:1px solid var(--ghost-border);color:var(--text-muted);
+  border-radius:3px;padding:13px 26px;
+  transition:border-color .2s,color .2s,transform .2s;
 }
-.nf-btn-explore:hover{border-color:var(--text-muted)}
-.nf-btn-explore svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-
-#neon-bg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.18}
+.nf-btn-explore:hover{border-color:var(--border-hi);color:var(--text);transform:translateY(-1px)}
+.nf-btn-explore svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 </style>
 
-<canvas id="neon-bg" aria-hidden="true"></canvas>
-<Header />
+<canvas id="nf-cv" aria-hidden="true"></canvas>
+<Header back={false} />
 
 <main>
   <div class="nf-page">
@@ -83,44 +89,66 @@ import '../styles/global.css';
 
 <Footer />
 
-<script>
+<script is:inline>
+/* ── AETHER FLOW background ── */
 (function(){
-  const c=document.getElementById('neon-bg');
-  if(!c)return;
-  const g=c.getContext('2d');
-  let W=0,H=0;
-  const tubes=[];
-  function resize(){W=c.width=innerWidth;H=c.height=innerHeight}
-  function rand(a,b){return a+Math.random()*(b-a)}
-  function mkTube(){
-    const pts=[];for(let i=0;i<Math.floor(rand(4,8));i++)pts.push({x:rand(0,W),y:rand(0,H)});
-    return{pts,color:`hsl(${rand(250,290)},80%,60%)`,w:rand(.5,1.5),t:0,sp:rand(.002,.005),alpha:rand(.3,.7)};
+  'use strict';
+  var cv=document.getElementById('nf-cv');
+  if(!cv)return;
+  var ctx=cv.getContext('2d');
+  var W,H,pts=[],RAF;
+  var mouse={x:null,y:null,r:180};
+
+  function Particle(){
+    this.x=Math.random()*W;this.y=Math.random()*H;
+    this.vx=(Math.random()*.4)-.2;this.vy=(Math.random()*.4)-.2;
+    this.size=Math.random()*1.6+.5;
   }
-  function init(){resize();tubes.length=0;for(let i=0;i<10;i++)tubes.push(mkTube())}
-  function catmull(pts,t){
-    const n=pts.length,seg=Math.min(Math.floor(t*(n-1)),n-2),lt=(t*(n-1))-seg;
-    const p0=pts[Math.max(seg-1,0)],p1=pts[seg],p2=pts[Math.min(seg+1,n-1)],p3=pts[Math.min(seg+2,n-1)];
-    const t2=lt*lt,t3=t2*lt;
-    return{x:.5*((2*p1.x)+(-p0.x+p2.x)*lt+(2*p0.x-5*p1.x+4*p2.x-p3.x)*t2+(-p0.x+3*p1.x-3*p2.x+p3.x)*t3),
-           y:.5*((2*p1.y)+(-p0.y+p2.y)*lt+(2*p0.y-5*p1.y+4*p2.y-p3.y)*t2+(-p0.y+3*p1.y-3*p2.y+p3.y)*t3)};
-  }
-  function draw(){
-    g.clearRect(0,0,W,H);
-    for(const tb of tubes){
-      tb.t=(tb.t+tb.sp)%1;
-      g.beginPath();
-      for(let i=0;i<=60;i++){const p=catmull(tb.pts,i/60);i===0?g.moveTo(p.x,p.y):g.lineTo(p.x,p.y)}
-      g.strokeStyle=tb.color;g.lineWidth=tb.w;g.globalAlpha=tb.alpha*.25;g.stroke();
-      const head=catmull(tb.pts,tb.t);
-      const gl=g.createRadialGradient(head.x,head.y,0,head.x,head.y,20);
-      gl.addColorStop(0,tb.color);gl.addColorStop(1,'transparent');
-      g.beginPath();g.arc(head.x,head.y,20,0,Math.PI*2);g.fillStyle=gl;g.globalAlpha=tb.alpha*.55;g.fill();
-      g.globalAlpha=1;
+  Particle.prototype.update=function(){
+    if(this.x>W||this.x<0)this.vx=-this.vx;
+    if(this.y>H||this.y<0)this.vy=-this.vy;
+    if(mouse.x!==null){
+      var dx=mouse.x-this.x,dy=mouse.y-this.y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<mouse.r&&d>0){var f=(mouse.r-d)/mouse.r;this.x-=(dx/d)*f*5;this.y-=(dy/d)*f*5;}
     }
-    requestAnimationFrame(draw);
+    this.x+=this.vx;this.y+=this.vy;
+    ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+    ctx.fillStyle='rgba(191,128,255,.75)';ctx.fill();
+  };
+
+  function connect(){
+    var thresh=(W/7)*(H/7);
+    for(var a=0;a<pts.length;a++){
+      for(var b=a+1;b<pts.length;b++){
+        var dx=pts[a].x-pts[b].x,dy=pts[a].y-pts[b].y,d2=dx*dx+dy*dy;
+        if(d2<thresh){
+          var op=1-(d2/20000),near=false;
+          if(mouse.x!==null){var mx=pts[a].x-mouse.x,my=pts[a].y-mouse.y;near=Math.sqrt(mx*mx+my*my)<mouse.r;}
+          ctx.strokeStyle=near?('rgba(255,255,255,'+op+')'): ('rgba(200,150,255,'+op+')');
+          ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(pts[a].x,pts[a].y);ctx.lineTo(pts[b].x,pts[b].y);ctx.stroke();
+        }
+      }
+    }
   }
-  window.addEventListener('resize',()=>{resize();init()},{passive:true});
-  init();draw();
+
+  function animate(){
+    RAF=requestAnimationFrame(animate);
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<pts.length;i++)pts[i].update();
+    connect();
+  }
+
+  function init(){
+    W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;
+    pts=[];var n=Math.min(Math.floor(W*H/9000),140);
+    for(var i=0;i<n;i++)pts.push(new Particle());
+  }
+
+  window.addEventListener('resize',function(){cancelAnimationFrame(RAF);init();animate();},{passive:true});
+  window.addEventListener('mousemove',function(e){mouse.x=e.clientX;mouse.y=e.clientY;},{passive:true});
+  window.addEventListener('mouseleave',function(){mouse.x=null;mouse.y=null;});
+  document.addEventListener('visibilitychange',function(){if(document.hidden)cancelAnimationFrame(RAF);else animate();});
+  init();animate();
 })();
 </script>
 </BaseLayout>
