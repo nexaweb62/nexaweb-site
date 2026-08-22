@@ -12,6 +12,21 @@ export const SITE = {
   whatsapp: 'https://wa.me/33698840194',
 } as const;
 
+/* Zone d'intervention. Toutes ces communes sont a moins de 40 km de Carvin :
+   c'est la zone ou un deplacement sur place reste possible dans la journee.
+   Sert au balisage `areaServed` et a la mention du pied de page — Google
+   accorde peu de credit a une zone declaree qui n'apparait nulle part dans
+   la page. Ajouter une ville ici l'ajoute aux deux endroits. */
+export const AREA = [
+  'Carvin',
+  'Lens',
+  'Hénin-Beaumont',
+  'Liévin',
+  'Douai',
+  'Seclin',
+  'Lille',
+] as const;
+
 export const CALENDLY = 'https://calendly.com/contact-nexaweb62/30min';
 
 export const NAV = [

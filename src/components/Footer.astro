@@ -1,5 +1,5 @@
 ---
-import { SITE, CALENDLY } from '../config/site';
+import { SITE, CALENDLY, AREA } from '../config/site';
 const year = new Date().getFullYear();
 ---
 
@@ -19,6 +19,11 @@ const year = new Date().getFullYear();
         <a href={SITE.phoneHref}>{SITE.phone}</a>
       </nav>
     </div>
+
+    <p class="footer-area">
+      Création de sites internet à {AREA.slice(0, -1).join(', ')} et {AREA.at(-1)} —
+      et partout ailleurs dans les {SITE.region}.
+    </p>
 
     <p class="footer-legal">
       © {year} {SITE.name} — {SITE.city}, {SITE.region}.{' '}

@@ -8,10 +8,11 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && node scripts/check-build.mjs",
+    "build": "astro build && node scripts/build-sitemap.mjs && node scripts/check-build.mjs",
     "preview": "astro preview",
     "astro": "astro",
-    "check": "node scripts/check-build.mjs"
+    "check": "node scripts/check-build.mjs",
+    "og": "node scripts/make-og.mjs"
   },
   "dependencies": {
     "astro": "^7.2.4"

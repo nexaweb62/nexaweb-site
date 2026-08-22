@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import {
-  SITE, CALENDLY, HERO, STATS, PROBLEMS, OFFER, LAUNCH, PRICING, PLEDGES, PRICING_NOTES, FAQ,
+  SITE, AREA, CALENDLY, HERO, STATS, PROBLEMS, OFFER, LAUNCH, PRICING, PLEDGES, PRICING_NOTES, FAQ,
 } from '../config/site';
 
 const title = 'Nexa Web — Sites internet pour restaurants et commerces · Carvin';
@@ -12,19 +12,31 @@ const description =
 ---
 
 <Base title={title} description={description} path="/">
+  {/* Balisage de l'etablissement. ProfessionalService derive de LocalBusiness :
+      c'est le type le plus precis pour une agence locale. Les montants sont
+      repris de PRICING, donc un changement de prix met le balisage a jour tout
+      seul — un prix contredit par les donnees structurees est un signal negatif. */}
   <script
     is:inline
     type="application/ld+json"
     set:html={JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'ProfessionalService',
+      '@id': `https://${SITE.domain}/#nexaweb`,
       name: SITE.name,
       description:
         "Création de sites internet pour les restaurants et les commerces de proximité : site, nom de domaine, réservations, suivi des visites et formation.",
       url: `https://${SITE.domain}`,
       email: SITE.email,
       telephone: '+33698840194',
-      areaServed: { '@type': 'AdministrativeArea', name: SITE.region },
+      image: `https://${SITE.domain}/assets/og.jpg`,
+      logo: `https://${SITE.domain}/assets/logo.svg`,
+      priceRange: '€€',
+      currenciesAccepted: 'EUR',
+      areaServed: [
+        { '@type': 'AdministrativeArea', name: SITE.region },
+        ...AREA.map((ville) => ({ '@type': 'City', name: ville })),
+      ],
       address: {
         '@type': 'PostalAddress',
         addressLocality: SITE.city,
@@ -32,6 +44,49 @@ const description =
         addressCountry: 'FR',
       },
       knowsLanguage: 'fr-FR',
+      makesOffer: [
+        {
+          '@type': 'Offer',
+          name: 'Lancement digital — mise en ligne',
+          description:
+            "Site vitrine ou boutique en ligne, nom de domaine, formulaire ou prise de rendez-vous, configuration des outils de suivi et formation. Facturé une seule fois.",
+          price: PRICING.setup,
+          priceCurrency: 'EUR',
+          availability: 'https://schema.org/InStock',
+        },
+        {
+          '@type': 'Offer',
+          name: 'Lancement digital — abonnement',
+          description:
+            "Hébergement, nom de domaine, sauvegardes, mises à jour, modifications courantes et accompagnement. Sans engagement de durée.",
+          priceSpecification: {
+            '@type': 'UnitPriceSpecification',
+            price: PRICING.monthly,
+            priceCurrency: 'EUR',
+            unitCode: 'MON',
+            billingIncrement: 1,
+          },
+          availability: 'https://schema.org/InStock',
+        },
+      ],
+    })}
+  />
+
+  {/* Les questions de la page, sous forme lisible par les moteurs. Google a
+      restreint l'affichage des resultats enrichis FAQ en 2023 : le gain n'est
+      plus dans la SERP mais dans la comprehension de la page — reponses
+      reprises par les assistants et les apercus generes. Cout : zero. */}
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: FAQ.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
     })}
   />
 

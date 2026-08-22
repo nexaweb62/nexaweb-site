@@ -6,9 +6,11 @@ interface Props {
   description: string;
   /** Chemin de la page, sans slash final, pour le canonical. Ex : "/mentions-legales" */
   path?: string;
+  /** Pages de service (confirmation, erreur, 404) : hors index, hors sitemap. */
+  noindex?: boolean;
 }
 
-const { title, description, path = '' } = Astro.props;
+const { title, description, path = '', noindex = false } = Astro.props;
 const canonical = new URL(path, Astro.site).href;
 ---
 
@@ -20,6 +22,7 @@ const canonical = new URL(path, Astro.site).href;
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
@@ -30,7 +33,12 @@ const canonical = new URL(path, Astro.site).href;
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={new URL('/assets/hero-poster.webp', Astro.site).href} />
+    {/* JPEG et non WebP : LinkedIn et une partie des clients de messagerie
+        ignorent encore le WebP et n'affichent alors aucune vignette. */}
+    <meta property="og:image" content={new URL('/assets/og.jpg', Astro.site).href} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Nexa Web — sites internet pour les commerces des Hauts-de-France" />
     <meta name="twitter:card" content="summary_large_image" />
 
     {/* Polices servies par le site lui-meme (voir src/styles/fonts.css).
