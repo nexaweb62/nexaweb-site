@@ -47,6 +47,7 @@ doit jamais partir en ligne avec un placeholder.
 | `docs/conclusions.md` | **Point d'entrée** : la synthèse en une page, les chiffres et ce qu'il faut faire |
 | `docs/analysis.md` | Analyse économique, audit conversion, journal des cycles |
 | `docs/production/` | Questionnaire de démarrage et checklist de mise en ligne, pour les sites clients |
+| `docs/design-system.md` | Couleurs, typographie, gabarits disponibles et ce qu'on s'interdit |
 | `docs/modele-economique.mjs` | Le calcul derrière les chiffres du document |
 
 ## Choix techniques
