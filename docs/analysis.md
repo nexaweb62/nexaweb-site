@@ -250,9 +250,22 @@ valeur/coût visé. Pour tenir un ratio de 3× minimum avec 18 h de production e
   trésorerie avant de la remplir. Recommandation : **1 190 €**, avec une
   version à 890 € réservée aux tout premiers clients en échange du droit de
   publier l'étude de cas.
-- **Abonnement : 89 € à 149 €/mois.** Recommandation : **99 €/mois**, engagement
-  12 mois. En dessous de 79 €, le récurrent ne compense pas le coût de support
-  et la promesse « on s'en occupe » devient un centre de perte.
+- **Abonnement : 89 € à 149 €/mois.** Recommandation : **99 €/mois**. En dessous
+  de 79 €, le récurrent ne compense pas le coût de support et la promesse
+  « on s'en occupe » devient un centre de perte.
+
+> **Décision du 22/08/2026 — 1 190 € et 99 €/mois, affichés sur le site.**
+>
+> Ces montants correspondent au scénario « Réaliste » du § 3.3, ce qui rend le
+> modèle cohérent : coût total par client 1 117 €, donc **les frais de lancement
+> couvrent à eux seuls la production et l'acquisition**. Le client est rentable
+> dès la mise en ligne, et tout mois d'abonnement est de la marge.
+>
+> C'est ce qui rend tenable la promesse « sans engagement de durée » affichée
+> sur le site. Le calcul serait très différent à 890 € de lancement : il faudrait
+> alors sept mois d'abonnement pour rentrer dans ses frais, et un départ au bout
+> de six mois coûterait de l'argent. **Si vous consentez le tarif de lancement à
+> 890 € pour les premiers clients, prenez l'engagement de 12 mois en échange.**
 
 ### 4.2 Ce que le marché supporte
 
@@ -320,7 +333,7 @@ indicatif des champs (2,26:1).
 | # | Problème | Impact | Effort |
 |---|---|---|---|
 | ~~P1~~ | ~~**Aucun formulaire.**~~ Corrigé en `v1.2` : formulaire à quatre champs traité par une fonction Cloudflare Pages, avec honeypot et pages de confirmation et d'échec. | Conversion | Fait |
-| P2 | **Les prix ne sont pas renseignés.** La section affiche un placeholder. Tant que les montants manquent, la page ne peut pas convertir et le garde-fou de build bloque la mise en production. | Conversion | Bloqué — décision d'Elio |
+| ~~P2~~ | ~~**Les prix ne sont pas renseignés.**~~ Arrêtés le 22/08/2026 en `v1.8` : **1 190 € de lancement, 99 €/mois**, soit exactement le scénario « Réaliste » modélisé ci-dessus. | Conversion | Fait |
 | ~~P3~~ | ~~**Aucun balisage structuré.**~~ Corrigé en `v1.1` : JSON-LD `ProfessionalService` avec ville, région et zone desservie. | SEO local | Fait |
 | ~~P4~~ | ~~**La section « constat » est en trois cartes.**~~ Corrigé en `v1.1` : bloc deux colonnes, gabarit `.card` supprimé de la feuille de style. | Différenciation | Fait |
 | ~~P5~~ | ~~**Le hero ne dit pas où l'on est.**~~ Corrigé en `v1.1` : l'accroche nomme « les commerces de Carvin et des Hauts-de-France ». | SEO local, confiance | Fait |
@@ -384,5 +397,6 @@ Restant à corriger :
 | `v1.3` | 22/08/2026 | Contrastes du pied de page et du texte indicatif portés au niveau AA | 2,69:1 et 2,26:1 mesurés, sous le seuil de 4,5:1 |
 | `v1.4` | 22/08/2026 | Suppression de l'ancien site : 104 fichiers, 20 108 lignes. `NOTES.md` réécrit | Le nouveau site n'appelait plus aucun de ces fichiers. `NOTES.md` était le seul inventaire des comptes : il liste désormais les services à résilier |
 | `v1.6` | 22/08/2026 | Créneau de rappel et raccourci Calendly par date | Un restaurateur ne peut pas décrocher pendant le service |
+| `v1.8` | 22/08/2026 | Prix affichés : 1 190 € de lancement, 99 €/mois | Décision d'Elio, conforme au scénario « Réaliste ». Le garde-fou de production ne bloque plus |
 | `v1.7` | 22/08/2026 | Sortie de Netlify : Cloudflare Pages, `_redirects` / `_headers`, formulaire en fonction maison + Resend | Choix d'Elio. Le formulaire maison est reproductible pour les sites clients — un actif plutôt qu'une dépendance |
 | `v1.5` | 22/08/2026 | Cormorant remplace Fraunces, corps d'affichage recalculés | Choix d'Elio. La hauteur d'x plus basse de 20 % imposait de majorer les corps de 12 %, sans quoi la typographie paraissait rabougrie |

@@ -114,12 +114,13 @@ export const LAUNCH = {
   ],
 } as const;
 
-/* Les deux montants sont a fournir par Elio.
-   Tant qu'ils valent null, la page affiche un placeholder visible et
-   `npm run build` echoue si l'on tente une mise en production. */
+/* Montants arretes par Elio le 22/08/2026, conformes a la recommandation de
+   docs/analysis.md § 4 : plancher absolu a 890 / 79, en dessous duquel un
+   nouveau client coute de l'argent avant d'en rapporter.
+   Repasser l'une des deux valeurs a null rebloque la mise en production. */
 export const PRICING: { setup: number | null; monthly: number | null } = {
-  setup: null,
-  monthly: null,
+  setup: 1190,
+  monthly: 99,
 };
 
 export const PRICING_NOTES = [

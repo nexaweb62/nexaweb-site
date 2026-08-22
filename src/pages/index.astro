@@ -199,7 +199,7 @@ const description =
           <div class="price-card">
             <p class="price-kicker">Frais de lancement</p>
             <p class:list={['price-figure', { 'price-todo': PRICING.setup === null }]}>
-              {PRICING.setup === null ? '— — —' : `${PRICING.setup} €`}
+              {PRICING.setup === null ? '— — —' : `${PRICING.setup.toLocaleString('fr-FR')} €`}
               <small>une fois</small>
             </p>
             {PRICING.setup === null && <span class="price-todo-note">Montant à définir</span>}
@@ -212,7 +212,7 @@ const description =
           <div class="price-card">
             <p class="price-kicker">Abonnement</p>
             <p class:list={['price-figure', { 'price-todo': PRICING.monthly === null }]}>
-              {PRICING.monthly === null ? '— — —' : `${PRICING.monthly} €`}
+              {PRICING.monthly === null ? '— — —' : `${PRICING.monthly.toLocaleString('fr-FR')} €`}
               <small>par mois</small>
             </p>
             {PRICING.monthly === null && <span class="price-todo-note">Montant à définir</span>}
