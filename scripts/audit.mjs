@@ -163,6 +163,45 @@ for (const [classe, page] of citees) {
   }
 }
 
+
+/* ── Vocabulaire ────────────────────────────────────────────────────────────
+   La regle editoriale du site tient en une phrase : un mot qu'on ne dirait pas
+   au telephone a un boulanger n'a rien a faire sur la page. Elle n'etait
+   verifiee que par relecture, donc oubliee des qu'une section est ajoutee.
+   La liste ne contient que des termes indefendables ici — pas des mots
+   discutables comme « solution » ou « accompagnement », qui ont parfois un sens
+   precis. */
+const INTERDITS = [
+  'expérience digitale',
+  'expériences digitales',
+  'sur-mesure',
+  'clé en main',
+  'clef en main',
+  'à 360',
+  'synergie',
+  'écosystème digital',
+  'transformation digitale',
+  'booster votre',
+  'boostez votre',
+  'nouvelle génération',
+  'incontournable',
+  'leader du marché',
+  'à la pointe',
+  'notre ADN',
+  'passionnés du digital',
+  'agence premium',
+];
+
+for (const chemin of pages) {
+  const nom = relative(dist, chemin);
+  const texte = sansBalises(readFileSync(chemin, 'utf8'))
+    .replace(/<[^>]+>/g, ' ')
+    .toLowerCase();
+  for (const mot of INTERDITS) {
+    if (texte.includes(mot)) soucis.push(`${nom} — vocabulaire d'agence : « ${mot} »`);
+  }
+}
+
 /* ── Contrastes ─────────────────────────────────────────────────────────────
    Les couleurs de texte du site, verifiees contre le fond sur lequel elles
    sont reellement posees. Seuil AA pour du texte courant : 4,5:1. */

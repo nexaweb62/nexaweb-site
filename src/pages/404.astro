@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { METIERS } from '../config/metiers';
 ---
 
 <Base
@@ -19,13 +20,18 @@ import Footer from '../components/Footer.astro';
       <p class="notfound-code" aria-hidden="true">404</p>
       <h1 class="section-title" style="max-width:none;margin-top:18px">Cette page n'existe pas</h1>
       <p class="lede" style="margin-inline:auto">
-        Le lien est peut-être ancien : le site a été refait. Tout se trouve désormais
-        sur une seule page.
+        Le lien est peut-être ancien : le site a été refait. Voici où se trouve
+        ce que vous cherchiez probablement.
       </p>
       <div class="contact-actions">
         <a class="cta" href="/">Retour à l'accueil</a>
-        <a class="btn-ghost" href="/#offre">Voir l'offre</a>
+        <a class="btn-ghost" href="/#tarifs">Les tarifs</a>
       </div>
+      <nav class="metier-liens" aria-label="Pages du site">
+        {METIERS.map((m) => <a class="inline-link" href={`/${m.slug}`}>{m.nav}</a>)}
+        <a class="inline-link" href="/equipe">L'équipe</a>
+        <a class="inline-link" href="/fiche-google-business">Guide fiche Google</a>
+      </nav>
     </div>
   </main>
 
