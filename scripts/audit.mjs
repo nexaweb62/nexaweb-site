@@ -108,9 +108,74 @@ const css = [...accueil.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)]
   .map((m) => m[1].length)
   .reduce((a, b) => a + b, 0);
 
+
+/* ── Classes citees mais jamais definies ────────────────────────────────────
+   Une faute de frappe dans un `class="..."` ne casse rien : elle produit une
+   page sans style, silencieusement. Sans navigateur pour s'en apercevoir,
+   c'est le controle qui remplace le coup d'oeil. */
+const feuille = [...accueil.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)]
+  .map((m) => m[1])
+  .join('\n');
+
+const definies = new Set([...feuille.matchAll(/\.(-?[_a-zA-Z][\w-]*)/g)].map((m) => m[1]));
+/* Classes sans regle propre, et c'est voulu : `menu-link` sert de point
+   d'accroche au JavaScript du menu, son apparence vient de `.menu-sheet a`.
+   `menu-open` et `is-active` sont posees a l'execution. */
+const tolerees = new Set(['menu-open', 'is-active', 'menu-link', 'astro-route-announcer']);
+
+const citees = new Map();
+for (const chemin of pages) {
+  const nom = relative(dist, chemin);
+  if (nom.startsWith('demo-')) continue; // feuilles autonomes
+  for (const m of readFileSync(chemin, 'utf8').matchAll(/\sclass="([^"]+)"/g)) {
+    for (const c of m[1].split(/\s+/).filter(Boolean)) {
+      if (!citees.has(c)) citees.set(c, nom);
+    }
+  }
+}
+
+for (const [classe, page] of citees) {
+  if (!definies.has(classe) && !tolerees.has(classe)) {
+    soucis.push(`${page} — classe sans style : .${classe}`);
+  }
+}
+
+/* ── Contrastes ─────────────────────────────────────────────────────────────
+   Les couleurs de texte du site, verifiees contre le fond sur lequel elles
+   sont reellement posees. Seuil AA pour du texte courant : 4,5:1. */
+const canal = (v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+const luminance = (hex) => {
+  const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255);
+  return 0.2126 * canal(r) + 0.7152 * canal(g) + 0.0722 * canal(b);
+};
+const contraste = (a, b) => {
+  const [x, y] = [luminance(a), luminance(b)].sort((p, q) => q - p);
+  return (x + 0.05) / (y + 0.05);
+};
+
+const variable = (nom) => feuille.match(new RegExp(`${nom}:\\s*(#[0-9a-fA-F]{6})`))?.[1];
+
+const PAIRES = [
+  ['texte courant', variable('--muted'), '#000000'],
+  ['texte de prose', variable('--dim'), '#000000'],
+  ['role de l equipe', variable('--warm'), '#000000'],
+  ['pilule de confiance', variable('--trust-text'), variable('--trust-bg')],
+  ['navigation', variable('--nav-text'), '#ffffff'],
+];
+
+for (const [quoi, avant, apres] of PAIRES) {
+  if (!avant || !apres) {
+    soucis.push(`contraste : couleur introuvable pour « ${quoi} »`);
+    continue;
+  }
+  const r = contraste(avant, apres);
+  if (r < 4.5) soucis.push(`contraste insuffisant — ${quoi} : ${r.toFixed(2)}:1 (seuil 4,5:1)`);
+}
+
 console.log(
   `audit : ${pages.length} page(s) — CSS ${(css / 1024).toFixed(0)} Ko dans la page, ` +
-    `premier ecran ${(media / 1024).toFixed(0)} Ko de media`,
+    `premier ecran ${(media / 1024).toFixed(0)} Ko de media, ` +
+    `${citees.size} classes utilisees`,
 );
 
 if (soucis.length === 0) {
