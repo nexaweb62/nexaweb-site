@@ -73,6 +73,14 @@ doit jamais partir en ligne avec un placeholder.
   construction — `import.meta.env.DEV` vaut alors `false` — et n'existe donc
   pas sur le site publié.
 
+  **Cas le plus fréquent en développement : `prefers-reduced-motion`.** Les
+  sessions de bureau distant (RDP, VNC) désactivent les animations côté système,
+  le navigateur relaie la préférence, et le site la respecte — plus de fond
+  animé, plus d'apparitions en cascade, plus de compteurs. Ce n'est pas une
+  panne, et ce n'est pas ce que voit un visiteur. Sous Windows : *Paramètres →
+  Accessibilité → Effets visuels → Effets d'animation*. Sous macOS :
+  *Réglages → Accessibilité → Écran → Réduire les animations*.
+
   **`?video=1` dans l'URL force le chargement** en levant les quatre
   conditions, y compris le `display: none` appliqué en animations réduites :
   c'est le moyen de vérifier en deux secondes que le fichier est bon. Si la

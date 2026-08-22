@@ -411,7 +411,12 @@ const description =
     const raison = (): string | null => {
       if (force) return null;
       if (window.innerWidth <= 720) return "ecran de moins de 720 px : l'affiche suffit et economise 1,2 Mo";
-      if (calm.matches) return 'le systeme demande des animations reduites (prefers-reduced-motion)';
+      if (calm.matches) {
+        return (
+          'le systeme demande des animations reduites (prefers-reduced-motion) — ' +
+          'reglage frequent en session de bureau distant, ou il ne reflete pas ce que voit un visiteur'
+        );
+      }
       const reseau = (navigator as any).connection;
       if (reseau?.saveData) return 'le navigateur est en mode economie de donnees';
       if (/2g/.test(reseau?.effectiveType ?? '')) return 'connexion estimee en 2G';
@@ -453,7 +458,7 @@ const description =
       const largeur = window.innerWidth;
       const detail = [
         `fenetre ${largeur} px`,
-        `animations ${calm.matches ? 'reduites' : 'normales'}`,
+        `animations ${calm.matches ? 'reduites (aucune animation du site ne joue)' : 'normales'}`,
         force ? 'force' : null,
       ]
         .filter(Boolean)
