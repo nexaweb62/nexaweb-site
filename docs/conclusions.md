@@ -11,7 +11,7 @@
 
 | Question | Réponse courte |
 |---|---|
-| Combien coûte l'IA ? | **154 $ mesurés** pour construire ce site en entier. 20 à 30 $ pour un site client une fois le processus rodé. 1 à 2 % du coût de production |
+| Combien coûte l'IA ? | **161 $ mesurés** pour construire ce site en entier. 8 à 20 $ pour un site client une fois le processus rodé. 1 à 2 % du coût de production |
 | Combien de temps pour un site ? | **18 h** avec Claude Code et un processus rodé, contre 39 h sans. **10,3 h** une fois industrialisé |
 | Le modèle à trois tient-il ? | Oui à partir de 5 sites/mois, et **c'est l'acquisition qui limite, jamais la production** — 41 % de la capacité utilisée dans le scénario réaliste |
 | Les tarifs sont-ils bons ? | **1 190 € + 99 €/mois** rendent le client rentable dès la mise en ligne. C'est ce qui rend tenable le « sans engagement » affiché |
@@ -27,21 +27,21 @@ refonte à aujourd'hui :
 
 | | |
 |---|---:|
-| Tours d'assistant | 1 028 |
-| Tokens d'entrée | 190 M, dont **98 % lus en cache** |
-| Tokens de sortie | 1,46 M |
-| **Coût** | **154,16 $ ≈ 142 €** |
+| Tours d'assistant | 1 062 |
+| Tokens d'entrée | 200 M, dont **98 % lus en cache** |
+| Tokens de sortie | 1,51 M |
+| **Coût** | **160,61 $ ≈ 148 €** |
 
-**0,150 $ par tour.** C'est le seul chiffre à retenir pour estimer un projet.
+**0,151 $ par tour.** C'est le seul chiffre à retenir pour estimer un projet.
 
 Trois conséquences pratiques :
 
-- **Le cache décide de la facture.** Sans lui, ces 190 M de tokens auraient
-  coûté environ 950 $ au lieu de 96 $. Rester dans une session longue plutôt
+- **Le cache décide de la facture.** Sans lui, ces 200 M de tokens auraient
+  coûté environ 1 000 $ au lieu de 100 $. Rester dans une session longue plutôt
   que d'en ouvrir dix, ne pas changer de modèle en cours de route.
 - **L'abonnement bat l'API dès le premier projet sérieux.** Claude Max 5× coûte
-  100 $/mois ; ce site seul en a consommé 154 $ en une journée.
-- **Le premier site coûte dix fois un site client.** 142 € ici, 20 à 30 $
+  100 $/mois ; ce site seul en a consommé 161 $ en une journée.
+- **Le premier site coûte dix fois un site client.** 148 € ici, 8 à 20 $
   ensuite : la différence, c'est le système visuel, les impasses et les choix
   qu'on ne refait qu'une fois. Ne pas deviser un projet neuf au tarif d'un
   projet répété.
@@ -74,8 +74,8 @@ Au 12ᵉ mois, scénario réaliste (5 sites/mois, 51 clients au parc) :
 | | Prudent | **Réaliste** | Optimisé |
 |---|---:|---:|---:|
 | CA mensuel | 3 392 € | **11 002 €** | 25 258 € |
-| Marge brute | 508 € | **5 365 €** | 18 413 € |
-| Par personne, avant charges | 1 117 € | **3 633 €** | 8 379 € |
+| Marge brute | 491 € | **5 324 €** | 18 379 € |
+| Par personne, avant charges | 1 112 € | **3 620 €** | 8 367 € |
 | Capacité de production utilisée | 21 % | **41 %** | 52 % |
 | Prospection à soutenir | 66 contacts/mois | **165/mois** | 297/mois |
 
@@ -84,7 +84,7 @@ Quatre conclusions, dans l'ordre d'importance :
 1. **Le goulot est l'acquisition, jamais la production.** Même dans le scénario
    optimisé, la moitié de la capacité reste inutilisée. Ce qui limite le chiffre
    d'affaires, c'est le nombre d'entreprises contactées et converties.
-2. **Le scénario prudent n'est pas viable à trois** : 1 117 € par personne avant
+2. **Le scénario prudent n'est pas viable à trois** : 1 112 € par personne avant
    charges, c'est sous le SMIC. À ce niveau, c'est une activité secondaire, ou
    une personne seule.
 3. **La valeur est dans le parc, pas dans les lancements.** Au 12ᵉ mois du
@@ -95,14 +95,14 @@ Quatre conclusions, dans l'ordre d'importance :
    dépensé à acquérir.
 
 **Ne pas recruter la troisième personne avant d'avoir atteint le scénario
-réaliste** : à deux, il donne 5 450 € par personne au lieu de 3 633 €.
+réaliste** : à deux, il donne environ 5 430 € par personne au lieu de 3 620 €.
 
 ## 4. Tarifs
 
 **1 190 € de lancement + 99 €/mois**, affichés sur le site depuis `v1.8`.
 
-- Coût total par client : 1 117 € (18 h de production, 6,6 h de prospection,
-  20 € d'IA). **Les frais de lancement le couvrent à eux seuls** : le client est
+- Coût total par client : 1 125 € (18 h de production, 6,6 h de prospection,
+  18 € d'IA). **Les frais de lancement le couvrent à eux seuls** : le client est
   rentable dès la mise en ligne, et chaque mois d'abonnement est de la marge.
 - C'est ce qui rend tenable la promesse « sans engagement de durée ». À 890 € de
   lancement, il faudrait sept mois d'abonnement pour rentrer dans ses frais —

@@ -27,22 +27,43 @@ const H = {
 // Modèle : N tours d'assistant, contexte moyen C, dont une part servie par le
 // cache. Claude Code met le préfixe en cache, donc l'entrée est très majoritai-
 // rement de la lecture de cache, bien moins chère que de l'entrée fraîche.
-function coutSession({ tours, contexteMoyen, partCache, sortieParTour, ecritureCache, modele }) {
+/* Quatre quantités par tour d'assistant, chacune facturée à un tarif différent.
+   La première version de ce script mélangeait le contexte total et l'écriture
+   de cache, et comptait donc celle-ci deux fois : elle surestimait de 16 %.
+   Les quantités ci-dessous sont celles que les transcripts enregistrent
+   réellement — aucune n'est déduite d'une autre. */
+function coutSession({ tours, lectureCache, entreeFraiche, ecritureCache, sortieParTour, modele }) {
   const p = H.api[modele];
-  const lecture = contexteMoyen * partCache;
-  const fraiche = contexteMoyen * (1 - partCache);
   const parTour =
-      (lecture       / 1e6) * p.in * H.cacheRead
-    + (fraiche       / 1e6) * p.in
+      (lectureCache  / 1e6) * p.in * H.cacheRead
+    + (entreeFraiche / 1e6) * p.in
     + (ecritureCache / 1e6) * p.in * H.cacheWrite
     + (sortieParTour / 1e6) * p.out;
   return { usd: parTour * tours, eur: parTour * tours * H.usdEur, parTourUsd: parTour };
 }
 
+/* Paramètres relevés sur les transcripts Claude Code de ce projet
+   (~/.claude/projects/…/*.jsonl), et non plus estimés. Le modèle initial se
+   trompait d'un facteur deux : il supposait 420 tours pour le premier site, il
+   en a fallu 1 062. Le coût par tour, lui, était à peu près juste. La leçon
+   tient en une phrase : ce qui est difficile à prévoir, ce n'est pas le prix
+   d'un échange, c'est le nombre d'échanges. */
+const MESURE = {
+  tours: 1062,
+  lectureCache: 183931,   // 98 % de l'entrée : le préfixe de conversation, relu à chaque tour
+  entreeFraiche: 2,       // deux tokens. Tout le reste est déjà en cache
+  ecritureCache: 3707,
+  sortieParTour: 1412,
+  usdConstate: 160.61,    // relevé au 22/08/2026 sur les transcripts, Claude Opus 5
+};
+
 const SESSIONS = {
-  'premier site (design system compris)': { tours: 420, contexteMoyen: 85000, partCache: 0.86, sortieParTour: 1800, ecritureCache: 6000 },
-  'site client, process rodé':            { tours: 150, contexteMoyen: 60000, partCache: 0.88, sortieParTour: 1400, ecritureCache: 4000 },
-  'site client, industrialisé':           { tours:  70, contexteMoyen: 45000, partCache: 0.90, sortieParTour: 1100, ecritureCache: 3000 },
+  'ce site (mesuré, système visuel compris)': { ...MESURE },
+  /* Projections. Le contexte moyen et la part de cache sont ceux mesurés : ce
+     sont des propriétés de l'outil, pas du projet. Seul le nombre de tours
+     change, et c'est l'hypothèse à surveiller. */
+  'site client, process rodé':            { tours: 150, lectureCache: 150000, entreeFraiche: 5, ecritureCache: 3700, sortieParTour: 1400 },
+  'site client, industrialisé':           { tours:  70, lectureCache: 120000, entreeFraiche: 5, ecritureCache: 3500, sortieParTour: 1200 },
 };
 
 // ── Temps de production, en heures ─────────────────────────────────────────
@@ -56,9 +77,9 @@ const TEMPS = {
 
 // ── Scénarios ──────────────────────────────────────────────────────────────
 const SCENARIOS = {
-  Prudent:    { sitesMois: 2, heuresSite: 25, setup:  890, abo:  79, sessionKey: 'site client, process rodé',   modele: 'sonnet5' },
-  Réaliste:   { sitesMois: 5, heuresSite: 18, setup: 1190, abo:  99, sessionKey: 'site client, process rodé',   modele: 'sonnet5' },
-  Optimisé:   { sitesMois: 9, heuresSite: 10, setup: 1490, abo: 129, sessionKey: 'site client, industrialisé',  modele: 'sonnet5' },
+  Prudent:    { sitesMois: 2, heuresSite: 25, setup:  890, abo:  79, sessionKey: 'site client, process rodé',   modele: 'opus5' },
+  Réaliste:   { sitesMois: 5, heuresSite: 18, setup: 1190, abo:  99, sessionKey: 'site client, process rodé',   modele: 'opus5' },
+  Optimisé:   { sitesMois: 9, heuresSite: 10, setup: 1490, abo: 129, sessionKey: 'site client, industrialisé',  modele: 'opus5' },
 };
 
 // Coût d'acquisition : heures de prospection nécessaires pour décrocher 1 client.
@@ -78,10 +99,19 @@ for (const [nom, s] of Object.entries(SESSIONS)) {
   const n = coutSession({ ...s, modele: 'sonnet5' });
   console.log(`${nom.padEnd(38)} Opus 5 : ${('$' + o.usd.toFixed(2)).padStart(8)} (${eur2(o.eur).padStart(9)})   Sonnet 5 : ${('$' + n.usd.toFixed(2)).padStart(7)} (${eur2(n.eur)})`);
 }
+/* Le modèle se contrôle lui-même : son estimation pour ce site doit retomber
+   sur la facture réellement constatée. Si l'écart dépasse quelques pour cent,
+   c'est le modèle qu'il faut corriger, pas la mesure. */
+const estime = coutSession({ ...MESURE, modele: 'opus5' });
+const ecart = (100 * (estime.usd - MESURE.usdConstate)) / MESURE.usdConstate;
+console.log(`\nContrôle : estimation ${'$' + estime.usd.toFixed(2)} contre ${'$' + MESURE.usdConstate.toFixed(2)} constatés — écart ${ecart >= 0 ? '+' : ''}${ecart.toFixed(1)} %.`);
+console.log(`Coût par tour d'assistant, mesuré : $${(MESURE.usdConstate / MESURE.tours).toFixed(3)}.`);
+
 console.log(`\nAbonnement Claude Max 5× : 100 $/mois ≈ ${eur2(100 * H.usdEur)}/mois.`);
-console.log('Seuil de bascule vers l\'abonnement, au coût Sonnet 5 « process rodé » :');
-const parSite = coutSession({ ...SESSIONS['site client, process rodé'], modele: 'sonnet5' }).eur;
-console.log(`  ${Math.ceil(100 * H.usdEur / parSite)} sites/mois. Au-delà, l'abonnement est moins cher que l'API.`);
+console.log("Seuil de bascule vers l'abonnement, au coût Opus 5 « process rodé » :");
+const parSite = coutSession({ ...SESSIONS['site client, process rodé'], modele: 'opus5' }).eur;
+console.log(`  ${Math.ceil((100 * H.usdEur) / parSite)} sites/mois — mais ce site seul a coûté ${eur2(MESURE.usdConstate * H.usdEur)} :`);
+console.log("  dès qu'un projet sort de l'ordinaire, l'abonnement est déjà rentable.");
 
 console.log('\n' + '='.repeat(78));
 console.log('2. TEMPS DE PRODUCTION (heures)');

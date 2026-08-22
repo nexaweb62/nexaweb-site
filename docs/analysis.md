@@ -39,25 +39,25 @@ ce site, du premier commit de la refonte jusqu'au cycle `v2.5` :
 | | Valeur |
 |---|---:|
 | Sessions | 4 |
-| Tours d'assistant | 1 028 |
-| Tokens d'entrée | 190,4 M |
+| Tours d'assistant | 1 062 |
+| Tokens d'entrée | 200,5 M |
 | — dont lus en cache | **98,0 %** |
-| Tokens de sortie | 1,46 M |
+| Tokens de sortie | 1,51 M |
 | Modèle | Claude Opus 5 |
-| **Coût total** | **154,16 $ ≈ 142 €** |
+| **Coût total** | **160,61 $ ≈ 148 €** |
 
 Trois conclusions, et ce sont des faits, pas des hypothèses :
 
 1. **Le cache fait tout.** 98 % des tokens d'entrée sont des relectures de
-   cache facturées 10 % du prix normal. Sans lui, les mêmes 190 M de tokens
-   d'entrée auraient coûté environ 950 $ au lieu de 96 $. Toute pratique qui
+   cache facturées 10 % du prix normal. Sans lui, les mêmes 200 M de tokens
+   d'entrée auraient coûté environ 1 000 $ au lieu de 100 $. Toute pratique qui
    casse le cache — changer de modèle en cours de session, réordonner le
    contexte, redémarrer sans raison — multiplie la facture par cinq.
-2. **Le coût par tour est stable : 0,150 $.** C'est le seul chiffre à retenir
+2. **Le coût par tour est stable : 0,151 $.** C'est le seul chiffre à retenir
    pour estimer un futur projet. Un site client demande 100 à 200 tours une
    fois le processus rodé, soit **15 à 30 $**.
 3. **L'abonnement est rentable dès le premier site.** Claude Max 5× coûte
-   100 $/mois. Ce seul site en a consommé 154 $ à l'usage, en une journée.
+   100 $/mois. Ce seul site en a consommé 161 $ à l'usage, en une journée.
    Le calcul « bascule à 10 sites/mois » de la modélisation ci-dessous était
    faux parce qu'il sous-estimait le nombre de tours : la bascule est en
    réalité **au premier site sérieux du mois**. Prenez l'abonnement.
@@ -87,15 +87,19 @@ Deux mécanismes changent tout sur le coût réel :
 
 #### 1.1.2 Projection pour les sites suivants
 
-Recalculée sur le coût par tour **mesuré** (0,150 $ en Opus 5), et non plus sur
+Recalculée sur le coût par tour **mesuré** (0,151 $ en Opus 5), et non plus sur
 une estimation de contexte. Le rapport Opus/Sonnet est appliqué au prorata des
 tarifs de sortie, poste dominant une fois le cache en place.
 
 | Session | Tours | Opus 5 | Sonnet 5 |
 |---|---:|---:|---:|
-| Ce site, système visuel compris — **mesuré** | 1 028 | **154,16 $ · 142 €** | — |
-| Site client, process rodé | 150 | 22,5 $ · **21 €** | 13,5 $ · **12 €** |
-| Site client, industrialisé (gabarit + questionnaire) | 70 | 10,5 $ · **10 €** | 6,3 $ · **6 €** |
+| Ce site, système visuel compris — **mesuré** | 1 062 | **160,61 $ · 148 €** | — |
+| Site client, process rodé | 150 | 19,97 $ · **18 €** | 11,98 $ · **11 €** |
+| Site client, industrialisé (gabarit + questionnaire) | 70 | 7,83 $ · **7 €** | 4,70 $ · **4 €** |
+
+*Ces projections sortent de `docs/modele-economique.mjs`, dont l'estimation pour
+ce site retombe à 0,5 % près sur la facture constatée. Le contrôle est affiché à
+chaque exécution : si l'écart se creuse, c'est le modèle qu'il faut corriger.*
 
 **Conclusion, et c'est la plus importante de cette section : le coût de l'IA
 est négligeable, mais moins qu'on ne le croit.** À 9–20 € par site client
@@ -103,9 +107,9 @@ contre 810–1 125 € de temps humain, elle pèse **1 à 2 % du coût de produc
 Optimiser ce poste est une perte de temps. Le seul arbitrage qui compte est de
 savoir si elle fait gagner des heures — et la réponse est oui (section 2).
 
-**En revanche, le premier site a coûté 142 €, pas 10 €.** Un devis établi sur
+**En revanche, le premier site a coûté 148 €, pas 10 €.** Un devis établi sur
 « l'IA ne coûte rien » se trompe d'un facteur dix sur un projet inhabituel.
-Retenez plutôt : *0,150 $ par tour d'assistant, et un projet neuf en demande
+Retenez plutôt : *0,151 $ par tour d'assistant, et un projet neuf en demande
 beaucoup plus qu'un projet répété*.
 
 ### 1.2 Coût infrastructure
@@ -138,9 +142,9 @@ optimisation technique.*
 
 | Scénario | Production | Acquisition | IA | **Total** |
 |---|---:|---:|---:|---:|
-| Prudent (25 h) | 1 125 € | 297 € | 10 € | **1 432 €** |
-| Réaliste (18 h) | 810 € | 297 € | 10 € | **1 117 €** |
-| Optimisé (10 h) | 450 € | 297 € | 3 € | **750 €** |
+| Prudent (25 h) | 1 125 € | 297 € | 18 € | **1 440 €** |
+| Réaliste (18 h) | 810 € | 297 € | 18 € | **1 125 €** |
+| Optimisé (10 h) | 450 € | 297 € | 7 € | **754 €** |
 
 L'acquisition est modélisée à 33 contacts pour 1 client signé et 12 min par
 contact, soit 6,6 h de prospection par client. **Hypothèse — à mesurer dès les
@@ -228,8 +232,8 @@ analyse.
 | Parc au 12e mois | 20 clients | 51 clients | 92 clients |
 | Revenu récurrent (MRR) | 1 612 € | 5 052 € | 11 848 € |
 | CA mensuel total | 3 392 € | 11 002 € | 25 258 € |
-| Marge brute | 508 € (15 %) | 5 365 € (49 %) | 18 413 € (73 %) |
-| **Par personne, avant charges et impôts** | **1 117 €** | **3 633 €** | **8 379 €** |
+| Marge brute | 491 € (14 %) | 5 324 € (48 %) | 18 379 € (73 %) |
+| **Par personne, avant charges et impôts** | **1 112 €** | **3 620 €** | **8 367 €** |
 | Charge de travail | 68 h (21 % de la capacité) | 136 h (41 %) | 172 h (52 %) |
 | **Prospection à soutenir** | **66 contacts/mois** | **165 contacts/mois** | **297 contacts/mois** |
 
@@ -242,11 +246,11 @@ chiffre d'affaires, c'est le nombre d'entreprises que l'on arrive à contacter,
 qualifier et convertir — 14 contacts qualifiés par jour ouvré dans le scénario
 optimisé, ce qui est un vrai métier à plein temps.
 
-**Le scénario prudent n'est pas viable à trois à plein temps.** 1 117 € par
+**Le scénario prudent n'est pas viable à trois à plein temps.** 1 112 € par
 personne et par mois avant charges, c'est sous le SMIC. À ce niveau d'activité,
 soit c'est une activité secondaire, soit c'est une personne seule, pas trois.
 
-**Le scénario réaliste est le seuil de survie**, pas le confort : 3 633 € par
+**Le scénario réaliste est le seuil de survie**, pas le confort : 3 620 € par
 personne avant cotisations et impôt, soit environ 2 300–2 700 € net selon le
 statut. Correct, sans plus, pour un an de travail à trois.
 
@@ -266,12 +270,12 @@ plus qu'un euro dépensé à acquérir.
 
 | Scénario | Durée de vie | Valeur client | Coût | Ratio | Rentabilité |
 |---|---:|---:|---:|---:|---|
-| Prudent | 33 mois | 3 523 € | 1 432 € | 2,5× | après 7 mois d'abonnement |
-| Réaliste | 33 mois | 4 490 € | 1 117 € | 4,0× | dès la mise en ligne |
-| Optimisé | 33 mois | 5 790 € | 750 € | 7,7× | dès la mise en ligne |
+| Prudent | 33 mois | 3 523 € | 1 440 € | 2,4× | après 7 mois d'abonnement |
+| Réaliste | 33 mois | 4 490 € | 1 125 € | 4,0× | dès la mise en ligne |
+| Optimisé | 33 mois | 5 790 € | 754 € | 7,7× | dès la mise en ligne |
 
 Un ratio valeur/coût de 3× est généralement considéré comme le minimum sain.
-Le scénario prudent à 2,5× est structurellement fragile : les frais de
+Le scénario prudent à 2,4× est structurellement fragile : les frais de
 lancement n'y couvrent même pas le coût d'acquisition et de production, et il
 faut sept mois d'abonnement pour rentrer dans ses frais. **Si un client part au
 bout de six mois, il a coûté de l'argent.**
@@ -298,7 +302,7 @@ valeur/coût visé. Pour tenir un ratio de 3× minimum avec 18 h de production e
 > **Décision du 22/08/2026 — 1 190 € et 99 €/mois, affichés sur le site.**
 >
 > Ces montants correspondent au scénario « Réaliste » du § 3.3, ce qui rend le
-> modèle cohérent : coût total par client 1 117 €, donc **les frais de lancement
+> modèle cohérent : coût total par client 1 125 €, donc **les frais de lancement
 > couvrent à eux seuls la production et l'acquisition**. Le client est rentable
 > dès la mise en ligne, et tout mois d'abonnement est de la marge.
 >
@@ -512,8 +516,8 @@ le vrai message de cette analyse.
    temps perdu, et le seul levier d'industrialisation qui rapporte avant le
    dixième site.
 6. **Ne pas recruter la troisième personne avant d'avoir atteint le scénario
-   réaliste.** À deux, le scénario réaliste donne 5 450 € par personne au lieu
-   de 3 633 €.
+   réaliste.** À deux, le scénario réaliste donne environ 5 430 € par personne
+   au lieu de 3 620 €.
 7. **Prendre l'abonnement Claude plutôt que l'API** (§ 1.1.0). Mesuré, pas
    supposé : 129 $ consommés en une journée sur un seul projet, contre 100 $
    par mois pour l'abonnement.
@@ -556,3 +560,6 @@ le vrai message de cette analyse.
 | `v3.5` | 22/08/2026 | Affiche du hero à 56 Ko, contrôle du vocabulaire d'agence, 404 utile | Le premier écran mobile pesait 94 Ko pour un fond flou ; la règle éditoriale n'était vérifiée que par relecture |
 | `v3.6` | 22/08/2026 | Seuil de rentabilité sous les prix | L'argument « ce que ça doit rapporter » n'existait que dans ce document |
 | `v3.7` | 22/08/2026 | Focus piégé dans le menu mobile, chiffres d'IA réactualisés | Le panneau se déclare `aria-modal` mais laissait la tabulation partir derrière l'overlay |
+| `v4.0` | 22/08/2026 | Montants injectés depuis `PRICING`, audit de cohérence tarifaire | Les descriptions des pages métier portaient les prix en clair : elles auraient menti au premier changement |
+| `v4.1` | 22/08/2026 | `production/demarrer-un-site-client.md`, note sur la vidéo de fond | Le gabarit de départ n'était décrit nulle part ; le motif de code de la vidéo reste un signal « tech » |
+| `v4.2` | 22/08/2026 | Modèle économique recalibré sur la mesure, double comptage du cache corrigé | Le script surestimait de 16 % : il comptait l'écriture de cache deux fois. Il se contrôle désormais contre la facture réelle |
