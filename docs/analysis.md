@@ -1,7 +1,7 @@
 # Nexa Web — analyse économique et analyse du site
 
 > Document de travail, mis à jour au fil des cycles.
-> Dernière mise à jour : 22 août 2026.
+> Dernière mise à jour : 22 août 2026, après le cycle `v2.5`.
 > Les chiffres chiffrés proviennent de `docs/modele-economique.mjs`, ré-exécutable
 > par `node docs/modele-economique.mjs`. Toute hypothèse y est nommée en tête de
 > fichier : si une hypothèse est fausse, corrigez-la là et relancez, le document
@@ -29,6 +29,44 @@ telle plutôt que comme une prévision.
 
 ### 1.1 Coût API — Claude Code
 
+#### 1.1.0 Ce que ce site a réellement coûté — **mesuré**
+
+Les transcripts de Claude Code (`~/.claude/projects/…/*.jsonl`) enregistrent la
+consommation de chaque échange. Relevé sur les quatre sessions qui ont produit
+ce site, du premier commit de la refonte jusqu'au cycle `v2.5` :
+
+| | Valeur |
+|---|---:|
+| Sessions | 4 |
+| Tours d'assistant | 897 |
+| Tokens d'entrée | 159,8 M |
+| — dont lus en cache | **98,2 %** |
+| Tokens de sortie | 1,30 M |
+| Modèle | Claude Opus 5 |
+| **Coût total** | **128,80 $ ≈ 118 €** |
+
+Trois conclusions, et ce sont des faits, pas des hypothèses :
+
+1. **Le cache fait tout.** 98,2 % des tokens d'entrée sont des relectures de
+   cache facturées 10 % du prix normal. Sans lui, les mêmes 160 M de tokens
+   d'entrée auraient coûté environ 800 $ au lieu de 80 $. Toute pratique qui
+   casse le cache — changer de modèle en cours de session, réordonner le
+   contexte, redémarrer sans raison — multiplie la facture par cinq.
+2. **Le coût par tour est stable : 0,144 $.** C'est le seul chiffre à retenir
+   pour estimer un futur projet. Un site client demande 100 à 200 tours une
+   fois le processus rodé, soit **15 à 30 $**.
+3. **L'abonnement est rentable dès le premier site.** Claude Max 5× coûte
+   100 $/mois. Ce seul site en a consommé 129 $ à l'usage, en une journée.
+   Le calcul « bascule à 10 sites/mois » de la modélisation ci-dessous était
+   faux parce qu'il sous-estimait le nombre de tours : la bascule est en
+   réalité **au premier site sérieux du mois**. Prenez l'abonnement.
+
+*Note de méthode : ce total inclut la conception du système visuel, les
+tâtonnements et les impasses. Un site client ne les refera pas — voir la
+projection en 1.1.2.*
+
+#### 1.1.1 Tarifs de référence
+
 **Tarifs relevés le 22 août 2026** (API Anthropic, $/million de tokens) :
 
 | Modèle | Entrée | Sortie |
@@ -46,26 +84,28 @@ Deux mécanismes changent tout sur le coût réel :
 - L'API Batch est à −50 %, mais elle est asynchrone : inutilisable pour du
   développement interactif.
 
-**Coût modélisé par site** (420/150/70 tours d'assistant, contexte moyen
-85K/60K/45K tokens, 86–90 % servis par le cache) :
+#### 1.1.2 Projection pour les sites suivants
 
-| Session | Opus 5 | Sonnet 5 |
-|---|---:|---:|
-| Premier site, design system compris | 75,0 $ · **69 €** | 45,0 $ · **41 €** |
-| Site client, process rodé | 18,4 $ · **17 €** | 11,0 $ · **10 €** |
-| Site client, industrialisé | 6,2 $ · **6 €** | 3,7 $ · **3 €** |
+Recalculée sur le coût par tour **mesuré** (0,144 $ en Opus 5), et non plus sur
+une estimation de contexte. Le rapport Opus/Sonnet est appliqué au prorata des
+tarifs de sortie, poste dominant une fois le cache en place.
 
-**Conclusion, et c'est la plus importante de cette section : le coût API est
-négligeable.** À 10–17 € par site contre 810–1 125 € de temps humain, l'IA pèse
-**1 à 2 % du coût de production**. Optimiser ce poste est une perte de temps.
-Le seul arbitrage qui compte est de savoir si l'IA fait gagner des heures — et
-la réponse est oui, massivement (section 2).
+| Session | Tours | Opus 5 | Sonnet 5 |
+|---|---:|---:|---:|
+| Ce site, système visuel compris — **mesuré** | 897 | **128,80 $ · 118 €** | — |
+| Site client, process rodé | 150 | 21,5 $ · **20 €** | 13,0 $ · **12 €** |
+| Site client, industrialisé (gabarit + questionnaire) | 70 | 10,1 $ · **9 €** | 6,1 $ · **6 €** |
 
-**Abonnement contre API.** Claude Max 5× coûte 100 $/mois (≈ 92 €). Au coût
-Sonnet 5 « process rodé », la bascule se fait à **10 sites par mois** : en
-dessous, l'API à l'usage est moins chère ; au-dessus, l'abonnement. En pratique,
-prenez l'abonnement dès le départ pour la prévisibilité, et gardez une clé API
-uniquement pour les automatisations.
+**Conclusion, et c'est la plus importante de cette section : le coût de l'IA
+est négligeable, mais moins qu'on ne le croit.** À 9–20 € par site client
+contre 810–1 125 € de temps humain, elle pèse **1 à 2 % du coût de production**.
+Optimiser ce poste est une perte de temps. Le seul arbitrage qui compte est de
+savoir si elle fait gagner des heures — et la réponse est oui (section 2).
+
+**En revanche, le premier site a coûté 118 €, pas 10 €.** Un devis établi sur
+« l'IA ne coûte rien » se trompe d'un facteur dix sur un projet inhabituel.
+Retenez plutôt : *0,144 $ par tour d'assistant, et un projet neuf en demande
+beaucoup plus qu'un projet répété*.
 
 ### 1.2 Coût infrastructure
 
@@ -300,13 +340,21 @@ devisées séparément — reportage photo (250–450 €), rédaction longue
 
 ## 5. Analyse du site — conversion, crédibilité, SEO
 
-État analysé : commit `v1`.
+État analysé : commit `v2.5`.
 
-### 5.0 Accessibilité — état vérifié
+### 5.0 Accessibilité et bonne santé — état vérifié en continu
 
-Contrôle automatisé sur les 7 pages générées : un seul `h1` par page,
-hiérarchie de titres sans saut, toutes les images pourvues d'un `alt`, tous les
-champs associés à un `label`, `lang="fr"` et `<title>` présents partout.
+Le contrôle n'est plus manuel : `npm run audit` relit les 12 pages produites et
+échoue si l'une d'elles perd un `h1`, saute un niveau de titre, sert une image
+sans `alt` ou sans dimensions, laisse un champ sans `label`, pointe un lien
+interne mort ou double de poids. `npm run test:contact` vérifie les cinq
+comportements de la fonction du formulaire, seul chemin de conversion du site.
+Les deux tournent en quelques secondes, et le second a déjà rattrapé une
+régression qui aurait fait perdre toutes les demandes.
+
+Contrôle au 22/08/2026 : un seul `h1` par page, hiérarchie sans saut, toutes
+les images pourvues d'un `alt` et de dimensions, tous les champs associés à un
+`label`, `lang="fr"` et `<title>` présents partout, aucun lien interne mort.
 
 Contrastes mesurés sur fond noir : texte courant `#8e8e8e` à 6,41:1, chapeaux à
 8,63:1, pilule de confiance à 8,30:1 — tous conformes AA. Deux échecs ont été
@@ -332,13 +380,18 @@ indicatif des champs (2,26:1).
 
 | # | Problème | Impact | Effort |
 |---|---|---|---|
-| ~~P1~~ | ~~**Aucun formulaire.**~~ Corrigé en `v1.2` : formulaire à quatre champs traité par une fonction Cloudflare Pages, avec honeypot et pages de confirmation et d'échec. | Conversion | Fait |
-| ~~P2~~ | ~~**Les prix ne sont pas renseignés.**~~ Arrêtés le 22/08/2026 en `v1.8` : **1 190 € de lancement, 99 €/mois**, soit exactement le scénario « Réaliste » modélisé ci-dessus. | Conversion | Fait |
-| ~~P3~~ | ~~**Aucun balisage structuré.**~~ Corrigé en `v1.1` : JSON-LD `ProfessionalService` avec ville, région et zone desservie. | SEO local | Fait |
-| ~~P4~~ | ~~**La section « constat » est en trois cartes.**~~ Corrigé en `v1.1` : bloc deux colonnes, gabarit `.card` supprimé de la feuille de style. | Différenciation | Fait |
-| ~~P5~~ | ~~**Le hero ne dit pas où l'on est.**~~ Corrigé en `v1.1` : l'accroche nomme « les commerces de Carvin et des Hauts-de-France ». | SEO local, confiance | Fait |
-| P6 | **Aucune objection traitée avant la FAQ.** Le prix arrive sans que la question « et si je ne suis pas satisfait » ait été adressée. | Conversion | Faible |
-| P7 | **Pas de `LocalBusiness` ni de page « à propos ».** On ne sait pas qui est derrière Nexa Web. Pour un artisan qui achète à un artisan, c'est un manque de confiance direct. | Crédibilité | Moyen |
+| ~~P1~~ | ~~**Aucun formulaire.**~~ Corrigé en `v1.2`, mutualisé en composant et instrumenté en `v2.3` : il transporte sa page d'origine jusque dans l'objet de l'e-mail. | Conversion | Fait |
+| ~~P2~~ | ~~**Les prix ne sont pas renseignés.**~~ Arrêtés le 22/08/2026 en `v1.8` : **1 190 € de lancement, 99 €/mois**, soit le scénario « Réaliste » modélisé ci-dessus. | Conversion | Fait |
+| ~~P3~~ | ~~**Aucun balisage structuré.**~~ Corrigé en `v1.1`, enrichi en `v2.1` : montants repris de `PRICING`, communes desservies, `FAQPage`, `Service` par métier, tous rattachés à une seule entité par son `@id`. | SEO local | Fait |
+| ~~P4~~ | ~~**La section « constat » est en trois cartes.**~~ Corrigé en `v1.1`. | Différenciation | Fait |
+| ~~P5~~ | ~~**Le hero ne dit pas où l'on est.**~~ Corrigé en `v1.1`. | SEO local | Fait |
+| ~~P6~~ | ~~**Aucune objection traitée avant la FAQ.**~~ Corrigé en `v1.9` : quatre engagements posés juste avant la grille de prix — propriété, absence d'engagement, délai, interlocuteur unique. | Conversion | Fait |
+| ~~P7~~ | ~~**On ne sait pas qui est derrière Nexa Web.**~~ Corrigé en `v2.2` : page `/equipe`, trois associés, portraits, rôles. | Crédibilité | Fait |
+| ~~P8~~ | ~~**Aucun chemin de conversion sur mobile avant le bas de page.**~~ Corrigé en `v1.9` : barre flottante « Appeler / Être rappelé », effacée sur le premier écran et sur la section contact. | Conversion mobile | Fait |
+| **P9** | **Aucune mesure d'audience.** On sait maintenant de quelle page vient une demande, mais pas combien de visiteurs il a fallu pour l'obtenir. Sans dénominateur, impossible de dire si une page métier fonctionne. Cloudflare Web Analytics s'active côté tableau de bord, sans cookie, sans script tiers dans le dépôt, et sans bannière de consentement. | Pilotage | Faible |
+| **P10** | **Une seule offre visible, aucun palier d'entrée.** Un commerçant qui trouve 1 190 € trop cher n'a rien d'autre à regarder : il part. Un audit payant de la fiche Google à 150–250 €, débité des frais de lancement en cas de suite, capterait une partie de ces départs — et se vend au téléphone. Décision commerciale, pas technique. | Conversion | Moyen |
+| **P11** | **Les deux maquettes `demo-*.html` traînent des champs sans `label`.** Elles sont hors index mais servent à la prospection : une démonstration montrée à un prospect ne devrait pas porter ce défaut. Elles sont hors périmètre de `npm run audit`, ce qui est précisément pourquoi personne ne l'a vu. | Crédibilité | Faible |
+| **P12** | **Aucune preuve, et c'est structurel.** Le site l'assume honnêtement, mais la première étude de cas publiée vaudra plus que n'importe quelle amélioration listée ici. Elle est bloquée sur le premier client, pas sur le site. | Conversion | — |
 
 ### 5.3 Ce qui « sent le site généré par IA », et ce qui a déjà été corrigé
 
@@ -369,25 +422,97 @@ Restant à corriger :
 
 ---
 
-## 6. Recommandations, par ordre de valeur
+## 6. Industrialisation de la production
 
-1. **Mesurer l'acquisition avant tout.** Le modèle repose sur « 33 contacts
-   pour 1 client ». Les 50 premiers appels donneront le vrai chiffre. Si c'est
-   80 contacts, tout le modèle change. Tenez un simple tableau : contacté,
-   réponse, rendez-vous, signé.
-2. **Renseigner les prix.** La page ne peut pas convertir sans eux.
-3. ~~Ajouter un formulaire court.~~ Fait en `v1.2`.
-4. ~~Ajouter le balisage `LocalBusiness`.~~ Fait en `v1.1`.
-5. **Choisir le statut juridique avec un comptable.** L'écart de cotisations
-   entre micro-entreprise et société pèse plus lourd que n'importe quelle
-   optimisation de production.
-6. **Ne pas recruter la troisième personne avant d'avoir atteint le scénario
-   réaliste.** À deux, le scénario réaliste donne 5 450 € par personne au lieu
-   de 3 633 €.
+La section 2 conclut que le passage de 18 h à 10 h par site ne vient pas d'un
+code écrit plus vite, mais d'organisation. Voici ce qui existe maintenant dans
+le dépôt, et ce qui manque encore.
+
+### 6.1 Ce qui est en place
+
+| Actif | Ce qu'il fait gagner |
+|---|---|
+| `src/config/site.ts` | Tout le texte et les coordonnées en un fichier. Changer de client, c'est réécrire ce fichier, pas chercher dans les gabarits |
+| `src/config/metiers.ts` | Une page métier = une entrée dans un tableau. Le gabarit `[metier].astro` fait le reste |
+| `src/components/ContactForm.astro` | Un seul formulaire, réutilisé partout, qui sait d'où il vient |
+| `functions/api/contact.js` | Réception des demandes sans service tiers. **Reproductible tel quel chez chaque client** — c'est un actif, pas une dépendance |
+| `npm run audit` | Douze pages relues en deux secondes. Supprime la relecture manuelle avant mise en ligne |
+| `npm run test:contact` | Le chemin de conversion vérifié sans navigateur ni déploiement |
+| `npm run build` | Refuse de publier des prix non renseignés, régénère le sitemap depuis les pages réelles |
+| `scripts/make-og.mjs`, `make-portraits.mjs` | Images de partage et portraits normalisés, sans outil externe |
+| `public/fonts/` + `src/styles/fonts.css` | Polices auto-hébergées : plus aucun appel tiers, et un souci RGPD de moins à expliquer au client |
+
+### 6.2 Ce qui manque, par ordre de rendement
+
+1. **Le questionnaire de collecte de contenu.** C'est le premier poste de temps
+   perdu : on attend des textes et des photos que le client ne sait pas quoi
+   envoyer. Un questionnaire qui demande exactement ce qu'il faut, dans l'ordre
+   où le site le consomme, vaut plusieurs heures par projet. **À écrire en
+   premier.**
+2. **La checklist de mise en ligne.** DNS, vérification du domaine chez Resend,
+   variables d'environnement, fiche Google, redirections, test du formulaire en
+   conditions réelles. Aujourd'hui, cette liste n'existe que dans `NOTES.md`, et
+   seulement pour ce site-ci.
+3. **Le gabarit de départ pour un site client.** Ce dépôt en est déjà un, à
+   ceci près qu'il faut retirer à la main les pages métier, `/equipe` et les
+   maquettes. Un script `nouveau-site` qui produit le squelette propre
+   économiserait une demi-journée à chaque fois.
+4. **La bibliothèque de sections.** Carte de restaurant, grille horaires,
+   galerie, zone d'intervention : quatre ou cinq blocs qui reviendront dans
+   presque tous les projets. À extraire au deuxième ou troisième site — pas
+   avant, sous peine d'abstraire des cas qu'on n'a pas encore vus.
+
+### 6.3 Le piège à éviter
+
+L'industrialisation a une limite nette : **elle ne s'applique qu'à la part du
+travail qui est déjà rapide.** Le tableau de la section 2 le montre — cadrage,
+collecte, corrections et formation représentent plus de la moitié du temps une
+fois le processus rodé, et aucun script ne les réduit. Passer une journée à
+outiller la production pour gagner vingt minutes par site est une erreur de
+priorité tant que le carnet n'est pas plein. La bonne séquence est : vendre,
+mesurer où le temps part réellement, outiller ensuite.
 
 ---
 
-## 7. Journal des cycles
+## 7. Recommandations, par ordre de valeur
+
+Révisées après les cycles `v1.9` à `v2.5`. Les points techniques du site sont
+désormais traités : ce qui reste est presque entièrement commercial, et c'est
+le vrai message de cette analyse.
+
+1. **Mesurer l'acquisition avant tout.** Le modèle repose sur « 33 contacts
+   pour 1 client ». Les 50 premiers appels donneront le vrai chiffre. Si c'est
+   80 contacts, tout le modèle change. Tenez un tableau : contacté, réponse,
+   rendez-vous, signé. Le formulaire vous donne déjà la page d'origine de
+   chaque demande — c'est la moitié de la mesure.
+2. **Activer une mesure d'audience** (P9). Sans nombre de visiteurs, la
+   provenance des demandes ne se transforme pas en taux de conversion, et on ne
+   saura pas si une page métier mérite d'être répliquée. Cloudflare Web
+   Analytics, sans cookie ni bannière, s'active en trois clics.
+3. **Décrocher le premier client et publier l'étude de cas** (P12). Elle vaudra
+   plus que tout ce qui figure dans cette liste. Le tarif de lancement à 890 €
+   est fait pour ça — mais il s'échange contre le droit de publier, et contre
+   un engagement de douze mois (§ 4.1), jamais contre rien.
+4. **Choisir le statut juridique avec un comptable.** L'écart de cotisations
+   entre micro-entreprise et société pèse plus lourd que n'importe quelle
+   optimisation de production.
+5. **Écrire le questionnaire de collecte de contenu** (§ 6.2). Premier poste de
+   temps perdu, et le seul levier d'industrialisation qui rapporte avant le
+   dixième site.
+6. **Ne pas recruter la troisième personne avant d'avoir atteint le scénario
+   réaliste.** À deux, le scénario réaliste donne 5 450 € par personne au lieu
+   de 3 633 €.
+7. **Prendre l'abonnement Claude plutôt que l'API** (§ 1.1.0). Mesuré, pas
+   supposé : 129 $ consommés en une journée sur un seul projet, contre 100 $
+   par mois pour l'abonnement.
+8. **Envisager un palier d'entrée payant** (P10) — audit de fiche Google à
+   150–250 €, déduit des frais de lancement si le client donne suite. C'est la
+   seule idée de cette liste qui augmente le nombre de clients sans augmenter
+   le nombre d'appels.
+
+---
+
+## 8. Journal des cycles
 
 | Version | Date | Contenu | Raison |
 |---|---|---|---|
@@ -400,3 +525,10 @@ Restant à corriger :
 | `v1.8` | 22/08/2026 | Prix affichés : 1 190 € de lancement, 99 €/mois | Décision d'Elio, conforme au scénario « Réaliste ». Le garde-fou de production ne bloque plus |
 | `v1.7` | 22/08/2026 | Sortie de Netlify : Cloudflare Pages, `_redirects` / `_headers`, formulaire en fonction maison + Resend | Choix d'Elio. Le formulaire maison est reproductible pour les sites clients — un actif plutôt qu'une dépendance |
 | `v1.5` | 22/08/2026 | Cormorant remplace Fraunces, corps d'affichage recalculés | Choix d'Elio. La hauteur d'x plus basse de 20 % imposait de majorer les corps de 12 %, sans quoi la typographie paraissait rabougrie |
+| `v1.9` | 22/08/2026 | Barre d'action mobile ; quatre engagements posés avant la grille de prix | Sous 720 px, le seul chemin de conversion était en bas de page. Et le montant arrivait sans qu'aucune objection ait été levée (P6) |
+| `v2.0` | 22/08/2026 | Polices auto-hébergées, plus aucun appel tiers | Feuille distante bloquant le rendu, deux connexions tierces avant le premier octet de police, et l'IP de chaque visiteur transmise à Google |
+| `v2.1` | 22/08/2026 | `noindex` sur les pages de service, sitemap généré depuis `dist/`, balisage enrichi, image de partage JPEG | `/merci` était indexable ; le sitemap manuel ne suivait pas les pages ajoutées ; le balisage ignorait prix et communes ; l'image WebP n'apparaissait pas sur LinkedIn |
+| `v2.2` | 22/08/2026 | Page `/equipe` : trois associés, portraits, rôles | P7, dernier problème ouvert de l'audit. Un artisan qui achète à un artisan veut savoir à qui il parle |
+| `v2.3` | 22/08/2026 | Trois pages métier, formulaire mutualisé et instrumenté, `npm run audit`, `npm run test:contact` | L'acquisition est le goulot du modèle, pas la production. Une page unique ne se positionne que sur une requête |
+| `v2.4` | 22/08/2026 | Feuille de style posée dans la page, vidéo repoussée au temps mort | 1,2 Mo décoratifs en concurrence avec le premier écran, et une requête bloquante avant le premier rendu |
+| `v2.5` | 22/08/2026 | Analyse mise à jour : coût API mesuré, section industrialisation, audit conversion réactualisé | Le coût de l'IA était modélisé ; il est désormais relevé sur les transcripts — 128,80 $, dix fois l'estimation par site |
