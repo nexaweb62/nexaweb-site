@@ -14,9 +14,15 @@ export function getStaticPaths() {
 
 const { m } = Astro.props;
 const autres = METIERS.filter((x) => x.slug !== m.slug);
+
+/* Les montants viennent de PRICING, jamais du texte : voir le commentaire de
+   `description` dans src/config/metiers.ts. */
+const description = m.description
+  .replace('{SETUP}', `${PRICING.setup?.toLocaleString('fr-FR')} €`)
+  .replace('{MONTHLY}', `${PRICING.monthly} €`);
 ---
 
-<Base title={m.title} description={m.description} path={`/${m.slug}`}>
+<Base title={m.title} description={description} path={`/${m.slug}`}>
   {/* Service rattache a l'etablissement de l'accueil par son @id : une seule
       entite, plusieurs prestations, plutot que trois entreprises concurrentes
       aux yeux du moteur. */}
@@ -27,7 +33,7 @@ const autres = METIERS.filter((x) => x.slug !== m.slug);
       '@context': 'https://schema.org',
       '@type': 'Service',
       name: m.title.split('—')[0].trim(),
-      description: m.description,
+      description,
       serviceType: 'Création de site internet',
       provider: { '@type': 'ProfessionalService', '@id': `https://${SITE.domain}/#nexaweb`, name: SITE.name },
       areaServed: AREA.map((ville) => ({ '@type': 'City', name: ville })),

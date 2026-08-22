@@ -164,6 +164,39 @@ for (const [classe, page] of citees) {
 }
 
 
+
+/* ── Coherence des montants ─────────────────────────────────────────────────
+   Les prix ne doivent exister qu'a un seul endroit : PRICING, dans
+   src/config/site.ts. Un montant ecrit en clair dans un texte survit au
+   changement de tarif et fait mentir la page — c'est arrive aux descriptions
+   des pages metier, corrigees en v4.0. Tout montant en euros affiche par le
+   site doit donc correspondre a l'un des deux prix. */
+const config = readFileSync(fileURLToPath(new URL('../src/config/site.ts', import.meta.url)), 'utf8');
+const bloc_prix = config.match(/export const PRICING[^=]*=\s*\{([\s\S]*?)\n\};/)?.[1] ?? '';
+/* `toLocaleString('fr-FR')` separe les milliers par une espace fine insecable :
+   on compare des chiffres nus des deux cotes. */
+const chiffres = (t) => t.replace(/[\s\u00a0\u202f]/g, '');
+const autorises = new Set([...bloc_prix.matchAll(/:\s*(\d+)/g)].map((m) => m[1]));
+
+/* Montants cites a dessein, qui ne sont pas des prix de Nexa Web. Toute
+   nouvelle entree ici doit etre justifiee : c'est le seul moyen de faire
+   passer un montant fixe, et c'est voulu. */
+const MONTANTS_CITES = new Set([
+  '300', // « mon neveu peut me le faire pour 300 € », objection citee dans la FAQ
+]);
+
+for (const chemin of pages) {
+  const nom = relative(dist, chemin);
+  if (nom.startsWith('demo-')) continue; // etablissements fictifs, prix fictifs
+  const texte = sansBalises(readFileSync(chemin, 'utf8')).replace(/<[^>]+>/g, ' ');
+  for (const m of texte.matchAll(/([\d\s\u00a0\u202f]*\d)\s?€/g)) {
+    const montant = chiffres(m[1]);
+    if (!autorises.has(montant) && !MONTANTS_CITES.has(montant)) {
+      soucis.push(`${nom} — montant « ${m[1].trim()} € » etranger a PRICING`);
+    }
+  }
+}
+
 /* ── Vocabulaire ────────────────────────────────────────────────────────────
    La regle editoriale du site tient en une phrase : un mot qu'on ne dirait pas
    au telephone a un boulanger n'a rien a faire sur la page. Elle n'etait

@@ -17,6 +17,10 @@ export type Metier = {
   /** Libelle court, pour la liste de bas de page. */
   nav: string;
   title: string;
+  /** Deux jetons y sont remplaces a la construction : {SETUP} et {MONTHLY}.
+      Ecrire les montants en clair ici les ferait mentir au premier changement
+      de tarif — la description est la seule chose que Google affiche sous le
+      titre, elle ne doit jamais contredire la page. */
   description: string;
   eyebrow: string;
   h1: string;
@@ -38,7 +42,7 @@ export const METIERS: Metier[] = [
     nav: 'Restaurants et brasseries',
     title: 'Site internet pour restaurant — Carvin et Hauts-de-France · Nexa Web',
     description:
-      "Site internet pour restaurant, brasserie ou pizzeria : carte à jour, horaires, réservation et fiche Google. Mise en ligne en 7 jours, 1 190 € puis 99 €/mois. Carvin, Lens, Douai, Lille.",
+      "Site internet pour restaurant, brasserie ou pizzeria : carte à jour, horaires, réservation et fiche Google. Mise en ligne en 7 jours, {SETUP} puis {MONTHLY}/mois. Carvin, Lens, Douai, Lille.",
     eyebrow: 'Restaurants, brasseries, pizzerias',
     h1: 'Un site de restaurant se juge sur trois choses',
     intro: [
@@ -107,7 +111,7 @@ export const METIERS: Metier[] = [
     nav: 'Commerces de proximité',
     title: 'Site internet pour commerce de proximité — Hauts-de-France · Nexa Web',
     description:
-      "Site internet pour boulangerie, boucherie, fleuriste, épicerie ou boutique : horaires, produits, itinéraire et fiche Google. 1 190 € puis 99 €/mois, mise en ligne en 7 jours.",
+      "Site internet pour boulangerie, boucherie, fleuriste, épicerie ou boutique : horaires, produits, itinéraire et fiche Google. {SETUP} puis {MONTHLY}/mois, mise en ligne en 7 jours.",
     eyebrow: 'Boulangeries, boucheries, fleuristes, boutiques',
     h1: 'Le client ne cherche pas votre boutique, il cherche un produit',
     intro: [
@@ -176,7 +180,7 @@ export const METIERS: Metier[] = [
     nav: 'Artisans et services',
     title: 'Site internet pour artisan — plombier, électricien, garage · Nexa Web',
     description:
-      "Site internet pour artisan et service à domicile : zone d'intervention, demandes de devis, avis clients et fiche Google. 1 190 € puis 99 €/mois, mise en ligne en 7 jours. Hauts-de-France.",
+      "Site internet pour artisan et service à domicile : zone d'intervention, demandes de devis, avis clients et fiche Google. {SETUP} puis {MONTHLY}/mois, mise en ligne en 7 jours. Hauts-de-France.",
     eyebrow: 'Plombiers, électriciens, garages, dépannage',
     h1: "Votre concurrent n'est pas meilleur, il est trouvable",
     intro: [
