@@ -32,16 +32,17 @@ const { cta = 'Démarrer un projet', ctaHref = '/devis', back = true } = Astro.p
         </div>
 
         <!-- Bouton Menu -->
-        <button class="menu-btn hdr-tip" id="menu-btn"
-          aria-label="Ouvrir la navigation" aria-expanded="false"
-          data-tip="MENU">
+        <button class="menu-btn" id="menu-btn"
+          aria-label="Ouvrir la navigation" aria-expanded="false">
           <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
+          <span class="hdr-btn-lbl">MENU</span>
         </button>
 
         <!-- Bouton Thème -->
-        <button class="theme-btn hdr-tip" id="theme-btn"
-          aria-label="Basculer le thème"
-          data-tip="MODE SOMBRE">○</button>
+        <button class="theme-btn" id="theme-btn" aria-label="Basculer le thème">
+          <span id="theme-icon">○</span>
+          <span class="hdr-btn-lbl" id="theme-label">SOMBRE</span>
+        </button>
 
         <!-- Bouton Espace Client -->
         <a href="/login" class="login-btn hdr-tip"
@@ -145,9 +146,11 @@ const { cta = 'Démarrer un projet', ctaHref = '/devis', back = true } = Astro.p
   if(tbtn){
     function isDark(){return root.getAttribute('data-theme')==='dark'||(!root.getAttribute('data-theme')&&window.matchMedia('(prefers-color-scheme:dark)').matches)}
     function updTheme(){
-      tbtn.textContent=isDark()?'◐':'○';
+      var icon=document.getElementById('theme-icon');
+      var lbl=document.getElementById('theme-label');
+      if(icon)icon.textContent=isDark()?'◐':'○';
+      if(lbl)lbl.textContent=isDark()?'CLAIR':'SOMBRE';
       tbtn.title=isDark()?'Mode clair':'Mode sombre';
-      tbtn.setAttribute('data-tip',isDark()?'MODE CLAIR':'MODE SOMBRE');
     }
     updTheme();
     tbtn.addEventListener('click',function(){
