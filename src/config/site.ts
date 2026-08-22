@@ -246,4 +246,12 @@ export const FAQ = [
     q: 'Vous travaillez uniquement à Carvin ?',
     a: 'Surtout dans les Hauts-de-France, où nous pouvons nous déplacer et voir le commerce. À distance, c’est possible également.',
   },
+  {
+    q: 'Mon neveu peut me le faire pour 300 €.',
+    a: "Il peut, et parfois très bien. Ce que vous achetez ici, c'est le reste : les textes écrits avec vous, la fiche Google configurée, le domaine à votre nom, quelqu'un qui répond sous 24 h quand un prix a changé, et le site toujours en ligne dans deux ans. Un site fait une fois par un proche coûte moins cher le premier mois ; le problème arrive le jour où il faut le modifier et que la personne n'est plus disponible.",
+  },
+  {
+    q: 'Et si vous arrêtez votre activité ?',
+    a: "C'est une question légitime, et voici la réponse honnête. Le nom de domaine est déposé à votre nom : il reste le vôtre quoi qu'il arrive. Le site est un site standard, sans outil maison, hébergé chez un fournisseur que n'importe quel prestataire sait reprendre. Vous recevez les identifiants par écrit à la mise en ligne. Nous ne détenons rien qui vous empêcherait de partir, et c'est délibéré.",
+  },
 ] as const;
