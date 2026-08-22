@@ -5,6 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
 
 export default defineConfig({
+  site: 'https://nexaaweb.com',
   integrations: [react()],
   vite: {
     plugins: [tailwindcss()],
