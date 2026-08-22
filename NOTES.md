@@ -42,7 +42,8 @@ doit jamais partir en ligne avec un placeholder.
 | `public/_headers` | En-têtes de sécurité et cache des médias |
 | `functions/api/contact.js` | Réception du formulaire, envoi via Resend |
 | `scripts/check-build.mjs` | Garde-fou de mise en production |
-| `docs/analysis.md` | Analyse économique et audit conversion |
+| `docs/analysis.md` | Analyse économique, audit conversion, journal des cycles |
+| `docs/production/` | Questionnaire de démarrage et checklist de mise en ligne, pour les sites clients |
 | `docs/modele-economique.mjs` | Le calcul derrière les chiffres du document |
 
 ## Choix techniques
