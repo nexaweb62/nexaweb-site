@@ -779,7 +779,8 @@ body.menu-open { overflow: hidden; }
 /* ── Formulaire de contact ───────────────────────────────────────────────────
    Trois champs, pas un de plus. Un commerçant qui regarde le site apres son
    service ne prendra pas rendez-vous : il laisse son numero. Traite par
-   Netlify Forms — aucun service tiers, aucune cle, aucun JavaScript. */
+   une fonction Cloudflare Pages — aucun service de formulaire tiers, et le
+   POST fonctionne sans JavaScript cote client. */
 .form {
   display: grid;
   gap: 14px;

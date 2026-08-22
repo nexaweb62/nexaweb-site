@@ -1,0 +1,34 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE, CALENDLY } from '../config/site';
+---
+
+<Base
+  title="L'envoi n'a pas abouti — Nexa Web"
+  description="Votre demande de rappel n'a pas pu être transmise. Voici comment nous joindre directement."
+  path="/probleme"
+>
+  <div class="page-simple">
+    <Header />
+  </div>
+
+  <main class="container notfound">
+    <div>
+      <h1 class="section-title" style="max-width:none">L'envoi n'a pas abouti.</h1>
+      <p class="lede" style="margin-inline:auto">
+        Quelque chose a échoué de notre côté, pas du vôtre. Votre demande n'est pas
+        arrivée — inutile de la renvoyer plusieurs fois. Le plus simple maintenant,
+        c'est de nous joindre directement.
+      </p>
+      <div class="contact-actions">
+        <a class="cta" href={SITE.phoneHref}>Appeler le {SITE.phone}</a>
+        <a class="btn-ghost" href={CALENDLY} target="_blank" rel="noopener">Réserver un créneau</a>
+        <a class="btn-ghost" href={`mailto:${SITE.email}`}>Écrire un e-mail</a>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Base>

@@ -41,17 +41,23 @@ import { SITE, CALENDLY } from '../config/site';
         Aucune donnée n'est revendue ni transmise à des courtiers en données.
       </p>
       <p>
-        Les envois du formulaire sont traités par <strong>Netlify Forms</strong>, notre
-        hébergeur, et nous sont transmis par e-mail. Un champ caché anti-robot est présent :
-        il n'enregistre rien vous concernant.
+        Les envois du formulaire sont reçus par une fonction hébergée chez
+        <strong>Cloudflare</strong>, qui nous les transmet immédiatement par e-mail via
+        <strong>Resend</strong>. Ils ne sont stockés dans aucune base de données. Un champ
+        caché anti-robot est présent : il n'enregistre rien vous concernant.
       </p>
 
       <h2>3. Ce que collectent les services que nous utilisons</h2>
       <ul>
         <li>
-          <strong>Netlify</strong> (hébergement et traitement du formulaire) enregistre des journaux techniques de connexion,
-          incluant l'adresse IP et le navigateur utilisé. Ces journaux servent à la sécurité et au
-          fonctionnement du service, et sont conservés par Netlify selon sa propre politique.
+          <strong>Cloudflare</strong> (hébergement et réception du formulaire) enregistre des journaux
+          techniques de connexion, incluant l'adresse IP et le navigateur utilisé. Ces journaux servent
+          à la sécurité et au fonctionnement du service, et sont conservés par Cloudflare selon sa
+          propre politique.
+        </li>
+        <li>
+          <strong>Resend</strong> achemine l'e-mail contenant votre demande. Les informations que vous
+          avez saisies transitent par ce service, qui en conserve une trace selon sa propre politique.
         </li>
         <li>
           <strong>Calendly</strong> intervient uniquement si vous cliquez sur un lien de prise de
@@ -77,7 +83,7 @@ import { SITE, CALENDLY } from '../config/site';
       <ul>
         <li>Demande sans suite : <strong>3 ans</strong> à compter du dernier échange.</li>
         <li>Client : durée de la relation contractuelle, puis <strong>10 ans</strong> pour les documents comptables, conformément au Code de commerce.</li>
-        <li>Journaux techniques d'hébergement : selon la politique de conservation de Netlify.</li>
+        <li>Journaux techniques d'hébergement : selon la politique de conservation de Cloudflare.</li>
       </ul>
 
       <h2>6. Vos droits</h2>

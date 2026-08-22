@@ -19,7 +19,7 @@ const H = {
   usdEur: 0.92,
 
   // Infrastructure récurrente par site (€/mois)
-  infraParSiteMois: 1.0,   // Netlify gratuit à ce volume ; domaine ~12 €/an
+  infraParSiteMois: 1.0,   // Cloudflare Pages gratuit à ce volume ; domaine ~12 €/an
   churnMensuel: 0.03,      // 3 %/mois — hypothèse prudente, à mesurer
 };
 

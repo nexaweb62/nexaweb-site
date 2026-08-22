@@ -260,15 +260,7 @@ const description =
             et ce qu'il faudrait pour faire mieux. Vous repartez avec un avis clair,
             même si on ne travaille pas ensemble.
           </p>
-          <form
-            class="form"
-            name="contact"
-            method="POST"
-            action="/merci"
-            data-netlify="true"
-            netlify-honeypot="bot-field"
-          >
-            <input type="hidden" name="form-name" value="contact" />
+          <form class="form" name="contact" method="POST" action="/api/contact">
             <p class="form-hp">
               <label>Ne remplissez pas ce champ : <input name="bot-field" tabindex="-1" /></label>
             </p>

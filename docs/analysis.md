@@ -71,11 +71,11 @@ uniquement pour les automatisations.
 
 | Poste | Coût | Note |
 |---|---:|---|
-| Hébergement Netlify | 0 € | Le palier gratuit (100 Go/mois) suffit très largement pour un site vitrine de commerce local |
+| Hébergement Cloudflare Pages | 0 € | Palier gratuit, bande passante illimitée. Migré depuis Netlify en `v1.7` |
 | Nom de domaine `.com` | ~12 €/an | OVH, renouvellement |
-| Certificat TLS | 0 € | Let's Encrypt via Netlify |
+| Certificat TLS | 0 € | Fourni par Cloudflare |
 | Supabase | 0 € | Palier gratuit, et l'espace client n'est pas dans le périmètre actuel |
-| E-mail transactionnel | 0 € | Resend, 3 000 envois/mois gratuits |
+| E-mail transactionnel | 0 € | Resend, palier gratuit. Reçoit les demandes du formulaire |
 | Calendly | 0 € | Palier gratuit suffisant pour un créneau de 30 min |
 
 **Total infrastructure : environ 1 €/mois par site**, dominé par le domaine.
@@ -319,7 +319,7 @@ indicatif des champs (2,26:1).
 
 | # | Problème | Impact | Effort |
 |---|---|---|---|
-| ~~P1~~ | ~~**Aucun formulaire.**~~ Corrigé en `v1.2` : formulaire à trois champs (nom, commerce, téléphone) traité par Netlify Forms, avec honeypot et page de confirmation. | Conversion | Fait |
+| ~~P1~~ | ~~**Aucun formulaire.**~~ Corrigé en `v1.2` : formulaire à quatre champs traité par une fonction Cloudflare Pages, avec honeypot et pages de confirmation et d'échec. | Conversion | Fait |
 | P2 | **Les prix ne sont pas renseignés.** La section affiche un placeholder. Tant que les montants manquent, la page ne peut pas convertir et le garde-fou de build bloque la mise en production. | Conversion | Bloqué — décision d'Elio |
 | ~~P3~~ | ~~**Aucun balisage structuré.**~~ Corrigé en `v1.1` : JSON-LD `ProfessionalService` avec ville, région et zone desservie. | SEO local | Fait |
 | ~~P4~~ | ~~**La section « constat » est en trois cartes.**~~ Corrigé en `v1.1` : bloc deux colonnes, gabarit `.card` supprimé de la feuille de style. | Différenciation | Fait |
@@ -383,4 +383,6 @@ Restant à corriger :
 | `v1.2` | 22/08/2026 | Formulaire de rappel à trois champs, page `/merci`, dégradé radial supprimé, politique de confidentialité corrigée | Seul chemin de conversion : Calendly ou téléphone, inutilisable le soir. La politique affirmait « aucun formulaire » — devenu faux |
 | `v1.3` | 22/08/2026 | Contrastes du pied de page et du texte indicatif portés au niveau AA | 2,69:1 et 2,26:1 mesurés, sous le seuil de 4,5:1 |
 | `v1.4` | 22/08/2026 | Suppression de l'ancien site : 104 fichiers, 20 108 lignes. `NOTES.md` réécrit | Le nouveau site n'appelait plus aucun de ces fichiers. `NOTES.md` était le seul inventaire des comptes : il liste désormais les services à résilier |
+| `v1.6` | 22/08/2026 | Créneau de rappel et raccourci Calendly par date | Un restaurateur ne peut pas décrocher pendant le service |
+| `v1.7` | 22/08/2026 | Sortie de Netlify : Cloudflare Pages, `_redirects` / `_headers`, formulaire en fonction maison + Resend | Choix d'Elio. Le formulaire maison est reproductible pour les sites clients — un actif plutôt qu'une dépendance |
 | `v1.5` | 22/08/2026 | Cormorant remplace Fraunces, corps d'affichage recalculés | Choix d'Elio. La hauteur d'x plus basse de 20 % imposait de majorer les corps de 12 %, sans quoi la typographie paraissait rabougrie |

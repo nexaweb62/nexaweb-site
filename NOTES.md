@@ -34,6 +34,9 @@ doit jamais partir en ligne avec un placeholder.
 | `src/layouts/Base.astro` | `<head>`, métadonnées, polices |
 | `public/assets/` | Vidéo de fond, affiche, logo |
 | `public/demo-*.html` | Deux maquettes de démonstration, en `noindex`, autonomes |
+| `public/_redirects` | 30 redirections 301 des anciennes URLs. **Ne pas y toucher** |
+| `public/_headers` | En-têtes de sécurité et cache des médias |
+| `functions/api/contact.js` | Réception du formulaire, envoi via Resend |
 | `scripts/check-build.mjs` | Garde-fou de mise en production |
 | `docs/analysis.md` | Analyse économique et audit conversion |
 | `docs/modele-economique.mjs` | Le calcul derrière les chiffres du document |
@@ -48,10 +51,13 @@ doit jamais partir en ligne avec un placeholder.
 - **Vidéo de fond** : ré-encodée de 13,86 Mo à 1,24 Mo, auto-hébergée. Chargée
   par JavaScript uniquement au-dessus de 720 px et hors `prefers-reduced-motion` :
   sur mobile, seule l'affiche de 95 Ko est téléchargée.
-- **Formulaire** : Netlify Forms, aucun service tiers, aucune clé. Honeypot
-  `bot-field`, confirmation sur `/merci`.
-- **Redirections** : 30 redirections 301 dans `netlify.toml` couvrent toutes les
-  anciennes URLs `.html` indexées. **Ne pas les supprimer.**
+- **Formulaire** : fonction Cloudflare Pages `functions/api/contact.js`, qui
+  envoie un e-mail via Resend. Aucun service de formulaire tiers. Le POST est du
+  HTML classique : il fonctionne sans JavaScript côté client. Honeypot
+  `bot-field`, succès sur `/merci`, échec sur `/probleme`.
+- **Redirections** : 30 redirections 301 dans `public/_redirects` couvrent toutes
+  les anciennes URLs `.html` indexées. **Ne pas les supprimer.** En-têtes de
+  sécurité dans `public/_headers`.
 
 ---
 
@@ -59,7 +65,8 @@ doit jamais partir en ligne avec un placeholder.
 
 | Service | Usage | Identifiant |
 |---|---|---|
-| **Netlify** | Hébergement + traitement du formulaire | `earnest-shortbread-152019.netlify.app` |
+| **Cloudflare Pages** | Hébergement + fonction du formulaire | Projet à créer, voir « Déploiement » |
+| **Resend** | Envoi de l'e-mail du formulaire | Clé `RESEND_API_KEY` en secret chiffré |
 | **OVH** | Nom de domaine | `nexaaweb.com` (deux « a » — confirmé, ce n'est pas une coquille) |
 | **Calendly** | Prise de rendez-vous, lié depuis le site | `calendly.com/contact-nexaweb62/30min` |
 | **Google Business Profile** | Fiche établissement — décisif pour le SEO local | Compte `contact.nexaweb62@gmail.com` |
@@ -79,8 +86,7 @@ il faut les fermer, pas seulement les oublier.
 |---|---|---|
 | **Cloudflare Workers** | Supprimer le worker `shy-art-5483.contact-nexaweb62.workers.dev`, qui servait de proxy au chatbot. **Il détient une variable d'environnement `ANTHROPIC_API_KEY`. Révoquer cette clé dans la console Anthropic, que le worker soit supprimé ou non.** | **Sécurité — à faire en premier** |
 | **Supabase** | Projet `abbplzlczwpqmyelopxo` : Edge Functions `chat` et `send-devis-email`, plus la base de l'espace client. Rien n'y accède. À archiver ou supprimer | Moyenne |
-| **Resend** | Clé API stockée dans les Edge Functions Supabase. À révoquer avec elles | Moyenne |
-| **EmailJS** | Service `service_nexaweb`, template `template_x66s6ig`. Remplacé par Netlify Forms | Faible |
+| **EmailJS** | Service `service_nexaweb`, template `template_x66s6ig`. Remplacé par la fonction Cloudflare | Faible |
 | **Formspree** | Endpoint `xgojwqyo`, qui recevait les avis clients | Faible |
 | **Google reCAPTCHA** | Clé de site de l'ancien formulaire de devis | Faible |
 | **Google Analytics** | Propriété `G-8TPVX3PQ1S`. Le nouveau site ne charge aucun outil de mesure — c'est un choix, à revoir si vous voulez mesurer les conversions | Faible |
@@ -111,27 +117,38 @@ page « qui sommes-nous » sera ajoutée — c'est la recommandation P7 de
 
 ## À faire
 
-1. **Activer et brancher le formulaire côté Netlify.** Trois étapes, sans
-   lesquelles les demandes n'arrivent nulle part :
-   `Forms → Enable form detection`, puis redéployer, puis
-   `Configuration → Notifications → Form submission notifications → Add notification`
-   vers `contact.nexaweb62@gmail.com`. **Aucun e-mail n'est envoyé par défaut** :
-   sans cette dernière étape, les envois dorment dans le tableau de bord.
-2. **Vérifier le raccourci Calendly.** Le champ « jour souhaité » construit une
+1. **Créer le projet Cloudflare Pages.** `Workers & Pages → Create → Pages →
+   Connect to Git`, dépôt `nexaweb62/nexaweb-site`, branche `redesign/nexa-2026`.
+   Commande de build : `npm run build`. Dossier de sortie : `dist`. Le dossier
+   `functions/` est repris automatiquement, rien à configurer pour lui.
+2. **Déclarer les variables d'environnement** (`Settings → Environment variables`) :
+   `RESEND_API_KEY` **en secret chiffré**, obligatoire. Optionnellement
+   `RESEND_FROM` et `CONTACT_TO`. Tant que `nexaaweb.com` n'est pas vérifié chez
+   Resend, laisser `RESEND_FROM` vide : la fonction utilise alors l'expéditeur de
+   test `onboarding@resend.dev`, qui n'envoie qu'à l'adresse du compte Resend.
+   **Le formulaire ne marchera vraiment qu'une fois le domaine vérifié.**
+3. **Ajouter la redirection www → apex.** Elle n'est pas dans `_redirects` :
+   Cloudflare Pages fait correspondre les sources sur le chemin, pas sur le nom
+   d'hôte. À créer en `Rules → Redirect Rules` : `www.nexaaweb.com/*` vers
+   `https://nexaaweb.com/$1`, code 301.
+4. **Pointer le domaine.** `Custom domains` sur le projet Pages, puis mettre à
+   jour les enregistrements chez OVH. À faire en dernier, une fois le site
+   vérifié sur l'URL `*.pages.dev`.
+5. **Vérifier le raccourci Calendly.** Le champ « jour souhaité » construit une
    URL `?month=…&date=…`. Ces paramètres sont réputés supportés par Calendly
    mais je n'ai pas pu le confirmer depuis leur documentation : cliquez une fois
    avec une date pour vérifier que la page s'ouvre bien sur ce jour. Si elle
    l'ignore, le lien reste fonctionnel, il ouvre la page normale.
-3. **Renseigner les montants** dans `src/config/site.ts` (`PRICING.setup` et
+6. **Renseigner les montants** dans `src/config/site.ts` (`PRICING.setup` et
    `PRICING.monthly`). Tant qu'ils valent `null`, la mise en production est
    bloquée. Recommandation chiffrée dans `docs/analysis.md` § 4.
-4. **Révoquer la clé Anthropic** du worker Cloudflare (voir plus haut).
-5. **Décider du sort des deux maquettes** `public/demo-*.html` : elles ne sont
+7. **Révoquer la clé Anthropic** du worker Cloudflare (voir plus haut).
+8. **Décider du sort des deux maquettes** `public/demo-*.html` : elles ne sont
    plus liées depuis le site, mais restent accessibles par leur URL pour la
    prospection.
-6. **Ajouter une page « qui sommes-nous »** — pour un artisan qui achète à un
+9. **Ajouter une page « qui sommes-nous »** — pour un artisan qui achète à un
    artisan, ne pas savoir qui est derrière est un frein direct.
-7. **Corriger les champs de `public/demo-le-grenier.html`** si les maquettes
+10. **Corriger les champs de `public/demo-le-grenier.html`** si les maquettes
    sont conservées : ses cinq champs de formulaire n'ont ni `id` ni `label`,
    seulement un `placeholder`. Reprise telle quelle de l'ancien site, non
    corrigée parce que le sort des maquettes n'est pas tranché — mais une
