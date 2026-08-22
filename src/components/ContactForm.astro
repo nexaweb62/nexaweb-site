@@ -1,0 +1,80 @@
+---
+import { SITE, CALENDLY } from '../config/site';
+
+interface Props {
+  /** D'ou vient la demande. Recopie dans l'e-mail : c'est la seule mesure
+      d'acquisition du site, et la recommandation n°1 de docs/analysis.md. */
+  source: string;
+  /** Le formulaire de l'accueil affiche aussi le raccourci Calendly. */
+  quickbook?: boolean;
+}
+const { source, quickbook = false } = Astro.props;
+---
+
+<form class="form" name="contact" method="POST" action="/api/contact">
+  <p class="form-hp">
+    <label>Ne remplissez pas ce champ : <input name="bot-field" tabindex="-1" /></label>
+  </p>
+  <input type="hidden" name="origine" value={source} />
+
+  <div class="field">
+    <label for={`nom-${source}`}>Votre nom</label>
+    <input id={`nom-${source}`} name="nom" type="text" autocomplete="name" required />
+  </div>
+
+  <div class="field">
+    <label for={`commerce-${source}`}>Votre commerce</label>
+    <input
+      id={`commerce-${source}`}
+      name="commerce"
+      type="text"
+      autocomplete="organization"
+      placeholder="Restaurant, boulangerie, salon…"
+      required
+    />
+  </div>
+
+  <div class="field">
+    <label for={`telephone-${source}`}>Téléphone</label>
+    <input id={`telephone-${source}`} name="telephone" type="tel" inputmode="tel" autocomplete="tel" required />
+  </div>
+
+  <div class="field">
+    <label for={`moment-${source}`}>Quand vous rappeler ?</label>
+    <select id={`moment-${source}`} name="moment">
+      <option>Dès que possible</option>
+      <option>En matinée — 9h à 11h30</option>
+      <option>L'après-midi — 14h30 à 17h30</option>
+      <option>En soirée, après le service — après 21h30</option>
+    </select>
+  </div>
+
+  <button class="cta" type="submit">Être rappelé</button>
+  <p class="form-note">On vous rappelle sous 24 h ouvrées. Aucun démarchage ensuite.</p>
+</form>
+
+<div class="contact-alt">
+  {
+    quickbook ? (
+      <>
+        <p>Vous préférez choisir votre créneau vous-même ?</p>
+        <div class="quickbook">
+          <div class="quickbook-row">
+            <label class="visually-hidden" for="jour">Jour souhaité</label>
+            <input id="jour" type="date" />
+            <a id="book-link" class="btn-ghost" href={CALENDLY} target="_blank" rel="noopener">
+              Voir les créneaux
+            </a>
+          </div>
+          <p class="form-note">Les horaires proposés sont ceux réellement disponibles à cette date.</p>
+        </div>
+      </>
+    ) : (
+      <p>
+        Vous préférez choisir votre créneau vous-même ?{' '}
+        <a href={CALENDLY} target="_blank" rel="noopener">Voir les créneaux</a>.
+      </p>
+    )
+  }
+  <p>Ou appelez directement le <a href={SITE.phoneHref}>{SITE.phone}</a>.</p>
+</div>

@@ -12,7 +12,9 @@
     "preview": "astro preview",
     "astro": "astro",
     "check": "node scripts/check-build.mjs",
-    "og": "node scripts/make-og.mjs"
+    "og": "node scripts/make-og.mjs",
+    "audit": "node scripts/audit.mjs",
+    "test:contact": "node scripts/test-contact.mjs"
   },
   "dependencies": {
     "astro": "^7.2.4"

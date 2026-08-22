@@ -1,5 +1,6 @@
 ---
 import { SITE, CALENDLY, AREA } from '../config/site';
+import { METIERS } from '../config/metiers';
 const year = new Date().getFullYear();
 ---
 
@@ -20,6 +21,10 @@ const year = new Date().getFullYear();
         <a href={SITE.phoneHref}>{SITE.phone}</a>
       </nav>
     </div>
+
+    <nav class="footer-metiers" aria-label="Par métier">
+      {METIERS.map((m) => <a href={`/${m.slug}`}>{m.nav}</a>)}
+    </nav>
 
     <p class="footer-area">
       Création de sites internet à {AREA.slice(0, -1).join(', ')} et {AREA.at(-1)} —

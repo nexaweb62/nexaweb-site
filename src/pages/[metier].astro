@@ -1,0 +1,163 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ContactForm from '../components/ContactForm.astro';
+import { SITE, AREA, PRICING } from '../config/site';
+import { METIERS } from '../config/metiers';
+
+export function getStaticPaths() {
+  return METIERS.map((m) => ({ params: { metier: m.slug }, props: { m } }));
+}
+
+const { m } = Astro.props;
+const autres = METIERS.filter((x) => x.slug !== m.slug);
+---
+
+<Base title={m.title} description={m.description} path={`/${m.slug}`}>
+  {/* Service rattache a l'etablissement de l'accueil par son @id : une seule
+      entite, plusieurs prestations, plutot que trois entreprises concurrentes
+      aux yeux du moteur. */}
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Service',
+      name: m.title.split('—')[0].trim(),
+      description: m.description,
+      serviceType: 'Création de site internet',
+      provider: { '@type': 'ProfessionalService', '@id': `https://${SITE.domain}/#nexaweb`, name: SITE.name },
+      areaServed: AREA.map((ville) => ({ '@type': 'City', name: ville })),
+      offers: {
+        '@type': 'Offer',
+        price: PRICING.setup,
+        priceCurrency: 'EUR',
+        description: `Mise en ligne facturée une fois, puis ${PRICING.monthly} € par mois sans engagement.`,
+      },
+    })}
+  />
+
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: m.faq.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    })}
+  />
+
+  <div class="page-simple">
+    <Header />
+  </div>
+
+  <main>
+    <section class="section" style="border-top:0">
+      <div class="container">
+        <p class="eyebrow">{m.eyebrow}</p>
+        <h1 class="section-title">{m.h1}</h1>
+        <div class="team-intro">
+          {m.intro.map((t) => <p class="split-note">{t}</p>)}
+        </div>
+        <p class="metier-cta">
+          <a class="cta" href="#contact">Être rappelé</a>
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <p class="eyebrow">Le constat</p>
+        <h2 class="section-title">Ce qui se passe aujourd'hui</h2>
+        <div class="split">
+          <div>
+            <p class="split-note">
+              Trois situations qui reviennent à chaque fois, et qui coûtent des clients
+              sans jamais apparaître nulle part.
+            </p>
+          </div>
+          <ul class="points">
+            {m.constat.map((c) => (
+              <li>
+                <strong>{c.title}</strong>
+                {c.text}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <p class="eyebrow">Ce que vous recevez</p>
+        <h2 class="section-title">Le site livré, pour ce métier</h2>
+        <p class="lede">
+          L'offre est la même pour tout le monde — une seule, à un prix affiché. Ce qui
+          change, c'est ce qu'on met dedans.
+        </p>
+        <div class="offer-list">
+          {m.contenu.map((c, i) => (
+            <article class="offer-item">
+              <span aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <div>
+                <h3>{c.title}</h3>
+                <p>{c.text}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+        <p class="metier-price">
+          <strong>{PRICING.setup?.toLocaleString('fr-FR')} €</strong> de frais de lancement,
+          puis <strong>{PRICING.monthly} €</strong> par mois sans engagement de durée.
+          <a class="inline-link" href="/#tarifs">Le détail des tarifs</a>
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <p class="eyebrow">Questions</p>
+        <h2 class="section-title">Ce qu'on nous demande, dans ce métier</h2>
+        <div class="faq">
+          {m.faq.map((f) => (
+            <details>
+              <summary>{f.q}</summary>
+              <p>{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="container">
+        <div class="contact-panel">
+          <p class="eyebrow" style="justify-content:center">Prendre contact</p>
+          <h2 class="section-title" style="max-width:none;margin-inline:auto">
+            Un appel de 30 minutes, sans engagement
+          </h2>
+          <p class="lede" style="margin-inline:auto">
+            On regarde ensemble ce que donnent votre site et votre fiche Google aujourd'hui,
+            et ce qu'il faudrait pour faire mieux. Vous repartez avec un avis clair, même
+            si on ne travaille pas ensemble.
+          </p>
+          <ContactForm source={m.slug} />
+        </div>
+
+        <nav class="metier-liens" aria-label="Autres métiers">
+          <span>Vous n'êtes pas dans ce cas ?</span>
+          {autres.map((a) => <a class="inline-link" href={`/${a.slug}`}>{a.nav}</a>)}
+          <a class="inline-link" href="/">Voir l'offre complète</a>
+        </nav>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Base>

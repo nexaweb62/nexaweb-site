@@ -703,13 +703,39 @@ ul, ol { list-style: none; }
 }
 .team-text { margin-top: 16px; max-width: 56ch; font-size: 15px; line-height: 1.68; color: var(--muted); }
 
+/* ── Pages metier ────────────────────────────────────────────────────────────
+   Aucun gabarit nouveau : ces pages reutilisent .points, .offer-list, .faq et
+   .contact-panel de l'accueil. Seuls trois elements leur sont propres. */
+.metier-cta { margin-top: clamp(26px, 3.5vw, 36px); }
+.metier-price {
+  margin-top: clamp(26px, 3.5vw, 34px);
+  padding-top: clamp(20px, 2.6vw, 26px);
+  border-top: 1px solid var(--hair);
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.metier-price strong { color: #fff; font-weight: 600; }
+.metier-price .inline-link { margin-left: 8px; white-space: nowrap; }
+.metier-liens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  justify-content: center;
+  margin-top: clamp(32px, 4vw, 44px);
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
 /* ── Pied de page ────────────────────────────────────────────────────────── */
 .site-footer { padding: clamp(40px, 6vw, 64px) 0; border-top: 1px solid var(--hair); }
 .footer-row { display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between; }
 .footer-links { display: flex; flex-wrap: wrap; gap: clamp(14px, 2vw, 26px); font-size: 13.5px; color: var(--muted); }
 .footer-links a:hover { color: #fff; }
 /* 0.32 donnait 2,69:1 sur noir — sous le seuil AA. #8e8e8e monte a 6,41:1. */
-.footer-area { margin-top: 26px; max-width: 72ch; font-size: 13px; line-height: 1.7; color: var(--muted); }
+.footer-metiers { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--hair); font-size: 13.5px; color: var(--muted); }
+.footer-metiers a:hover { color: #fff; }
+.footer-area { margin-top: 18px; max-width: 72ch; font-size: 13px; line-height: 1.7; color: var(--muted); }
 .footer-legal { margin-top: 14px; font-size: 12.5px; color: var(--muted); line-height: 1.7; }
 .footer-legal a { text-decoration: underline; text-underline-offset: 2px; }
 

@@ -21,7 +21,7 @@ const EXPEDITEUR_DEFAUT = 'Nexa Web <onboarding@resend.dev>';
 /* Bornes de longueur : un formulaire public reçoit tôt ou tard des charges
    utiles absurdes. On tronque plutôt que de rejeter, pour ne pas perdre une
    demande légitime un peu bavarde. */
-const LIMITES = { nom: 120, commerce: 160, telephone: 40, moment: 80 };
+const LIMITES = { nom: 120, commerce: 160, telephone: 40, moment: 80, origine: 60 };
 
 const redirige = (vers) => new Response(null, { status: 303, headers: { Location: vers } });
 
@@ -48,6 +48,10 @@ export async function onRequestPost({ request, env }) {
   const commerce = lire('commerce');
   const telephone = lire('telephone');
   const moment = lire('moment') || 'Non précisé';
+  /* Page d'ou part la demande — a ne pas confondre avec `origine` ci-dessus,
+     qui est l'origine HTTP. Sans cette ligne, impossible de savoir si une page
+     metier rapporte quoi que ce soit : c'est la seule mesure du site. */
+  const provenance = lire('origine') || 'inconnue';
 
   if (!nom || !commerce || !telephone) return redirige(`${origine}/probleme`);
 
@@ -62,6 +66,7 @@ export async function onRequestPost({ request, env }) {
     `Commerce  : ${commerce}`,
     `Téléphone : ${telephone}`,
     `Rappel    : ${moment}`,
+    `Page      : ${provenance}`,
     '',
     `Reçu le ${new Date().toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })}`,
   ].join('\n');
@@ -73,7 +78,7 @@ export async function onRequestPost({ request, env }) {
       body: JSON.stringify({
         from: env.RESEND_FROM || EXPEDITEUR_DEFAUT,
         to: env.CONTACT_TO || DESTINATAIRE_DEFAUT,
-        subject: `Demande de rappel — ${commerce}`,
+        subject: `Demande de rappel — ${commerce} (${provenance})`,
         text: corps,
       }),
     });

@@ -2,9 +2,11 @@
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import ContactForm from '../components/ContactForm.astro';
 import {
-  SITE, AREA, CALENDLY, HERO, STATS, PROBLEMS, OFFER, LAUNCH, PRICING, PLEDGES, PRICING_NOTES, FAQ,
+  SITE, AREA, HERO, STATS, PROBLEMS, OFFER, LAUNCH, PRICING, PLEDGES, PRICING_NOTES, FAQ,
 } from '../config/site';
+import { METIERS } from '../config/metiers';
 
 const title = 'Nexa Web — Sites internet pour restaurants et commerces · Carvin';
 const description =
@@ -214,6 +216,11 @@ const description =
             ))
           }
         </div>
+
+        <nav class="metier-liens" aria-label="Pages par métier">
+          <span>Ce que ça donne dans votre métier :</span>
+          {METIERS.map((m) => <a class="inline-link" href={`/${m.slug}`}>{m.nav}</a>)}
+        </nav>
       </div>
     </section>
 
@@ -329,56 +336,7 @@ const description =
             et ce qu'il faudrait pour faire mieux. Vous repartez avec un avis clair,
             même si on ne travaille pas ensemble.
           </p>
-          <form class="form" name="contact" method="POST" action="/api/contact">
-            <p class="form-hp">
-              <label>Ne remplissez pas ce champ : <input name="bot-field" tabindex="-1" /></label>
-            </p>
-
-            <div class="field">
-              <label for="nom">Votre nom</label>
-              <input id="nom" name="nom" type="text" autocomplete="name" required />
-            </div>
-
-            <div class="field">
-              <label for="commerce">Votre commerce</label>
-              <input id="commerce" name="commerce" type="text" autocomplete="organization" placeholder="Restaurant, boulangerie, salon…" required />
-            </div>
-
-            <div class="field">
-              <label for="telephone">Téléphone</label>
-              <input id="telephone" name="telephone" type="tel" inputmode="tel" autocomplete="tel" required />
-            </div>
-
-            <div class="field">
-              <label for="moment">Quand vous rappeler ?</label>
-              <select id="moment" name="moment">
-                <option>Dès que possible</option>
-                <option>En matinée — 9h à 11h30</option>
-                <option>L'après-midi — 14h30 à 17h30</option>
-                <option>En soirée, après le service — après 21h30</option>
-              </select>
-            </div>
-
-            <button class="cta" type="submit">Être rappelé</button>
-            <p class="form-note">On vous rappelle sous 24 h ouvrées. Aucun démarchage ensuite.</p>
-          </form>
-
-          <div class="contact-alt">
-            <p>Vous préférez choisir votre créneau vous-même ?</p>
-            <div class="quickbook">
-              <div class="quickbook-row">
-                <label class="visually-hidden" for="jour">Jour souhaité</label>
-                <input id="jour" type="date" />
-                <a id="book-link" class="btn-ghost" href={CALENDLY} target="_blank" rel="noopener">
-                  Voir les créneaux
-                </a>
-              </div>
-              <p class="form-note">
-                Les horaires proposés sont ceux réellement disponibles à cette date.
-              </p>
-            </div>
-            <p>Ou appelez directement le <a href={SITE.phoneHref}>{SITE.phone}</a>.</p>
-          </div>
+          <ContactForm source="accueil" quickbook />
         </div>
       </div>
     </section>
