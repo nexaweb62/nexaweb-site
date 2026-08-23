@@ -1,0 +1,164 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+---
+<BaseLayout
+  title="Comment ça marche — Nexa Web"
+  description="De la prise de contact à la mise en ligne : découvrez les 6 étapes d'un projet web chez Nexa Web. Livraison en 7 jours, accompagnement inclus."
+>
+<style>
+main { padding-top: var(--hdr) }
+
+/* Hero */
+.hero { padding: clamp(72px,12vh,140px) 0 clamp(48px,8vh,96px); text-align: center; position: relative; overflow: hidden; }
+.hero::before { content:''; position:absolute; inset:0; background: radial-gradient(ellipse 70% 55% at 50% 0%, rgba(139,92,246,.15) 0%, transparent 70%); pointer-events:none; }
+.hero-tag { font-size:10px; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); margin-bottom:20px; display:inline-block; }
+.hero-title { font-size:clamp(2rem,5vw,4rem); font-weight:900; letter-spacing:-.04em; line-height:1.05; text-wrap:balance; margin-bottom:20px; }
+.hero-sub { font-size:clamp(.95rem,1.6vw,1.1rem); color:var(--text-muted); line-height:1.7; max-width:520px; margin:0 auto; }
+
+/* Steps section */
+.s-steps { padding: clamp(64px,10vw,120px) 0; }
+.steps { display:flex; flex-direction:column; max-width:700px; }
+
+.step { display:flex; gap:32px; padding-bottom:52px; position:relative; }
+.step:last-child { padding-bottom:0; }
+
+/* Vertical connector line */
+.step-left { display:flex; flex-direction:column; align-items:center; flex-shrink:0; }
+.step-num {
+  width:44px; height:44px; border-radius:50%;
+  background:var(--accent-dim); border:1px solid var(--accent-ring);
+  display:flex; align-items:center; justify-content:center;
+  font-size:13px; font-weight:800; color:var(--accent); flex-shrink:0;
+  position:relative; z-index:1;
+}
+.step-connector {
+  flex:1; width:1px; background:var(--border); margin-top:8px;
+}
+.step:last-child .step-connector { display:none; }
+
+/* Step body */
+.step-body { padding-top:10px; padding-bottom:0; }
+.step-title { font-size:1.05rem; font-weight:800; margin-bottom:8px; letter-spacing:-.01em; }
+.step-desc { font-size:.9rem; color:var(--text-muted); line-height:1.75; }
+
+/* CTA band */
+.cta-band { border-top:1px solid var(--border); padding: clamp(56px,8vw,96px) 0; text-align:center; }
+.cta-band h2 { font-size:clamp(1.5rem,3.5vw,2.6rem); font-weight:900; letter-spacing:-.03em; margin-bottom:14px; text-wrap:balance; }
+.cta-band p { font-size:.95rem; color:var(--text-muted); margin-bottom:36px; line-height:1.65; max-width:440px; margin-left:auto; margin-right:auto; }
+.cta-row { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+</style>
+
+<Header backBtn={true} />
+
+<main>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="wrap">
+      <span class="hero-tag r">Transparence & méthode</span>
+      <h1 class="hero-title r r.d1">De la première idée<br>à la mise en ligne.</h1>
+      <p class="hero-sub r r.d2">Vous n'avez jamais commandé de site web ? Voici exactement ce qui se passe, étape par étape, sans jargon.</p>
+    </div>
+  </section>
+
+  <!-- Étapes -->
+  <section class="s-steps">
+    <div class="wrap">
+      <div class="steps">
+
+        <div class="step r r.d1">
+          <div class="step-left">
+            <div class="step-num">1</div>
+            <div class="step-connector"></div>
+          </div>
+          <div class="step-body">
+            <p class="step-title">Prise de contact &amp; devis gratuit</p>
+            <p class="step-desc">Décrivez votre projet via le formulaire de devis ou par e-mail. On vous répond sous 24 h avec une estimation claire, sans engagement. Pas de rendez-vous commercial obligatoire.</p>
+          </div>
+        </div>
+
+        <div class="step r r.d2">
+          <div class="step-left">
+            <div class="step-num">2</div>
+            <div class="step-connector"></div>
+          </div>
+          <div class="step-body">
+            <p class="step-title">Cadrage du besoin</p>
+            <p class="step-desc">Un appel de 30 minutes pour affiner les détails : vos cibles, vos contenus, les fonctionnalités voulues et votre délai. On définit ensemble ce qui fera un bon site pour votre activité — rien n'est décidé à votre place.</p>
+          </div>
+        </div>
+
+        <div class="step r r.d3">
+          <div class="step-left">
+            <div class="step-num">3</div>
+            <div class="step-connector"></div>
+          </div>
+          <div class="step-body">
+            <p class="step-title">Design &amp; maquette</p>
+            <p class="step-desc">On vous présente une maquette de la page principale avant de commencer le développement. Vous validez — ou on ajuste. Rien n'est lancé sans votre accord.</p>
+          </div>
+        </div>
+
+        <div class="step r r.d1">
+          <div class="step-left">
+            <div class="step-num">4</div>
+            <div class="step-connector"></div>
+          </div>
+          <div class="step-body">
+            <p class="step-title">Développement &amp; intégration</p>
+            <p class="step-desc">On construit le site : pages, contenus, formulaires, SEO de base. Vous recevez un lien de prévisualisation pour suivre l'avancement et donner votre avis en temps réel.</p>
+          </div>
+        </div>
+
+        <div class="step r r.d2">
+          <div class="step-left">
+            <div class="step-num">5</div>
+            <div class="step-connector"></div>
+          </div>
+          <div class="step-body">
+            <p class="step-title">Mise en ligne</p>
+            <p class="step-desc">Tests sur tous les appareils, vérification des performances, déploiement sur votre nom de domaine. Livraison en 7 jours ouvrés après validation du brief — souvent moins.</p>
+          </div>
+        </div>
+
+        <div class="step r r.d3">
+          <div class="step-left">
+            <div class="step-num">6</div>
+            <div class="step-connector"></div>
+          </div>
+          <div class="step-body">
+            <p class="step-title">Support post-livraison</p>
+            <p class="step-desc">On reste disponibles après la mise en ligne : correction de bugs éventuels, formation à la mise à jour du contenu, réponses à vos questions. Sans frais cachés, sans contrat d'engagement.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-band">
+    <div class="wrap">
+      <h2 class="r">Prêt à démarrer ?</h2>
+      <p class="r r.d1">Décrivez votre projet en 2 minutes. On vous répond sous 24 h avec un devis gratuit et sans engagement.</p>
+      <div class="cta-row r r.d2">
+        <a href="/devis" class="btn">Demander un devis gratuit →</a>
+        <a href="/rendez-vous" class="btn-g">Réserver un créneau</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<Footer />
+
+<script is:inline>
+(function(){
+  var els=document.querySelectorAll('.r');
+  if(!els.length)return;
+  var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('v');io.unobserve(e.target);}});},{threshold:0.12});
+  els.forEach(function(el){io.observe(el);});
+})();
+</script>
+</BaseLayout>
