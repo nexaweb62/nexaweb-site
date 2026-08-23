@@ -21,6 +21,8 @@ var D={
     /* ── Header / nav ── */
     'hdr-nav-home':'Home','hdr-nav-services':'Services','hdr-nav-about':'About',
     'hdr-nav-pricing':'Pricing','hdr-nav-faq':'FAQ','hdr-nav-contact':'Location',
+    'hdr-nav-rdv':'Book','hdr-nav-team':'Team','hdr-nav-reviews':'Reviews',
+    'hdr-cta':'Start a project',
     'hdr-back':'Back',
     /* ── Loader (index) ── */
     'idx-enter':'Enter',
@@ -232,6 +234,8 @@ var D={
     /* ── Header / nav ── */
     'hdr-nav-home':'Accueil','hdr-nav-services':'Services','hdr-nav-about':'À propos',
     'hdr-nav-pricing':'Tarifs','hdr-nav-faq':'FAQ','hdr-nav-contact':'Localisation',
+    'hdr-nav-rdv':'RDV','hdr-nav-team':'Équipe','hdr-nav-reviews':'Avis',
+    'hdr-cta':'Démarrer un projet',
     'hdr-back':'Retour',
     /* ── Loader (index) ── */
     'idx-enter':'Entrer',
