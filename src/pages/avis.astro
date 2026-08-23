@@ -234,6 +234,8 @@ import '../styles/global.css';
         submitBtn.innerHTML = 'Envoyer mon avis <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
         alert('Une erreur est survenue. Veuillez réessayer.'); return;
       }
+      /* Notifie l'équipe Nexa Web (non bloquant) */
+      try{ window.sb.functions.invoke('send-avis-email',{body:{author_name:name,company:company||null,rating:rating,message:msg}}); }catch(e){ console.warn('[avis] email failed:',e); }
       form.style.display = 'none';
       successEl.classList.add('show');
     });

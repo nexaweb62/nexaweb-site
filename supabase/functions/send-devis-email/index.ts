@@ -55,9 +55,13 @@ Deno.serve(async (req) => {
   }
 
   const formuleLabels: Record<string, string> = {
-    vitrine:  "Vitrine — 790 €",
-    business: "Business — 1 490 €",
-    premium:  "Premium — 2 490 €",
+    etudiant:    "Étudiant — 100 €",
+    "vitrine-pro": "Vitrine Pro — 1 000 €",
+    entreprise:  "Entreprise — 1 200 – 3 100 €",
+    // anciens alias (rétro-compatibilité)
+    vitrine:     "Vitrine",
+    business:    "Business",
+    premium:     "Premium",
   };
 
   const typeSiteLabels: Record<string, string> = {
@@ -78,6 +82,8 @@ Deno.serve(async (req) => {
   };
 
   const budgetLabels: Record<string, string> = {
+    etudiant:    "Étudiant — 100 – 200 €",
+    entreprise:  "Entreprise — 1 200 – 3 100 €",
     "<500":      "Moins de 500 €",
     "500-1000":  "500 – 1 000 €",
     "1000-2000": "1 000 – 2 000 €",
@@ -89,9 +95,10 @@ Deno.serve(async (req) => {
     formuleLabels[data.formule] ?? (data.formule || "Formule non précisée")
   }`;
 
-  const html = buildEmailHtml(data, formuleLabels, typeSiteLabels, delaiLabels, budgetLabels);
+  const html = buildTeamEmailHtml(data, formuleLabels, typeSiteLabels, delaiLabels, budgetLabels);
 
-  const resendRes = await fetch("https://api.resend.com/emails", {
+  // ── 1. Notification à l'équipe Nexa Web ──────────────────────────────────
+  const teamRes = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${RESEND_API_KEY}`,
@@ -106,13 +113,36 @@ Deno.serve(async (req) => {
     }),
   });
 
-  if (!resendRes.ok) {
-    const errBody = await resendRes.text();
-    console.error("Resend API error:", resendRes.status, errBody);
+  if (!teamRes.ok) {
+    const errBody = await teamRes.text();
+    console.error("Resend API error (team):", teamRes.status, errBody);
     return new Response(
       JSON.stringify({ error: "email_send_failed" }),
       { status: 502, headers: { ...cors, "Content-Type": "application/json" } }
     );
+  }
+
+  // ── 2. Accusé de réception au client ────────────────────────────────────
+  const confirmHtml = buildConfirmationHtml(data, formuleLabels);
+  const clientRes = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${RESEND_API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from:     "Nexa Web <contact@nexaaweb.com>",
+      to:       [email],
+      reply_to: TO_EMAIL,
+      subject:  `Votre demande de devis Nexa Web — bien reçue, ${prenom} !`,
+      html:     confirmHtml,
+    }),
+  });
+
+  if (!clientRes.ok) {
+    // On logue l'erreur mais on ne la retourne pas — la demande est déjà enregistrée
+    const errBody = await clientRes.text();
+    console.warn("Resend API error (client confirmation):", clientRes.status, errBody);
   }
 
   return new Response(
@@ -122,9 +152,9 @@ Deno.serve(async (req) => {
 });
 
 /* ─────────────────────────────────────────────────────────
-   Email HTML
+   Email 1 — Notification équipe
 ───────────────────────────────────────────────────────── */
-function buildEmailHtml(
+function buildTeamEmailHtml(
   d: Record<string, string>,
   formuleLabels: Record<string, string>,
   typeSiteLabels: Record<string, string>,
@@ -148,7 +178,7 @@ function buildEmailHtml(
     : null;
 
   const replyLink =
-    `mailto:${esc(email(d))}?subject=${encodeURIComponent("Re : Votre demande de devis Nexa Web")}`;
+    `mailto:${esc(emailOf(d))}?subject=${encodeURIComponent("Re : Votre demande de devis Nexa Web")}`;
 
   const now = new Date().toLocaleDateString("fr-FR", {
     day: "numeric", month: "long", year: "numeric",
@@ -251,6 +281,86 @@ function buildEmailHtml(
 </html>`;
 }
 
+/* ─────────────────────────────────────────────────────────
+   Email 2 — Accusé de réception client
+───────────────────────────────────────────────────────── */
+function buildConfirmationHtml(
+  d: Record<string, string>,
+  formuleLabels: Record<string, string>,
+): string {
+  const formuleLbl = formuleLabels[d.formule] ?? (d.formule || null);
+
+  return `<!DOCTYPE html>
+<html lang="fr">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#f4f4f0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif">
+
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f0;padding:32px 0">
+<tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0"
+       style="background:#ffffff;border-radius:12px;overflow:hidden;
+              box-shadow:0 4px 24px rgba(0,0,0,.08);max-width:600px">
+
+  <!-- En-tête -->
+  <tr>
+    <td style="background:linear-gradient(135deg,#8b5cf6 0%,#7c3aed 100%);padding:28px 32px">
+      <p style="margin:0;font-size:10px;font-weight:700;letter-spacing:.18em;
+                text-transform:uppercase;color:rgba(255,255,255,.65)">Nexa Web</p>
+      <h1 style="margin:6px 0 0;font-size:22px;font-weight:800;color:#ffffff;letter-spacing:-.02em">
+        Votre demande est bien reçue !
+      </h1>
+    </td>
+  </tr>
+
+  <!-- Corps -->
+  <tr>
+    <td style="padding:32px 32px 24px">
+      <p style="margin:0 0 18px;font-size:15px;color:#111118;font-weight:700">
+        Bonjour ${esc(d.prenom)},
+      </p>
+      <p style="margin:0 0 16px;font-size:14px;color:#374151;line-height:1.7">
+        Merci pour votre demande de devis. Nous l'avons bien reçue et nous vous recontacterons
+        sous <strong>24 heures ouvrées</strong> avec une proposition personnalisée.
+      </p>
+      ${formuleLbl ? `
+      <p style="margin:0 0 16px;font-size:14px;color:#374151;line-height:1.7">
+        Formule demandée : <strong>${esc(formuleLbl)}</strong>
+      </p>` : ""}
+      <p style="margin:0 0 28px;font-size:14px;color:#374151;line-height:1.7">
+        En attendant, si vous avez des questions ou souhaitez compléter votre demande,
+        répondez simplement à cet e-mail ou écrivez-nous à
+        <a href="mailto:contact.nexaweb62@gmail.com" style="color:#8b5cf6">contact.nexaweb62@gmail.com</a>.
+      </p>
+
+      <div style="text-align:center;margin-bottom:8px">
+        <a href="https://nexaaweb.com"
+           style="display:inline-block;padding:13px 30px;
+                  background:linear-gradient(135deg,#8b5cf6,#7c3aed);
+                  color:#ffffff;border-radius:8px;
+                  font-size:13px;font-weight:700;text-decoration:none;
+                  letter-spacing:.03em">
+          Retour sur nexaaweb.com
+        </a>
+      </div>
+    </td>
+  </tr>
+
+  <!-- Pied -->
+  <tr>
+    <td style="padding:14px 32px;background:#f9fafb;border-top:1px solid #e5e7eb">
+      <p style="margin:0;font-size:11px;color:#9ca3af;text-align:center">
+        Nexa Web · Carvin, Hauts-de-France · <a href="https://nexaaweb.com" style="color:#9ca3af">nexaaweb.com</a>
+      </p>
+    </td>
+  </tr>
+
+</table>
+</td></tr>
+</table>
+</body>
+</html>`;
+}
+
 /* helpers */
 function esc(s: string | undefined | null): string {
   return (s ?? "")
@@ -260,7 +370,6 @@ function esc(s: string | undefined | null): string {
     .replace(/"/g, "&quot;");
 }
 
-/* needed because d.email is used before data is destructured in some paths */
-function email(d: Record<string, string>): string {
+function emailOf(d: Record<string, string>): string {
   return d.email ?? "";
 }
