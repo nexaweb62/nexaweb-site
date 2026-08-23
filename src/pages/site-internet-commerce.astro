@@ -57,12 +57,6 @@ main { padding-top: var(--hdr) }
 .other-pages a { display:inline-block; margin-right:12px; margin-bottom:8px; font-size:.82rem; color:var(--text-muted); border:1px solid var(--border-hi); padding:5px 12px; border-radius:3px; transition:color .2s,border-color .2s; }
 .other-pages a:hover { color:var(--text); border-color:var(--text-muted); }
 
-/* Breadcrumb */
-.breadcrumb { font-size:.78rem; color:var(--text-dim); padding:clamp(16px,3vw,24px) 0 0; }
-.breadcrumb a { color:var(--text-dim); transition:color .2s; }
-.breadcrumb a:hover { color:var(--text-muted); }
-.breadcrumb span { margin:0 6px; }
-
 @media(max-width:768px) {
   .contact-grid { grid-template-columns:1fr; }
   .cards { grid-template-columns:1fr; background:none; gap:1px; }
@@ -73,15 +67,6 @@ main { padding-top: var(--hdr) }
 <Header backBtn={true} />
 
 <main>
-  <!-- 1. Fil d'Ariane -->
-  <div class="wrap">
-    <nav class="breadcrumb">
-      <a href="/">Accueil</a><span>›</span>
-      <a href="/#services">Services</a><span>›</span>
-      Site internet commerce
-    </nav>
-  </div>
-
   <!-- 2. Hero -->
   <section class="hero">
     <div class="wrap">
@@ -174,8 +159,7 @@ main { padding-top: var(--hdr) }
       <h2 class="s-title r">Un prix fixe, sans mauvaise surprise</h2>
       <p class="s-sub r r.d1">Formule Vitrine Pro adaptée aux commerces de proximité.</p>
       <div class="prix-block r r.d2">
-        <div class="prix-depuis">À partir de <strong>1 000 €</strong></div>
-        <p class="prix-desc">Offre de lancement · places limitées · paiement unique, sans abonnement mensuel</p>
+        <p class="prix-desc">Formule Vitrine Pro, adaptée aux commerces de proximité. Tarif actuel et détail des places disponibles sur notre page tarifs.</p>
         <div class="prix-links">
           <a href="/tarifs" class="btn-g">Voir le détail des tarifs →</a>
           <a href="/devis?plan=vitrine-pro" class="btn">Demander un devis →</a>
@@ -192,7 +176,7 @@ main { padding-top: var(--hdr) }
       <div class="faq-list">
         <div class="faq-item r r.d1">
           <p class="faq-q">Puis-je ajouter des produits moi-même ?</p>
-          <p class="faq-a">Oui. On vous forme en une demi-heure. Vous gérez votre catalogue, vos photos et vos descriptions depuis votre téléphone ou ordinateur, sans toucher au code. Si vous préférez déléguer, c'est compris dans le mensuel.</p>
+          <p class="faq-a">Oui. On vous forme en une demi-heure. Vous gérez votre catalogue, vos photos et vos descriptions depuis votre téléphone ou ordinateur, sans toucher au code. Si vous préférez déléguer, mentionnez-le dans votre devis.</p>
         </div>
         <div class="faq-item r r.d2">
           <p class="faq-q">Dois-je gérer un stock en ligne ou faire de la vente à distance ?</p>
@@ -204,7 +188,7 @@ main { padding-top: var(--hdr) }
         </div>
         <div class="faq-item r r.d1">
           <p class="faq-q">Mon budget est limité. Est-ce vraiment pour moi ?</p>
-          <p class="faq-a">490 € une fois, 39 € par mois : c'est moins d'un encart publicitaire local par an. Et contrairement à la pub, le site travaille pour vous 24h/24 sans frais supplémentaires.</p>
+          <p class="faq-a">Un site professionnel bien référencé travaille pour vous 24h/24, sans frais publicitaires récurrents. C'est un investissement ponctuel qui génère des clients sur la durée — consultez notre page tarifs pour voir si ça correspond à votre situation.</p>
         </div>
       </div>
     </div>

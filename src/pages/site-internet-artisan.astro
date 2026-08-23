@@ -57,12 +57,6 @@ main { padding-top: var(--hdr) }
 .other-pages a { display:inline-block; margin-right:12px; margin-bottom:8px; font-size:.82rem; color:var(--text-muted); border:1px solid var(--border-hi); padding:5px 12px; border-radius:3px; transition:color .2s,border-color .2s; }
 .other-pages a:hover { color:var(--text); border-color:var(--text-muted); }
 
-/* Breadcrumb */
-.breadcrumb { font-size:.78rem; color:var(--text-dim); padding:clamp(16px,3vw,24px) 0 0; }
-.breadcrumb a { color:var(--text-dim); transition:color .2s; }
-.breadcrumb a:hover { color:var(--text-muted); }
-.breadcrumb span { margin:0 6px; }
-
 @media(max-width:768px) {
   .contact-grid { grid-template-columns:1fr; }
   .cards { grid-template-columns:1fr; background:none; gap:1px; }
@@ -73,15 +67,6 @@ main { padding-top: var(--hdr) }
 <Header backBtn={true} />
 
 <main>
-  <!-- 1. Fil d'Ariane -->
-  <div class="wrap">
-    <nav class="breadcrumb">
-      <a href="/">Accueil</a><span>›</span>
-      <a href="/#services">Services</a><span>›</span>
-      Site internet artisan
-    </nav>
-  </div>
-
   <!-- 2. Hero -->
   <section class="hero">
     <div class="wrap">
@@ -174,8 +159,7 @@ main { padding-top: var(--hdr) }
       <h2 class="s-title r">Un seul investissement, des chantiers en continu</h2>
       <p class="s-sub r r.d1">Formule Vitrine Pro adaptée aux artisans et TPE locales.</p>
       <div class="prix-block r r.d2">
-        <div class="prix-depuis">À partir de <strong>1 000 €</strong></div>
-        <p class="prix-desc">Offre de lancement · places limitées · paiement unique, sans abonnement mensuel</p>
+        <p class="prix-desc">Formule Vitrine Pro, adaptée aux artisans et TPE locales. Tarif actuel et détail des places disponibles sur notre page tarifs.</p>
         <div class="prix-links">
           <a href="/tarifs" class="btn-g">Voir le détail des tarifs →</a>
           <a href="/devis?plan=vitrine-pro" class="btn">Demander un devis →</a>

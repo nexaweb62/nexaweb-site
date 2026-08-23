@@ -57,12 +57,6 @@ main { padding-top: var(--hdr) }
 .other-pages a { display:inline-block; margin-right:12px; margin-bottom:8px; font-size:.82rem; color:var(--text-muted); border:1px solid var(--border-hi); padding:5px 12px; border-radius:3px; transition:color .2s,border-color .2s; }
 .other-pages a:hover { color:var(--text); border-color:var(--text-muted); }
 
-/* Breadcrumb */
-.breadcrumb { font-size:.78rem; color:var(--text-dim); padding:clamp(16px,3vw,24px) 0 0; }
-.breadcrumb a { color:var(--text-dim); transition:color .2s; }
-.breadcrumb a:hover { color:var(--text-muted); }
-.breadcrumb span { margin:0 6px; }
-
 @media(max-width:768px) {
   .contact-grid { grid-template-columns:1fr; }
   .cards { grid-template-columns:1fr; background:none; gap:1px; }
@@ -73,15 +67,6 @@ main { padding-top: var(--hdr) }
 <Header backBtn={true} />
 
 <main>
-  <!-- 1. Fil d'Ariane -->
-  <div class="wrap">
-    <nav class="breadcrumb">
-      <a href="/">Accueil</a><span>›</span>
-      <a href="/#services">Services</a><span>›</span>
-      Site internet restaurant
-    </nav>
-  </div>
-
   <!-- 2. Hero -->
   <section class="hero">
     <div class="wrap">
@@ -174,8 +159,7 @@ main { padding-top: var(--hdr) }
       <h2 class="s-title r">Un tarif lisible, sans surprise</h2>
       <p class="s-sub r r.d1">Formule Vitrine Pro adaptée aux restaurants et commerces locaux.</p>
       <div class="prix-block r r.d2">
-        <div class="prix-depuis">À partir de <strong>1 000 €</strong></div>
-        <p class="prix-desc">Offre de lancement · places limitées · paiement unique, sans abonnement mensuel</p>
+        <p class="prix-desc">Formule Vitrine Pro, adaptée aux restaurants et commerces locaux. Tarif actuel et détail des places disponibles sur notre page tarifs.</p>
         <div class="prix-links">
           <a href="/tarifs" class="btn-g">Voir le détail des tarifs →</a>
           <a href="/devis?plan=vitrine-pro" class="btn">Demander un devis →</a>
@@ -192,7 +176,7 @@ main { padding-top: var(--hdr) }
       <div class="faq-list">
         <div class="faq-item r r.d1">
           <p class="faq-q">Est-ce que je peux mettre à jour le menu moi-même ?</p>
-          <p class="faq-a">Oui. On vous forme en 20 minutes. Vous changez les plats, les prix et les formules directement depuis votre téléphone, sans toucher au code. Si vous préférez qu'on s'en charge, c'est compris dans le mensuel.</p>
+          <p class="faq-a">Oui. On vous forme en 20 minutes. Vous changez les plats, les prix et les formules directement depuis votre téléphone, sans toucher au code. Si vous préférez qu'on s'en charge, mentionnez-le dans votre devis.</p>
         </div>
         <div class="faq-item r r.d2">
           <p class="faq-q">Combien de temps avant d'être en ligne ?</p>
@@ -201,10 +185,6 @@ main { padding-top: var(--hdr) }
         <div class="faq-item r r.d3">
           <p class="faq-q">Je n'ai pas de photos professionnelles de mes plats.</p>
           <p class="faq-a">Pas de problème. Des photos prises avec un smartphone récent fonctionnent très bien. On vous explique comment les cadrer correctement. Sinon, on peut vous recommander un photographe local pour un shooting rapide.</p>
-        </div>
-        <div class="faq-item r r.d1">
-          <p class="faq-q">Que se passe-t-il si on résilie le mensuel ?</p>
-          <p class="faq-a">Le site reste en ligne tant que vous payez. Si vous stoppez, on vous remet les fichiers et vous pouvez héberger ailleurs. Il n'y a pas de pénalité, pas de contrat minimum d'un an.</p>
         </div>
       </div>
     </div>
