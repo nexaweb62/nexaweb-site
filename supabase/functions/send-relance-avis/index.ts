@@ -1,14 +1,13 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 // SUPABASE_URL et SUPABASE_SERVICE_ROLE_KEY sont injectés automatiquement
-// par le runtime Supabase Edge Functions — pas besoin de les déclarer comme secrets.
-const SUPABASE_URL             = Deno.env.get('SUPABASE_URL')!;
+// par le runtime Supabase Edge Functions.
+const SUPABASE_URL              = Deno.env.get('SUPABASE_URL')!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const RESEND_API_KEY            = Deno.env.get('RESEND_API_KEY')!;
 
-const SITE_URL  = 'https://nexaaweb.com';
-const TO_NEXA   = 'contact.nexaweb62@gmail.com';
-const DELAY_MS  = 7 * 24 * 60 * 60 * 1000; // 7 jours
+const SITE_URL = 'https://nexaaweb.com';
+const TO_NEXA  = 'contact.nexaweb62@gmail.com';
 
 Deno.serve(async () => {
   if (!RESEND_API_KEY) {
@@ -18,15 +17,15 @@ Deno.serve(async () => {
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
-  // ── Cherche les clients éligibles ────────────────────────────────────────
-  const cutoff = new Date(Date.now() - DELAY_MS).toISOString();
+  // ── Sélectionne les projets livrés depuis ≥ 7 jours, relance non encore envoyée ──
+  const cutoff = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
 
   const { data: demandes, error: queryErr } = await supabase
     .from('demandes_devis')
     .select('id, prenom, nom, email')
-    .eq('statut', 'termine')
-    .eq('avis_relance_envoyee', false)
-    .lte('statut_updated_at', cutoff);
+    .not('livre_le', 'is', null)          // livre_le renseigné = site livré au client
+    .lte('livre_le', cutoff)              // livré depuis au moins 7 jours
+    .eq('avis_relance_envoyee', false);   // relance pas encore envoyée
 
   if (queryErr) {
     console.error('Erreur requête DB:', queryErr);
@@ -37,7 +36,7 @@ Deno.serve(async () => {
 
   for (const d of (demandes ?? [])) {
     try {
-      // ── Envoie l'e-mail de relance ────────────────────────────────────
+      // ── Envoie l'e-mail de relance ────────────────────────────────────────
       const emailRes = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
@@ -59,7 +58,7 @@ Deno.serve(async () => {
         continue;
       }
 
-      // ── Passe le flag à true uniquement si l'envoi a réussi ──────────
+      // ── Passe le flag à true uniquement après envoi réussi ───────────────
       const { error: updateErr } = await supabase
         .from('demandes_devis')
         .update({ avis_relance_envoyee: true })
@@ -126,7 +125,6 @@ function buildRelanceHtml(d: { prenom: string; nom: string }): string {
         et c'est le meilleur soutien que vous puissiez nous apporter.
       </p>
 
-      <!-- Étoiles déco -->
       <p style="margin:0 0 24px;font-size:28px;text-align:center;letter-spacing:4px;color:#F59E0B">
         ★★★★★
       </p>
