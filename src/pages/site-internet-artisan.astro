@@ -4,7 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 ---
-<BaseLayout title="Site Internet pour Artisan — Nexa Web" description="Un site pour artisan avec galerie réalisations, formulaire de devis et SEO local. 490 € lancement, 39 €/mois. Livraison en 7 jours.">
+<BaseLayout title="Site Internet pour Artisan — Nexa Web" description="Un site pour artisan avec galerie réalisations, formulaire de devis et SEO local. Livraison en 7 jours — Nexa Web, Carvin, Hauts-de-France.">
 <style>
 main { padding-top: var(--hdr) }
 
@@ -36,13 +36,13 @@ main { padding-top: var(--hdr) }
 .card-desc { font-size:.875rem; color:var(--text-muted); line-height:1.65; }
 
 /* Tarif */
-.tarif-box { max-width:540px; border:1px solid var(--border-hi); border-radius:8px; padding:clamp(32px,5vw,56px); background:var(--bg-card); }
-.tarif-price { font-size:clamp(2.8rem,6vw,4rem); font-weight:900; letter-spacing:-.04em; margin-bottom:4px; }
-.tarif-price span { font-size:1.1rem; font-weight:400; color:var(--text-muted); }
-.tarif-mensuel { font-size:.95rem; color:var(--text-muted); margin-bottom:28px; }
-.tarif-list { display:flex; flex-direction:column; gap:10px; margin-bottom:32px; }
-.tarif-list li { font-size:.9rem; display:flex; gap:10px; align-items:flex-start; }
-.tarif-list li::before { content:'✓'; color:var(--accent); font-weight:700; flex-shrink:0; }
+.prix-block { max-width:540px; }
+.prix-depuis { font-size:clamp(2.2rem,5vw,3.2rem); font-weight:900; letter-spacing:-.04em; margin-bottom:8px; }
+.prix-depuis strong { color:var(--accent); }
+.prix-desc { font-size:.95rem; color:var(--text-muted); margin-bottom:28px; line-height:1.6; }
+.prix-links { display:flex; gap:16px; flex-wrap:wrap; align-items:center; }
+/* CTA finale */
+.cta-btns { display:flex; gap:16px; flex-wrap:wrap; align-items:center; margin-bottom:40px; }
 
 /* FAQ */
 .faq-list { display:flex; flex-direction:column; gap:0; max-width:760px; }
@@ -51,16 +51,7 @@ main { padding-top: var(--hdr) }
 .faq-q { font-size:1rem; font-weight:700; margin-bottom:10px; }
 .faq-a { font-size:.9rem; color:var(--text-muted); line-height:1.7; }
 
-/* Contact */
-.contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:clamp(40px,7vw,100px); align-items:start; }
-.contact-form { display:flex; flex-direction:column; gap:14px; }
-.contact-form input, .contact-form select, .contact-form textarea { width:100%; background:var(--bg-card); border:1px solid var(--border-hi); color:var(--text); font:inherit; font-size:.9rem; padding:12px 16px; border-radius:4px; outline:none; transition:border-color .2s; }
-.contact-form input:focus, .contact-form select:focus, .contact-form textarea:focus { border-color:var(--accent); }
-.contact-form select option { background:var(--bg); }
-.contact-aside { display:flex; flex-direction:column; gap:20px; }
-.contact-link { display:flex; align-items:center; gap:12px; font-size:.9rem; font-weight:600; color:var(--text-muted); transition:color .2s; }
-.contact-link:hover { color:var(--text); }
-.contact-link svg { width:18px; height:18px; stroke:currentColor; stroke-width:1.8; fill:none; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
+/* Navigation métier */
 .other-pages { margin-top:8px; }
 .other-pages p { font-size:.82rem; color:var(--text-dim); margin-bottom:10px; font-weight:500; letter-spacing:.06em; text-transform:uppercase; }
 .other-pages a { display:inline-block; margin-right:12px; margin-bottom:8px; font-size:.82rem; color:var(--text-muted); border:1px solid var(--border-hi); padding:5px 12px; border-radius:3px; transition:color .2s,border-color .2s; }
@@ -97,7 +88,7 @@ main { padding-top: var(--hdr) }
       <span class="hero-tag r">Artisans &amp; TPE</span>
       <h1 class="hero-title r r.d1">Vous dépendez du bouche-à-oreille<br>et les chantiers se font rares.</h1>
       <p class="hero-sub r r.d2">8 artisans sur 10 n'ont pas de site. Résultat : le client appelle le premier qui sort sur Google — et ce n'est pas vous.</p>
-      <a href="#contact" class="btn r r.d3">Avoir mon site artisan →</a>
+      <a href="/devis?plan=vitrine-pro" class="btn r r.d3">Avoir mon site artisan →</a>
     </div>
   </section>
 
@@ -181,19 +172,14 @@ main { padding-top: var(--hdr) }
   <section class="s">
     <div class="wrap">
       <h2 class="s-title r">Un seul investissement, des chantiers en continu</h2>
-      <p class="s-sub r r.d1">Moins cher qu'une journée de pub locale. Et ça travaille 24h/24.</p>
-      <div class="tarif-box r r.d2">
-        <div class="tarif-price">490 <span>€ HT</span></div>
-        <p class="tarif-mensuel">+ 39 €/mois — hébergement, maintenance et mises à jour inclus</p>
-        <ul class="tarif-list">
-          <li>Site livré en 7 jours ouvrés</li>
-          <li>Galerie réalisations avant / après</li>
-          <li>Formulaire de demande de devis</li>
-          <li>Zones d'intervention et coordonnées</li>
-          <li>Avis clients intégrés</li>
-          <li>SEO local sur votre métier et votre ville</li>
-        </ul>
-        <a href="#contact" class="btn">Lancer mon site →</a>
+      <p class="s-sub r r.d1">Formule Vitrine Pro adaptée aux artisans et TPE locales.</p>
+      <div class="prix-block r r.d2">
+        <div class="prix-depuis">À partir de <strong>1 000 €</strong></div>
+        <p class="prix-desc">Offre de lancement · places limitées · paiement unique, sans abonnement mensuel</p>
+        <div class="prix-links">
+          <a href="/tarifs" class="btn-g">Voir le détail des tarifs →</a>
+          <a href="/devis?plan=vitrine-pro" class="btn">Demander un devis →</a>
+        </div>
       </div>
     </div>
   </section>
@@ -224,40 +210,19 @@ main { padding-top: var(--hdr) }
     </div>
   </section>
 
-  <!-- 7. Contact -->
+  <!-- 7. Démarrer -->
   <section class="s" id="contact">
     <div class="wrap">
-      <h2 class="s-title r">On regarde ensemble ce qu'on peut faire</h2>
-      <p class="s-sub r r.d1">Laissez vos coordonnées. Un appel de 15 minutes suffit pour voir si c'est adapté à votre activité.</p>
-      <div class="contact-grid">
-        <form class="contact-form r r.d1" action="" method="POST">
-          <input type="text" name="nom" placeholder="Votre nom" required />
-          <input type="text" name="activite" placeholder="Votre métier (ex : plombier, électricien…)" required />
-          <input type="tel" name="telephone" placeholder="Téléphone" required />
-          <select name="creneau">
-            <option value="" disabled selected>Créneau de rappel préféré</option>
-            <option value="matin">Matin (9h–12h)</option>
-            <option value="midi">Midi (12h–14h)</option>
-            <option value="apres-midi">Après-midi (14h–18h)</option>
-            <option value="soir">Soir (18h–20h)</option>
-          </select>
-          <button type="submit" class="btn">Envoyer ma demande →</button>
-        </form>
-        <div class="contact-aside r r.d2">
-          <a href="https://calendly.com/contact-nexaweb62/30min" target="_blank" rel="noopener" class="contact-link">
-            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-            Réserver un créneau Calendly
-          </a>
-          <a href="tel:+33641467898" class="contact-link">
-            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.48 2 2 0 0 1 3.6 1.28h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.02z"/></svg>
-            +33 6 41 46 78 98
-          </a>
-          <div class="other-pages">
-            <p>Autres pages métier</p>
-            <a href="/site-internet-restaurant">Restaurant &amp; Brasserie</a>
-            <a href="/site-internet-commerce">Commerce de proximité</a>
-          </div>
-        </div>
+      <h2 class="s-title r">Prêt à vous lancer ?</h2>
+      <p class="s-sub r r.d1">Décrivez votre projet en 2 minutes. On vous revient sous 24 h, sans engagement.</p>
+      <div class="cta-btns r r.d2">
+        <a href="/devis?plan=vitrine-pro" class="btn">Demander un devis gratuit →</a>
+        <a href="/rendez-vous" class="btn-g">Réserver un créneau →</a>
+      </div>
+      <div class="other-pages r r.d3">
+        <p>Autres pages métier</p>
+        <a href="/site-internet-restaurant">Restaurant &amp; Brasserie</a>
+        <a href="/site-internet-commerce">Commerce de proximité</a>
       </div>
     </div>
   </section>
