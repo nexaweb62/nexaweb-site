@@ -27,7 +27,7 @@ import '../styles/global.css';
 
 /* ── SECTION LABEL ── */
 .form-section{margin-bottom:28px}
-.section-label{font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border);display:block}
+.section-label{font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--text-muted);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border);display:block}
 :root[data-theme="light"] .section-label{border-bottom-color:rgba(18,18,22,.09)}
 @media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .section-label{border-bottom-color:rgba(18,18,22,.09)}}
 
@@ -47,7 +47,7 @@ import '../styles/global.css';
 }
 .field{display:flex;flex-direction:column;gap:6px}
 .field-full{grid-column:1/-1}
-.field label{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim)}
+.field label{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted)}
 .field input:not([type=checkbox]):not([type=radio]),.field textarea,.field select{
   width:100%;padding:12px 15px;background:var(--bg-alt);border:1px solid var(--border);border-radius:5px;
   font:inherit;font-size:13px;color:var(--text);outline:none;
@@ -74,7 +74,7 @@ import '../styles/global.css';
 .submit-row{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:32px;padding-top:24px;border-top:1px solid var(--border)}
 :root[data-theme="light"] .submit-row{border-top-color:rgba(18,18,22,.09)}
 @media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .submit-row{border-top-color:rgba(18,18,22,.09)}}
-.submit-note{font-size:11px;color:var(--text-dim);line-height:1.55}
+.submit-note{font-size:11px;color:var(--text-muted);line-height:1.55}
 .submit-note svg{display:inline;width:12px;height:12px;stroke:var(--green);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;margin-right:4px;vertical-align:-1px}
 .submit-btn{display:inline-flex;align-items:center;gap:10px;padding:15px 32px;background:linear-gradient(135deg,var(--accent),#a78bfa);color:#fff;border-radius:5px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;border:none;cursor:pointer;box-shadow:0 6px 24px rgba(139,92,246,.4);transition:opacity .2s,transform .2s;white-space:nowrap}
 .submit-btn:hover{opacity:.9;transform:translateY(-2px)}
