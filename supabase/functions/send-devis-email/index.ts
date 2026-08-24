@@ -123,7 +123,7 @@ Deno.serve(async (req) => {
   }
 
   // ── 2. Accusé de réception au client ────────────────────────────────────
-  const confirmHtml = buildConfirmationHtml(data, formuleLabels);
+  const confirmHtml = buildConfirmationHtml(data, formuleLabels, typeSiteLabels, delaiLabels, budgetLabels);
   const clientRes = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
@@ -287,8 +287,28 @@ function buildTeamEmailHtml(
 function buildConfirmationHtml(
   d: Record<string, string>,
   formuleLabels: Record<string, string>,
+  typeSiteLabels: Record<string, string>,
+  delaiLabels: Record<string, string>,
+  budgetLabels: Record<string, string>,
 ): string {
+  const row = (label: string, value: string | undefined | null) => {
+    if (!value) return "";
+    return `
+      <tr>
+        <td style="padding:8px 12px;font-size:12px;font-weight:600;color:#6b7280;
+                   width:140px;vertical-align:top;white-space:nowrap;
+                   border-bottom:1px solid #f3f4f6">${label}</td>
+        <td style="padding:8px 12px;font-size:13px;color:#111118;
+                   vertical-align:top;border-bottom:1px solid #f3f4f6">${value}</td>
+      </tr>`;
+  };
+
   const formuleLbl = formuleLabels[d.formule] ?? (d.formule || null);
+  const typeLbl    = typeSiteLabels[d.type_site] ?? (d.type_site || null);
+  const delaiLbl   = delaiLabels[d.delai_souhaite] ?? (d.delai_souhaite || null);
+  const budgetLbl  = budgetLabels[d.budget_estime] ?? (d.budget_estime || null);
+
+  const hasRecap = formuleLbl || typeLbl || d.entreprise || delaiLbl || budgetLbl;
 
   return `<!DOCTYPE html>
 <html lang="fr">
@@ -318,17 +338,29 @@ function buildConfirmationHtml(
       <p style="margin:0 0 18px;font-size:15px;color:#111118;font-weight:700">
         Bonjour ${esc(d.prenom)},
       </p>
-      <p style="margin:0 0 16px;font-size:14px;color:#374151;line-height:1.7">
+      <p style="margin:0 0 20px;font-size:14px;color:#374151;line-height:1.7">
         Merci pour votre demande de devis. Nous l'avons bien reçue et nous vous recontacterons
         sous <strong>24 heures ouvrées</strong> avec une proposition personnalisée.
       </p>
-      ${formuleLbl ? `
-      <p style="margin:0 0 16px;font-size:14px;color:#374151;line-height:1.7">
-        Formule demandée : <strong>${esc(formuleLbl)}</strong>
-      </p>` : ""}
+
+      ${hasRecap ? `
+      <!-- Récapitulatif projet -->
+      <p style="margin:0 0 8px;font-size:10px;font-weight:700;letter-spacing:.14em;
+                text-transform:uppercase;color:#9ca3af">Votre demande</p>
+      <table width="100%" cellpadding="0" cellspacing="0"
+             style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;margin-bottom:24px">
+        <tbody>
+          ${row("Formule",   esc(formuleLbl))}
+          ${row("Type",      esc(typeLbl))}
+          ${row("Entreprise",esc(d.entreprise))}
+          ${row("Délai",     esc(delaiLbl))}
+          ${row("Budget",    esc(budgetLbl))}
+        </tbody>
+      </table>` : ""}
+
       <p style="margin:0 0 28px;font-size:14px;color:#374151;line-height:1.7">
-        En attendant, si vous avez des questions ou souhaitez compléter votre demande,
-        répondez simplement à cet e-mail ou écrivez-nous à
+        Des questions ou quelque chose à ajouter ? Répondez directement à cet e-mail ou
+        écrivez-nous à
         <a href="mailto:contact.nexaweb62@gmail.com" style="color:#8b5cf6">contact.nexaweb62@gmail.com</a>.
       </p>
 
