@@ -156,7 +156,8 @@ Deno.serve(async (req) => {
 </body>
 </html>`;
 
-  const resendRes = await fetch("https://api.resend.com/emails", {
+  // ── 1. Notification équipe ───────────────────────────────────────────────
+  const teamRes = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${RESEND_API_KEY}`,
@@ -170,13 +171,36 @@ Deno.serve(async (req) => {
     }),
   });
 
-  if (!resendRes.ok) {
-    const errBody = await resendRes.text();
-    console.error("Resend API error:", resendRes.status, errBody);
+  if (!teamRes.ok) {
+    const errBody = await teamRes.text();
+    console.error("Resend API error (team):", teamRes.status, errBody);
     return new Response(
       JSON.stringify({ error: "email_send_failed" }),
       { status: 502, headers: { ...cors, "Content-Type": "application/json" } }
     );
+  }
+
+  // ── 2. Accusé de réception au reviewer (si e-mail fourni) ───────────────
+  const reviewerEmail = String(data.author_email ?? "").trim();
+  if (reviewerEmail) {
+    const confirmHtml = buildReviewerConfirmHtml(String(author_name), Number(rating), stars);
+    const clientRes = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from:     "Nexa Web <contact@nexaaweb.com>",
+        to:       [reviewerEmail],
+        reply_to: TO_EMAIL,
+        subject:  "Merci pour votre avis — Nexa Web",
+        html:     confirmHtml,
+      }),
+    });
+    if (!clientRes.ok) {
+      console.warn("Resend API error (reviewer confirmation):", clientRes.status, await clientRes.text());
+    }
   }
 
   return new Response(
@@ -184,6 +208,77 @@ Deno.serve(async (req) => {
     { headers: { ...cors, "Content-Type": "application/json" } }
   );
 });
+
+/* ─────────────────────────────────────────────────────────
+   Email 2 — Accusé de réception reviewer
+───────────────────────────────────────────────────────── */
+function buildReviewerConfirmHtml(name: string, rating: number, stars: string): string {
+  return `<!DOCTYPE html>
+<html lang="fr">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#f4f4f0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif">
+
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f0;padding:32px 0">
+<tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0"
+       style="background:#ffffff;border-radius:12px;overflow:hidden;
+              box-shadow:0 4px 24px rgba(0,0,0,.08);max-width:600px">
+
+  <!-- En-tête -->
+  <tr>
+    <td style="background:linear-gradient(135deg,#8b5cf6 0%,#7c3aed 100%);padding:28px 32px">
+      <p style="margin:0;font-size:10px;font-weight:700;letter-spacing:.18em;
+                text-transform:uppercase;color:rgba(255,255,255,.65)">Nexa Web</p>
+      <h1 style="margin:6px 0 0;font-size:22px;font-weight:800;color:#ffffff;letter-spacing:-.02em">
+        Merci pour votre avis !
+      </h1>
+    </td>
+  </tr>
+
+  <!-- Corps -->
+  <tr>
+    <td style="padding:32px 32px 24px">
+      <p style="margin:0 0 18px;font-size:15px;color:#111118;font-weight:700">
+        Bonjour ${esc(name)},
+      </p>
+      <p style="margin:0 0 16px;font-size:14px;color:#374151;line-height:1.7">
+        Nous avons bien reçu votre avis ${rating > 0 ? `(${stars})` : ""}. Il sera examiné par notre équipe
+        et publié sous <strong>24h</strong> s'il est conforme à notre charte.
+      </p>
+      <p style="margin:0 0 28px;font-size:14px;color:#374151;line-height:1.7">
+        Votre retour compte beaucoup — il aide les futurs clients à mieux comprendre
+        comment nous travaillons. Merci de nous faire confiance.
+      </p>
+
+      <div style="text-align:center;margin-bottom:8px">
+        <a href="https://nexaaweb.com/avis"
+           style="display:inline-block;padding:13px 30px;
+                  background:linear-gradient(135deg,#8b5cf6,#7c3aed);
+                  color:#ffffff;border-radius:8px;
+                  font-size:13px;font-weight:700;text-decoration:none;
+                  letter-spacing:.03em">
+          Voir les avis publiés
+        </a>
+      </div>
+    </td>
+  </tr>
+
+  <!-- Pied -->
+  <tr>
+    <td style="padding:14px 32px;background:#f9fafb;border-top:1px solid #e5e7eb">
+      <p style="margin:0;font-size:11px;color:#9ca3af;text-align:center">
+        Nexa Web · Carvin, Hauts-de-France ·
+        <a href="https://nexaaweb.com" style="color:#9ca3af">nexaaweb.com</a>
+      </p>
+    </td>
+  </tr>
+
+</table>
+</td></tr>
+</table>
+</body>
+</html>`;
+}
 
 /* helpers */
 function esc(s: string): string {

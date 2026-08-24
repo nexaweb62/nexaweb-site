@@ -133,6 +133,10 @@ import '../styles/global.css';
               </div>
             </div>
             <div class="field">
+              <label class="field-label" for="rv-email" data-i18n="av-email-label">E-mail (optionnel)</label>
+              <input id="rv-email" type="email" placeholder="votre@email.fr" maxlength="120">
+            </div>
+            <div class="field">
               <label class="field-label" for="rv-msg" data-i18n="av-msg-label">Votre avis *</label>
               <textarea id="rv-msg" placeholder="Décrivez votre expérience avec Nexa Web…" required maxlength="600"></textarea>
             </div>
@@ -222,20 +226,21 @@ import '../styles/global.css';
     e.preventDefault();
     var name = document.getElementById('rv-name').value.trim();
     var company = document.getElementById('rv-company').value.trim();
+    var emailVal = document.getElementById('rv-email').value.trim();
     var msg = document.getElementById('rv-msg').value.trim();
     if(!name || !msg){ alert('Veuillez remplir votre nom et votre avis.'); return; }
     if(rating === 0){ alert('Veuillez sélectionner une note.'); return; }
     if(!window.sb){ alert('Erreur de connexion. Réessayez dans un instant.'); return; }
     submitBtn.disabled = true;
     submitBtn.textContent = 'Envoi…';
-    window.sb.from('reviews').insert({ author_name: name, company: company||null, rating: rating, message: msg, status: 'pending' }).then(function(res){
+    window.sb.from('reviews').insert({ author_name: name, company: company||null, author_email: emailVal||null, rating: rating, message: msg, status: 'pending' }).then(function(res){
       if(res.error){
         submitBtn.disabled = false;
         submitBtn.innerHTML = 'Envoyer mon avis <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
         alert('Une erreur est survenue. Veuillez réessayer.'); return;
       }
       /* Notifie l'équipe Nexa Web (non bloquant) */
-      try{ window.sb.functions.invoke('send-avis-email',{body:{author_name:name,company:company||null,rating:rating,message:msg}}); }catch(e){ console.warn('[avis] email failed:',e); }
+      try{ window.sb.functions.invoke('send-avis-email',{body:{author_name:name,company:company||null,author_email:emailVal||null,rating:rating,message:msg}}); }catch(e){ console.warn('[avis] email failed:',e); }
       form.style.display = 'none';
       successEl.classList.add('show');
     });
