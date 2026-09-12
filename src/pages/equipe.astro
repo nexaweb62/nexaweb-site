@@ -4,7 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 ---
-<BaseLayout title="L'Équipe — Nexa Web" description="Découvrez l'équipe Nexa Web — trois passionnés du digital au service de votre présence en ligne. Carvin, Hauts-de-France.">
+<BaseLayout title="L'Équipe — Nexa Web" description="Découvrez l'équipe Nexa Web — deux passionnés du digital au service de votre présence en ligne. Carvin, Hauts-de-France.">
 <style>
 /* Scroll reveal */
 .r{opacity:0;transform:translateY(28px);filter:blur(5px);transition:opacity .72s cubic-bezier(.16,1,.3,1),transform .72s cubic-bezier(.16,1,.3,1),filter .72s cubic-bezier(.16,1,.3,1)}
@@ -24,7 +24,7 @@ import '../styles/global.css';
 
 /* Team cards */
 .s-team{padding:clamp(80px,12vw,160px) 0}
-.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.team-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:920px;margin:0 auto}
 .team-card{height:540px}
 .tc-inner{position:relative;display:block;width:100%;height:100%;border-radius:20px;overflow:hidden;cursor:default;transition:transform .52s cubic-bezier(.16,1,.3,1),box-shadow .52s cubic-bezier(.16,1,.3,1)}
 .tc-inner:hover{transform:scale(1.035)}
@@ -39,8 +39,7 @@ import '../styles/global.css';
 .tc-inner:hover .tc-btn{background:rgba(255,255,255,.17);border-color:rgba(255,255,255,.30)}
 .tc-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .3s cubic-bezier(.16,1,.3,1);flex-shrink:0}
 .tc-inner:hover .tc-btn svg{transform:translateX(5px)}
-@media(max-width:900px){.team-grid{grid-template-columns:1fr 1fr}.team-card:nth-child(3){grid-column:1 / -1;max-width:440px;margin:0 auto;width:100%}}
-@media(max-width:540px){.team-grid{grid-template-columns:1fr}.team-card:nth-child(3){grid-column:1;max-width:none}.team-card{height:460px}}
+@media(max-width:540px){.team-grid{grid-template-columns:1fr}.team-card{height:460px}}
 
 /* CTA */
 .s-eq-cta{border-top:1px solid var(--border);text-align:center}
@@ -62,7 +61,7 @@ import '../styles/global.css';
           L'équipe qui donne<br>vie à votre <em>vision.</em>
         </h1>
         <p class="body-text r d2" style="margin-top:26px;max-width:520px" data-i18n="eq-sub">
-          Trois passionnés du digital réunis autour d'une mission : vous offrir une présence en ligne qui vous ressemble et qui convertit.
+          Deux passionnés du digital réunis autour d'une mission : vous offrir une présence en ligne qui vous ressemble et qui convertit.
         </p>
       </div>
     </div>
@@ -99,23 +98,6 @@ import '../styles/global.css';
               <p class="tc-role" data-i18n="eq-role">Co-fondateur</p>
               <h2 class="tc-name">Ahmed Chteoui</h2>
               <p class="tc-title" data-i18n="eq-title2">Design UI/UX & Stratégie digitale</p>
-              <a href="/contact" class="tc-btn">
-                <span data-i18n="eq-contact">Prendre contact</span>
-                <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Membre 3 -->
-        <div class="team-card r d2">
-          <div class="tc-inner" style="box-shadow:0 24px 70px hsl(345 55% 12% / .5)">
-            <div class="tc-bg" style="background-image:url(/img/membre3.jpg);background-position:center 10%"></div>
-            <div class="tc-overlay" style="background:linear-gradient(to top,hsl(345 55% 7% / .95),hsl(345 50% 14% / .65) 40%,transparent 68%)"></div>
-            <div class="tc-content">
-              <p class="tc-role" data-i18n="eq-role">Co-fondateur</p>
-              <h2 class="tc-name">Killian Mordacq</h2>
-              <p class="tc-title" data-i18n="eq-title3">Conseil & Stratégie web</p>
               <a href="/contact" class="tc-btn">
                 <span data-i18n="eq-contact">Prendre contact</span>
                 <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
