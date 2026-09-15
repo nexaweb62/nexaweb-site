@@ -1,0 +1,48 @@
+---
+/* Image responsive — AVIF + WebP avec repli JPEG.
+   Lit public/img/manifest.json produit par `npm run build:images` : les
+   dimensions viennent du fichier réel, jamais d'une valeur recopiée à la
+   main, ce qui garantit width/height exacts et donc CLS = 0. */
+import manifest from '../../public/img/manifest.json';
+
+export interface Props {
+  name: string;                 // clé du manifeste (nom du fichier source)
+  alt: string;                  // description en français, obligatoire
+  sizes?: string;
+  priority?: boolean;           // hero : préchargé, jamais lazy
+  className?: string;
+  curtain?: boolean;            // révélation en rideau à l'entrée
+}
+const {
+  name, alt,
+  sizes = '(max-width: 768px) 100vw, 50vw',
+  priority = false,
+  className = '',
+  curtain = true,
+} = Astro.props;
+
+const entry = (manifest as Record<string, any>)[name];
+if (!entry) throw new Error(
+  `Picture : « ${name} » est absent de public/img/manifest.json. ` +
+  `Dépose la source dans assets/sources/ puis lance npm run build:images.`
+);
+
+const sorted  = Object.values(entry.widths) as { w: number; h: number }[];
+const largest = sorted[sorted.length - 1];
+const srcset  = (ext: string) => sorted.map(v => `/img/gen/${name}-${v.w}.${ext} ${v.w}w`).join(', ');
+---
+<picture class={className} data-anim={curtain ? 'curtain' : undefined}>
+  <source type="image/avif" srcset={srcset('avif')} sizes={sizes} />
+  <source type="image/webp" srcset={srcset('webp')} sizes={sizes} />
+  <img
+    src={`/img/gen/${name}-${largest.w}.jpg`}
+    srcset={srcset('jpg')}
+    sizes={sizes}
+    width={largest.w}
+    height={largest.h}
+    alt={alt}
+    decoding={priority ? 'sync' : 'async'}
+    loading={priority ? 'eager' : 'lazy'}
+    fetchpriority={priority ? 'high' : 'auto'}
+  />
+</picture>

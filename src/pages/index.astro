@@ -161,6 +161,9 @@ import '../styles/global.css';
 /* ── WHY ── */
 .s-why{border-top:1px solid var(--border);background:var(--surface)}
 .why-in{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,8vw,120px);align-items:start}
+/* Le titre vit dans une colonne de ~560 px : à la taille pleine de .h-lg
+   il se cassait en quatre lignes bancales autour de son <br>. */
+.why-in .h-lg{font-size:clamp(var(--fs-500),3.6vw,var(--fs-700))}
 .why-bio{display:flex;flex-direction:column;gap:18px;padding:4px 0}
 .why-bio-lead{font-size:clamp(1.35rem,2.4vw,1.9rem);font-weight:800;line-height:1.18;letter-spacing:-.03em;color:var(--text)}
 .why-bio-body{font-size:13px;font-weight:300;line-height:1.72;color:var(--text-muted)}
@@ -407,7 +410,8 @@ import '../styles/global.css';
 </section>
 
 <!-- WHY -->
-<section class="s-why" style="padding:var(--sec) 0" id="apropos2" aria-labelledby="why-h">
+<section class="s-why has-texture" style="padding:var(--sec) 0" id="apropos2" aria-labelledby="why-h">
+  <div class="sec-texture" data-texture="1" data-parallax aria-hidden="true"></div>
   <div class="wrap">
     <div class="why-in">
       <div>
@@ -492,7 +496,8 @@ import '../styles/global.css';
 </section>
 
 <!-- FINAL CTA -->
-<section class="s-cta" id="contact" aria-labelledby="cta-h">
+<section class="s-cta has-texture" id="contact" aria-labelledby="cta-h">
+  <div class="sec-texture" data-texture="2" data-parallax aria-hidden="true"></div>
   <div class="wrap">
     <div class="cta-in">
       <div class="cta-super r" data-i18n="idx-cta-super">Passons à l'action</div>

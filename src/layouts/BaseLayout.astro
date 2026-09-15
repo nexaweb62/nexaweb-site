@@ -12,7 +12,11 @@ const {
 
 const siteOrigin = 'https://nexaaweb.com';
 const canonicalUrl = siteOrigin + Astro.url.pathname;
+// Deux variantes existent ; la sombre est l'identité de la marque et
+// reste la déclaration principale, les plateformes ne lisant en
+// pratique que la première.
 const ogImageUrl = siteOrigin + '/og-image.png';
+const ogImageLightUrl = siteOrigin + '/og-image-light.png';
 ---
 <!doctype html>
 <html lang="fr">
@@ -34,6 +38,8 @@ const ogImageUrl = siteOrigin + '/og-image.png';
   <meta property="og:type" content="website" />
   <meta property="og:url" content={canonicalUrl} />
   <meta property="og:image" content={ogImageUrl} />
+  <meta property="og:image:alt" content="Nexa Web — des sites web qui donnent une nouvelle dimension à votre marque. Carvin, Hauts-de-France." />
+  <meta property="og:image" content={ogImageLightUrl} />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:locale" content="fr_FR" />

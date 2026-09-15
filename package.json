@@ -12,7 +12,9 @@
     "astro": "astro",
     "check:colors": "node scripts/check-colors.mjs",
     "check:contrast": "node scripts/check-contrast.mjs",
-    "check": "npm run check:colors && npm run check:contrast"
+    "check": "npm run check:colors && npm run check:contrast",
+    "build:assets": "node scripts/build-assets.mjs",
+    "build:images": "node scripts/build-images.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^6.0.4",
@@ -33,5 +35,8 @@
     "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.3.3",
     "three": "^0.185.1"
+  },
+  "devDependencies": {
+    "sharp": "^0.35.4"
   }
 }

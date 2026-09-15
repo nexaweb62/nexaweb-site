@@ -166,6 +166,7 @@
   --focus:         var(--raw-copper-300);
   --shadow-1:      var(--raw-shadow-1-d);
   --shadow-2:      var(--raw-shadow-2-d);
+  --decor-opacity: .55;
 }
 
 /* ───────────────────────────────────────────────────────────────────────
@@ -198,6 +199,7 @@
     --focus:         var(--raw-copper-800);
     --shadow-1:      var(--raw-shadow-1-l);
     --shadow-2:      var(--raw-shadow-2-l);
+    --decor-opacity: .28;
   }
 }
 
@@ -228,6 +230,7 @@
   --focus:         var(--raw-copper-800);
   --shadow-1:      var(--raw-shadow-1-l);
   --shadow-2:      var(--raw-shadow-2-l);
+  --decor-opacity: .28;
 }
 
 /* ───────────────────────────────────────────────────────────────────────
@@ -258,4 +261,5 @@
   --focus:         var(--raw-copper-300);
   --shadow-1:      var(--raw-shadow-1-d);
   --shadow-2:      var(--raw-shadow-2-d);
+  --decor-opacity: .55;
 }

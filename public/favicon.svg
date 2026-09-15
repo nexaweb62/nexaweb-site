@@ -1,5 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <circle cx="32" cy="32" r="32" fill="#0d0d0d"/>
-  <text x="19" y="44" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="30" fill="#ffffff" text-anchor="middle">N</text>
-  <text x="45" y="44" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="30" fill="#6366f1" text-anchor="middle">W</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Nexa Web">
+  <style>
+    .bg { fill: #0B0F14 }
+    .mk { fill: #C8834A }
+    @media (prefers-color-scheme: light) {
+      .bg { fill: #FBF9F6 }
+      .mk { fill: #A95F2C }
+    }
+  </style>
+  <rect class="bg" width="64" height="64" rx="14"/>
+  <path class="mk" d="M16 47V17h6.4l14.6 19.1V17H43v30h-6.4L22 27.9V47z"/>
+  <rect class="mk" x="16" y="51.5" width="27" height="3" rx="1.5"/>
 </svg>

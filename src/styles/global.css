@@ -419,6 +419,43 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
 }
 .js-enabled [data-anim="curtain"].is-in{clip-path:inset(0);transform:scale(1)}
 
+/* ── TEXTURES DE FOND DE SECTION ──
+   Remplacent les mesh-gradients violets. Une variante par thème, servie en
+   AVIF puis WebP avec repli JPEG, posée à opacity .5 maximum et toujours
+   sous le texte. Parallaxe pilotée par /motion.js (désactivée < 1024 px). */
+.sec-texture{
+  position:absolute;inset:-8% 0;z-index:0;pointer-events:none;
+  opacity:.5;background-size:cover;background-position:center;
+}
+.has-texture{position:relative;isolation:isolate}
+.has-texture>.wrap{position:relative;z-index:1}
+
+.sec-texture[data-texture="1"]{background-image:url('/img/textures/texture-1-dark.jpg')}
+.sec-texture[data-texture="2"]{background-image:url('/img/textures/texture-2-dark.jpg')}
+@supports (background-image:image-set(url('a.avif') type('image/avif'))){
+  .sec-texture[data-texture="1"]{
+    background-image:image-set(
+      url('/img/textures/texture-1-dark.avif') type('image/avif'),
+      url('/img/textures/texture-1-dark.webp') type('image/webp'),
+      url('/img/textures/texture-1-dark.jpg')  type('image/jpeg'));
+  }
+  .sec-texture[data-texture="2"]{
+    background-image:image-set(
+      url('/img/textures/texture-2-dark.avif') type('image/avif'),
+      url('/img/textures/texture-2-dark.webp') type('image/webp'),
+      url('/img/textures/texture-2-dark.jpg')  type('image/jpeg'));
+  }
+}
+
+/* Variante claire — une nappe d'encre sur du crème serait aussi fausse
+   qu'une nappe crème sur de l'encre. */
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]) .sec-texture[data-texture="1"]{background-image:url('/img/textures/texture-1-light.jpg')}
+  :root:not([data-theme="dark"]) .sec-texture[data-texture="2"]{background-image:url('/img/textures/texture-2-light.jpg')}
+}
+:root[data-theme="light"] .sec-texture[data-texture="1"]{background-image:url('/img/textures/texture-1-light.jpg')}
+:root[data-theme="light"] .sec-texture[data-texture="2"]{background-image:url('/img/textures/texture-2-light.jpg')}
+
 /* 7 — Section épinglée */
 .pin-label{position:sticky;top:30vh;align-self:start}
 
