@@ -48,6 +48,18 @@ import '../styles/global.css';
 .eq-cta-super{font-size:clamp(.6rem,1vw,.75rem);font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--text-muted);margin-bottom:28px}
 .eq-cta-hl{font-size:clamp(2.2rem,5.5vw,6rem);font-weight:900;line-height:.94;letter-spacing:-.035em;margin-bottom:40px;text-wrap:balance}
 .eq-cta-hl em{font-style:italic}
+
+/* Photos d'équipe — AVIF/WebP avec repli JPEG, produites par
+   `npm run build:images`. Les JPEG d'origine pesaient 55 à 583 Ko pour
+   moins de 600 px de large. */
+.tc-bg[data-photo="1"]{background-image:url("/img/gen/vignette-membre1-399.jpg")}
+.tc-bg[data-photo="2"]{background-image:url("/img/gen/vignette-membre2-567.jpg")}
+.tc-bg[data-photo="3"]{background-image:url("/img/gen/vignette-membre3-574.jpg")}
+@supports (background-image:image-set(url('a.avif') type('image/avif'))){
+  .tc-bg[data-photo="1"]{background-image:image-set(url("/img/gen/vignette-membre1-399.avif") type("image/avif"),url("/img/gen/vignette-membre1-399.webp") type("image/webp"),url("/img/gen/vignette-membre1-399.jpg") type("image/jpeg"))}
+  .tc-bg[data-photo="2"]{background-image:image-set(url("/img/gen/vignette-membre2-567.avif") type("image/avif"),url("/img/gen/vignette-membre2-567.webp") type("image/webp"),url("/img/gen/vignette-membre2-567.jpg") type("image/jpeg"))}
+  .tc-bg[data-photo="3"]{background-image:image-set(url("/img/gen/vignette-membre3-574.avif") type("image/avif"),url("/img/gen/vignette-membre3-574.webp") type("image/webp"),url("/img/gen/vignette-membre3-574.jpg") type("image/jpeg"))}
+}
 </style>
 
 <Header />
@@ -76,9 +88,9 @@ import '../styles/global.css';
         <!-- Membre 1 -->
         <div class="team-card r">
           <div class="tc-inner" style="box-shadow:var(--shadow-2)">
-            <div class="tc-bg" style="background-image:url(/img/membre1.jpg);background-position:center 15%"></div>
+            <div class="tc-bg" data-photo="1" style="background-position:center 15%"></div>
             <div class="tc-overlay" style="background:linear-gradient(to top,var(--media-scrim-900),var(--media-scrim-600) 40%,transparent 68%)"></div>
-            <div class="tc-content">
+            <div class="tc-content" data-on-media>
               <p class="tc-role" data-i18n="eq-role">Co-fondateur</p>
               <h2 class="tc-name">Imad Torchi</h2>
               <p class="tc-title" data-i18n="eq-title1">Développement web & Architecture</p>
@@ -93,9 +105,9 @@ import '../styles/global.css';
         <!-- Membre 2 -->
         <div class="team-card r d1">
           <div class="tc-inner" style="box-shadow:var(--shadow-2)">
-            <div class="tc-bg" style="background-image:url(/img/membre2.jpg);background-position:center 12%"></div>
+            <div class="tc-bg" data-photo="2" style="background-position:center 12%"></div>
             <div class="tc-overlay" style="background:linear-gradient(to top,var(--media-scrim-900),var(--media-scrim-600) 40%,transparent 68%)"></div>
-            <div class="tc-content">
+            <div class="tc-content" data-on-media>
               <p class="tc-role" data-i18n="eq-role">Co-fondateur</p>
               <h2 class="tc-name">Ahmed Chteoui</h2>
               <p class="tc-title" data-i18n="eq-title2">Design UI/UX & Stratégie digitale</p>
@@ -110,9 +122,9 @@ import '../styles/global.css';
         <!-- Membre 3 -->
         <div class="team-card r d2">
           <div class="tc-inner" style="box-shadow:var(--shadow-2)">
-            <div class="tc-bg" style="background-image:url(/img/membre3.jpg);background-position:center 10%"></div>
+            <div class="tc-bg" data-photo="3" style="background-position:center 10%"></div>
             <div class="tc-overlay" style="background:linear-gradient(to top,var(--media-scrim-900),var(--media-scrim-600) 40%,transparent 68%)"></div>
-            <div class="tc-content">
+            <div class="tc-content" data-on-media>
               <p class="tc-role" data-i18n="eq-role">Co-fondateur</p>
               <h2 class="tc-name">Killian Mordacq</h2>
               <p class="tc-title" data-i18n="eq-title3">Conseil & Stratégie web</p>

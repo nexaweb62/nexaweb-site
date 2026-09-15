@@ -290,10 +290,22 @@
   else boot();
 
   // L'i18n réinjecte du texte : on repasse la typographie derrière elle.
-  // L'i18n remplace l'innerHTML des titres : on recoupe puis on repasse la
-  // typographie derrière elle.
+  // L'i18n remplace l'innerHTML des titres. Son écouteur est enregistré
+  // avant le nôtre (i18n.js est chargé en premier), donc quand on arrive ici
+  // les titres portent déjà la nouvelle langue — en clair, non découpés.
+  // Il faut OUBLIER le cache de découpage, sinon splitLines() restaure
+  // l'original de l'ancienne langue et écrase la traduction.
   document.addEventListener('nw-lang', function () {
-    setTimeout(function () { splitAll(); frenchTypography(); }, 0);
+    setTimeout(function () {
+      document.querySelectorAll('[data-anim="lines"][data-i18n]').forEach(function (el) {
+        // Si les masques sont encore en place, c'est que l'i18n ne
+        // connaissait pas cette clé : le contenu n'a pas bougé, le cache
+        // reste valable.
+        if (!el.querySelector('.ln')) delete el.dataset.origHtml;
+      });
+      splitAll();
+      frenchTypography();
+    }, 0);
   });
 
   // Le visiteur active « réduire les animations » en cours de route.

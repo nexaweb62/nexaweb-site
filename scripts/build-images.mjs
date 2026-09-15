@@ -53,8 +53,20 @@ for (const file of readdirSync(SRC).filter(f => /\.(jpe?g|png|tiff?|webp|avif)$/
   const meta = await src.metadata();
   const entry = { widths: {}, ratio: meta.width / meta.height, alt: '' };
 
-  for (const w of profile.widths) {
-    if (w > meta.width) { warnings.push(`${name} : source trop petite pour ${w}px (${meta.width}px)`); continue; }
+  // On n'agrandit jamais une source. Si elle est plus petite que toutes les
+  // largeurs du profil, on l'encode au moins à sa taille native : une image
+  // mal compressée a tout autant besoin de passer à l'AVIF.
+  let widths = profile.widths.filter(w => w <= meta.width);
+  if (!widths.length) {
+    widths = [meta.width];
+    warnings.push(`${name} : source de ${meta.width}px seulement — servie à sa taille native, sans agrandissement.`);
+  } else if (meta.width > widths[widths.length - 1] * 1.1) {
+    // La source dépasse nettement la plus grande largeur retenue : on ajoute
+    // sa taille native, sinon les écrans haute densité sont sous-servis.
+    widths.push(meta.width);
+  }
+
+  for (const w of widths) {
     const h = Math.round(w / entry.ratio);
     entry.widths[w] = { w, h };
 

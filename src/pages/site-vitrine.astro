@@ -96,12 +96,4 @@ main{padding-top:var(--hdr)}
 
 <Footer />
 
-<script>
-(function(){
-  var hdr = document.getElementById('hdr');
-  if(!hdr) return;
-  window.addEventListener('scroll', function(){ hdr.classList.toggle('on', window.scrollY > 8); }, {passive:true});
-  if(window.scrollY > 8) hdr.classList.add('on');
-})();
-</script>
 </BaseLayout>
