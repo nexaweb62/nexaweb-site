@@ -31,7 +31,7 @@ et un accent cuivre, sobres et lisibles en mode clair comme en sombre.
 | `src/layouts/BaseLayout.astro` | Script bloquant avant rendu (thème + `js-enabled`), `meta color-scheme`, `theme-color` lu dans les tokens, manifeste PWA, OG par thème, lien d'évitement, barre de lecture. |
 | `src/pages/index.astro` | Dégradé néon → ambiance encre & cuivre. Titres en reveal ligne par ligne, survol de la liste des services, tuiles de chiffres avec compteurs, section épinglée, filets tracés, textures de section. |
 | `src/pages/tarifs.astro` | Shader WebGL plein écran (violet/rose/jaune à 72 % d'opacité) retiré : il écrasait la page et coûtait un `requestAnimationFrame` permanent. |
-| `src/pages/equipe.astro` | Voiles photographiques unifiés (les 3 cartes avaient chacune sa teinte). Photos ré-encodées : 461 Ko → 13 Ko, 583 Ko → 14 Ko. |
+| `src/pages/equipe.astro` | Voiles photographiques unifiés (les cartes avaient chacune sa teinte : bleue, violette, rose). Photos ré-encodées : 461 Ko → 13 Ko, 583 Ko → 14 Ko. |
 | `src/pages/devis.astro`, `login`, `inscription`, `contact`, `404`, `avis`, `rendez-vous` | Toutes les couleurs en dur migrées. Canvas, WebGL et widget Calendly lisent les tokens et suivent la bascule de thème. |
 | Les 5 pages service | Perdent leur accent propre (bleu, vert, orange, cyan, fuchsia) : le cuivre est l'accent unique du site. |
 
@@ -39,7 +39,7 @@ et un accent cuivre, sobres et lisibles en mode clair comme en sombre.
 
 - `public/og.svg` — halo et filet violets, remplacé par `og-image.png` et `og-image-light.png` générés.
 - Les 156 lignes de GLSL du shader de `/tarifs`.
-- `public/img/membre{1,2,3}.jpg` — remplacés par leurs dérivés AVIF/WebP/JPEG.
+- `public/img/membre{1,2,3}.jpg` — remplacés par leurs dérivés AVIF/WebP/JPEG. `membre3` est parti avec la carte supprimée en parallèle sur la branche.
 
 ---
 
@@ -151,6 +151,12 @@ déploiement.
 référencés nulle part dans le code. Je ne les ai pas supprimés : ce sont
 des photos de personnes, la décision vous revient. S'ils sont inutiles,
 les retirer allège le déploiement d'autant.
+
+**Un conflit résolu en faveur du distant.** Pendant ce travail, la
+branche a reçu « Retire Killian Mordacq de la page équipe ». Le conflit
+portait sur la carte que je venais de restyler : c'est du contenu, leur
+choix prime, la carte est supprimée. J'ai nettoyé derrière — règles CSS
+de la photo orpheline et ses dérivés générés.
 
 **La branche.** Vous demandiez `refonte/encre-cuivre` ; les consignes de
 cette session imposent de développer et pousser sur `astro-migration`,
