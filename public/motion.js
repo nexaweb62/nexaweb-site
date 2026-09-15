@@ -12,7 +12,7 @@
   /* ───────────────────────────────────────────────────────────────────
      1. ENTRÉES — IntersectionObserver, UNE SEULE FOIS par élément
      ─────────────────────────────────────────────────────────────────── */
-  var revealTargets = '[data-anim],.r';
+  var revealTargets = '[data-anim],.r,[data-count-group]';
 
   function revealAll() {
     document.querySelectorAll(revealTargets).forEach(function (el) {
@@ -43,13 +43,94 @@
       io.observe(el);
     });
 
-    // Indexation automatique du stagger pour les titres ligne par ligne.
-    document.querySelectorAll('[data-anim="lines"]').forEach(function (h) {
-      h.querySelectorAll('.li').forEach(function (li, i) {
-        if (!li.style.getPropertyValue('--i')) li.style.setProperty('--i', i);
+  }
+
+
+  /* ───────────────────────────────────────────────────────────────────
+     1b. DÉCOUPAGE EN LIGNES
+         L'effet signature enveloppe chaque ligne RÉELLEMENT RENDUE dans
+         un masque. On ne peut donc pas l'écrire dans le balisage : le
+         nombre de lignes dépend de la largeur, de la langue et de la
+         police. On mesure, puis on reconstruit.
+         Bonus : l'i18n remplace l'innerHTML des titres — repasser ici
+         après un changement de langue suffit à tout recâbler.
+     ─────────────────────────────────────────────────────────────────── */
+  function splitLines(el) {
+    if (el.dataset.origHtml === undefined) el.dataset.origHtml = el.innerHTML;
+    el.innerHTML = el.dataset.origHtml;
+
+    // 1. Atomiser : chaque mot devient une unité mesurable ; les éléments
+    //    inline (<em>, <span>) et les <br> restent intacts.
+    var units = [];
+    Array.prototype.slice.call(el.childNodes).forEach(function (node) {
+      if (node.nodeType === 3) {
+        node.nodeValue.split(/(\s+)/).forEach(function (w) {
+          if (!w.trim()) return;
+          var sp = document.createElement('span');
+          sp.className = 'w';
+          sp.textContent = w;
+          units.push(sp);
+        });
+      } else if (node.nodeName === 'BR') {
+        units.push({ br: true });
+      } else {
+        var c = node.cloneNode(true);
+        if (c.nodeType === 1) c.classList.add('w');
+        units.push(c);
+      }
+    });
+    if (!units.length) return;
+
+    el.innerHTML = '';
+    units.forEach(function (u) {
+      if (u.br) { el.appendChild(document.createElement('br')); return; }
+      el.appendChild(u);
+      el.appendChild(document.createTextNode(' '));
+    });
+
+    // 2. Mesurer : regrouper par position verticale réelle.
+    var lines = [], cur = null, top = null;
+    units.forEach(function (u) {
+      if (u.br) { cur = null; top = null; return; }
+      var t = u.offsetTop;
+      if (cur === null || Math.abs(t - top) > 2) { cur = []; lines.push(cur); top = t; }
+      cur.push(u);
+    });
+    if (!lines.length) return;
+
+    // 3. Reconstruire : un masque par ligne.
+    el.innerHTML = '';
+    lines.forEach(function (words, i) {
+      var ln = document.createElement('span'); ln.className = 'ln';
+      var li = document.createElement('span'); li.className = 'li';
+      li.style.setProperty('--i', i);
+      words.forEach(function (w, j) {
+        if (j) li.appendChild(document.createTextNode(' '));
+        w.classList.remove('w');
+        li.appendChild(w);
       });
+      ln.appendChild(li);
+      el.appendChild(ln);
+    });
+    el.dataset.split = '1';
+  }
+
+  function splitAll() {
+    document.querySelectorAll('[data-anim="lines"]').forEach(function (el) {
+      var wasIn = el.classList.contains('is-in');
+      splitLines(el);
+      if (wasIn || reduced.matches) el.classList.add('is-in');
     });
   }
+
+  // Le nombre de lignes change avec la largeur : on recoupe, sans excès.
+  var resizeT = null, lastW = window.innerWidth;
+  window.addEventListener('resize', function () {
+    if (window.innerWidth === lastW) return;   // ignore la barre d'URL mobile
+    lastW = window.innerWidth;
+    clearTimeout(resizeT);
+    resizeT = setTimeout(splitAll, 180);
+  }, { passive: true });
 
   /* ───────────────────────────────────────────────────────────────────
      6. COMPTEURS — un traitement par tuile, jamais un seul et même code
@@ -199,6 +280,7 @@
      4. DÉMARRAGE
      ─────────────────────────────────────────────────────────────────── */
   function boot() {
+    splitAll();          // avant l'observation : les masques doivent exister
     initReveals();
     initScrollLoop();
     frenchTypography();
@@ -208,7 +290,11 @@
   else boot();
 
   // L'i18n réinjecte du texte : on repasse la typographie derrière elle.
-  document.addEventListener('nw-lang', function () { setTimeout(frenchTypography, 0); });
+  // L'i18n remplace l'innerHTML des titres : on recoupe puis on repasse la
+  // typographie derrière elle.
+  document.addEventListener('nw-lang', function () {
+    setTimeout(function () { splitAll(); frenchTypography(); }, 0);
+  });
 
   // Le visiteur active « réduire les animations » en cours de route.
   reduced.addEventListener('change', function () { if (reduced.matches) revealAll(); });

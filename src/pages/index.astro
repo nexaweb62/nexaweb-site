@@ -38,7 +38,8 @@ import '../styles/global.css';
 @media(prefers-reduced-motion:reduce){.amb-streak,.amb-streak-2{animation:none!important}}
 
 /* ── ÉCRAN D'ACCUEIL ── */
-#loader{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center}
+#loader{display:none}
+.js-enabled #loader{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center}
 #loader.ld-exit{opacity:0;transform:scale(1.06);transition:opacity .85s var(--ease-inout),transform .85s var(--ease-inout);pointer-events:none}
 .ld-nucleus-wrap{position:fixed;inset:0;z-index:0}
 #nucleus-cv{display:block;width:100%;height:100%}
@@ -74,6 +75,7 @@ import '../styles/global.css';
 
 /* ── HERO ── */
 .s-hero{min-height:100svh;display:flex;flex-direction:column;padding-top:var(--hdr)}
+.s-hero>.wrap{width:100%}
 .hero-main{flex:1;display:flex;flex-direction:column;justify-content:center;padding:clamp(40px,8vh,100px) 0}
 .hero-eye{display:flex;align-items:center;gap:12px;margin-bottom:clamp(24px,4vh,48px);opacity:0;transform:translateY(14px);animation:fu .6s cubic-bezier(.16,1,.3,1) .2s forwards}
 .hero-dot{width:6px;height:6px;border-radius:50%;background:var(--text-muted)}
@@ -98,24 +100,50 @@ import '../styles/global.css';
 /* ── PHILOSOPHY ── */
 .s-phil{border-top:1px solid var(--border)}
 .phil-in{display:grid;grid-template-columns:1fr 2fr;gap:clamp(32px,6vw,120px);align-items:start}
+.s-phil{min-height:62vh}
 .phil-txt{font-size:clamp(1.5rem,3.5vw,3.4rem);font-weight:700;line-height:1.15;letter-spacing:-.025em}
 .phil-txt span{color:var(--text-muted)}
-@media(max-width:700px){.phil-in{grid-template-columns:1fr;gap:22px}}
+@media(max-width:700px){.phil-in{grid-template-columns:1fr;gap:22px}.pin-label{position:static}.s-phil{min-height:0}}
 
 /* ── SERVICES ── */
 .s-svc{border-top:1px solid var(--border)}
 .svc-hdr{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:24px;margin-bottom:clamp(36px,6vh,72px)}
 .svc-list{border-top:1px solid var(--border)}
-.svc-row{display:grid;grid-template-columns:52px 1fr auto;align-items:center;gap:20px;padding:clamp(16px,2.5vh,26px) 0;border-bottom:1px solid var(--border);position:relative;overflow:hidden;cursor:pointer;text-decoration:none;color:inherit}
-.svc-row::before{content:'';position:absolute;inset:0;background:var(--surface);transform:translateX(-100%);transition:transform .45s cubic-bezier(.16,1,.3,1);z-index:0}
-.svc-row:hover::before{transform:translateX(0)}
+.svc-row{
+  display:grid;grid-template-columns:52px 1fr auto;align-items:center;gap:20px;
+  padding:clamp(16px,2.5vh,26px) 0;position:relative;cursor:pointer;color:inherit;
+  transition:opacity var(--dur-micro) var(--ease-out);
+}
+/* Le filet de chaque rangée se trace à l'entrée dans le viewport (effet 4) */
+.svc-rule{
+  grid-column:1 / -1;   /* sans ça, l'absolu se cale sur la 1re colonne (52px) */
+  position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--border);
+}
+.svc-row::before{
+  content:'';position:absolute;inset:0 calc(var(--pad-x) * -.35);
+  background:var(--surface);opacity:0;
+  transition:opacity var(--dur-micro) var(--ease-out);z-index:0;
+}
 .svc-row>*{position:relative;z-index:1}
-.svc-n{font-size:9.5px;font-weight:500;letter-spacing:.12em;color:var(--text-subtle);font-variant-numeric:tabular-nums}
-.svc-name{font-size:clamp(1rem,2.5vw,2rem);font-weight:700;letter-spacing:-.02em}
+.svc-n{font-size:9.5px;font-weight:500;letter-spacing:.12em;color:var(--text-subtle);font-variant-numeric:tabular-nums;transition:color var(--dur-micro) var(--ease-out)}
+.svc-name{font-size:clamp(1rem,2.5vw,2rem);font-weight:700;letter-spacing:-.02em;transition:transform var(--dur-micro) var(--ease-out)}
 .svc-meta{display:flex;align-items:center;gap:16px;color:var(--text-muted)}
-.svc-tag{font-size:9px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted)}
-.svc-arr{font-size:1.1rem;transition:transform .3s cubic-bezier(.16,1,.3,1);color:var(--text-muted)}
-.svc-row:hover .svc-arr{transform:translateX(7px)}
+.svc-tag{font-size:9px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--text-subtle)}
+.svc-arr{font-size:1.1rem;color:var(--text-muted);transition:transform var(--dur-micro) var(--ease-out),color var(--dur-micro) var(--ease-out)}
+
+/* Survol : la rangée visée avance, les autres s'effacent.
+   Conditionné à (hover:hover) — au doigt, rien de tout ça n'a de sens. */
+@media (hover:hover){
+  .svc-list:hover .svc-row{opacity:.45}
+  .svc-list .svc-row:hover{opacity:1}
+  .svc-row:hover::before{opacity:1}
+  .svc-row:hover .svc-name{transform:translateX(8px)}
+  .svc-row:hover .svc-n{color:var(--accent-text)}
+  .svc-row:hover .svc-arr{transform:translateX(6px);color:var(--accent-text)}
+}
+/* Au clavier, même traitement que le survol */
+.svc-row:focus-visible::before{opacity:1}
+.svc-row:focus-visible .svc-n,.svc-row:focus-visible .svc-arr{color:var(--accent-text)}
 @media(max-width:600px){.svc-tag{display:none}}
 
 /* ── PROCESS ── */
@@ -141,12 +169,34 @@ import '../styles/global.css';
 @media(max-width:720px){.why-in{grid-template-columns:1fr}}
 
 /* ── STATS ── */
+/* ── TUILES DE CHIFFRES ──
+   Règles du système de dataviz appliquées : la valeur domine, le libellé
+   reste discret, les lignes de base sont alignées, et AUCUNE couleur
+   décorative ne touche les chiffres — ils portent le token de texte, pas
+   l'accent. Le cuivre ne sert qu'au filet sous la valeur. */
 .s-stats{border-top:1px solid var(--border)}
 .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border)}
-.stat{padding:clamp(28px,6vw,64px);border-right:1px solid var(--border);text-align:center}
+.stat{
+  padding:clamp(28px,6vw,64px);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;align-items:center;
+}
 .stat:last-child{border-right:none}
-.stat-val{font-size:clamp(2.8rem,6vw,6rem);font-weight:900;letter-spacing:-.04em;line-height:1;margin-bottom:10px;font-variant-numeric:tabular-nums}
-.stat-lbl{font-size:10.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted)}
+.stat-val{
+  font-size:clamp(2.8rem,6vw,6rem);font-weight:800;letter-spacing:-.04em;
+  line-height:1;color:var(--text);
+  /* Ligne de base commune aux trois tuiles, quel que soit le glyphe */
+  display:flex;align-items:baseline;justify-content:center;
+  min-height:1em;
+}
+/* Filet cuivre : le seul accent de la tuile */
+.stat-rule{width:32px;height:2px;background:var(--accent);margin:18px 0 12px;transform-origin:left}
+.stat-lbl{
+  font-size:13px;font-weight:400;letter-spacing:0;color:var(--text-muted);
+  text-align:center;
+}
+/* Masqué seulement si le JS peut le révéler : sans JS, « 24/7 » reste entier. */
+.js-enabled .stat-static{opacity:0}
+@media(prefers-reduced-motion:reduce){.js-enabled .stat-static{opacity:1}}
 @media(max-width:500px){.stats-grid{grid-template-columns:1fr}.stat{border-right:none;border-bottom:1px solid var(--border)}.stat:last-child{border-bottom:none}}
 
 /* ── FAQ ── */
@@ -186,8 +236,12 @@ import '../styles/global.css';
 .who-price-sub{font-size:9.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);margin-top:6px}
 @media(max-width:600px){.who-grid{grid-template-columns:1fr;gap:0}.who-card:not(:last-child){border-bottom:1px solid var(--border)}}
 
-/* ── SECTIONS skip render ── */
-.s-phil,.s-svc,.s-who,.s-proc,.s-why,.s-stats,.s-faq,.s-cta,.s-foot{content-visibility:auto;contain-intrinsic-size:0 500px}
+/* content-visibility:auto a été retiré ici : avec contain-intrinsic-size
+   à 500px pour des sections qui en font 700 à 1200, la hauteur du document
+   changeait pendant le défilement. Conséquences directes : la barre de
+   progression de lecture sautait, les ancres visaient à côté, et les
+   reveals des sections repliées ne se déclenchaient pas. La page est
+   largement assez légère pour s'en passer. */
 </style>
 
 <!-- Ambiance encre & cuivre -->
@@ -248,8 +302,8 @@ import '../styles/global.css';
 <section class="s-phil" style="padding:var(--sec) 0" id="apropos" aria-labelledby="phil-h">
   <div class="wrap">
     <div class="phil-in">
-      <div class="r"><span class="label" id="phil-h" data-i18n="idx-phil-lbl">Notre vision</span></div>
-      <p class="phil-txt r d1" data-i18n="idx-phil-txt">
+      <div class="r pin-label"><span class="label" id="phil-h" data-i18n="idx-phil-lbl">Notre vision</span></div>
+      <p class="phil-txt" data-anim="lines" data-i18n="idx-phil-txt">
         Votre site n'est pas simplement une vitrine. C'est le <span>premier contact</span> entre votre marque et votre futur client. Chaque détail compte. Chaque pixel est une décision.
       </p>
     </div>
@@ -262,7 +316,7 @@ import '../styles/global.css';
     <div class="svc-hdr r">
       <div>
         <span class="label" id="svc-h" data-i18n="idx-svc-lbl">Ce que nous créons</span>
-        <h2 class="h-lg" style="margin-top:14px" data-i18n="idx-svc-h">Nos services</h2>
+        <h2 class="h-lg" style="margin-top:14px" data-anim="lines" data-i18n="idx-svc-h">Nos services</h2>
       </div>
       <p class="body" style="max-width:300px;text-align:right" data-i18n="idx-svc-sub">Chaque prestation est pensée pour maximiser l'impact de votre présence en ligne.</p>
     </div>
@@ -271,26 +325,31 @@ import '../styles/global.css';
         <span class="svc-n" aria-hidden="true">01</span>
         <span class="svc-name" data-i18n="idx-svc1">Site vitrine</span>
         <div class="svc-meta"><span class="svc-tag" data-i18n="idx-tag1">Essentiel</span><span class="svc-arr" aria-hidden="true">→</span></div>
+      <span class="svc-rule" data-anim="rule" aria-hidden="true"></span>
       </a>
       <a href="/ecommerce" class="svc-row r d1">
         <span class="svc-n" aria-hidden="true">02</span>
         <span class="svc-name" data-i18n="idx-svc2">Site e-commerce</span>
         <div class="svc-meta"><span class="svc-tag" data-i18n="idx-tag2">Conversion</span><span class="svc-arr" aria-hidden="true">→</span></div>
+      <span class="svc-rule" data-anim="rule" aria-hidden="true"></span>
       </a>
       <a href="/refonte" class="svc-row r d2">
         <span class="svc-n" aria-hidden="true">03</span>
         <span class="svc-name" data-i18n="idx-svc3">Refonte de site</span>
         <div class="svc-meta"><span class="svc-tag" data-i18n="idx-tag3">Modernisation</span><span class="svc-arr" aria-hidden="true">→</span></div>
+      <span class="svc-rule" data-anim="rule" aria-hidden="true"></span>
       </a>
       <a href="/design-uiux" class="svc-row r d3">
         <span class="svc-n" aria-hidden="true">04</span>
         <span class="svc-name" data-i18n="idx-svc4">Design UI/UX</span>
         <div class="svc-meta"><span class="svc-tag" data-i18n="idx-tag4">Expérience</span><span class="svc-arr" aria-hidden="true">→</span></div>
+      <span class="svc-rule" data-anim="rule" aria-hidden="true"></span>
       </a>
       <a href="/seo" class="svc-row r d4">
         <span class="svc-n" aria-hidden="true">05</span>
         <span class="svc-name" data-i18n="idx-svc5">Optimisation SEO &amp; Performance</span>
         <div class="svc-meta"><span class="svc-tag" data-i18n="idx-tag5">Visibilité</span><span class="svc-arr" aria-hidden="true">→</span></div>
+      <span class="svc-rule" data-anim="rule" aria-hidden="true"></span>
       </a>
     </div>
   </div>
@@ -302,7 +361,7 @@ import '../styles/global.css';
     <div class="svc-hdr r">
       <div>
         <span class="label" id="who-h">Fait pour vous</span>
-        <h2 class="h-lg" style="margin-top:14px">Une formule pour<br>chaque profil.</h2>
+        <h2 class="h-lg" style="margin-top:14px" data-anim="lines">Une formule pour<br>chaque profil.</h2>
       </div>
       <p class="body" style="max-width:300px;text-align:right">Étudiant, artisan ou commerçant — chaque budget a sa réponse ici.</p>
     </div>
@@ -336,7 +395,7 @@ import '../styles/global.css';
   <div class="wrap">
     <div class="proc-hdr r">
       <span class="label" id="proc-h" data-i18n="idx-proc-lbl">De l'idée au site en ligne</span>
-      <h2 class="h-lg" style="margin-top:14px" data-i18n="idx-proc-h">Notre méthode</h2>
+      <h2 class="h-lg" style="margin-top:14px" data-anim="lines" data-i18n="idx-proc-h">Notre méthode</h2>
     </div>
     <div class="proc-grid">
       <div class="proc-step r"><div class="proc-n">01</div><div class="proc-title" data-i18n="idx-proc-t1">Découverte</div><p class="proc-desc" data-i18n="idx-proc-d1">Nous apprenons à connaître votre activité, vos objectifs et votre audience pour concevoir une stratégie digitale sur mesure.</p></div>
@@ -353,7 +412,7 @@ import '../styles/global.css';
     <div class="why-in">
       <div>
         <span class="label r" id="why-h" data-i18n="idx-why-lbl">Pourquoi Nexa Web</span>
-        <h2 class="h-lg r d1" style="margin-top:14px" data-i18n="idx-why-h">La différence qui<br>fait la différence.</h2>
+        <h2 class="h-lg" style="margin-top:14px" data-anim="lines" data-i18n="idx-why-h">La différence qui<br>fait la différence.</h2>
         <p class="body r d2" style="margin-top:22px;max-width:380px" data-i18n="idx-why-sub">Nous ne faisons pas dans la quantité. Chaque projet reçoit une attention totale, de la stratégie à la mise en ligne.</p>
       </div>
       <div class="why-bio r d1">
@@ -370,10 +429,26 @@ import '../styles/global.css';
 <!-- STATS -->
 <section class="s-stats" style="padding:var(--sec) 0" aria-label="Chiffres clés">
   <div class="wrap">
-    <div class="stats-grid">
-      <div class="stat r"><div class="stat-val">100%</div><div class="stat-lbl" data-i18n="idx-stat1">Sur mesure</div></div>
-      <div class="stat r d1"><div class="stat-val">24/7</div><div class="stat-lbl" data-i18n="idx-stat2">Présence digitale</div></div>
-      <div class="stat r d2"><div class="stat-val">∞</div><div class="stat-lbl" data-i18n="idx-stat3">Possibilités</div></div>
+    <div class="stats-grid" data-count-group>
+      <div class="stat r">
+        <!-- Comptage de 0 à 100, 1 400 ms, out-expo -->
+        <div class="stat-val"><span data-count="100" data-count-dur="1400">100</span>%</div>
+        <div class="stat-rule" data-anim="rule" aria-hidden="true"></div>
+        <div class="stat-lbl" data-i18n="idx-stat1">Sur mesure</div>
+      </div>
+      <div class="stat r d1">
+        <!-- Seul le « 24 » se compte. « /7 » n'est pas un nombre : le
+             compter produirait des valeurs absurdes en cours d'animation. -->
+        <div class="stat-val"><span data-count="24" data-count-dur="1400">24</span><span class="stat-static" data-count-after>/7</span></div>
+        <div class="stat-rule" data-anim="rule" aria-hidden="true"></div>
+        <div class="stat-lbl" data-i18n="idx-stat2">Présence digitale</div>
+      </div>
+      <div class="stat r d2">
+        <!-- Aucun comptage possible : fondu + léger scale -->
+        <div class="stat-val"><span data-count-symbol>∞</span></div>
+        <div class="stat-rule" data-anim="rule" aria-hidden="true"></div>
+        <div class="stat-lbl" data-i18n="idx-stat3">Possibilités</div>
+      </div>
     </div>
   </div>
 </section>
@@ -384,7 +459,7 @@ import '../styles/global.css';
     <div class="faq-in">
       <div>
         <span class="label r" id="faq-h" data-i18n="idx-faq-lbl">Questions fréquentes</span>
-        <h2 class="h-md r d1" style="margin-top:14px" data-i18n="idx-faq-h">On répond à vos questions.</h2>
+        <h2 class="h-md" style="margin-top:14px" data-anim="lines" data-i18n="idx-faq-h">On répond à vos questions.</h2>
         <p class="body faq-side r d2" style="margin-top:18px;font-size:13px" data-i18n="idx-faq-sub">Une question absente de cette liste ? Contactez-nous directement.</p>
         <a href="/contact" class="btn-g r d3" style="margin-top:28px;display:inline-flex" data-i18n="idx-faq-contact">Nous contacter</a>
       </div>
@@ -421,7 +496,7 @@ import '../styles/global.css';
   <div class="wrap">
     <div class="cta-in">
       <div class="cta-super r" data-i18n="idx-cta-super">Passons à l'action</div>
-      <h2 class="cta-hl r d1" id="cta-h" data-i18n="idx-cta-h">Votre prochain<br>site commence <em>ici.</em></h2>
+      <h2 class="cta-hl" id="cta-h" data-anim="lines" data-i18n="idx-cta-h">Votre prochain<br>site commence <em>ici.</em></h2>
       <div class="r d2">
         <a href="/devis" class="cta-btn" data-i18n="idx-cta-btn">Démarrer un projet <span class="cta-arr" aria-hidden="true">→</span></a>
       </div>
@@ -774,40 +849,25 @@ void main(){
   var PRM=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
   var IS_MOBILE=window.matchMedia('(max-width:768px)').matches;
 
-  /* ── Bidirectional scroll reveal ── */
-  var revEls=document.querySelectorAll('.r');
-  if(PRM){
-    revEls.forEach(function(el){el.classList.add('v')});
-  } else if('IntersectionObserver' in window){
-    var io=new IntersectionObserver(function(entries){
-      entries.forEach(function(e){e.target.classList.toggle('v',e.isIntersecting)});
-    },{threshold:0.1,rootMargin:'0px 0px -60px 0px'});
-    revEls.forEach(function(el){io.observe(el)});
-  } else {
-    revEls.forEach(function(el){el.classList.add('v')});
-  }
-
-  /* ── Scroll-linked: hero fade/drift + neon parallax ── */
+  /* Les reveals et la parallaxe sont gérés par /motion.js (un seul rAF).
+     Ne reste ici que le fondu du hero, propre à cette page. */
   if(!PRM && !IS_MOBILE){
     var heroMain=document.querySelector('.hero-main');
     var heroFoot=document.querySelector('.hero-foot');
     var heroSec=document.getElementById('accueil');
-    var neonFlow=document.querySelector('.neon-flow');
     var heroSecH=heroSec?heroSec.offsetHeight:800;
     window.addEventListener('resize',function(){if(heroSec)heroSecH=heroSec.offsetHeight;},{passive:true});
-    function applyFX(){
-      var sy=window.scrollY;
-      if(heroMain&&heroSec){
-        var prog=Math.min(Math.max(sy/(heroSecH*.62),0),1);
-        heroMain.style.opacity=Math.max(0,1-prog*1.2).toFixed(3);
-        heroMain.style.transform='translateY('+(-50*prog).toFixed(1)+'px)';
-        if(heroFoot)heroFoot.style.opacity=Math.max(0,1-prog*2.5).toFixed(3);
-      }
-      if(neonFlow)neonFlow.style.transform='translateY('+(sy*.055).toFixed(1)+'px)';
-    }
     var _rAF=null;
+    function applyFX(){
+      _rAF=null;
+      if(!heroMain||!heroSec)return;
+      var prog=Math.min(Math.max(window.scrollY/(heroSecH*.62),0),1);
+      heroMain.style.opacity=Math.max(0,1-prog*1.2).toFixed(3);
+      heroMain.style.transform='translateY('+(-50*prog).toFixed(1)+'px)';
+      if(heroFoot)heroFoot.style.opacity=Math.max(0,1-prog*2.5).toFixed(3);
+    }
     window.addEventListener('scroll',function(){
-      if(!_rAF)_rAF=requestAnimationFrame(function(){_rAF=null;applyFX();});
+      if(!_rAF)_rAF=requestAnimationFrame(applyFX);
     },{passive:true});
     applyFX();
   }

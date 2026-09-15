@@ -377,8 +377,11 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
 .js-enabled [data-anim]{will-change:opacity,transform}
 .js-enabled [data-anim].is-in{will-change:auto}
 
-/* 1 — Reveal de titre, ligne par ligne (effet signature) */
-.js-enabled [data-anim="lines"] .ln{display:block;overflow:hidden}
+/* 1 — Reveal de titre, ligne par ligne (effet signature)
+   Le padding/marge compense le masque : sans lui, overflow:hidden coupe
+   les jambages des g, p, q sur des titres à interlignage serré. */
+[data-anim="lines"] .ln{display:block;overflow:hidden;padding-bottom:.14em;margin-bottom:-.14em}
+[data-anim="lines"] .li{display:block}
 .js-enabled [data-anim="lines"] .li{
   display:block;transform:translateY(110%);opacity:0;
   transition:transform var(--dur-enter) var(--ease-out),opacity var(--dur-enter) var(--ease-out);
