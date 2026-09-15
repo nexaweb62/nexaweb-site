@@ -1,0 +1,261 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   NEXA WEB — SYSTÈME DE TOKENS « ENCRE & CUIVRE »
+   ───────────────────────────────────────────────────────────────────────
+   CE FICHIER EST LE SEUL ENDROIT DU PROJET OÙ UNE COULEUR LITTÉRALE
+   (#hex / rgb() / hsl()) A LE DROIT D'ÊTRE ÉCRITE.
+
+   Tout le reste du site — CSS, composants, SVG, canvas, WebGL — consomme
+   exclusivement les variables définies ici. Un `grep` des couleurs en dur
+   sur src/ et public/ ne doit remonter que ce fichier.
+   Vérifié automatiquement par `npm run check:colors`.
+
+   Structure :
+     1. Palette brute        → chaque couleur écrite UNE seule fois
+     2. Échelles non-colorées → type, espacement, rayons, mouvement
+     3. Mapping sémantique   → 4 blocs qui ne font que pointer vers (1)
+
+   Thème par défaut : SOMBRE. Une préférence système « clair » explicite
+   est respectée ; un choix utilisateur ([data-theme]) prime sur tout.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ─────────────────────────────────────────────────────────────────────
+     1. PALETTE BRUTE — aucune de ces variables n'est utilisée directement
+        par un composant. Elles ne servent qu'au mapping sémantique (3).
+     ───────────────────────────────────────────────────────────────────── */
+
+  /* Encre — bleu-nuit profond, jamais violet, jamais bleu roi */
+  --raw-ink-950:  #0B0F14;
+  --raw-ink-900:  #111720;
+  --raw-ink-800:  #18202B;
+  --raw-ink-700:  #232C38;
+  --raw-ink-600:  #33404F;
+  --raw-ink-500:  #606D7C;
+  --raw-ink-text: #14191F;
+
+  /* Brume — les textes du mode sombre */
+  --raw-mist-50:  #EDF1F5;
+  --raw-mist-300: #9AA7B4;
+  --raw-mist-400: #7C8A99;
+
+  /* Papier — crème ivoire, jamais blanc pur (le blanc pur est froid) */
+  --raw-paper-0:   #FFFFFF;
+  --raw-paper-50:  #FBF9F6;
+  --raw-paper-100: #F2EEE8;
+  --raw-sand-200:  #E4DDD3;
+  --raw-sand-300:  #CFC5B7;
+
+  /* Ardoise — les textes du mode clair */
+  --raw-slate-600: #4A5563;
+  --raw-slate-500: #626C7A;
+  --raw-sand-500:  #8A8378;
+
+  /* Cuivre — l'accent. Métal, tampon, savoir-faire. */
+  --raw-copper-300: #DB9A63;
+  --raw-copper-400: #C8834A;
+  --raw-copper-600: #AE6C38;
+  --raw-copper-700: #A95F2C;
+  --raw-copper-800: #8E4E22;
+  --raw-copper-900: #7A4219;
+
+  /* Signalétique */
+  --raw-green-d: #4C9A78;  --raw-green-l: #2D7554;
+  --raw-amber-d: #D6A24B;  --raw-amber-l: #8A5E12;
+  --raw-red-d:   #D46A5C;  --raw-red-l:   #B4453A;
+
+  /* Halos cuivre (8–14 % d'opacité, jamais dans le chemin du texte) */
+  --raw-glow-d: rgba(200, 131, 74, .14);
+  --raw-glow-l: rgba(169,  95, 44, .10);
+
+  /* Ombres — aucune ombre teintée couleur, aucune ombre en dur ailleurs */
+  --raw-shadow-1-d: 0 1px 2px rgba(0, 0, 0, .35);
+  --raw-shadow-2-d: 0 10px 30px rgba(0, 0, 0, .28);
+  --raw-shadow-1-l: 0 1px 2px rgba(20, 25, 31, .06);
+  --raw-shadow-2-l: 0 10px 30px rgba(20, 25, 31, .08);
+
+  /* Voiles photographiques — indépendants du thème : ils vivent PAR-DESSUS
+     une image sombre, dans les deux modes. */
+  --on-media:        #FFFFFF;
+  --media-scrim-900: rgba(11, 15, 20, .94);
+  --media-scrim-600: rgba(11, 15, 20, .62);
+  --media-tint:      rgba(255, 255, 255, .10);
+  --media-tint-hi:   rgba(255, 255, 255, .18);
+  --media-edge:      rgba(255, 255, 255, .16);
+  --media-edge-hi:   rgba(255, 255, 255, .30);
+
+  /* Marques tierces — logos et couleurs de marque, hors palette maison.
+     Ce sont des identités qui ne nous appartiennent pas : on ne les
+     retouche pas, on les isole ici. */
+  --brand-linkedin: #0A66C2;
+  --brand-facebook: #1877F2;
+  --brand-whatsapp: #25D366;
+  --brand-google-blue:   #4285F4;
+  --brand-google-green:  #34A853;
+  --brand-google-yellow: #FBBC05;
+  --brand-google-red:    #EA4335;
+
+  /* ─────────────────────────────────────────────────────────────────────
+     2. ÉCHELLES NON-COLORÉES
+     ───────────────────────────────────────────────────────────────────── */
+
+  /* Type — échelle modulaire stricte, ratio 1,25, base 16 px */
+  --fs-25:  .512rem;   /*  8.2 px — micro-label */
+  --fs-50:  .64rem;    /* 10.2 px — label */
+  --fs-100: .8rem;     /* 12.8 px — légende */
+  --fs-200: 1rem;      /* 16   px — corps */
+  --fs-300: 1.25rem;   /* 20   px */
+  --fs-400: 1.5625rem; /* 25   px */
+  --fs-500: 1.953rem;  /* 31.2 px */
+  --fs-600: 2.441rem;  /* 39   px */
+  --fs-700: 3.052rem;  /* 48.8 px */
+  --fs-800: 3.815rem;  /* 61   px */
+  --fs-900: 4.768rem;  /* 76.3 px */
+
+  --lh-tight: 1.15;  /* titres */
+  --lh-body:  1.65;  /* corps */
+  --measure:  68ch;  /* longueur de ligne maximale */
+
+  /* Espacement — une seule échelle, aucune valeur arbitraire */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px; --sp-5: 24px;
+  --sp-6: 32px; --sp-7: 48px; --sp-8: 64px; --sp-9: 96px; --sp-10: 128px;
+
+  --radius-xs: 2px; --radius-sm: 4px; --radius-md: 8px;
+  --radius-lg: 14px; --radius-pill: 100px;
+
+  /* Gabarit */
+  --font: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --max-w: 1280px;
+  --pad-x: clamp(20px, 5vw, 80px);   /* gouttière ≥ 20 px partout */
+  --sec:   clamp(80px, 12vw, 160px);
+  --hdr:   80px;
+
+  /* Mouvement — un seul easing d'entrée, un seul easing continu */
+  --ease-out:   cubic-bezier(.16, 1, .3, 1);
+  --ease-inout: cubic-bezier(.65, 0, .35, 1);
+  --dur-micro: 400ms;   /* micro-interactions */
+  --dur-enter: 800ms;   /* entrées principales */
+  --dur-line:  900ms;   /* tracé des filets */
+  --dur-theme: 250ms;   /* bascule de thème */
+  --stagger:   70ms;
+
+  /* ─────────────────────────────────────────────────────────────────────
+     3a. MAPPING SÉMANTIQUE — SOMBRE (défaut, sur :root nu)
+         Tout token a une valeur ici : aucune couleur n'existe uniquement
+         dans un @media ou un [data-theme].
+     ───────────────────────────────────────────────────────────────────── */
+  color-scheme: dark;
+
+  --bg:            var(--raw-ink-950);
+  --surface:       var(--raw-ink-900);
+  --surface-2:     var(--raw-ink-800);
+  --border:        var(--raw-ink-700);
+  --border-strong: var(--raw-ink-600);
+  --field-border:  var(--raw-ink-500);
+  --text:          var(--raw-mist-50);
+  --text-muted:    var(--raw-mist-300);
+  --text-subtle:   var(--raw-mist-400);
+  --accent:        var(--raw-copper-400);
+  --accent-text:   var(--raw-copper-400);
+  --accent-hover:  var(--raw-copper-300);
+  --accent-active: var(--raw-copper-600);
+  --on-accent:     var(--raw-ink-950);
+  --accent-glow:   var(--raw-glow-d);
+  --success:       var(--raw-green-d);
+  --warning:       var(--raw-amber-d);
+  --danger:        var(--raw-red-d);
+  --focus:         var(--raw-copper-300);
+  --shadow-1:      var(--raw-shadow-1-d);
+  --shadow-2:      var(--raw-shadow-2-d);
+}
+
+/* ───────────────────────────────────────────────────────────────────────
+   3b. MAPPING SÉMANTIQUE — CLAIR par préférence système
+       S'applique tant que l'utilisateur n'a pas explicitement choisi le
+       sombre. Un choix explicite « clair » est géré en 3c.
+   ─────────────────────────────────────────────────────────────────────── */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+
+    --bg:            var(--raw-paper-50);
+    --surface:       var(--raw-paper-0);
+    --surface-2:     var(--raw-paper-100);
+    --border:        var(--raw-sand-200);
+    --border-strong: var(--raw-sand-300);
+    --field-border:  var(--raw-sand-500);
+    --text:          var(--raw-ink-text);
+    --text-muted:    var(--raw-slate-600);
+    --text-subtle:   var(--raw-slate-500);
+    --accent:        var(--raw-copper-700);
+    --accent-text:   var(--raw-copper-800);
+    --accent-hover:  var(--raw-copper-800);
+    --accent-active: var(--raw-copper-900);
+    --on-accent:     var(--raw-paper-0);
+    --accent-glow:   var(--raw-glow-l);
+    --success:       var(--raw-green-l);
+    --warning:       var(--raw-amber-l);
+    --danger:        var(--raw-red-l);
+    --focus:         var(--raw-copper-800);
+    --shadow-1:      var(--raw-shadow-1-l);
+    --shadow-2:      var(--raw-shadow-2-l);
+  }
+}
+
+/* ───────────────────────────────────────────────────────────────────────
+   3c. MAPPING SÉMANTIQUE — CLAIR choisi explicitement
+   ─────────────────────────────────────────────────────────────────────── */
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --bg:            var(--raw-paper-50);
+  --surface:       var(--raw-paper-0);
+  --surface-2:     var(--raw-paper-100);
+  --border:        var(--raw-sand-200);
+  --border-strong: var(--raw-sand-300);
+  --field-border:  var(--raw-sand-500);
+  --text:          var(--raw-ink-text);
+  --text-muted:    var(--raw-slate-600);
+  --text-subtle:   var(--raw-slate-500);
+  --accent:        var(--raw-copper-700);
+  --accent-text:   var(--raw-copper-800);
+  --accent-hover:  var(--raw-copper-800);
+  --accent-active: var(--raw-copper-900);
+  --on-accent:     var(--raw-paper-0);
+  --accent-glow:   var(--raw-glow-l);
+  --success:       var(--raw-green-l);
+  --warning:       var(--raw-amber-l);
+  --danger:        var(--raw-red-l);
+  --focus:         var(--raw-copper-800);
+  --shadow-1:      var(--raw-shadow-1-l);
+  --shadow-2:      var(--raw-shadow-2-l);
+}
+
+/* ───────────────────────────────────────────────────────────────────────
+   3d. MAPPING SÉMANTIQUE — SOMBRE choisi explicitement
+       Nécessaire pour reprendre la main sur 3b quand l'OS est en clair.
+   ─────────────────────────────────────────────────────────────────────── */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg:            var(--raw-ink-950);
+  --surface:       var(--raw-ink-900);
+  --surface-2:     var(--raw-ink-800);
+  --border:        var(--raw-ink-700);
+  --border-strong: var(--raw-ink-600);
+  --field-border:  var(--raw-ink-500);
+  --text:          var(--raw-mist-50);
+  --text-muted:    var(--raw-mist-300);
+  --text-subtle:   var(--raw-mist-400);
+  --accent:        var(--raw-copper-400);
+  --accent-text:   var(--raw-copper-400);
+  --accent-hover:  var(--raw-copper-300);
+  --accent-active: var(--raw-copper-600);
+  --on-accent:     var(--raw-ink-950);
+  --accent-glow:   var(--raw-glow-d);
+  --success:       var(--raw-green-d);
+  --warning:       var(--raw-amber-d);
+  --danger:        var(--raw-red-d);
+  --focus:         var(--raw-copper-300);
+  --shadow-1:      var(--raw-shadow-1-d);
+  --shadow-2:      var(--raw-shadow-2-d);
+}

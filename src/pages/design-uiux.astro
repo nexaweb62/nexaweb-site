@@ -6,25 +6,23 @@ import '../styles/global.css';
 ---
 <BaseLayout title="Design UI/UX — Nexa Web" description="Design UI/UX soigné pour interfaces web et apps mobiles. Maquettes Figma, prototypes interactifs — Nexa Web.">
 <style>
-:root{ --accent:#d946ef }
-
 main{padding-top:var(--hdr)}
 
 .svc-hero{padding:80px var(--pad-x) 60px;max-width:1100px;margin:0 auto;position:relative}
-.svc-hero::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse 70% 50% at 60% 20%,rgba(217,70,239,.10) 0%,transparent 70%);pointer-events:none;z-index:0}
-.svc-eyebrow{font-size:10px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:20px;display:flex;align-items:center;gap:8px;position:relative;z-index:1}
+.svc-hero::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse 70% 50% at 60% 20%,var(--accent-glow) 0%,transparent 70%);pointer-events:none;z-index:0}
+.svc-eyebrow{font-size:10px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent-text);margin-bottom:20px;display:flex;align-items:center;gap:8px;position:relative;z-index:1}
 .svc-eyebrow::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0}
 .svc-title{font-size:clamp(2.8rem,7vw,5.5rem);font-weight:900;letter-spacing:-.03em;line-height:1;margin-bottom:28px;position:relative;z-index:1}
-.svc-title span{color:var(--accent)}
+.svc-title span{color:var(--accent-text)}
 .svc-desc{font-size:clamp(1rem,1.8vw,1.15rem);color:var(--text-muted);line-height:1.75;max-width:640px;margin-bottom:40px;position:relative;z-index:1}
-.svc-cta{display:inline-flex;align-items:center;gap:10px;background:var(--btn-bg);color:var(--btn-text);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:16px 32px;border-radius:2px;transition:opacity .2s,transform .2s;position:relative;z-index:1}
+.svc-cta{display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:var(--on-accent);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:16px 32px;border-radius:2px;transition:opacity .2s,transform .2s;position:relative;z-index:1}
 .svc-cta:hover{opacity:.82;transform:translateY(-2px)}
 
 .svc-features{padding:60px var(--pad-x);max-width:1100px;margin:0 auto}
-.svc-section-label{font-size:10px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:40px;display:block}
+.svc-section-label{font-size:10px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent-text);margin-bottom:40px;display:block}
 .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
 .feat-item{background:var(--bg);padding:32px 28px}
-.feat-num{font-size:11px;font-weight:600;color:var(--accent);letter-spacing:.1em;margin-bottom:14px}
+.feat-num{font-size:11px;font-weight:600;color:var(--accent-text);letter-spacing:.1em;margin-bottom:14px}
 .feat-title{font-size:1rem;font-weight:700;letter-spacing:-.01em;margin-bottom:10px}
 .feat-desc{font-size:.875rem;color:var(--text-muted);line-height:1.65}
 

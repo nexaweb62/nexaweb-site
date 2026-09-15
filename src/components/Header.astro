@@ -35,11 +35,26 @@ const { cta = 'Démarrer un projet', ctaHref = '/devis', back = true } = Astro.p
           <span class="hdr-btn-lbl">MENU</span>
         </button>
 
-        <!-- Bouton Thème -->
-        <button class="theme-btn" id="theme-btn" aria-label="Basculer le thème">
-          <span id="theme-icon">○</span>
-          <span class="hdr-btn-lbl" id="theme-label">SOMBRE</span>
-        </button>
+        <!-- Sélecteur de thème — clair / sombre / système.
+             role=radiogroup : un choix parmi trois, pas un état actif/inactif.
+             aria-pressed serait sémantiquement faux ici. -->
+        <div class="theme-sel" id="theme-sel" role="radiogroup" aria-label="Thème d'affichage">
+          <button type="button" class="theme-opt" role="radio" data-theme-opt="light"
+                  aria-checked="false" tabindex="-1" title="Mode clair">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4"/></svg>
+            <span class="sr-only">Mode clair</span>
+          </button>
+          <button type="button" class="theme-opt" role="radio" data-theme-opt="dark"
+                  aria-checked="false" tabindex="-1" title="Mode sombre">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.2A8.2 8.2 0 0 1 9.8 4a8.4 8.4 0 1 0 10.2 10.2z"/></svg>
+            <span class="sr-only">Mode sombre</span>
+          </button>
+          <button type="button" class="theme-opt" role="radio" data-theme-opt="system"
+                  aria-checked="false" tabindex="-1" title="Suivre le système">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.8" y="4.2" width="18.4" height="12.6" rx="1.8"/><path d="M8.5 20.5h7"/></svg>
+            <span class="sr-only">Suivre le système</span>
+          </button>
+        </div>
 
 <!-- Bouton Retour -->
         {back && (
@@ -56,7 +71,7 @@ const { cta = 'Démarrer un projet', ctaHref = '/devis', back = true } = Astro.p
 </header>
 
 <!-- CIRCULAR NAV OVERLAY -->
-<div class="cnav" id="cnav" role="dialog" aria-modal="true" aria-label="Navigation">
+<div class="cnav" id="cnav" role="dialog" aria-modal="true" aria-label="Navigation" inert>
   <div class="cnav-ring" id="cnav-ring">
     <button class="cnav-close" id="cnav-close" aria-label="Fermer la navigation">
       <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -122,104 +137,176 @@ const { cta = 'Démarrer un projet', ctaHref = '/devis', back = true } = Astro.p
 (function(){
   'use strict';
 
-  /* ── Header scroll ── */
-  var hdr=document.getElementById('hdr');
-  if(hdr){
-    function chkHdr(){hdr.classList.toggle('on',window.scrollY>40)}
-    window.addEventListener('scroll',chkHdr,{passive:true});
-    chkHdr();
+  var root = document.documentElement;
+
+  /* ═══════════════════════════════════════════════════════════════════
+     THÈME — clair / sombre / système
+     Le sombre est l'identité de la marque : il s'applique quand aucune
+     préférence n'est exprimée. Une préférence système « clair » explicite
+     est respectée ; un choix utilisateur prime sur tout.
+     ═══════════════════════════════════════════════════════════════════ */
+  var mqDark = window.matchMedia('(prefers-color-scheme: dark)');
+  var sel = document.getElementById('theme-sel');
+
+  function stored(){
+    try{ var t = localStorage.getItem('nw-theme'); return (t==='light'||t==='dark') ? t : 'system'; }
+    catch(e){ return 'system'; }
   }
 
-  /* ── Theme toggle ── */
-  var root=document.documentElement;
-  var tbtn=document.getElementById('theme-btn');
-  if(tbtn){
-    function isDark(){return root.getAttribute('data-theme')==='dark'||(!root.getAttribute('data-theme')&&window.matchMedia('(prefers-color-scheme:dark)').matches)}
-    function updTheme(){
-      var lang=localStorage.getItem('nw-lang')||'fr';
-      var en=lang==='en';
-      var icon=document.getElementById('theme-icon');
-      var lbl=document.getElementById('theme-label');
-      if(icon)icon.textContent=isDark()?'◐':'○';
-      if(lbl)lbl.textContent=isDark()?(en?'LIGHT':'CLAIR'):(en?'DARK':'SOMBRE');
-      tbtn.title=isDark()?(en?'Light mode':'Mode clair'):(en?'Dark mode':'Mode sombre');
+  function apply(choice, animate){
+    // Neutralise les transitions le temps de la bascule, sinon les
+    // couleurs traversent des teintes intermédiaires = clignotement.
+    if(!animate){
+      document.body.classList.add('theme-switching');
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){ document.body.classList.remove('theme-switching'); });
+      });
     }
-    updTheme();
-    tbtn.addEventListener('click',function(){
-      var next=isDark()?'light':'dark';
-      root.setAttribute('data-theme',next);
-      localStorage.setItem('nw-theme',next);
-      updTheme();
+    if(choice === 'system'){
+      root.removeAttribute('data-theme');
+      try{ localStorage.removeItem('nw-theme'); }catch(e){}
+    }else{
+      root.setAttribute('data-theme', choice);
+      try{ localStorage.setItem('nw-theme', choice); }catch(e){}
+    }
+    paint(choice);
+    document.dispatchEvent(new CustomEvent('nw-theme', { detail: choice }));
+  }
+
+  function paint(choice){
+    if(!sel) return;
+    sel.querySelectorAll('.theme-opt').forEach(function(b){
+      var on = b.getAttribute('data-theme-opt') === choice;
+      b.setAttribute('aria-checked', on ? 'true' : 'false');
+      // Un seul arrêt de tabulation pour tout le groupe (motif radiogroup).
+      b.tabIndex = on ? 0 : -1;
+      b.classList.toggle('on', on);
     });
-    document.addEventListener('nw-lang',function(){updTheme();});
   }
 
-  /* ── Bouton Retour ── */
-  var backBtn=document.getElementById('hdr-back');
-  if(backBtn){
-    backBtn.addEventListener('click',function(){window.location.href='/';});
+  if(sel){
+    var opts = Array.prototype.slice.call(sel.querySelectorAll('.theme-opt'));
+    paint(stored());
+
+    opts.forEach(function(b){
+      b.addEventListener('click', function(){ apply(b.getAttribute('data-theme-opt')); b.focus(); });
+    });
+
+    // Flèches directionnelles : navigation attendue dans un radiogroup.
+    sel.addEventListener('keydown', function(e){
+      var i = opts.indexOf(document.activeElement);
+      if(i < 0) return;
+      var n = null;
+      if(e.key === 'ArrowRight' || e.key === 'ArrowDown') n = (i + 1) % opts.length;
+      if(e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   n = (i - 1 + opts.length) % opts.length;
+      if(n === null) return;
+      e.preventDefault();
+      apply(opts[n].getAttribute('data-theme-opt'));
+      opts[n].focus();
+    });
+
+    // En mode « système », le site suit l'OS en direct, sans rechargement.
+    mqDark.addEventListener('change', function(){
+      if(stored() === 'system') document.dispatchEvent(new CustomEvent('nw-theme', { detail: 'system' }));
+    });
   }
 
-  /* ── Lang FR/EN ── */
-  var savedLang=localStorage.getItem('nw-lang')||'fr';
+  /* ── Retour ── */
+  var backBtn = document.getElementById('hdr-back');
+  if(backBtn) backBtn.addEventListener('click', function(){ window.location.href = '/'; });
+
+  /* ── Langue FR/EN ── */
+  var savedLang = 'fr';
+  try{ savedLang = localStorage.getItem('nw-lang') || 'fr'; }catch(e){}
   document.querySelectorAll('.lang-opt').forEach(function(b){
-    b.classList.toggle('active',b.getAttribute('data-lang')===savedLang);
-    b.addEventListener('click',function(){
-      var lang=b.getAttribute('data-lang');
-      localStorage.setItem('nw-lang',lang);
-      document.querySelectorAll('.lang-opt').forEach(function(x){x.classList.toggle('active',x.getAttribute('data-lang')===lang);});
-      document.dispatchEvent(new CustomEvent('nw-lang',{detail:lang}));
+    var isOn = b.getAttribute('data-lang') === savedLang;
+    b.classList.toggle('active', isOn);
+    b.setAttribute('aria-pressed', isOn ? 'true' : 'false');
+    b.addEventListener('click', function(){
+      var lang = b.getAttribute('data-lang');
+      try{ localStorage.setItem('nw-lang', lang); }catch(e){}
+      document.querySelectorAll('.lang-opt').forEach(function(x){
+        var on = x.getAttribute('data-lang') === lang;
+        x.classList.toggle('active', on);
+        x.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+      document.dispatchEvent(new CustomEvent('nw-lang', { detail: lang }));
     });
   });
 
-  /* ── Circular nav ── */
-  var overlay=document.getElementById('cnav');
-  var ring=document.getElementById('cnav-ring');
-  var menuBtn=document.getElementById('menu-btn');
-  var closeBtn=document.getElementById('cnav-close');
-  if(!overlay||!ring||!menuBtn)return;
+  /* ═══════════════════════════════════════════════════════════════════
+     NAVIGATION PLEIN ÉCRAN — fond opaque, scroll verrouillé, focus piégé
+     ═══════════════════════════════════════════════════════════════════ */
+  var overlay = document.getElementById('cnav');
+  var ring    = document.getElementById('cnav-ring');
+  var menuBtn = document.getElementById('menu-btn');
+  var closeBtn= document.getElementById('cnav-close');
+  if(!overlay || !ring || !menuBtn) return;
 
-  var items=Array.from(ring.querySelectorAll('.cnav-item'));
-  var n=items.length;
+  var items = Array.prototype.slice.call(ring.querySelectorAll('.cnav-item'));
+  var n = items.length;
+  var scrollY = 0;
 
   function positionItems(){
-    var size=ring.offsetWidth;
-    var r=size*0.368;
-    items.forEach(function(item,i){
-      var angle=((360/n)*i-90)*Math.PI/180;
-      var x=Math.cos(angle)*r;
-      var y=Math.sin(angle)*r;
-      item.style.transform='translate(calc(-50% + '+x.toFixed(1)+'px), calc(-50% + '+y.toFixed(1)+'px))';
+    var r = ring.offsetWidth * 0.368;
+    items.forEach(function(item, i){
+      var a = ((360 / n) * i - 90) * Math.PI / 180;
+      item.style.transform = 'translate(calc(-50% + ' + (Math.cos(a) * r).toFixed(1) + 'px), calc(-50% + ' + (Math.sin(a) * r).toFixed(1) + 'px))';
     });
   }
 
+  function focusables(){
+    return Array.prototype.slice.call(
+      overlay.querySelectorAll('a[href],button:not([disabled])')
+    ).filter(function(el){ return el.offsetParent !== null; });
+  }
+
   function openNav(){
+    scrollY = window.scrollY;
+    overlay.removeAttribute('inert');
     overlay.classList.add('open');
-    menuBtn.setAttribute('aria-expanded','true');
-    document.body.style.overflow='hidden';
+    menuBtn.setAttribute('aria-expanded', 'true');
+    // Verrouillage du scroll sans saut de page (iOS compris).
+    document.body.classList.add('nav-open');
+    document.body.style.top = (-scrollY) + 'px';
     positionItems();
     closeBtn.focus();
   }
 
   function closeNav(){
     overlay.classList.remove('open');
-    menuBtn.setAttribute('aria-expanded','false');
-    document.body.style.overflow='';
+    overlay.setAttribute('inert', '');
+    menuBtn.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('nav-open');
+    document.body.style.top = '';
+    window.scrollTo(0, scrollY);
     menuBtn.focus();
   }
 
-  menuBtn.addEventListener('click',openNav);
-  closeBtn.addEventListener('click',closeNav);
-  overlay.addEventListener('click',function(e){if(e.target===overlay)closeNav();});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&overlay.classList.contains('open'))closeNav();});
-  ring.querySelectorAll('.cnav-link').forEach(function(link){link.addEventListener('click',closeNav);});
-  window.addEventListener('resize',function(){if(overlay.classList.contains('open'))positionItems();},{passive:true});
+  menuBtn.addEventListener('click', openNav);
+  closeBtn.addEventListener('click', closeNav);
+  overlay.addEventListener('click', function(e){ if(e.target === overlay) closeNav(); });
 
-  /* ── Tooltips mobile (touch) ── */
+  document.addEventListener('keydown', function(e){
+    if(!overlay.classList.contains('open')) return;
+    if(e.key === 'Escape'){ closeNav(); return; }
+    if(e.key !== 'Tab') return;
+    // Piège de focus : la tabulation tourne en boucle dans l'overlay.
+    var f = focusables();
+    if(!f.length) return;
+    var first = f[0], last = f[f.length - 1];
+    if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+  });
+
+  ring.querySelectorAll('.cnav-link').forEach(function(l){ l.addEventListener('click', closeNav); });
+  window.addEventListener('resize', function(){ if(overlay.classList.contains('open')) positionItems(); }, { passive:true });
+
+  /* ── Infobulles au toucher ── */
   document.querySelectorAll('.hdr-tip').forEach(function(el){
-    el.addEventListener('touchstart',function(){el.classList.add('tip-active');},{passive:true});
-    el.addEventListener('touchend',function(){setTimeout(function(){el.classList.remove('tip-active');},700);});
-    el.addEventListener('touchcancel',function(){el.classList.remove('tip-active');});
+    el.addEventListener('touchstart', function(){ el.classList.add('tip-active'); }, { passive:true });
+    el.addEventListener('touchend',   function(){ setTimeout(function(){ el.classList.remove('tip-active'); }, 700); });
+    el.addEventListener('touchcancel',function(){ el.classList.remove('tip-active'); });
   });
 })();
 </script>

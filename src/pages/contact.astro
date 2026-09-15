@@ -15,32 +15,28 @@ html,body{overflow:hidden;height:100%}
 /* Loading */
 #globe-loading{position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:var(--bg);transition:opacity .6s}
 #globe-loading.out{opacity:0;pointer-events:none}
-.gl-spinner{width:28px;height:28px;border:2px solid var(--border-hi);border-top-color:var(--accent);border-radius:50%;animation:spin .75s linear infinite}
+.gl-spinner{width:28px;height:28px;border:2px solid var(--border-strong);border-top-color:var(--accent);border-radius:50%;animation:spin .75s linear infinite}
 .gl-loading-text{font-size:9px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--text-muted)}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* Page title */
 .contact-head{position:fixed;top:calc(var(--hdr) + 40px);left:clamp(20px,5vw,80px);z-index:10;pointer-events:none}
-.contact-eyebrow{font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.contact-eyebrow{font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--accent-text);margin-bottom:10px}
 .contact-title{font-size:clamp(1.7rem,3.8vw,3rem);font-weight:900;letter-spacing:-.04em;line-height:.96;color:var(--text)}
 .contact-title em{font-style:italic;color:var(--text-muted)}
 
 /* Carvin marker */
 #carvin-pin{position:fixed;z-index:30;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:4px;transform:translate(-50%,-100%) translateY(-10px);opacity:0;transition:opacity .4s}
 #carvin-pin.visible{opacity:1}
-.carvin-badge{font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--text);background:rgba(8,8,17,.72);border:1px solid var(--accent-ring);padding:3px 9px;border-radius:4px;backdrop-filter:blur(8px);white-space:nowrap}
-:root[data-theme="light"] .carvin-badge{background:rgba(244,244,240,.85)}
-@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .carvin-badge{background:rgba(244,244,240,.85)}}
+.carvin-badge{font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--text);background:color-mix(in srgb,var(--bg) 78%,transparent);border:1px solid var(--accent);padding:3px 9px;border-radius:4px;backdrop-filter:blur(8px);white-space:nowrap}
 .carvin-line{width:1px;height:12px;background:linear-gradient(to bottom,var(--accent),transparent)}
-.carvin-dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 rgba(139,92,246,.6);animation:carvin-beat 2s ease-out infinite}
-@keyframes carvin-beat{0%{box-shadow:0 0 0 0 rgba(139,92,246,.7)}70%{box-shadow:0 0 0 14px rgba(139,92,246,0)}100%{box-shadow:0 0 0 0 rgba(139,92,246,0)}}
+.carvin-dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 var(--accent-glow);animation:carvin-beat 2s ease-out infinite}
+@keyframes carvin-beat{0%{box-shadow:0 0 0 0 var(--accent-glow)}70%{box-shadow:0 0 0 14px transparent}100%{box-shadow:0 0 0 0 transparent}}
 
 /* Floating contact buttons */
-.c-btn{position:fixed;z-index:50;display:inline-flex;align-items:center;gap:10px;padding:11px 20px;background:rgba(10,10,20,.22);border:1px solid rgba(232,232,242,.13);border-radius:100px;color:var(--text);font-family:var(--font);font-size:12px;font-weight:500;letter-spacing:.03em;text-decoration:none;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);white-space:nowrap;cursor:pointer;transition:background .25s,border-color .25s,transform .25s;user-select:none}
-.c-btn:hover{background:rgba(139,92,246,.18);border-color:rgba(139,92,246,.40);transform:translateY(-3px) !important}
-.c-btn svg{width:14px;height:14px;flex-shrink:0;color:var(--accent)}
-:root[data-theme="light"] .c-btn{background:rgba(255,255,255,.35);border-color:rgba(18,18,22,.14)}
-@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .c-btn{background:rgba(255,255,255,.35);border-color:rgba(18,18,22,.14)}}
+.c-btn{position:fixed;z-index:50;display:inline-flex;align-items:center;gap:10px;padding:11px 20px;background:color-mix(in srgb,var(--surface) 65%,transparent);border:1px solid var(--border-strong);border-radius:100px;color:var(--text);font-family:var(--font);font-size:12px;font-weight:500;letter-spacing:.03em;text-decoration:none;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);white-space:nowrap;cursor:pointer;transition:background .25s,border-color .25s,transform .25s;user-select:none}
+.c-btn:hover{background:var(--accent-glow);border-color:var(--accent);transform:translateY(-3px) !important}
+.c-btn svg{width:14px;height:14px;flex-shrink:0;color:var(--accent-text)}
 .c-btn-3{bottom:12%;left:50%;transform:translateX(-50%);animation:fl3 4.8s ease-in-out infinite}
 @keyframes fl3{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-9px)}}
 .c-btn-3:hover{transform:translateX(-50%) translateY(-3px) !important}
@@ -86,6 +82,11 @@ html,body{overflow:hidden;height:100%}
 
   var canvas   = document.getElementById('globe-canvas');
   var ctx      = canvas.getContext('2d');
+
+  /* Le globe lit ses couleurs dans les tokens : il suit la bascule de thème
+     et aucune couleur n'est écrite en dur dans ce script. */
+  var T = function(n){ return window.nwToken ? window.nwToken(n) : 'transparent'; };
+  var A = function(a){ return window.nwTokenRgba ? window.nwTokenRgba('--accent', a) : 'transparent'; };
   var loadEl   = document.getElementById('globe-loading');
   var pinEl    = document.getElementById('carvin-pin');
 
@@ -164,24 +165,24 @@ html,body{overflow:hidden;height:100%}
     ctx.clearRect(0,0,W,H);
     ctx.beginPath();
     ctx.arc(W/2, H/2, radius, 0, Math.PI*2);
-    ctx.fillStyle='rgba(6,5,15,1)';
+    ctx.fillStyle=T('--bg');
     ctx.fill();
-    ctx.strokeStyle='rgba(139,92,246,.30)';
+    ctx.strokeStyle=A(.30);
     ctx.lineWidth=1.2;
     ctx.stroke();
     ctx.beginPath();
     geoPath(graticule);
-    ctx.strokeStyle='rgba(139,92,246,.09)';
+    ctx.strokeStyle=A(.09);
     ctx.lineWidth=0.5;
     ctx.stroke();
     if(landFeatures){
       ctx.beginPath();
       landFeatures.features.forEach(function(f){ geoPath(f); });
-      ctx.strokeStyle='rgba(139,92,246,.25)';
+      ctx.strokeStyle=A(.25);
       ctx.lineWidth=0.7;
       ctx.stroke();
     }
-    ctx.fillStyle='rgba(139,92,246,.60)';
+    ctx.fillStyle=A(.60);
     allDots.forEach(function(dot){
       var p=projection(dot);
       if(!p) return;
@@ -199,20 +200,20 @@ html,body{overflow:hidden;height:100%}
         var a=(1-phase)*0.55;
         ctx.beginPath();
         ctx.arc(cx, cy, r, 0, Math.PI*2);
-        ctx.strokeStyle='rgba(139,92,246,'+a+')';
+        ctx.strokeStyle=A(a);
         ctx.lineWidth=1.5;
         ctx.stroke();
       });
       ctx.beginPath();
       ctx.arc(cx, cy, 4.5, 0, Math.PI*2);
-      ctx.fillStyle='#8B5CF6';
-      ctx.shadowColor='rgba(139,92,246,.9)';
+      ctx.fillStyle=T('--accent');
+      ctx.shadowColor=A(.9);
       ctx.shadowBlur=10;
       ctx.fill();
       ctx.shadowBlur=0;
       ctx.beginPath();
       ctx.arc(cx, cy, 2, 0, Math.PI*2);
-      ctx.fillStyle='#fff';
+      ctx.fillStyle=T('--text');
       ctx.fill();
       pinEl.style.left = cx+'px';
       pinEl.style.top  = (cy-8)+'px';

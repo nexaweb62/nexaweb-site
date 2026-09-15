@@ -11,12 +11,12 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
 
 /* ── Hero ── */
 .rdv-hero{text-align:center;padding:clamp(64px,11vh,130px) var(--pad-x) clamp(48px,7vh,80px)}
-.rdv-label{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent-ring);border-radius:100px;padding:5px 16px;margin-bottom:26px;background:var(--accent-dim)}
+.rdv-label{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--accent-text);border:1px solid var(--accent);border-radius:100px;padding:5px 16px;margin-bottom:26px;background:var(--accent-glow)}
 .rdv-title{font-size:clamp(2.4rem,5.5vw,5rem);font-weight:900;line-height:.93;letter-spacing:-.04em;margin-bottom:20px;text-wrap:balance}
 .rdv-title em{font-style:italic;color:var(--text-muted)}
 .rdv-sub{font-size:clamp(.88rem,1.3vw,1.05rem);color:var(--text-muted);font-weight:300;line-height:1.65;max-width:480px;margin:0 auto 32px}
 .rdv-badges{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px}
-.rdv-badge{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border-hi);border-radius:100px;padding:7px 16px;font-size:11px;font-weight:500;color:var(--text-muted);letter-spacing:.04em}
+.rdv-badge{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border-strong);border-radius:100px;padding:7px 16px;font-size:11px;font-weight:500;color:var(--text-muted);letter-spacing:.04em}
 .rdv-badge svg{width:13px;height:13px;stroke:var(--accent);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 
 /* ── Calendly section ── */
@@ -44,22 +44,60 @@ main{position:relative;z-index:1;padding-top:var(--hdr)}
 
   <!-- Calendly -->
   <div class="rdv-section">
-    <div class="calendly-inline-widget"
-         data-url="https://calendly.com/contact-nexaweb62/30min?background_color=080811&text_color=e8e8f2&primary_color=8b5cf6&locale=fr"
+    <!-- L'URL est composée en JS à partir des tokens : le widget suit le
+         thème et aucune couleur n'est écrite en dur dans le balisage. -->
+    <div class="calendly-inline-widget" id="calendly"
+         data-cal-base="https://calendly.com/contact-nexaweb62/30min"
          style="min-width:320px;height:700px"></div>
   </div>
 </main>
 
 <Footer />
 
-<script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async is:inline></script>
+<script is:inline>
+/* Le widget Calendly prend ses couleurs dans l'URL : on la compose à partir
+   des tokens, et on la recompose à chaque bascule de thème. */
+(function(){
+  var el = document.getElementById('calendly');
+  if(!el) return;
+  function hex(name){
+    var v = (window.nwToken ? window.nwToken(name) : '').replace('#','');
+    return v.length === 3 ? v[0]+v[0]+v[1]+v[1]+v[2]+v[2] : v;
+  }
+  function build(){
+    var lang = 'fr';
+    try{ lang = localStorage.getItem('nw-lang') || 'fr'; }catch(e){}
+    el.setAttribute('data-url', el.dataset.calBase
+      + '?background_color=' + hex('--bg')
+      + '&text_color='       + hex('--text')
+      + '&primary_color='    + hex('--accent')
+      + '&locale=' + lang);
+  }
+  build();
+  var s = document.createElement('script');
+  s.src = 'https://assets.calendly.com/assets/external/widget.js';
+  s.async = true;
+  document.body.appendChild(s);
+
+  // Rebascule : Calendly ne relit pas l'URL tout seul, on réinitialise l'iframe.
+  document.addEventListener('nw-theme', function(){
+    build();
+    var f = el.querySelector('iframe');
+    if(f) f.src = el.getAttribute('data-url');
+  });
+})();
+</script>
 
 <script is:inline type="module">
 (async function(){
   var canvas=document.getElementById('neon-canvas');
+  var T=window.nwToken||function(){return 'transparent'};
   try{
     var mod=await import('https://cdn.jsdelivr.net/npm/threejs-components@0.0.19/build/cursors/tubes1.min.js');
-    mod.default(canvas,{tubes:{colors:['#8B5CF6','#6366f1','#a78bfa'],lights:{intensity:180,colors:['#8B5CF6','#60aed5','#ff008a','#53bc28']}}});
+    mod.default(canvas,{tubes:{
+      colors:[T('--accent'),T('--accent-hover'),T('--accent-active')],
+      lights:{intensity:180,colors:[T('--accent'),T('--accent-hover'),T('--text-subtle'),T('--accent-active')]}
+    }});
   }catch(e){console.warn('Neon:',e);}
 })();
 </script>

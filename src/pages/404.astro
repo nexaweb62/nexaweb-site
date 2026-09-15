@@ -35,7 +35,7 @@ import '../styles/global.css';
 .nf-desc{
   margin-top:-28px;
   font-size:clamp(13px,1.5vw,16px);
-  color:rgba(var(--text-muted-rgb,232,232,242),.7);
+  color:var(--text-muted);
   line-height:1.7;
   max-width:400px;
   margin-bottom:40px;
@@ -47,7 +47,7 @@ import '../styles/global.css';
 .nf-btn-home{
   display:inline-flex;align-items:center;gap:9px;
   font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-  background:var(--btn-bg);color:var(--btn-text);
+  background:var(--accent);color:var(--on-accent);
   border-radius:3px;padding:13px 26px;
   transition:opacity .2s,transform .2s;
 }
@@ -57,11 +57,11 @@ import '../styles/global.css';
 .nf-btn-explore{
   display:inline-flex;align-items:center;gap:9px;
   font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-  border:1px solid var(--ghost-border);color:var(--text-muted);
+  border:1px solid var(--field-border);color:var(--text-muted);
   border-radius:3px;padding:13px 26px;
   transition:border-color .2s,color .2s,transform .2s;
 }
-.nf-btn-explore:hover{border-color:var(--border-hi);color:var(--text);transform:translateY(-1px)}
+.nf-btn-explore:hover{border-color:var(--border-strong);color:var(--text);transform:translateY(-1px)}
 .nf-btn-explore svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 </style>
 
@@ -113,7 +113,7 @@ import '../styles/global.css';
     }
     this.x+=this.vx;this.y+=this.vy;
     ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
-    ctx.fillStyle='rgba(191,128,255,.75)';ctx.fill();
+    ctx.fillStyle=window.nwTokenRgba?window.nwTokenRgba('--accent',.75):'transparent';ctx.fill();
   };
 
   function connect(){
@@ -124,7 +124,7 @@ import '../styles/global.css';
         if(d2<thresh){
           var op=1-(d2/20000),near=false;
           if(mouse.x!==null){var mx=pts[a].x-mouse.x,my=pts[a].y-mouse.y;near=Math.sqrt(mx*mx+my*my)<mouse.r;}
-          ctx.strokeStyle=near?('rgba(255,255,255,'+op+')'): ('rgba(200,150,255,'+op+')');
+          ctx.strokeStyle=window.nwTokenRgba?window.nwTokenRgba(near?'--text':'--accent',op):'transparent';
           ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(pts[a].x,pts[a].y);ctx.lineTo(pts[b].x,pts[b].y);ctx.stroke();
         }
       }
