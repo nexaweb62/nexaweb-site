@@ -74,6 +74,14 @@ const ogImageLightUrl = siteOrigin + '/og-image-light.png';
 </head>
 <body>
   <a class="skip-link" href="#main-content">Aller au contenu</a>
+  <!-- Le fond vivant : ce que le verre des boutons réfracte. Décoratif,
+       retiré de l'arbre d'accessibilité, sous tout le contenu. -->
+  <div class="ambience" aria-hidden="true" role="presentation">
+    <div class="amb-depth"></div>
+    <div class="amb-weave"></div>
+    <div class="amb-streak"></div>
+    <div class="amb-streak-2"></div>
+  </div>
   <div class="read-bar" aria-hidden="true"></div>
   <slot />
 

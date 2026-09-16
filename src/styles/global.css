@@ -548,6 +548,171 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
   :focus-visible{outline:2px solid Highlight}
 }
 
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   LIQUID GLASS — LE SYSTÈME DE BOUTONS, SANS EXCEPTION
+   Verre translucide : fond flouté, saturation poussée, arête claire en
+   haut qui accroche la lumière, ombre portée douce en dessous.
+
+   Deux teintes seulement :
+     · OR    — l'action principale. « Demander un devis », « Entrer »,
+               « Envoyer », « Créer mon compte », la croix de fermeture.
+     · NEUTRE — tout le reste : secondaire, menu, thème, langue, retour,
+               compte, réinitialiser, Google, explorer.
+
+   Aucune valeur n'est écrite ici : les niveaux de verre vivent dans
+   tokens.css (--glass-*) et basculent avec le thème. Cette section est
+   placée APRÈS les définitions de chaque contrôle pour que le verre
+   l'emporte sur leur fond d'origine, sans recourir à !important.
+
+   Ne sont pas des surfaces de bouton, donc pas de verre : les glyphes
+   nus posés DANS un contrôle déjà en verre ou dans un champ — .theme-opt,
+   .lang-opt, .lf-eye, .star-btn. Leur fond est le verre du parent.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Le verre lui-même ── */
+.btn,.btn-g,
+.menu-btn,.theme-sel,.login-btn,.hdr-back,.cnav-close,.lang-sel,
+.enter-btn,.submit-btn,.lf-btn,.lf-social-btn,.lf-reset-btn,.lf-lang-btn,
+.success-back,.nf-btn-home,.nf-btn-explore,.svc-cta,.cta-btn,.c-btn{
+  position:relative;isolation:isolate;border:0;
+  -webkit-backdrop-filter:blur(22px) saturate(180%);
+          backdrop-filter:blur(22px) saturate(180%);
+}
+
+/* ── L'arête de lumière : c'est elle qui fait lire le verre comme du
+      verre. Un seul pseudo-élément, au-dessus du fond, sous le texte. ── */
+.btn::before,.btn-g::before,
+.menu-btn::before,.theme-sel::before,.login-btn::before,.hdr-back::before,
+.cnav-close::before,.lang-sel::before,
+.enter-btn::before,.submit-btn::before,.lf-btn::before,
+.lf-social-btn::before,.lf-reset-btn::before,.lf-lang-btn::before,
+.success-back::before,.nf-btn-home::before,.nf-btn-explore::before,
+.svc-cta::before,.cta-btn::before,.c-btn::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  box-shadow:inset 0 1px 0 var(--glass-edge-t),
+             inset 0 -1px 0 var(--glass-edge-b),
+             inset 0 0 0 1px var(--glass-edge-r);
+}
+.btn > *,.btn-g > *,.enter-btn > *,.submit-btn > *,.lf-btn > *,
+.svc-cta > *,.cta-btn > *,.c-btn > *{position:relative;z-index:1}
+
+/* ── Teinte NEUTRE ── */
+.btn-g,
+.menu-btn,.theme-sel,.login-btn,.hdr-back,.lang-sel,
+.lf-social-btn,.lf-reset-btn,.lf-lang-btn,.success-back,.nf-btn-explore,.c-btn{
+  background-color:var(--glass-scrim);
+  background-image:linear-gradient(180deg,var(--glass-ghost-a),var(--glass-ghost-b));
+  box-shadow:var(--glass-sh-ghost);
+}
+.btn-g:hover,
+.menu-btn:hover,.login-btn:hover,.hdr-back:hover,
+.lf-social-btn:hover,.lf-reset-btn:hover,.lf-lang-btn:hover,
+.success-back:hover,.nf-btn-explore:hover,.c-btn:hover{
+  background-image:linear-gradient(180deg,var(--glass-ghost-ah),var(--glass-ghost-bh));
+}
+
+/* ── Teinte OR — l'action principale ── */
+.btn,.cnav-close,.enter-btn,.submit-btn,.lf-btn,.nf-btn-home,.svc-cta,.cta-btn{
+  background-color:var(--glass-scrim);
+  background-image:linear-gradient(180deg,var(--glass-gold-a),var(--glass-gold-b));
+  color:var(--glass-gold-ink);
+  box-shadow:var(--glass-sh-gold);
+}
+.btn::before,.cnav-close::before,.enter-btn::before,
+.submit-btn::before,.lf-btn::before,.nf-btn-home::before,
+.svc-cta::before,.cta-btn::before{
+  box-shadow:inset 0 1px 0 var(--glass-gedge-t),
+             inset 0 -1px 0 var(--glass-gedge-b),
+             inset 0 0 0 1px var(--glass-gedge-r);
+}
+.btn:hover,.cnav-close:hover,.enter-btn:hover,
+.submit-btn:hover,.lf-btn:hover,.nf-btn-home:hover,
+.svc-cta:hover,.cta-btn:hover{
+  background-image:linear-gradient(180deg,var(--glass-gold-ah),var(--glass-gold-bh));
+  color:var(--glass-gold-ink);
+}
+
+/* ── Le relief au survol : 2 px, rien de plus. ── */
+.btn:hover,.btn-g:hover,.enter-btn:hover,.submit-btn:hover,.lf-btn:hover,
+.nf-btn-home:hover,.nf-btn-explore:hover,.success-back:hover,
+.svc-cta:hover,.cta-btn:hover{transform:translateY(-2px)}
+.btn:active,.btn-g:active,.enter-btn:active,.submit-btn:active,.lf-btn:active{transform:translateY(0)}
+
+/* ── Repli obligatoire : sans flou, on repasse en opaque plutôt qu'en
+      texte illisible posé sur un fond transparent. ── */
+@supports not ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))){
+  .btn,.cnav-close,.enter-btn,.submit-btn,.lf-btn,.nf-btn-home,.svc-cta,.cta-btn,
+  .btn:hover,.cnav-close:hover,.enter-btn:hover,.submit-btn:hover,.lf-btn:hover,
+  .nf-btn-home:hover,.svc-cta:hover,.cta-btn:hover{
+    background-image:none;background-color:var(--glass-fb-gold);color:var(--glass-fb-gold-ink);
+  }
+  .btn-g,.menu-btn,.theme-sel,.login-btn,.hdr-back,.lang-sel,
+  .lf-social-btn,.lf-reset-btn,.lf-lang-btn,.success-back,.nf-btn-explore,.c-btn,
+  .btn-g:hover,.menu-btn:hover,.login-btn:hover,.hdr-back:hover,.c-btn:hover,
+  .lf-social-btn:hover,.lf-reset-btn:hover,.lf-lang-btn:hover,
+  .success-back:hover,.nf-btn-explore:hover{
+    background-image:none;background-color:var(--glass-fb-ghost);color:var(--text);
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   LE FOND VIVANT — CE QUI PASSE DERRIÈRE LE VERRE
+   Le Liquid Glass ne se voit que s'il a quelque chose à réfracter. Posé
+   sur un aplat, un bouton en verre n'est qu'un bouton translucide.
+
+   Cette couche est fixe, commune à toutes les pages, sous le contenu et
+   hors du chemin du texte : une profondeur (--bg vers --surface), deux
+   traînées de sable très diffuses, et une trame de fils à ~1 % que le
+   flou déforme. Aucune image : c'est le repli CSS, faute de crédits de
+   génération (compte gratuit, 0 crédit). Le visuel photographique du
+   hero et les cinq vignettes de services restent à livrer.
+
+   Elle est continue sur toute la hauteur du document, donc elle ne peut
+   pas créer de cassure à une jonction de section — c'était la leçon du
+   lot 1.
+   ═══════════════════════════════════════════════════════════════════════ */
+.ambience{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;contain:strict}
+.amb-depth{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 120% 80% at 70% -10%,var(--surface) 0%,rgb(from var(--surface) r g b / 0) 62%);
+  /* Sans ce masque la couche s'arrête net en bas de sa boîte. */
+  -webkit-mask-image:linear-gradient(to bottom,black 70%,transparent 100%);
+          mask-image:linear-gradient(to bottom,black 70%,transparent 100%);
+}
+.amb-streak{
+  position:absolute;top:-6vh;right:-18vw;width:min(1100px,90vw);height:150px;
+  background:radial-gradient(ellipse at 50% 50%,var(--accent-glow) 0%,rgb(from var(--accent-glow) r g b / 0) 72%);
+  filter:blur(28px);transform:rotate(-28deg);
+  animation:amb-drift 46s var(--ease-inout) infinite;
+}
+.amb-streak-2{
+  position:absolute;bottom:-4vh;left:-14vw;width:min(760px,80vw);height:110px;
+  background:radial-gradient(ellipse at 50% 50%,var(--accent-glow) 0%,rgb(from var(--accent-glow) r g b / 0) 76%);
+  filter:blur(34px);transform:rotate(-16deg);opacity:.7;
+  animation:amb-drift 58s var(--ease-inout) infinite 12s reverse;
+}
+/* La trame : invisible à l'œil nu, mais le flou du verre s'appuie dessus. */
+.amb-weave{
+  position:absolute;inset:0;
+  background-image:
+    repeating-linear-gradient(64deg,
+      rgb(from var(--text) r g b / 0) 0 13px,
+      rgb(from var(--text) r g b / .014) 13px 14px),
+    repeating-linear-gradient(-26deg,
+      rgb(from var(--text) r g b / 0) 0 19px,
+      rgb(from var(--text) r g b / .010) 19px 20px);
+}
+@keyframes amb-drift{
+  0%,100%{transform:rotate(-28deg) translate3d(0,0,0)}
+  50%    {transform:rotate(-24deg) translate3d(-60px,34px,0)}
+}
+@media(max-width:768px){.amb-streak-2{display:none}}
+@media (prefers-reduced-motion:reduce){.amb-streak,.amb-streak-2{animation:none!important}}
+
+
 /* ═══════════════════════════════════════════════════════════════════════
    EN-TÊTE MOBILE
    ═══════════════════════════════════════════════════════════════════════ */

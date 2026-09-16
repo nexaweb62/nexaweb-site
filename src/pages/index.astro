@@ -5,40 +5,6 @@ import '../styles/global.css';
 ---
 <BaseLayout title="Nexa Web — Agence Web Premium · Carvin" description="Nexa Web conçoit des sites internet sur-mesure pour commerçants et artisans. Livraison en 7 jours. Carvin, Hauts-de-France.">
 <style>
-/* ══════════════════════════════════════════════════════════════════════
-   AMBIANCE — encre & cuivre
-   Plus aucun dégradé néon. Ce qui reste : une profondeur d'encre
-   (variation très proche du fond) et UNE traînée de lumière cuivre à
-   faible opacité, floutée, hors du chemin du texte.
-   ══════════════════════════════════════════════════════════════════════ */
-.ambience{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
-/* Profondeur : --bg → --surface, rien de plus */
-.amb-depth{
-  position:absolute;inset:0;
-  background:radial-gradient(ellipse 120% 80% at 70% -10%,var(--surface) 0%,rgb(from var(--surface) r g b / 0) 62%);
-  /* Sans ce masque la couche s'arrête net en bas de sa boîte. */
-  -webkit-mask-image:linear-gradient(to bottom,black 70%,transparent 100%);
-          mask-image:linear-gradient(to bottom,black 70%,transparent 100%);
-}
-/* La traînée de cuivre — une seule, en diagonale, très diffuse */
-.amb-streak{
-  position:absolute;top:-6vh;right:-18vw;width:min(1100px,90vw);height:150px;
-  background:radial-gradient(ellipse at 50% 50%,var(--accent-glow) 0%,rgb(from var(--accent-glow) r g b / 0) 72%);
-  filter:blur(28px);transform:rotate(-28deg);
-  animation:amb-drift 46s var(--ease-inout) infinite;
-}
-.amb-streak-2{
-  position:absolute;bottom:-4vh;left:-14vw;width:min(760px,80vw);height:110px;
-  background:radial-gradient(ellipse at 50% 50%,var(--accent-glow) 0%,rgb(from var(--accent-glow) r g b / 0) 76%);
-  filter:blur(34px);transform:rotate(-16deg);opacity:.7;
-  animation:amb-drift 58s var(--ease-inout) infinite 12s reverse;
-}
-@keyframes amb-drift{
-  0%,100%{transform:rotate(-28deg) translate3d(0,0,0)}
-  50%    {transform:rotate(-24deg) translate3d(-60px,34px,0)}
-}
-@media(max-width:768px){.amb-streak-2{display:none}}
-@media(prefers-reduced-motion:reduce){.amb-streak,.amb-streak-2{animation:none!important}}
 
 /* ── ÉCRAN D'ACCUEIL ── */
 #loader{display:none}
@@ -275,11 +241,6 @@ import '../styles/global.css';
 </style>
 
 <!-- Ambiance encre & cuivre -->
-<div class="ambience" aria-hidden="true" role="presentation">
-  <div class="amb-depth"></div>
-  <div class="amb-streak"></div>
-  <div class="amb-streak-2"></div>
-</div>
 
 <!-- Loading Screen -->
 <div id="loader" role="dialog" aria-modal="true" aria-label="Écran d'accueil Nexa Web">
