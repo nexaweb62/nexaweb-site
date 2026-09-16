@@ -24,3 +24,6 @@ graphify-out/
 # OS
 .DS_Store
 Thumbs.db
+
+# Sorties de scripts de diagnostic lancés sans répertoire de travail défini
+/undefined/
