@@ -1,0 +1,179 @@
+---
+/* Page de comparaison TEMPORAIRE des trois pistes de logo.
+   noindex : elle n'a pas à être référencée, elle sert à trancher.
+   À supprimer une fois la piste choisie. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/global.css';
+
+const PISTES = [
+  {
+    id: 'a',
+    titre: 'Piste A — Monogramme + nom',
+    pitch: "Un « N » construit à la règle dans un badge à coins arrondis (rayon 23 % du côté), or sur noir en sombre, noir sur or en clair. Le seul des trois qui fonctionne isolé : c'est lui qui alimente le favicon, l'avatar et les icônes PWA.",
+    force: 'Fonctionne seul. Décline en favicon sans perte.',
+    reserve: 'Le badge est une forme très répandue : la distinction vient du dessin du N, pas du contenant.',
+  },
+  {
+    id: 'b',
+    titre: 'Piste B — Logotype seul',
+    pitch: "Pas de symbole. « NEXA » en graisse lourde, « WEB » en graisse fine très espacée, un filet or sous « WEB » seulement, un point or en fin de mot. Sobre et éditorial.",
+    force: 'Le plus adulte des trois. Rien à expliquer, rien à défendre.',
+    reserve: "Ne se réduit pas à une icône : prévoir le « N » seul en repli pour le favicon.",
+  },
+  {
+    id: 'c',
+    titre: 'Piste C — Symbole abstrait + nom',
+    pitch: "Trois faces formant un volume — la « nouvelle dimension » de la baseline prise au mot : face supérieure en or plein, faces latérales en or assombri et en noir, assemblées en isométrie.",
+    force: 'Le plus mémorable et le plus distinctif.',
+    reserve: "Ne se lit pas comme un « N » : toujours accompagné du nom tant que la marque est jeune.",
+  },
+];
+const TAILLES = [
+  { px: 28, nom: 'En-tête',      note: '28 px — la taille réelle dans la barre de navigation' },
+  { px: 16, nom: 'Test 16 px',   note: 'Le seuil de lisibilité' },
+  { px: 52, nom: 'Pied de page', note: '52 px' },
+];
+---
+<BaseLayout title="Logos — comparaison des trois pistes" noindex={true}
+  description="Page de travail interne : comparaison des trois pistes de logo Nexa Web.">
+<style>
+  main { padding: calc(var(--hdr) + var(--sp-8)) var(--pad-x) var(--sp-10); max-width: 1180px; margin: 0 auto }
+  .lp-intro { margin-bottom: var(--sp-9); max-width: var(--measure) }
+  .lp-intro h1 { font-size: clamp(var(--fs-500), 4vw, var(--fs-700)); font-weight: 900; letter-spacing: -.03em; line-height: var(--lh-tight); margin-bottom: var(--sp-4) }
+  .lp-note { display: inline-flex; align-items: center; gap: var(--sp-2); font-size: var(--fs-100); font-weight: 600;
+             letter-spacing: .1em; text-transform: uppercase; color: var(--accent-text);
+             border: 1px solid var(--accent); border-radius: var(--radius-pill); padding: 6px 14px; margin-bottom: var(--sp-5) }
+
+  .piste { margin-bottom: var(--sp-10); border-top: 1px solid var(--border); padding-top: var(--sp-6) }
+  .piste-h { display: flex; flex-wrap: wrap; gap: var(--sp-5); align-items: baseline; justify-content: space-between; margin-bottom: var(--sp-3) }
+  .piste-h h2 { font-size: var(--fs-400); font-weight: 800; letter-spacing: -.02em }
+  .piste-id { font-size: var(--fs-50); font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--accent-text) }
+  .piste-pitch { color: var(--text-muted); font-size: 14px; line-height: var(--lh-body); max-width: var(--measure); margin-bottom: var(--sp-5) }
+  .piste-avis { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-5); margin-bottom: var(--sp-6) }
+  .piste-avis div { font-size: 13px; line-height: 1.6; color: var(--text-muted) }
+  .piste-avis b { display: block; font-size: var(--fs-50); letter-spacing: .16em; text-transform: uppercase; color: var(--text-subtle); margin-bottom: 6px; font-weight: 600 }
+
+  /* Deux fonds côte à côte : c'est la seule façon de juger un logo. */
+  .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden }
+  .panneau { padding: var(--sp-6) var(--sp-5) }
+  /* Les deux thèmes sont montrés côte à côte : on cible donc les variables
+     BRUTES, définies sur :root quel que soit le thème actif, et non les
+     tokens sémantiques qui basculent avec lui. */
+  .panneau--sombre { background: var(--raw-black-950) }
+  .panneau--clair  { background: var(--raw-paper-50) }
+  .panneau-lbl { font-size: var(--fs-25); font-weight: 700; letter-spacing: .2em; text-transform: uppercase; margin-bottom: var(--sp-5) }
+  .panneau--sombre .panneau-lbl { color: var(--raw-warm-400) }
+  .panneau--clair  .panneau-lbl { color: var(--raw-stone-500) }
+  .rangee { padding: var(--sp-4) 0; border-top: 1px dashed color-mix(in srgb, currentColor 18%, transparent) }
+  .rangee:first-of-type { border-top: none }
+  .rangee img { display: block; width: auto; max-width: 100% }
+  .rangee-meta { margin-bottom: var(--sp-3) }
+  .rangee-nom { font-size: var(--fs-50); font-weight: 700; letter-spacing: .12em; text-transform: uppercase }
+  .rangee-note { font-size: 11px; margin-top: 3px }
+  .panneau--sombre .rangee-nom { color: var(--raw-warm-50) } .panneau--sombre .rangee-note { color: var(--raw-warm-400) }
+  .panneau--clair  .rangee-nom { color: var(--raw-black-ink) } .panneau--clair  .rangee-note { color: var(--raw-stone-500) }
+
+  .grand { margin-top: var(--sp-5); background: var(--raw-black-950); border-radius: var(--radius-md); padding: var(--sp-6) var(--sp-5); overflow-x: auto }
+  .grand .panneau-lbl { color: var(--raw-warm-400) }
+  .grand img { display: block; width: auto; max-width: none }
+  .mono-bloc { margin-top: var(--sp-5); border: 1px solid var(--border); border-radius: var(--radius-md); padding: var(--sp-5); background: var(--surface) }
+  .mono-bloc .panneau-lbl { color: var(--text-subtle) }
+  .mono-plage { background: var(--raw-paper-0); border-radius: var(--radius-sm); padding: var(--sp-5); display: flex; align-items: center; gap: var(--sp-6); flex-wrap: wrap }
+
+  @media (max-width: 860px) { .duo, .piste-avis { grid-template-columns: 1fr } }
+</style>
+
+<main id="main-content" tabindex="-1">
+  <div class="lp-intro">
+    <span class="lp-note">Page de travail · non indexée</span>
+    <h1>Trois pistes de logo</h1>
+    <p class="body">
+      Chaque piste est montrée sur fond noir et sur fond crème, aux tailles réelles
+      d'usage. Les lettres sont vectorisées : aucun rendu ne dépend d'une police
+      installée. La version monochrome est celle qui sert pour un tampon, une facture
+      ou une sérigraphie.
+    </p>
+  </div>
+
+  {PISTES.map((p) => (
+    <section class="piste">
+      <div class="piste-h">
+        <h2>{p.titre}</h2>
+        <span class="piste-id">Piste {p.id.toUpperCase()}</span>
+      </div>
+      <p class="piste-pitch">{p.pitch}</p>
+      <div class="piste-avis">
+        <div><b>Ce qu'elle a pour elle</b>{p.force}</div>
+        <div><b>Ce qu'elle coûte</b>{p.reserve}</div>
+      </div>
+
+      <div class="duo">
+        <div class="panneau panneau--sombre">
+          <div class="panneau-lbl">Fond noir</div>
+          {TAILLES.map((t) => (
+            <div class="rangee">
+              <div class="rangee-meta">
+                <div class="rangee-nom">{t.nom}</div>
+                <div class="rangee-note">{t.note}</div>
+              </div>
+              <img src={`/logos/logo-${p.id}-dark.svg`} height={t.px} alt={`Piste ${p.id.toUpperCase()} sur fond noir, ${t.px} pixels de haut`} />
+            </div>
+          ))}
+        </div>
+        <div class="panneau panneau--clair">
+          <div class="panneau-lbl">Fond crème</div>
+          {TAILLES.map((t) => (
+            <div class="rangee">
+              <div class="rangee-meta">
+                <div class="rangee-nom">{t.nom}</div>
+                <div class="rangee-note">{t.note}</div>
+              </div>
+              <img src={`/logos/logo-${p.id}-light.svg`} height={t.px} alt={`Piste ${p.id.toUpperCase()} sur fond crème, ${t.px} pixels de haut`} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="grand">
+        <div class="panneau-lbl">En grand — présentation, papeterie</div>
+        <img src={`/logos/logo-${p.id}-dark.svg`} height="104" alt={`Piste ${p.id.toUpperCase()}, grand format`} />
+      </div>
+
+      <div class="mono-bloc">
+        <div class="panneau-lbl">Monochrome — tampon, facture, sérigraphie</div>
+        <div class="mono-plage">
+          <img src={`/logos/logo-${p.id}-mono.svg`} height="56" alt={`Piste ${p.id.toUpperCase()} en monochrome`} />
+          <img src={`/logos/logo-${p.id}-mono.svg`} height="28" alt={`Piste ${p.id.toUpperCase()} en monochrome, taille en-tête`} />
+          <img src={`/logos/logo-${p.id}-mono.svg`} height="16" alt={`Piste ${p.id.toUpperCase()} en monochrome, 16 pixels`} />
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <section class="piste">
+    <div class="piste-h"><h2>Favicon et avatar</h2><span class="piste-id">Piste A seule</span></div>
+    <p class="piste-pitch">
+      Le monogramme de la piste A tient sans le nom. C'est lui qui alimente le favicon,
+      l'avatar et les icônes PWA — les pistes B et C doivent s'y replier.
+    </p>
+    <div class="duo">
+      <div class="panneau panneau--sombre">
+        <div class="panneau-lbl">Fond noir</div>
+        <div class="rangee">
+          {[16, 32, 64, 128].map((s) => (
+            <img src="/logos/mark-a-dark.svg" height={s} alt={`Monogramme, ${s} pixels`} />
+          ))}
+        </div>
+      </div>
+      <div class="panneau panneau--clair">
+        <div class="panneau-lbl">Fond crème</div>
+        <div class="rangee">
+          {[16, 32, 64, 128].map((s) => (
+            <img src="/logos/mark-a-light.svg" height={s} alt={`Monogramme, ${s} pixels`} />
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+</BaseLayout>

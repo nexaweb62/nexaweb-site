@@ -21,6 +21,8 @@ const GENERATED = new Set([
   'public/favicon.svg',
   'public/site.webmanifest',
 ]);
+/* Répertoires entièrement produits par un générateur lisant les tokens. */
+const GENERATED_DIRS = ['src/assets/logos/', 'public/logos/'];
 
 const PATTERNS = [
   // #rgb / #rrggbb / #rrggbbaa — précédé d'un séparateur, pas d'un mot
@@ -62,6 +64,7 @@ function walk(dir) {
     if (!EXT.has(extname(p))) continue;
     const rel = relative(ROOT, p);
     if (rel === TOKENS || GENERATED.has(rel)) continue;
+    if (GENERATED_DIRS.some(d => rel.startsWith(d))) continue;
     stripComments(readFileSync(p, 'utf8')).split('\n').forEach((line, i) => {
       if (ALLOW.some(a => a.test(line))) return;
       for (const { re, what } of PATTERNS) {
@@ -76,7 +79,8 @@ for (const d of SCAN) walk(join(ROOT, d));
 
 if (!hits.length) {
   console.log(`✓ Aucune couleur littérale hors de ${TOKENS}`);
-  console.log(`  (${[...GENERATED].join(', ')} sont générés depuis ce fichier par npm run build:assets)`);
+  console.log(`  (générés depuis ce fichier : ${[...GENERATED].join(', ')},`);
+  console.log(`   et ${GENERATED_DIRS.join(', ')} — npm run build:assets / build:logos)`);
   process.exit(0);
 }
 console.error(`✗ ${hits.length} couleur(s) littérale(s) hors de ${TOKENS} :\n`);
