@@ -69,7 +69,7 @@ import '../styles/global.css';
 }
 .plan-card:hover{border-color:var(--accent)}
 .plan-spotlight{position:absolute;inset:0;pointer-events:none;z-index:10;opacity:0;transition:opacity .3s;overflow:hidden}
-.plan-spotlight::after{content:'';position:absolute;width:200%;height:200%;border-radius:50%;background:radial-gradient(circle,var(--accent-glow) 0%,transparent 40%);transform:translate(-50%,-50%);top:var(--sy,50%);left:var(--sx,50%)}
+.plan-spotlight::after{content:'';position:absolute;width:200%;height:200%;border-radius:50%;background:radial-gradient(circle,var(--accent-glow) 0%,rgb(from var(--accent-glow) r g b / 0) 40%);transform:translate(-50%,-50%);top:var(--sy,50%);left:var(--sx,50%)}
 .plan-card.plan-featured{
   border-color:var(--accent);
   box-shadow:0 0 0 1px var(--accent),var(--shadow-2);
@@ -113,10 +113,10 @@ import '../styles/global.css';
    un coût d'un requestAnimationFrame permanent. Même profondeur d'encre
    que l'accueil, en CSS, sans frais de GPU. */
 .ambience{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.amb-depth{position:absolute;inset:0;background:radial-gradient(ellipse 120% 80% at 70% -10%,var(--surface) 0%,transparent 62%)}
+.amb-depth{position:absolute;inset:0;background:radial-gradient(ellipse 120% 80% at 70% -10%,var(--surface) 0%,rgb(from var(--surface) r g b / 0) 62%)}
 .amb-streak{
   position:absolute;top:-6vh;right:-18vw;width:min(1100px,90vw);height:150px;
-  background:radial-gradient(ellipse at 50% 50%,var(--accent-glow) 0%,transparent 72%);
+  background:radial-gradient(ellipse at 50% 50%,var(--accent-glow) 0%,rgb(from var(--accent-glow) r g b / 0) 72%);
   filter:blur(28px);transform:rotate(-28deg);
 }
 </style>

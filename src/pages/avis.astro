@@ -19,9 +19,9 @@ import '../styles/global.css';
 .body-text{font-size:clamp(.9rem,1.4vw,1.05rem);font-weight:300;line-height:1.72;color:var(--text-muted)}
 
 /* Sections */
-.s-hero{padding-top:var(--hdr);border-bottom:1px solid var(--border)}
+.s-hero{padding-top:var(--hdr)}
 .hero-in{padding:clamp(60px,10vh,130px) 0 clamp(48px,8vh,100px)}
-.s-form{padding:clamp(80px,12vw,160px) 0;border-bottom:1px solid var(--border)}
+.s-form{padding:clamp(80px,12vw,160px) 0}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,100px);align-items:start}
 .form-lede-h{font-size:clamp(1.6rem,3vw,3rem);font-weight:900;letter-spacing:-.03em;line-height:1;margin-bottom:16px;text-wrap:balance}
 .form-lede-h em{font-style:italic;color:var(--text-muted)}
@@ -75,7 +75,7 @@ import '../styles/global.css';
 .empty-sub{font-size:.85rem;color:var(--text-muted);max-width:340px;line-height:1.7}
 
 /* CTA */
-.s-cta{border-top:1px solid var(--border);text-align:center}
+.s-cta{text-align:center}
 .cta-in{padding:clamp(60px,10vw,120px) 0}
 .cta-super{font-size:clamp(.6rem,1vw,.75rem);font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--text-muted);margin-bottom:28px}
 .cta-hl{font-size:clamp(2.2rem,5.5vw,6rem);font-weight:900;line-height:.94;letter-spacing:-.035em;margin-bottom:40px;text-wrap:balance}
@@ -102,7 +102,7 @@ import '../styles/global.css';
   </section>
 
   <!-- FORM -->
-  <section class="s-form" aria-labelledby="form-h">
+  <section class="s-form sec-seam" aria-labelledby="form-h">
     <div class="wrap">
       <div class="form-grid">
         <div class="form-lede r">
@@ -159,7 +159,7 @@ import '../styles/global.css';
   </section>
 
   <!-- REVIEWS -->
-  <section class="s-reviews" aria-labelledby="reviews-h">
+  <section class="s-reviews sec-seam" aria-labelledby="reviews-h">
     <div class="wrap">
       <div class="reviews-top r">
         <h2 class="reviews-hl" id="reviews-h" data-i18n="av-reviews-h">Avis publiés</h2>
@@ -170,7 +170,7 @@ import '../styles/global.css';
   </section>
 
   <!-- CTA -->
-  <section class="s-cta" aria-labelledby="avis-cta-h">
+  <section class="s-cta sec-seam" aria-labelledby="avis-cta-h">
     <div class="wrap">
       <div class="cta-in r">
         <div class="cta-super" data-i18n="av-cta-super">Travaillons ensemble</div>

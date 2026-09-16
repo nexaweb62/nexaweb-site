@@ -19,7 +19,7 @@ import '../styles/global.css';
 .body-text{font-size:clamp(.9rem,1.4vw,1.05rem);font-weight:300;line-height:1.72;color:var(--text-muted)}
 
 /* Hero */
-.s-eq-hero{padding-top:var(--hdr);border-bottom:1px solid var(--border)}
+.s-eq-hero{padding-top:var(--hdr)}
 .eq-hero-in{padding:clamp(60px,10vh,130px) 0 clamp(48px,8vh,100px)}
 
 /* Team cards */
@@ -42,7 +42,7 @@ import '../styles/global.css';
 @media(max-width:540px){.team-grid{grid-template-columns:1fr}.team-card{height:460px}}
 
 /* CTA */
-.s-eq-cta{border-top:1px solid var(--border);text-align:center}
+.s-eq-cta{text-align:center}
 .eq-cta-in{padding:clamp(60px,10vw,120px) 0}
 .eq-cta-super{font-size:clamp(.6rem,1vw,.75rem);font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--text-muted);margin-bottom:28px}
 .eq-cta-hl{font-size:clamp(2.2rem,5.5vw,6rem);font-weight:900;line-height:.94;letter-spacing:-.035em;margin-bottom:40px;text-wrap:balance}
@@ -78,7 +78,7 @@ import '../styles/global.css';
   </section>
 
   <!-- TEAM CARDS -->
-  <section class="s-team" aria-labelledby="team-h">
+  <section class="s-team sec-seam" aria-labelledby="team-h">
     <div class="wrap">
       <div class="team-grid">
 
@@ -86,7 +86,7 @@ import '../styles/global.css';
         <div class="team-card r">
           <div class="tc-inner" style="box-shadow:var(--shadow-2)">
             <div class="tc-bg" data-photo="1" style="background-position:center 15%"></div>
-            <div class="tc-overlay" style="background:linear-gradient(to top,var(--media-scrim-900),var(--media-scrim-600) 40%,transparent 68%)"></div>
+            <div class="tc-overlay" style="background:linear-gradient(to top,var(--media-scrim-900),var(--media-scrim-600) 40%,rgb(from var(--media-scrim-600) r g b / 0) 68%)"></div>
             <div class="tc-content" data-on-media>
               <p class="tc-role" data-i18n="eq-role">Co-fondateur</p>
               <h2 class="tc-name">Imad Torchi</h2>
@@ -103,7 +103,7 @@ import '../styles/global.css';
         <div class="team-card r d1">
           <div class="tc-inner" style="box-shadow:var(--shadow-2)">
             <div class="tc-bg" data-photo="2" style="background-position:center 12%"></div>
-            <div class="tc-overlay" style="background:linear-gradient(to top,var(--media-scrim-900),var(--media-scrim-600) 40%,transparent 68%)"></div>
+            <div class="tc-overlay" style="background:linear-gradient(to top,var(--media-scrim-900),var(--media-scrim-600) 40%,rgb(from var(--media-scrim-600) r g b / 0) 68%)"></div>
             <div class="tc-content" data-on-media>
               <p class="tc-role" data-i18n="eq-role">Co-fondateur</p>
               <h2 class="tc-name">Ahmed Chteoui</h2>
@@ -121,7 +121,7 @@ import '../styles/global.css';
   </section>
 
   <!-- CTA -->
-  <section class="s-eq-cta" aria-labelledby="eq-cta-h">
+  <section class="s-eq-cta sec-seam" aria-labelledby="eq-cta-h">
     <div class="wrap">
       <div class="eq-cta-in r">
         <div class="eq-cta-super" data-i18n="eq-cta-super">On travaille ensemble ?</div>

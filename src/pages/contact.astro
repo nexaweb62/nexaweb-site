@@ -29,7 +29,7 @@ html,body{overflow:hidden;height:100%}
 #carvin-pin{position:fixed;z-index:30;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:4px;transform:translate(-50%,-100%) translateY(-10px);opacity:0;transition:opacity .4s}
 #carvin-pin.visible{opacity:1}
 .carvin-badge{font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--text);background:color-mix(in srgb,var(--bg) 78%,transparent);border:1px solid var(--accent);padding:3px 9px;border-radius:4px;backdrop-filter:blur(8px);white-space:nowrap}
-.carvin-line{width:1px;height:12px;background:linear-gradient(to bottom,var(--accent),transparent)}
+.carvin-line{width:1px;height:12px;background:linear-gradient(to bottom,var(--accent),rgb(from var(--accent) r g b / 0))}
 .carvin-dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 var(--accent-glow);animation:carvin-beat 2s ease-out infinite}
 @keyframes carvin-beat{0%{box-shadow:0 0 0 0 var(--accent-glow)}70%{box-shadow:0 0 0 14px transparent}100%{box-shadow:0 0 0 0 transparent}}
 

@@ -15,18 +15,21 @@ import '../styles/global.css';
 /* Profondeur : --bg → --surface, rien de plus */
 .amb-depth{
   position:absolute;inset:0;
-  background:radial-gradient(ellipse 120% 80% at 70% -10%,var(--surface) 0%,transparent 62%);
+  background:radial-gradient(ellipse 120% 80% at 70% -10%,var(--surface) 0%,rgb(from var(--surface) r g b / 0) 62%);
+  /* Sans ce masque la couche s'arrête net en bas de sa boîte. */
+  -webkit-mask-image:linear-gradient(to bottom,black 70%,transparent 100%);
+          mask-image:linear-gradient(to bottom,black 70%,transparent 100%);
 }
 /* La traînée de cuivre — une seule, en diagonale, très diffuse */
 .amb-streak{
   position:absolute;top:-6vh;right:-18vw;width:min(1100px,90vw);height:150px;
-  background:radial-gradient(ellipse at 50% 50%,var(--accent-glow) 0%,transparent 72%);
+  background:radial-gradient(ellipse at 50% 50%,var(--accent-glow) 0%,rgb(from var(--accent-glow) r g b / 0) 72%);
   filter:blur(28px);transform:rotate(-28deg);
   animation:amb-drift 46s var(--ease-inout) infinite;
 }
 .amb-streak-2{
   position:absolute;bottom:-4vh;left:-14vw;width:min(760px,80vw);height:110px;
-  background:radial-gradient(ellipse at 50% 50%,var(--accent-glow) 0%,transparent 76%);
+  background:radial-gradient(ellipse at 50% 50%,var(--accent-glow) 0%,rgb(from var(--accent-glow) r g b / 0) 76%);
   filter:blur(34px);transform:rotate(-16deg);opacity:.7;
   animation:amb-drift 58s var(--ease-inout) infinite 12s reverse;
 }
@@ -79,7 +82,7 @@ import '../styles/global.css';
 }
 .enter-btn::after{
   content:'';position:absolute;inset:0;z-index:-1;
-  background:linear-gradient(105deg,transparent 30%,var(--accent-glow) 50%,transparent 70%);
+  background:linear-gradient(105deg,rgb(from var(--accent-glow) r g b / 0) 30%,var(--accent-glow) 50%,rgb(from var(--accent-glow) r g b / 0) 70%);
   transform:translateX(-120%);
 }
 .enter-btn:hover{background:var(--accent);color:var(--on-accent);transform:translateY(0) scale(1.03);box-shadow:var(--shadow-2)}
@@ -120,7 +123,7 @@ import '../styles/global.css';
 @media(prefers-reduced-motion:reduce){.hero-eye,.hero-hl .li,.hero-sub,.hero-ctas,.hero-foot{animation:none!important;opacity:1!important;transform:none!important}}
 
 /* ── PHILOSOPHY ── */
-.s-phil{border-top:1px solid var(--border)}
+.s-phil{}
 .phil-in{display:grid;grid-template-columns:1fr 2fr;gap:clamp(32px,6vw,120px);align-items:start}
 .s-phil{min-height:62vh}
 .phil-txt{font-size:clamp(1.5rem,3.5vw,3.4rem);font-weight:700;line-height:1.15;letter-spacing:-.025em}
@@ -128,7 +131,7 @@ import '../styles/global.css';
 @media(max-width:700px){.phil-in{grid-template-columns:1fr;gap:22px}.pin-label{position:static}.s-phil{min-height:0}}
 
 /* ── SERVICES ── */
-.s-svc{border-top:1px solid var(--border)}
+.s-svc{}
 .svc-hdr{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:24px;margin-bottom:clamp(36px,6vh,72px)}
 .svc-list{border-top:1px solid var(--border)}
 .svc-row{
@@ -169,7 +172,7 @@ import '../styles/global.css';
 @media(max-width:600px){.svc-tag{display:none}}
 
 /* ── PROCESS ── */
-.s-proc{border-top:1px solid var(--border)}
+.s-proc{}
 .proc-hdr{margin-bottom:clamp(36px,6vh,72px)}
 .proc-grid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border)}
 .proc-step{padding:clamp(22px,4vw,48px);border-right:1px solid var(--border)}
@@ -181,7 +184,15 @@ import '../styles/global.css';
 @media(max-width:480px){.proc-grid{grid-template-columns:1fr}.proc-step{border-right:none;border-top:1px solid var(--border)}.proc-step:first-child{border-top:none}}
 
 /* ── WHY ── */
-.s-why{border-top:1px solid var(--border);background:var(--surface)}
+.s-why{
+  /* Un aplat --surface à bords francs produisait deux arêtes nettes sur
+     toute la largeur. Le décrochement se fait en dégradé vertical. */
+  background:linear-gradient(to bottom,
+    rgb(from var(--surface) r g b / 0) 0%,
+    color-mix(in srgb,var(--surface) 70%,transparent) 22%,
+    color-mix(in srgb,var(--surface) 70%,transparent) 78%,
+    rgb(from var(--surface) r g b / 0) 100%);
+}
 .why-in{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,8vw,120px);align-items:start}
 /* Le titre vit dans une colonne de ~560 px : à la taille pleine de .h-lg
    il se cassait en quatre lignes bancales autour de son <br>. */
@@ -199,7 +210,7 @@ import '../styles/global.css';
    reste discret, les lignes de base sont alignées, et AUCUNE couleur
    décorative ne touche les chiffres — ils portent le token de texte, pas
    l'accent. Le cuivre ne sert qu'au filet sous la valeur. */
-.s-stats{border-top:1px solid var(--border)}
+.s-stats{}
 .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border)}
 .stat{
   padding:clamp(28px,6vw,64px);border-right:1px solid var(--border);
@@ -225,7 +236,7 @@ import '../styles/global.css';
 @media(max-width:500px){.stats-grid{grid-template-columns:1fr}.stat{border-right:none;border-bottom:1px solid var(--border)}.stat:last-child{border-bottom:none}}
 
 /* ── FAQ ── */
-.s-faq{border-top:1px solid var(--border)}
+.s-faq{}
 .faq-in{display:grid;grid-template-columns:1fr 1.8fr;gap:clamp(40px,8vw,120px)}
 .faq-side p{margin-top:20px;font-size:13px}
 .faq-list{border-top:1px solid var(--border)}
@@ -239,7 +250,7 @@ import '../styles/global.css';
 @media(max-width:700px){.faq-in{grid-template-columns:1fr}}
 
 /* ── CTA ── */
-.s-cta{border-top:1px solid var(--border);text-align:center}
+.s-cta{text-align:center}
 .cta-in{max-width:900px;margin:0 auto;padding:clamp(80px,15vw,180px) 0}
 .cta-super{font-size:clamp(.6rem,1vw,.75rem);font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--text-muted);margin-bottom:32px}
 .cta-hl{font-size:clamp(3rem,8vw,9.5rem);font-weight:900;line-height:.92;letter-spacing:-.04em;margin-bottom:48px;text-wrap:balance}
@@ -251,7 +262,7 @@ import '../styles/global.css';
 .cta-btn:hover .cta-arr{transform:translateX(5px)}
 
 /* ── POUR QUI ── */
-.s-who{border-top:1px solid var(--border)}
+.s-who{}
 .who-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-top:clamp(36px,6vh,72px)}
 .who-card{background:var(--bg);padding:clamp(28px,4vw,48px);display:flex;flex-direction:column;gap:16px}
 .who-marker{font-size:9.5px;font-weight:500;letter-spacing:.14em;color:var(--text-subtle);margin-bottom:6px;font-variant-numeric:tabular-nums}
@@ -325,7 +336,7 @@ import '../styles/global.css';
 </section>
 
 <!-- PHILOSOPHY -->
-<section class="s-phil" style="padding:var(--sec) 0" id="apropos" aria-labelledby="phil-h">
+<section class="s-phil sec-seam" style="padding:var(--sec) 0" id="apropos" aria-labelledby="phil-h">
   <div class="wrap">
     <div class="phil-in">
       <div class="r pin-label"><span class="label" id="phil-h" data-i18n="idx-phil-lbl">Notre vision</span></div>
@@ -337,7 +348,7 @@ import '../styles/global.css';
 </section>
 
 <!-- SERVICES -->
-<section class="s-svc" style="padding:var(--sec) 0" id="services" aria-labelledby="svc-h">
+<section class="s-svc sec-seam" style="padding:var(--sec) 0" id="services" aria-labelledby="svc-h">
   <div class="wrap">
     <div class="svc-hdr r">
       <div>
@@ -382,7 +393,7 @@ import '../styles/global.css';
 </section>
 
 <!-- POUR QUI -->
-<section class="s-who" style="padding:var(--sec) 0" id="pour-qui" aria-labelledby="who-h">
+<section class="s-who sec-seam" style="padding:var(--sec) 0" id="pour-qui" aria-labelledby="who-h">
   <div class="wrap">
     <div class="svc-hdr r">
       <div>
@@ -417,7 +428,7 @@ import '../styles/global.css';
 </section>
 
 <!-- PROCESS -->
-<section class="s-proc" style="padding:var(--sec) 0" aria-labelledby="proc-h">
+<section class="s-proc sec-seam" style="padding:var(--sec) 0" aria-labelledby="proc-h">
   <div class="wrap">
     <div class="proc-hdr r">
       <span class="label" id="proc-h" data-i18n="idx-proc-lbl">De l'idée au site en ligne</span>
@@ -433,7 +444,7 @@ import '../styles/global.css';
 </section>
 
 <!-- WHY -->
-<section class="s-why has-texture" style="padding:var(--sec) 0" id="apropos2" aria-labelledby="why-h">
+<section class="s-why sec-seam has-texture" style="padding:var(--sec) 0" id="apropos2" aria-labelledby="why-h">
   <div class="sec-texture" data-texture="1" data-parallax aria-hidden="true"></div>
   <div class="wrap">
     <div class="why-in">
@@ -454,7 +465,7 @@ import '../styles/global.css';
 </section>
 
 <!-- STATS -->
-<section class="s-stats" style="padding:var(--sec) 0" aria-label="Chiffres clés">
+<section class="s-stats sec-seam" style="padding:var(--sec) 0" aria-label="Chiffres clés">
   <div class="wrap">
     <div class="stats-grid" data-count-group>
       <div class="stat r">
@@ -481,7 +492,7 @@ import '../styles/global.css';
 </section>
 
 <!-- FAQ -->
-<section class="s-faq" style="padding:var(--sec) 0" id="faq" aria-labelledby="faq-h">
+<section class="s-faq sec-seam" style="padding:var(--sec) 0" id="faq" aria-labelledby="faq-h">
   <div class="wrap">
     <div class="faq-in">
       <div>
@@ -519,7 +530,7 @@ import '../styles/global.css';
 </section>
 
 <!-- FINAL CTA -->
-<section class="s-cta has-texture" id="contact" aria-labelledby="cta-h">
+<section class="s-cta sec-seam has-texture" id="contact" aria-labelledby="cta-h">
   <div class="sec-texture" data-texture="2" data-parallax aria-hidden="true"></div>
   <div class="wrap">
     <div class="cta-in">
@@ -535,7 +546,7 @@ import '../styles/global.css';
 </main>
 
 <!-- FOOTER -->
-<footer class="s-foot" aria-label="Pied de page">
+<footer class="s-foot sec-seam" aria-label="Pied de page">
   <div class="wrap">
     <div class="foot-in">
       <div>

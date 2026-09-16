@@ -16,7 +16,8 @@
     "build:assets": "node scripts/build-assets.mjs",
     "build:images": "node scripts/build-images.mjs",
     "check:contrast:rendered": "node scripts/check-contrast-rendered.mjs",
-    "build:logos": "node scripts/build-logos.mjs && mkdir -p public/logos && cp src/assets/logos/*.svg public/logos/"
+    "build:logos": "node scripts/build-logos.mjs && mkdir -p public/logos && cp src/assets/logos/*.svg public/logos/",
+    "check:seams": "node scripts/check-seams.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^6.0.4",

@@ -432,11 +432,18 @@ import '../styles/global.css';
     }
   }
 
-  function animate(){
-    RAF=requestAnimationFrame(animate);
+  /* Ce décor animait ses particules même sous prefers-reduced-motion.
+     Il dessine désormais une seule image figée pour qui le demande. */
+  var PRM=window.matchMedia('(prefers-reduced-motion:reduce)');
+  function draw(){
     ctx.clearRect(0,0,W,H);
     for(var i=0;i<pts.length;i++)pts[i].update();
     connect();
+  }
+  function animate(){
+    if(PRM.matches){ draw(); return; }
+    RAF=requestAnimationFrame(animate);
+    draw();
   }
 
   function init(){

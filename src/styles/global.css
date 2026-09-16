@@ -134,7 +134,7 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
 /* Balayage de lumière cuivre au survol */
 .btn::after{
   content:'';position:absolute;inset:0;z-index:-1;
-  background:linear-gradient(105deg,transparent 30%,var(--media-tint) 50%,transparent 70%);
+  background:linear-gradient(105deg,rgb(from var(--media-tint) r g b / 0) 30%,var(--media-tint) 50%,rgb(from var(--media-tint) r g b / 0) 70%);
   transform:translateX(-120%);
 }
 .btn:hover{background:var(--accent-hover);transform:translateY(-2px);box-shadow:var(--shadow-2)}
@@ -326,7 +326,30 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
 /* ═══════════════════════════════════════════════════════════════════════
    PIED DE PAGE
    ═══════════════════════════════════════════════════════════════════════ */
-.s-foot{border-top:1px solid var(--border);background:var(--surface)}
+/* ── SÉPARATIONS DE SECTION ──
+   Un border-top traverse tout l'écran et se termine par deux arêtes
+   franches sur les bords : c'est ce qui se lit comme une cassure. Le filet
+   naît et meurt dans le transparent, et descend d'un ton. */
+.sec-seam{position:relative}
+.sec-seam::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;z-index:1;
+  /* Paliers explicites : sans eux le dégradé garde une queue d'alpha de
+     quelques pour cent jusqu'au bord de l'écran. Le filet doit être
+     rigoureusement nul avant d'y arriver. */
+  background:linear-gradient(90deg,
+    rgb(from var(--surface-2) r g b / 0) 0%, rgb(from var(--surface-2) r g b / 0) 9%,
+    var(--surface-2) 32%, var(--surface-2) 68%,
+    rgb(from var(--surface-2) r g b / 0) 91%, rgb(from var(--surface-2) r g b / 0) 100%);
+  pointer-events:none;
+}
+/* Le pied de page ne pose plus un aplat à bord franc : le décrochement
+   naît et meurt dans le transparent, comme les autres couches. */
+.s-foot{
+  background:linear-gradient(to bottom,
+    rgb(from var(--surface) r g b / 0) 0%,
+    color-mix(in srgb,var(--surface) 72%,transparent) 18%,
+    color-mix(in srgb,var(--surface) 72%,transparent) 100%);
+}
 .foot-in{
   display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:clamp(28px,5vw,80px);
   padding:clamp(40px,6vh,80px) 0;border-bottom:1px solid var(--border);
@@ -424,10 +447,18 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
    AVIF puis WebP avec repli JPEG, posée à opacity .5 maximum et toujours
    sous le texte. Parallaxe pilotée par /motion.js (désactivée < 1024 px). */
 .sec-texture{
-  position:absolute;inset:-8% 0;z-index:0;pointer-events:none;
-  opacity:.5;background-size:cover;background-position:center;
+  position:absolute;inset:0;z-index:0;pointer-events:none;
+  opacity:.28;background-size:cover;background-position:center;
+  /* Naît et meurt dans le transparent : aucune arête, en haut comme en
+     bas. Le « black » d'un masque est un niveau d'alpha, pas une couleur —
+     seul le canal alpha du dégradé est lu.
+     Comme les deux extrémités sont à alpha 0, la parallaxe peut déplacer
+     l'élément sans jamais exposer de bord franc. */
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,black 14%,black 86%,transparent 100%);
+          mask-image:linear-gradient(to bottom,transparent 0%,black 14%,black 86%,transparent 100%);
 }
-.has-texture{position:relative;isolation:isolate}
+/* overflow:hidden : la texture ne déborde plus de sa section. */
+.has-texture{position:relative;isolation:isolate;overflow:hidden}
 .has-texture>.wrap{position:relative;z-index:1}
 
 .sec-texture[data-texture="1"]{background-image:url('/img/textures/texture-1-dark.jpg')}

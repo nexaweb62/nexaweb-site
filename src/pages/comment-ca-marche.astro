@@ -13,7 +13,7 @@ main { padding-top: var(--hdr) }
 
 /* Hero */
 .hero { padding: clamp(72px,12vh,140px) 0 clamp(48px,8vh,96px); text-align: center; position: relative; overflow: hidden; }
-.hero::before { content:''; position:absolute; inset:0; background: radial-gradient(ellipse 70% 55% at 50% 0%, var(--accent-glow) 0%, transparent 70%); pointer-events:none; }
+.hero::before { content:''; position:absolute; inset:0; background: radial-gradient(ellipse 70% 55% at 50% 0%, var(--accent-glow) 0%, rgb(from var(--accent-glow) r g b / 0) 70%); pointer-events:none; }
 .hero-tag { font-size:10px; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:var(--accent-text); margin-bottom:20px; display:inline-block; }
 .hero-title { font-size:clamp(2rem,5vw,4rem); font-weight:900; letter-spacing:-.04em; line-height:1.05; text-wrap:balance; margin-bottom:20px; }
 .hero-sub { font-size:clamp(.95rem,1.6vw,1.1rem); color:var(--text-muted); line-height:1.7; max-width:520px; margin:0 auto; }
@@ -45,7 +45,7 @@ main { padding-top: var(--hdr) }
 .step-desc { font-size:.9rem; color:var(--text-muted); line-height:1.75; }
 
 /* CTA band */
-.cta-band { border-top:1px solid var(--border); padding: clamp(56px,8vw,96px) 0; text-align:center; }
+.cta-band { padding: clamp(56px,8vw,96px) 0; text-align:center; }
 .cta-band h2 { font-size:clamp(1.5rem,3.5vw,2.6rem); font-weight:900; letter-spacing:-.03em; margin-bottom:14px; text-wrap:balance; }
 .cta-band p { font-size:.95rem; color:var(--text-muted); margin-bottom:36px; line-height:1.65; max-width:440px; margin-left:auto; margin-right:auto; }
 .cta-row { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
@@ -139,7 +139,7 @@ main { padding-top: var(--hdr) }
   </section>
 
   <!-- CTA -->
-  <section class="cta-band">
+  <section class="cta-band sec-seam">
     <div class="wrap">
       <h2 class="r">Prêt à démarrer ?</h2>
       <p class="r r.d1">Décrivez votre projet en 2 minutes. On vous répond sous 24 h avec un devis gratuit et sans engagement.</p>

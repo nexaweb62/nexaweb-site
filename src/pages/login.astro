@@ -12,7 +12,7 @@ html,body{height:100%;overflow:hidden}
 
 /* LEFT PANEL */
 .login-left{display:flex;flex-direction:column;background:var(--surface);height:100vh;overflow-y:auto;position:relative;z-index:2}
-.login-left::after{content:'';position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:600px;height:600px;background:radial-gradient(ellipse,var(--accent-glow) 0%,transparent 70%);pointer-events:none;z-index:0}
+.login-left::after{content:'';position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:600px;height:600px;background:radial-gradient(ellipse,var(--accent-glow) 0%,rgb(from var(--accent-glow) r g b / 0) 70%);pointer-events:none;z-index:0}
 
 .lf-top{display:flex;align-items:center;justify-content:space-between;padding:28px 40px;position:relative;z-index:1}
 .lf-logo{font-size:14px;font-weight:900;letter-spacing:.1em;color:var(--text)}
@@ -65,7 +65,7 @@ html,body{height:100%;overflow:hidden}
 
 /* RIGHT PANEL */
 .login-right{position:relative;height:100vh;overflow:hidden;background:var(--bg)}
-.login-right::before{content:'';position:absolute;inset:0;background:linear-gradient(to right,var(--surface) 0%,transparent 18%),linear-gradient(to bottom,var(--bg) 0%,transparent 10%,transparent 90%,var(--bg) 100%);z-index:2;pointer-events:none}
+.login-right::before{content:'';position:absolute;inset:0;background:linear-gradient(to right,var(--surface) 0%,rgb(from var(--surface) r g b / 0) 18%),linear-gradient(to bottom,var(--bg) 0%,rgb(from var(--surface) r g b / 0) 10%,rgb(from var(--surface) r g b / 0) 90%,var(--bg) 100%);z-index:2;pointer-events:none}
 .lr-trust{position:absolute;bottom:36px;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:14px;z-index:3;pointer-events:none}
 .lr-trust-label{font-size:9.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--text-subtle)}
 .lr-logos{display:flex;align-items:center;gap:20px}
