@@ -39,11 +39,26 @@ import '../styles/global.css';
 
 /* ── ÉCRAN D'ACCUEIL ── */
 #loader{display:none}
-.js-enabled #loader{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center}
+/* :global() est indispensable : .js-enabled vit sur <html>, hors du
+   composant. Sans lui, Astro scope le sélecteur en
+   « .js-enabled[data-astro-cid-…] #loader[data-astro-cid-…] », <html> ne
+   porte pas l'attribut, la règle ne matche jamais et l'écran d'accueil
+   reste invisible. */
+:global(html.js-enabled) #loader{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center}
 #loader.ld-exit{opacity:0;transform:scale(1.06);transition:opacity .85s var(--ease-inout),transform .85s var(--ease-inout);pointer-events:none}
 .ld-nucleus-wrap{position:fixed;inset:0;z-index:0}
+/* Le champ de soie bouge : la marque et le bouton ne peuvent pas dépendre
+   de ce qui passe derrière eux. Ce voile leur garantit un fond d'encre
+   stable, sans masquer le décor sur les bords. */
+.ld-scrim{
+  position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(ellipse 38% 34% at 50% 50%,
+    var(--bg) 0%,
+    color-mix(in srgb,var(--bg) 88%,transparent) 42%,
+    transparent 78%);
+}
 #nucleus-cv{display:block;width:100%;height:100%}
-.ld-inner{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;text-align:center;user-select:none;gap:0}
+.ld-inner{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;user-select:none;gap:0}
 .ld-brand{font-size:11px;font-weight:700;letter-spacing:.30em;text-transform:uppercase;color:var(--text);margin-bottom:56px;opacity:0;transform:translateY(10px);animation:ldfade .55s var(--ease-out) .08s forwards}
 .ld-brand b{color:var(--accent-text);font-weight:700}
 
@@ -71,7 +86,14 @@ import '../styles/global.css';
 .enter-btn:hover::after{transform:translateX(120%);transition:transform 600ms var(--ease-inout)}
 .enter-btn:active{transform:scale(.97)}
 @keyframes ldfade{to{opacity:1;transform:none}}
-@media(prefers-reduced-motion:reduce){#loader{display:none}}
+/* Mouvement réduit : l'écran d'accueil reste — c'est un choix de design,
+   pas une décoration. Seul le mouvement disparaît : apparition et
+   disparition instantanées. */
+@media(prefers-reduced-motion:reduce){
+  .ld-brand,.enter-btn{animation:none!important;opacity:1!important;transform:none!important}
+  #loader.ld-exit{transition:none!important}
+  .enter-btn::after{display:none}
+}
 
 /* ── HERO ── */
 .s-hero{min-height:100svh;display:flex;flex-direction:column;padding-top:var(--hdr)}
@@ -259,9 +281,10 @@ import '../styles/global.css';
   <div class="ld-nucleus-wrap" aria-hidden="true">
     <canvas id="nucleus-cv"></canvas>
   </div>
+  <div class="ld-scrim" aria-hidden="true"></div>
   <div class="ld-inner">
     <div class="ld-brand">NEXA<b>WEB</b></div>
-    <button class="enter-btn" id="enter-btn" aria-label="Entrer dans le site">
+    <button type="button" class="enter-btn" id="enter-btn">
       <span data-i18n="idx-enter">Entrer</span>
     </button>
   </div>
@@ -269,7 +292,7 @@ import '../styles/global.css';
 
 <Header back={false} />
 
-<main id="main-content">
+<main id="main-content" tabindex="-1">
 
 <!-- HERO -->
 <section class="s-hero" id="accueil" aria-label="Accueil">
@@ -562,16 +585,52 @@ import '../styles/global.css';
   'use strict';
   var ld=document.getElementById('loader');
   if(!ld)return;
-  if(sessionStorage.getItem('nxa-ld')){ld.remove();return;}
-  if(window.matchMedia('(prefers-reduced-motion:reduce)').matches){ld.remove();return;}
+
+  // Déjà entré dans cette session : on retire l'écran sans l'afficher.
+  var seen=false;
+  try{ seen=!!sessionStorage.getItem('nxa-ld'); }catch(e){}
+  if(seen){ ld.remove(); return; }
+
   var enterBtn=document.getElementById('enter-btn');
-  if(enterBtn){
-    enterBtn.addEventListener('click',function(){
-      sessionStorage.setItem('nxa-ld','1');
-      ld.classList.add('ld-exit');
-      setTimeout(function(){ld.remove();},900);
-    });
+  var main=document.getElementById('main-content');
+  if(!enterBtn){ ld.remove(); return; }
+
+  var reduced=window.matchMedia('(prefers-reduced-motion:reduce)');
+
+  // L'écran est un dialogue modal : on verrouille le défilement derrière
+  // lui et on amène le focus sur sa seule action.
+  document.body.style.overflow='hidden';
+  enterBtn.focus();
+
+  // Une seule cible focusable : la tabulation y reste, comme l'exige
+  // aria-modal.
+  function trap(e){
+    if(e.key==='Tab'){ e.preventDefault(); enterBtn.focus(); return; }
+    if(e.key==='Escape'){ e.preventDefault(); enter(); }
   }
+  document.addEventListener('keydown',trap);
+
+  var done=false;
+  function enter(){
+    if(done) return;
+    done=true;
+    try{ sessionStorage.setItem('nxa-ld','1'); }catch(e){}
+    document.removeEventListener('keydown',trap);
+    document.body.style.overflow='';
+
+    function finish(){
+      ld.remove();
+      // Le focus doit revenir dans le document, pas rester dans le vide
+      // après la disparition du bouton.
+      if(main) main.focus({preventScroll:true});
+    }
+
+    if(reduced.matches){ finish(); return; }   // disparition instantanée
+    ld.classList.add('ld-exit');
+    setTimeout(finish,900);
+  }
+
+  enterBtn.addEventListener('click',enter);
 })();
 </script>
 
@@ -771,15 +830,29 @@ void main(){
   gl_FragColor=vec4(clamp(col,0.0,1.0),1.0);
 }`;
 
+    /* Une erreur de compilation ou d'édition de liens était jusqu'ici
+       avalée en silence : le programme ne tournait pas et le fond sortait
+       noir, sans rien dans la console pour le dire. */
     function mkShader(type,src){
       var s=gl.createShader(type);
       gl.shaderSource(s,src);gl.compileShader(s);
+      if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){
+        console.warn('[NexaWeb] shader non compilé :',gl.getShaderInfoLog(s));
+        return null;
+      }
       return s;
     }
+    var vs=mkShader(gl.VERTEX_SHADER,VS), fs=mkShader(gl.FRAGMENT_SHADER,FS);
+    if(!vs||!fs) return;
     var prog=gl.createProgram();
-    gl.attachShader(prog,mkShader(gl.VERTEX_SHADER,VS));
-    gl.attachShader(prog,mkShader(gl.FRAGMENT_SHADER,FS));
-    gl.linkProgram(prog);gl.useProgram(prog);
+    gl.attachShader(prog,vs);
+    gl.attachShader(prog,fs);
+    gl.linkProgram(prog);
+    if(!gl.getProgramParameter(prog,gl.LINK_STATUS)){
+      console.warn('[NexaWeb] programme non lié :',gl.getProgramInfoLog(prog));
+      return;
+    }
+    gl.useProgram(prog);
 
     var buf=gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER,buf);
@@ -788,7 +861,10 @@ void main(){
     gl.enableVertexAttribArray(aPos);
     gl.vertexAttribPointer(aPos,2,gl.FLOAT,false,0,0);
 
-    var uColors=gl.getUniformLocation(prog,'u_colors');
+    /* Pour un uniforme tableau, la forme portable est « u_colors[0] ».
+       Certains pilotes renvoient null pour le nom nu, et gl.uniform3fv(null,…)
+       est un no-op silencieux : la palette reste à zéro et le fond sort noir. */
+    var uColors=gl.getUniformLocation(prog,'u_colors[0]')||gl.getUniformLocation(prog,'u_colors');
     var uScene=gl.getUniformLocation(prog,'u_scene');
     var uShape=gl.getUniformLocation(prog,'u_shape');
     var uSurface=gl.getUniformLocation(prog,'u_surface');
@@ -798,15 +874,38 @@ void main(){
     var uCursor=gl.getUniformLocation(prog,'u_cursor');
 
     /* Les quatre teintes du dégradé viennent des tokens : encre profonde,
-       encre élevée, cuivre, cuivre clair. Rien n'est écrit en dur. */
-    function lin(name){
-      var c=(window.nwTokenRgb?window.nwTokenRgb(name):[0,0,0]);
-      return c.map(function(v){var s=v/255;return s<=0.04045?s/12.92:Math.pow((s+0.055)/1.055,2.4);});
+       encre élevée, cuivre, cuivre clair. Rien n'est écrit en dur.
+
+       Le shader attend des valeurs sRGB normalisées, PAS de la lumière
+       linéaire : quand l'oklab est actif il appelle lui-même
+       srgbToLinear() sur ses entrées. Les linéariser ici écrasait toute
+       la palette vers le noir, dans les deux thèmes. */
+    function srgb(name){
+      /* Lecture autonome du token. Passer par window.nwTokenRgb créait une
+         dépendance à l'ordre de chargement : ce script s'exécute pendant
+         l'analyse du document, motion.js est en defer et s'exécute après.
+         Le pont n'existait pas encore, srgb() renvoyait [0,0,0] pour tout,
+         et le fond sortait noir. */
+      var v=getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+      var h=v.charAt(0)==='#'
+        ? (v.length===4 ? v[1]+v[1]+v[2]+v[2]+v[3]+v[3] : v.slice(1))
+        : null;
+      if(h) return [0,2,4].map(function(i){ return parseInt(h.substr(i,2),16)/255; });
+      var m=v.match(/-?[\d.]+/g);
+      return m ? [m[0]/255, m[1]/255, m[2]/255] : [0,0,0];
     }
-    gl.uniform3fv(uColors,new Float32Array([].concat(
-      lin('--bg'), lin('--surface-2'), lin('--accent'), lin('--accent-hover'),
-      [0,0,0, 0,0,0, 0,0,0, 0,0,0]
-    )));
+    function paintPalette(){
+      gl.uniform3fv(uColors,new Float32Array([].concat(
+        srgb('--bg'), srgb('--surface'), srgb('--surface-2'), srgb('--accent'),
+        [0,0,0, 0,0,0, 0,0,0, 0,0,0]
+      )));
+    }
+    paintPalette();
+    // L'écran d'accueil peut rester ouvert pendant une bascule de thème.
+    document.addEventListener('nw-theme',function(){
+      paintPalette();
+      if(window.matchMedia('(prefers-reduced-motion:reduce)').matches) draw(0.6);
+    });
     gl.uniform4f(uShape,    1.50,0.55,0.50,0.00);
     gl.uniform4f(uSurface,  2.40,1.00,-0.03,1.00);
     gl.uniform4f(uFinish,   0.00,0.00,0.012,0.04);
@@ -823,20 +922,29 @@ void main(){
       cv.width=w;cv.height=h;gl.viewport(0,0,w,h);
     }
     resize();
-    window.addEventListener('resize',resize,{passive:true});
+    window.addEventListener('resize',function(){
+      resize();
+      if(window.matchMedia('(prefers-reduced-motion:reduce)').matches) draw(0.6);
+    },{passive:true});
 
     document.addEventListener('visibilitychange',function(){
       if(document.hidden){paused=true;cancelAnimationFrame(rafN);}
       else{paused=false;t0=performance.now()-lastT*1000;rafN=requestAnimationFrame(tick);}
     });
 
+    function draw(time){
+      gl.uniform4f(uScene,cv.width,cv.height,time,4.0);
+      gl.drawArrays(gl.TRIANGLES,0,3);
+    }
     function tick(ts){
       rafN=requestAnimationFrame(tick);
       lastT=(ts-t0)/1000;
-      gl.uniform4f(uScene,cv.width,cv.height,lastT*0.31,4.0);
-      gl.drawArrays(gl.TRIANGLES,0,3);
+      draw(lastT*0.31);
     }
-    rafN=requestAnimationFrame(tick);
+    // Mouvement réduit : une seule image, figée. Le décor reste, la boucle
+    // d'animation ne démarre pas.
+    if(window.matchMedia('(prefers-reduced-motion:reduce)').matches) draw(0.6);
+    else rafN=requestAnimationFrame(tick);
 
     var obs=new MutationObserver(function(muts){
       muts.forEach(function(m){m.removedNodes.forEach(function(n){
