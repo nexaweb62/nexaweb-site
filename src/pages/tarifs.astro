@@ -47,19 +47,19 @@ import '../styles/global.css';
 @media(max-width:900px){.plans-grid{grid-template-columns:1fr;max-width:480px;margin-left:auto;margin-right:auto}}
 @media(max-width:600px){
   .plan-card{padding:14px 14px}
-  .plan-name{font-size:10.5px;margin-bottom:8px}
+  .plan-name{font-size:var(--fs-caption);margin-bottom:8px}
   .plan-from,.plan-to{font-size:20px}
   .plan-amount{font-size:22px}
   .plan-sep{font-size:13px}
-  .plan-desc{font-size:10px}
-  .plan-feature{font-size:10.5px;gap:6px}
+  .plan-desc{font-size:var(--fs-caption)}
+  .plan-feature{font-size:var(--fs-caption);gap:6px}
   .plan-feature-icon{width:14px;height:14px}
   .plan-feature-icon svg{width:7px;height:7px}
-  .plan-spots{font-size:10px;padding:4px 8px}
+  .plan-spots{font-size:var(--fs-caption);padding:4px 8px}
   .plan-spots-num{font-size:12px}
   .plan-divider{margin:12px 0}
   .plan-features{gap:7px;margin-bottom:16px}
-  .btn,.btn-g{font-size:10px;padding:10px 16px}
+  .btn,.btn-g{font-size:var(--fs-caption);padding:10px 16px}
 }
 .plan-card{
   position:relative;display:flex;flex-direction:column;
@@ -103,8 +103,11 @@ import '../styles/global.css';
   background:var(--accent-glow);border:1px solid var(--accent);border-radius:16px;
   padding:clamp(32px,4vw,52px);
 }
-.cta-title{font-size:clamp(20px,3vw,30px);font-weight:700;letter-spacing:-.02em;margin-bottom:12px}
-.cta-sub{font-size:14px;color:var(--text-muted);line-height:1.65;margin-bottom:28px}
+.cta-title{font-size:clamp(20px,3vw,30px);font-weight:600;letter-spacing:-.02em;margin-bottom:12px}
+/* Mesuré : sur un panneau teinté (or ou vert à ~13 %), le gris secondaire
+   tombe juste sous AA en sombre — 4.48:1 et 4.1:1. Sur ces fonds-là, le
+   texte secondaire prend l'encre pleine. */
+.cta-sub{font-size:14px;color:var(--text);line-height:1.65;margin-bottom:28px}
 .cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 
 /* ── AMBIANCE ──

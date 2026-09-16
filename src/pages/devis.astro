@@ -16,18 +16,21 @@ import '../styles/global.css';
 /* ── LAUNCH NOTICE ── */
 .launch-notice{display:flex;align-items:center;gap:12px;background:var(--success-glow);border:1px solid var(--success);border-radius:10px;padding:14px 18px;margin-bottom:32px}
 .launch-notice svg{width:18px;height:18px;stroke:var(--success);stroke-width:2;fill:none;flex-shrink:0}
-.launch-notice p{font-size:12.5px;color:var(--text-muted);line-height:1.55}
+/* Mesuré : sur un panneau teinté (or ou vert à ~13 %), le gris secondaire
+   tombe juste sous AA en sombre — 4.48:1 et 4.1:1. Sur ces fonds-là, le
+   texte secondaire prend l'encre pleine. */
+.launch-notice p{font-size:12.5px;color:var(--text);line-height:1.55}
 .launch-notice strong{color:var(--success)}
 
 /* ── CARD HEAD ── */
-.card-eyebrow{font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--accent-text);margin-bottom:10px}
-.card-title{font-size:clamp(1.6rem,3vw,2.4rem);font-weight:900;letter-spacing:-.04em;line-height:.95;margin-bottom:10px}
+.card-eyebrow{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--accent-text);margin-bottom:10px}
+.card-title{font-size:clamp(1.6rem,3vw,2.4rem);font-weight:600;letter-spacing:-.04em;line-height:.95;margin-bottom:10px}
 .card-title em{font-style:italic;color:var(--text-muted)}
 .card-sub{font-size:13px;color:var(--text-muted);line-height:1.6;margin-bottom:36px}
 
 /* ── SECTION LABEL ── */
 .form-section{margin-bottom:28px}
-.section-label{font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--text-muted);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border);display:block}
+.section-label{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-muted);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border);display:block}
 :root[data-theme="light"] .section-label{border-bottom-color:var(--border)}
 @media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .section-label{border-bottom-color:var(--border)}}
 
@@ -39,15 +42,15 @@ import '../styles/global.css';
   .devis-card{padding:22px 18px}
   .card-title{font-size:1.35rem}
   .card-sub{font-size:12px;margin-bottom:24px}
-  .field label{font-size:9px}
+  .field label{font-size:var(--fs-caption)}
   .field input:not([type=checkbox]):not([type=radio]),.field textarea,.field select{font-size:12px;padding:10px 13px}
-  .section-label{font-size:8px}
-  .submit-btn{font-size:10px;padding:12px 22px}
-  .budget-pill{font-size:10px;padding:7px 13px}
+  .section-label{font-size:var(--fs-caption)}
+  .submit-btn{font-size:var(--fs-caption);padding:12px 22px}
+  .budget-pill{font-size:var(--fs-caption);padding:7px 13px}
 }
 .field{display:flex;flex-direction:column;gap:6px}
 .field-full{grid-column:1/-1}
-.field label{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted)}
+.field label{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-muted)}
 .field input:not([type=checkbox]):not([type=radio]),.field textarea,.field select{
   width:100%;padding:12px 15px;background:var(--surface);border:1px solid var(--border);border-radius:5px;
   font:inherit;font-size:13px;color:var(--text);outline:none;
@@ -80,13 +83,13 @@ import '../styles/global.css';
 .submit-row{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:32px;padding-top:24px;border-top:1px solid var(--border)}
 :root[data-theme="light"] .submit-row{border-top-color:var(--border)}
 @media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .submit-row{border-top-color:var(--border)}}
-.submit-note{font-size:11px;color:var(--text-muted);line-height:1.55}
+.submit-note{font-size:var(--fs-caption);color:var(--text-muted);line-height:1.55}
 .submit-note svg{display:inline;width:12px;height:12px;stroke:var(--success);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;margin-right:4px;vertical-align:-1px}
-.submit-btn{display:inline-flex;align-items:center;gap:10px;padding:15px 32px;background:var(--accent);color:var(--on-accent);border-radius:5px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;border:none;cursor:pointer;box-shadow:var(--shadow-2);transition:opacity .2s,transform .2s;white-space:nowrap}
-.submit-btn:hover{opacity:.9;transform:translateY(-2px)}
+.submit-btn{display:inline-flex;align-items:center;gap:10px;padding:15px 32px;border-radius:var(--radius-pill);font-size:var(--fs-caption);font-weight:600;letter-spacing:0;cursor:pointer;transition:background-color .2s,transform .2s;white-space:nowrap}
+.submit-btn:hover{transform:translateY(-2px)}
 .submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none!important}
 .submit-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.submit-btn-spinner{display:none;width:14px;height:14px;border:2px solid var(--media-tint-hi);border-top-color:var(--on-accent);border-radius:50%;animation:spin .7s linear infinite}
+.submit-btn-spinner{display:none;width:14px;height:14px;border:2px solid var(--glass-edge-r);border-top-color:currentColor;border-radius:50%;animation:spin .7s linear infinite}
 .submit-btn.loading .submit-btn-icon{display:none}
 .submit-btn.loading .submit-btn-spinner{display:block}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -95,10 +98,10 @@ import '../styles/global.css';
 .rgpd-row{padding:14px 16px;margin-top:6px;background:var(--accent-glow);border:1px solid var(--accent);border-radius:8px}
 .rgpd-label{display:flex;align-items:flex-start;gap:10px;cursor:pointer}
 .rgpd-label input[type=checkbox]{width:15px;height:15px;flex-shrink:0;margin-top:2px;accent-color:var(--accent);cursor:pointer}
-.rgpd-label span{font-size:11.5px;line-height:1.65;color:var(--text-muted)}
+.rgpd-label span{font-size:var(--fs-caption);line-height:1.65;color:var(--text)}
 .rgpd-label a{color:var(--accent-text);text-decoration:underline}
 .req{color:var(--accent-text)}
-.field-err{font-size:11px;color:var(--danger);min-height:14px;display:block;margin-top:3px;line-height:1.4}
+.field-err{font-size:var(--fs-caption);color:var(--danger);min-height:14px;display:block;margin-top:3px;line-height:1.4}
 
 /* ── FORM BANNER ── */
 .form-banner{display:none;align-items:flex-start;gap:10px;padding:12px 16px;border-radius:9px;font-size:12.5px;line-height:1.55;margin-bottom:20px}
@@ -112,10 +115,10 @@ import '../styles/global.css';
 .devis-form.hide{display:none}
 .success-icon{width:64px;height:64px;border-radius:50%;background:var(--success-glow);border:1px solid var(--success);display:flex;align-items:center;justify-content:center}
 .success-icon svg{width:30px;height:30px;stroke:var(--success);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.success-title{font-size:1.5rem;font-weight:800;letter-spacing:-.03em}
+.success-title{font-size:1.5rem;font-weight:600;letter-spacing:-.03em}
 .success-text{font-size:13px;color:var(--text-muted);line-height:1.65;max-width:380px}
-.success-back{display:inline-flex;align-items:center;gap:8px;font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);border:1px solid var(--field-border);border-radius:4px;padding:11px 22px;transition:color .2s,border-color .2s;cursor:pointer;background:none}
-.success-back:hover{color:var(--text);border-color:var(--border-strong)}
+.success-back{display:inline-flex;align-items:center;gap:8px;font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text);border-radius:var(--radius-pill);padding:11px 22px;transition:color .2s,background-color .2s,transform .2s;cursor:pointer}
+.success-back:hover{color:var(--text)}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px}
 
 /* ── AETHER CANVAS ── */

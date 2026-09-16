@@ -14,57 +14,57 @@ html,body{height:100%;overflow:hidden}
 .login-left::after{content:'';position:fixed;left:25%;top:50%;transform:translate(-50%,-50%);width:500px;height:500px;background:radial-gradient(ellipse,var(--accent-glow) 0%,rgb(from var(--accent-glow) r g b / 0) 70%);pointer-events:none;z-index:0}
 
 .lf-top{display:flex;align-items:center;justify-content:space-between;padding:28px 40px;position:relative;z-index:1}
-.lf-logo{font-size:14px;font-weight:900;letter-spacing:.1em;color:var(--text)}
+.lf-logo{font-size:14px;font-weight:600;letter-spacing:0;color:var(--text)}
 .lf-logo span{color:var(--text-muted)}
-.lf-back{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);display:flex;align-items:center;gap:6px;transition:color .2s}
+.lf-back{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-muted);display:flex;align-items:center;gap:6px;transition:color .2s}
 .lf-back:hover{color:var(--text)}
 .lf-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
 .lf-body{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:24px 40px 40px;position:relative;z-index:1}
 .lf-form-wrap{width:100%;max-width:400px}
 
-.lf-headline{font-size:clamp(1.5rem,2.6vw,2rem);font-weight:900;line-height:.96;letter-spacing:-.04em;margin-bottom:32px;text-wrap:balance}
-.lf-headline em{font-style:italic;font-weight:800;color:var(--text-muted)}
+.lf-headline{font-size:clamp(1.5rem,2.6vw,2rem);font-weight:600;line-height:.96;letter-spacing:-.04em;margin-bottom:32px;text-wrap:balance}
+.lf-headline em{font-style:italic;font-weight:600;color:var(--text-muted)}
 
-.lf-social-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:13px 20px;border:1px solid var(--field-border);border-radius:3px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);transition:border-color .2s,color .2s,background .2s;background:transparent;cursor:pointer}
-.lf-social-btn:hover{border-color:var(--border-strong);color:var(--text);background:var(--surface-glow)}
+.lf-social-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:13px 20px;border-radius:var(--radius-pill);font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text);transition:color .2s,background-color .2s;cursor:pointer}
+.lf-social-btn:hover{color:var(--text)}
 
 .lf-divider{display:flex;align-items:center;gap:14px;margin:20px 0}
 .lf-divider::before,.lf-divider::after{content:'';flex:1;height:1px;background:var(--border)}
-.lf-divider span{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-subtle);flex-shrink:0}
+.lf-divider span{font-size:var(--fs-caption);letter-spacing:0;color:var(--text-subtle);flex-shrink:0}
 
 .insc-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 @media(max-width:480px){.insc-row{grid-template-columns:1fr}}
 
 .lf-field{margin-bottom:10px}
-.lf-label{display:block;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-subtle);margin-bottom:5px}
+.lf-label{display:block;font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-subtle);margin-bottom:5px}
 .lf-input{display:block;width:100%;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:3px;font:inherit;font-size:13px;color:var(--text);outline:none;transition:border-color .2s,box-shadow .2s}
 .lf-input::placeholder{color:var(--text-muted)}
 .lf-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
-.lf-opt{font-size:9px;letter-spacing:.08em;color:var(--text-subtle);margin-left:5px;font-weight:400;text-transform:none}
+.lf-opt{font-size:var(--fs-caption);letter-spacing:0;color:var(--text-subtle);margin-left:5px;font-weight:400;text-transform:none}
 
 .insc-criteria{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;margin-top:7px}
 @media(max-width:480px){.insc-criteria{grid-template-columns:1fr}}
-.insc-crit{display:flex;align-items:center;gap:6px;font-size:10.5px;color:var(--text-subtle);transition:color .25s}
-.insc-crit::before{content:'○';font-size:9px;flex-shrink:0;transition:color .25s}
+.insc-crit{display:flex;align-items:center;gap:6px;font-size:var(--fs-caption);color:var(--text-subtle);transition:color .25s}
+.insc-crit::before{content:'○';font-size:var(--fs-caption);flex-shrink:0;transition:color .25s}
 .insc-crit.ok{color:var(--success)}
 .insc-crit.ok::before{content:'●'}
 
-.insc-match{font-size:10.5px;margin-top:5px;min-height:14px;transition:color .2s;color:var(--text-subtle)}
+.insc-match{font-size:var(--fs-caption);margin-top:5px;min-height:14px;transition:color .2s;color:var(--text-subtle)}
 .insc-match.ok{color:var(--success)}
 .insc-match.err{color:var(--danger)}
 
 .insc-rgpd{display:flex;align-items:flex-start;gap:10px;margin-top:14px}
 .insc-rgpd input[type="checkbox"]{width:15px;height:15px;margin-top:2px;accent-color:var(--accent);flex-shrink:0;cursor:pointer}
-.insc-rgpd label{font-size:11px;color:var(--text-muted);line-height:1.5;cursor:pointer}
+.insc-rgpd label{font-size:var(--fs-caption);color:var(--text-muted);line-height:1.5;cursor:pointer}
 .insc-rgpd a{color:var(--text);text-decoration:underline;text-underline-offset:3px}
 
 .insc-hp{position:absolute;left:-9999px;height:0;overflow:hidden;opacity:0}
 
-.lf-btn{display:flex;align-items:center;justify-content:center;width:100%;margin-top:16px;padding:14px 20px;background:var(--accent);color:var(--on-accent);border-radius:3px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;transition:opacity .2s,transform .2s;border:none;cursor:pointer}
-.lf-btn:hover{opacity:.88;transform:translateY(-1px)}
+.lf-btn{display:flex;align-items:center;justify-content:center;width:100%;margin-top:16px;padding:14px 20px;border-radius:var(--radius-pill);font-size:var(--fs-caption);font-weight:600;letter-spacing:0;transition:background-color .2s,transform .2s;cursor:pointer}
+.lf-btn:hover{transform:translateY(-1px)}
 .lf-btn.loading{opacity:.6;pointer-events:none}
-.lf-btn-spinner{width:14px;height:14px;border:2px solid var(--accent-glow);border-top-color:var(--on-accent);border-radius:50%;animation:spin .7s linear infinite;display:none}
+.lf-btn-spinner{width:14px;height:14px;border:2px solid var(--glass-edge-r);border-top-color:currentColor;border-radius:50%;animation:spin .7s linear infinite;display:none}
 .lf-btn.loading .lf-btn-spinner{display:block}
 .lf-btn.loading .lf-btn-label{display:none}
 @keyframes spin{to{transform:rotate(360deg)}}

@@ -16,31 +16,31 @@ html,body{overflow:hidden;height:100%}
 #globe-loading{position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:var(--bg);transition:opacity .6s}
 #globe-loading.out{opacity:0;pointer-events:none}
 .gl-spinner{width:28px;height:28px;border:2px solid var(--border-strong);border-top-color:var(--accent);border-radius:50%;animation:spin .75s linear infinite}
-.gl-loading-text{font-size:9px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--text-muted)}
+.gl-loading-text{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-muted)}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* Page title */
 .contact-head{position:fixed;top:calc(var(--hdr) + 40px);left:clamp(20px,5vw,80px);z-index:10;pointer-events:none}
-.contact-eyebrow{font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--accent-text);margin-bottom:10px}
-.contact-title{font-size:clamp(1.7rem,3.8vw,3rem);font-weight:900;letter-spacing:-.04em;line-height:.96;color:var(--text)}
+.contact-eyebrow{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--accent-text);margin-bottom:10px}
+.contact-title{font-size:clamp(1.7rem,3.8vw,3rem);font-weight:600;letter-spacing:-.04em;line-height:.96;color:var(--text)}
 .contact-title em{font-style:italic;color:var(--text-muted)}
 
 /* Carvin marker */
 #carvin-pin{position:fixed;z-index:30;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:4px;transform:translate(-50%,-100%) translateY(-10px);opacity:0;transition:opacity .4s}
 #carvin-pin.visible{opacity:1}
-.carvin-badge{font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--text);background:color-mix(in srgb,var(--bg) 78%,transparent);border:1px solid var(--accent);padding:3px 9px;border-radius:4px;backdrop-filter:blur(8px);white-space:nowrap}
+.carvin-badge{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text);background:color-mix(in srgb,var(--bg) 78%,transparent);border:1px solid var(--accent);padding:3px 9px;border-radius:4px;backdrop-filter:blur(8px);white-space:nowrap}
 .carvin-line{width:1px;height:12px;background:linear-gradient(to bottom,var(--accent),rgb(from var(--accent) r g b / 0))}
 .carvin-dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 var(--accent-glow);animation:carvin-beat 2s ease-out infinite}
 @keyframes carvin-beat{0%{box-shadow:0 0 0 0 var(--accent-glow)}70%{box-shadow:0 0 0 14px transparent}100%{box-shadow:0 0 0 0 transparent}}
 
 /* Floating contact buttons */
-.c-btn{position:fixed;z-index:50;display:inline-flex;align-items:center;gap:10px;padding:11px 20px;background:color-mix(in srgb,var(--surface) 65%,transparent);border:1px solid var(--border-strong);border-radius:100px;color:var(--text);font-family:var(--font);font-size:12px;font-weight:500;letter-spacing:.03em;text-decoration:none;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);white-space:nowrap;cursor:pointer;transition:background .25s,border-color .25s,transform .25s;user-select:none}
-.c-btn:hover{background:var(--accent-glow);border-color:var(--accent);transform:translateY(-3px) !important}
+.c-btn{position:fixed;z-index:50;display:inline-flex;align-items:center;gap:10px;padding:11px 20px;border-radius:var(--radius-pill);color:var(--text);font-family:var(--font);font-size:var(--fs-caption);font-weight:500;letter-spacing:0;text-decoration:none;white-space:nowrap;cursor:pointer;transition:background-color .25s,transform .25s;user-select:none}
+.c-btn:hover{transform:translateY(-3px) !important}
 .c-btn svg{width:14px;height:14px;flex-shrink:0;color:var(--accent-text)}
 .c-btn-3{bottom:12%;left:50%;transform:translateX(-50%);animation:fl3 4.8s ease-in-out infinite}
 @keyframes fl3{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-9px)}}
 .c-btn-3:hover{transform:translateX(-50%) translateY(-3px) !important}
-@media(max-width:600px){.c-btn{font-size:11px;padding:9px 15px;gap:8px}.c-btn-3{bottom:10%}}
+@media(max-width:600px){.c-btn{font-size:var(--fs-caption);padding:9px 15px;gap:8px}.c-btn-3{bottom:10%}}
 </style>
 
 <Header />

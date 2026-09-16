@@ -46,22 +46,21 @@ import '../styles/global.css';
 
 .nf-btn-home{
   display:inline-flex;align-items:center;gap:9px;
-  font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-  background:var(--accent);color:var(--on-accent);
-  border-radius:3px;padding:13px 26px;
-  transition:opacity .2s,transform .2s;
+  font-size:var(--fs-caption);font-weight:600;letter-spacing:0;
+  border-radius:var(--radius-pill);padding:13px 26px;
+  transition:background-color .2s,transform .2s;
 }
-.nf-btn-home:hover{opacity:.84;transform:translateY(-1px)}
+.nf-btn-home:hover{transform:translateY(-1px)}
 .nf-btn-home svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
 .nf-btn-explore{
   display:inline-flex;align-items:center;gap:9px;
-  font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-  border:1px solid var(--field-border);color:var(--text-muted);
-  border-radius:3px;padding:13px 26px;
-  transition:border-color .2s,color .2s,transform .2s;
+  font-size:var(--fs-caption);font-weight:600;letter-spacing:0;
+  color:var(--text);
+  border-radius:var(--radius-pill);padding:13px 26px;
+  transition:background-color .2s,color .2s,transform .2s;
 }
-.nf-btn-explore:hover{border-color:var(--border-strong);color:var(--text);transform:translateY(-1px)}
+.nf-btn-explore:hover{color:var(--text);transform:translateY(-1px)}
 .nf-btn-explore svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 </style>
 

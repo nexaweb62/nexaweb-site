@@ -47,18 +47,47 @@ for (const theme of ['dark', 'light']) {
       };
       const lum = ([r,g,b]) => { const f = v => { v/=255; return v<=0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055,2.4); };
         return 0.2126*f(r)+0.7152*f(g)+0.0722*f(b); };
-      const over = (fg, bg) => fg[3] >= 1 ? fg : [0,1,2].map(i => fg[i]*fg[3] + bg[i]*(1-fg[3])).concat(1);
+      // « source-over » complet : le résultat de deux voiles empilés reste
+      // un voile. L'ancienne version forçait alpha = 1 au premier
+      // composite, si bien qu'un voile d'or à 13 % était lu comme de l'or
+      // plein — et un bouton parfaitement lisible ressortait à 1.87:1.
+      const over = (fg, bg) => {
+        if (fg[3] >= 1) return fg;
+        const a = fg[3] + bg[3] * (1 - fg[3]);
+        if (a <= 0) return [0, 0, 0, 0];
+        return [0,1,2].map(i => (fg[i]*fg[3] + bg[i]*bg[3]*(1-fg[3])) / a).concat(a);
+      };
       const ratio = (a,b2) => { const [x,y] = [lum(a),lum(b2)].sort((m,n)=>n-m); return (x+0.05)/(y+0.05); };
 
-      function bgOf(el) {
+      // Les boutons en verre n'ont pas de background-color : ils ont un
+      // dégradé translucide (background-image). Le lire est indispensable,
+      // sinon on mesure le texte contre le fond de page et on croit le
+      // verre lisible alors qu'on ne l'a jamais mesuré.
+      // Chaque arrêt de couleur du dégradé donne un fond candidat ; le
+      // texte traverse toute la hauteur du bouton, donc on retient le pire.
+      const stopsOf = n => {
+        const bi = getComputedStyle(n).backgroundImage;
+        if (!bi || bi === 'none' || !/gradient/.test(bi)) return null;
+        const cols = bi.match(/(?:rgba?|color)\([^()]*\)/g);
+        if (!cols) return null;
+        const out = cols.map(parse).filter(Boolean);
+        return out.length ? out : null;
+      };
+      // k = 0 → premier arrêt de chaque dégradé, k = 1 → dernier.
+      function bgOf(el, k) {
         let acc = null;
         for (let n = el; n; n = n.parentElement) {
-          const c = parse(getComputedStyle(n).backgroundColor);
-          if (!c || c[3] === 0) continue;
-          acc = acc ? over(acc, c) : c;
-          if (acc[3] >= 1) return acc;
+          const st = stopsOf(n);
+          const layers = [];
+          if (st) layers.push(k === 0 ? st[0] : st[st.length - 1]);
+          layers.push(parse(getComputedStyle(n).backgroundColor));
+          for (const c of layers) {
+            if (!c || c[3] === 0) continue;
+            acc = acc ? over(acc, c) : c;
+            if (acc[3] >= 0.999) return acc;
+          }
         }
-        return acc && acc[3] >= 1 ? acc : [255,255,255,1];
+        return acc && acc[3] >= 0.999 ? acc : [255,255,255,1];
       }
 
       const out = [];
@@ -72,13 +101,17 @@ for (const theme of ['dark', 'light']) {
         if (el.closest('[data-on-media]')) return;
         const cs = getComputedStyle(el);
         if (cs.visibility === 'hidden' || cs.display === 'none') return;
+        // Texte réservé aux lecteurs d'écran : découpé à 1 px, jamais peint.
+        // Le contraste ne s'applique pas à ce qui ne s'affiche pas.
+        if (cs.clip !== 'auto' && cs.clip !== '') return;
         if (parseFloat(cs.opacity) < 0.75) return;          // en cours d'animation
         const r = el.getBoundingClientRect();
         if (!r.width || !r.height) return;
 
         const fg = parse(cs.color); if (!fg) return;
-        const bg = bgOf(el);
-        const cr = ratio(over(fg, bg), bg);
+        const cands = [bgOf(el, 0), bgOf(el, 1)];
+        let bg = cands[0], cr = Infinity;
+        for (const c of cands) { const r2 = ratio(over(fg, c), c); if (r2 < cr) { cr = r2; bg = c; } }
         const px = parseFloat(cs.fontSize);
         const bold = parseInt(cs.fontWeight, 10) >= 700;
         // WCAG : « grand texte » = 24px, ou 18.66px en gras → seuil 3:1

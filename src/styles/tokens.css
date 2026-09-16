@@ -61,6 +61,46 @@
   --raw-gold-850: #8E6F26;
   --raw-gold-900: #6B541B;
 
+  /* ── VERRE ──
+     Ce sont des NIVEAUX DE VERRE, pas des couleurs de marque : une arête
+     de lumière et un voile translucide. Ils vivent ici pour que ce
+     fichier reste la seule source de couleur du projet, et se déclinent
+     par thème comme le reste — ce qui évite de dupliquer tout le CSS des
+     boutons en clair et en sombre. */
+  --raw-glass-gold-a-d: rgba(212,179,106,.42);  --raw-glass-gold-b-d: rgba(212,179,106,.20);
+  --raw-glass-gold-ah-d: rgba(212,179,106,.54); --raw-glass-gold-bh-d: rgba(212,179,106,.28);
+  --raw-glass-gold-ink-d: #FFF6E4;
+  --raw-glass-gold-a-l: rgba(168,132,47,.46);   --raw-glass-gold-b-l: rgba(168,132,47,.26);
+  --raw-glass-gold-ah-l: rgba(168,132,47,.60);  --raw-glass-gold-bh-l: rgba(168,132,47,.36);
+  --raw-glass-gold-ink-l: #241B06;
+
+  --raw-glass-ghost-a-d: rgba(255,255,255,.13);  --raw-glass-ghost-b-d: rgba(255,255,255,.05);
+  --raw-glass-ghost-ah-d: rgba(255,255,255,.20); --raw-glass-ghost-bh-d: rgba(255,255,255,.09);
+  --raw-glass-ghost-a-l: rgba(255,255,255,.72);  --raw-glass-ghost-b-l: rgba(255,255,255,.44);
+  --raw-glass-ghost-ah-l: rgba(255,255,255,.88); --raw-glass-ghost-bh-l: rgba(255,255,255,.62);
+
+  --raw-glass-edge-t-d: rgba(255,255,255,.34); --raw-glass-edge-b-d: rgba(0,0,0,.28);
+  --raw-glass-edge-r-d: rgba(255,255,255,.12);
+  --raw-glass-edge-t-l: rgba(255,255,255,.70); --raw-glass-edge-b-l: rgba(90,74,40,.16);
+  --raw-glass-edge-r-l: rgba(125,99,32,.34);
+  --raw-glass-gedge-t-d: rgba(255,255,255,.48); --raw-glass-gedge-b-d: rgba(0,0,0,.3);
+  --raw-glass-gedge-r-d: rgba(212,179,106,.42);
+
+  --raw-glass-sh-gold-d: 0 10px 30px rgba(0,0,0,.42);
+  --raw-glass-sh-ghost-d: 0 8px 24px rgba(0,0,0,.34);
+  --raw-glass-sh-gold-l: 0 8px 24px rgba(90,74,40,.20);
+  --raw-glass-sh-ghost-l: 0 8px 22px rgba(90,74,40,.14);
+
+  /* Repli sans flou : opaque plutôt qu'illisible. */
+  /* Voile de fond : le verre a besoin d'un plancher. Sans lui, une ligne
+     décorative claire qui passe derrière un bouton suffit à faire tomber
+     son libellé sous AA — mesuré sur /404 à 390 px (3.29:1). */
+  --raw-glass-scrim-d: rgba(10,10,11,.34);
+  --raw-glass-scrim-l: rgba(255,255,255,.22);
+  --raw-glass-fb-gold-d: #6B5A35;  --raw-glass-fb-ghost-d: #2A2A2E;
+  --raw-glass-fb-gold-l: #A8842F;  --raw-glass-fb-ghost-l: #EAE4D8;
+  --raw-glass-fb-gold-ink-l: #FFFFFF;
+
   /* Signalétique */
   --raw-green-d: #4C9A78;  --raw-green-l: #256345;
   --raw-amber-d: #D6A24B;  --raw-amber-l: #8A5E12;
@@ -194,6 +234,27 @@
   --shadow-1:      var(--raw-shadow-1-d);
   --shadow-2:      var(--raw-shadow-2-d);
   --decor-opacity: .55;
+  --glass-gold-a:    var(--raw-glass-gold-a-d);
+  --glass-gold-b:    var(--raw-glass-gold-b-d);
+  --glass-gold-ah:   var(--raw-glass-gold-ah-d);
+  --glass-gold-bh:   var(--raw-glass-gold-bh-d);
+  --glass-gold-ink:  var(--raw-glass-gold-ink-d);
+  --glass-ghost-a:   var(--raw-glass-ghost-a-d);
+  --glass-ghost-b:   var(--raw-glass-ghost-b-d);
+  --glass-ghost-ah:  var(--raw-glass-ghost-ah-d);
+  --glass-ghost-bh:  var(--raw-glass-ghost-bh-d);
+  --glass-edge-t:    var(--raw-glass-edge-t-d);
+  --glass-edge-b:    var(--raw-glass-edge-b-d);
+  --glass-edge-r:    var(--raw-glass-edge-r-d);
+  --glass-gedge-t:   var(--raw-glass-gedge-t-d);
+  --glass-gedge-b:   var(--raw-glass-gedge-b-d);
+  --glass-gedge-r:   var(--raw-glass-gedge-r-d);
+  --glass-sh-gold:   var(--raw-glass-sh-gold-d);
+  --glass-sh-ghost:  var(--raw-glass-sh-ghost-d);
+  --glass-fb-gold:   var(--raw-glass-fb-gold-d);
+  --glass-fb-ghost:  var(--raw-glass-fb-ghost-d);
+  --glass-fb-gold-ink: var(--raw-glass-gold-ink-d);
+  --glass-scrim:     var(--raw-glass-scrim-d);
 }
 
 /* ───────────────────────────────────────────────────────────────────────
@@ -227,6 +288,27 @@
     --shadow-1:      var(--raw-shadow-1-l);
     --shadow-2:      var(--raw-shadow-2-l);
     --decor-opacity: .28;
+    --glass-gold-a:    var(--raw-glass-gold-a-l);
+    --glass-gold-b:    var(--raw-glass-gold-b-l);
+    --glass-gold-ah:   var(--raw-glass-gold-ah-l);
+    --glass-gold-bh:   var(--raw-glass-gold-bh-l);
+    --glass-gold-ink:  var(--raw-glass-gold-ink-l);
+    --glass-ghost-a:   var(--raw-glass-ghost-a-l);
+    --glass-ghost-b:   var(--raw-glass-ghost-b-l);
+    --glass-ghost-ah:  var(--raw-glass-ghost-ah-l);
+    --glass-ghost-bh:  var(--raw-glass-ghost-bh-l);
+    --glass-edge-t:    var(--raw-glass-edge-t-l);
+    --glass-edge-b:    var(--raw-glass-edge-b-l);
+    --glass-edge-r:    var(--raw-glass-edge-r-l);
+    --glass-gedge-t:   var(--raw-glass-edge-t-l);
+    --glass-gedge-b:   var(--raw-glass-edge-b-l);
+    --glass-gedge-r:   var(--raw-glass-edge-r-l);
+    --glass-sh-gold:   var(--raw-glass-sh-gold-l);
+    --glass-sh-ghost:  var(--raw-glass-sh-ghost-l);
+    --glass-fb-gold:   var(--raw-glass-fb-gold-l);
+    --glass-fb-ghost:  var(--raw-glass-fb-ghost-l);
+    --glass-fb-gold-ink: var(--raw-glass-fb-gold-ink-l);
+  --glass-scrim:     var(--raw-glass-scrim-l);
   }
 }
 
@@ -258,6 +340,27 @@
   --shadow-1:      var(--raw-shadow-1-l);
   --shadow-2:      var(--raw-shadow-2-l);
   --decor-opacity: .28;
+  --glass-gold-a:    var(--raw-glass-gold-a-l);
+  --glass-gold-b:    var(--raw-glass-gold-b-l);
+  --glass-gold-ah:   var(--raw-glass-gold-ah-l);
+  --glass-gold-bh:   var(--raw-glass-gold-bh-l);
+  --glass-gold-ink:  var(--raw-glass-gold-ink-l);
+  --glass-ghost-a:   var(--raw-glass-ghost-a-l);
+  --glass-ghost-b:   var(--raw-glass-ghost-b-l);
+  --glass-ghost-ah:  var(--raw-glass-ghost-ah-l);
+  --glass-ghost-bh:  var(--raw-glass-ghost-bh-l);
+  --glass-edge-t:    var(--raw-glass-edge-t-l);
+  --glass-edge-b:    var(--raw-glass-edge-b-l);
+  --glass-edge-r:    var(--raw-glass-edge-r-l);
+  --glass-gedge-t:   var(--raw-glass-edge-t-l);
+  --glass-gedge-b:   var(--raw-glass-edge-b-l);
+  --glass-gedge-r:   var(--raw-glass-edge-r-l);
+  --glass-sh-gold:   var(--raw-glass-sh-gold-l);
+  --glass-sh-ghost:  var(--raw-glass-sh-ghost-l);
+  --glass-fb-gold:   var(--raw-glass-fb-gold-l);
+  --glass-fb-ghost:  var(--raw-glass-fb-ghost-l);
+  --glass-fb-gold-ink: var(--raw-glass-fb-gold-ink-l);
+  --glass-scrim:     var(--raw-glass-scrim-l);
 }
 
 /* ───────────────────────────────────────────────────────────────────────
@@ -289,4 +392,25 @@
   --shadow-1:      var(--raw-shadow-1-d);
   --shadow-2:      var(--raw-shadow-2-d);
   --decor-opacity: .55;
+  --glass-gold-a:    var(--raw-glass-gold-a-d);
+  --glass-gold-b:    var(--raw-glass-gold-b-d);
+  --glass-gold-ah:   var(--raw-glass-gold-ah-d);
+  --glass-gold-bh:   var(--raw-glass-gold-bh-d);
+  --glass-gold-ink:  var(--raw-glass-gold-ink-d);
+  --glass-ghost-a:   var(--raw-glass-ghost-a-d);
+  --glass-ghost-b:   var(--raw-glass-ghost-b-d);
+  --glass-ghost-ah:  var(--raw-glass-ghost-ah-d);
+  --glass-ghost-bh:  var(--raw-glass-ghost-bh-d);
+  --glass-edge-t:    var(--raw-glass-edge-t-d);
+  --glass-edge-b:    var(--raw-glass-edge-b-d);
+  --glass-edge-r:    var(--raw-glass-edge-r-d);
+  --glass-gedge-t:   var(--raw-glass-gedge-t-d);
+  --glass-gedge-b:   var(--raw-glass-gedge-b-d);
+  --glass-gedge-r:   var(--raw-glass-gedge-r-d);
+  --glass-sh-gold:   var(--raw-glass-sh-gold-d);
+  --glass-sh-ghost:  var(--raw-glass-sh-ghost-d);
+  --glass-fb-gold:   var(--raw-glass-fb-gold-d);
+  --glass-fb-ghost:  var(--raw-glass-fb-ghost-d);
+  --glass-fb-gold-ink: var(--raw-glass-gold-ink-d);
+  --glass-scrim:     var(--raw-glass-scrim-d);
 }
