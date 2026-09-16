@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Nexa Web">
   <style>
-    .bg { fill: #0B0F14 }
-    .mk { fill: #C8834A }
+    .bg { fill: #0A0A0B }
+    .mk { fill: #D4B36A }
     @media (prefers-color-scheme: light) {
-      .bg { fill: #FBF9F6 }
-      .mk { fill: #A95F2C }
+      .bg { fill: #FAF8F4 }
+      .mk { fill: #A6822E }
     }
   </style>
   <rect class="bg" width="64" height="64" rx="14"/>

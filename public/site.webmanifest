@@ -4,8 +4,8 @@
   "description": "Agence web premium · Carvin, Hauts-de-France",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0B0F14",
-  "theme_color": "#0B0F14",
+  "background_color": "#0A0A0B",
+  "theme_color": "#0A0A0B",
   "icons": [
     {
       "src": "/icons/icon-192.png",

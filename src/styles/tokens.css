@@ -24,60 +24,62 @@
         par un composant. Elles ne servent qu'au mapping sémantique (3).
      ───────────────────────────────────────────────────────────────────── */
 
-  /* Encre — bleu-nuit profond, jamais violet, jamais bleu roi */
-  --raw-ink-950:  #0B0F14;
-  --raw-ink-900:  #111720;
-  --raw-ink-800:  #18202B;
-  --raw-ink-700:  #232C38;
-  --raw-ink-600:  #33404F;
-  --raw-ink-500:  #606D7C;
-  --raw-ink-text: #14191F;
+  /* Noir — neutre, très légèrement chaud. Surtout PAS de noir pur #000 :
+     les ombres et les bordures y deviennent invisibles et le rendu dur. */
+  --raw-black-950: #0A0A0B;
+  --raw-black-900: #121214;
+  --raw-black-850: #1A1A1D;
+  --raw-black-800: #26262A;
+  --raw-black-700: #3A3A40;
+  --raw-black-600: #6A6A73;
+  --raw-black-ink: #141416;
 
-  /* Brume — les textes du mode sombre */
-  --raw-mist-50:  #EDF1F5;
-  --raw-mist-300: #9AA7B4;
-  --raw-mist-400: #7C8A99;
+  /* Blancs chauds — les textes du mode sombre */
+  --raw-warm-50:  #F4F2EE;
+  --raw-warm-300: #A8A49C;
+  --raw-warm-400: #888379;
 
-  /* Papier — crème ivoire, jamais blanc pur (le blanc pur est froid) */
+  /* Papier — crème chaud, jamais blanc pur (le blanc pur est froid) */
   --raw-paper-0:   #FFFFFF;
-  --raw-paper-50:  #FBF9F6;
-  --raw-paper-100: #F2EEE8;
-  --raw-sand-200:  #E4DDD3;
-  --raw-sand-300:  #CFC5B7;
+  --raw-paper-50:  #FAF8F4;
+  --raw-paper-100: #F1EDE5;
+  --raw-sand-200:  #E3DDD0;
+  --raw-sand-300:  #CFC7B5;
+  --raw-sand-500:  #8F8670;
 
-  /* Ardoise — les textes du mode clair */
-  --raw-slate-600: #4A5563;
-  --raw-slate-500: #626C7A;
-  --raw-sand-500:  #8A8378;
+  /* Gris chauds — les textes du mode clair */
+  --raw-stone-600: #55514A;
+  --raw-stone-500: #6E6960;
 
-  /* Cuivre — l'accent. Métal, tampon, savoir-faire. */
-  --raw-copper-300: #DB9A63;
-  --raw-copper-400: #C8834A;
-  --raw-copper-600: #AE6C38;
-  --raw-copper-700: #A95F2C;
-  --raw-copper-800: #8E4E22;
-  --raw-copper-900: #7A4219;
+  /* Or sable — l'accent. Métal mat, joaillerie, jamais cuivré-rouge. */
+  --raw-gold-300: #E3C684;
+  --raw-gold-400: #D4B36A;
+  --raw-gold-600: #B8974F;
+  --raw-gold-700: #A6822E;
+  --raw-gold-800: #7D6320;
+  --raw-gold-850: #8E6F26;
+  --raw-gold-900: #6B541B;
 
   /* Signalétique */
   --raw-green-d: #4C9A78;  --raw-green-l: #256345;
   --raw-amber-d: #D6A24B;  --raw-amber-l: #8A5E12;
   --raw-red-d:   #D46A5C;  --raw-red-l:   #B4453A;
 
-  /* Halos cuivre (8–14 % d'opacité, jamais dans le chemin du texte) */
-  --raw-glow-d: rgba(200, 131, 74, .14);
-  --raw-glow-l: rgba(169,  95, 44, .10);
+  /* Halos d'or (11–13 % d'opacité, jamais dans le chemin du texte) */
+  --raw-glow-d: rgba(212, 179, 106, .13);
+  --raw-glow-l: rgba(168, 132,  47, .11);
 
   /* Ombres — aucune ombre teintée couleur, aucune ombre en dur ailleurs */
-  --raw-shadow-1-d: 0 1px 2px rgba(0, 0, 0, .35);
-  --raw-shadow-2-d: 0 10px 30px rgba(0, 0, 0, .28);
-  --raw-shadow-1-l: 0 1px 2px rgba(20, 25, 31, .06);
-  --raw-shadow-2-l: 0 10px 30px rgba(20, 25, 31, .08);
+  --raw-shadow-1-d: 0 1px 2px rgba(0, 0, 0, .5);
+  --raw-shadow-2-d: 0 12px 32px rgba(0, 0, 0, .45);
+  --raw-shadow-1-l: 0 1px 2px rgba(20, 20, 22, .06);
+  --raw-shadow-2-l: 0 12px 32px rgba(20, 20, 22, .10);
 
   /* Voiles photographiques — indépendants du thème : ils vivent PAR-DESSUS
      une image sombre, dans les deux modes. */
   --on-media:        #FFFFFF;
-  --media-scrim-900: rgba(11, 15, 20, .94);
-  --media-scrim-600: rgba(11, 15, 20, .62);
+  --media-scrim-900: rgba(10, 10, 11, .94);
+  --media-scrim-600: rgba(10, 10, 11, .62);
   --media-tint:      rgba(255, 255, 255, .10);
   --media-tint-hi:   rgba(255, 255, 255, .18);
   --media-edge:      rgba(255, 255, 255, .16);
@@ -145,25 +147,25 @@
      ───────────────────────────────────────────────────────────────────── */
   color-scheme: dark;
 
-  --bg:            var(--raw-ink-950);
-  --surface:       var(--raw-ink-900);
-  --surface-2:     var(--raw-ink-800);
-  --border:        var(--raw-ink-700);
-  --border-strong: var(--raw-ink-600);
-  --field-border:  var(--raw-ink-500);
-  --text:          var(--raw-mist-50);
-  --text-muted:    var(--raw-mist-300);
-  --text-subtle:   var(--raw-mist-400);
-  --accent:        var(--raw-copper-400);
-  --accent-text:   var(--raw-copper-400);
-  --accent-hover:  var(--raw-copper-300);
-  --accent-active: var(--raw-copper-600);
-  --on-accent:     var(--raw-ink-950);
+  --bg:            var(--raw-black-950);
+  --surface:       var(--raw-black-900);
+  --surface-2:     var(--raw-black-850);
+  --border:        var(--raw-black-800);
+  --border-strong: var(--raw-black-700);
+  --field-border:  var(--raw-black-600);
+  --text:          var(--raw-warm-50);
+  --text-muted:    var(--raw-warm-300);
+  --text-subtle:   var(--raw-warm-400);
+  --accent:        var(--raw-gold-400);
+  --accent-text:   var(--raw-gold-400);
+  --accent-hover:  var(--raw-gold-300);
+  --accent-active: var(--raw-gold-600);
+  --on-accent:     var(--raw-black-950);
   --accent-glow:   var(--raw-glow-d);
   --success:       var(--raw-green-d);
   --warning:       var(--raw-amber-d);
   --danger:        var(--raw-red-d);
-  --focus:         var(--raw-copper-300);
+  --focus:         var(--raw-gold-300);
   --shadow-1:      var(--raw-shadow-1-d);
   --shadow-2:      var(--raw-shadow-2-d);
   --decor-opacity: .55;
@@ -184,19 +186,19 @@
     --border:        var(--raw-sand-200);
     --border-strong: var(--raw-sand-300);
     --field-border:  var(--raw-sand-500);
-    --text:          var(--raw-ink-text);
-    --text-muted:    var(--raw-slate-600);
-    --text-subtle:   var(--raw-slate-500);
-    --accent:        var(--raw-copper-700);
-    --accent-text:   var(--raw-copper-800);
-    --accent-hover:  var(--raw-copper-800);
-    --accent-active: var(--raw-copper-900);
-    --on-accent:     var(--raw-paper-0);
+    --text:          var(--raw-black-ink);
+    --text-muted:    var(--raw-stone-600);
+    --text-subtle:   var(--raw-stone-500);
+    --accent:        var(--raw-gold-700);
+    --accent-text:   var(--raw-gold-800);
+    --accent-hover:  var(--raw-gold-850);
+    --accent-active: var(--raw-gold-900);
+    --on-accent:     var(--raw-black-ink);
     --accent-glow:   var(--raw-glow-l);
     --success:       var(--raw-green-l);
     --warning:       var(--raw-amber-l);
     --danger:        var(--raw-red-l);
-    --focus:         var(--raw-copper-800);
+    --focus:         var(--raw-gold-800);
     --shadow-1:      var(--raw-shadow-1-l);
     --shadow-2:      var(--raw-shadow-2-l);
     --decor-opacity: .28;
@@ -215,19 +217,19 @@
   --border:        var(--raw-sand-200);
   --border-strong: var(--raw-sand-300);
   --field-border:  var(--raw-sand-500);
-  --text:          var(--raw-ink-text);
-  --text-muted:    var(--raw-slate-600);
-  --text-subtle:   var(--raw-slate-500);
-  --accent:        var(--raw-copper-700);
-  --accent-text:   var(--raw-copper-800);
-  --accent-hover:  var(--raw-copper-800);
-  --accent-active: var(--raw-copper-900);
-  --on-accent:     var(--raw-paper-0);
+  --text:          var(--raw-black-ink);
+  --text-muted:    var(--raw-stone-600);
+  --text-subtle:   var(--raw-stone-500);
+  --accent:        var(--raw-gold-700);
+  --accent-text:   var(--raw-gold-800);
+  --accent-hover:  var(--raw-gold-850);
+  --accent-active: var(--raw-gold-900);
+  --on-accent:     var(--raw-black-ink);
   --accent-glow:   var(--raw-glow-l);
   --success:       var(--raw-green-l);
   --warning:       var(--raw-amber-l);
   --danger:        var(--raw-red-l);
-  --focus:         var(--raw-copper-800);
+  --focus:         var(--raw-gold-800);
   --shadow-1:      var(--raw-shadow-1-l);
   --shadow-2:      var(--raw-shadow-2-l);
   --decor-opacity: .28;
@@ -240,25 +242,25 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  --bg:            var(--raw-ink-950);
-  --surface:       var(--raw-ink-900);
-  --surface-2:     var(--raw-ink-800);
-  --border:        var(--raw-ink-700);
-  --border-strong: var(--raw-ink-600);
-  --field-border:  var(--raw-ink-500);
-  --text:          var(--raw-mist-50);
-  --text-muted:    var(--raw-mist-300);
-  --text-subtle:   var(--raw-mist-400);
-  --accent:        var(--raw-copper-400);
-  --accent-text:   var(--raw-copper-400);
-  --accent-hover:  var(--raw-copper-300);
-  --accent-active: var(--raw-copper-600);
-  --on-accent:     var(--raw-ink-950);
+  --bg:            var(--raw-black-950);
+  --surface:       var(--raw-black-900);
+  --surface-2:     var(--raw-black-850);
+  --border:        var(--raw-black-800);
+  --border-strong: var(--raw-black-700);
+  --field-border:  var(--raw-black-600);
+  --text:          var(--raw-warm-50);
+  --text-muted:    var(--raw-warm-300);
+  --text-subtle:   var(--raw-warm-400);
+  --accent:        var(--raw-gold-400);
+  --accent-text:   var(--raw-gold-400);
+  --accent-hover:  var(--raw-gold-300);
+  --accent-active: var(--raw-gold-600);
+  --on-accent:     var(--raw-black-950);
   --accent-glow:   var(--raw-glow-d);
   --success:       var(--raw-green-d);
   --warning:       var(--raw-amber-d);
   --danger:        var(--raw-red-d);
-  --focus:         var(--raw-copper-300);
+  --focus:         var(--raw-gold-300);
   --shadow-1:      var(--raw-shadow-1-d);
   --shadow-2:      var(--raw-shadow-2-d);
   --decor-opacity: .55;
