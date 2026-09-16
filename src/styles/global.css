@@ -212,14 +212,17 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
 .nav-link:hover::after,.nav-link.on::after{transform:scaleX(1)}
 .nav-r{display:flex;align-items:center;gap:var(--sp-3);margin-left:auto}
 
-.lang-sel{display:flex;gap:2px;border-radius:var(--radius-pill);padding:3px 5px;min-height:38px;align-items:center}
+/* WCAG 2.5.8 — cible d'au moins 24×24 px, espacement compris. Les deux
+   options de langue étaient à 28×24 collées à 2 px : axe les refusait. */
+.lang-sel{display:flex;gap:4px;border-radius:var(--radius-pill);padding:3px 5px;min-height:38px;align-items:center}
 /* Mesuré : à 12 px sur du verre posé au-dessus d'un halo doré, ni le gris
    secondaire (1.76:1) ni l'or du texte (3.44:1) ne tiennent AA. L'option
    inactive prend donc l'encre pleine, et l'active une pastille d'accent
    opaque — le même parti que le sélecteur de thème juste à côté. */
 .lang-opt{
   font-size:var(--fs-caption);font-weight:500;letter-spacing:0;color:var(--text);
-  padding:2px 6px;border-radius:var(--radius-xs);
+  display:flex;align-items:center;justify-content:center;
+  min-width:32px;min-height:30px;padding:2px 6px;border-radius:var(--radius-xs);
   transition:color var(--dur-micro) var(--ease-out),background-color var(--dur-micro) var(--ease-out);
 }
 .lang-opt:hover{color:var(--text)}
@@ -237,12 +240,12 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
 
 /* Sélecteur de thème — contrôle segmenté à trois états */
 .theme-sel{
-  display:flex;align-items:center;gap:1px;flex-shrink:0;
+  display:flex;align-items:center;gap:3px;flex-shrink:0;
   border-radius:var(--radius-pill);padding:3px;min-height:38px;
 }
 .theme-opt{
   display:flex;align-items:center;justify-content:center;
-  width:26px;height:24px;border-radius:6px;color:var(--text-subtle);
+  width:30px;height:30px;border-radius:7px;color:var(--text-subtle);
   transition:color var(--dur-micro) var(--ease-out),background-color var(--dur-micro) var(--ease-out);
 }
 .theme-opt svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}

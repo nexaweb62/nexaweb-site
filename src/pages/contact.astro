@@ -54,6 +54,8 @@ html,body{overflow:hidden;height:100%}
 <!-- Globe -->
 <canvas id="globe-canvas" aria-hidden="true"></canvas>
 
+<main id="main-content" tabindex="-1">
+
 <!-- Page title -->
 <div class="contact-head" aria-label="Contact Nexa Web">
   <div class="contact-eyebrow" data-i18n="ctt-eyebrow">Notre localisation</div>
@@ -68,10 +70,12 @@ html,body{overflow:hidden;height:100%}
 </div>
 
 <!-- Floating contact button — email uniquement -->
-<a href="mailto:contact.nexaweb62@gmail.com" class="c-btn c-btn-3" aria-label="Envoyer un email">
+<a href="mailto:contact.nexaweb62@gmail.com" class="c-btn c-btn-3" aria-label="Envoyer un email à contact.nexaweb62@gmail.com">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
   contact.nexaweb62@gmail.com
 </a>
+
+</main>
 
 <script is:inline src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
 <script is:inline>

@@ -94,8 +94,17 @@ for (const theme of ['dark', 'light']) {
         try {
           const r = await route.fetch();
           let css = await r.text();
+          // D'abord les conditions @supports — jamais par une regex large :
+          // la condition « @supports (backdrop-filter:blur(1px)) » contient
+          // le mot, et une regex gourmande dévorait la feuille jusqu'au
+          // point-virgule suivant. Tout le site devenait noir.
           css = css.split(SUPPORTS_NOT).join('@supports (color:red)');
-          css = css.replace(/(-webkit-)?backdrop-filter\s*:[^;}]*;?/g, '');
+          css = css.split('@supports (backdrop-filter:blur(1px))').join('@supports (color:__aucun__)');
+          // Puis les déclarations elles-mêmes, une par une, en clair.
+          for (const d of ['blur(22px) saturate(180%)', 'blur(14px)', 'blur(12px)']) {
+            css = css.split(`-webkit-backdrop-filter:${d}`).join('--x-bdf:0');
+            css = css.split(`backdrop-filter:${d}`).join('--x-bdf:0');
+          }
           await route.fulfill({ status: 200, contentType: 'text/css', body: css });
         } catch { await route.continue().catch(() => {}); }
       });

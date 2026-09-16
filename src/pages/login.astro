@@ -76,7 +76,9 @@ html,body{height:100%;overflow:hidden}
 /* PASSWORD TOGGLE */
 .lf-pwd-wrap{position:relative}
 .lf-pwd-wrap .lf-input{padding-right:44px}
-.lf-eye{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--text-subtle);cursor:pointer;background:none;border:none;padding:0;display:flex;align-items:center;justify-content:center;transition:color .2s}
+/* WCAG 2.5.8 : 24×24 minimum. L'icône reste à 16 px, c'est la zone
+   cliquable qui grandit. */
+.lf-eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:28px;height:28px;color:var(--text-subtle);cursor:pointer;background:none;border:none;padding:0;display:flex;align-items:center;justify-content:center;transition:color .2s}
 .lf-eye:hover{color:var(--text-muted)}
 .lf-eye svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 
@@ -100,7 +102,7 @@ html,body{height:100%;overflow:hidden}
 :focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:2px}
 </style>
 
-<div class="login-wrap">
+<main id="main-content" tabindex="-1" class="login-wrap">
 
   <!-- GAUCHE -->
   <div class="login-left">
@@ -202,7 +204,7 @@ html,body{height:100%;overflow:hidden}
     </div>
   </div>
 
-</div>
+</main>
 
 <script is:inline>
 (function(){

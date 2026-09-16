@@ -99,7 +99,9 @@
   --raw-glass-scrim-l: rgba(255,255,255,.22);
   --raw-glass-fb-gold-d: #6B5A35;  --raw-glass-fb-ghost-d: #2A2A2E;
   --raw-glass-fb-gold-l: #A8842F;  --raw-glass-fb-ghost-l: #EAE4D8;
-  --raw-glass-fb-gold-ink-l: #FFFFFF;
+  /* Repli clair : blanc sur l'or plein ne donne que 3.5:1 — mesuré avec
+     NO_BACKDROP=1. C'est l'encre brune du verre qui tient (4.87:1). */
+  --raw-glass-fb-gold-ink-l: #241B06;
 
   /* Signalétique */
   --raw-green-d: #4C9A78;  --raw-green-l: #256345;
