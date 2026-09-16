@@ -36,8 +36,9 @@
 
   /* Blancs chauds — les textes du mode sombre */
   --raw-warm-50:  #F4F2EE;
-  --raw-warm-300: #A8A49C;
-  --raw-warm-400: #888379;
+  /* Un seul gris pour TOUT le secondaire en sombre — le gris d'Apple. */
+  --raw-warm-300: #86868B;
+  --raw-warm-400: #86868B;
 
   /* Papier — crème chaud, jamais blanc pur (le blanc pur est froid) */
   --raw-paper-0:   #FFFFFF;
@@ -100,7 +101,23 @@
      2. ÉCHELLES NON-COLORÉES
      ───────────────────────────────────────────────────────────────────── */
 
-  /* Type — échelle modulaire stricte, ratio 1,25, base 16 px */
+  /* ── ÉCHELLE TYPOGRAPHIQUE — rapports relevés sur apple.com/fr/store ──
+     L'interlettrage est INVERSÉ : négatif au-dessus de 32 px, nul ou à
+     peine positif en dessous de 16 px. La graisse plafonne à 600 : un
+     titre s'impose par sa taille, jamais par son épaisseur. */
+  --fs-title:   clamp(40px, 6.4vw, 80px);   --ls-title:   -.015em; --lh-title:   1.05;
+  --fs-section: clamp(28px, 3.4vw, 44px);   --ls-section: -.01em;  --lh-section: 1.1;
+  --fs-sub:     clamp(20px, 1.9vw, 26px);   --ls-sub:     -.01em;  --lh-sub:     1.2;
+  --fs-body:    17px;                       --ls-body:    -.012em; --lh-body:    1.47;
+  --fs-caption: 12px;                       --ls-caption: -.005em; --lh-caption: 1.35;
+  --w-semi: 600;   /* graisse maximale du site */
+  --w-reg:  400;
+
+  /* Rayon des blocs. Ils se distinguent par un fond légèrement différent,
+     jamais par une bordure. */
+  --radius-block: 18px;
+
+  /* Type — échelle modulaire conservée pour les cas particuliers */
   --fs-25:  .512rem;   /*  8.2 px — micro-label */
   --fs-50:  .64rem;    /* 10.2 px — label */
   --fs-100: .8rem;     /* 12.8 px — légende */
@@ -125,10 +142,18 @@
   --radius-lg: 14px; --radius-pill: 100px;
 
   /* Gabarit */
-  --font: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* Pile système : le visiteur lit la police de SON système — SF Pro sur
+     Mac et iPhone, Segoe UI Variable sur Windows, Roboto sur Android.
+     Aucun fichier à télécharger, aucune milliseconde au chargement, rien
+     à déclarer dans la politique de confidentialité. UNE famille pour
+     tout le site : il n'y a plus de police de titre distincte. */
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+          "Segoe UI Variable Display", "Segoe UI", Roboto,
+          "Helvetica Neue", Helvetica, Arial, sans-serif;
   --max-w: 1280px;
   --pad-x: clamp(20px, 5vw, 80px);   /* gouttière ≥ 20 px partout */
-  --sec:   clamp(80px, 12vw, 160px);
+  /* Deux fois plus de vide entre les sections. */
+  --sec:   clamp(120px, 16vw, 240px);
   --hdr:   80px;
 
   /* Mouvement — un seul easing d'entrée, un seul easing continu */

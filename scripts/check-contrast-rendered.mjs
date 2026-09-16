@@ -105,7 +105,7 @@ if (!fails.length) { console.log('✓ Aucun texte sous son seuil WCAG AA.'); pro
 console.log(`✗ ${fails.length} sous le seuil :\n`);
 const seen = new Set();
 for (const f of fails) {
-  const k = f.theme + f.sel + f.ratio;
+  const k = f.theme + f.path + f.sel + f.ratio;
   if (seen.has(k)) continue; seen.add(k);
   console.log(`  [${f.theme}] ${f.path}  ${f.sel}  ${f.ratio}:1 < ${f.min}:1  (${f.px}px)\n      « ${f.text} »`);
 }

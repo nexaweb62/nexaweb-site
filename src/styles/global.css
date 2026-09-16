@@ -10,6 +10,10 @@
 html{font-size:16px;scroll-behavior:smooth}
 body{
   font-family:var(--font);
+  font-size:var(--fs-body);
+  font-weight:var(--w-reg);
+  letter-spacing:var(--ls-body);
+  line-height:var(--lh-body);
   background:var(--bg);
   color:var(--text);
   -webkit-font-smoothing:antialiased;
@@ -73,7 +77,7 @@ select:-webkit-autofill{
   position:absolute;left:var(--sp-4);top:-100px;z-index:10000;
   background:var(--accent);color:var(--on-accent);
   padding:var(--sp-3) var(--sp-5);border-radius:var(--radius-sm);
-  font-size:var(--fs-100);font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  font-size:var(--fs-100);font-weight:600;letter-spacing:0;
   transition:top var(--dur-micro) var(--ease-out);
 }
 .skip-link:focus{top:var(--sp-4)}
@@ -201,8 +205,7 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
 .nav-logo-svg .logo-web{fill:var(--accent-text)}
 .nav-links{display:none;gap:clamp(16px,3vw,40px);position:absolute;left:50%;transform:translateX(-50%)}
 .nav-link{
-  position:relative;font-size:10.5px;font-weight:500;letter-spacing:.12em;
-  text-transform:uppercase;color:var(--text-muted);
+  position:relative;font-size:var(--fs-caption);font-weight:500;letter-spacing:0;color:var(--text-muted);
   transition:color var(--dur-micro) var(--ease-out);
 }
 .nav-link::after{
@@ -273,8 +276,7 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
 .hdr-tip{position:relative}
 .hdr-tip::after{
   content:attr(data-tip);position:absolute;top:calc(100% + 7px);left:50%;
-  transform:translateX(-50%);font-size:7.5px;font-weight:700;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--text-subtle);white-space:nowrap;
+  transform:translateX(-50%);font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-subtle);white-space:nowrap;
   opacity:0;pointer-events:none;transition:opacity .18s;
 }
 .hdr-tip:hover::after,.hdr-tip.tip-active::after{opacity:1}
@@ -321,7 +323,7 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
 }
 .cnav-link:hover,.cnav-link:focus-visible{background:var(--accent);color:var(--on-accent);transform:scale(1.09)}
 .cnav-link svg{width:21px;height:21px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
-.cnav-name{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.cnav-name{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;}
 
 /* ═══════════════════════════════════════════════════════════════════════
    PIED DE PAGE
@@ -354,16 +356,16 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
   display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:clamp(28px,5vw,80px);
   padding:clamp(40px,6vh,80px) 0;border-bottom:1px solid var(--border);
 }
-.foot-logo{font-size:1.15rem;font-weight:900;letter-spacing:.08em;margin-bottom:10px;color:var(--text)}
+.foot-logo{font-size:1.15rem;font-weight:600;letter-spacing:0;margin-bottom:10px;color:var(--text)}
 .foot-logo span{color:var(--accent-text)}
 .foot-tag{font-size:var(--fs-100);font-weight:300;color:var(--text-muted);line-height:var(--lh-body);max-width:230px}
-.foot-col-title{font-size:9px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--text-subtle);margin-bottom:var(--sp-3)}
+.foot-col-title{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-subtle);margin-bottom:var(--sp-3)}
 .foot-links{display:flex;flex-direction:column;gap:9px}
 .foot-lnk{font-size:13px;font-weight:300;color:var(--text-muted);transition:color var(--dur-micro) var(--ease-out)}
 .foot-lnk:hover{color:var(--accent-text)}
 .foot-team-lnk{
   display:inline-flex;align-items:center;gap:var(--sp-2);
-  font-size:var(--fs-100);font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  font-size:var(--fs-100);font-weight:600;letter-spacing:0;
   color:var(--accent-text);border:1px solid var(--accent);
   padding:9px var(--sp-4);border-radius:var(--radius-sm);margin-top:6px;
   transition:background-color var(--dur-micro) var(--ease-out),color var(--dur-micro) var(--ease-out);
@@ -385,9 +387,9 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
 .foot-soc.facebook:hover{background:var(--brand-facebook);border-color:var(--brand-facebook)}
 .foot-soc.whatsapp:hover{background:var(--brand-whatsapp);border-color:var(--brand-whatsapp)}
 .foot-bot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding:18px 0}
-.foot-copy{font-size:11px;color:var(--text-subtle);letter-spacing:.03em}
+.foot-copy{font-size:var(--fs-caption);color:var(--text-subtle);letter-spacing:0}
 .foot-legal{display:flex;gap:var(--sp-5)}
-.foot-legal a{font-size:11px;color:var(--text-subtle);transition:color var(--dur-micro) var(--ease-out)}
+.foot-legal a{font-size:var(--fs-caption);color:var(--text-subtle);transition:color var(--dur-micro) var(--ease-out)}
 .foot-legal a:hover{color:var(--accent-text)}
 @media(max-width:860px){.foot-in{grid-template-columns:1fr 1fr}}
 @media(max-width:440px){.foot-in{grid-template-columns:1fr}.foot-bot{flex-direction:column;align-items:flex-start}}
@@ -441,6 +443,41 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
   transition-delay:calc(var(--i,0) * var(--stagger));
 }
 .js-enabled [data-anim="curtain"].is-in{clip-path:inset(0);transform:scale(1)}
+
+/* ── FOND VIVANT ──
+   Le verre a besoin de quelque chose derrière lui : sur un aplat noir, un
+   bouton translucide n'est qu'un rectangle un peu plus clair et l'effet
+   disparaît. Tout bloc qui porte un bouton reçoit donc des halos dorés.
+
+   Construit à partir de --accent : il suit la palette et les deux thèmes,
+   plutôt que d'être figé en valeurs littérales. Chaque halo naît et meurt
+   dans le transparent, et l'ensemble est masqué aux deux extrémités —
+   la règle du fond continu reste tenue.
+
+   Repli livré faute de crédits de génération d'images : aucune photo
+   n'est utilisée ici. */
+.has-glow{position:relative;isolation:isolate}
+.has-glow > *{position:relative;z-index:1}
+.has-glow::before{
+  content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(52% 40% at 14% 12%,
+      color-mix(in srgb,var(--accent) 30%,transparent) 0%,
+      rgb(from var(--accent) r g b / 0) 62%),
+    radial-gradient(44% 36% at 84% 22%,
+      color-mix(in srgb,var(--accent-hover) 22%,transparent) 0%,
+      rgb(from var(--accent-hover) r g b / 0) 64%),
+    radial-gradient(60% 50% at 70% 92%,
+      color-mix(in srgb,var(--accent-active) 34%,transparent) 0%,
+      rgb(from var(--accent-active) r g b / 0) 66%);
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,black 12%,black 88%,transparent 100%);
+          mask-image:linear-gradient(to bottom,transparent 0%,black 12%,black 88%,transparent 100%);
+}
+/* En clair les halos doivent se retenir : le doré sur crème monte vite. */
+:root[data-theme="light"] .has-glow::before{opacity:.55}
+@media(prefers-color-scheme:light){
+  :root:not([data-theme="dark"]) .has-glow::before{opacity:.55}
+}
 
 /* ── TEXTURES DE FOND DE SECTION ──
    Remplacent les mesh-gradients violets. Une variante par thème, servie en

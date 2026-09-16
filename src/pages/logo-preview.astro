@@ -39,19 +39,19 @@ const TAILLES = [
 <style>
   main { padding: calc(var(--hdr) + var(--sp-8)) var(--pad-x) var(--sp-10); max-width: 1180px; margin: 0 auto }
   .lp-intro { margin-bottom: var(--sp-9); max-width: var(--measure) }
-  .lp-intro h1 { font-size: clamp(var(--fs-500), 4vw, var(--fs-700)); font-weight: 900; letter-spacing: -.03em; line-height: var(--lh-tight); margin-bottom: var(--sp-4) }
+  .lp-intro h1 { font-size: clamp(var(--fs-500), 4vw, var(--fs-700)); font-weight: 600; letter-spacing: -.03em; line-height: var(--lh-tight); margin-bottom: var(--sp-4) }
   .lp-note { display: inline-flex; align-items: center; gap: var(--sp-2); font-size: var(--fs-100); font-weight: 600;
-             letter-spacing: .1em; text-transform: uppercase; color: var(--accent-text);
+             letter-spacing:0; color: var(--accent-text);
              border: 1px solid var(--accent); border-radius: var(--radius-pill); padding: 6px 14px; margin-bottom: var(--sp-5) }
 
   .piste { margin-bottom: var(--sp-10); border-top: 1px solid var(--border); padding-top: var(--sp-6) }
   .piste-h { display: flex; flex-wrap: wrap; gap: var(--sp-5); align-items: baseline; justify-content: space-between; margin-bottom: var(--sp-3) }
-  .piste-h h2 { font-size: var(--fs-400); font-weight: 800; letter-spacing: -.02em }
-  .piste-id { font-size: var(--fs-50); font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--accent-text) }
+  .piste-h h2 { font-size: var(--fs-400); font-weight: 600; letter-spacing: -.02em }
+  .piste-id { font-size: var(--fs-50); font-weight: 600; letter-spacing:0; color: var(--accent-text) }
   .piste-pitch { color: var(--text-muted); font-size: 14px; line-height: var(--lh-body); max-width: var(--measure); margin-bottom: var(--sp-5) }
   .piste-avis { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-5); margin-bottom: var(--sp-6) }
   .piste-avis div { font-size: 13px; line-height: 1.6; color: var(--text-muted) }
-  .piste-avis b { display: block; font-size: var(--fs-50); letter-spacing: .16em; text-transform: uppercase; color: var(--text-subtle); margin-bottom: 6px; font-weight: 600 }
+  .piste-avis b { display: block; font-size: var(--fs-50); letter-spacing:0; color: var(--text-subtle); margin-bottom: 6px; font-weight: 600 }
 
   /* Deux fonds côte à côte : c'est la seule façon de juger un logo. */
   .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden }
@@ -61,15 +61,15 @@ const TAILLES = [
      tokens sémantiques qui basculent avec lui. */
   .panneau--sombre { background: var(--raw-black-950) }
   .panneau--clair  { background: var(--raw-paper-50) }
-  .panneau-lbl { font-size: var(--fs-25); font-weight: 700; letter-spacing: .2em; text-transform: uppercase; margin-bottom: var(--sp-5) }
+  .panneau-lbl { font-size: var(--fs-25); font-weight: 600; letter-spacing:0; margin-bottom: var(--sp-5) }
   .panneau--sombre .panneau-lbl { color: var(--raw-warm-400) }
   .panneau--clair  .panneau-lbl { color: var(--raw-stone-500) }
   .rangee { padding: var(--sp-4) 0; border-top: 1px dashed color-mix(in srgb, currentColor 18%, transparent) }
   .rangee:first-of-type { border-top: none }
   .rangee img { display: block; width: auto; max-width: 100% }
   .rangee-meta { margin-bottom: var(--sp-3) }
-  .rangee-nom { font-size: var(--fs-50); font-weight: 700; letter-spacing: .12em; text-transform: uppercase }
-  .rangee-note { font-size: 11px; margin-top: 3px }
+  .rangee-nom { font-size: var(--fs-50); font-weight: 600; letter-spacing:0; }
+  .rangee-note { font-size:var(--fs-caption); margin-top: 3px }
   .panneau--sombre .rangee-nom { color: var(--raw-warm-50) } .panneau--sombre .rangee-note { color: var(--raw-warm-400) }
   .panneau--clair  .rangee-nom { color: var(--raw-black-ink) } .panneau--clair  .rangee-note { color: var(--raw-stone-500) }
 

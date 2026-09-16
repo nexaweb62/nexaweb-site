@@ -40,7 +40,7 @@ var D={
     'idx-phil-txt':'Your website isn\'t just a storefront. It\'s the <span>first contact</span> between your brand and your future client. Every detail matters. Every pixel is a decision.',
     /* ── Index services ── */
     'idx-svc-lbl':'What we create',
-    'idx-svc-h':'Our services',
+    'idx-svc-h':'Our services.',
     'idx-svc-sub':'Each service is designed to maximize the impact of your online presence.',
     'idx-svc1':'Showcase website','idx-svc2':'E-commerce website',
     'idx-svc3':'Website redesign','idx-svc4':'UI/UX Design',
@@ -254,7 +254,7 @@ var D={
     'idx-phil-txt':'Votre site n\'est pas simplement une vitrine. C\'est le <span>premier contact</span> entre votre marque et votre futur client. Chaque détail compte. Chaque pixel est une décision.',
     /* ── Index services ── */
     'idx-svc-lbl':'Ce que nous créons',
-    'idx-svc-h':'Nos services',
+    'idx-svc-h':'Nos services.',
     'idx-svc-sub':'Chaque prestation est pensée pour maximiser l\'impact de votre présence en ligne.',
     'idx-svc1':'Site vitrine','idx-svc2':'Site e-commerce',
     'idx-svc3':'Refonte de site','idx-svc4':'Design UI/UX',
@@ -263,7 +263,7 @@ var D={
     'idx-tag3':'Modernisation','idx-tag4':'Expérience','idx-tag5':'Visibilité',
     /* ── Index process ── */
     'idx-proc-lbl':'De l\'idée au site en ligne',
-    'idx-proc-h':'Notre méthode',
+    'idx-proc-h':'Notre méthode.',
     'idx-proc-t1':'Découverte',
     'idx-proc-d1':'Nous apprenons à connaître votre activité, vos objectifs et votre audience pour concevoir une stratégie digitale sur mesure.',
     'idx-proc-t2':'Direction artistique',
