@@ -13,11 +13,15 @@ import '../styles/global.css';
 .legal-body{padding-bottom:clamp(64px,10vh,120px)}
 .legal-body section{margin-bottom:40px}
 .legal-body h2{font-size:16px;font-weight:600;letter-spacing:0;color:var(--text-muted);border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:16px}
-.legal-body p{font-size:15px;line-height:1.75;opacity:.85;margin-bottom:12px}
-.legal-body ul{font-size:15px;line-height:1.75;opacity:.85;padding-left:20px;list-style:disc;margin-bottom:12px}
+/* L'opacité n'est pas une couleur : à .85, l'or des liens tombait à
+   3.96:1 et strong{opacity:1} ne rattrapait rien — un enfant ne défait
+   pas l'opacité de son parent. Le gris secondaire fait le même effet et
+   passe AA. */
+.legal-body p{font-size:15px;line-height:1.75;color:var(--text-muted);margin-bottom:12px}
+.legal-body ul{font-size:15px;line-height:1.75;color:var(--text-muted);padding-left:20px;list-style:disc;margin-bottom:12px}
 .legal-body ul li{margin-bottom:4px}
 .legal-body a{color:var(--accent-text);text-decoration:underline;text-underline-offset:3px}
-.legal-body strong{opacity:1;font-weight:600}
+.legal-body strong{color:var(--text);font-weight:600}
 .site-footer{border-top:1px solid var(--border);padding:24px 0}
 .site-footer .foot-in{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .foot-copy{font-size:var(--fs-caption);color:var(--text-muted)}

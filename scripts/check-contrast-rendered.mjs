@@ -101,14 +101,21 @@ for (const theme of ['dark', 'light']) {
         if (el.closest('[data-on-media]')) return;
         const cs = getComputedStyle(el);
         if (cs.visibility === 'hidden' || cs.display === 'none') return;
+        // L'opacité d'un ANCÊTRE s'applique au texte comme si l'encre
+        // était translucide. Sans en tenir compte, un paragraphe à
+        // opacity:.85 se mesurait sur sa couleur déclarée : les liens des
+        // pages légales passaient ici et tombaient à 3.96:1 en vrai.
+        let opAcc = 1;
+        for (let n = el; n; n = n.parentElement) opAcc *= parseFloat(getComputedStyle(n).opacity);
         // Texte réservé aux lecteurs d'écran : découpé à 1 px, jamais peint.
         // Le contraste ne s'applique pas à ce qui ne s'affiche pas.
         if (cs.clip !== 'auto' && cs.clip !== '') return;
-        if (parseFloat(cs.opacity) < 0.75) return;          // en cours d'animation
+        if (opAcc < 0.1) return;                            // invisible ou en cours d'animation
         const r = el.getBoundingClientRect();
         if (!r.width || !r.height) return;
 
         const fg = parse(cs.color); if (!fg) return;
+        fg[3] *= opAcc;
         const cands = [bgOf(el, 0), bgOf(el, 1)];
         let bg = cands[0], cr = Infinity;
         for (const c of cands) { const r2 = ratio(over(fg, c), c); if (r2 < cr) { cr = r2; bg = c; } }
