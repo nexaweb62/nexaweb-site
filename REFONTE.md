@@ -67,6 +67,8 @@ cassure à une jonction de section.
 | Libellés sur verre, mesurés au pixel, 2 thèmes × 2 largeurs × 11 pages | **232 mesurés, 0 sous AA**, le plus juste à 5:1 |
 | Les mêmes **sans `backdrop-filter`** | **0 sous AA**, le plus juste à 4,87:1 |
 | Cassures de fond (ΔL\* ≥ 1 sur une ligne pleine largeur) | **0** |
+| Écran d'accueil, shader forcé à sa couleur la plus extrême | **12 mesures, 0 sous AA**, le plus juste à 4,93:1 |
+| Classes du balisage sans aucune règle CSS | **3 sur 386**, toutes volontaires |
 | Lighthouse mobile — performance | **100 sur 21 pages** |
 | Lighthouse mobile — accessibilité | **100 sur 21 pages** |
 | Lighthouse mobile — CLS | **0 sur 21 pages** |
@@ -140,6 +142,42 @@ défauts réels :
 - `opacity:.85` utilisée comme couleur sur les pages légales.
 - « Ce qui est inclus » en `<span>` sur les cinq pages service : la page
   enchaînait `h1` puis six `h3`.
+
+### L'écran d'accueil, le pire fond du site
+
+Le champ de soie passe du noir à l'or plein derrière la marque et le
+bouton « Entrer ». Aucun autre contrôle n'a un fond pareil — et aucun
+des contrôles automatiques ne le voyait : ils sautent tous l'écran
+d'accueil en posant `nxa-ld` dans `sessionStorage`.
+
+`check:glass` a maintenant un passage dédié qui **remplace le canvas par
+un aplat de `--accent`** — la plus claire des quatre couleurs que le
+shader peut produire en sombre, la plus sombre en clair — puis mesure la
+marque et le bouton sur les pixels réels. Le voile radial tient : les
+fonds composités ressortent à rgb(24,21,18) en sombre et rgb(244,240,231)
+en clair, et le plus juste des douze relevés est « WEB » à 4,93:1.
+
+Le calcul à la main, lui, donnait 2,80:1 pour le bouton et 1,80:1 pour la
+marque — parce qu'il ignorait le voile. C'est la raison d'être de la
+règle de ce projet : construire la mesure avant de croire au
+raisonnement, puis vérifier la mesure avant de croire à son résultat.
+
+### Deux défauts antérieurs à la refonte, trouvés en regardant les captures
+
+- Sur `/tarifs`, le titre de section portait `.section-title` et
+  `.section-tag` — deux classes qu'**aucune règle du projet n'a jamais
+  ciblées**, dans tout l'historique. Le titre tombait sur le style `h2`
+  par défaut du navigateur.
+- Sur quatre pages, les classes de décalage étaient écrites
+  `class="r r.d1"` — un point au milieu, donc une seule classe nommée
+  `r.d1` que le sélecteur `.r.d1` ne peut pas atteindre. Le décalage n'a
+  jamais été appliqué : **78 éléments** se révélaient tous ensemble.
+
+Les deux venaient du même angle mort, et un audit les trouve : pour
+chaque classe du balisage, existe-t-il une règle qui la cible ? Il en
+reste trois sans règle, toutes volontaires — `.h-captcha` (stylée par le
+script hCaptcha), `.form-lede` (conteneur dont les enfants sont stylés)
+et `.submit-btn-label` (accroche pour l'état de chargement).
 
 ### Ce qui n'est pas livré
 
