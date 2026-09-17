@@ -43,6 +43,16 @@ import '../styles/global.css';
 
 /* ── FORMULES ── */
 .plans-section{padding:clamp(32px,5vh,56px) 0 clamp(48px,7vh,72px);position:relative;z-index:1}
+/* Ces deux classes existaient dans le balisage depuis l'origine sans
+   qu'aucune règle ne les cible : le titre de section tombait sur le
+   style h2 par défaut du navigateur — trop petit, interligne trop
+   lâche. Elles prennent l'échelle. */
+.section-tag{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--accent-text);margin:0 0 14px}
+.section-title{
+  font-size:var(--fs-section);font-weight:var(--w-semi);
+  letter-spacing:var(--ls-section);line-height:var(--lh-section);
+  margin:0 0 clamp(28px,4vh,44px);text-wrap:balance;
+}
 .plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:clamp(32px,5vw,52px)}
 @media(max-width:900px){.plans-grid{grid-template-columns:1fr;max-width:480px;margin-left:auto;margin-right:auto}}
 @media(max-width:600px){

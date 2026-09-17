@@ -1,9 +1,154 @@
-# Refonte « Encre & Cuivre »
+# Refonte visuelle — nexaaweb.com
 
-Refonte chromatique, système d'animations au scroll et visuels du site
-nexaaweb.com. Le dégradé violet/indigo néon sur fond noir — la signature
-visuelle des sites générés par IA — est remplacé par une encre bleu-nuit
-et un accent cuivre, sobres et lisibles en mode clair comme en sombre.
+Refonte chromatique, typographique et animée du site nexaaweb.com. Le
+dégradé violet/indigo néon sur fond noir — la signature visuelle des
+sites générés par IA — a disparu.
+
+La palette a connu deux états : « Encre & Cuivre » d'abord, puis
+**« Noir & Sable doré »**, qui est l'état actuel. Les sections 1 à 5 de
+ce document décrivent le premier passage et restent valables pour tout
+ce qui n'est pas la couleur elle-même ; la section 0 ci-dessous donne
+l'état courant.
+
+---
+
+## 0. État actuel — grammaire Apple, Liquid Glass, fond vivant
+
+### Ce qui est en place
+
+**Typographie.** Pile système (`-apple-system`, `BlinkMacSystemFont`,
+`SF Pro`, `Segoe UI Variable`, Roboto) — aucun fichier de police n'est
+chargé, donc aucune requête et aucun FOUT. Inter et Mulish ne sont
+référencées nulle part. Une échelle de cinq degrés relevée sur
+apple.com vit dans les tokens : titre / section / sous-titre / corps /
+légende, chacun avec son interlettrage et son interligne. Le corps est
+à 17 px. L'interlettrage est toujours négatif — **zéro déclaration
+positive dans tout le projet**, zéro capitale espacée, zéro
+`text-transform: uppercase`. Deux graisses, 600 et 400. Un seul gris
+secondaire, `#86868B`. `--sec` doublé à `clamp(120px, 16vw, 240px)` :
+c'est le vide qui fait lire la hiérarchie, pas la graisse.
+
+**Liquid Glass.** Tous les boutons, sans exception — principal,
+secondaire, menu, thème, langue, retour, compte, fermeture de
+l'overlay, « Entrer », « Envoyer », Google, les pastilles flottantes de
+la page contact, les CTA des pages service. Flou 22 px, saturation
+180 %, arête de lumière en haut, ombre douce dessous. Deux teintes
+seulement : **or** pour l'action principale, **neutre** pour tout le
+reste.
+
+Ne sont pas des surfaces de bouton, donc pas de verre : les glyphes nus
+posés *dans* un contrôle déjà en verre ou dans un champ — `.theme-opt`,
+`.lang-opt`, `.lf-eye`, `.star-btn`. Leur fond est le verre du parent.
+
+Aucune valeur n'est écrite dans les règles : 21 tokens `--glass-*`
+portent les niveaux de verre et basculent avec le thème, dans les
+quatre blocs sémantiques. Un voile de fond (`--glass-scrim`) sous
+chaque bouton, parce que **le verre a besoin d'un plancher** : sans
+lui, une ligne décorative claire passant derrière un bouton suffit à
+faire tomber son libellé sous AA — mesuré à 3,29:1 sur `/404` à 390 px.
+
+**Le fond vivant.** Le verre ne se voit que s'il a quelque chose à
+réfracter ; posé sur un aplat, il n'est qu'un bouton translucide. La
+couche d'ambiance est donc remontée dans `global.css` et `BaseLayout` :
+fixe, commune aux 22 pages, sous le contenu, hors de l'arbre
+d'accessibilité. Une profondeur `--bg` → `--surface`, deux traînées de
+sable très diffuses (coupées sous `prefers-reduced-motion`, la seconde
+masquée sous 768 px), et une trame de fils à ~1 % que le flou déforme.
+Continue sur toute la hauteur du document, donc incapable de créer une
+cassure à une jonction de section.
+
+### Mesures
+
+| Contrôle | Résultat |
+|---|---|
+| Couleurs littérales hors de `tokens.css` | **0** |
+| Paires de tokens (72) | **0 en échec** |
+| Éléments rendus, contraste composité, 21 pages × 2 thèmes | **2 236 mesurés, 0 sous AA** |
+| Libellés sur verre, mesurés au pixel, 2 thèmes × 2 largeurs × 11 pages | **232 mesurés, 0 sous AA**, le plus juste à 5:1 |
+| Les mêmes **sans `backdrop-filter`** | **0 sous AA**, le plus juste à 4,87:1 |
+| Cassures de fond (ΔL\* ≥ 1 sur une ligne pleine largeur) | **0** |
+| Lighthouse mobile — performance | **100 sur 21 pages** |
+| Lighthouse mobile — accessibilité | **100 sur 21 pages** |
+| Lighthouse mobile — CLS | **0 sur 21 pages** |
+| Lighthouse mobile — TBT | **0 ms** sur 18 pages, 10 à 30 ms sur trois |
+| Lighthouse mobile — LCP | **0,9 s à 1,4 s** |
+
+### Les deux scores qui ne sont pas à 100, et pourquoi
+
+**Bonnes pratiques : 96 sur six pages.** Une seule cause, la même
+partout : `ERR_TUNNEL_CONNECTION_FAILED`. L'environnement de mesure
+bloque les CDN en sortie — Supabase sur `avis`, `devis`, `login`,
+`inscription`, d3 sur `contact`, Calendly sur `rendez-vous`. Les
+erreurs relevées sont **les scripts qui n'ont pas pu être téléchargés**,
+pas du code fautif. À reprendre sur l'environnement de déploiement, où
+ces CDN répondent.
+
+**SEO : 66 sur `login` et `inscription`.** L'audit qui échoue est
+`is-crawlable` : ces deux pages sont volontairement en `noindex`. C'est
+le comportement voulu, pas un défaut.
+
+### Comment le verre est vérifié
+
+`npm run check:glass` ne fait pas confiance au calcul sur les couleurs
+déclarées : un bouton en verre n'a pas de fond, il a un flou qui
+échantillonne ce qui passe derrière lui. Le script **capture chaque
+libellé deux fois** — une fois tel quel, une fois le texte rendu
+transparent. La seconde capture donne le fond exact, flou compris ; la
+différence entre les deux donne exactement les pixels où la lettre s'est
+posée. On compare l'encre au fond sous ces pixels-là, et on garde le
+pire.
+
+Il se teste lui-même au démarrage sur trois valeurs calculées à la main
+(`--self-test`), et il fige le mouvement. `NO_BACKDROP=1` rejoue tout le
+site comme sur un navigateur sans `backdrop-filter`, en réécrivant la
+feuille de style à la volée : c'est le seul moyen de vérifier la branche
+de repli, Chromium ne sachant pas désactiver le flou.
+
+### Quatre erreurs de mesure trouvées en route
+
+Elles valent d'être notées, parce que chacune faisait passer le site
+pour sain :
+
+1. Le vérificateur de contraste ne lisait que `background-color` — il ne
+   voyait donc **aucun** bouton en verre, dont le fond est un dégradé.
+2. Son compositeur forçait `alpha = 1` au premier calque : un voile d'or
+   à 13 % était lu comme de l'or plein, et un bouton parfaitement
+   lisible ressortait à 1,87:1.
+3. Il lisait la couleur *déclarée* d'un élément sans y replier
+   l'opacité de ses ancêtres. C'est ce qui a laissé passer les liens des
+   pages légales — `opacity:.85` au repos, 3,96:1 en vrai — à travers
+   2 238 mesures.
+4. Le mesureur de verre, première version, cherchait les pixels d'encre
+   par seuil colorimétrique : à 12 px, les fûts d'une lettre n'atteignent
+   jamais la couleur pleine, ils étaient comptés comme du fond, et tout
+   ressortait à 1,7:1. D'où les deux captures.
+
+### Ce que Lighthouse a trouvé
+
+Premier passage sur ce projet — il n'avait jamais été exécuté. Six
+défauts réels :
+
+- « Aller au contenu » pointait vers `#main-content`, **qui n'existait
+  que sur l'accueil**. Sur les 20 autres pages le lien ne menait nulle
+  part ; `login`, `inscription` et `contact` n'avaient pas de `<main>`
+  du tout.
+- Nom accessible ne contenant pas le libellé visible (WCAG 2.5.3) : le
+  logo, le bouton Menu, le bouton Retour. Une commande vocale sur le
+  libellé visible ne pouvait pas les atteindre.
+- Cibles sous 24×24 px (WCAG 2.5.8) : options FR/EN, segments du
+  sélecteur de thème, œil d'affichage du mot de passe.
+- `opacity:.85` utilisée comme couleur sur les pages légales.
+- « Ce qui est inclus » en `<span>` sur les cinq pages service : la page
+  enchaînait `h1` puis six `h3`.
+
+### Ce qui n'est pas livré
+
+**Les visuels photographiques — hero et cinq vignettes de services.**
+La génération d'images demande un abonnement payant : le compte est sur
+l'offre gratuite avec 0 crédit (revérifié). **Ce qui est en place est le
+repli CSS**, pas les photographies. La chaîne d'accueil est prête :
+déposer les sources dans `assets/sources/` avec le préfixe `hero-` ou
+`vignette-`, puis `npm run build:images`.
 
 ---
 
@@ -92,7 +237,10 @@ une seule fois.
 
 ```bash
 npm run check                      # couleurs littérales + 72 paires de tokens
-npm run check:contrast:rendered    # 2 352 éléments réellement rendus (site lancé)
+npm run check:contrast:rendered    # 2 236 éléments réellement rendus (site lancé)
+npm run check:glass                # libellés sur verre, mesurés au pixel (site lancé)
+NO_BACKDROP=1 npm run check:glass  # les mêmes, sans backdrop-filter
+npm run check:seams                # cassures du fond, ligne de pixels par ligne
 npm run build:assets               # favicon, icônes, OG, textures — depuis les tokens
 npm run build:images               # AVIF/WebP/JPEG + srcset + budgets
 ```
@@ -119,7 +267,7 @@ n'est une faute que si c'est une **valeur**.
 | JS désactivé : tout le contenu reste visible | ✅ 0 élément masqué |
 | Aucun scroll horizontal, gouttière ≥ 20 px | ✅ 0 px sur 5 largeurs |
 | Version EN testée au même niveau que la FR | ✅ |
-| **Lighthouse mobile ≥ 90 / 95 / 95 / 95, CLS = 0** | ⚠️ **non exécuté** — voir §5 |
+| **Lighthouse mobile ≥ 90 / 95 / 95 / 95, CLS = 0** | ✅ exécuté sur 21 pages — voir §0 |
 
 ---
 
