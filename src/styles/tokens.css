@@ -120,8 +120,9 @@
   --raw-glow-rgb-d: 255,247,230; --raw-glow-rgb-l: 120,92,26;
   --raw-scrim-d: 10,10,11;       --raw-scrim-l: 246,243,236;
 
-  /* Signalétique */
-  --raw-green-d: #4C9A78;  --raw-green-l: #256345;
+  /* Signalétique — « aucun vert » : la règle est absolue, elle ne vaut pas
+     que pour la page Tarifs. Le succès prend donc l'or, pas un vert de
+     formulaire. L'ambre et le rouge restent : seul le vert est banni. */
   --raw-amber-d: #D6A24B;  --raw-amber-l: #8A5E12;
   --raw-red-d:   #D46A5C;  --raw-red-l:   #B4453A;
 
@@ -246,7 +247,7 @@
   --accent-active: var(--raw-gold-600);
   --on-accent:     var(--raw-black-950);
   --accent-glow:   var(--raw-glow-d);
-  --success:       var(--raw-green-d);
+  --success:       var(--raw-gold-400);
   --warning:       var(--raw-amber-d);
   --danger:        var(--raw-red-d);
   --focus:         var(--raw-gold-300);
@@ -338,7 +339,7 @@
     --accent-active: var(--raw-gold-900);
     --on-accent:     var(--raw-black-ink);
     --accent-glow:   var(--raw-glow-l);
-    --success:       var(--raw-green-l);
+    --success:       var(--raw-gold-800);
     --warning:       var(--raw-amber-l);
     --danger:        var(--raw-red-l);
     --focus:         var(--raw-gold-800);
@@ -424,7 +425,7 @@
   --accent-active: var(--raw-gold-900);
   --on-accent:     var(--raw-black-ink);
   --accent-glow:   var(--raw-glow-l);
-  --success:       var(--raw-green-l);
+  --success:       var(--raw-gold-800);
   --warning:       var(--raw-amber-l);
   --danger:        var(--raw-red-l);
   --focus:         var(--raw-gold-800);
@@ -510,7 +511,7 @@
   --accent-active: var(--raw-gold-600);
   --on-accent:     var(--raw-black-950);
   --accent-glow:   var(--raw-glow-d);
-  --success:       var(--raw-green-d);
+  --success:       var(--raw-gold-400);
   --warning:       var(--raw-amber-d);
   --danger:        var(--raw-red-d);
   --focus:         var(--raw-gold-300);

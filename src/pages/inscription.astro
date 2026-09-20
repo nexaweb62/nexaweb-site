@@ -301,7 +301,7 @@ function checkConfirm(){
   var pwd=document.getElementById('password').value,conf=document.getElementById('confirm').value;
   var el=document.getElementById('match-indicator');
   if(!conf){el.className='insc-match';el.textContent='';return false}
-  if(pwd===conf){el.className='insc-match ok';el.textContent='✓ Les mots de passe correspondent';return true}
+  if(pwd===conf){el.className='insc-match ok';el.textContent='Les mots de passe correspondent';return true}
   el.className='insc-match err';el.textContent='✗ Les mots de passe ne correspondent pas';return false;
 }
 document.getElementById('password').addEventListener('input',function(){updateCriteria(this.value);checkConfirm()});

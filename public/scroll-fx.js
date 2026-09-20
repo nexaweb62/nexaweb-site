@@ -116,5 +116,59 @@
       });
   })();
 
+  /* ── 6. Les chiffres montent quand la carte entre dans l'écran ──────
+     Le compteur du site est piloté par des attributs (data-count). Les
+     prix, eux, sont du texte libre : « 100 € — 200 € », « 1 200 € ». On
+     les lit, on garde les littéraux (€, tiret, espaces fines) et on ne
+     fait monter que les nombres.
+
+     Un texte qui contient « / » n'est pas une quantité : « 24/7 » qui
+     défile ressemble à un bug. On n'y touche pas. */
+  (function chiffres() {
+    if (reduce.matches) return;
+    var cibles = [].slice.call(document.querySelectorAll('.plan-amount, .plan-from, .plan-to, .launch-num'));
+    var RE = /\d+(?:[\s\u00A0\u202F]\d{3})*/g;
+    cibles.forEach(function (el) {
+      var txt = el.textContent;
+      if (txt.indexOf('/') > -1) return;
+      RE.lastIndex = 0;
+      if (!RE.test(txt)) return;
+      RE.lastIndex = 0;
+      var parts = [], last = 0, m;
+      while ((m = RE.exec(txt)) !== null) {
+        parts.push({ lit: txt.slice(last, m.index) });
+        parts.push({ num: parseInt(m[0].replace(/[^\d]/g, ''), 10), raw: m[0] });
+        last = m.index + m[0].length;
+      }
+      parts.push({ lit: txt.slice(last) });
+      el.__parts = parts;
+      el.textContent = rendu(parts, 0);
+    });
+    function fmt(v, raw) {
+      var t = String(v);
+      if (/[\s\u00A0\u202F]/.test(raw)) t = t.replace(/\B(?=(\d{3})+(?!\d))/g, '\u202F');
+      return t;
+    }
+    function rendu(parts, t) {
+      return parts.map(function (p) {
+        return p.lit !== undefined ? p.lit : fmt(Math.round(p.num * t), p.raw);
+      }).join('');
+    }
+    function lancer(el) {
+      if (el.__ran) return; el.__ran = 1;
+      var t0 = null, D = 1250;
+      requestAnimationFrame(function step(ts) {
+        if (t0 === null) t0 = ts;
+        var k = Math.min(1, (ts - t0) / D);
+        el.textContent = rendu(el.__parts, 1 - Math.pow(1 - k, 4));
+        if (k < 1) requestAnimationFrame(step);
+      });
+    }
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) lancer(e.target); });
+    }, { threshold: 0.4 });
+    cibles.forEach(function (el) { if (el.__parts) io.observe(el); });
+  })();
+
   window.nwCartes = CARTES;
 })();

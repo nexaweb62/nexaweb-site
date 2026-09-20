@@ -59,7 +59,7 @@ import '../styles/global.css';
   .plan-card{padding:14px 14px}
   .plan-name{font-size:var(--fs-caption);margin-bottom:8px}
   .plan-from,.plan-to{font-size:20px}
-  .plan-amount{font-size:22px}
+  .plan-amount{font-size:21px}
   .plan-sep{font-size:13px}
   .plan-desc{font-size:var(--fs-caption)}
   .plan-feature{font-size:var(--fs-caption);gap:6px}
@@ -92,10 +92,13 @@ import '../styles/global.css';
 }
 .plan-name{font-size:var(--fs-caption);font-weight:600;color:var(--text-muted);margin-bottom:12px}
 .plan-range{display:flex;align-items:center;gap:6px;flex-wrap:nowrap}
-.plan-from{font-size:clamp(22px,2.6vw,30px);font-weight:600;letter-spacing:-.03em;line-height:1;white-space:nowrap}
+.plan-from{font-size:clamp(20px,2.4vw,28px);font-weight:600;letter-spacing:-.03em;line-height:1;white-space:nowrap;font-variant-numeric:tabular-nums}
 .plan-sep{font-size:clamp(14px,1.5vw,18px);color:var(--text-subtle);flex-shrink:0;line-height:1}
-.plan-to{font-size:clamp(22px,2.6vw,30px);font-weight:600;letter-spacing:-.03em;line-height:1;color:var(--text-muted);white-space:nowrap}
-.plan-amount{font-size:clamp(26px,3vw,36px);font-weight:600;letter-spacing:-.04em;line-height:1;white-space:nowrap}
+.plan-to{font-size:clamp(20px,2.4vw,28px);font-weight:600;letter-spacing:-.03em;line-height:1;color:var(--text-muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+/* Chasse fixe pendant que les chiffres montent, sinon ils tremblent.
+   Les chiffres tabulaires sont plus larges : la taille descend d'un
+   cran pour que « 1 200 € — 3 100 € » tienne encore sur une ligne. */
+.plan-amount{font-size:clamp(23px,3vw,33px);font-weight:600;letter-spacing:-.04em;line-height:1;white-space:nowrap;font-variant-numeric:tabular-nums}
 .plan-desc{font-size:var(--fs-caption);color:var(--text-muted);margin-top:5px;line-height:1.5}
 .plan-spots{display:inline-flex;align-items:center;gap:5px;font-size:var(--fs-caption);font-weight:600;color:var(--accent-text);padding:4px 9px;background:var(--accent-glow);border:1px solid var(--accent);border-radius:6px;margin-bottom:14px}
 .plan-spots-num{font-size:12px;font-weight:600;line-height:1}

@@ -48,7 +48,8 @@ import '../styles/global.css';
 .form-note{font-size:var(--fs-caption);color:var(--text-muted)}
 .form-success{display:none;padding:20px 24px;border:1px solid var(--accent);border-radius:6px;background:var(--accent-glow);text-align:center}
 .form-success.show{display:block}
-.form-success-icon{font-size:28px;margin-bottom:8px}
+.form-success-icon{display:flex;align-items:center;justify-content:center;width:44px;height:44px;margin:0 auto 12px;border-radius:50%;background:var(--accent-glow);border:1px solid var(--accent);color:var(--accent-text)}
+.form-success-icon svg{width:20px;height:20px;display:block}
 .form-success-title{font-size:.95rem;font-weight:600;margin-bottom:4px}
 .form-success-sub{font-size:.83rem;color:var(--text-muted)}
 
@@ -149,7 +150,7 @@ import '../styles/global.css';
             </div>
           </form>
           <div class="form-success" id="form-success" role="alert">
-            <div class="form-success-icon">✓</div>
+            <div class="form-success-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
             <div class="form-success-title" data-i18n="av-success-title">Merci pour votre avis !</div>
             <div class="form-success-sub" data-i18n="av-success-sub">Il sera examiné et publié sous 24h si tout est conforme.</div>
           </div>
