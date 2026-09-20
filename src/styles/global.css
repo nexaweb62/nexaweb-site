@@ -774,6 +774,125 @@ body[data-page="home"] main>section{position:relative;z-index:2}
 
 
 /* ═══════════════════════════════════════════════════════════════════════
+   LE MOUVEMENT AU SCROLL
+   Tout passe par les animations pilotées par le défilement
+   (animation-timeline: view() et scroll(root)). Elles tournent hors du
+   fil principal : c'est ce qui permet d'en avoir autant sans bloquer.
+
+   Le bloc entier vit sous @supports. Sur un navigateur qui ne les
+   connaît pas, le repli plus bas remet simplement tout à opacity:1 —
+   le site est moins vivant, il n'est jamais cassé.
+
+   Les listes de sélecteurs sont celles du VRAI site : la référence
+   nomme ses blocs .plan / .box / .who-card, ici ce sont .plan-card,
+   .card, .feat-item… Les rôles sont les mêmes.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Le fil d'or qui mesure la lecture ──
+   La barre existait déjà, pilotée en JS. Elle prend l'allure d'un fil
+   d'or et, là où le navigateur sait le faire, c'est le scroll lui-même
+   qui la tire : le JS devient alors un repli inerte. */
+.read-bar{
+  height:2px;z-index:210;opacity:1;
+  background:linear-gradient(90deg,var(--gold-deep),var(--gold) 55%,var(--glass-gold-ink));
+  box-shadow:0 0 16px rgba(var(--glow),.55);
+}
+
+/* ── Le texte s'allume mot par mot ── */
+.reader .rw{display:inline-block;color:var(--rdim);
+  transition:color var(--dur-micro) var(--ease-out)}
+.reader .rw b,.reader .rw i,.reader .rw em,.reader .rw strong{color:inherit}
+
+/* ── Le ruban qui file au rythme du scroll ── */
+.ribbon{position:relative;overflow:hidden;z-index:2;
+  padding:clamp(16px,2.4vw,26px) 0;margin-top:clamp(28px,5vw,58px);
+  border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
+  -webkit-mask-image:linear-gradient(90deg,transparent,black 9%,black 91%,transparent);
+          mask-image:linear-gradient(90deg,transparent,black 9%,black 91%,transparent)}
+.ribbon .track{display:flex;width:max-content;white-space:nowrap}
+.ribbon .seg{font:700 clamp(20px,3.2vw,38px)/1.15 var(--font);letter-spacing:-.02em;
+  color:transparent;-webkit-text-stroke:1px rgba(var(--glow),.38);padding-right:.44em}
+.ribbon .seg b{-webkit-text-stroke:0;color:var(--gold);font-weight:700}
+.ribbon .seg span{-webkit-text-stroke:0;color:var(--gold-deep);padding:0 .3em;font-weight:400}
+
+/* ── La lumière qui traverse une carte pendant qu'elle traverse l'écran ── */
+.pass{position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:1;
+  background:linear-gradient(100deg,transparent 41%,rgba(var(--glow),.11) 50%,transparent 59%);
+  background-size:320% 100%;background-position:210% 0}
+
+/* ── Le trait d'or sous les titres de section ── */
+.s-title,.svc-title,.h-lg,.h-xl,.h-md,.section-title,.legal-title,.prix-h1,
+.hero-title,.hero-hl,.contact-title,.rdv-title,.reviews-hl,.lf-headline,.form-lede-h{position:relative}
+.s-title::after,.svc-title::after,.h-lg::after,.h-xl::after,.h-md::after,
+.section-title::after,.legal-title::after,.prix-h1::after,.hero-title::after,
+.hero-hl::after,.contact-title::after,.rdv-title::after,.reviews-hl::after,
+.lf-headline::after,.form-lede-h::after{
+  content:"";position:absolute;left:0;bottom:-.20em;
+  height:2px;width:min(220px,42%);transform:scaleX(0);transform-origin:0 50%;border-radius:2px;
+  background:linear-gradient(90deg,var(--gold-deep),var(--gold) 50%,rgb(from var(--gold) r g b / 0))}
+/* Un titre centré ne porte pas de trait aligné à gauche. */
+.s-cta h2::after,.cta-inner h2::after,.cta-title::after,.prix-title::after{display:none}
+
+@supports (animation-timeline: view()){
+  .read-bar{transform-origin:0 50%;
+    animation:progGrow linear both;animation-timeline:scroll(root);animation-range:0 100%}
+  @keyframes progGrow{to{transform:scaleX(1)}}
+
+  /* Le décalage entre les mots : --st vaut 44/nombreDeMots, plafonné à
+     1.5 %. C'est ce qui fait que la vague traverse un paragraphe court
+     comme un paragraphe long en un temps comparable. */
+  .reader .rw{animation:readLite linear both;animation-timeline:view();
+    animation-range:cover calc(13% + var(--i,0)*var(--st,1%))
+                    cover calc(31% + var(--i,0)*var(--st,1%))}
+  @keyframes readLite{to{color:var(--rlit)}}
+
+  .ribbon .track{animation:ribbonRun linear both;animation-timeline:scroll(root);animation-range:0 100%;
+    translate:calc(var(--svn,0) * 26px) 0;transition:translate .5s var(--ease-out)}
+  @keyframes ribbonRun{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  .pass{animation:passLight linear both;animation-timeline:view();animation-range:entry 0% exit 100%}
+  @keyframes passLight{from{background-position:210% 0}to{background-position:-150% 0}}
+
+  /* Le héros de chaque page s'éloigne et s'efface quand on le quitte.
+     Pas de filter:blur() : trop cher pour un effet à peine visible. */
+  .svc-hero,.rdv-hero,.legal-hero,.prix-hero,.lp-hero,.nf-page{
+    animation:heroPara linear both;animation-timeline:view();animation-range:exit 0% exit 100%}
+  @keyframes heroPara{to{transform:translateY(-70px) scale(.955);opacity:.16}}
+
+  .s-title::after,.svc-title::after,.h-lg::after,.h-xl::after,.h-md::after,
+  .section-title::after,.legal-title::after,.prix-h1::after,.hero-title::after,
+  .hero-hl::after,.contact-title::after,.rdv-title::after,.reviews-hl::after,
+  .lf-headline::after,.form-lede-h::after{
+    animation:ruleDraw linear both;animation-timeline:view();animation-range:entry 16% cover 42%}
+  @keyframes ruleDraw{to{transform:scaleX(1)}}
+}
+
+/* ── Le penchant à la vitesse ──
+   Un script mesure la vitesse de défilement et pose --sk (degrés,
+   plafonné à ±1,35°) et --svn (-1 à 1) sur :root. */
+.split{transform:skewY(var(--sk,0deg))}
+
+@supports not (animation-timeline: view()){
+  .reader .rw{color:var(--rlit)}
+  .pass,.ribbon .track{animation:none}
+  .s-title::after,.svc-title::after,.h-lg::after,.h-xl::after,.h-md::after,
+  .section-title::after,.legal-title::after,.prix-h1::after,.hero-title::after,
+  .hero-hl::after,.contact-title::after,.rdv-title::after,.reviews-hl::after,
+  .lf-headline::after,.form-lede-h::after{transform:scaleX(1)}
+}
+@media (prefers-reduced-motion:reduce){
+  .read-bar,.pass,.ribbon .track{animation:none!important}
+  .reader .rw{color:var(--rlit);animation:none!important}
+  .split{transform:none}
+  .svc-hero,.rdv-hero,.legal-hero,.prix-hero,.lp-hero,.nf-page{
+    animation:none!important;transform:none!important;opacity:1!important}
+  .s-title::after,.svc-title::after,.h-lg::after,.h-xl::after,.h-md::after,
+  .section-title::after,.legal-title::after,.prix-h1::after,.hero-title::after,
+  .hero-hl::after,.contact-title::after,.rdv-title::after,.reviews-hl::after,
+  .lf-headline::after,.form-lede-h::after{animation:none!important;transform:scaleX(1)}
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
    EN-TÊTE MOBILE
    ═══════════════════════════════════════════════════════════════════════ */
 @media(max-width:640px){

@@ -18,7 +18,8 @@
     "check:contrast:rendered": "node scripts/check-contrast-rendered.mjs",
     "build:logos": "node scripts/build-logos.mjs && mkdir -p public/logos && cp src/assets/logos/*.svg public/logos/",
     "check:seams": "node scripts/check-seams.mjs",
-    "check:glass": "node scripts/check-glass.mjs"
+    "check:glass": "node scripts/check-glass.mjs",
+    "check:anim": "node scripts/check-anim.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^6.0.4",
