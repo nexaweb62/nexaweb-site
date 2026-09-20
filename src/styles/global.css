@@ -830,8 +830,12 @@ body[data-page="home"] main>section{position:relative;z-index:2}
   content:"";position:absolute;left:0;bottom:-.20em;
   height:2px;width:min(220px,42%);transform:scaleX(0);transform-origin:0 50%;border-radius:2px;
   background:linear-gradient(90deg,var(--gold-deep),var(--gold) 50%,rgb(from var(--gold) r g b / 0))}
-/* Un titre centré ne porte pas de trait aligné à gauche. */
-.s-cta h2::after,.cta-inner h2::after,.cta-title::after,.prix-title::after{display:none}
+/* Un titre centré porte son trait au centre, pas collé à la gouttière
+   gauche : mesuré page par page, .prix-h1, .rdv-title et .hero-title
+   sont les trois qui le sont. */
+.prix-h1::after,.rdv-title::after,.hero-title::after{
+  left:50%;translate:-50% 0;width:min(180px,28%)}
+.s-cta h2::after,.cta-inner h2::after,.cta-title::after{display:none}
 
 @supports (animation-timeline: view()){
   .read-bar{transform-origin:0 50%;
@@ -891,6 +895,64 @@ body[data-page="home"] main>section{position:relative;z-index:2}
   .hero-hl::after,.contact-title::after,.rdv-title::after,.reviews-hl::after,
   .lf-headline::after,.form-lede-h::after{animation:none!important;transform:scaleX(1)}
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   L'ORBITE — le fond de la page Rendez-vous
+   SVG et CSS, zéro WebGL, zéro librairie : ça tourne sur le compositeur,
+   ça ne coûte presque rien, et ça marche dans les deux thèmes.
+
+   transform-box:fill-box sur les groupes qui tournent est indispensable :
+   sans lui la rotation SVG se fait autour de l'origine du repère et tout
+   part de travers.
+   ═══════════════════════════════════════════════════════════════════════ */
+.orbit{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+  -webkit-mask-image:radial-gradient(64% 58% at 50% 34%,black 24%,transparent 76%);
+          mask-image:radial-gradient(64% 58% at 50% 34%,black 24%,transparent 76%)}
+.orbit .halo{position:absolute;left:50%;top:34%;translate:-50% -50%;
+  width:min(118vw,1180px);aspect-ratio:1;border-radius:50%;
+  background:
+    radial-gradient(38% 34% at 32% 30%,rgba(var(--glow),.16),transparent 66%),
+    radial-gradient(34% 30% at 72% 62%,rgb(from var(--gold) r g b / .15),transparent 68%),
+    radial-gradient(30% 26% at 58% 20%,rgb(from var(--gold-deep) r g b / .16),transparent 70%);
+  filter:blur(28px)}
+.orbit svg{position:absolute;left:50%;top:34%;translate:-50% -50%;
+  width:min(112vw,1080px);height:auto;overflow:visible}
+.orbit .ring{fill:none;stroke:var(--gold-deep);stroke-opacity:.38;stroke-width:1}
+.orbit .ring.thin{stroke-opacity:.2}
+.orbit .tick{stroke:var(--gold);stroke-opacity:.5;stroke-width:1.4;stroke-linecap:round}
+.orbit .arc{fill:none;stroke:url(#arcg);stroke-width:2.2;stroke-linecap:round}
+.orbit .bead{fill:var(--gold-hi)}
+.orbit .beadglow{fill:var(--gold);opacity:.26}
+:root[data-theme="light"] .orbit .ring{stroke-opacity:.30}
+:root[data-theme="light"] .orbit .halo{filter:blur(34px);opacity:.8}
+@media (prefers-color-scheme:light){
+  :root:not([data-theme="dark"]) .orbit .ring{stroke-opacity:.30}
+  :root:not([data-theme="dark"]) .orbit .halo{filter:blur(34px);opacity:.8}
+}
+
+@media (prefers-reduced-motion:no-preference){
+  .orbit .spin{transform-box:fill-box;transform-origin:50% 50%;
+    animation:orbSpin 46s linear infinite}
+  .orbit .spin.rev{animation-duration:72s;animation-direction:reverse}
+  @keyframes orbSpin{to{rotate:360deg}}
+  .orbit .beadwrap{transform-box:fill-box;transform-origin:50% 50%;
+    animation:orbSpin 18s linear infinite}
+  .orbit .halo{animation:haloDrift 24s ease-in-out infinite alternate}
+  @keyframes haloDrift{
+    0%{transform:translate(-2%,1%) scale(1)}
+    50%{transform:translate(2%,-2%) scale(1.06)}
+    100%{transform:translate(-1%,2%) scale(1.02)}}
+}
+@supports (animation-timeline: view()){
+  /* l'orbite s'ouvre et recule au fil du scroll */
+  .orbit{animation:orbPara linear both;animation-timeline:view();animation-range:cover 0% cover 100%}
+  @keyframes orbPara{
+    from{transform:translateY(38px) scale(1.10);opacity:.35}
+    45%{opacity:1}
+    to{transform:translateY(-58px) scale(.94);opacity:.25}}
+}
+body.lite .orbit .spin,body.lite .orbit .beadwrap,body.lite .orbit .halo{animation:none}
+@media (prefers-reduced-motion:reduce){.orbit{animation:none!important;transform:none!important}}
 
 /* ═══════════════════════════════════════════════════════════════════════
    EN-TÊTE MOBILE

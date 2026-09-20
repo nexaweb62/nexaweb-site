@@ -77,7 +77,9 @@ for (const theme of ['dark', 'light']) {
         out.over = document.documentElement.scrollWidth - document.documentElement.clientWidth;
         const rv = document.querySelector('.river');
         out.river = rv ? getComputedStyle(rv).opacity : 'absent';
-        out.canvas = document.querySelectorAll('canvas').length;
+        /* La rivière est présente dans le DOM de toutes les pages, par
+           construction : on ne compte que les AUTRES canevas. */
+        out.canvas = [...document.querySelectorAll('canvas')].filter(c => c.id !== 'river').length;
 
         /* Un élément « fantôme » : entièrement dans l'écran, porteur de
            texte ou d'image, et pourtant presque transparent. */
