@@ -1114,6 +1114,187 @@ body.lite .orbit .spin,body.lite .orbit .beadwrap,body.lite .orbit .halo{animati
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
+   LES TITRES ARRIVENT MOT PAR MOT
+   Chaque mot monte, pivote vers l'avant et sort d'un flou, 46 ms d'écart
+   entre chacun. Le découpage préserve les <em> et les <br> : un élément
+   enfant devient UN SEUL mot, jamais découpé caractère par caractère —
+   sinon un dégradé background-clip:text se brise en morceaux.
+   ═══════════════════════════════════════════════════════════════════════ */
+.split{perspective:820px}
+.split .w{display:inline-block;transform-origin:50% 92%}
+@media (prefers-reduced-motion:no-preference){
+  .split{clip-path:none!important;animation:none!important;opacity:1!important}
+  .split .w{opacity:0;transform:translateY(.46em) rotateX(-48deg);filter:blur(6px);
+    transition:opacity .60s var(--ease-out) var(--dl,0ms),
+               transform .94s var(--ease-out) var(--dl,0ms),
+               filter .60s var(--ease-out) var(--dl,0ms)}
+  .split.in .w{opacity:1;transform:none;filter:blur(0)}
+}
+@media (prefers-reduced-motion:reduce){
+  .split .w{opacity:1!important;transform:none!important;filter:none!important}
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   LES BOUTONS — reflet, nappe d'or, flèche, onde d'appui
+   La nappe part du point EXACT où le curseur est entré : --bx/--by sont
+   posés au pointerenter.
+   ═══════════════════════════════════════════════════════════════════════ */
+.btn .t,.btn-g .t,.svc-cta .t,.cta-btn .t,.submit-btn .t,.lf-btn .t,
+.enter-btn .t,.nf-btn-home .t,.nf-btn-explore .t,.success-back .t{position:relative;z-index:2}
+.btn .sh,.btn .fill,.btn .rip,
+.btn-g .sh,.btn-g .fill,.btn-g .rip,
+.svc-cta .sh,.svc-cta .fill,.svc-cta .rip,
+.cta-btn .sh,.cta-btn .fill,.cta-btn .rip,
+.submit-btn .sh,.submit-btn .fill,.submit-btn .rip,
+.lf-btn .sh,.lf-btn .fill,.lf-btn .rip{position:absolute;pointer-events:none}
+.btn .sh,.btn-g .sh,.svc-cta .sh,.cta-btn .sh,.submit-btn .sh,.lf-btn .sh{
+  inset:0;border-radius:inherit;z-index:0;
+  background:linear-gradient(105deg,transparent 40%,rgba(var(--spec),.28) 50%,transparent 60%);
+  background-size:300% 100%;background-position:200% 0}
+.btn .fill,.btn-g .fill,.svc-cta .fill,.cta-btn .fill,.submit-btn .fill,.lf-btn .fill{
+  left:var(--bx,50%);top:var(--by,50%);width:0;height:0;border-radius:50%;z-index:0;opacity:0;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle,rgba(var(--glow),.42),rgb(from var(--gold-hi) r g b / .22) 58%,
+             rgb(from var(--gold-hi) r g b / 0) 72%);
+  transition:width .66s var(--ease-out),height .66s var(--ease-out),opacity .34s linear}
+.btn:hover .fill,.btn-g:hover .fill,.svc-cta:hover .fill,.cta-btn:hover .fill,
+.submit-btn:hover .fill,.lf-btn:hover .fill{width:330%;height:330%;opacity:1}
+.btn .rip,.btn-g .rip,.svc-cta .rip,.cta-btn .rip,.submit-btn .rip,.lf-btn .rip{
+  width:14px;height:14px;border-radius:50%;z-index:0;
+  background:radial-gradient(circle,rgba(var(--spec),.62),rgba(var(--spec),0) 70%)}
+.btn .ar,.btn-g .ar,.svc-cta .ar,.cta-btn .ar,.submit-btn .ar,.lf-btn .ar{
+  display:inline-block;transition:transform .44s var(--ease-out)}
+.btn:hover .ar,.btn-g:hover .ar,.svc-cta:hover .ar,.cta-btn:hover .ar,
+.submit-btn:hover .ar,.lf-btn:hover .ar{transform:translateX(7px)}
+@media (prefers-reduced-motion:no-preference){
+  .btn .sh,.btn-g .sh,.svc-cta .sh,.cta-btn .sh{animation:btnSheen 5.4s cubic-bezier(.45,0,.18,1) infinite}
+  @keyframes btnSheen{0%{background-position:200% 0}40%,100%{background-position:-130% 0}}
+  @keyframes ripGo{from{transform:translate(-50%,-50%) scale(1);opacity:.85}
+                   to{transform:translate(-50%,-50%) scale(28);opacity:0}}
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   LE GRAIN — la pellicule qui empêche les aplats de faire « plat »
+   ═══════════════════════════════════════════════════════════════════════ */
+.grain{position:fixed;inset:-120px;z-index:300;pointer-events:none;opacity:var(--grain-op);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode:var(--grain-blend)}
+@media (prefers-reduced-motion:no-preference){
+  .grain{animation:grainShift 1.1s steps(6) infinite}
+  @keyframes grainShift{
+    0%{transform:translate(0,0)}       16%{transform:translate(-14px,9px)}
+    33%{transform:translate(11px,-16px)} 50%{transform:translate(-9px,-11px)}
+    66%{transform:translate(16px,7px)}   83%{transform:translate(-12px,14px)}
+    100%{transform:translate(0,0)}}
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   LE CURSEUR — un anneau d'or qui traîne, un point qui colle
+   Le curseur système n'est masqué que par body.pointer, et cette classe
+   n'est posée QUE par le script qui dessine l'anneau : si le script
+   échoue, le curseur normal reste. Les champs gardent le curseur texte.
+   ═══════════════════════════════════════════════════════════════════════ */
+.lamp{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0;
+  background:radial-gradient(520px circle at var(--lx,50%) var(--ly2,40%),
+             rgba(var(--glow),.09),rgba(var(--glow),.03) 42%,transparent 66%);
+  transition:opacity .5s var(--curve)}
+body.pointer .lamp{opacity:1}
+.ring,.cur-dot{position:fixed;left:0;top:0;z-index:420;pointer-events:none;border-radius:50%;
+  opacity:0;transition:opacity .35s linear}
+body.pointer .ring,body.pointer .cur-dot{opacity:1}
+.ring{width:34px;height:34px;margin:-17px 0 0 -17px;
+  box-shadow:inset 0 0 0 1px rgb(from var(--gold) r g b / .75),0 0 18px rgb(from var(--gold) r g b / .22);
+  transform:translate3d(var(--rx2,-200px),var(--ry3,-200px),0) scale(var(--rs,1));
+  transition:opacity .35s linear,box-shadow .32s var(--curve),background .32s var(--curve)}
+.cur-dot{width:5px;height:5px;margin:-2.5px 0 0 -2.5px;background:var(--gold-hi);
+  transform:translate3d(var(--dx2,-200px),var(--dy2,-200px),0) scale(var(--ds,1));
+  box-shadow:0 0 10px rgb(from var(--gold-hi) r g b / .8)}
+body.grab .ring{background:rgb(from var(--gold) r g b / .14);
+  box-shadow:inset 0 0 0 1px rgb(from var(--gold-hi) r g b / .95),0 0 34px rgb(from var(--gold) r g b / .42)}
+body.press .ring{--rs:.78}
+@media (hover:hover) and (pointer:fine){
+  body.pointer{cursor:none}
+  body.pointer a,body.pointer button,body.pointer .faq-q,body.pointer label{cursor:none}
+  body.pointer input,body.pointer textarea,body.pointer select{cursor:auto}
+}
+@media (hover:none),(pointer:coarse){.ring,.cur-dot,.lamp{display:none}}
+@media (prefers-reduced-motion:reduce){
+  .grain{animation:none}.ring,.cur-dot,.lamp{display:none}body.pointer{cursor:auto}
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   LE RIDEAU DE TRANSITION
+   Une crête bombée balaye l'écran de bas en haut, avec une lame de
+   lumière sur son arête, et s'aplatit en arrivant. Le dégradé va du
+   CLAIR vers le FONCÉ de haut en bas : sans ça la crête est sombre sur
+   fond sombre et on ne voit rien.
+   ═══════════════════════════════════════════════════════════════════════ */
+.curtain{position:fixed;inset:-16% 0 0 0;z-index:200;pointer-events:none;transform:translateY(112%);
+  display:grid;place-items:center;
+  background:linear-gradient(180deg,var(--curt1) 0%,var(--curt2) 6%,var(--curt3) 15%,
+             var(--curt4) 44%,var(--curt5) 78%)}
+.curtain .cw{font:700 clamp(22px,4vw,40px)/1 var(--font);letter-spacing:-.03em;
+  color:var(--glass-gold-ink);opacity:0}
+.curtain .cw i{font-style:normal;color:var(--gold)}
+.curtain .cw b{display:inline-block;font-weight:inherit}
+.curtain .sheen{position:absolute;inset:0;pointer-events:none;opacity:0;
+  background:linear-gradient(100deg,transparent 36%,rgba(var(--glow),.40) 50%,transparent 64%);
+  background-size:240% 100%;background-position:200% 0}
+.curtain .edgeline{position:absolute;left:0;right:0;top:0;height:2px;pointer-events:none;opacity:0;
+  background:linear-gradient(90deg,transparent,var(--gold-hi),rgba(var(--glow),1),var(--gold-hi),transparent);
+  box-shadow:0 0 26px 4px rgb(from var(--gold-hi) r g b / .55)}
+@media (prefers-reduced-motion:no-preference){
+  .curtain.in{animation:curtIn 460ms var(--ease-inout) forwards}
+  .curtain.out{animation:curtOut 620ms var(--ease-out) forwards}
+  .curtain.in .cw{animation:cwIn 460ms var(--ease-out) forwards}
+  .curtain.out .cw{animation:cwOut 300ms linear forwards}
+  @keyframes curtIn{
+    0%{transform:translateY(112%);border-radius:60% 40% 0 0/26% 30% 0 0}
+    58%{border-radius:54% 46% 0 0/12% 14% 0 0}
+    100%{transform:translateY(0);border-radius:0}}
+  @keyframes curtOut{
+    0%{transform:translateY(0);border-radius:0}
+    46%{border-radius:0 0 44% 56%/0 0 13% 16%}
+    100%{transform:translateY(-112%);border-radius:0 0 40% 60%/0 0 26% 30%}}
+  @keyframes cwIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @keyframes cwOut{to{opacity:0}}
+  .curtain.in .sheen{animation:curtSheen 980ms cubic-bezier(.3,0,.2,1) forwards}
+  @keyframes curtSheen{0%{opacity:0;background-position:200% 0}22%{opacity:1}
+                       100%{opacity:.55;background-position:-120% 0}}
+  .curtain.in .edgeline,.curtain.out .edgeline{animation:edgeFlash 560ms linear forwards}
+  @keyframes edgeFlash{0%{opacity:0}12%{opacity:1}72%{opacity:1}100%{opacity:0}}
+  .curtain.in .cw b{animation:cwLetter 640ms var(--ease-out) both;
+    animation-delay:calc(var(--i,0)*36ms + 110ms)}
+  @keyframes cwLetter{from{opacity:0;transform:translateY(24px) rotateX(-72deg)}
+                      to{opacity:1;transform:none}}
+}
+@media (prefers-reduced-motion:reduce){.curtain{display:none}}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   LE MODE LÉGER
+   Ces animations coûtent cher. Sur une machine modeste, le site mesure
+   sa propre fluidité et s'allège tout seul : plus de pli 3D (les cartes
+   montent simplement), plus de grain animé, plus de lampe, plus de
+   lecture mot à mot, plus de lèvre ni de lumière de passage.
+   ═══════════════════════════════════════════════════════════════════════ */
+body.lite .grain{animation:none}
+body.lite .pass,body.lite .lip,body.lite .lamp{display:none}
+body.lite .reader .rw{animation:none!important;color:var(--rlit)}
+body.lite .drwi,body.lite .plan-features li,body.lite .card li,
+body.lite .aside li,body.lite .feat-item li{
+  animation:none!important;opacity:1!important;transform:none!important}
+body.lite .plan-card,body.lite .card,body.lite .feat-item,body.lite .who-card,
+body.lite .team-card,body.lite .constat-item,body.lite .step,body.lite .proc-step,
+body.lite .stat,body.lite .cta-inner,body.lite .launch-notice,body.lite .aside{
+  animation-name:cardLite!important}
+@keyframes cardLite{
+  0%{opacity:0;transform:translateY(30px) scale(.98)}
+  42%{opacity:1;transform:none}
+  100%{opacity:1;transform:none}}
+body.lite .split .w{transition-duration:.35s}
+
+
+/* ═══════════════════════════════════════════════════════════════════════
    EN-TÊTE MOBILE
    ═══════════════════════════════════════════════════════════════════════ */
 @media(max-width:640px){

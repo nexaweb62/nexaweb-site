@@ -74,10 +74,22 @@ import River from '../components/River.astro';
   <script src="/motion.js" defer></script>
   <!-- Le mouvement au scroll : ruban, lumière de passage, lecture mot à mot -->
   <script src="/scroll-fx.js" defer></script>
+  <!-- Titres mot a mot, boutons, curseur, rideau de transition -->
+  <script src="/finition.js" defer></script>
 </head>
 <body data-page={Astro.url.pathname === "/" ? "home" : "page"}>
   <a class="skip-link" href="#main-content">Aller au contenu</a>
   <River />
+  <div class="grain" aria-hidden="true" role="presentation"></div>
+  <div class="lamp" aria-hidden="true" role="presentation"></div>
+  <div class="ring" aria-hidden="true" role="presentation"></div>
+  <div class="cur-dot" aria-hidden="true" role="presentation"></div>
+  <!-- Le rideau de transition. Il n'existe que si le JS tourne : sans
+       lui, la navigation reste une navigation, simplement sans rideau. -->
+  <div class="curtain" aria-hidden="true" role="presentation" hidden>
+    <span class="sheen"></span><span class="edgeline"></span>
+    <span class="cw">NEXA<i>WEB</i></span>
+  </div>
   <!-- Le fond vivant : ce que le verre des boutons réfracte. Décoratif,
        retiré de l'arbre d'accessibilité, sous tout le contenu. -->
   <div class="ambience" aria-hidden="true" role="presentation">

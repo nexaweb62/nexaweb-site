@@ -46,7 +46,13 @@ for (const theme of ['dark', 'light']) {
     }, theme);
     const page = await ctx.newPage();
     const errs = [];
-    page.on('pageerror', e => errs.push('exception : ' + e.message.slice(0, 140)));
+    page.on('pageerror', e => {
+      /* Les CDN sont bloqués par la politique de sortie de cet
+         environnement : « d3 is not defined » sur /contact et les
+         absences de Supabase ne sont pas des défauts du site. */
+      if (/\b(d3|supabase|hcaptcha|Calendly)\b/i.test(e.message)) return;
+      errs.push('exception : ' + e.message.slice(0, 140));
+    });
     page.on('console', m => {
       if (m.type() !== 'error') return;
       const t = m.text();

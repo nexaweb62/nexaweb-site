@@ -32,7 +32,9 @@ import '../styles/global.css';
 .star-field{margin-bottom:24px}
 .field-label{display:block;font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-muted);margin-bottom:10px}
 .stars{display:flex;gap:4px}
-.star-btn{font-size:26px;color:var(--text-subtle);background:none;border:none;cursor:pointer;padding:0 2px;line-height:1;transition:color .12s,transform .12s}
+.star-btn{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;color:var(--text-subtle);background:none;border:none;cursor:pointer;padding:0;line-height:1;transition:color .12s,transform .12s}
+.ico-star{width:1em;height:1em;display:block}
+.star-btn .ico-star{width:26px;height:26px}
 .star-btn.on,.star-btn.hov{color:var(--warning)}
 .star-btn:hover{transform:scale(1.2)}
 
@@ -63,7 +65,7 @@ import '../styles/global.css';
 @media(max-width:560px){.reviews-grid{grid-template-columns:1fr}}
 .rv-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:14px;transition:border-color .25s}
 .rv-card:hover{border-color:var(--border-strong)}
-.rv-stars{display:flex;gap:3px;color:var(--warning);font-size:14px}
+.rv-stars{display:flex;gap:3px;align-items:center;color:var(--warning);font-size:14px}
 .rv-msg{font-size:.88rem;font-weight:300;color:var(--text-muted);line-height:1.7;flex:1}
 .rv-footer{display:flex;align-items:center;gap:10px;padding-top:12px;border-top:1px solid var(--border)}
 .rv-avatar{width:34px;height:34px;border-radius:50%;background:var(--accent-glow);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--accent-text);flex-shrink:0;}
@@ -71,7 +73,7 @@ import '../styles/global.css';
 .rv-company{font-size:.75rem;color:var(--text-muted)}
 .rv-date{font-size:.72rem;color:var(--text-muted);margin-left:auto}
 .empty-wrap{display:flex;flex-direction:column;align-items:center;text-align:center;gap:20px;padding:clamp(60px,10vw,100px) 0}
-.empty-stars-row{display:flex;gap:8px;opacity:.15;font-size:28px;color:var(--text)}
+.empty-stars-row{display:flex;gap:8px;align-items:center;opacity:.15;font-size:28px;color:var(--text)}
 .empty-title{font-size:1.1rem;font-weight:600;color:var(--text-muted)}
 .empty-sub{font-size:.85rem;color:var(--text-muted);max-width:340px;line-height:1.7}
 
@@ -116,11 +118,11 @@ import '../styles/global.css';
             <div class="star-field">
               <span class="field-label" id="star-label" data-i18n="av-star-lbl">Votre note</span>
               <div class="stars" role="group" aria-labelledby="star-label" id="stars">
-                <button class="star-btn" type="button" data-val="1" aria-label="1 étoile">★</button>
-                <button class="star-btn" type="button" data-val="2" aria-label="2 étoiles">★</button>
-                <button class="star-btn" type="button" data-val="3" aria-label="3 étoiles">★</button>
-                <button class="star-btn" type="button" data-val="4" aria-label="4 étoiles">★</button>
-                <button class="star-btn" type="button" data-val="5" aria-label="5 étoiles">★</button>
+                <button class="star-btn" type="button" data-val="1" aria-label="1 étoile"><svg class="ico-star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.6l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.4l-5.8 3.06 1.11-6.46-4.7-4.58 6.49-.94z"/></svg></button>
+                <button class="star-btn" type="button" data-val="2" aria-label="2 étoiles"><svg class="ico-star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.6l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.4l-5.8 3.06 1.11-6.46-4.7-4.58 6.49-.94z"/></svg></button>
+                <button class="star-btn" type="button" data-val="3" aria-label="3 étoiles"><svg class="ico-star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.6l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.4l-5.8 3.06 1.11-6.46-4.7-4.58 6.49-.94z"/></svg></button>
+                <button class="star-btn" type="button" data-val="4" aria-label="4 étoiles"><svg class="ico-star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.6l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.4l-5.8 3.06 1.11-6.46-4.7-4.58 6.49-.94z"/></svg></button>
+                <button class="star-btn" type="button" data-val="5" aria-label="5 étoiles"><svg class="ico-star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.6l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.4l-5.8 3.06 1.11-6.46-4.7-4.58 6.49-.94z"/></svg></button>
               </div>
             </div>
             <div class="fields-row">
@@ -248,7 +250,11 @@ import '../styles/global.css';
   });
 
   /* Load published reviews */
-  function starsHtml(n){ var s=''; for(var i=1;i<=5;i++) s+='<span style="color:'+(i<=n?'var(--warning)':'var(--text-subtle)')+'">★</span>'; return s; }
+  /* Dessinées, pas écrites : un glyphe d'étoile se pose sur la ligne de
+     base et ne se centre jamais dans sa rangée. */
+  var STAR='<svg class="ico-star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
+    +'<path d="M12 2.6l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.4l-5.8 3.06 1.11-6.46-4.7-4.58 6.49-.94z"/></svg>';
+  function starsHtml(n){ var s=''; for(var i=1;i<=5;i++) s+='<span style="color:'+(i<=n?'var(--warning)':'var(--text-subtle)')+'">'+STAR+'</span>'; return s; }
   function initials(name){ return name.split(' ').map(function(w){ return w[0]; }).join('').slice(0,2); }
   function formatDate(iso){ var d=new Date(iso); return d.toLocaleDateString('fr-FR',{year:'numeric',month:'long',day:'numeric'}); }
   function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -266,7 +272,7 @@ import '../styles/global.css';
 
   function emptyStateHtml(){
     var s = AV_STRINGS[localStorage.getItem('nw-lang') || 'fr'] || AV_STRINGS.fr;
-    return '<div class="empty-wrap"><div class="empty-stars-row">★★★★★</div><p class="empty-title">'+s.title+'</p><p class="empty-sub">'+s.sub+'</p></div>';
+    return '<div class="empty-wrap"><div class="empty-stars-row">'+STAR+STAR+STAR+STAR+STAR+'</div><p class="empty-title">'+s.title+'</p><p class="empty-sub">'+s.sub+'</p></div>';
   }
 
   function loadReviews(){
