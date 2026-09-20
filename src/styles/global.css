@@ -955,6 +955,165 @@ body.lite .orbit .spin,body.lite .orbit .beadwrap,body.lite .orbit .halo{animati
 @media (prefers-reduced-motion:reduce){.orbit{animation:none!important;transform:none!important}}
 
 /* ═══════════════════════════════════════════════════════════════════════
+   LES CARTES — LE PLI, L'ÉVENTAIL, L'EMPILEMENT
+   La carte arrive couchée à 72°, charnière sur son arête haute, et se
+   déplie vers le lecteur.
+
+   LA RÈGLE QUI ÉVITE LE PIÈGE PRINCIPAL : une animation CSS écrase toute
+   transformation posée en JS ou par une règle normale. Si l'animation
+   finit sur transform:none, aucun survol ne pourra plus bouger la carte.
+   La solution, ici partout : les transformations interactives passent par
+   des VARIABLES, référencées À L'INTÉRIEUR des keyframes. Le JS pose
+   --rx/--ry au survol, le CSS pose --ly/--sc, et l'animation les reprend
+   en direct.
+
+   box-shadow n'est PAS animé : ça force un repeint par image et par
+   carte. L'ombre est fixe, la profondeur vient de la 3D.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.plans-grid,.cards,.feat-grid,.who-grid,.team-grid,.stats-grid,.proc-grid,
+.steps,.constat-list,.cta-section,.s-who,.s-stats,.s-proc{perspective:1600px}
+
+.plan-card,.card,.feat-item,.who-card,.team-card,.constat-item,.step,.proc-step,
+.stat,.cta-inner,.launch-notice,.aside{
+  /* Le repère de la lèvre et du reflet. Posé en CSS et pas en ligne par
+     le script : un style en ligne bat toute règle, y compris celle qui
+     rend la carte collante plus bas. */
+  position:relative;
+  transform-origin:50% 0;backface-visibility:hidden;
+  transform:translateY(var(--ly,0px)) scale(var(--sc,1))
+            rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) skewY(var(--sk,0deg));
+  transition:transform .5s var(--ease-out),box-shadow .5s var(--curve)}
+
+/* La lèvre dorée : un trait de 2 px sur l'arête haute, qui s'allume et
+   s'étire pendant le dépliage. */
+.lip{position:absolute;left:0;right:0;top:0;height:2px;z-index:3;pointer-events:none;
+  transform-origin:50% 50%;transform:scaleX(.2);opacity:0;border-radius:inherit;
+  background:linear-gradient(90deg,transparent,var(--gold-hi),rgba(var(--glow),1),var(--gold-hi),transparent);
+  box-shadow:0 0 18px 2px rgba(var(--glow),.5)}
+
+/* Le reflet qui balaye au survol. */
+.gloss{position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:1;opacity:0;
+  background:linear-gradient(112deg,transparent 42%,rgba(var(--glow),.15) 50%,transparent 58%);
+  background-size:280% 100%;background-position:200% 0;
+  transition:background-position 1.15s var(--ease-out),opacity .28s linear}
+
+@media (hover:hover) and (pointer:fine){
+  .plan-card:hover>.gloss,.card:hover>.gloss,.who-card:hover>.gloss,.team-card:hover>.gloss,
+  .stat:hover>.gloss,.feat-item:hover>.gloss,.aside:hover>.gloss,.cta-inner:hover>.gloss,
+  .constat-item:hover>.gloss,.step:hover>.gloss,.proc-step:hover>.gloss{
+    opacity:1;background-position:-90% 0}
+  .plan-card:hover,.card:hover,.who-card:hover,.team-card:hover,.stat:hover,
+  .feat-item:hover,.aside:hover,.cta-inner:hover,.constat-item:hover,
+  .step:hover,.proc-step:hover{--ly:-7px;--sc:1.012}
+}
+
+@supports (animation-timeline: view()){
+  .plan-card,.card,.feat-item,.who-card,.team-card,.constat-item,.step,.proc-step,
+  .stat,.cta-inner,.launch-notice,.aside{
+    animation:cardFlight linear both;animation-timeline:view();
+    animation-range:entry 0% exit 92%}
+
+  @keyframes cardFlight{
+    0%{opacity:0;
+       transform:translateX(var(--fx,0px)) translateY(-10px) translateZ(-150px)
+                 rotateX(-72deg) rotateZ(var(--fr,0deg)) scale(.90)}
+    12%{opacity:.45}
+    33%{opacity:1;
+       transform:translateY(var(--ly,0px)) translateZ(0) rotateX(var(--rx,0deg))
+                 rotateY(var(--ry,0deg)) scale(var(--sc,1)) skewY(var(--sk,0deg))}
+    70%{opacity:1;
+       transform:translateY(var(--ly,0px)) translateZ(0) rotateX(var(--rx,0deg))
+                 rotateY(var(--ry,0deg)) scale(var(--sc,1)) skewY(var(--sk,0deg))}
+    100%{opacity:.16;
+       transform:translateY(-16px) translateZ(-190px) rotateX(30deg) scale(.94)}}
+
+  /* L'ÉVENTAIL : la carte de gauche vient de la droite, celle de droite
+     vient de la gauche. C'est ce croisement qui donne l'impression d'un
+     jeu de cartes qu'on ouvre en main.
+
+     Uniquement à partir de 760 px. En dessous, la grille est sur une
+     colonne : une carte pleine largeur décalée de 130 px sort de l'écran
+     et crée une barre de défilement horizontale — mesuré, 69 px de
+     débordement à 390 px sur trois pages. */
+  @media (min-width:760px){
+  .plans-grid>*:nth-child(1),.cards>*:nth-child(1),.who-grid>*:nth-child(1),
+  .team-grid>*:nth-child(1),.stats-grid>*:nth-child(1){--fx:130px;--fr:-6deg}
+  .plans-grid>*:nth-child(3),.cards>*:nth-child(3),.who-grid>*:nth-child(3),
+  .team-grid>*:nth-child(3),.stats-grid>*:nth-child(3){--fx:-130px;--fr:6deg}
+  .plans-grid>*:nth-child(2),.cards>*:nth-child(2),.stats-grid>*:nth-child(2){--fx:0px;--fr:0deg}
+  /* elles ne se déplient pas en même temps */
+  .plans-grid>*:nth-child(2),.cards>*:nth-child(2),.who-grid>*:nth-child(2),
+  .team-grid>*:nth-child(2),.stats-grid>*:nth-child(2){animation-range:entry -8% exit 92%}
+  .plans-grid>*:nth-child(3),.cards>*:nth-child(3),.who-grid>*:nth-child(3),
+  .team-grid>*:nth-child(3),.stats-grid>*:nth-child(3){animation-range:entry -17% exit 92%}
+  }
+
+  /* La lèvre suit le dépliage. */
+  .lip{animation:lipOn linear both;animation-timeline:view();animation-range:entry 0% entry 86%}
+  @keyframes lipOn{
+    0%{opacity:0;transform:scaleX(.08)}
+    26%{opacity:1;transform:scaleX(1)}
+    100%{opacity:0;transform:scaleX(1)}}
+
+  /* Le contenu sort du pli, ligne après ligne. */
+  .drwi{animation:drawerPull linear both;animation-timeline:view();
+    animation-range:entry calc(12% + var(--i,0)*6%) entry calc(96% + var(--i,0)*2%)}
+  @keyframes drawerPull{
+    from{opacity:0;transform:translateY(-26px) rotateX(-22deg)}
+    to{opacity:1;transform:none}}
+
+  /* Les puces arrivent une par une, par la gauche. */
+  .plan-features li,.card li,.aside li,.feat-item li{
+    animation:liIn linear both;animation-timeline:view();
+    animation-range:entry calc(26% + var(--j,0)*5%) entry 100%}
+  @keyframes liIn{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
+
+  /* ── L'EMPILEMENT COLLANT ──
+     Chaque carte se colle sous l'en-tête et la suivante vient se poser
+     par-dessus. Trois choses à ne pas rater, et elles sont ici :
+       · la carte empilée a SA PROPRE animation (cardLand), qui finit
+         posée. Avec cardFlight elle finirait à opacity .16 en position
+         collée, et on lirait à travers ;
+       · son fond doit être OPAQUE, sinon la carte du dessous transparaît ;
+       · l'empilement est réservé au desktop. */
+  @media (min-width:760px){
+    .steps,.constat-list{gap:0}
+    /* body en tête : les styles de page d'Astro portent un attribut
+       (.step[data-astro-cid-…] = 0,2,0) et gagneraient à égalité. */
+    body .steps .step,body .constat-list .constat-item{
+      position:sticky;
+      top:calc(var(--hdr, 72px) + 46px + var(--n,0) * 16px);
+      margin-bottom:clamp(120px,21vh,210px);
+      animation-name:cardLand;animation-range:entry 0% cover 30%;
+      background:var(--cardbg);box-shadow:0 -16px 46px -20px var(--shadow-1)}
+    body .steps .step:last-child,body .constat-list .constat-item:last-child{margin-bottom:0}
+    @keyframes cardLand{
+      0%{opacity:0;transform:translateY(-10px) translateZ(-150px) rotateX(-72deg) scale(.90)}
+      38%{opacity:1}
+      100%{opacity:1;
+        transform:translateY(var(--ly,0px)) translateZ(0) rotateX(var(--rx,0deg))
+                  rotateY(var(--ry,0deg)) scale(var(--sc,1)) skewY(var(--sk,0deg))}}
+  }
+}
+
+@supports not (animation-timeline: view()){
+  .lip{display:none}
+  .drwi,.plan-features li,.card li,.aside li,.feat-item li{opacity:1;transform:none}
+}
+
+@media (prefers-reduced-motion:reduce){
+  /* Le tiroir reste ouvert : aucune carte ne bouge, rien ne reste caché. */
+  .plan-card,.card,.feat-item,.who-card,.team-card,.constat-item,.step,.proc-step,
+  .stat,.cta-inner,.launch-notice,.aside,.drwi,
+  .plan-features li,.card li,.aside li,.feat-item li{
+    animation:none!important;clip-path:none!important;opacity:1!important;transform:none!important}
+  body .steps .step,body .constat-list .constat-item{
+    position:relative!important;top:auto!important;margin-bottom:12px!important}
+  .lip{display:none}
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
    EN-TÊTE MOBILE
    ═══════════════════════════════════════════════════════════════════════ */
 @media(max-width:640px){

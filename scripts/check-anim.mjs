@@ -73,7 +73,7 @@ for (const theme of ['dark', 'light']) {
       });
 
       const res = await page.evaluate(() => {
-        const out = { over: 0, ghosts: [], river: null, canvas: 0 };
+        const out = { over: 0, cands: [], river: null, canvas: 0 };
         out.over = document.documentElement.scrollWidth - document.documentElement.clientWidth;
         const rv = document.querySelector('.river');
         out.river = rv ? getComputedStyle(rv).opacity : 'absent';
@@ -81,9 +81,18 @@ for (const theme of ['dark', 'light']) {
            construction : on ne compte que les AUTRES canevas. */
         out.canvas = [...document.querySelectorAll('canvas')].filter(c => c.id !== 'river').length;
 
-        /* Un élément « fantôme » : entièrement dans l'écran, porteur de
-           texte ou d'image, et pourtant presque transparent. */
+        const opDe = el => {
+          let op = 1;
+          for (let n = el; n && n !== document.documentElement; n = n.parentElement) {
+            op *= parseFloat(getComputedStyle(n).opacity);
+          }
+          return op;
+        };
+        window.__opDe = opDe;
+
+        /* Premier passage, bon marché : on repère les candidats. */
         const vh = innerHeight, vw = innerWidth;
+        let k = 0;
         document.querySelectorAll('body *').forEach(el => {
           if (el.closest('[aria-hidden="true"]') || el.getAttribute('aria-hidden') === 'true') return;
           if (el.closest('.cnav, .curtain, #loader, .faq-a, details:not([open])')) return;
@@ -93,23 +102,40 @@ for (const theme of ['dark', 'light']) {
           if (!own && el.tagName !== 'IMG') return;
           const r = el.getBoundingClientRect();
           if (r.width < 4 || r.height < 4) return;
-          if (r.top < 0 || r.left < 0 || r.bottom > vh || r.right > vw) return;   // pas entièrement visible
-          /* opacité composée : celle de l'élément et de tous ses parents */
-          let op = 1;
-          for (let n = el; n && n !== document.documentElement; n = n.parentElement) {
-            op *= parseFloat(getComputedStyle(n).opacity);
-          }
-          if (op < 0.55) {
-            out.ghosts.push({
-              sel: el.tagName.toLowerCase() + (typeof el.className === 'string' && el.className
-                ? '.' + el.className.trim().split(/\s+/).slice(0, 2).join('.') : ''),
-              op: +op.toFixed(2),
-              txt: (el.textContent || '').trim().slice(0, 40),
-            });
-          }
+          if (r.top < 0 || r.left < 0 || r.bottom > vh || r.right > vw) return;
+          if (opDe(el) >= 0.55) return;
+          el.setAttribute('data-ghost-probe', String(k++));
+          out.cands.push({
+            probe: k - 1,
+            sel: el.tagName.toLowerCase() + (typeof el.className === 'string' && el.className
+              ? '.' + el.className.trim().split(/\s+/).slice(0, 2).join('.') : ''),
+            txt: (el.textContent || '').trim().slice(0, 40),
+          });
         });
         return out;
       });
+
+      /* Second passage, décisif : on AMÈNE chaque candidat au centre de
+         l'écran et on remesure. Un élément peut être « dans le cadre »
+         alors que la carte qui le porte commence à peine à entrer — ce
+         n'est pas un fantôme, c'est une animation en cours. Le fantôme,
+         c'est celui qui reste éteint une fois arrivé au centre. */
+      const ghosts = [];
+      for (const c of res.cands) {
+        const op = await page.evaluate(async n => {
+          const el = document.querySelector(`[data-ghost-probe="${n}"]`);
+          if (!el) return 1;
+          el.scrollIntoView({ block: 'center', behavior: 'instant' });
+          await new Promise(r => setTimeout(r, 220));
+          return +window.__opDe(el).toFixed(2);
+        }, c.probe);
+        if (op < 0.55) ghosts.push({ ...c, op });
+      }
+      await page.evaluate(() => {
+        document.querySelectorAll('[data-ghost-probe]').forEach(e => e.removeAttribute('data-ghost-probe'));
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      });
+      res.ghosts = ghosts;
 
       checked++;
       const tag = `[${theme} ${vp.width}] ${path}`;

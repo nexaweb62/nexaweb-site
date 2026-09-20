@@ -170,5 +170,60 @@
     cibles.forEach(function (el) { if (el.__parts) io.observe(el); });
   })();
 
+  /* ── 7. Le tiroir : lèvre dorée, reflet, et le contenu qui sort ─────
+     Les enfants directs d'une carte sortent ligne après ligne, sauf les
+     calques décoratifs et ceux qui ont déjà leur propre animation. */
+  (function tiroir() {
+    var DECOR = { LIP: 1, GLOSS: 1, PASS: 1, EDGE: 1, RIM: 1, SWEEP: 1, FLOW: 1 };
+    document.querySelectorAll(CARTES).forEach(function (c) {
+      if (c.dataset.drw) return; c.dataset.drw = '1';
+      if (!c.querySelector(':scope > .lip')) {
+        var l = document.createElement('span');
+        l.className = 'lip'; l.setAttribute('aria-hidden', 'true');
+        c.insertBefore(l, c.firstChild);
+      }
+      if (!c.querySelector(':scope > .gloss')) {
+        var g = document.createElement('span');
+        g.className = 'gloss'; g.setAttribute('aria-hidden', 'true');
+        c.insertBefore(g, c.firstChild);
+      }
+      var i = 0;
+      [].slice.call(c.children).forEach(function (el) {
+        var cl = (el.className || '').toString().toUpperCase().split(/\s+/);
+        if (cl.some(function (k) { return DECOR[k]; })) return;
+        var cs = getComputedStyle(el);
+        if (cs.animationName && cs.animationName !== 'none') return;
+        el.classList.add('drwi');
+        el.style.setProperty('--i', i++);
+      });
+    });
+  })();
+
+  /* ── 8. L'inclinaison 3D qui suit le curseur ───────────────────────
+     Le JS ne pose QUE des variables : l'animation au scroll les
+     reprend en direct depuis l'intérieur de ses keyframes. Poser un
+     transform ici ne servirait à rien, l'animation l'écraserait. */
+  (function tilt() {
+    if (!matchMedia('(hover:hover) and (pointer:fine)').matches) return;
+    if (reduce.matches) return;
+    var cur = null, pend = false, ev = null;
+    function clear(c) { c.style.setProperty('--rx', '0deg'); c.style.setProperty('--ry', '0deg'); }
+    document.addEventListener('pointermove', function (e) {
+      ev = e; if (pend) return; pend = true;
+      requestAnimationFrame(function () {
+        pend = false;
+        var c = ev.target && ev.target.closest ? ev.target.closest(CARTES) : null;
+        if (c !== cur && cur) { clear(cur); cur = null; }
+        if (!c) return;
+        cur = c;
+        var r = c.getBoundingClientRect();
+        var px = (ev.clientX - r.left) / r.width - 0.5, py = (ev.clientY - r.top) / r.height - 0.5;
+        c.style.setProperty('--ry', (px * 7).toFixed(2) + 'deg');
+        c.style.setProperty('--rx', (-py * 6).toFixed(2) + 'deg');
+      });
+    }, { passive: true });
+    document.addEventListener('pointerleave', function () { if (cur) { clear(cur); cur = null; } }, { passive: true });
+  })();
+
   window.nwCartes = CARTES;
 })();
