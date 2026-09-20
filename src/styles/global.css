@@ -721,6 +721,59 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
 
 
 /* ═══════════════════════════════════════════════════════════════════════
+   LA RIVIÈRE D'OR
+   Un seul canevas WebGL fixe, derrière toute la page. Présent partout,
+   il ne coule que sur l'accueil.
+
+   Le « animation:none!important » n'est pas décoratif : la rivière a une
+   animation pilotée par le scroll, et en CSS une animation bat toujours
+   une déclaration normale. Sans lui, opacity:0 serait écrasé et la
+   rivière réapparaîtrait sur Tarifs, Équipe et les autres.
+   ═══════════════════════════════════════════════════════════════════════ */
+.river{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:1;
+  transition:opacity 620ms var(--curve)}
+.river canvas{width:100%;height:100%;display:block}
+body:not([data-page="home"]) .river{animation:none!important;opacity:0}
+
+/* Hors accueil, c'est le fond vivant qui prend le relais ; sur l'accueil
+   la rivière suffit, et les deux ensemble feraient une bouillie. */
+body[data-page="home"] .ambience{opacity:0}
+.ambience{transition:opacity 620ms var(--curve)}
+
+@supports (animation-timeline: scroll(root)){
+  /* elle se retire pendant la lecture, et revient à la fin */
+  body[data-page="home"] .river{
+    animation:riverPulse linear both;animation-timeline:scroll(root);animation-range:0 100%}
+  @keyframes riverPulse{0%{opacity:1}20%{opacity:.16}70%{opacity:.16}100%{opacity:1}}
+}
+@media (prefers-reduced-motion:reduce){
+  body[data-page="home"] .river{animation:none!important;opacity:.5}
+}
+
+/* ── Les voiles de lisibilité ──
+   Le texte passe par-dessus la rivière. Tout calque posé sur un fond
+   animé doit être estompé sur ses bords : sans le mask-image on voit une
+   cassure horizontale nette en travers de la page. */
+body[data-page="home"] .s-hero::after{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(102deg,rgba(var(--scrim),.94) 0%,rgba(var(--scrim),.86) 26%,
+             rgba(var(--scrim),.52) 52%,rgba(var(--scrim),0) 78%);
+  -webkit-mask-image:linear-gradient(to bottom,black 0%,black 78%,transparent 100%);
+          mask-image:linear-gradient(to bottom,black 0%,black 78%,transparent 100%)}
+body[data-page="home"] .s-cta::after{
+  content:"";position:absolute;inset:-10% 0;z-index:1;pointer-events:none;
+  background:radial-gradient(58% 48% at 50% 52%,rgba(var(--scrim),.92) 0%,rgba(var(--scrim),.62) 52%,
+             rgba(var(--scrim),0) 84%);
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,black 18%,black 82%,transparent 100%);
+          mask-image:linear-gradient(to bottom,transparent 0%,black 18%,black 82%,transparent 100%)}
+body[data-page="home"] .s-hero>.wrap,
+body[data-page="home"] .s-cta>.wrap{position:relative;z-index:2}
+
+/* Les sections restent au-dessus de la rivière. */
+body[data-page="home"] main>section{position:relative;z-index:2}
+
+
+/* ═══════════════════════════════════════════════════════════════════════
    EN-TÊTE MOBILE
    ═══════════════════════════════════════════════════════════════════════ */
 @media(max-width:640px){

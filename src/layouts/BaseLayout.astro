@@ -17,6 +17,7 @@ const canonicalUrl = siteOrigin + Astro.url.pathname;
 // pratique que la première.
 const ogImageUrl = siteOrigin + '/og-image.png';
 const ogImageLightUrl = siteOrigin + '/og-image-light.png';
+import River from '../components/River.astro';
 ---
 <!doctype html>
 <html lang="fr">
@@ -72,8 +73,9 @@ const ogImageLightUrl = siteOrigin + '/og-image-light.png';
   <!-- Système de mouvement (reveals, parallaxe, compteurs, barre de lecture) -->
   <script src="/motion.js" defer></script>
 </head>
-<body>
+<body data-page={Astro.url.pathname === "/" ? "home" : "page"}>
   <a class="skip-link" href="#main-content">Aller au contenu</a>
+  <River />
   <!-- Le fond vivant : ce que le verre des boutons réfracte. Décoratif,
        retiré de l'arbre d'accessibilité, sous tout le contenu. -->
   <div class="ambience" aria-hidden="true" role="presentation">

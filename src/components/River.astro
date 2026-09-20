@@ -1,0 +1,151 @@
+---
+/**
+ * LA RIVIÈRE D'OR
+ *
+ * Un seul canevas WebGL, fixe, derrière toute la page. Il est présent
+ * partout mais ne coule que sur l'accueil : ailleurs son opacité est
+ * exactement 0 (voir global.css, et le `animation:none!important` qui
+ * l'accompagne — une animation CSS bat toujours une déclaration normale,
+ * donc sans lui la rivière réapparaîtrait dès que le scroll la rejoue).
+ *
+ * Le shader connaît le thème par l'uniforme u_light. En sombre les rives
+ * s'éteignent dans le noir ; en clair ça produirait des taches sur le
+ * papier, alors c'est l'alpha seul qui les efface.
+ */
+---
+
+<div class="river" aria-hidden="true" role="presentation"><canvas id="river"></canvas></div>
+
+<script is:inline>
+  (function () {
+    var cv = document.getElementById('river');
+    if (!cv) return;
+    var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var gl = null;
+    try { gl = cv.getContext('webgl', { antialias: false, alpha: true, premultipliedAlpha: false }); } catch (e) {}
+    if (!gl) { cv.style.display = 'none'; return; }
+
+    /* Le thème effectif, pas l'attribut : ce site a un troisième état,
+       « système », où data-theme n'est pas posé du tout. */
+    function clair() {
+      var a = document.documentElement.getAttribute('data-theme');
+      if (a === 'light') return 1.0;
+      if (a === 'dark') return 0.0;
+      return matchMedia('(prefers-color-scheme: light)').matches ? 1.0 : 0.0;
+    }
+
+    var vs = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+    var fs = [
+      'precision highp float;',
+      'uniform vec2 u_res; uniform float u_t; uniform vec2 u_mouse; uniform float u_light;',
+      'mat2 rot(float a){float c=cos(a),s=sin(a);return mat2(c,-s,s,c);}',
+      'float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}',
+      'float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);',
+      ' return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);}',
+      'float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<5;i++){v+=a*noise(p);p*=2.02;a*=.5;}return v;}',
+      'float H(vec2 p,float t){',
+      ' vec2 q=vec2(p.x*0.62 - t*0.13, p.y*2.55);',
+      ' float w=fbm(q*1.35 + vec2(t*0.08,0.0));',
+      ' return fbm(q + 1.45*vec2(w, w*0.55));}',
+      'void main(){',
+      ' vec2 uv=gl_FragCoord.xy/u_res;',
+      ' vec2 p=(uv-0.5);',
+      ' p.x*=u_res.x/max(u_res.y,1.0);',
+      ' p*=rot(-0.42);',
+      ' float t=u_t;',
+      ' float mid=0.085*sin(p.x*1.25+0.5) + 0.055*sin(p.x*2.4-1.1) + 0.06;',
+      ' float dist=abs(p.y-mid);',
+      ' float width=0.46;',
+      ' float band=1.0-smoothstep(width*0.16,width,dist);',
+      ' if(band<=0.003){gl_FragColor=vec4(0.0);return;}',
+      ' float h=H(p,t);',
+      ' float e=0.010;',
+      ' float hx=H(p+vec2(e,0.0),t), hy=H(p+vec2(0.0,e),t);',
+      ' vec3 n=normalize(vec3((h-hx)/e,(h-hy)/e,2.2));',
+      ' vec3 l=normalize(vec3(-0.45,0.72,0.52));',
+      ' float dif=max(dot(n,l),0.0);',
+      ' vec3 r=reflect(-l,n);',
+      ' float spec=pow(max(r.z,0.0),26.0);',
+      ' float crest=smoothstep(0.32,0.64,h);',
+      ' vec3 deep=mix(vec3(0.255,0.200,0.092),vec3(0.470,0.365,0.130),u_light);',
+      ' vec3 gold=mix(vec3(0.878,0.745,0.451),vec3(0.722,0.558,0.188),u_light);',
+      ' vec3 hi=mix(vec3(1.0,0.980,0.906),vec3(0.972,0.906,0.710),u_light);',
+      ' vec3 col=mix(deep,gold,crest);',
+      ' col+=gold*dif*0.46;',
+      ' col+=hi*spec*1.35*crest;',
+      ' float edge=pow(band,1.35);',
+      ' col=mix(col*edge,col,u_light);',
+      ' float a=mix(edge*(0.60+0.40*crest), edge*(0.40+0.44*crest), u_light);',
+      ' vec2 mn=u_mouse/u_res;',
+      ' float md=distance(uv,mn)*1.15;',
+      ' float glow=exp(-md*md*24.0);',
+      ' col+=hi*glow*mix(0.26,0.09,u_light)*edge;',
+      ' a=min(1.0,a+glow*0.18*edge);',
+      ' gl_FragColor=vec4(col,a);}'
+    ].join('\n');
+
+    function sh(ty, src) {
+      var s = gl.createShader(ty); gl.shaderSource(s, src); gl.compileShader(s);
+      if (gl.getShaderParameter(s, gl.COMPILE_STATUS)) return s;
+      if (window.console) console.warn('Rivière — compilation :', gl.getShaderInfoLog(s));
+      return null;
+    }
+    var v = sh(gl.VERTEX_SHADER, vs), f = sh(gl.FRAGMENT_SHADER, fs);
+    if (!v || !f) { cv.style.display = 'none'; return; }
+    var pr = gl.createProgram(); gl.attachShader(pr, v); gl.attachShader(pr, f); gl.linkProgram(pr);
+    if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) {
+      if (window.console) console.warn('Rivière — édition de liens :', gl.getProgramInfoLog(pr));
+      cv.style.display = 'none'; return;
+    }
+    gl.useProgram(pr);
+    var bu = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, bu);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    var lo = gl.getAttribLocation(pr, 'p'); gl.enableVertexAttribArray(lo);
+    gl.vertexAttribPointer(lo, 2, gl.FLOAT, false, 0, 0);
+    var uRes = gl.getUniformLocation(pr, 'u_res'), uT = gl.getUniformLocation(pr, 'u_t'),
+        uM = gl.getUniformLocation(pr, 'u_mouse'), uL = gl.getUniformLocation(pr, 'u_light');
+    gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+    var dpr = 1, mx = -9999, my = -9999, tmx = -9999, tmy = -9999;
+    function size() {
+      dpr = Math.min(devicePixelRatio || 1, 1.4);
+      var w = cv.clientWidth || 1, h = cv.clientHeight || 1;
+      cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+      gl.viewport(0, 0, cv.width, cv.height); gl.uniform2f(uRes, cv.width, cv.height);
+    }
+
+    if (matchMedia('(hover:hover) and (pointer:fine)').matches && !reduce) {
+      addEventListener('pointermove', function (e) {
+        tmx = e.clientX * dpr; tmy = (innerHeight - e.clientY) * dpr;
+      }, { passive: true });
+      addEventListener('pointerleave', function () { tmx = -9999; tmy = -9999; }, { passive: true });
+    }
+
+    /* La vitesse de défilement accélère le courant — lue image par image,
+       donc sans aucun écouteur de scroll. */
+    var lastY = scrollY, vel = 0, phase = 0, last = 0;
+    function frame(ms) {
+      var dt = last ? Math.min((ms - last) / 1000, 0.05) : 0.016; last = ms;
+      if (reduce) {
+        gl.uniform1f(uT, 9.0); gl.uniform2f(uM, -9999, -9999);
+        gl.uniform1f(uL, clair()); gl.drawArrays(gl.TRIANGLES, 0, 3); return;
+      }
+      var y = scrollY, dy = Math.abs(y - lastY); lastY = y;
+      vel += (Math.min(dy, 140) - vel) * 0.14;
+      phase += dt * (1.0 + vel * 0.017);
+      if (tmx > -9000) {
+        mx += (tmx - (mx > -9000 ? mx : tmx)) * 0.12; my += (tmy - (my > -9000 ? my : tmy)) * 0.12;
+        if (mx < -9000) { mx = tmx; my = tmy; }
+      } else { mx = -9999; my = -9999; }
+      gl.uniform1f(uT, phase);
+      gl.uniform2f(uM, mx, my);
+      gl.uniform1f(uL, clair());
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      requestAnimationFrame(frame);
+    }
+    size(); requestAnimationFrame(frame);
+    addEventListener('resize', function () { size(); if (reduce) requestAnimationFrame(frame); }, { passive: true });
+    /* Mouvement réduit : une seule image, redessinée quand le thème change. */
+    document.addEventListener('nw-theme', function () { if (reduce) requestAnimationFrame(frame); });
+  })();
+</script>
