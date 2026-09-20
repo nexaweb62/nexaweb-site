@@ -103,6 +103,23 @@
      NO_BACKDROP=1. C'est l'encre brune du verre qui tient (4.87:1). */
   --raw-glass-fb-gold-ink-l: #241B06;
 
+  /* ── LA RÉFÉRENCE D'ANIMATION ──
+     Le fichier de démonstration fourni écrit ses couleurs sous d'autres
+     noms (--ink, --gold-deep, --spec…). Plutôt que de renommer 22 pages
+     et de casser les garde-fous, ces noms deviennent des ALIAS posés sur
+     les jetons existants, un peu plus bas. Seules les quelques valeurs
+     qui n'existaient pas ici sont ajoutées comme brutes.
+
+     --spec et --glow sont des TRIPLETS sans parenthèses, à consommer en
+     rgba(var(--spec),.34) : c'est ce qui fait qu'un reflet blanc en
+     sombre devient bronze en clair sans dupliquer une règle. */
+  --raw-gold-deep-d:  #8A7238;   --raw-gold-deep-l:  #4E3C0E;
+  --raw-gold-low-d:   #5C4C24;   --raw-gold-low-l:   #C6AE74;
+  --raw-curtain-4-d:  #241B08;   --raw-curtain-4-l:  #F0E8D6;
+  --raw-spec-d:  255,255,255;    --raw-spec-l:  92,72,22;
+  --raw-glow-rgb-d: 255,247,230; --raw-glow-rgb-l: 120,92,26;
+  --raw-scrim-d: 10,10,11;       --raw-scrim-l: 246,243,236;
+
   /* Signalétique */
   --raw-green-d: #4C9A78;  --raw-green-l: #256345;
   --raw-amber-d: #D6A24B;  --raw-amber-l: #8A5E12;
@@ -257,6 +274,44 @@
   --glass-fb-ghost:  var(--raw-glass-fb-ghost-d);
   --glass-fb-gold-ink: var(--raw-glass-gold-ink-d);
   --glass-scrim:     var(--raw-glass-scrim-d);
+  /* ── Alias de la référence d'animation ──────────────────────────────
+     Mêmes couleurs, autres noms : le CSS et le JS repris du fichier de
+     démonstration s'écrivent tels quels, et une seule palette gouverne
+     toujours le site. */
+  --ink:      var(--bg);
+  --surf:     var(--surface);
+  --surf2:    var(--surface-2);
+  --hair:     var(--border);
+  --line2:    var(--border-strong);
+  --fg:       var(--text);
+  --mut:      var(--text-muted);
+  --sub:      var(--text-subtle);
+  --gold:     var(--accent);
+  --gold-hi:  var(--accent-hover);
+  --gold-deep: var(--raw-gold-deep-d);
+  --gold-low:  var(--raw-gold-low-d);
+  --gold-lab:  var(--accent-text);
+  --btn-fg:    var(--glass-gold-ink);
+  --cardbg:    var(--surface);
+  --spec:      var(--raw-spec-d);
+  --glow:      var(--raw-glow-rgb-d);
+  --scrim:     var(--raw-scrim-d);
+  /* La lecture mot à mot. La référence part d'un gris très sombre qui
+     ne passe pas AA tant que la vague n'est pas arrivée ; ici le mot
+     éteint reste lisible et c'est l'encre pleine qui l'allume. */
+  --rdim:      var(--text-subtle);
+  --rlit:      var(--text);
+  --curt1:     var(--accent-hover);
+  --curt2:     var(--accent-active);
+  --curt3:     var(--raw-gold-deep-d);
+  --curt4:     var(--raw-curtain-4-d);
+  --curt5:     var(--bg);
+  /* Durées et courbe de la référence, en plus des nôtres. */
+  --fast:  var(--dur-micro);
+  --med:   320ms;
+  --curve: cubic-bezier(.25,.1,.25,1);
+  --grain-op:    .075;
+  --grain-blend: overlay;
 }
 
 /* ───────────────────────────────────────────────────────────────────────
@@ -311,6 +366,40 @@
     --glass-fb-ghost:  var(--raw-glass-fb-ghost-l);
     --glass-fb-gold-ink: var(--raw-glass-fb-gold-ink-l);
   --glass-scrim:     var(--raw-glass-scrim-l);
+    /* ── Alias de la référence d'animation ──────────────────────────────
+       Mêmes couleurs, autres noms : le CSS et le JS repris du fichier de
+       démonstration s'écrivent tels quels, et une seule palette gouverne
+       toujours le site. */
+    --ink:      var(--bg);
+    --surf:     var(--surface);
+    --surf2:    var(--surface-2);
+    --hair:     var(--border);
+    --line2:    var(--border-strong);
+    --fg:       var(--text);
+    --mut:      var(--text-muted);
+    --sub:      var(--text-subtle);
+    --gold:     var(--accent);
+    --gold-hi:  var(--accent-hover);
+    --gold-deep: var(--raw-gold-deep-l);
+    --gold-low:  var(--raw-gold-low-l);
+    --gold-lab:  var(--accent-text);
+    --btn-fg:    var(--glass-gold-ink);
+    --cardbg:    var(--surface);
+    --spec:      var(--raw-spec-l);
+    --glow:      var(--raw-glow-rgb-l);
+    --scrim:     var(--raw-scrim-l);
+    /* La lecture mot à mot. La référence part d'un gris très sombre qui
+       ne passe pas AA tant que la vague n'est pas arrivée ; ici le mot
+       éteint reste lisible et c'est l'encre pleine qui l'allume. */
+    --rdim:      var(--text-subtle);
+    --rlit:      var(--text);
+    --curt1:     var(--accent-hover);
+    --curt2:     var(--accent-active);
+    --curt3:     var(--raw-gold-deep-l);
+    --curt4:     var(--raw-curtain-4-l);
+    --curt5:     var(--bg);
+    --grain-op:    .05;
+    --grain-blend: multiply;
   }
 }
 
@@ -363,6 +452,40 @@
   --glass-fb-ghost:  var(--raw-glass-fb-ghost-l);
   --glass-fb-gold-ink: var(--raw-glass-fb-gold-ink-l);
   --glass-scrim:     var(--raw-glass-scrim-l);
+  /* ── Alias de la référence d'animation ──────────────────────────────
+     Mêmes couleurs, autres noms : le CSS et le JS repris du fichier de
+     démonstration s'écrivent tels quels, et une seule palette gouverne
+     toujours le site. */
+  --ink:      var(--bg);
+  --surf:     var(--surface);
+  --surf2:    var(--surface-2);
+  --hair:     var(--border);
+  --line2:    var(--border-strong);
+  --fg:       var(--text);
+  --mut:      var(--text-muted);
+  --sub:      var(--text-subtle);
+  --gold:     var(--accent);
+  --gold-hi:  var(--accent-hover);
+  --gold-deep: var(--raw-gold-deep-l);
+  --gold-low:  var(--raw-gold-low-l);
+  --gold-lab:  var(--accent-text);
+  --btn-fg:    var(--glass-gold-ink);
+  --cardbg:    var(--surface);
+  --spec:      var(--raw-spec-l);
+  --glow:      var(--raw-glow-rgb-l);
+  --scrim:     var(--raw-scrim-l);
+  /* La lecture mot à mot. La référence part d'un gris très sombre qui
+     ne passe pas AA tant que la vague n'est pas arrivée ; ici le mot
+     éteint reste lisible et c'est l'encre pleine qui l'allume. */
+  --rdim:      var(--text-subtle);
+  --rlit:      var(--text);
+  --curt1:     var(--accent-hover);
+  --curt2:     var(--accent-active);
+  --curt3:     var(--raw-gold-deep-l);
+  --curt4:     var(--raw-curtain-4-l);
+  --curt5:     var(--bg);
+  --grain-op:    .05;
+  --grain-blend: multiply;
 }
 
 /* ───────────────────────────────────────────────────────────────────────
@@ -415,4 +538,38 @@
   --glass-fb-ghost:  var(--raw-glass-fb-ghost-d);
   --glass-fb-gold-ink: var(--raw-glass-gold-ink-d);
   --glass-scrim:     var(--raw-glass-scrim-d);
+  /* ── Alias de la référence d'animation ──────────────────────────────
+     Mêmes couleurs, autres noms : le CSS et le JS repris du fichier de
+     démonstration s'écrivent tels quels, et une seule palette gouverne
+     toujours le site. */
+  --ink:      var(--bg);
+  --surf:     var(--surface);
+  --surf2:    var(--surface-2);
+  --hair:     var(--border);
+  --line2:    var(--border-strong);
+  --fg:       var(--text);
+  --mut:      var(--text-muted);
+  --sub:      var(--text-subtle);
+  --gold:     var(--accent);
+  --gold-hi:  var(--accent-hover);
+  --gold-deep: var(--raw-gold-deep-d);
+  --gold-low:  var(--raw-gold-low-d);
+  --gold-lab:  var(--accent-text);
+  --btn-fg:    var(--glass-gold-ink);
+  --cardbg:    var(--surface);
+  --spec:      var(--raw-spec-d);
+  --glow:      var(--raw-glow-rgb-d);
+  --scrim:     var(--raw-scrim-d);
+  /* La lecture mot à mot. La référence part d'un gris très sombre qui
+     ne passe pas AA tant que la vague n'est pas arrivée ; ici le mot
+     éteint reste lisible et c'est l'encre pleine qui l'allume. */
+  --rdim:      var(--text-subtle);
+  --rlit:      var(--text);
+  --curt1:     var(--accent-hover);
+  --curt2:     var(--accent-active);
+  --curt3:     var(--raw-gold-deep-d);
+  --curt4:     var(--raw-curtain-4-d);
+  --curt5:     var(--bg);
+  --grain-op:    .075;
+  --grain-blend: overlay;
 }
