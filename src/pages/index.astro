@@ -96,52 +96,150 @@ import '../styles/global.css';
 /* ── SERVICES ── */
 .s-svc{}
 .svc-hdr{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:24px;margin-bottom:clamp(36px,6vh,72px)}
-.svc-list{display:flex;flex-direction:column;gap:4px}
+/* ═══════════════════════════════════════════════════════════════════
+   DES LIGNES, PAS DES CARTES — recopie de la reference.
+   Aucun rayon, aucun fond : des filets fins, et c'est tout. Le
+   traitement carte (.gloss/.pass/.lip) a ete retire de .svc-row dans
+   scroll-fx.js : ce n'est pas une carte.
+   ═══════════════════════════════════════════════════════════════════ */
+.svc-list{display:flex;flex-direction:column}
 .svc-row{
   display:grid;grid-template-columns:52px 1fr auto;align-items:center;gap:20px;
-  padding:clamp(16px,2.5vh,26px) 22px;position:relative;cursor:pointer;color:inherit;border-radius:var(--radius-block);
-  transition:opacity var(--dur-micro) var(--ease-out);
+  padding:clamp(18px,2.6vw,28px) clamp(10px,2vw,20px);
+  position:relative;cursor:pointer;color:inherit;border-radius:0;background:transparent;
+  border-top:1px solid var(--border);
+  transition:background-color var(--dur-short) var(--ease-out);
 }
-/* Le filet de chaque rangée se trace à l'entrée dans le viewport (effet 4) */
-
-.svc-row::before{
-  content:'';position:absolute;inset:0;border-radius:inherit;
-  background:var(--surface);opacity:0;
-  transition:opacity var(--dur-micro) var(--ease-out);z-index:0;
-}
+.svc-list .svc-row:last-child{border-bottom:1px solid var(--border)}
 .svc-row>*{position:relative;z-index:1}
-.svc-n{font-size:var(--fs-caption);font-weight:500;letter-spacing:0;color:var(--text-subtle);font-variant-numeric:tabular-nums;transition:color var(--dur-micro) var(--ease-out)}
-.svc-name{font-size:clamp(1rem,2.5vw,2rem);font-weight:600;letter-spacing:-.02em;transition:transform var(--dur-micro) var(--ease-out)}
+.svc-n{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-subtle);
+  font-variant-numeric:tabular-nums;transition:color var(--dur-short) var(--ease-out)}
+.svc-name{font-size:clamp(1.05rem,2.4vw,1.6rem);font-weight:600;letter-spacing:-.025em;
+  transition:transform var(--dur-short) var(--ease-out)}
 .svc-meta{display:flex;align-items:center;gap:16px;color:var(--text-muted)}
-.svc-tag{font-size:var(--fs-caption);font-weight:500;letter-spacing:0;color:var(--text-subtle)}
-.svc-arr{font-size:1.1rem;color:var(--text-muted);transition:transform var(--dur-micro) var(--ease-out),color var(--dur-micro) var(--ease-out)}
+/* Petites capitales espacees : une etiquette, pas un titre. */
+.svc-tag{font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--text-subtle);white-space:nowrap}
+.svc-arr{font-size:1.1rem;color:var(--text-subtle);
+  transition:transform var(--dur-short) var(--ease-out),color var(--dur-short) var(--ease-out)}
 
-/* Survol : la rangée visée avance, les autres s'effacent.
-   Conditionné à (hover:hover) — au doigt, rien de tout ça n'a de sens. */
 @media (hover:hover){
-  .svc-list:hover .svc-row{opacity:.45}
-  .svc-list .svc-row:hover{opacity:1}
-  .svc-row:hover::before{opacity:1}
+  .svc-row:hover{background:var(--surface)}
+  .svc-row:hover .svc-n,.svc-row:hover .svc-arr{color:var(--accent-text)}
   .svc-row:hover .svc-name{transform:translateX(8px)}
-  .svc-row:hover .svc-n{color:var(--accent-text)}
-  .svc-row:hover .svc-arr{transform:translateX(6px);color:var(--accent-text)}
+  .svc-row:hover .svc-arr{transform:translateX(6px)}
 }
-/* Au clavier, même traitement que le survol */
-.svc-row:focus-visible::before{opacity:1}
+.svc-row:focus-visible{background:var(--surface)}
 .svc-row:focus-visible .svc-n,.svc-row:focus-visible .svc-arr{color:var(--accent-text)}
+
+/* Le courant qui traverse la ligne au survol. */
+.svc-row::before{
+  content:'';position:absolute;inset:0;border-radius:0;pointer-events:none;opacity:0;z-index:0;
+  background:linear-gradient(90deg,
+    rgb(from var(--accent) r g b / 0),
+    rgb(from var(--accent) r g b / .17) 48%,
+    rgb(from var(--accent) r g b / 0));
+  background-size:42% 100%;background-repeat:no-repeat;background-position:-46% 0;
+  transition:opacity 220ms var(--ease-out);
+}
+@media (prefers-reduced-motion:no-preference) and (hover:hover){
+  .svc-row:hover::before{opacity:1;animation:flowRun 1.25s linear infinite}
+  @keyframes flowRun{to{background-position:146% 0}}
+}
+
+/* La tete de lecture : le trait d'or qui marque la ligne au centre de
+   l'ecran. A top:-1px — donc JAMAIS d'overflow:hidden sur .svc-row,
+   il la couperait. */
+.svc-row::after{
+  content:'';position:absolute;left:0;top:-1px;height:1px;width:100%;z-index:2;pointer-events:none;
+  background:linear-gradient(90deg,var(--accent),rgb(from var(--accent) r g b / 0));
+  transform-origin:left;transform:scaleX(0);
+}
+@supports (animation-timeline: view()){
+  .svc-row::after{animation:playhead linear both;animation-timeline:view();
+    animation-range:cover 34% cover 66%}
+  @keyframes playhead{0%{transform:scaleX(0)}50%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+}
+@media (prefers-reduced-motion:reduce){
+  .svc-row::after{animation:none!important;transform:scaleX(0)}
+}
 @media(max-width:600px){.svc-tag{display:none}}
 
-/* ── PROCESS ── */
-.s-proc{}
-.proc-hdr{margin-bottom:clamp(36px,6vh,72px)}
-.proc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.proc-step{padding:clamp(22px,4vw,48px);background:var(--surface);border-radius:var(--radius-block)}
+/* ═══════════════════════════════════════════════════════════════════
+   NOTRE METHODE — une sequence epinglee, pas une grille de cartes.
 
-.proc-n{font-size:var(--fs-caption);font-weight:500;letter-spacing:0;color:var(--text-subtle);margin-bottom:36px;font-variant-numeric:tabular-nums}
-.proc-title{font-size:clamp(.95rem,1.8vw,1.4rem);font-weight:600;letter-spacing:-.02em;margin-bottom:10px}
-.proc-desc{font-size:13px;font-weight:300;line-height:1.68;color:var(--text-muted)}
-@media(max-width:860px){.proc-grid{grid-template-columns:repeat(2,1fr)}.proc-step:nth-child(2){border-right:none}.proc-step:nth-child(n+3){border-top:1px solid var(--border)}.proc-step:nth-child(4){border-right:none}}
-@media(max-width:480px){.proc-grid{grid-template-columns:1fr}.proc-step{border-right:none;border-top:1px solid var(--border)}.proc-step:first-child{border-top:none}}
+   La section se bloque pendant qu'on defile et les quatre etapes
+   passent l'une apres l'autre AU MEME ENDROIT. .proc-step ne recoit
+   aucun calque de carte et aucun cardFlight : il a stepIn, point.
+   ═══════════════════════════════════════════════════════════════════ */
+.s-proc{padding-top:clamp(60px,10vw,120px)}
+.proc-hdr{margin-bottom:clamp(36px,6vh,72px)}
+.procwrap{position:relative;height:340vh;z-index:2}
+.procpin{position:sticky;top:0;height:100svh;display:flex;align-items:center;
+  perspective:1200px;overflow:clip}
+.procpin .wrap{position:relative;z-index:1}
+.procstack{position:relative;width:100%;min-height:clamp(240px,34vh,340px);
+  transform-style:preserve-3d}
+.proc-step{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+  gap:14px;opacity:0;background:none;border-radius:0;padding:0}
+.proc-step .k{font-size:clamp(46px,8.5vw,104px);line-height:.88;font-weight:600;
+  letter-spacing:-.045em;font-variant-numeric:tabular-nums}
+.proc-step .proc-title{font-size:clamp(21px,3vw,32px);font-weight:600;letter-spacing:-.02em;margin:0}
+.proc-step .proc-desc{margin:0;color:var(--text-muted);max-width:44ch;
+  font-size:16px;font-weight:300;line-height:1.68}
+.procticks{display:flex;gap:7px;margin-top:clamp(20px,3vw,30px)}
+.procticks i{display:block;height:2px;width:clamp(34px,5vw,56px);background:var(--border);
+  border-radius:2px;overflow:hidden;position:relative}
+.procticks i::after{content:'';position:absolute;inset:0;background:var(--accent);
+  transform-origin:left;transform:scaleX(0)}
+.proc-glow{position:absolute;inset:-20% -10%;z-index:0;pointer-events:none;opacity:0;
+  background:
+    radial-gradient(34% 30% at 80% 34%, rgb(from var(--accent) r g b / .15) 0, rgb(from var(--accent) r g b / 0) 70%),
+    radial-gradient(30% 26% at 14% 78%, rgb(from var(--gold-deep) r g b / .13) 0, rgb(from var(--gold-deep) r g b / 0) 72%)}
+
+@supports (animation-timeline: view()){
+  .procwrap{view-timeline-name:--proc;view-timeline-axis:block}
+  .proc-step{animation:stepIn linear both;animation-timeline:--proc}
+  .proc-step:nth-child(1){animation-range:contain 0% contain 26%}
+  .proc-step:nth-child(2){animation-range:contain 25% contain 51%}
+  .proc-step:nth-child(3){animation-range:contain 50% contain 76%}
+  .proc-step:nth-child(4){animation-range:contain 75% contain 100%}
+  @keyframes stepIn{
+    0%{opacity:0;transform:translate3d(0,30px,-80px) rotateX(8deg)}
+    18%{opacity:1;transform:none}
+    80%{opacity:1;transform:none}
+    100%{opacity:0;transform:translate3d(0,-24px,-60px) rotateX(-6deg)}}
+  .procticks i::after{animation:lineDraw linear both;animation-timeline:--proc}
+  .procticks i:nth-child(1)::after{animation-range:contain 0% contain 26%}
+  .procticks i:nth-child(2)::after{animation-range:contain 25% contain 51%}
+  .procticks i:nth-child(3)::after{animation-range:contain 50% contain 76%}
+  .procticks i:nth-child(4)::after{animation-range:contain 75% contain 100%}
+  @keyframes lineDraw{to{transform:scaleX(1)}}
+  .proc-glow{animation:procGlow linear both;animation-timeline:--proc;
+    animation-range:contain 0% contain 100%}
+  @keyframes procGlow{
+    0%{opacity:0}12%{opacity:.85}24%{opacity:.34}
+    36%{opacity:.85}50%{opacity:.34}
+    62%{opacity:.85}74%{opacity:.34}
+    88%{opacity:.85}100%{opacity:0}}
+}
+
+/* Sans animations au defilement, ou en mouvement reduit : les quatre
+   etapes l'une sous l'autre. Rien ne reste invisible. */
+@supports not (animation-timeline: view()){
+  .procticks i::after{transform:scaleX(1)}
+  .proc-step{opacity:1;position:relative;inset:auto;margin-bottom:30px}
+  .procstack{min-height:0}.procwrap{height:auto}
+  .procpin{position:static;height:auto;display:block}
+}
+@media (prefers-reduced-motion:reduce){
+  .proc-step{opacity:1!important;position:relative;inset:auto;margin-bottom:30px;
+    animation:none!important;transform:none!important}
+  .procstack{min-height:0}.procwrap{height:auto}
+  .procpin{position:static;height:auto;display:block}
+  .procticks i::after{transform:scaleX(1);animation:none!important}
+  .proc-glow{opacity:0;animation:none!important}
+}
 
 /* ── WHY ── */
 .s-why{
@@ -199,14 +297,49 @@ import '../styles/global.css';
 .s-faq{}
 .faq-in{display:grid;grid-template-columns:1fr 1.8fr;gap:clamp(40px,8vw,120px)}
 .faq-side p{margin-top:20px;font-size:13px}
-.faq-list{display:flex;flex-direction:column;gap:4px}
-.faq-item{background:var(--surface);border-radius:var(--radius-block);padding:0 22px}
-.faq-q{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;padding:21px 0;font-size:clamp(.88rem,1.4vw,1.02rem);font-weight:600;letter-spacing:-.01em;gap:16px;cursor:pointer;color:var(--text)}
-.faq-q:focus-visible{outline:2px solid var(--text);border-radius:2px}
-.faq-ind{flex-shrink:0;width:23px;height:23px;border:1px solid var(--border-strong);border-radius:50%;font-size:14px;display:flex;align-items:center;justify-content:center;color:var(--text-muted);transition:transform .3s,border-color .3s}
-.faq-item.open .faq-ind{transform:rotate(45deg);border-color:var(--text-muted)}
-.faq-a{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.16,1,.3,1)}
-.faq-a-in{padding-bottom:22px;font-size:13.5px;font-weight:300;line-height:1.75;color:var(--text-muted)}
+/* ═══════════════════════════════════════════════════════════════════
+   FAQ — une liste a filets, pas des cartes. Recopie de la reference.
+
+   Le + est DESSINE (deux barres), pas ecrit : un caractere « + » se
+   pose sur la ligne de base et ne se centre jamais dans son cercle.
+   Le depliage passe par grid-template-rows 0fr -> 1fr : aucune hauteur
+   a mesurer en JavaScript, donc aucun saut.
+   ═══════════════════════════════════════════════════════════════════ */
+.faq-list{display:flex;flex-direction:column}
+.qa{position:relative;border-top:1px solid var(--border)}
+.qa:last-child{border-bottom:1px solid var(--border)}
+.qa .bar{position:absolute;left:0;top:0;bottom:0;width:2px;transform-origin:top;transform:scaleY(0);
+  background:linear-gradient(180deg,var(--accent),rgb(from var(--accent) r g b / 0));
+  transition:transform 480ms cubic-bezier(.22,.9,.24,1)}
+.qa.open .bar{transform:scaleY(1)}
+.qa .q{width:100%;background:none;border:0;color:inherit;font:inherit;cursor:pointer;text-align:left;
+  display:flex;align-items:center;gap:16px;padding:clamp(16px,2.2vw,22px) 4px;
+  font-size:clamp(15px,1.8vw,18px);font-weight:600;letter-spacing:-.02em}
+.qa .q:focus-visible{outline:2px solid var(--text);outline-offset:-2px;border-radius:2px}
+.qa .q .qt{transition:transform 420ms cubic-bezier(.22,.9,.24,1),color 260ms var(--ease-out)}
+.qa.open .q .qt{transform:translateX(12px);color:var(--text)}
+.qa .q:hover .qt{transform:translateX(6px)}
+.qa .plus{margin-left:auto;flex:none;position:relative;width:28px;height:28px;border-radius:50%;
+  box-shadow:inset 0 0 0 1px var(--border-strong);
+  transition:transform 480ms cubic-bezier(.22,.9,.24,1),box-shadow var(--dur-short) var(--ease-out)}
+.qa .plus::before,.qa .plus::after{content:'';position:absolute;top:50%;left:50%;
+  background:var(--accent);border-radius:1px}
+.qa .plus::before{width:11px;height:1.5px;transform:translate(-50%,-50%)}
+.qa .plus::after{width:1.5px;height:11px;transform:translate(-50%,-50%) scaleY(1);
+  transition:transform 420ms cubic-bezier(.22,.9,.24,1)}
+.qa.open .plus{transform:rotate(180deg);box-shadow:inset 0 0 0 1px rgb(from var(--accent) r g b / .5)}
+.qa.open .plus::after{transform:translate(-50%,-50%) scaleY(0)}
+.qa .panel{display:grid;grid-template-rows:0fr;
+  transition:grid-template-rows 480ms cubic-bezier(.22,.9,.24,1)}
+.qa.open .panel{grid-template-rows:1fr}
+.qa .panel>div{overflow:hidden}
+.qa .ans{padding:0 4px clamp(18px,2.4vw,24px) 18px;color:var(--text-muted);font-size:15px;
+  font-weight:300;line-height:1.75;max-width:60ch;margin:0;opacity:0;transform:translateY(-6px);
+  transition:opacity 340ms var(--ease-out) 90ms,transform 420ms cubic-bezier(.22,.9,.24,1) 90ms}
+.qa.open .ans{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .qa .bar,.qa .q .qt,.qa .plus,.qa .plus::after,.qa .panel,.qa .ans{transition:none}
+}
 @media(max-width:700px){.faq-in{grid-template-columns:1fr}}
 
 /* ── CTA ── */
@@ -377,21 +510,39 @@ import '../styles/global.css';
   </div>
 </section>
 
-<!-- PROCESS -->
-<section class="s-proc sec-seam" style="padding:var(--sec) 0" aria-labelledby="proc-h">
+<!-- PROCESS — sequence epinglee.
+     .procwrap est HORS de la <section>, juste apres : c'est lui qui
+     porte la view-timeline, et un ancetre en overflow hidden/auto
+     casserait le position:sticky de .procpin. -->
+<section class="s-proc sec-seam" style="padding:var(--sec) 0 0" aria-labelledby="proc-h">
   <div class="wrap">
     <div class="proc-hdr r">
       <span class="label" id="proc-h" data-i18n="idx-proc-lbl">De l'idée au site en ligne</span>
       <h2 class="h-lg" style="margin-top:14px" data-i18n="idx-proc-h">Notre méthode.</h2>
     </div>
-    <div class="proc-grid">
-      <div class="proc-step r"><div class="proc-n">01</div><div class="proc-title" data-i18n="idx-proc-t1">Découverte</div><p class="proc-desc" data-i18n="idx-proc-d1">Nous apprenons à connaître votre activité, vos objectifs et votre audience pour concevoir une stratégie digitale sur mesure.</p></div>
-      <div class="proc-step r d1"><div class="proc-n">02</div><div class="proc-title" data-i18n="idx-proc-t2">Direction artistique</div><p class="proc-desc" data-i18n="idx-proc-d2">Création d'une identité visuelle cohérente, des maquettes aux prototypes interactifs, validés à chaque étape.</p></div>
-      <div class="proc-step r d2"><div class="proc-n">03</div><div class="proc-title" data-i18n="idx-proc-t3">Développement</div><p class="proc-desc" data-i18n="idx-proc-d3">Code propre, performant et maintenable. Optimisé pour la vitesse, le référencement et tous les appareils.</p></div>
-      <div class="proc-step r d3"><div class="proc-n">04</div><div class="proc-title" data-i18n="idx-proc-t4">Mise en ligne</div><p class="proc-desc" data-i18n="idx-proc-d4">Déploiement soigné, tests complets et formation à la gestion de votre site. Nous restons disponibles après le lancement.</p></div>
-    </div>
   </div>
 </section>
+<div class="procwrap">
+  <div class="procpin"><span class="proc-glow" aria-hidden="true"></span>
+    <div class="wrap" style="width:100%">
+      <div class="procstack">
+        <div class="proc-step"><span class="k liquid">01</span>
+          <h3 class="proc-title" data-i18n="idx-proc-t1">Découverte</h3>
+          <p class="proc-desc" data-i18n="idx-proc-d1">Nous apprenons à connaître votre activité, vos objectifs et votre audience pour concevoir une stratégie digitale sur mesure.</p></div>
+        <div class="proc-step"><span class="k liquid">02</span>
+          <h3 class="proc-title" data-i18n="idx-proc-t2">Direction artistique</h3>
+          <p class="proc-desc" data-i18n="idx-proc-d2">Création d'une identité visuelle cohérente, des maquettes aux prototypes interactifs, validés à chaque étape.</p></div>
+        <div class="proc-step"><span class="k liquid">03</span>
+          <h3 class="proc-title" data-i18n="idx-proc-t3">Développement</h3>
+          <p class="proc-desc" data-i18n="idx-proc-d3">Code propre, performant et maintenable. Optimisé pour la vitesse, le référencement et tous les appareils.</p></div>
+        <div class="proc-step"><span class="k liquid">04</span>
+          <h3 class="proc-title" data-i18n="idx-proc-t4">Mise en ligne</h3>
+          <p class="proc-desc" data-i18n="idx-proc-d4">Déploiement soigné, tests complets et formation à la gestion de votre site. Nous restons disponibles après le lancement.</p></div>
+      </div>
+      <div class="procticks" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    </div>
+  </div>
+</div>
 
 <!-- WHY -->
 <section class="s-why sec-seam has-texture" style="padding:var(--sec) 0" id="apropos2" aria-labelledby="why-h">
@@ -453,25 +604,40 @@ import '../styles/global.css';
       </div>
       <div>
         <ul class="faq-list" aria-label="Foire aux questions">
-          <li class="faq-item r">
-            <button class="faq-q" aria-expanded="false"><span data-i18n="idx-faq-q1">Quel est le coût d'un site web ?</span><span class="faq-ind" aria-hidden="true">+</span></button>
-            <div class="faq-a" role="region"><div class="faq-a-in" data-i18n="idx-faq-a1">Nos tarifs varient selon le projet. Pour un portfolio ou une page unique (formule Étudiant), nous démarrons à 100 €. Un site vitrine complet avec SEO et support (offre Vitrine Pro) est à 1 000 € en tarif de lancement — places limitées. Les projets Entreprise (e-commerce, multi-pages) débutent à 1 200 €. Facilités de paiement disponibles sur demande.</div></div>
+          <li class="qa"><span class="bar" aria-hidden="true"></span>
+            <button class="q" type="button" aria-expanded="false">
+              <span class="qt" data-i18n="idx-faq-q1">Quel est le coût d'un site web ?</span>
+              <span class="plus" aria-hidden="true"></span>
+            </button>
+            <div class="panel"><div><p class="ans" data-i18n="idx-faq-a1">Nos tarifs varient selon le projet. Pour un portfolio ou une page unique (formule Étudiant), nous démarrons à 100 €. Un site vitrine complet avec SEO et support (offre Vitrine Pro) est à 1 000 € en tarif de lancement — places limitées. Les projets Entreprise (e-commerce, multi-pages) débutent à 1 200 €. Facilités de paiement disponibles sur demande.</p></div></div>
           </li>
-          <li class="faq-item r d1">
-            <button class="faq-q" aria-expanded="false"><span data-i18n="idx-faq-q2">Quel est le délai de livraison ?</span><span class="faq-ind" aria-hidden="true">+</span></button>
-            <div class="faq-a" role="region"><div class="faq-a-in" data-i18n="idx-faq-a2">Un site vitrine est livré entre 1 et 3 semaines selon la complexité. Un projet e-commerce peut nécessiter 4 à 8 semaines. Nous établissons un calendrier précis dès le départ.</div></div>
+          <li class="qa"><span class="bar" aria-hidden="true"></span>
+            <button class="q" type="button" aria-expanded="false">
+              <span class="qt" data-i18n="idx-faq-q2">Quel est le délai de livraison ?</span>
+              <span class="plus" aria-hidden="true"></span>
+            </button>
+            <div class="panel"><div><p class="ans" data-i18n="idx-faq-a2">Un site vitrine est livré entre 1 et 3 semaines selon la complexité. Un projet e-commerce peut nécessiter 4 à 8 semaines. Nous établissons un calendrier précis dès le départ.</p></div></div>
           </li>
-          <li class="faq-item r d2">
-            <button class="faq-q" aria-expanded="false"><span data-i18n="idx-faq-q3">Mon site sera-t-il bien référencé sur Google ?</span><span class="faq-ind" aria-hidden="true">+</span></button>
-            <div class="faq-a" role="region"><div class="faq-a-in" data-i18n="idx-faq-a3">Oui. Le SEO technique est intégré dès la conception : structure sémantique, vitesse de chargement, balises optimisées, données structurées. Nous proposons aussi un accompagnement éditorial pour aller plus loin.</div></div>
+          <li class="qa"><span class="bar" aria-hidden="true"></span>
+            <button class="q" type="button" aria-expanded="false">
+              <span class="qt" data-i18n="idx-faq-q3">Mon site sera-t-il bien référencé sur Google ?</span>
+              <span class="plus" aria-hidden="true"></span>
+            </button>
+            <div class="panel"><div><p class="ans" data-i18n="idx-faq-a3">Oui. Le SEO technique est intégré dès la conception : structure sémantique, vitesse de chargement, balises optimisées, données structurées. Nous proposons aussi un accompagnement éditorial pour aller plus loin.</p></div></div>
           </li>
-          <li class="faq-item r d3">
-            <button class="faq-q" aria-expanded="false"><span data-i18n="idx-faq-q4">Proposez-vous de la maintenance après livraison ?</span><span class="faq-ind" aria-hidden="true">+</span></button>
-            <div class="faq-a" role="region"><div class="faq-a-in" data-i18n="idx-faq-a4">Absolument. Nos contrats de maintenance incluent les mises à jour de sécurité, les sauvegardes régulières et les petites modifications. Votre site reste performant dans la durée.</div></div>
+          <li class="qa"><span class="bar" aria-hidden="true"></span>
+            <button class="q" type="button" aria-expanded="false">
+              <span class="qt" data-i18n="idx-faq-q4">Proposez-vous de la maintenance après livraison ?</span>
+              <span class="plus" aria-hidden="true"></span>
+            </button>
+            <div class="panel"><div><p class="ans" data-i18n="idx-faq-a4">Absolument. Nos contrats de maintenance incluent les mises à jour de sécurité, les sauvegardes régulières et les petites modifications. Votre site reste performant dans la durée.</p></div></div>
           </li>
-          <li class="faq-item r d4">
-            <button class="faq-q" aria-expanded="false"><span data-i18n="idx-faq-q5">Je n'ai aucune connaissance technique, est-ce un problème ?</span><span class="faq-ind" aria-hidden="true">+</span></button>
-            <div class="faq-a" role="region"><div class="faq-a-in" data-i18n="idx-faq-a5">Pas du tout. Nous gérons l'intégralité du projet et vous formons à la gestion de votre site à la livraison. L'interface est pensée pour être intuitive, même sans expérience technique.</div></div>
+          <li class="qa"><span class="bar" aria-hidden="true"></span>
+            <button class="q" type="button" aria-expanded="false">
+              <span class="qt" data-i18n="idx-faq-q5">Je n'ai aucune connaissance technique, est-ce un problème ?</span>
+              <span class="plus" aria-hidden="true"></span>
+            </button>
+            <div class="panel"><div><p class="ans" data-i18n="idx-faq-a5">Pas du tout. Nous gérons l'intégralité du projet et vous formons à la gestion de votre site à la livraison. L'interface est pensée pour être intuitive, même sans expérience technique.</p></div></div>
           </li>
         </ul>
       </div>
@@ -946,19 +1112,25 @@ void main(){
     applyFX();
   }
 
-  /* ── FAQ accordion ── */
-  document.querySelectorAll('.faq-q').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      var item=btn.closest('.faq-item');
-      var ans=item.querySelector('.faq-a');
-      var open=item.classList.contains('open');
-      document.querySelectorAll('.faq-item.open').forEach(function(o){
-        if(o!==item){o.classList.remove('open');o.querySelector('.faq-q').setAttribute('aria-expanded','false');o.querySelector('.faq-a').style.maxHeight='0'}
+  /* ── FAQ : ouverture en douceur, une seule a la fois ──
+     Plus aucune hauteur mesuree : c'est .panel{grid-template-rows}
+     qui fait le depliage, donc aucun saut quand le texte change de
+     longueur ou quand la langue bascule. */
+  (function(){
+    var items = [].slice.call(document.querySelectorAll('.qa'));
+    items.forEach(function(it){
+      var b = it.querySelector('.q');
+      if(!b) return;
+      b.addEventListener('click', function(){
+        var open = it.classList.contains('open');
+        items.forEach(function(o){
+          o.classList.remove('open');
+          o.querySelector('.q').setAttribute('aria-expanded','false');
+        });
+        if(!open){ it.classList.add('open'); b.setAttribute('aria-expanded','true'); }
       });
-      if(open){item.classList.remove('open');btn.setAttribute('aria-expanded','false');ans.style.maxHeight='0'}
-      else{item.classList.add('open');btn.setAttribute('aria-expanded','true');ans.style.maxHeight=ans.scrollHeight+'px'}
     });
-  });
+  })();
 
   /* ── Smooth anchor scroll ── */
   document.addEventListener('click',function(e){
