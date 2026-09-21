@@ -564,6 +564,87 @@ leur taille propre — `.cta-btn` 56, `.svc-cta` 52, `.submit-btn` 50,
 
 ---
 
+## 2 octies. La formule Refonte et la page Devis
+
+### Une quatrième formule
+
+**Refonte de site, dès 490 €, livrée en 2 semaines.** Le prix et le
+délai sont une **proposition à confirmer par le fondateur**, et ils
+vivent à un seul endroit : `src/data/formules.ts`. La page Tarifs et la
+page Devis les lisent depuis ce fichier — changer `490` là-bas les
+change aux deux endroits.
+
+Ce fichier porte aussi le formatage : espace fine insécable entre les
+milliers, espace insécable avant le €. Sans eux, « 1 200 € » se coupe
+en « 1 » / « 200 € » en fin de ligne.
+
+Avec quatre cartes, trois colonnes étranglent les prix : la grille
+passe en **2 × 2** au-dessus de 760 px, une colonne en dessous. Mesuré
+sur les quatre formules, dans les deux thèmes, à 1280 et à 390 :
+chaque prix tient sur une ligne (28 px de haut, une seule ligne).
+
+L'éventail raisonne maintenant **par colonne** et non par rang : en
+2 × 2 la troisième carte est *sous* la première, dans la même colonne —
+la faire partir vers la gauche comme avant n'aurait aucun sens. Les
+règles `nth-child(odd)/(even)` viennent après les anciennes, ce sont
+elles qui gagnent.
+
+### La page Devis
+
+Deux colonnes : le formulaire à gauche, **« Ce qui se passe ensuite »**
+à droite, collé en haut de l'écran pendant qu'on remplit. Un héros avec
+« 48 heures » en or liquide, l'offre de lancement en encadré doré, des
+titres d'étape numérotés dans un cercle, les étiquettes en petites
+capitales espacées avec astérisque dorée, les menus déroulants à
+chevron doré et « Sélectionner… » en gris tant que rien n'est choisi.
+
+**Tous les champs actuels sont conservés, avec leurs `name`** : le
+back-end reçoit exactement ce qu'il recevait, plus la valeur `refonte`.
+
+Le budget a exactement **trois** pastilles — Étudiant, Refonte,
+Entreprise — et un clic sur « Demander un devis » depuis une carte
+tarif ouvre la page avec la bonne pastille cochée et le type de site
+choisi (`/devis?formule=refonte`). Vitrine Pro n'a pas de pastille :
+seul le type est rempli. Une valeur inventée ne trouve rien, c'est
+voulu.
+
+### Trois pièges, tous mesurés
+
+1. **Les pastilles sortaient en MAJUSCULES.** Ce sont des `<label>`
+   dans un `.field`, et `.field label{text-transform:uppercase}` pèse
+   0,1,1 contre 0,1,0 pour `.budget-pill` : la remise à zéro simple ne
+   passait pas. Le prompt signalait le piège ; l'implémentation y est
+   tombée quand même, et c'est la mesure qui l'a dit — `textTransform`
+   valait bien `uppercase`. Corrigé par `.field label.budget-pill`.
+2. **Puis les pastilles ont grandi de 35 à 46 px.** Le `font:inherit`
+   de la règle plus spécifique écrasait leur taille. On ne remet à zéro
+   que ce qu'il faut.
+3. **Les flèches du clavier décochaient ce qu'elles venaient de
+   choisir.** Une flèche coche le radio *puis* émet un clic ; la
+   logique de « reclique pour décocher » lisait `radio.checked === true`
+   et décochait aussitôt. Le focus avançait, la sélection disparaissait.
+   `e.detail === 0` distingue un clic clavier d'un clic pointeur.
+
+Le radio reste `position:absolute; opacity:0; width:1px; height:1px` —
+jamais `display:none`, sinon il ne reçoit plus le focus. Le focus se
+voit sur la pastille.
+
+### La validation
+
+Pas d'alerte du navigateur. À l'envoi, chaque champ fautif prend une
+bordure rouge-orangé et son message ; le premier reçoit le focus ;
+l'erreur s'efface dès que le visiteur corrige, pas à l'envoi suivant.
+Mesuré : 6 champs signalés et marqués, focus sur « prenom », bordure
+`rgb(212,106,92)`, message effacé à la saisie tandis que les autres
+restent.
+
+La couleur est `--danger`, le jeton du site (`#D46A5C` en sombre,
+`#B4453A` en clair), déjà vérifié AA dans les deux thèmes — plutôt que
+les littéraux du prompt, qu'il aurait fallu introduire hors de
+`tokens.css`.
+
+---
+
 ## 3. Garde-fous exécutables
 
 ```bash

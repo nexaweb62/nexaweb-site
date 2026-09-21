@@ -124,6 +124,8 @@
      que pour la page Tarifs. Le succès prend donc l'or, pas un vert de
      formulaire. L'ambre et le rouge restent : seul le vert est banni. */
   --raw-amber-d: #D6A24B;  --raw-amber-l: #8A5E12;
+  /* Placeholder : le gris du mode sombre est illisible sur blanc. */
+  --raw-ph-d:    #86868B;  --raw-ph-l:    #8C8576;
   --raw-red-d:   #D46A5C;  --raw-red-l:   #B4453A;
 
   /* Halos d'or (11–13 % d'opacité, jamais dans le chemin du texte) */
@@ -241,6 +243,7 @@
   --text:          var(--raw-warm-50);
   --text-muted:    var(--raw-warm-300);
   --text-subtle:   var(--raw-warm-400);
+  --placeholder:   var(--raw-ph-d);
   --accent:        var(--raw-gold-400);
   --accent-text:   var(--raw-gold-400);
   --accent-hover:  var(--raw-gold-300);
@@ -336,6 +339,7 @@
     --text:          var(--raw-black-ink);
     --text-muted:    var(--raw-stone-600);
     --text-subtle:   var(--raw-stone-500);
+    --placeholder:   var(--raw-ph-l);
     --accent:        var(--raw-gold-700);
     --accent-text:   var(--raw-gold-800);
     --accent-hover:  var(--raw-gold-850);
@@ -425,6 +429,7 @@
   --text:          var(--raw-black-ink);
   --text-muted:    var(--raw-stone-600);
   --text-subtle:   var(--raw-stone-500);
+  --placeholder:   var(--raw-ph-l);
   --accent:        var(--raw-gold-700);
   --accent-text:   var(--raw-gold-800);
   --accent-hover:  var(--raw-gold-850);
@@ -514,6 +519,7 @@
   --text:          var(--raw-warm-50);
   --text-muted:    var(--raw-warm-300);
   --text-subtle:   var(--raw-warm-400);
+  --placeholder:   var(--raw-ph-d);
   --accent:        var(--raw-gold-400);
   --accent-text:   var(--raw-gold-400);
   --accent-hover:  var(--raw-gold-300);

@@ -2,14 +2,49 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import '../styles/global.css';
+import { REFONTE_PRIX } from '../data/formules';
 ---
 <BaseLayout title="Devis gratuit — Nexa Web" description="Décrivez votre projet web et recevez un devis gratuit sous 24 h. Site vitrine, e-commerce, refonte — Nexa Web, Carvin, Hauts-de-France.">
 <style>
 /* ── PAGE ── */
-.devis-page{min-height:calc(100vh - var(--hdr));display:flex;align-items:flex-start;justify-content:center;padding:clamp(48px,8vh,96px) var(--pad-x) clamp(64px,10vh,120px)}
+/* L'en-tête est fixe : sans var(--hdr) ici, le héros passe dessous. */
+.devis-page{min-height:calc(100vh - var(--hdr));
+  padding:calc(var(--hdr) + clamp(28px,5vh,60px)) var(--pad-x) clamp(64px,10vh,120px);
+  max-width:1180px;margin:0 auto}
+
+/* ── LE HÉROS ── */
+.dv-hero{text-align:center;margin-bottom:clamp(30px,5vw,54px)}
+.dv-pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border-strong);
+  border-radius:var(--radius-pill);padding:6px 16px;font-size:var(--fs-caption);font-weight:600;
+  letter-spacing:0;color:var(--text-muted);margin-bottom:22px}
+.dv-pill-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
+.dv-title{font-size:clamp(1.9rem,5vw,3.4rem);font-weight:600;letter-spacing:-.035em;line-height:1.04;
+  text-wrap:balance;margin:0}
+.dv-title em{font-style:normal}
+.dv-lede{margin:18px auto 0;max-width:52ch;color:var(--text-muted);font-weight:300;line-height:1.7}
+
+/* ── DEUX COLONNES ── */
+.devis-grid{display:grid;grid-template-columns:1fr;gap:clamp(20px,3vw,32px);align-items:start}
+@media(min-width:900px){
+  .devis-grid{grid-template-columns:minmax(0,1fr) 340px}
+  /* Le panneau reste sous les yeux pendant qu'on remplit le formulaire.
+     124px = la hauteur de l'en-tête plus une respiration. */
+  .devis-side{position:sticky;top:124px}
+}
+.devis-main{min-width:0}
+.dv-aside-h{font-size:1.05rem;font-weight:600;letter-spacing:-.02em;margin:0 0 18px}
+.dv-next{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:18px}
+.dv-next li{display:flex;gap:13px;align-items:flex-start}
+.dv-next-n{flex:none;width:23px;height:23px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:11px;font-weight:600;color:var(--on-accent);background:var(--accent);
+  font-variant-numeric:tabular-nums}
+.dv-next b{display:block;font-size:var(--fs-caption);font-weight:600;margin-bottom:4px}
+.dv-next p{margin:0;font-size:12.5px;font-weight:300;line-height:1.6;color:var(--text-muted)}
+.dv-aside-fine{margin:20px 0 0;padding-top:16px;border-top:1px solid var(--border);
+  font-size:11.5px;font-weight:300;line-height:1.6;color:var(--text-subtle)}
 
 /* ── CARD ── */
-.devis-card{width:100%;max-width:760px;background:var(--surface);border:1px solid var(--border-strong);border-radius:16px;padding:clamp(32px,5vw,56px) clamp(24px,5vw,52px);box-shadow:var(--shadow-2)}
+.devis-card{width:100%;background:var(--surface);border:1px solid var(--border-strong);border-radius:16px;padding:clamp(32px,5vw,56px) clamp(24px,5vw,52px);box-shadow:var(--shadow-2)}
 :root[data-theme="light"] .devis-card{background:var(--surface);border-color:var(--border)}
 @media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .devis-card{background:var(--surface);border-color:var(--border)}}
 
@@ -30,7 +65,13 @@ import '../styles/global.css';
 
 /* ── SECTION LABEL ── */
 .form-section{margin-bottom:28px}
-.section-label{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-muted);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border);display:block}
+/* Un numéro dans un cercle doré, et un filet dessous. */
+.fstep{display:flex;align-items:center;gap:11px;margin-bottom:18px;padding-bottom:10px;
+  border-bottom:1px solid var(--border)}
+.fstep-n{flex:none;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:12px;font-weight:600;color:var(--on-accent);background:var(--accent);
+  font-variant-numeric:tabular-nums}
+.fstep-t{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text)}
 :root[data-theme="light"] .section-label{border-bottom-color:var(--border)}
 @media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .section-label{border-bottom-color:var(--border)}}
 
@@ -50,13 +91,19 @@ import '../styles/global.css';
 }
 .field{display:flex;flex-direction:column;gap:6px}
 .field-full{grid-column:1/-1}
-.field label{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-muted)}
+/* Petites capitales espacées. Exception assumée à la règle de typographie
+   du site (zéro capitale espacée) : demandée nommément pour ce formulaire. */
+.field label{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--text-subtle)}
+.field .req{color:var(--accent-text);font-style:normal;margin-left:.15em}
 .field input:not([type=checkbox]):not([type=radio]),.field textarea,.field select{
   width:100%;padding:12px 15px;background:var(--surface);border:1px solid var(--border);border-radius:5px;
   font:inherit;font-size:13px;color:var(--text);outline:none;
   transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;appearance:none;
 }
-.field input::placeholder,.field textarea::placeholder{color:var(--text-muted)}
+/* Le gris du mode sombre est illisible sur blanc : le placeholder a son
+   propre jeton, plus sombre en mode clair. */
+.field input::placeholder,.field textarea::placeholder{color:var(--placeholder)}
 .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
 .field select{padding-right:36px;cursor:pointer}
 /* Chevron dessiné en CSS plutôt qu'en SVG inline : il prend la couleur du
@@ -65,19 +112,67 @@ import '../styles/global.css';
 .field:has(select)::after{
   content:'';position:absolute;right:16px;top:calc(50% + 10px);
   width:7px;height:7px;margin-top:-6px;
-  border-right:1.5px solid var(--text-subtle);
-  border-bottom:1.5px solid var(--text-subtle);
+  border-right:1.5px solid var(--accent);
+  border-bottom:1.5px solid var(--accent);
   transform:rotate(45deg);pointer-events:none;
 }
 .field select option{background:var(--surface);color:var(--text)}
+/* « Sélectionner… » en gris tant que rien n'est choisi — pour les deux
+   menus, obligatoire ou non. :invalid ne couvre que le premier. */
+.field select:invalid,
+.field select:has(option[value=""]:checked){color:var(--text-subtle)}
 .field textarea{resize:vertical;min-height:110px;line-height:1.6}
+
+/* ═══════════════════════════════════════════════════════════════════
+   L'APPARITION AU DÉFILEMENT
+   Les champs, les titres d'étape et l'encadré d'offre montent en même
+   temps que la page défile. Les pastilles arrivent l'une après l'autre :
+   chacune porte son rang --k, posé en JavaScript.
+   Le repli est explicite : sans animations au défilement, ou en
+   mouvement réduit, tout est visible. Un formulaire ne doit jamais
+   pouvoir rester invisible.
+   ═══════════════════════════════════════════════════════════════════ */
+@keyframes rvIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@supports (animation-timeline: view()){
+  @media (prefers-reduced-motion:no-preference){
+    .devis-card .field,.devis-card .fstep,.devis-card .launch-notice,.dv-next li{
+      animation:rvIn linear both;animation-timeline:view();
+      animation-range:entry 4% cover 26%}
+    .budget-pill{animation:rvIn linear both;animation-timeline:view();
+      animation-range:entry calc(4% + var(--k,0)*3%) cover calc(26% + var(--k,0)*3%)}
+  }
+}
 
 /* ── BUDGET PILLS ── */
 .budget-pills{display:flex;flex-wrap:wrap;gap:8px}
-.budget-pill{position:relative;font-size:var(--fs-caption);font-weight:600;letter-spacing:0;padding:8px 16px;border:1px solid var(--border);border-radius:100px;cursor:pointer;transition:border-color .2s,background .2s,color .2s;color:var(--text-muted);user-select:none}
-.budget-pill input{position:absolute;opacity:0;width:0;height:0}
+/* Les pastilles sont des <label> DANS un .field : sans ces trois
+   remises à zéro, elles héritent des petites capitales espacées de
+   .field label et partent en MAJUSCULES. */
+/* .field label pese 0,1,1 et bat .budget-pill a 0,1,0 : la remise a zero
+   doit etre AU MOINS aussi specifique, sinon les pastilles heritent des
+   MAJUSCULES des etiquettes. Mesure : elles sortaient bien en uppercase
+   avec le selecteur simple. */
+.field label.budget-pill,.field label.budget-pill span{
+  text-transform:none;letter-spacing:normal;
+  /* PAS font:inherit ici : plus specifique que .budget-pill, il ecraserait
+     sa taille et ferait passer la pastille de 35 a 46 px de haut. */
+  font-size:var(--fs-caption);font-weight:600}
+.budget-pill{position:relative;cursor:pointer;text-transform:none;letter-spacing:normal;font:inherit;
+  font-size:var(--fs-caption);font-weight:600;padding:8px 16px;border:1px solid var(--border);
+  border-radius:var(--radius-pill);color:var(--text-muted);user-select:none;
+  transition:border-color .2s,background-color .2s,color .2s,box-shadow .2s}
+/* Masqué mais jamais display:none : sinon il ne reçoit plus le focus
+   clavier et les flèches ne parcourent plus le groupe. 1px, pas 0. */
+.budget-pill input{position:absolute;opacity:0;width:1px;height:1px;margin:0;pointer-events:none}
 .budget-pill:hover{border-color:var(--border-strong);color:var(--text)}
-.budget-pill.selected{border-color:var(--accent);background:var(--accent-glow);color:var(--accent-text)}
+/* Le focus ne se voit pas sur un radio invisible : il se voit ici. */
+.budget-pill:has(input:focus-visible){outline:3px solid var(--accent-hover);outline-offset:3px}
+.budget-pill.selected{border-color:var(--accent);background:var(--accent-glow);color:var(--accent-text);
+  box-shadow:0 0 0 3px rgb(from var(--accent) r g b / .14)}
+@media (prefers-reduced-motion:no-preference){
+  .budget-pill.selected{animation:pillPick 420ms cubic-bezier(.22,.9,.24,1)}
+  @keyframes pillPick{0%{transform:scale(1)}38%{transform:scale(1.06)}100%{transform:scale(1)}}
+}
 
 /* ── SUBMIT ── */
 .submit-row{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:32px;padding-top:24px;border-top:1px solid var(--border)}
@@ -102,6 +197,17 @@ import '../styles/global.css';
 .rgpd-label a{color:var(--accent-text);text-decoration:underline}
 .req{color:var(--accent-text)}
 .field-err{font-size:var(--fs-caption);color:var(--danger);min-height:14px;display:block;margin-top:3px;line-height:1.4}
+/* Le champ fautif se voit, discretement : une bordure rouge-orange et
+   son halo. --danger est verifie AA dans les deux themes. */
+.field.has-err input:not([type=checkbox]),
+.field.has-err textarea,
+.field.has-err select,
+.rgpd-row.has-err .rgpd-label{border-color:var(--danger)}
+.field.has-err input:not([type=checkbox]):focus,
+.field.has-err textarea:focus,
+.field.has-err select:focus{border-color:var(--danger);
+  box-shadow:0 0 0 3px rgb(from var(--danger) r g b / .18)}
+.rgpd-row.has-err .field-err{margin-top:8px}
 
 /* ── FORM BANNER ── */
 .form-banner{display:none;align-items:flex-start;gap:10px;padding:12px 16px;border-radius:9px;font-size:12.5px;line-height:1.55;margin-bottom:20px}
@@ -131,6 +237,17 @@ import '../styles/global.css';
 
 <main id="main-content" tabindex="-1">
   <div class="devis-page">
+
+    <!-- LE HÉROS -->
+    <header class="dv-hero">
+      <span class="dv-pill"><span class="dv-pill-dot" aria-hidden="true"></span><span data-i18n="dv-pill">Devis gratuit</span></span>
+      <h1 class="dv-title">Un prix ferme en <em class="liquid">48 heures</em>.</h1>
+      <p class="dv-lede" data-i18n="dv-lede">Décrivez votre projet. Nous revenons vers vous avec un devis
+        détaillé, sans engagement — et sans mauvaise surprise.</p>
+    </header>
+
+    <div class="devis-grid">
+      <div class="devis-main">
     <div class="devis-card">
 
       <!-- SUCCESS STATE -->
@@ -173,7 +290,7 @@ import '../styles/global.css';
 
         <!-- CONTACT -->
         <div class="form-section">
-          <span class="section-label" data-i18n="sec1">1 — Vos coordonnées</span>
+          <div class="fstep"><span class="fstep-n" aria-hidden="true">1</span><span class="fstep-t" data-i18n="sec1">Vos coordonnées</span></div>
           <div class="field-grid">
             <div class="field">
               <label for="prenom"><span data-i18n="prenom">Prénom</span> <span class="req">*</span></label>
@@ -203,7 +320,7 @@ import '../styles/global.css';
 
         <!-- PROJECT -->
         <div class="form-section">
-          <span class="section-label" data-i18n="sec2">2 — Votre projet</span>
+          <div class="fstep"><span class="fstep-n" aria-hidden="true">2</span><span class="fstep-t" data-i18n="sec2">Votre projet</span></div>
           <div class="field-grid">
             <div class="field">
               <label for="type"><span data-i18n="type">Type de site</span> <span class="req">*</span></label>
@@ -232,8 +349,9 @@ import '../styles/global.css';
             <div class="field field-full">
               <label><span data-i18n="budget">Budget estimé</span></label>
               <div class="budget-pills" role="radiogroup" aria-label="Budget estimé">
-                <label class="budget-pill"><input type="radio" name="budget" value="etudiant"><span>Étudiant — 100 – 200 €</span></label>
-                <label class="budget-pill"><input type="radio" name="budget" value="entreprise"><span>Entreprise — 1 200 – 3 100 €</span></label>
+                <label class="budget-pill"><input type="radio" name="budget" value="etudiant"><span>Étudiant — 100 à 200&nbsp;€</span></label>
+                <label class="budget-pill"><input type="radio" name="budget" value="refonte"><span>Refonte — dès {REFONTE_PRIX}</span></label>
+                <label class="budget-pill"><input type="radio" name="budget" value="entreprise"><span>Entreprise — 1&#8239;200 à 3&#8239;100&nbsp;€</span></label>
               </div>
             </div>
             <div class="field field-full">
@@ -272,6 +390,28 @@ import '../styles/global.css';
 
       </form>
     </div>
+      </div>
+
+      <!-- CE QUI SE PASSE ENSUITE — collé en haut pendant qu'on remplit -->
+      <aside class="devis-side" aria-labelledby="ensuite-h">
+        <div class="aside">
+          <h2 class="dv-aside-h" id="ensuite-h" data-i18n="dv-next-h">Ce qui se passe ensuite</h2>
+          <ol class="dv-next">
+            <li><span class="dv-next-n" aria-hidden="true">1</span>
+              <div><b data-i18n="dv-next-t1">On lit votre demande</b>
+                <p data-i18n="dv-next-d1">Le jour même. Si un point manque, nous vous écrivons pour le préciser.</p></div></li>
+            <li><span class="dv-next-n" aria-hidden="true">2</span>
+              <div><b data-i18n="dv-next-t2">Vous recevez un prix ferme</b>
+                <p data-i18n="dv-next-d2">Sous 48 heures ouvrées, détaillé poste par poste. Pas de fourchette vague.</p></div></li>
+            <li><span class="dv-next-n" aria-hidden="true">3</span>
+              <div><b data-i18n="dv-next-t3">On en parle</b>
+                <p data-i18n="dv-next-d3">Un appel de vingt minutes pour valider, ajuster, ou simplement répondre à vos questions.</p></div></li>
+          </ol>
+          <p class="dv-aside-fine" data-i18n="dv-next-fine">Gratuit et sans engagement. Vos données servent
+            uniquement à traiter cette demande.</p>
+        </div>
+      </aside>
+    </div>
   </div>
 </main>
 
@@ -279,26 +419,57 @@ import '../styles/global.css';
 <script is:inline src="/supabase-client.js"></script>
 
 <script>
-/* ── BUDGET PILLS — désélectionnable au reclique ── */
+/* ── BUDGET : les pastilles ──────────────────────────────────────────
+   Deux entrées, un seul état. La souris passe par le clic (avec le
+   reclique qui décoche) ; le clavier passe par les flèches, qui
+   déclenchent un change sur le radio. Sans l'écoute de change, la
+   sélection au clavier cocherait le radio sans jamais allumer la
+   pastille — le focus serait visible, la sélection non. */
 (function(){
   var pills = Array.from(document.querySelectorAll('.budget-pill'));
+  if(!pills.length) return;
+
+  /* Le rang de chaque pastille : l'animation d'apparition s'en sert
+     pour les faire arriver l'une après l'autre. */
+  pills.forEach(function(p,i){ p.style.setProperty('--k', i); });
+
+  function sync(){
+    pills.forEach(function(p){
+      p.classList.toggle('selected', p.querySelector('input').checked);
+    });
+  }
   pills.forEach(function(pill){
     var radio = pill.querySelector('input');
     pill.addEventListener('click', function(e){
-      e.preventDefault(); // empêche le navigateur de cocher le radio nativement
-      var wasChecked = radio.checked; // état AVANT modification
-      // tout décocher
-      pills.forEach(function(p){
-        p.classList.remove('selected');
-        p.querySelector('input').checked = false;
-      });
-      // ne re-cocher que si ce n'était pas déjà sélectionné
-      if(!wasChecked){
-        radio.checked = true;
-        pill.classList.add('selected');
-      }
+      /* Les flèches du clavier COCHENT le radio puis emettent un clic.
+         Sans cette garde, « avant » vaut deja true et la logique de
+         reclique decoche aussitot ce que la fleche vient de choisir :
+         le focus avance, la selection disparait. e.detail vaut 0 quand
+         le clic ne vient pas d'un pointeur — on laisse alors faire le
+         comportement natif. */
+      if(e.detail === 0){ sync(); return; }
+      e.preventDefault();                  // souris : on gère le reclique
+      var avant = radio.checked;
+      pills.forEach(function(p){ p.querySelector('input').checked = false; });
+      if(!avant) radio.checked = true;
+      sync();
+      radio.dispatchEvent(new Event('change', {bubbles:true}));
     });
+    radio.addEventListener('change', sync);   // flèches du clavier
   });
+
+  /* ── Depuis une carte tarif : /devis?formule=refonte ──
+     La pastille est cochée et le type de site pré-rempli. Vitrine Pro
+     n'a pas de pastille : seul le type l'est, aucune pastille cochée.
+     Une valeur inventée ne trouve simplement rien — c'est voulu. */
+  var TYPE = { etudiant:'portfolio', refonte:'refonte', vitrine:'vitrine', entreprise:'vitrine' };
+  var f = new URLSearchParams(location.search).get('formule');
+  if(f){
+    var r = document.querySelector('.budget-pill input[value="' + (CSS.escape ? CSS.escape(f) : f) + '"]');
+    if(r){ r.checked = true; sync(); }
+    var t = document.getElementById('type');
+    if(t && TYPE[f]) t.value = TYPE[f];
+  }
 })();
 
 /* ── FORM SUBMIT ── */
@@ -311,8 +482,40 @@ import '../styles/global.css';
   function canSubmit(){var last=sessionStorage.getItem('nw_devis_ts');return !last||(Date.now()-parseInt(last,10))>60000}
   function stampSubmit(){sessionStorage.setItem('nw_devis_ts',String(Date.now()))}
 
-  function setErr(id,msg){var el=document.getElementById(id);if(el)el.textContent=msg}
-  function clearErrors(){['err-prenom','err-nom','err-email','err-type','err-desc','err-rgpd'].forEach(id=>setErr(id,''));hideBanner()}
+  /* Le message seul ne suffit pas : on marque le champ lui-meme, sinon
+     l'oeil ne sait pas ou regarder dans un formulaire de dix champs.
+     Le premier fautif recoit le focus, et l'erreur s'efface des que le
+     visiteur corrige — pas a l'envoi suivant. */
+  var CHAMP = { 'err-prenom':'prenom','err-nom':'nom','err-email':'email','err-type':'type',
+                'err-desc':'description','err-rgpd':'rgpd-consent' };
+  var premierFautif = null;
+  function setErr(id,msg){
+    var el=document.getElementById(id); if(el) el.textContent=msg;
+    var ch=document.getElementById(CHAMP[id]);
+    if(ch){
+      var f = ch.closest('.field') || ch.closest('.rgpd-row');
+      if(f) f.classList.toggle('has-err', !!msg);
+      if(msg){
+        ch.setAttribute('aria-invalid','true');
+        if(el) ch.setAttribute('aria-describedby', id);
+        if(!premierFautif) premierFautif = ch;
+      } else {
+        ch.removeAttribute('aria-invalid');
+      }
+    }
+  }
+  function clearErrors(){
+    premierFautif = null;
+    Object.keys(CHAMP).forEach(function(id){ setErr(id,''); });
+    hideBanner();
+  }
+  /* Des que le champ change, son erreur disparait. */
+  Object.keys(CHAMP).forEach(function(id){
+    var ch=document.getElementById(CHAMP[id]); if(!ch) return;
+    var effacer=function(){ if(document.getElementById(id).textContent) setErr(id,''); };
+    ch.addEventListener('input', effacer);
+    ch.addEventListener('change', effacer);
+  });
   function showBanner(msg){var b=document.getElementById('form-error');document.getElementById('form-error-text').textContent=msg;b.classList.add('show');b.scrollIntoView({behavior:'smooth',block:'nearest'})}
   function hideBanner(){document.getElementById('form-error').classList.remove('show')}
   function setLoading(on){btn.classList.toggle('loading',on);btn.disabled=on}
@@ -345,7 +548,13 @@ import '../styles/global.css';
     if(!desc){setErr('err-desc','La description est requise.');ok=false}
     else if(desc.length<20){setErr('err-desc','Décrivez votre projet en au moins 20 caractères.');ok=false}
     if(!rgpd){setErr('err-rgpd','Vous devez accepter le traitement de vos données pour continuer.');ok=false}
-    if(!ok)return;
+    if(!ok){
+      if(premierFautif){
+        premierFautif.focus({preventScroll:true});
+        premierFautif.scrollIntoView({behavior:'smooth',block:'center'});
+      }
+      return;
+    }
 
     if(!window.sb){showBanner('Erreur de connexion. Écrivez-nous à contact.nexaweb62@gmail.com');return}
 
