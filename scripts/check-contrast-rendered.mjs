@@ -198,12 +198,21 @@ for (const theme of ['dark', 'light']) {
        défaut de contraste, c'est une animation en cours. On amène donc
        chaque échec au centre de l'écran, on laisse l'animation finir, et
        on ne garde que ce qui échoue ENCORE. */
+    if (res.fails.length) {
+      /* On FIGE tout pour le second passage. Centrer l'élément ne suffit
+         pas : la carte qui le porte est plus grande que lui et peut
+         rester en plein pli. Or le contraste se juge AU REPOS — un état
+         transitoire d'animation n'est pas un défaut de contraste. */
+      await p.addStyleTag({ content: '*,*::before,*::after{animation:none!important;transition:none!important}' })
+        .catch(() => {});
+      await p.waitForTimeout(120);
+    }
     for (const f of res.fails) {
       const encore = await p.evaluate(async n => {
         const el = document.querySelector(`[data-contrast-probe="${n}"]`);
         if (!el) return null;
         el.scrollIntoView({ block: 'center', behavior: 'instant' });
-        await new Promise(r => setTimeout(r, 260));
+        await new Promise(r => setTimeout(r, 160));
         return window.__mesure(el);
       }, f.probe);
       if (encore && encore.cr < encore.min) {

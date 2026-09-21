@@ -190,6 +190,105 @@ déposer les sources dans `assets/sources/` avec le préfixe `hero-` ou
 
 ---
 
+## 0 bis. Le système d'animation
+
+### Ce qui bouge, et d'où ça vient
+
+Tout le mouvement au défilement passe par les **animations pilotées par
+le scroll** (`animation-timeline: view()` et `scroll(root)`). Elles
+tournent hors du fil principal : c'est ce qui permet d'en avoir autant
+sans bloquer la page. L'ensemble vit sous `@supports`, avec un repli qui
+remet simplement les éléments à `opacity:1` — le site est moins vivant,
+il n'est jamais cassé.
+
+| | |
+|---|---|
+| **La rivière d'or** | Un canevas WebGL fixe, dans le DOM des 22 pages, visible sur la seule page d'accueil. Le shader connaît le thème par `u_light` : en sombre les rives s'éteignent dans le noir, en clair c'est l'alpha seul qui les efface. |
+| **Le fil de progression** | Un trait d'or en haut de l'écran, tiré par `scroll(root)`. |
+| **La lecture mot par mot** | Chaque paragraphe est découpé ; le décalage entre les mots vaut `44 / nombre de mots`, plafonné, pour qu'un paragraphe court et un paragraphe long se traversent en un temps comparable. |
+| **Le ruban** | Une bande de lettres creuses au-dessus du pied de page, qui file avec le scroll et se décale selon son sens. |
+| **Les cartes** | Elles arrivent couchées à 72°, charnière sur l'arête haute, et se déplient. Dans une grille de trois, elles s'ouvrent en éventail — celle de gauche vient de la droite. Les listes verticales se collent les unes sous les autres. |
+| **Les titres** | Mot par mot, 46 ms d'écart. Le titre du hero fait exception (voir plus bas). |
+| **Les boutons** | Reflet en boucle, nappe d'or depuis le point d'entrée du curseur, flèche qui part, onde au clic. |
+| **Le curseur, le grain, le rideau** | Anneau d'or qui traîne ; pellicule `feTurbulence` en `overlay` ou `multiply` selon le thème ; rideau en vague à chaque changement de page. |
+| **L'orbite** | Le fond de la page Rendez-vous : anneaux, arcs contrarotatifs, bille qui fait le tour en 18 s. SVG et CSS, zéro WebGL. |
+| **Le mode léger** | La fluidité est mesurée 1,1 s au premier défilement ; sous 38 i/s, le pli 3D, le grain animé et la lecture mot à mot s'effacent. |
+
+### Le bug qui aurait tout tué en silence
+
+Le minificateur CSS du projet (lightningcss, amené par Tailwind) replie
+`animation-name`, `-timing`, `-fill` **et `animation-timeline`** dans le
+raccourci `animation` :
+
+```css
+animation: linear both progGrow scroll(root)
+```
+
+Or la timeline ne fait pas partie de ce raccourci. La déclaration est
+invalide, le navigateur la jette **en entier**, et toutes les animations
+pilotées par le scroll meurent — en développement elles marchent, au
+build elles n'existent plus. Vérifié dans Chromium : la forme repliée
+donne `animation-name:none`, la forme séparée donne
+`progGrow | scroll(root)`. Le CSS passe donc par esbuild.
+
+### Le voile qui a demandé quatre essais
+
+`.pass` et `.sh` déclaraient une taille de fond de 320 % et une position
+hors cadre, mais pas `background-repeat:no-repeat`. Un dégradé plus large
+que sa boîte **se répète** : la bande claire réapparaît à l'intérieur,
+sans qu'aucune animation tourne. `.pass` étant posé dans toutes les
+cartes, l'écran entier prenait un voile gris — luminosité moyenne du fond
+**80,9 avec, 14,9 sans**.
+
+Chaque calque testé un par un ne changeait pas le *pire pixel* mesuré :
+la mesure de contraste est locale, le voile est global. C'est en comparant
+deux captures de la même zone, avec et sans les nouveaux calques, que
+l'écart a sauté aux yeux.
+
+### Trois écarts avec le fichier de référence, et pourquoi
+
+1. **Les jetons ne sont pas remplacés, ils sont aliasés.** Le prompt
+   demande de remplacer le bloc `:root`. Ce bloc gouverne 22 pages,
+   quatre blocs sémantiques, un sélecteur de thème à trois états et
+   trois garde-fous exécutables. `--ink`, `--gold`, `--spec`… sont donc
+   des alias posés sur les jetons existants : le CSS et le JS repris de
+   la référence s'écrivent tels quels, et une seule palette gouverne le
+   site.
+
+2. **Le rideau ne passe pas par un routeur.** La référence est une
+   démonstration à onglets et intercepte son routeur maison. Ce site est
+   un vrai site multi-pages : le rideau monte au clic sur un lien
+   interne, la navigation part derrière, et il se retire à l'arrivée.
+   Le retour depuis le cache est traité. Sans JavaScript, les liens
+   restent des liens.
+
+3. **Le titre du hero garde sa révélation ligne par ligne.** Il contient
+   un mot en dégradé sur le texte — exactement le cas contre lequel la
+   référence met en garde. Les sept autres titres qui l'avaient passent
+   aux mots.
+
+Deux valeurs s'écartent aussi : `--rdim`, le mot encore éteint de la
+lecture au scroll, part du gris secondaire et non d'un gris à 2,6:1 — la
+checklist de la référence interdit elle-même de laisser du texte sous AA.
+Et `--gold-lab` pointe sur `--accent-text`, déjà vérifié AA ici.
+
+### Un garde-fou de plus
+
+```bash
+npm run check:anim    # 21 pages × 2 thèmes × 2 largeurs (site lancé)
+```
+
+Après avoir descendu et remonté chaque page comme un visiteur, il
+vérifie : aucune erreur JavaScript, aucun débordement horizontal,
+l'opacité de la rivière (1 sur l'accueil, 0 ailleurs), aucun emoji dans
+le HTML livré, aucun vert sur Tarifs, plus de canevas sur Rendez-vous —
+et surtout **aucun fantôme** : un élément entièrement visible à l'écran
+dont l'opacité composée reste sous 0,55, c'est-à-dire un texte que rien
+n'a jamais déclenché. Chaque candidat est ramené au centre de l'écran
+avant d'être jugé : une carte saisie en plein pli n'est pas un fantôme.
+
+---
+
 ## 1. Ce qui a changé, fichier par fichier
 
 ### Nouveaux
