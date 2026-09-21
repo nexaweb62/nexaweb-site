@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
+import { REFONTE_PRIX, REFONTE_DELAI } from '../data/formules';
 ---
 <BaseLayout title="Tarifs — Nexa Web" description="Formule Étudiant dès 100 €, Vitrine Pro à 1 000 € (offre de lancement, places limitées) et Entreprise de 1 200 à 3 100 €. Devis gratuit — Nexa Web, Carvin.">
 <style>
@@ -53,8 +54,14 @@ import '../styles/global.css';
   letter-spacing:var(--ls-section);line-height:var(--lh-section);
   margin:0 0 clamp(28px,4vh,44px);text-wrap:balance;
 }
-.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:clamp(32px,5vw,52px)}
-@media(max-width:900px){.plans-grid{grid-template-columns:1fr;max-width:480px;margin-left:auto;margin-right:auto}}
+/* Quatre formules : deux colonnes. A trois colonnes, « 1 200 € — 3 100 € »
+   ne tient plus sur une ligne et le prix se coupe. */
+.plans-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:clamp(32px,5vw,52px);
+  max-width:480px;margin-left:auto;margin-right:auto}
+@media(min-width:760px){.plans-grid{grid-template-columns:repeat(2,1fr);gap:20px;max-width:none}}
+/* « dès » : un prefixe, pas un prix. Il ne doit pas peser autant. */
+.plan-pre{font-size:.46em;font-weight:500;letter-spacing:.02em;color:var(--text-muted);
+  margin-right:.12em;vertical-align:.32em}
 @media(max-width:600px){
   .plan-card{padding:14px 14px}
   .plan-name{font-size:var(--fs-caption);margin-bottom:8px}
@@ -216,7 +223,43 @@ import '../styles/global.css';
               <span data-i18n="trf-p1-f5">Hébergement guidé</span>
             </li>
           </ul>
-          <a href="/devis?plan=etudiant" class="btn-g plan-cta" data-i18n="trf-p1-cta">Demander un devis</a>
+          <a href="/devis?formule=etudiant" class="btn-g plan-cta" data-plan="etudiant" data-i18n="trf-p1-cta">Demander un devis</a>
+        </div>
+
+
+        <!-- Refonte de site -->
+        <div class="plan-card">
+          <p class="plan-name" data-i18n="trf-p4-name">Refonte de site</p>
+          <div>
+            <div class="plan-range">
+              <span class="plan-from"><small class="plan-pre" data-i18n="trf-p4-pre">dès</small> {REFONTE_PRIX}</span>
+            </div>
+            <p class="plan-desc" data-i18n="trf-p4-desc">Votre site existe, mais il a vieilli.</p>
+          </div>
+          <hr class="plan-divider">
+          <ul class="plan-features">
+            <li class="plan-feature">
+              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span data-i18n="trf-p4-f1">Nouveau design sur mesure</span>
+            </li>
+            <li class="plan-feature">
+              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span data-i18n="trf-p4-f2">Reprise de vos contenus existants</span>
+            </li>
+            <li class="plan-feature">
+              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span data-i18n="trf-p4-f3">Adapté mobile et tablette</span>
+            </li>
+            <li class="plan-feature">
+              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span data-i18n="trf-p4-f4">Redirections pour garder votre référencement</span>
+            </li>
+            <li class="plan-feature">
+              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span data-i18n="trf-p4-f5">Livraison sous {REFONTE_DELAI}</span>
+            </li>
+          </ul>
+          <a href="/devis?formule=refonte" class="btn-g plan-cta" data-plan="refonte" data-i18n="trf-p4-cta">Demander un devis</a>
         </div>
 
         <!-- Vitrine Pro — populaire -->
@@ -260,7 +303,7 @@ import '../styles/global.css';
               <span data-i18n="trf-p2-f6">1 mois de support inclus</span>
             </li>
           </ul>
-          <a href="/devis?plan=vitrine-pro" class="btn plan-cta" data-i18n="trf-p2-cta">Démarrer mon projet</a>
+          <a href="/devis?formule=vitrine" class="btn plan-cta" data-plan="vitrine" data-i18n="trf-p2-cta">Démarrer mon projet</a>
         </div>
 
         <!-- Entreprise -->
@@ -301,7 +344,7 @@ import '../styles/global.css';
               <span data-i18n="trf-p3-f6">Support étendu</span>
             </li>
           </ul>
-          <a href="/devis?plan=entreprise" class="btn-g plan-cta" data-i18n="trf-p3-cta">Obtenir un devis</a>
+          <a href="/devis?formule=entreprise" class="btn-g plan-cta" data-plan="entreprise" data-i18n="trf-p3-cta">Obtenir un devis</a>
         </div>
 
       </div>
