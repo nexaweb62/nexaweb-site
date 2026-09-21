@@ -28,10 +28,10 @@ export const REFONTE = {
 export const REFONTE_PRIX = prix(REFONTE.prixDepart);          // « 490 € »
 export const REFONTE_DELAI = `${REFONTE.delaiSemaines} semaines`;
 
-/** Les quatre formules, par prix croissant. L'ordre du tableau est
- *  l'ordre d'affichage : c'est lui qui fait foi, pas le markup. */
+/** Les formules qui ont une pastille de budget, par prix croissant.
+ *  L'ordre du tableau est l'ordre d'affichage : c'est lui qui fait foi,
+ *  pas le markup. */
 export const FORMULES = [
-  { cle: 'etudiant',   budget: `Étudiant — 100 à 200 €` },
   { cle: 'refonte',    budget: `Refonte — dès ${REFONTE_PRIX}` },
   { cle: 'entreprise', budget: `Entreprise — 1 200 à 3 100 €` },
 ] as const;
@@ -40,7 +40,6 @@ export const FORMULES = [
  *  pré-sélectionner. Vitrine Pro n'a pas de pastille de budget — seul le
  *  type est rempli, aucune pastille n'est cochée. */
 export const TYPE_PAR_FORMULE: Record<string, string> = {
-  etudiant:   'portfolio',
   refonte:    'refonte',
   vitrine:    'vitrine',
   entreprise: 'vitrine',

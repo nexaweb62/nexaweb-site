@@ -5,7 +5,7 @@ import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 import { REFONTE_PRIX, REFONTE_DELAI } from '../data/formules';
 ---
-<BaseLayout title="Tarifs — Nexa Web" description="Formule Étudiant dès 100 €, Vitrine Pro à 1 000 € (offre de lancement, places limitées) et Entreprise de 1 200 à 3 100 €. Devis gratuit — Nexa Web, Carvin.">
+<BaseLayout title="Tarifs — Nexa Web" description="Refonte de site dès 490 €, Vitrine Pro à 1 000 € (offre de lancement, places limitées) et Entreprise de 1 200 à 3 100 €. Devis gratuit — Nexa Web, Carvin.">
 <style>
 /* ── HERO ── */
 .prix-hero{padding:clamp(56px,9vh,100px) 0 clamp(32px,5vh,56px);text-align:center;position:relative;z-index:1}
@@ -54,11 +54,12 @@ import { REFONTE_PRIX, REFONTE_DELAI } from '../data/formules';
   letter-spacing:var(--ls-section);line-height:var(--lh-section);
   margin:0 0 clamp(28px,4vh,44px);text-wrap:balance;
 }
-/* Quatre formules : deux colonnes. A trois colonnes, « 1 200 € — 3 100 € »
-   ne tient plus sur une ligne et le prix se coupe. */
+/* Trois formules : trois colonnes. Deux laisseraient une carte
+   orpheline sur sa ligne. La bascule est a 900 px et non a 760 :
+   mesure, a 760 px trois colonnes debordent de 31 px. */
 .plans-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:clamp(32px,5vw,52px);
   max-width:480px;margin-left:auto;margin-right:auto}
-@media(min-width:760px){.plans-grid{grid-template-columns:repeat(2,1fr);gap:20px;max-width:none}}
+@media(min-width:900px){.plans-grid{grid-template-columns:repeat(3,1fr);gap:20px;max-width:none}}
 /* « dès » : un prefixe, pas un prix. Il ne doit pas peser autant. */
 .plan-pre{font-size:.46em;font-weight:500;letter-spacing:.02em;color:var(--text-muted);
   margin-right:.12em;vertical-align:.32em}
@@ -188,44 +189,6 @@ import { REFONTE_PRIX, REFONTE_DELAI } from '../data/formules';
       <h2 class="section-title" data-i18n="trf-plans-h">La formule<br>adaptée à votre profil.</h2>
 
       <div class="plans-grid">
-
-        <!-- Étudiant -->
-        <div class="plan-card">
-          <p class="plan-name" data-i18n="trf-p1-name">Étudiant</p>
-          <div>
-            <div class="plan-range">
-              <span class="plan-from" data-i18n="trf-p1-from">100 €</span>
-              <span class="plan-sep">—</span>
-              <span class="plan-to" data-i18n="trf-p1-to">200 €</span>
-            </div>
-            <p class="plan-desc" data-i18n="trf-p1-desc">Portfolio ou projet académique</p>
-          </div>
-          <hr class="plan-divider">
-          <ul class="plan-features">
-            <li class="plan-feature">
-              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
-              <span data-i18n="trf-p1-f1">Page unique ou portfolio</span>
-            </li>
-            <li class="plan-feature">
-              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
-              <span data-i18n="trf-p1-f2">Design responsive inclus</span>
-            </li>
-            <li class="plan-feature">
-              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
-              <span data-i18n="trf-p1-f3">Formulaire de contact</span>
-            </li>
-            <li class="plan-feature">
-              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
-              <span data-i18n="trf-p1-f4">Livraison rapide 7 jours</span>
-            </li>
-            <li class="plan-feature">
-              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
-              <span data-i18n="trf-p1-f5">Hébergement guidé</span>
-            </li>
-          </ul>
-          <a href="/devis?formule=etudiant" class="btn-g plan-cta" data-plan="etudiant" data-i18n="trf-p1-cta">Demander un devis</a>
-        </div>
-
 
         <!-- Refonte de site -->
         <div class="plan-card">

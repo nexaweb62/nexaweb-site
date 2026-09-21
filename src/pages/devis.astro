@@ -349,7 +349,6 @@ import { REFONTE_PRIX } from '../data/formules';
             <div class="field field-full">
               <label><span data-i18n="budget">Budget estimé</span></label>
               <div class="budget-pills" role="radiogroup" aria-label="Budget estimé">
-                <label class="budget-pill"><input type="radio" name="budget" value="etudiant"><span>Étudiant — 100 à 200&nbsp;€</span></label>
                 <label class="budget-pill"><input type="radio" name="budget" value="refonte"><span>Refonte — dès {REFONTE_PRIX}</span></label>
                 <label class="budget-pill"><input type="radio" name="budget" value="entreprise"><span>Entreprise — 1&#8239;200 à 3&#8239;100&nbsp;€</span></label>
               </div>
@@ -462,7 +461,7 @@ import { REFONTE_PRIX } from '../data/formules';
      La pastille est cochée et le type de site pré-rempli. Vitrine Pro
      n'a pas de pastille : seul le type l'est, aucune pastille cochée.
      Une valeur inventée ne trouve simplement rien — c'est voulu. */
-  var TYPE = { etudiant:'portfolio', refonte:'refonte', vitrine:'vitrine', entreprise:'vitrine' };
+  var TYPE = { refonte:'refonte', vitrine:'vitrine', entreprise:'vitrine' };
   var f = new URLSearchParams(location.search).get('formule');
   if(f){
     var r = document.querySelector('.budget-pill input[value="' + (CSS.escape ? CSS.escape(f) : f) + '"]');

@@ -1072,17 +1072,12 @@ body.lite .orbit .spin,body.lite .orbit .beadwrap,body.lite .orbit .halo{animati
   .plans-grid>*:nth-child(3),.cards>*:nth-child(3),.who-grid>*:nth-child(3),
   .team-grid>*:nth-child(3),.stats-grid>*:nth-child(3){animation-range:entry -17% exit 92%}
 
-  /* LES TARIFS S'OUVRENT PAR COLONNE, pas par rang.
-     Avec quatre formules la grille est en 2x2 : le decalage par
-     nth-child(1)/(3) ci-dessus ferait partir la carte 3 vers la gauche
-     alors qu'elle est SOUS la carte 1, dans la meme colonne. On raisonne
-     donc en colonnes — impaire a gauche, paire a droite — et la colonne
-     de droite s'ouvre un peu avant. Ces regles viennent APRES les
-     precedentes : c'est ce qui les remplace. */
-  .plans-grid>*:nth-child(odd){--fx:90px;--fr:-5deg}
-  .plans-grid>*:nth-child(even){--fx:-90px;--fr:5deg}
-  .plans-grid>*:nth-child(odd){animation-range:entry 0% exit 92%}
-  .plans-grid>*:nth-child(even){animation-range:entry -8% exit 92%}
+  /* Les tarifs ne passent a trois colonnes qu'a 900 px. Entre 760 et
+     900 ils sont en UNE colonne : un decalage de 130 px sortirait de
+     l'ecran, exactement le debordement que ce bloc evite ailleurs. */
+  @media (max-width:899.98px){
+    .plans-grid>*{--fx:0px;--fr:0deg}
+  }
   }
 
   /* La lèvre suit le dépliage. */

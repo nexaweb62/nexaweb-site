@@ -570,7 +570,15 @@ leur taille propre — `.cta-btn` 56, `.svc-cta` 52, `.submit-btn` 50,
 
 **Refonte de site, dès 490 €, livrée en 2 semaines.** Le prix et le
 délai sont une **proposition à confirmer par le fondateur**, et ils
-vivent à un seul endroit : `src/data/formules.ts`. La page Tarifs et la
+vivent à un seul endroit : `src/data/formules.ts`.
+
+> **La formule Étudiant a depuis été retirée**, de la page Tarifs comme
+> de la page Devis. Il reste trois formules — Refonte, Vitrine Pro,
+> Entreprise — et deux pastilles de budget. La grille repasse à trois
+> colonnes : deux laisseraient une carte orpheline sur sa ligne. La
+> bascule est à **900 px et non 760** — mesuré, à 760 px trois colonnes
+> débordent de 31 px — et l'éventail est neutralisé entre les deux
+> largeurs, où les cartes sont en une seule colonne. La page Tarifs et la
 page Devis les lisent depuis ce fichier — changer `490` là-bas les
 change aux deux endroits.
 
@@ -578,16 +586,8 @@ Ce fichier porte aussi le formatage : espace fine insécable entre les
 milliers, espace insécable avant le €. Sans eux, « 1 200 € » se coupe
 en « 1 » / « 200 € » en fin de ligne.
 
-Avec quatre cartes, trois colonnes étranglent les prix : la grille
-passe en **2 × 2** au-dessus de 760 px, une colonne en dessous. Mesuré
-sur les quatre formules, dans les deux thèmes, à 1280 et à 390 :
-chaque prix tient sur une ligne (28 px de haut, une seule ligne).
-
-L'éventail raisonne maintenant **par colonne** et non par rang : en
-2 × 2 la troisième carte est *sous* la première, dans la même colonne —
-la faire partir vers la gauche comme avant n'aurait aucun sens. Les
-règles `nth-child(odd)/(even)` viennent après les anciennes, ce sont
-elles qui gagnent.
+Mesuré sur chaque formule, dans les deux thèmes et à six largeurs :
+chaque prix tient sur une ligne, « 1 200 € — 3 100 € » compris.
 
 ### La page Devis
 
