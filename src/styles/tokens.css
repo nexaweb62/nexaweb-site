@@ -316,9 +316,14 @@
   --curve: cubic-bezier(.25,.1,.25,1);
   --grain-op:    .075;
   --grain-blend: overlay;
-  /* L'or liquide de la référence, tel quel. C'est une valeur de
-     couleur : elle ne peut vivre que dans ce fichier. */
-  --liquid-grad: linear-gradient(112deg,#6A5628 0%,#8A7238 12%,#E8CE8E 26%,#FFF7E6 34%,#D4B36A 46%,#7A6330 62%,#E8CE8E 80%,#A8853F 92%,#6A5628 100%);
+  /* L'OR LIQUIDE. Mesuré au pixel, pas déduit : le dégradé de la
+     référence descendait à 1,90:1 sur noir (sa butée #6A5628) et
+     montait à 2,76:1 sur blanc (sa butée claire #C9A758) — sous le
+     3:1 du grand texte, dans les deux cas. Les butées sont relevées
+     d'un cran : plancher 4,28:1 en sombre, 3,49:1 en clair. Le
+     chatoiement reste, dans la bande lisible. Garde-fou :
+     npm run check:liquid. */
+  --liquid-grad: linear-gradient(112deg,#8A7238 0%,#A8853F 12%,#E8CE8E 26%,#FFF7E6 34%,#D4B36A 46%,#8A7238 62%,#E8CE8E 80%,#A8853F 92%,#8A7238 100%);
 }
 
 /* ───────────────────────────────────────────────────────────────────────
@@ -410,7 +415,7 @@
     --grain-blend: multiply;
     /* L'or liquide de la référence, tel quel. C'est une valeur de
        couleur : elle ne peut vivre que dans ce fichier. */
-    --liquid-grad: linear-gradient(112deg,#4E3C0E 0%,#6F5718 12%,#A98A3C 26%,#C9A758 34%,#8A6C22 46%,#5B4713 62%,#A98A3C 80%,#7A5F1E 92%,#4E3C0E 100%);
+    --liquid-grad: linear-gradient(112deg,#4E3C0E 0%,#6F5718 12%,#8A6C22 26%,#9C7B2C 34%,#6F5718 46%,#5B4713 62%,#8A6C22 80%,#7A5F1E 92%,#4E3C0E 100%);
   }
 }
 
@@ -498,9 +503,14 @@
   --curt5:     var(--bg);
   --grain-op:    .05;
   --grain-blend: multiply;
-  /* L'or liquide de la référence, tel quel. C'est une valeur de
-     couleur : elle ne peut vivre que dans ce fichier. */
-  --liquid-grad: linear-gradient(112deg,#4E3C0E 0%,#6F5718 12%,#A98A3C 26%,#C9A758 34%,#8A6C22 46%,#5B4713 62%,#A98A3C 80%,#7A5F1E 92%,#4E3C0E 100%);
+  /* L'OR LIQUIDE. Mesuré au pixel, pas déduit : le dégradé de la
+     référence descendait à 1,90:1 sur noir (sa butée #6A5628) et
+     montait à 2,76:1 sur blanc (sa butée claire #C9A758) — sous le
+     3:1 du grand texte, dans les deux cas. Les butées sont relevées
+     d'un cran : plancher 4,28:1 en sombre, 3,49:1 en clair. Le
+     chatoiement reste, dans la bande lisible. Garde-fou :
+     npm run check:liquid. */
+  --liquid-grad: linear-gradient(112deg,#4E3C0E 0%,#6F5718 12%,#8A6C22 26%,#9C7B2C 34%,#6F5718 46%,#5B4713 62%,#8A6C22 80%,#7A5F1E 92%,#4E3C0E 100%);
 }
 
 /* ───────────────────────────────────────────────────────────────────────
@@ -588,7 +598,12 @@
   --curt5:     var(--bg);
   --grain-op:    .075;
   --grain-blend: overlay;
-  /* L'or liquide de la référence, tel quel. C'est une valeur de
-     couleur : elle ne peut vivre que dans ce fichier. */
-  --liquid-grad: linear-gradient(112deg,#6A5628 0%,#8A7238 12%,#E8CE8E 26%,#FFF7E6 34%,#D4B36A 46%,#7A6330 62%,#E8CE8E 80%,#A8853F 92%,#6A5628 100%);
+  /* L'OR LIQUIDE. Mesuré au pixel, pas déduit : le dégradé de la
+     référence descendait à 1,90:1 sur noir (sa butée #6A5628) et
+     montait à 2,76:1 sur blanc (sa butée claire #C9A758) — sous le
+     3:1 du grand texte, dans les deux cas. Les butées sont relevées
+     d'un cran : plancher 4,28:1 en sombre, 3,49:1 en clair. Le
+     chatoiement reste, dans la bande lisible. Garde-fou :
+     npm run check:liquid. */
+  --liquid-grad: linear-gradient(112deg,#8A7238 0%,#A8853F 12%,#E8CE8E 26%,#FFF7E6 34%,#D4B36A 46%,#8A7238 62%,#E8CE8E 80%,#A8853F 92%,#8A7238 100%);
 }

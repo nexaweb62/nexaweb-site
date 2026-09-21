@@ -645,6 +645,53 @@ les littéraux du prompt, qu'il aurait fallu introduire hors de
 
 ---
 
+## 2 nonies. L'or liquide était illisible, et le contrôle ne savait pas le dire
+
+`check:contrast:rendered` a signalé « 48 heures » à **1:1**. Le chiffre
+était faux : `background-clip:text` exige `color:transparent`, et un
+contrôle qui lit la propriété `color` n'y voit que du transparent. Il
+ne peut pas voir à travers.
+
+Mais l'alerte, elle, était fondée. Mesuré au pixel, le dégradé de la
+référence descendait à **1,90:1 sur noir** et **2,76:1 sur blanc** —
+sous le 3:1 du grand texte, dans les deux thèmes. Les butées sont
+relevées d'un cran : plancher **4,28:1** en sombre, **3,49:1** en
+clair. Le chatoiement reste, dans la bande lisible.
+
+```bash
+npm run check:liquid
+```
+
+### Deux pièges de mesure, l'un après l'autre
+
+**Le premier**, connu : le pixel le plus faible d'un glyphe est toujours
+un pixel d'anticrénelage, à moitié encre à moitié fond. Mesuré à
+**1,24:1** sur un texte parfaitement lisible. Le prendre pour verdict
+condamnerait tout texte.
+
+**Le second**, plus retors : filtrer « les pixels les plus écartés du
+fond » ne suffit pas non plus. Ils restent partiellement couverts — et
+la preuve est arithmétique, pas une intuition : en mode sombre l'encre
+mesurée ressortait **plus sombre que la butée la plus sombre du
+dégradé**, en mode clair **plus claire que la plus claire**. Dans les
+deux cas, du fond s'y était mêlé. Le contrôle annonçait alors 2,42:1
+là où la vérité est 3,83:1.
+
+D'où une **troisième capture**, texte forcé en noir plein, qui donne la
+couverture réelle de chaque pixel : `alpha = 1 − noir / fond`. On ne
+juge que les pixels pleinement couverts. L'encre mesurée vaut alors
+rgb(144,118,58) — la butée `#8A7238` du dégradé, rgb(138,114,56). La
+mesure et le code disent enfin la même chose.
+
+Vérifié à l'envers : le dégradé d'origine remis, les quatre cas
+ressortent sous le seuil.
+
+`check:contrast:rendered` passe désormais la main sur ce qui est peint
+par un dégradé, avec le commentaire qui renvoie ici — se taire vaut
+mieux qu'un chiffre faux.
+
+---
+
 ## 3. Garde-fous exécutables
 
 ```bash
@@ -656,6 +703,7 @@ npm run check:seams                # cassures du fond, ligne de pixels par ligne
 npm run check:anim                 # la checklist du mouvement (site lancé)
 npm run check:header               # l'en-tête à 6 largeurs × 2 thèmes (site lancé)
 npm run check:scoped               # le piège du style scopé (ni serveur ni navigateur)
+npm run check:liquid               # le texte peint par un dégradé, au pixel (site lancé)
 npm run build:assets               # favicon, icônes, OG, textures — depuis les tokens
 npm run build:images               # AVIF/WebP/JPEG + srcset + budgets
 ```

@@ -139,6 +139,17 @@ for (const theme of ['dark', 'light']) {
         if (el.closest('[aria-hidden="true"]')) return;
         const cs = getComputedStyle(el);
         if (cs.visibility === 'hidden' || cs.display === 'none') return;
+        /* TEXTE DÉCOUPÉ DANS UN DÉGRADÉ. background-clip:text exige
+           color:transparent : ce contrôle, qui lit la propriété color,
+           n'y voit que du transparent et annonce 1:1 — un chiffre faux
+           sur un texte parfaitement peint. Il ne peut pas voir à travers,
+           et faire semblant serait pire que se taire.
+           C'est npm run check:liquid qui mesure ceux-là, au pixel, avec
+           la couverture réelle de chaque glyphe. Il a d'ailleurs trouvé
+           deux vrais défauts que ce 1:1 signalait sans savoir le dire :
+           1,90:1 sur noir et 2,76:1 sur blanc. */
+        const clip = cs.webkitBackgroundClip || cs.backgroundClip;
+        if (clip === 'text' && cs.backgroundImage !== 'none') return;
         // L'opacité d'un ANCÊTRE s'applique au texte comme si l'encre
         // était translucide. Sans en tenir compte, un paragraphe à
         // opacity:.85 se mesurait sur sa couleur déclarée : les liens des
