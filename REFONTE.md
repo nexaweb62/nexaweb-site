@@ -370,6 +370,86 @@ une seule fois.
 
 ---
 
+## 2 ter. L'en-tête mobile — un contrôle peut disparaître en silence
+
+Le bouton **Retour** était bien dans le HTML de toutes les pages
+intérieures, visible, cliquable, jamais recouvert. Et pourtant il ne se
+voyait plus sur téléphone.
+
+Trois causes cumulées, aucune détectable par les garde-fous existants :
+
+1. **Le libellé était masqué sous 420 px.** Il ne restait qu'un chevron
+   `‹` de 14 px dans une pastille sombre — une décoration, pas un bouton.
+2. **Il était le dernier de la grappe**, donc collé au bord droit : 1 px
+   de marge à 320 px de large.
+3. **La barre portait cinq contrôles pour trois places.** Langue, menu,
+   thème, retour et l'appel à l'action se partageaient la largeur, et
+   c'est le logo qui payait : mesuré à 51 px à 390, 21 px à 360 et
+   **0 px à 320** — le logo avait littéralement disparu.
+
+Rien ne débordait : `document.scrollWidth` restait égal à `clientWidth`,
+parce que le logo se laissait comprimer au lieu de pousser. C'est
+exactement le genre de défaut qu'aucune vérification d'overflow ne voit.
+
+**Ce qui a changé.** Sur mobile, la barre garde ce qui sert à chaque
+page — le logo, le retour, le menu. La langue et le thème descendent au
+bas de la navigation plein écran, où la place ne manque pas ; le même
+JavaScript pilote les deux exemplaires, et un seul état les peint tous
+les deux. `.nav-logo` ne se comprime plus (`flex:0 0 auto`). Le bouton
+Retour passe en tête de la grappe (`order:-1`), garde son libellé
+jusqu'à 320 px et fait 44 px de haut au pointeur grossier.
+
+**Et il fait ce que son nom annonce.** Son nom accessible disait
+« Retour — page précédente » ; le code faisait `location.href = '/'`.
+Il revient maintenant vraiment en arrière — mais uniquement si la page
+précédente appartient à ce site, sinon on renverrait le visiteur vers
+le moteur de recherche qui l'a amené. Le signal n'est ni
+`document.referrer` (vide dès qu'une politique de référent le coupe) ni
+`history.length` (qui compte les pages des autres sites), mais un
+compteur d'onglet posé dans `BaseLayout` : combien de pages **de ce
+site** cet onglet a-t-il déjà servies. La page 404 récupère le bouton
+au passage : c'est celle où revenir en arrière sert le plus.
+
+### Et un écran mort sur /contact
+
+C'est le nouveau garde-fou qui l'a trouvé, du premier coup : sur
+**toutes** les largeurs et dans les deux thèmes, le bouton Retour de
+`/contact` était « recouvert par un autre élément ». Le coupable :
+`#globe-loading`, le voile d'attente du globe — `position:fixed`,
+`inset:0`, `z-index:200`, par-dessus la page entière.
+
+Il se retire quand le globe est prêt, et aussi quand le fetch des
+frontières échoue. Mais **si d3 lui-même n'arrive pas**, le script lève
+une exception à la première ligne qui l'utilise, bien avant le fetch :
+le voile ne part jamais. Bloqueur de publicité, proxy d'entreprise,
+CDN en panne — et `/contact` devient un écran opaque qui avale tous les
+clics, en-tête compris. Ce n'était pas un artefact du bac à sable : le
+même scénario attend n'importe quel visiteur dont le réseau filtre
+jsdelivr.
+
+Trois verrous, plutôt qu'un :
+
+1. `pointer-events:none` sur le voile dès le départ — rien à l'intérieur
+   n'est cliquable, un voile d'attente n'a aucune raison d'avaler un
+   clic, même quand il s'attarde ;
+2. une garde `typeof d3 === 'undefined'` qui retire le voile, masque le
+   canevas et rend la main : le globe est un décor, son absence ne doit
+   rien coûter à la page ;
+3. un délai de huit secondes qui retire le voile quoi qu'il arrive.
+
+```bash
+npm run check:header
+```
+
+6 largeurs (320 → 1280) × 2 thèmes × 3 pages, plus quatre essais de
+comportement. Il vérifie le logo à sa largeur naturelle, le bouton
+Retour présent, libellé, dans le cadre, non recouvert, à 44 px de cible,
+la langue et le thème atteignables **une seule fois** — ni absents ni en
+double — et que le Retour mène bien à la page précédente du site, ou à
+l'accueil quand il n'y en a pas.
+
+---
+
 ## 3. Garde-fous exécutables
 
 ```bash
@@ -378,6 +458,8 @@ npm run check:contrast:rendered    # 2 236 éléments réellement rendus (site l
 npm run check:glass                # libellés sur verre, mesurés au pixel (site lancé)
 NO_BACKDROP=1 npm run check:glass  # les mêmes, sans backdrop-filter
 npm run check:seams                # cassures du fond, ligne de pixels par ligne
+npm run check:anim                 # la checklist du mouvement (site lancé)
+npm run check:header               # l'en-tête à 6 largeurs × 2 thèmes (site lancé)
 npm run build:assets               # favicon, icônes, OG, textures — depuis les tokens
 npm run build:images               # AVIF/WebP/JPEG + srcset + budgets
 ```
