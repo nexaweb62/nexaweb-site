@@ -78,8 +78,14 @@ import '../styles/global.css';
   will-change:transform;transform-style:preserve-3d;
 }
 .plan-card:hover{border-color:var(--accent)}
-.plan-spotlight{position:absolute;inset:0;pointer-events:none;z-index:10;opacity:0;transition:opacity .3s;overflow:hidden}
-.plan-spotlight::after{content:'';position:absolute;width:200%;height:200%;border-radius:50%;background:radial-gradient(circle,var(--accent-glow) 0%,rgb(from var(--accent-glow) r g b / 0) 40%);transform:translate(-50%,-50%);top:var(--sy,50%);left:var(--sx,50%)}
+/* INJECTÉ EN JAVASCRIPT dans chaque .plan-card — d'où :global().
+   Scopées, ces deux règles ne s'appliquaient à rien : Astro les compile
+   en .plan-spotlight[data-astro-cid-…] et le script ne pose pas cet
+   attribut. La nappe lumineuse au survol ne fonctionnait donc pas du
+   tout, et un div vide restait dans le flux de la carte.
+   L'ancrage sur .plan-card garde la règle chez elle. */
+.plan-card :global(.plan-spotlight){position:absolute;inset:0;pointer-events:none;z-index:10;opacity:0;transition:opacity .3s;overflow:hidden}
+.plan-card :global(.plan-spotlight::after){content:'';position:absolute;width:200%;height:200%;border-radius:50%;background:radial-gradient(circle,var(--accent-glow) 0%,rgb(from var(--accent-glow) r g b / 0) 40%);transform:translate(-50%,-50%);top:var(--sy,50%);left:var(--sx,50%)}
 .plan-card.plan-featured{
   border-color:var(--accent);
   box-shadow:0 0 0 1px var(--accent),var(--shadow-2);
@@ -348,6 +354,7 @@ setTimeout(initSpots,500);
     /* inject spotlight */
     var sp=document.createElement('div');
     sp.className='plan-spotlight';
+    sp.setAttribute('aria-hidden','true');   /* décor : jamais annoncé, jamais compté comme contenu */
     card.appendChild(sp);
 
     card.addEventListener('pointerenter',function(){

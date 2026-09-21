@@ -171,7 +171,16 @@
       [].slice.call(c.children).forEach(function (el) {
         var cl = (el.className || '').toString().toUpperCase().split(/\s+/);
         if (cl.some(function (k) { return DECOR[k]; })) return;
+        /* Le tiroir sort les LIGNES de la carte, les unes après les
+           autres. Un calque hors flux n'est pas une ligne : c'est du
+           décor posé par-dessus. L'inclure lui impose l'opacité du
+           tiroir — et une nappe lumineuse censée rester éteinte au
+           repos se met à briller en permanence. La liste DECOR
+           ci-dessus ne connaît que les calques que ce fichier fabrique
+           lui-même ; cette règle attrape aussi ceux d'ailleurs. */
+        if (el.getAttribute('aria-hidden') === 'true') return;
         var cs = getComputedStyle(el);
+        if (cs.position === 'absolute' || cs.position === 'fixed') return;
         if (cs.animationName && cs.animationName !== 'none') return;
         el.classList.add('drwi');
         el.style.setProperty('--i', i++);
