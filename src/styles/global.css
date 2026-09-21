@@ -194,7 +194,7 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
 .hdr.is-hidden{transform:translateY(-100%)}
 
 .nav{display:flex;align-items:center;height:var(--hdr);position:relative}
-.nav-logo{display:flex;align-items:center;color:var(--text)}
+.nav-logo{display:flex;align-items:center;color:var(--text);flex:0 0 auto}
 .nav-logo-svg{flex-shrink:0;overflow:visible}
 .nav-logo-svg .logo-nexa{fill:var(--text)}
 .nav-logo-svg .logo-web{fill:var(--accent-text)}
@@ -275,6 +275,11 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
   letter-spacing:0;color:var(--text);
   transition:color var(--dur-micro) var(--ease-out);white-space:nowrap;
 }
+/* Le pointeur grossier n'a pas 1 px de précision : 44 px de haut, la
+   recommandation WCAG 2.5.8, sinon le bouton se rate une fois sur trois.
+   APRÈS la règle de base : une media query n'ajoute aucune spécificité,
+   placée avant elle se ferait écraser par le min-height:38px. */
+@media(pointer:coarse){ .hdr-back{min-height:44px} }
 .hdr-back:hover{color:var(--accent-text)}
 .hdr-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 
@@ -329,6 +334,12 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
 .cnav-link:hover,.cnav-link:focus-visible{background:var(--accent);color:var(--on-accent);transform:scale(1.09)}
 .cnav-link svg{width:21px;height:21px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .cnav-name{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;}
+/* Langue et thème, au bas du menu plein écran. Masqués par défaut : sur
+   grand écran ils sont dans la barre. */
+.cnav-tools{
+  display:none;position:absolute;left:50%;bottom:calc(26px + env(safe-area-inset-bottom, 0px));
+  transform:translateX(-50%);gap:var(--sp-3);align-items:center;z-index:1;
+}
 
 /* ═══════════════════════════════════════════════════════════════════════
    PIED DE PAGE
@@ -1325,13 +1336,29 @@ body.lite .split .w{transition-duration:.35s}
 /* ═══════════════════════════════════════════════════════════════════════
    EN-TÊTE MOBILE
    ═══════════════════════════════════════════════════════════════════════ */
+/* Sur mobile la barre ne peut pas porter cinq contrôles : la langue et
+   le thème écrasaient le logo jusqu'à le faire disparaître (0 px de large
+   à 320), et repoussaient le bouton Retour dans le coin droit, privé de
+   son libellé. Ils descendent donc dans le menu plein écran, qui a la
+   place. La barre garde ce qui sert à chaque page : le logo, le retour,
+   le menu. */
 @media(max-width:640px){
   .nav-r .btn{display:none}
   .nav-r{gap:10px}
+  .nav-r > .lang-sel,.nav-r > .theme-sel{display:none}
+  .cnav-tools{display:flex}
+  /* Le retour se lit à gauche de la grappe, côté contenu, pas dans l'angle. */
+  .hdr-back{order:-1}
 }
 @media(max-width:420px){
   .nav-r{gap:7px}
-  .hdr-back .back-label{display:none}
-  .lang-sel{gap:1px}
-  .lang-opt{padding:2px 3px}
+  .nav-r .lang-sel{gap:1px}
+  .nav-r .lang-opt{padding:2px 3px}
+  .hdr-back{padding:0 12px}
+}
+/* En dessous de 340 px le mot « Menu » ne rentre plus ; le trait triple
+   est compris sans lui, « Retour » ne l'est pas sans le sien. */
+@media(max-width:340px){
+  .hdr-btn-lbl{display:none}
+  .menu-btn{padding:0 11px}
 }

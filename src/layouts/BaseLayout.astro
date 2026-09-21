@@ -64,6 +64,16 @@ import River from '../components/River.astro';
         var t = localStorage.getItem('nw-theme');
         if (t === 'light' || t === 'dark') r.setAttribute('data-theme', t);
       } catch (e) { /* navigation privée, stockage bloqué */ }
+      /* Combien de pages de ce site l'onglet a-t-il déjà servies ? Le
+         bouton Retour a besoin de le savoir : document.referrer est vide
+         dès qu'une politique de référent le coupe, et history.length
+         compte aussi les pages des autres sites. Ce compteur, lui, ne
+         compte que les nôtres, et meurt avec l'onglet. */
+      try {
+        var vues = parseInt(sessionStorage.getItem('nw-vues') || '0', 10) || 0;
+        r.dataset.vues = String(vues);
+        sessionStorage.setItem('nw-vues', String(Math.min(vues + 1, 99)));
+      } catch (e) { /* stockage bloqué : on retombera sur l'accueil */ }
       r.classList.add('js-enabled');
     })();
   </script>
