@@ -10,11 +10,28 @@
   var reduce = matchMedia('(prefers-reduced-motion: reduce)');
 
   /* ── 1. Le calque de lumière, dans chaque carte ────────────────────── */
+  /* CE QUI EST UNE CARTE, ET RIEN D'AUTRE.
+
+     .svc-row, .faq-item et .proc-step ont ete retires : ce ne sont pas
+     des cartes, chacun a sa propre animation. Les leur donner posait
+     .gloss/.pass/.lip dans des elements qui n'en veulent pas — et pour
+     .faq-item, qui etait en position:static, ces calques en
+     position:absolute;inset:0 remontaient jusqu'a la section : mesures
+     1280x770 px pour un parent de 675x69. Cinq .pass arrondis empiles
+     sur toute la FAQ, c'etait le grand panneau gris. */
   var CARTES = '.plan-card,.card,.feat-item,.who-card,.team-card,.constat-item,' +
-               '.step,.proc-step,.stat,.faq-item,.svc-row,.cta-inner,.launch-notice,.aside';
+               '.step,.stat,.cta-inner,.launch-notice,.aside';
+
+  /* Un calque decoratif ne doit JAMAIS pouvoir sortir de son parent.
+     Un parent en position:static ne retient rien : on l'ancre avant
+     d'inserer quoi que ce soit d'absolu. */
+  function ancrer(c) {
+    if (getComputedStyle(c).position === 'static') c.style.position = 'relative';
+  }
   (function pass() {
     document.querySelectorAll(CARTES).forEach(function (c) {
       if (c.querySelector(':scope > .pass')) return;
+      ancrer(c);
       var g = document.createElement('span');
       g.className = 'pass';
       g.setAttribute('aria-hidden', 'true');
@@ -30,6 +47,10 @@
     document.querySelectorAll(SEL).forEach(function (el) {
       if (el.dataset.reader || el.dataset.split) return;
       if (el.closest('.cnav') || el.closest('.hdr')) return;
+      /* .proc-step a deja stepIn, et deux animations sur le meme texte
+         se battent. Les reponses de la FAQ sont repliees quand la page
+         defile : la vague serait jouee dans le vide. */
+      if (el.closest('.proc-step') || el.closest('.panel')) return;
       var words = el.textContent.trim().split(/\s+/);
       if (words.length < 5) return;
       /* Un paragraphe qui contient un contrôle n'est pas du texte courant. */
@@ -157,6 +178,7 @@
     var DECOR = { LIP: 1, GLOSS: 1, PASS: 1, EDGE: 1, RIM: 1, SWEEP: 1, FLOW: 1 };
     document.querySelectorAll(CARTES).forEach(function (c) {
       if (c.dataset.drw) return; c.dataset.drw = '1';
+      ancrer(c);
       if (!c.querySelector(':scope > .lip')) {
         var l = document.createElement('span');
         l.className = 'lip'; l.setAttribute('aria-hidden', 'true');

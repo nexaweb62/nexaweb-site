@@ -120,7 +120,7 @@ for (const theme of ['dark', 'light']) {
         let k = 0;
         document.querySelectorAll('body *').forEach(el => {
           if (el.closest('[aria-hidden="true"]') || el.getAttribute('aria-hidden') === 'true') return;
-          if (el.closest('.cnav, .curtain, #loader, .faq-a, details:not([open])')) return;
+          if (el.closest('.cnav, .curtain, #loader, .panel, details:not([open])')) return;
           const cs = getComputedStyle(el);
           if (cs.display === 'none' || cs.visibility === 'hidden') return;
           const own = [...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim().length > 1);

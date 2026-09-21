@@ -106,7 +106,7 @@
     if (!ring || !dot) return;
     var tx = innerWidth / 2, ty = innerHeight / 2, rx = tx, ry = ty, raf = null, on = false;
     var GRAB = '.btn, .btn-g, a, button, .plan-card, .card, .who-card, .team-card, .stat,' +
-               ' .step, .constat-item, .faq-q, .svc-row, .feat-item';
+               ' .step, .constat-item, .qa .q, .svc-row, .feat-item';
     function loop() {
       raf = null;
       rx += (tx - rx) * 0.19; ry += (ty - ry) * 0.19;
