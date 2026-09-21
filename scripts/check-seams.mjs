@@ -53,6 +53,22 @@ for (const theme of THEMES) {
     const page = await ctx.newPage();
     await page.goto(BASE + path, { waitUntil: 'networkidle' }).catch(() => {});
 
+    /* La rivière et le grain sont masqués pour la mesure, et c'est
+       volontaire. Ce garde-fou teste la STRUCTURE de la page : une
+       bordure oubliée, un fond de section qui change, un calque qui
+       s'arrête net. La rivière est une bande d'or qui traverse la page
+       en diagonale — par construction elle fait varier la luminance
+       d'une ligne à l'autre, et le détecteur la lisait comme une
+       cassure de ΔL* 19 là où l'œil ne voit qu'un dégradé (vérifié sur
+       capture). Le grain est du bruit, même raison.
+       Ce qu'ils cachent, eux, ne peut pas créer de cassure : ils sont
+       continus sur toute la hauteur du document. */
+    await page.evaluate(() => {
+      const st = document.createElement('style');
+      st.textContent = '.river,.grain{display:none!important}';
+      document.head.appendChild(st);
+    }).catch(() => {});
+
     // Déclenche toutes les entrées, sinon on mesure une page à moitié révélée.
     await page.evaluate(async () => {
       for (let y = 0; y < document.body.scrollHeight; y += 500) {

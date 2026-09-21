@@ -804,21 +804,43 @@ body[data-page="home"] main>section{position:relative;z-index:2}
 .reader .rw b,.reader .rw i,.reader .rw em,.reader .rw strong{color:inherit}
 
 /* ── Le ruban qui file au rythme du scroll ── */
+/* Pas de border pleine largeur : un filet qui traverse tout l'écran est
+   exactement la cassure de fond que le site s'interdit — le détecteur
+   l'a relevée à ΔL* 1,5. Les deux filets sont des dégradés estompés
+   aux gouttières, comme .sec-seam. */
 .ribbon{position:relative;overflow:hidden;z-index:2;
   padding:clamp(16px,2.4vw,26px) 0;margin-top:clamp(28px,5vw,58px);
-  border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
   -webkit-mask-image:linear-gradient(90deg,transparent,black 9%,black 91%,transparent);
           mask-image:linear-gradient(90deg,transparent,black 9%,black 91%,transparent)}
+.ribbon::before,.ribbon::after{content:'';position:absolute;left:0;right:0;height:1px;z-index:1;
+  pointer-events:none;
+  background:linear-gradient(90deg,
+    rgb(from var(--hair) r g b / 0) 0%, var(--hair) 24%,
+    var(--hair) 76%, rgb(from var(--hair) r g b / 0) 100%)}
+.ribbon::before{top:0}
+.ribbon::after{bottom:0}
 .ribbon .track{display:flex;width:max-content;white-space:nowrap}
+/* Décor, pas du texte : le ruban est aria-hidden et son lettrage est
+   creux. En clair, le bronze à .38 était quasi invisible sur le papier —
+   il monte à .62 pour que le creux se lise comme une intention. */
 .ribbon .seg{font:700 clamp(20px,3.2vw,38px)/1.15 var(--font);letter-spacing:-.02em;
   color:transparent;-webkit-text-stroke:1px rgba(var(--glow),.38);padding-right:.44em}
+:root[data-theme="light"] .ribbon .seg{-webkit-text-stroke-color:rgba(var(--glow),.62)}
+@media (prefers-color-scheme:light){
+  :root:not([data-theme="dark"]) .ribbon .seg{-webkit-text-stroke-color:rgba(var(--glow),.62)}
+}
 .ribbon .seg b{-webkit-text-stroke:0;color:var(--gold);font-weight:700}
 .ribbon .seg span{-webkit-text-stroke:0;color:var(--gold-deep);padding:0 .3em;font-weight:400}
 
 /* ── La lumière qui traverse une carte pendant qu'elle traverse l'écran ── */
+/* background-repeat:no-repeat, sinon le dégradé se RÉPÈTE : la bande
+   claire réapparaît dans chaque carte quelle que soit sa position, et
+   comme ce calque est posé dans toutes les cartes de la page, l'écran
+   entier prend un voile. Mesuré : luminosité moyenne du fond 80,9 avec,
+   14,9 sans. C'est la même faute que sur le reflet des boutons. */
 .pass{position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:1;
   background:linear-gradient(100deg,transparent 41%,rgba(var(--glow),.11) 50%,transparent 59%);
-  background-size:320% 100%;background-position:210% 0}
+  background-repeat:no-repeat;background-size:320% 100%;background-position:210% 0}
 
 /* ── Le trait d'or sous les titres de section ── */
 .s-title,.svc-title,.h-lg,.h-xl,.h-md,.section-title,.legal-title,.prix-h1,
@@ -995,7 +1017,7 @@ body.lite .orbit .spin,body.lite .orbit .beadwrap,body.lite .orbit .halo{animati
 /* Le reflet qui balaye au survol. */
 .gloss{position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:1;opacity:0;
   background:linear-gradient(112deg,transparent 42%,rgba(var(--glow),.15) 50%,transparent 58%);
-  background-size:280% 100%;background-position:200% 0;
+  background-repeat:no-repeat;background-size:280% 100%;background-position:200% 0;
   transition:background-position 1.15s var(--ease-out),opacity .28s linear}
 
 @media (hover:hover) and (pointer:fine){
@@ -1147,10 +1169,16 @@ body.lite .orbit .spin,body.lite .orbit .beadwrap,body.lite .orbit .halo{animati
 .cta-btn .sh,.cta-btn .fill,.cta-btn .rip,
 .submit-btn .sh,.submit-btn .fill,.submit-btn .rip,
 .lf-btn .sh,.lf-btn .fill,.lf-btn .rip{position:absolute;pointer-events:none}
+/* background-repeat:no-repeat est indispensable. Sans lui le dégradé se
+   RÉPÈTE : la bande claire réapparaît dans le bouton quelle que soit la
+   position, y compris hors animation. Mesuré : le libellé tombait à
+   3,91:1 alors que le reflet était censé être hors cadre.
+   Et .28 était trop fort de toute façon : au passage du reflet le
+   libellé descendait sous AA. À .18 le pire moment donne 5,03:1. */
 .btn .sh,.btn-g .sh,.svc-cta .sh,.cta-btn .sh,.submit-btn .sh,.lf-btn .sh{
   inset:0;border-radius:inherit;z-index:0;
-  background:linear-gradient(105deg,transparent 40%,rgba(var(--spec),.28) 50%,transparent 60%);
-  background-size:300% 100%;background-position:200% 0}
+  background:linear-gradient(105deg,transparent 40%,rgba(var(--spec),.18) 50%,transparent 60%);
+  background-repeat:no-repeat;background-size:300% 100%;background-position:200% 0}
 .btn .fill,.btn-g .fill,.svc-cta .fill,.cta-btn .fill,.submit-btn .fill,.lf-btn .fill{
   left:var(--bx,50%);top:var(--by,50%);width:0;height:0;border-radius:50%;z-index:0;opacity:0;
   transform:translate(-50%,-50%);
