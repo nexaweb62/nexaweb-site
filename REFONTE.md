@@ -206,7 +206,6 @@ il n'est jamais cassé.
 | **La rivière d'or** | Un canevas WebGL fixe, dans le DOM des 22 pages, visible sur la seule page d'accueil. Le shader connaît le thème par `u_light` : en sombre les rives s'éteignent dans le noir, en clair c'est l'alpha seul qui les efface. |
 | **Le fil de progression** | Un trait d'or en haut de l'écran, tiré par `scroll(root)`. |
 | **La lecture mot par mot** | Chaque paragraphe est découpé ; le décalage entre les mots vaut `44 / nombre de mots`, plafonné, pour qu'un paragraphe court et un paragraphe long se traversent en un temps comparable. |
-| **Le ruban** | Une bande de lettres creuses au-dessus du pied de page, qui file avec le scroll et se décale selon son sens. |
 | **Les cartes** | Elles arrivent couchées à 72°, charnière sur l'arête haute, et se déplient. Dans une grille de trois, elles s'ouvrent en éventail — celle de gauche vient de la droite. Les listes verticales se collent les unes sous les autres. |
 | **Les titres** | Mot par mot, 46 ms d'écart. Le titre du hero fait exception (voir plus bas). |
 | **Les boutons** | Reflet en boucle, nappe d'or depuis le point d'entrée du curseur, flèche qui part, onde au clic. |
@@ -447,6 +446,21 @@ Retour présent, libellé, dans le cadre, non recouvert, à 44 px de cible,
 la langue et le thème atteignables **une seule fois** — ni absents ni en
 double — et que le Retour mène bien à la page précédente du site, ou à
 l'accueil quand il n'y en a pas.
+
+---
+
+## 2 quater. Le ruban a été retiré
+
+La bande de lettres creuses qui filait au-dessus du pied de page —
+« Sites sur mesure · Carvin · Hauts-de-France · NexaWeb · Design » — est
+supprimée, sur mobile comme sur ordinateur, à la demande du client.
+Retirée pour de bon, pas masquée : l'injection dans `scroll-fx.js`, le
+bloc `.ribbon` de `global.css`, l'animation `ribbonRun` et les deux
+replis (`@supports not`, `prefers-reduced-motion`) sont partis avec elle.
+
+`check:seams` n'a plus besoin de la masquer pour mesurer : son lettrage
+creux traversait les gouttières du détecteur, et c'était la seule raison
+de l'exclure.
 
 ---
 

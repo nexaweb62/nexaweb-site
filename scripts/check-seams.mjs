@@ -61,17 +61,11 @@ for (const theme of THEMES) {
        d'une ligne à l'autre, et le détecteur la lisait comme une
        cassure de ΔL* 19 là où l'œil ne voit qu'un dégradé (vérifié sur
        capture). Le grain est du bruit, même raison.
-       Le ruban est masqué pour la même raison, et pour une de plus :
-       son lettrage creux traverse les gouttières, justement là où ce
-       détecteur mesure. Ses rangées de pixels alternent glyphe et fond
-       (rgb 11 → 18,7 → 13 d'une ligne à l'autre, mesuré), ce qu'il
-       lisait comme une cassure. C'est du texte, pas une arête.
-
        Ce qu'ils cachent, eux, ne peut pas créer de cassure : ils sont
        continus sur toute la hauteur du document. */
     await page.evaluate(() => {
       const st = document.createElement('style');
-      st.textContent = '.river,.grain,.ribbon{display:none!important}';
+      st.textContent = '.river,.grain{display:none!important}';
       document.head.appendChild(st);
     }).catch(() => {});
 
