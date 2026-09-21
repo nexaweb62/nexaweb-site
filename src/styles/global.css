@@ -872,6 +872,29 @@ body[data-page="home"] main>section{position:relative;z-index:2}
   @keyframes ruleDraw{to{transform:scaleX(1)}}
 }
 
+/* ═══════════════════════════════════════════════════════════════════════
+   L'OR LIQUIDE — le dégradé coule dans le texte lui-même.
+   Le dégradé vit dans tokens.css (c'est une valeur de couleur) ; ici on
+   ne fait que le peindre dans les glyphes. Le repli existe : sans
+   background-clip:text, le texte redevient une couleur pleine plutôt
+   que transparent — donc invisible.
+   ═══════════════════════════════════════════════════════════════════════ */
+.liquid{
+  background-image:var(--liquid-grad);
+  background-size:300% 100%;background-position:0 0;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  /* L'italique déborde à droite : on élargit la zone peinte sans
+     décaler le texte. */
+  padding-right:.16em;margin-right:-.16em;padding-bottom:.10em;margin-bottom:-.10em;
+}
+@supports not ((background-clip:text) or (-webkit-background-clip:text)){
+  .liquid{color:var(--accent-text);background-image:none}
+}
+@media (prefers-reduced-motion:no-preference){
+  .liquid{animation:liquidFlow 17s linear infinite}
+  @keyframes liquidFlow{to{background-position:300% 0}}
+}
+
 /* ── Le penchant à la vitesse ──
    Un script mesure la vitesse de défilement et pose --sk (degrés,
    plafonné à ±1,35°) et --svn (-1 à 1) sur :root. */
@@ -975,7 +998,7 @@ body.lite .orbit .spin,body.lite .orbit .beadwrap,body.lite .orbit .halo{animati
 .plans-grid,.cards,.feat-grid,.who-grid,.team-grid,.stats-grid,.proc-grid,
 .steps,.constat-list,.cta-section,.s-who,.s-stats,.s-proc{perspective:1600px}
 
-.plan-card,.card,.feat-item,.who-card,.team-card,.constat-item,.step,.proc-step,
+.plan-card,.card,.feat-item,.who-card,.team-card,.constat-item,.step,
 .stat,.cta-inner,.launch-notice,.aside{
   /* Le repère de la lèvre et du reflet. Posé en CSS et pas en ligne par
      le script : un style en ligne bat toute règle, y compris celle qui
@@ -1002,15 +1025,15 @@ body.lite .orbit .spin,body.lite .orbit .beadwrap,body.lite .orbit .halo{animati
 @media (hover:hover) and (pointer:fine){
   .plan-card:hover>.gloss,.card:hover>.gloss,.who-card:hover>.gloss,.team-card:hover>.gloss,
   .stat:hover>.gloss,.feat-item:hover>.gloss,.aside:hover>.gloss,.cta-inner:hover>.gloss,
-  .constat-item:hover>.gloss,.step:hover>.gloss,.proc-step:hover>.gloss{
+  .constat-item:hover>.gloss,.step:hover>.gloss{
     opacity:1;background-position:-90% 0}
   .plan-card:hover,.card:hover,.who-card:hover,.team-card:hover,.stat:hover,
   .feat-item:hover,.aside:hover,.cta-inner:hover,.constat-item:hover,
-  .step:hover,.proc-step:hover{--ly:-7px;--sc:1.012}
+  .step:hover{--ly:-7px;--sc:1.012}
 }
 
 @supports (animation-timeline: view()){
-  .plan-card,.card,.feat-item,.who-card,.team-card,.constat-item,.step,.proc-step,
+  .plan-card,.card,.feat-item,.who-card,.team-card,.constat-item,.step,
   .stat,.cta-inner,.launch-notice,.aside{
     animation:cardFlight linear both;animation-timeline:view();
     animation-range:entry 0% exit 92%}
@@ -1105,7 +1128,7 @@ body.lite .orbit .spin,body.lite .orbit .beadwrap,body.lite .orbit .halo{animati
 
 @media (prefers-reduced-motion:reduce){
   /* Le tiroir reste ouvert : aucune carte ne bouge, rien ne reste caché. */
-  .plan-card,.card,.feat-item,.who-card,.team-card,.constat-item,.step,.proc-step,
+  .plan-card,.card,.feat-item,.who-card,.team-card,.constat-item,.step,
   .stat,.cta-inner,.launch-notice,.aside,.drwi,
   .plan-features li,.card li,.aside li,.feat-item li{
     animation:none!important;clip-path:none!important;opacity:1!important;transform:none!important}
@@ -1235,7 +1258,7 @@ body.grab .ring{background:rgb(from var(--gold) r g b / .14);
 body.press .ring{--rs:.78}
 @media (hover:hover) and (pointer:fine){
   body.pointer{cursor:none}
-  body.pointer a,body.pointer button,body.pointer .faq-q,body.pointer label{cursor:none}
+  body.pointer a,body.pointer button,body.pointer .qa .q,body.pointer label{cursor:none}
   body.pointer input,body.pointer textarea,body.pointer select{cursor:auto}
 }
 @media (hover:none),(pointer:coarse){.ring,.cur-dot,.lamp{display:none}}
@@ -1305,7 +1328,7 @@ body.lite .drwi,body.lite .plan-features li,body.lite .card li,
 body.lite .aside li,body.lite .feat-item li{
   animation:none!important;opacity:1!important;transform:none!important}
 body.lite .plan-card,body.lite .card,body.lite .feat-item,body.lite .who-card,
-body.lite .team-card,body.lite .constat-item,body.lite .step,body.lite .proc-step,
+body.lite .team-card,body.lite .constat-item,body.lite .step,
 body.lite .stat,body.lite .cta-inner,body.lite .launch-notice,body.lite .aside{
   animation-name:cardLite!important}
 @keyframes cardLite{
