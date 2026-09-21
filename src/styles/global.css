@@ -1140,8 +1140,14 @@ body.lite .orbit .spin,body.lite .orbit .beadwrap,body.lite .orbit .halo{animati
    La nappe part du point EXACT où le curseur est entré : --bx/--by sont
    posés au pointerenter.
    ═══════════════════════════════════════════════════════════════════════ */
+/* inline-flex, pas block : ce span enveloppe TOUT le contenu du bouton.
+   En block, une flèche qui est un <svg> (lui-même en display:block)
+   part à la ligne et le bouton passe de 44 à 56 px de haut — c'est ce
+   qui arrivait au seul bouton dont la flèche est dessinée et non
+   écrite, « Envoyer mon avis ». */
 .btn .t,.btn-g .t,.svc-cta .t,.cta-btn .t,.submit-btn .t,.lf-btn .t,
-.enter-btn .t,.nf-btn-home .t,.nf-btn-explore .t,.success-back .t{position:relative;z-index:2}
+.enter-btn .t,.nf-btn-home .t,.nf-btn-explore .t,.success-back .t{
+  position:relative;z-index:2;display:inline-flex;align-items:center;gap:9px}
 .btn .sh,.btn .fill,.btn .rip,
 .btn-g .sh,.btn-g .fill,.btn-g .rip,
 .svc-cta .sh,.svc-cta .fill,.svc-cta .rip,
@@ -1206,7 +1212,15 @@ body.lite .orbit .spin,body.lite .orbit .beadwrap,body.lite .orbit .halo{animati
              rgba(var(--glow),.09),rgba(var(--glow),.03) 42%,transparent 66%);
   transition:opacity .5s var(--curve)}
 body.pointer .lamp{opacity:1}
-.ring,.cur-dot{position:fixed;left:0;top:0;z-index:420;pointer-events:none;border-radius:50%;
+/* LE PLAFOND DU SITE. Le curseur système est masqué (body.pointer
+   {cursor:none}) et remplacé par cet anneau : s'il passe DERRIÈRE quoi
+   que ce soit, il ne reste plus rien à l'écran pour savoir où l'on
+   clique. C'est ce qui arrivait quand le menu plein écran s'ouvrait —
+   .cnav est en z-index:9000, l'anneau était à 420.
+   Il est en pointer-events:none, donc le monter tout en haut ne gêne
+   aucun clic. AUCUN élément du site ne doit dépasser cette valeur :
+   menu, modale, bandeau, rideau de transition — tout reste en dessous. */
+.ring,.cur-dot{position:fixed;left:0;top:0;z-index:2147483000;pointer-events:none;border-radius:50%;
   opacity:0;transition:opacity .35s linear}
 body.pointer .ring,body.pointer .cur-dot{opacity:1}
 .ring{width:34px;height:34px;margin:-17px 0 0 -17px;
