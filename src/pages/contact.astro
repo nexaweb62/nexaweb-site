@@ -13,7 +13,10 @@ html,body{overflow:hidden;height:100%}
 #globe-canvas:active{cursor:grabbing}
 
 /* Loading */
-#globe-loading{position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:var(--bg);transition:opacity .6s}
+/* pointer-events:none dès le départ : rien ici n'est cliquable, et un
+   voile d'attente qui avale les clics bloque toute la page — en-tête
+   compris — si jamais il ne se retire pas. */
+#globe-loading{position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:var(--bg);transition:opacity .6s;pointer-events:none}
 #globe-loading.out{opacity:0;pointer-events:none}
 .gl-spinner{width:28px;height:28px;border:2px solid var(--border-strong);border-top-color:var(--accent);border-radius:50%;animation:spin .75s linear infinite}
 .gl-loading-text{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-muted)}
@@ -86,12 +89,34 @@ html,body{overflow:hidden;height:100%}
 
   var canvas   = document.getElementById('globe-canvas');
   var ctx      = canvas.getContext('2d');
+  var voile    = document.getElementById('globe-loading');
+
+  function retirerVoile(){
+    if(!voile) return;
+    voile.classList.add('out');
+    setTimeout(function(){ if(voile) voile.remove(); voile = null; }, 700);
+  }
+
+  /* d3 vient d'un CDN. Bloqueur de publicité, proxy d'entreprise, réseau
+     coupé : il peut ne jamais arriver. Sans cette garde, la ligne
+     suivante lève une exception, le script s'arrête avant le fetch, et
+     le voile reste sur la page POUR TOUJOURS — la page devient un écran
+     mort. Le globe est un décor : son absence ne doit rien coûter. */
+  if (typeof d3 === 'undefined') {
+    if (window.console) console.warn('Contact — d3 indisponible : le globe est abandonné, la page reste utilisable.');
+    retirerVoile();
+    canvas.style.display = 'none';
+    return;
+  }
+
+  /* Deuxième filet : quoi qu'il arrive en dessous, le voile ne survit pas
+     à huit secondes. */
+  setTimeout(retirerVoile, 8000);
 
   /* Le globe lit ses couleurs dans les tokens : il suit la bascule de thème
      et aucune couleur n'est écrite en dur dans ce script. */
   var T = function(n){ return window.nwToken ? window.nwToken(n) : 'transparent'; };
   var A = function(a){ return window.nwTokenRgba ? window.nwTokenRgba('--accent', a) : 'transparent'; };
-  var loadEl   = document.getElementById('globe-loading');
   var pinEl    = document.getElementById('carvin-pin');
 
   var W, H, radius, DPR;
@@ -277,13 +302,11 @@ html,body{overflow:hidden;height:100%}
     .then(function(data){
       landFeatures=data;
       allDots=buildDots(data.features);
-      loadEl.classList.add('out');
-      setTimeout(function(){ loadEl.remove(); }, 700);
+      retirerVoile();
       rafId=requestAnimationFrame(tick);
     })
     .catch(function(){
-      loadEl.classList.add('out');
-      setTimeout(function(){ loadEl.remove(); }, 700);
+      retirerVoile();
       rafId=requestAnimationFrame(tick);
     });
 })();
