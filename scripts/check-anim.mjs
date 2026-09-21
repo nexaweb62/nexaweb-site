@@ -16,7 +16,11 @@
         voit jamais ;
      5. aucun emoji dans le HTML livré ;
      6. aucune couleur verte sur la page Tarifs ;
-     7. plus de canevas WebGL sur la page Rendez-vous.
+     7. plus de canevas WebGL sur la page Rendez-vous ;
+     8. rien au-dessus du curseur. Le curseur système est masqué et
+        remplacé par un anneau d'or : tout élément qui passe devant lui
+        laisse le visiteur sans rien pour savoir où il clique. C'est
+        arrivé avec le menu plein écran (z-index 9000 contre 420).
 
    Le point 4 se mesure APRÈS avoir parcouru la page de haut en bas puis
    être remonté : c'est ce qu'un visiteur fait, et c'est ce qui révèle
@@ -83,6 +87,21 @@ for (const theme of ['dark', 'light']) {
         out.over = document.documentElement.scrollWidth - document.documentElement.clientWidth;
         const rv = document.querySelector('.river');
         out.river = rv ? getComputedStyle(rv).opacity : 'absent';
+
+        /* Le plafond : l'anneau du curseur doit rester devant tout. */
+        const ring = document.querySelector('.ring');
+        out.plafond = [];
+        if (ring) {
+          const zr = parseInt(getComputedStyle(ring).zIndex, 10);
+          out.zRing = zr;
+          document.querySelectorAll('body *').forEach(el => {
+            if (el.classList.contains('ring') || el.classList.contains('cur-dot')) return;
+            const z = parseInt(getComputedStyle(el).zIndex, 10);
+            if (!isNaN(z) && z >= zr) {
+              out.plafond.push((el.id || el.className.toString().trim().split(/\s+/)[0] || el.tagName) + ' z=' + z);
+            }
+          });
+        }
         /* La rivière est présente dans le DOM de toutes les pages, par
            construction : on ne compte que les AUTRES canevas. */
         out.canvas = [...document.querySelectorAll('canvas')].filter(c => c.id !== 'river').length;
@@ -149,6 +168,9 @@ for (const theme of ['dark', 'light']) {
       if (res.over !== 0) fails.push(`${tag}  débordement horizontal : ${res.over}px`);
       const attendu = path === '/' ? '1' : '0';
       if (res.river !== attendu) fails.push(`${tag}  rivière : opacité ${res.river}, attendu ${attendu}`);
+      for (const e of [...new Set(res.plafond || [])]) {
+        fails.push(`${tag}  ${e} passe devant le curseur (z=${res.zRing})`);
+      }
       if (path === '/rendez-vous' && res.canvas > 0) {
         fails.push(`${tag}  la page Rendez-vous porte encore ${res.canvas} canevas`);
       }

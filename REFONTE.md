@@ -464,6 +464,106 @@ de l'exclure.
 
 ---
 
+## 2 quinquies. Le piège du style scopé
+
+Trois bugs signalés sur le site en ligne, dont deux partagent la même
+cause — et cette cause en cachait deux autres que personne n'avait vues.
+
+### La page Avis : cinq étoiles de 1 152 px
+
+Astro compile un `<style>` de composant en `.ico-star[data-astro-cid-…]`
+et ne pose cet attribut **que sur les éléments écrits dans le template**.
+Le bloc « aucun avis pour l'instant » est injecté en JavaScript dans
+`#reviews-container` : ses éléments n'ont pas l'attribut, aucune des
+règles ne s'applique, et un `<svg>` sans taille prend toute la largeur
+de son parent.
+
+Mesuré avant correctif : cinq étoiles à **1 152 px** de large sur
+ordinateur, page à **8 417 px** de haut au lieu de 2 800. Après :
+28 px et 2 955 px.
+
+Le remède : sortir ces règles du scope avec `:global()`, ancrées sur le
+conteneur pour ne rien laisser fuir — `#reviews-container :global(.ico-star)`.
+Appliqué à **tout** ce que ce script fabrique, pas seulement à l'état
+vide : les cartes d'avis, quand il y en aura, seraient tombées dans le
+même trou. Vérifié en injectant une fausse carte dans le conteneur,
+mesurée, puis retirée. Et l'étoile injectée porte désormais
+`width="24" height="24"` dans son HTML : un filet, pour que l'accident
+coûte 24 px et non l'écran entier.
+
+### La même chose sur Tarifs, jamais signalée
+
+`.plan-spotlight` — la nappe lumineuse qui suit le curseur sur les
+cartes de prix — est elle aussi injectée en JavaScript, et ses deux
+règles étaient scopées. Elle ne fonctionnait donc **pas du tout** :
+mesurée `position:static`, `z-index:auto`, `::after` sans `content`.
+Personne ne l'avait remarqué parce qu'un effet absent ne casse rien.
+
+### Et une régression que le correctif a créée
+
+Une fois la nappe stylée, elle s'est mise à briller en permanence. Le
+tiroir de `scroll-fx.js` parcourt les enfants d'une carte pour les
+sortir ligne après ligne ; il prenait ce calque pour une ligne de
+contenu et lui imposait son opacité. Tant que la nappe n'avait aucun
+style, c'était sans effet. Le tiroir ignore maintenant ce qui est hors
+flux — `position:absolute` ou `fixed` — et ce qui est `aria-hidden` :
+un calque posé par-dessus n'est pas une ligne de texte.
+
+```bash
+npm run check:scoped
+```
+
+Aucun navigateur, aucun serveur. Il recoupe, fichier par fichier, les
+classes qu'un `<style>` scopé atteint — le **dernier compound** du
+sélecteur, celui qu'Astro attribue — contre les classes portées par un
+élément que le script du même fichier **fabrique** : un `class="…"`
+dans une chaîne, ou une variable issue de `createElement`. Un
+`classList.add('show')` sur un élément du template n'est pas un piège :
+l'élément garde son attribut, la règle s'applique. C'est cette
+distinction qui sépare les trois vrais cas des seize faux.
+
+Limite assumée : une seule règle globalisée suffit à considérer la
+classe couverte. Ce qu'il attrape — et c'est le scénario de régression
+réel — c'est une classe injectée dont aucune règle n'est sortie du
+scope. Vérifié en ajoutant un `.rv-badge` neuf, stylé dans le scope et
+injecté en `innerHTML` : relevé du premier coup.
+
+## 2 sexies. Le curseur doit être le calque le plus haut
+
+Le curseur système est masqué (`body.pointer{cursor:none}`) et remplacé
+par un anneau d'or. L'anneau était en `z-index:420`, le menu plein
+écran en `9000` : menu ouvert, le curseur système était caché et
+l'anneau passait dessous — **plus rien à l'écran** pour savoir où l'on
+clique.
+
+L'anneau est maintenant à `2147483000`, et une règle est gravée à côté :
+aucun élément du site ne doit dépasser cette valeur. `check:anim` la
+fait respecter sur les 21 pages, dans les deux thèmes.
+
+Le premier contrôle écrit pour le vérifier était complaisant, et il a
+fallu le prendre en défaut : survoler une entrée du menu la rend dorée
+d'elle-même (`.cnav-link:hover{background:var(--accent)}`), donc
+chercher des pixels dorés sur une entrée survolée passait **9/9 même
+avec l'anneau enterré à 420**. Le contrôle gare désormais le curseur sur
+une zone vide du voile, où le seul or possible est l'anneau : 0 pixel
+doré avant, 76 après.
+
+## 2 septies. Le span du bouton restait en block
+
+Le script des boutons enveloppe leur contenu dans un `<span class="t">`,
+laissé en `display:block`. Les flèches du site sont des caractères, qui
+restent en ligne — sauf une, dessinée en `<svg>` (lui-même en
+`display:block`) : « Envoyer mon avis » partait à la ligne et le bouton
+passait de 44 à 56 px.
+
+`.t` est maintenant en `inline-flex`. Mesuré après correctif : les
+76 `.btn` du site font tous 44 px, les 30 `.btn-g` aussi, et « Envoyer
+mon avis » tient sur une ligne de 21 px. Les autres familles gardent
+leur taille propre — `.cta-btn` 56, `.svc-cta` 52, `.submit-btn` 50,
+`.lf-btn` 48 — mais chacune n'a qu'une seule hauteur, sans exception.
+
+---
+
 ## 3. Garde-fous exécutables
 
 ```bash
@@ -474,6 +574,7 @@ NO_BACKDROP=1 npm run check:glass  # les mêmes, sans backdrop-filter
 npm run check:seams                # cassures du fond, ligne de pixels par ligne
 npm run check:anim                 # la checklist du mouvement (site lancé)
 npm run check:header               # l'en-tête à 6 largeurs × 2 thèmes (site lancé)
+npm run check:scoped               # le piège du style scopé (ni serveur ni navigateur)
 npm run build:assets               # favicon, icônes, OG, textures — depuis les tokens
 npm run build:images               # AVIF/WebP/JPEG + srcset + budgets
 ```

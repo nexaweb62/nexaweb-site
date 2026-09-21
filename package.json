@@ -20,7 +20,8 @@
     "check:seams": "node scripts/check-seams.mjs",
     "check:glass": "node scripts/check-glass.mjs",
     "check:anim": "node scripts/check-anim.mjs",
-    "check:header": "node scripts/check-header.mjs"
+    "check:header": "node scripts/check-header.mjs",
+    "check:scoped": "node scripts/check-scoped.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^6.0.4",
