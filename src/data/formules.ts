@@ -28,17 +28,19 @@ export const REFONTE = {
 export const REFONTE_PRIX = prix(REFONTE.prixDepart);          // « 490 € »
 export const REFONTE_DELAI = `${REFONTE.delaiSemaines} semaines`;
 
-/** Les formules qui ont une pastille de budget, par prix croissant.
+/** Les trois formules, par prix croissant. Chacune a sa pastille de
+ *  budget sur la page Devis.
  *  L'ordre du tableau est l'ordre d'affichage : c'est lui qui fait foi,
  *  pas le markup. */
 export const FORMULES = [
   { cle: 'refonte',    budget: `Refonte — dès ${REFONTE_PRIX}` },
+  { cle: 'vitrine',    budget: `Vitrine Pro — 1 000 €` },
   { cle: 'entreprise', budget: `Entreprise — 1 200 à 3 100 €` },
 ] as const;
 
 /** Depuis une carte tarif vers la page Devis : quel type de site
- *  pré-sélectionner. Vitrine Pro n'a pas de pastille de budget — seul le
- *  type est rempli, aucune pastille n'est cochée. */
+ *  pré-sélectionner. « entreprise » retombe sur le type vitrine :
+ *  aucun type de la liste ne lui correspond exactement. */
 export const TYPE_PAR_FORMULE: Record<string, string> = {
   refonte:    'refonte',
   vitrine:    'vitrine',

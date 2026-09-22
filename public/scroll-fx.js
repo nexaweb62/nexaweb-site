@@ -119,7 +119,7 @@
 
   /* ── 5. Les chiffres montent quand la carte entre dans l'écran ──────
      Le compteur du site est piloté par des attributs (data-count). Les
-     prix, eux, sont du texte libre : « 100 € — 200 € », « 1 200 € ». On
+     prix, eux, sont du texte libre : « dès 490 € », « 1 200 € ». On
      les lit, on garde les littéraux (€, tiret, espaces fines) et on ne
      fait monter que les nombres.
 

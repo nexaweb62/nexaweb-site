@@ -327,7 +327,6 @@ import { REFONTE_PRIX } from '../data/formules';
               <select id="type" name="type" required>
                 <option value="" disabled selected>Sélectionner…</option>
                 <option value="vitrine">Site vitrine</option>
-                <option value="portfolio">Portfolio</option>
                 <option value="ecommerce">Boutique e-commerce</option>
                 <option value="blog">Blog / Magazine</option>
                 <option value="app">Application web</option>
@@ -350,6 +349,7 @@ import { REFONTE_PRIX } from '../data/formules';
               <label><span data-i18n="budget">Budget estimé</span></label>
               <div class="budget-pills" role="radiogroup" aria-label="Budget estimé">
                 <label class="budget-pill"><input type="radio" name="budget" value="refonte"><span>Refonte — dès {REFONTE_PRIX}</span></label>
+                <label class="budget-pill"><input type="radio" name="budget" value="vitrine"><span>Vitrine Pro — 1&#8239;000&nbsp;€</span></label>
                 <label class="budget-pill"><input type="radio" name="budget" value="entreprise"><span>Entreprise — 1&#8239;200 à 3&#8239;100&nbsp;€</span></label>
               </div>
             </div>
@@ -458,8 +458,9 @@ import { REFONTE_PRIX } from '../data/formules';
   });
 
   /* ── Depuis une carte tarif : /devis?formule=refonte ──
-     La pastille est cochée et le type de site pré-rempli. Vitrine Pro
-     n'a pas de pastille : seul le type l'est, aucune pastille cochée.
+     La pastille est cochée et le type de site pré-rempli. Les trois
+     formules ont leur pastille ; « entreprise » retombe sur le type
+     vitrine, faute de type qui lui corresponde.
      Une valeur inventée ne trouve simplement rien — c'est voulu. */
   var TYPE = { refonte:'refonte', vitrine:'vitrine', entreprise:'vitrine' };
   var f = new URLSearchParams(location.search).get('formule');
