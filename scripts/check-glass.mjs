@@ -46,7 +46,7 @@ const SUPPORTS_NOT = '@supports not ((-webkit-backdrop-filter:blur(1px)) or (bac
 
 const SEL = [
   '.btn', '.btn-g', '.menu-btn', '.theme-sel', '.login-btn', '.hdr-back',
-  '.cnav-close', '.lang-sel', '.enter-btn', '.submit-btn', '.lf-btn',
+  '.cnav-close', '.lang-sel', '.submit-btn', '.lf-btn',
   '.lf-social-btn', '.lf-reset-btn', '.lf-lang-btn', '.success-back',
   '.nf-btn-home', '.nf-btn-explore', '.tc-btn',
 ].join(',');
@@ -86,7 +86,7 @@ for (const theme of ['dark', 'light']) {
     // glyphe ». Un libellé parfaitement lisible tombait ainsi à 1.24:1.
     const ctx = await browser.newContext({ viewport: vp, colorScheme: theme, deviceScaleFactor: 1, reducedMotion: 'reduce' });
     await ctx.addInitScript(t => {
-      try { localStorage.setItem('nw-theme', t); sessionStorage.setItem('nxa-ld', '1'); } catch (e) {}
+      try { localStorage.setItem('nw-theme', t); } catch (e) {}
     }, theme);
     const page = await ctx.newPage();
     if (NO_BACKDROP) {
@@ -206,71 +206,6 @@ for (const theme of ['dark', 'light']) {
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════════════
-   L'ÉCRAN D'ACCUEIL — LE PIRE FOND DU SITE
-   Le champ de soie passe du noir à l'or plein derrière la marque et le
-   bouton « Entrer ». Aucun autre contrôle n'a un fond pareil, et aucun
-   des passages ci-dessus ne le voyait : ils sautent l'écran d'accueil en
-   posant nxa-ld dans sessionStorage.
-
-   Pour mesurer le pire cas et pas un instant du shader, on remplace le
-   canvas par un aplat de --accent : c'est la plus claire des quatre
-   couleurs que le shader peut produire en sombre, la plus sombre en
-   clair. Ce que le voile radial et le verre en font est alors mesuré sur
-   les pixels réels, flou compris.
-   ═══════════════════════════════════════════════════════════════════════ */
-const introFails = [], introAll = [];
-for (const theme of ['dark', 'light']) {
-  for (const vp of VIEWPORTS) {
-    const ctx = await browser.newContext({ viewport: vp, colorScheme: theme, deviceScaleFactor: 1, reducedMotion: 'reduce' });
-    await ctx.addInitScript(t => { try { localStorage.setItem('nw-theme', t); } catch (e) {} }, theme);
-    const page = await ctx.newPage();
-    await page.goto(BASE + '/', { waitUntil: 'load' }).catch(() => {});
-    await page.waitForTimeout(900);
-    await page.addStyleTag({ content: '#nucleus-cv{display:none!important}.ld-nucleus-wrap{background:var(--accent)!important}' });
-    await page.waitForTimeout(250);
-
-    for (const sel of ['.enter-btn span', '.ld-brand', '.ld-brand b']) {
-      const loc = page.locator(sel).first();
-      if (!(await loc.count())) { continue; }
-      const info = await loc.evaluate(el => {
-        const cs = getComputedStyle(el);
-        const px = parseFloat(cs.fontSize);
-        return { ink: cs.color, txt: el.textContent.trim().slice(0, 24),
-                 min: (px >= 24 || (px >= 18.66 && parseInt(cs.fontWeight, 10) >= 700)) ? 3 : 4.5 };
-      }).catch(() => null);
-      if (!info) continue;
-      let A, B;
-      try {
-        A = await loc.screenshot({ timeout: 5000 });
-        await page.addStyleTag({ content: `${sel}{color:transparent!important;-webkit-text-fill-color:transparent!important}` });
-        await page.waitForTimeout(80);
-        B = await loc.screenshot({ timeout: 5000 });
-      } catch { continue; }
-      const a = await sharp(A).removeAlpha().raw().toBuffer({ resolveWithObject: true });
-      const b2 = await sharp(B).removeAlpha().raw().toBuffer({ resolveWithObject: true });
-      if (a.info.width !== b2.info.width || a.info.height !== b2.info.height) continue;
-      const ink = parse(info.ink); if (!ink) continue;
-      let wr = Infinity, wbg = null, glyphs = 0;
-      for (let i = 0; i < a.info.width * a.info.height; i++) {
-        const o = i * 3;
-        const d = Math.abs(a.data[o] - b2.data[o]) + Math.abs(a.data[o+1] - b2.data[o+1]) + Math.abs(a.data[o+2] - b2.data[o+2]);
-        if (d < GLYPH_D) continue;
-        glyphs++;
-        const bg = [b2.data[o], b2.data[o+1], b2.data[o+2]];
-        const r = ratio(ink, bg);
-        if (r < wr) { wr = r; wbg = bg; }
-      }
-      if (glyphs < MIN_GLYPH || !isFinite(wr)) continue;
-      const rec = { theme, vp: vp.width, sel, txt: info.txt, ratio: +wr.toFixed(2), min: info.min, bg: wbg, ink };
-      introAll.push(rec);
-      if (wr < info.min) introFails.push(rec);
-      // On remet l'encre pour la mesure suivante.
-      await page.addStyleTag({ content: `${sel}{color:${info.ink}!important;-webkit-text-fill-color:${info.ink}!important}` });
-    }
-    await ctx.close();
-  }
-}
 await browser.close();
 
 const fails = all.filter(r => r.ratio < r.min);
@@ -282,18 +217,12 @@ for (const w of all.slice(0, 10)) {
   console.log(`  [${w.theme} ${w.vp}] ${w.path} ${w.root} ${w.ratio}:1 / ${w.min} — rgb(${w.ink}) sur rgb(${w.bg}) — « ${w.txt} »`);
 }
 
-console.log(`\nÉcran d'accueil, fond forcé à --accent (le pire que le shader produise) — ${introAll.length} mesures :`);
-introAll.sort((a, b) => a.ratio / a.min - b.ratio / b.min);
-for (const w of introAll) {
-  console.log(`  [${w.theme} ${w.vp}] ${w.sel}  ${w.ratio}:1 / ${w.min} — rgb(${w.ink}) sur rgb(${w.bg}) — « ${w.txt} »`);
-}
-fails.push(...introFails);
 if (!fails.length) { console.log('\n✓ Aucun libellé de bouton sous son seuil WCAG AA.'); process.exit(0); }
 console.log(`\n✗ ${fails.length} sous le seuil :`);
 const seen = new Set();
 for (const f of fails) {
-  const k = f.theme + (f.path || 'intro') + (f.root || f.sel) + f.txt + f.ratio;
+  const k = f.theme + f.path + f.root + f.txt + f.ratio;
   if (seen.has(k)) continue; seen.add(k);
-  console.log(`  [${f.theme} ${f.vp}] ${f.path || "accueil (écran d'intro)"}  ${f.root || f.sel}  ${f.ratio}:1 < ${f.min}:1  « ${f.txt} »  encre rgb(${f.ink}) sur rgb(${f.bg})`);
+  console.log(`  [${f.theme} ${f.vp}] ${f.path}  ${f.root}  ${f.ratio}:1 < ${f.min}:1  « ${f.txt} »  encre rgb(${f.ink}) sur rgb(${f.bg})`);
 }
 process.exit(1);

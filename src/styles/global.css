@@ -124,6 +124,15 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
 .h-sm{font-size:var(--fs-sub);    letter-spacing:var(--ls-sub);    line-height:var(--lh-sub)}
 .h-xl em,.h-lg em,.cta-hl em{font-style:normal;font-weight:var(--w-semi);color:var(--accent-text)}
 
+/* « Hauts-de-France » ne doit pas se couper en « Hauts-de- » / « France ».
+   La regle vit ici et non dans le style scope de la page : i18n.js repose
+   le titre par innerHTML au changement de langue, et ce qui est fabrique en
+   JavaScript ne porte pas l'attribut de scope d'Astro.
+   Sous 360px le mot ne tient pas sur une ligne (317px de texte pour 280px
+   de place) : on rend alors la coupure au trait d'union, qui vaut mieux
+   qu'un debordement. */
+@media (min-width:360px){ .h-xl .nb,.hero-hl .nb{white-space:nowrap} }
+
 .body{
   font-size:var(--fs-body);font-weight:var(--w-reg);
   letter-spacing:var(--ls-body);line-height:var(--lh-body);
@@ -592,7 +601,7 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
 /* ── Le verre lui-même ── */
 .btn,.btn-g,
 .menu-btn,.theme-sel,.login-btn,.hdr-back,.cnav-close,.lang-sel,
-.enter-btn,.submit-btn,.lf-btn,.lf-social-btn,.lf-reset-btn,.lf-lang-btn,
+.submit-btn,.lf-btn,.lf-social-btn,.lf-reset-btn,.lf-lang-btn,
 .success-back,.nf-btn-home,.nf-btn-explore,.svc-cta,.cta-btn,.c-btn{
   position:relative;isolation:isolate;border:0;
   -webkit-backdrop-filter:blur(22px) saturate(180%);
@@ -604,7 +613,7 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
 .btn::before,.btn-g::before,
 .menu-btn::before,.theme-sel::before,.login-btn::before,.hdr-back::before,
 .cnav-close::before,.lang-sel::before,
-.enter-btn::before,.submit-btn::before,.lf-btn::before,
+.submit-btn::before,.lf-btn::before,
 .lf-social-btn::before,.lf-reset-btn::before,.lf-lang-btn::before,
 .success-back::before,.nf-btn-home::before,.nf-btn-explore::before,
 .svc-cta::before,.cta-btn::before,.c-btn::before{
@@ -613,7 +622,7 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
              inset 0 -1px 0 var(--glass-edge-b),
              inset 0 0 0 1px var(--glass-edge-r);
 }
-.btn > *,.btn-g > *,.enter-btn > *,.submit-btn > *,.lf-btn > *,
+.btn > *,.btn-g > *,.submit-btn > *,.lf-btn > *,
 .svc-cta > *,.cta-btn > *,.c-btn > *{position:relative;z-index:1}
 
 /* ── Teinte NEUTRE ── */
@@ -632,20 +641,20 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
 }
 
 /* ── Teinte OR — l'action principale ── */
-.btn,.cnav-close,.enter-btn,.submit-btn,.lf-btn,.nf-btn-home,.svc-cta,.cta-btn{
+.btn,.cnav-close,.submit-btn,.lf-btn,.nf-btn-home,.svc-cta,.cta-btn{
   background-color:var(--glass-scrim);
   background-image:linear-gradient(180deg,var(--glass-gold-a),var(--glass-gold-b));
   color:var(--glass-gold-ink);
   box-shadow:var(--glass-sh-gold);
 }
-.btn::before,.cnav-close::before,.enter-btn::before,
+.btn::before,.cnav-close::before,
 .submit-btn::before,.lf-btn::before,.nf-btn-home::before,
 .svc-cta::before,.cta-btn::before{
   box-shadow:inset 0 1px 0 var(--glass-gedge-t),
              inset 0 -1px 0 var(--glass-gedge-b),
              inset 0 0 0 1px var(--glass-gedge-r);
 }
-.btn:hover,.cnav-close:hover,.enter-btn:hover,
+.btn:hover,.cnav-close:hover,
 .submit-btn:hover,.lf-btn:hover,.nf-btn-home:hover,
 .svc-cta:hover,.cta-btn:hover{
   background-image:linear-gradient(180deg,var(--glass-gold-ah),var(--glass-gold-bh));
@@ -653,16 +662,16 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
 }
 
 /* ── Le relief au survol : 2 px, rien de plus. ── */
-.btn:hover,.btn-g:hover,.enter-btn:hover,.submit-btn:hover,.lf-btn:hover,
+.btn:hover,.btn-g:hover,.submit-btn:hover,.lf-btn:hover,
 .nf-btn-home:hover,.nf-btn-explore:hover,.success-back:hover,
 .svc-cta:hover,.cta-btn:hover{transform:translateY(-2px)}
-.btn:active,.btn-g:active,.enter-btn:active,.submit-btn:active,.lf-btn:active{transform:translateY(0)}
+.btn:active,.btn-g:active,.submit-btn:active,.lf-btn:active{transform:translateY(0)}
 
 /* ── Repli obligatoire : sans flou, on repasse en opaque plutôt qu'en
       texte illisible posé sur un fond transparent. ── */
 @supports not ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))){
-  .btn,.cnav-close,.enter-btn,.submit-btn,.lf-btn,.nf-btn-home,.svc-cta,.cta-btn,
-  .btn:hover,.cnav-close:hover,.enter-btn:hover,.submit-btn:hover,.lf-btn:hover,
+  .btn,.cnav-close,.submit-btn,.lf-btn,.nf-btn-home,.svc-cta,.cta-btn,
+  .btn:hover,.cnav-close:hover,.submit-btn:hover,.lf-btn:hover,
   .nf-btn-home:hover,.svc-cta:hover,.cta-btn:hover{
     background-image:none;background-color:var(--glass-fb-gold);color:var(--glass-fb-gold-ink);
   }
@@ -1176,7 +1185,7 @@ body.lite .orbit .spin,body.lite .orbit .beadwrap,body.lite .orbit .halo{animati
    qui arrivait au seul bouton dont la flèche est dessinée et non
    écrite, « Envoyer mon avis ». */
 .btn .t,.btn-g .t,.svc-cta .t,.cta-btn .t,.submit-btn .t,.lf-btn .t,
-.enter-btn .t,.nf-btn-home .t,.nf-btn-explore .t,.success-back .t{
+.nf-btn-home .t,.nf-btn-explore .t,.success-back .t{
   position:relative;z-index:2;display:inline-flex;align-items:center;gap:9px}
 .btn .sh,.btn .fill,.btn .rip,
 .btn-g .sh,.btn-g .fill,.btn-g .rip,

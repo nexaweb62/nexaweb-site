@@ -49,7 +49,7 @@ for (const theme of THEMES) {
       /* Décors figés : une cassure structurelle est la même dans les deux
          modes, mais seul celui-ci est mesurable de façon déterministe. */
       reducedMotion: 'reduce' });
-    await ctx.addInitScript(t => { try { localStorage.setItem('nw-theme', t); sessionStorage.setItem('nxa-ld', '1'); } catch (e) {} }, theme);
+    await ctx.addInitScript(t => { try { localStorage.setItem('nw-theme', t); } catch (e) {} }, theme);
     const page = await ctx.newPage();
     await page.goto(BASE + path, { waitUntil: 'networkidle' }).catch(() => {});
 

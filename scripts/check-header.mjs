@@ -56,7 +56,7 @@ for (const theme of ['dark', 'light']) {
       reducedMotion: 'reduce',
     });
     await ctx.addInitScript(t => {
-      try { localStorage.setItem('nw-theme', t); sessionStorage.setItem('nxa-ld', '1'); } catch (e) {}
+      try { localStorage.setItem('nw-theme', t); } catch (e) {}
     }, theme);
     const page = await ctx.newPage();
 
@@ -140,7 +140,6 @@ for (const theme of ['dark', 'light']) {
    « page précédente » doit ramener à la page précédente DE CE SITE, et
    à l'accueil quand il n'y en a pas. */
 const ctx = await navigateur.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
-await ctx.addInitScript(() => { try { sessionStorage.setItem('nxa-ld', '1'); } catch (e) {} });
 const page = await ctx.newPage();
 
 await page.goto(BASE + '/tarifs', { waitUntil: 'domcontentloaded' });

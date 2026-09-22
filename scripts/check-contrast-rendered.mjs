@@ -21,7 +21,7 @@ let total = 0, fails = [];
 
 for (const theme of ['dark', 'light']) {
   const ctx = await b.newContext({ viewport: { width: 1440, height: 900 }, colorScheme: theme });
-  await ctx.addInitScript(t => { try { localStorage.setItem('nw-theme', t); sessionStorage.setItem('nxa-ld','1'); } catch(e){} }, theme);
+  await ctx.addInitScript(t => { try { localStorage.setItem('nw-theme', t); } catch(e){} }, theme);
   const p = await ctx.newPage();
 
   for (const path of PAGES) {

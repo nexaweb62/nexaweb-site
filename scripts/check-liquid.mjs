@@ -71,7 +71,7 @@ for (const [chemin, sel, nom] of CIBLES) {
       viewport: { width: 1280, height: 900 }, colorScheme: theme, reducedMotion: 'reduce',
     });
     await ctx.addInitScript(t => {
-      try { localStorage.setItem('nw-theme', t); sessionStorage.setItem('nxa-ld', '1'); } catch (e) {}
+      try { localStorage.setItem('nw-theme', t); } catch (e) {}
     }, theme);
     const page = await ctx.newPage();
     page.setDefaultNavigationTimeout(60000);
