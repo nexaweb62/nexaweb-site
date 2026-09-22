@@ -20,7 +20,20 @@
   (function () {
     var cv = document.getElementById('river');
     if (!cv) return;
+
+    /* La riviere ne coule que sur l'accueil : partout ailleurs son
+       opacite est exactement 0 (global.css). Compiler un shader et
+       repeindre le plein ecran soixante fois par seconde derriere un
+       calque invisible, c'etaient vingt pages sur vingt-et-une qui
+       payaient pour rien. On sort avant de demander le contexte : pas
+       de contexte WebGL, pas de calque, pas de boucle. */
+    if (document.body.getAttribute('data-page') !== 'home') {
+      cv.style.display = 'none';
+      return;
+    }
+
     var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var petit = matchMedia('(max-width:820px)');
     var gl = null;
     try { gl = cv.getContext('webgl', { antialias: false, alpha: true, premultipliedAlpha: false }); } catch (e) {}
     if (!gl) { cv.style.display = 'none'; return; }
@@ -108,7 +121,9 @@
 
     var dpr = 1, mx = -9999, my = -9999, tmx = -9999, tmy = -9999;
     function size() {
-      dpr = Math.min(devicePixelRatio || 1, 1.4);
+      /* 1,4 sur grand ecran, 1,2 sur telephone : le shader peint autant de
+         pixels que le carre de ce nombre, 1,2 en retire 27 %. */
+      dpr = Math.min(devicePixelRatio || 1, petit.matches ? 0.8 : 1.4);
       var w = cv.clientWidth || 1, h = cv.clientHeight || 1;
       cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
       gl.viewport(0, 0, cv.width, cv.height); gl.uniform2f(uRes, cv.width, cv.height);
@@ -124,7 +139,36 @@
     /* La vitesse de défilement accélère le courant — lue image par image,
        donc sans aucun écouteur de scroll. */
     var lastY = scrollY, vel = 0, phase = 0, last = 0;
+
+    /* Le courant est lent : trente images par seconde le rendent aussi
+       bien que soixante, pour moitie moins de travail. Reserve aux petits
+       ecrans et au mode leger, ou le cout se voit. */
+    function minDelta() {
+      return (petit.matches || document.body.classList.contains('lite')) ? 31 : 0;
+    }
+
+    var visible = true, tourne = false;
+    function reveiller() {
+      if (tourne || reduce || document.hidden || !visible) return;
+      tourne = true; last = 0; requestAnimationFrame(frame);
+    }
+    /* A dire franchement : ce canevas est en position fixed et couvre tout
+       l'ecran, l'observateur ne repondra donc jamais « hors champ » tant
+       que la mise en page ne change pas. Il reste parce qu'il ne coute
+       rien et qu'il ferait son travail le jour ou la riviere cesserait
+       d'etre fixe. Ce qui arrete vraiment la boucle ici, c'est la sortie
+       hors accueil plus haut et la mise en veille de l'onglet ci-dessous. */
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function (e) {
+        visible = e[0].isIntersecting; reveiller();
+      }, { rootMargin: '120px' }).observe(cv);
+    }
+    document.addEventListener('visibilitychange', reveiller);
+
     function frame(ms) {
+      if (!reduce && (document.hidden || !visible)) { tourne = false; return; }
+      var md = minDelta();
+      if (md && last && ms - last < md) { requestAnimationFrame(frame); return; }
       var dt = last ? Math.min((ms - last) / 1000, 0.05) : 0.016; last = ms;
       if (reduce) {
         gl.uniform1f(uT, 9.0); gl.uniform2f(uM, -9999, -9999);
@@ -143,7 +187,8 @@
       gl.drawArrays(gl.TRIANGLES, 0, 3);
       requestAnimationFrame(frame);
     }
-    size(); requestAnimationFrame(frame);
+    size();
+    if (reduce) requestAnimationFrame(frame); else { tourne = true; requestAnimationFrame(frame); }
     addEventListener('resize', function () { size(); if (reduce) requestAnimationFrame(frame); }, { passive: true });
     /* Mouvement réduit : une seule image, redessinée quand le thème change. */
     document.addEventListener('nw-theme', function () { if (reduce) requestAnimationFrame(frame); });

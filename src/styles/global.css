@@ -598,14 +598,22 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
    .lang-opt, .lf-eye, .star-btn. Leur fond est le verre du parent.
    ═══════════════════════════════════════════════════════════════════════ */
 
-/* ── Le verre lui-même ── */
+/* ── Le verre lui-même ──
+   Plus de backdrop-filter ici. Il obligeait le navigateur a relire et
+   reflouter le fond derriere chaque bouton a chaque image, une
+   cinquantaine de fois par page. Mesure avant de le retirer : sur les
+   boutons du hero, sur le bouton fantome et sur les appels a l'action
+   de la page Tarifs, l'image change de 0,2 a 0,5 niveau sur 255 en
+   moyenne — invisible. Le voile de fond (--glass-scrim) et le degrade
+   portaient deja presque tout ; le flou ne travaillait que sur un fond
+   deja uniforme.
+   Le flou reste la ou il se voit : l'en-tete collant et le panneau du
+   menu ouvert, qui passent au-dessus du contenu en defilement. ── */
 .btn,.btn-g,
 .menu-btn,.theme-sel,.login-btn,.hdr-back,.cnav-close,.lang-sel,
 .submit-btn,.lf-btn,.lf-social-btn,.lf-reset-btn,.lf-lang-btn,
 .success-back,.nf-btn-home,.nf-btn-explore,.svc-cta,.cta-btn,.c-btn{
   position:relative;isolation:isolate;border:0;
-  -webkit-backdrop-filter:blur(22px) saturate(180%);
-          backdrop-filter:blur(22px) saturate(180%);
 }
 
 /* ── L'arête de lumière : c'est elle qui fait lire le verre comme du
@@ -667,22 +675,10 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
 .svc-cta:hover,.cta-btn:hover{transform:translateY(-2px)}
 .btn:active,.btn-g:active,.submit-btn:active,.lf-btn:active{transform:translateY(0)}
 
-/* ── Repli obligatoire : sans flou, on repasse en opaque plutôt qu'en
-      texte illisible posé sur un fond transparent. ── */
-@supports not ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))){
-  .btn,.cnav-close,.submit-btn,.lf-btn,.nf-btn-home,.svc-cta,.cta-btn,
-  .btn:hover,.cnav-close:hover,.submit-btn:hover,.lf-btn:hover,
-  .nf-btn-home:hover,.svc-cta:hover,.cta-btn:hover{
-    background-image:none;background-color:var(--glass-fb-gold);color:var(--glass-fb-gold-ink);
-  }
-  .btn-g,.menu-btn,.theme-sel,.login-btn,.hdr-back,.lang-sel,
-  .lf-social-btn,.lf-reset-btn,.lf-lang-btn,.success-back,.nf-btn-explore,.c-btn,
-  .btn-g:hover,.menu-btn:hover,.login-btn:hover,.hdr-back:hover,.c-btn:hover,
-  .lf-social-btn:hover,.lf-reset-btn:hover,.lf-lang-btn:hover,
-  .success-back:hover,.nf-btn-explore:hover{
-    background-image:none;background-color:var(--glass-fb-ghost);color:var(--text);
-  }
-}
+/* Le repli opaque a disparu avec le flou : les boutons ne dependent plus
+   de backdrop-filter, il n'y a donc plus rien dont se replier. Les jetons
+   --glass-fb-* restent definis, ils servent de plancher documente si le
+   verre devait revenir. */
 
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -758,6 +754,11 @@ body:not([data-page="home"]) .river{animation:none!important;opacity:0}
 /* Hors accueil, c'est le fond vivant qui prend le relais ; sur l'accueil
    la rivière suffit, et les deux ensemble feraient une bouillie. */
 body[data-page="home"] .ambience{opacity:0}
+/* Et puisque l'ambiance y est invisible, ses deux traînées floutées n'ont
+   plus rien à animer : elles dérivaient en permanence derrière un calque
+   à opacité zéro. */
+body[data-page="home"] .amb-streak,
+body[data-page="home"] .amb-streak-2{animation:none}
 .ambience{transition:opacity 620ms var(--curve)}
 
 @supports (animation-timeline: scroll(root)){
@@ -1164,11 +1165,19 @@ body.lite .orbit .spin,body.lite .orbit .beadwrap,body.lite .orbit .halo{animati
 .split .w{display:inline-block;transform-origin:50% 92%}
 @media (prefers-reduced-motion:no-preference){
   .split{clip-path:none!important;animation:none!important;opacity:1!important}
-  .split .w{opacity:0;transform:translateY(.46em) rotateX(-48deg);filter:blur(6px);
+  .split .w{opacity:0;transform:translateY(.46em) rotateX(-48deg);
+    transition:opacity .60s var(--ease-out) var(--dl,0ms),
+               transform .94s var(--ease-out) var(--dl,0ms)}
+  /* Le flou ne reste que sur les titres. Une page compte trois a quatre
+     cents mots decoupes : autant de couches floutees que le navigateur
+     devait peindre, y compris hors ecran. Sur un titre ils se comptent
+     par dizaines, et c'est la que l'effet se voit. */
+  .split-h .w{filter:blur(6px);
     transition:opacity .60s var(--ease-out) var(--dl,0ms),
                transform .94s var(--ease-out) var(--dl,0ms),
                filter .60s var(--ease-out) var(--dl,0ms)}
-  .split.in .w{opacity:1;transform:none;filter:blur(0)}
+  .split.in .w{opacity:1;transform:none}
+  .split-h.in .w{filter:blur(0)}
 }
 @media (prefers-reduced-motion:reduce){
   .split .w{opacity:1!important;transform:none!important;filter:none!important}

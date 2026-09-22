@@ -45,6 +45,9 @@
       while (el.firstChild) el.removeChild(el.firstChild);
       out.forEach(function (n) { el.appendChild(n); });
       el.classList.add('split');
+      /* Le flou mot a mot ne vaut son prix que sur un titre : la classe
+         qui le porte n'est posee que la. */
+      if (/^H[1-3]$/.test(el.tagName)) el.classList.add('split-h');
     }
     document.querySelectorAll(SEL).forEach(decouper);
     var io = new IntersectionObserver(function (es) {

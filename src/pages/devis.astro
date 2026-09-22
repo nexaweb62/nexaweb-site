@@ -652,10 +652,22 @@ import { REFONTE_PRIX } from '../data/formules';
     for(var i=0;i<pts.length;i++)pts[i].update();
     connect();
   }
+  /* La boucle s'arrete quand l'onglet passe en arriere-plan, et le
+     drapeau « tourne » empeche qu'un redimensionnement ou un retour
+     d'onglet en demarre une seconde par-dessus la premiere.
+     L'observateur ci-dessous ne se declenchera jamais tel quel : le
+     canevas est en position fixed et couvre l'ecran, il est donc
+     toujours « visible ». Il est garde comme filet, pas comme gain. */
+  var visible=true,tourne=false;
   function animate(){
     if(PRM.matches){ draw(); return; }
+    if(document.hidden||!visible){ tourne=false; return; }
     RAF=requestAnimationFrame(animate);
     draw();
+  }
+  function reveiller(){
+    if(tourne||PRM.matches||document.hidden||!visible)return;
+    tourne=true;RAF=requestAnimationFrame(animate);
   }
 
   function init(){
@@ -665,11 +677,18 @@ import { REFONTE_PRIX } from '../data/formules';
     for(var i=0;i<n;i++)pts.push(new Particle());
   }
 
-  window.addEventListener('resize',function(){cancelAnimationFrame(RAF);init();animate();},{passive:true});
+  window.addEventListener('resize',function(){cancelAnimationFrame(RAF);tourne=false;init();reveiller();},{passive:true});
   window.addEventListener('mousemove',function(e){mouse.x=e.clientX;mouse.y=e.clientY;},{passive:true});
   window.addEventListener('mouseleave',function(){mouse.x=null;mouse.y=null;});
-  document.addEventListener('visibilitychange',function(){if(document.hidden)cancelAnimationFrame(RAF);else animate();});
-  init();animate();
+  document.addEventListener('visibilitychange',function(){
+    if(document.hidden){cancelAnimationFrame(RAF);tourne=false;}else reveiller();
+  });
+  if(window.IntersectionObserver){
+    new IntersectionObserver(function(e){visible=e[0].isIntersecting;reveiller();},
+      {rootMargin:'200px'}).observe(cv);
+  }
+  init();
+  if(PRM.matches)draw();else{tourne=true;RAF=requestAnimationFrame(animate);}
 })();
 </script>
 
