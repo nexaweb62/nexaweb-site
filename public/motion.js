@@ -278,16 +278,23 @@
 
   /* ───────────────────────────────────────────────────────────────────
      3 bis. LES BOUCLES SANS FIN S'ARRÊTENT QUAND ON NE LES VOIT PLUS
-     Le reflet des boutons, le dégradé liquide des chiffres, le halo de
-     l'orbite : chacun tourne en permanence, partout dans la page.
+     Le reflet des boutons, le dégradé liquide des chiffres et les
+     feuilles de la page Rendez-vous : chacun tourne en permanence.
 
      On agit sur l'élément lui-même, jamais par un sélecteur de
      descendance : une classe posée sur une section obligerait le
      navigateur à recalculer le style de toute la sous-arborescence à
      chaque entrée et sortie d'écran, ce qui coûte plus que le gain.
      ─────────────────────────────────────────────────────────────────── */
-  var BOUCLES = '.liquid, .btn .sh, .btn-g .sh, .svc-cta .sh, .cta-btn .sh,' +
-                ' .orbit .halo, .orbit .spin, .orbit .beadwrap';
+  var BOUCLES = '.liquid, .btn .sh, .btn-g .sh, .svc-cta .sh, .cta-btn .sh';
+
+  /* Certaines boucles sortent d'elles-mêmes du cadre : les feuilles de la
+     page Rendez-vous commencent au-dessus de l'écran et y descendent.
+     Les observer une par une les figerait à leur point de départ, donc
+     hors champ, donc invisibles à jamais — c'est exactement ce qui est
+     arrivé au premier essai. On observe le cadre, et on agit sur chacun
+     de ses enfants. */
+  var GROUPES = [['.ginkgo', '.gk']];
 
   function initBoucles() {
     if (reduced.matches || !window.IntersectionObserver) return;
@@ -298,6 +305,19 @@
       }
     }, { rootMargin: '200px' });
     document.querySelectorAll(BOUCLES).forEach(function (el) { io.observe(el); });
+
+    GROUPES.forEach(function (paire) {
+      document.querySelectorAll(paire[0]).forEach(function (cadre) {
+        var enfants = cadre.querySelectorAll(paire[1]);
+        if (!enfants.length) return;
+        new IntersectionObserver(function (es) {
+          var actif = es[0].isIntersecting;
+          for (var i = 0; i < enfants.length; i++) {
+            enfants[i].style.animationPlayState = actif ? '' : 'paused';
+          }
+        }, { rootMargin: '200px' }).observe(cadre);
+      });
+    });
     return io;
   }
 

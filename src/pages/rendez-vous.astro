@@ -3,6 +3,47 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
+
+/* LES FEUILLES D'OR — la table qui les decrit.
+   Une ligne par feuille : depart horizontal, largeur, duree de chute,
+   retard, derive laterale, rotation totale, opacite. Ecrites a la main
+   et non tirees au hasard : un tirage changerait a chaque construction,
+   et deux captures d'ecran ne seraient plus comparables.
+
+   Les retards sont NEGATIFS a dessein. Avec des retards positifs, la
+   page s'ouvrait sur un ciel vide et mettait vingt secondes a se
+   remplir : mesure faite, deux feuilles visibles sur dix-huit apres six
+   secondes. Un retard negatif demarre l'animation en cours de route,
+   donc le decor est deja en place a la premiere image. Les fractions
+   suivent le nombre d'or pour repartir les feuilles sans les aligner. */
+const FEUILLES = [
+  { l: 100, w: 38, d: 24.6, dl:   -7.6, x:   -9, r:  -460, o: 0.51 },
+  { l:  4, w: 26, d: 22.1, dl:  -20.5, x:   -5, r:   578, o: 0.35 },
+  { l:  8, w: 58, d: 21.2, dl:  -11.6, x:  -10, r:  -589, o: 0.77 },
+  { l: 11, w: 30, d: 17.0, dl:   -2.8, x:    4, r:   582, o: 0.40 },
+  { l: 16, w: 30, d: 22.0, dl:  -17.2, x:    1, r:   498, o: 0.40 },
+  { l: 20, w: 38, d: 17.2, dl:   -6.9, x:   -2, r:  -451, o: 0.51 },
+  { l: 22, w: 38, d: 26.1, dl:   -0.4, x:   10, r:  -353, o: 0.51 },
+  { l: 28, w: 52, d: 25.0, dl:  -15.9, x:    0, r:  -608, o: 0.69 },
+  { l: 30, w: 64, d: 27.6, dl:   -7.0, x:  -11, r:   249, o: 0.85 },
+  { l: 34, w: 42, d: 30.0, dl:  -26.1, x:    4, r:  -285, o: 0.56 },
+  { l: 38, w: 46, d: 22.3, dl:  -10.9, x:   -5, r:  -464, o: 0.61 },
+  { l: 41, w: 64, d: 26.9, dl:   -2.9, x:   11, r:   579, o: 0.85 },
+  { l: 46, w: 58, d: 22.3, dl:  -16.2, x:    2, r:  -528, o: 0.77 },
+  { l: 49, w: 34, d: 16.0, dl:   -5.5, x:    9, r:   326, o: 0.46 },
+  { l: 54, w: 38, d: 16.1, dl:  -15.5, x:    8, r:   248, o: 0.51 },
+  { l: 59, w: 26, d: 15.4, dl:   -8.9, x:  -12, r:  -435, o: 0.35 },
+  { l: 60, w: 58, d: 27.1, dl:   -5.4, x:   -2, r:   333, o: 0.77 },
+  { l: 64, w: 38, d: 20.9, dl:  -17.0, x:   -8, r:   281, o: 0.51 },
+  { l: 68, w: 64, d: 14.3, dl:   -6.2, x:   -2, r:   286, o: 0.85 },
+  { l: 73, w: 30, d: 18.7, dl:   -1.0, x:   11, r:   553, o: 0.40 },
+  { l: 76, w: 64, d: 16.5, dl:  -11.0, x:  -11, r:  -512, o: 0.85 },
+  { l: 80, w: 22, d: 26.1, dl:   -7.5, x:   -7, r:  -609, o: 0.30 },
+  { l: 84, w: 30, d: 24.8, dl:  -22.5, x:   -9, r:  -609, o: 0.40 },
+  { l: 87, w: 58, d: 17.4, dl:   -9.1, x:   -9, r:  -413, o: 0.77 },
+  { l: 92, w: 42, d: 19.7, dl:   -2.8, x:   -4, r:  -234, o: 0.56 },
+  { l: 97, w: 46, d: 14.1, dl:  -10.7, x:   12, r:  -597, o: 0.61 },
+] as const;
 ---
 <BaseLayout title="Rendez-vous — Nexa Web" description="Réservez une consultation gratuite de 30 min avec Nexa Web. Visio ou téléphone. Zéro engagement.">
 <style>
@@ -19,6 +60,83 @@ main{position:relative;z-index:1;padding-top:var(--hdr);overflow:hidden}
 .rdv-badge{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border-strong);border-radius:100px;padding:7px 16px;font-size:var(--fs-caption);font-weight:500;color:var(--text-muted);letter-spacing:0}
 .rdv-badge svg{width:13px;height:13px;stroke:var(--accent);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 
+/* ══════════════════════════════════════════════════════════════════
+   LES FEUILLES D'OR — le fond de la page
+   Dix-huit feuilles de ginkgo qui descendent en tournant. Chacune ne
+   fait bouger que deux choses, transform et opacity : le compositeur
+   s'en charge seul, sans recalcul de style ni repeinture. Aucune boucle
+   JavaScript, aucun canevas.
+   ══════════════════════════════════════════════════════════════════ */
+.ginkgo{
+  position:absolute;left:0;right:0;top:0;height:min(1180px,142vh);
+  z-index:0;pointer-events:none;overflow:hidden;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0,black 7%,black 82%,transparent 100%);
+          mask-image:linear-gradient(to bottom,transparent 0,black 7%,black 82%,transparent 100%);
+}
+/* La brume derrière elles : trois dégradés, pas un filter:blur(). Un flou
+   sur un calque de cette taille coûte une passe de rendu complète à
+   chaque image, et le dégradé donne le même velouté pour rien. */
+.gk-brume{
+  position:absolute;left:50%;top:26%;translate:-50% -50%;
+  width:min(128vw,1320px);aspect-ratio:1.25;
+  background:
+    radial-gradient(42% 38% at 34% 32%,var(--accent-glow),transparent 68%),
+    radial-gradient(38% 34% at 70% 58%,rgb(from var(--gold) r g b / .13),transparent 70%),
+    radial-gradient(30% 28% at 56% 18%,rgb(from var(--gold-deep) r g b / .14),transparent 72%);
+}
+.gk-src{position:absolute;width:0;height:0;overflow:hidden}
+/* La couleur passe par `color` et non par `fill` : le dessin est appelé
+   par <use>, qui crée un arbre fantôme où les sélecteurs du document
+   n'entrent pas. Seul l'héritage le traverse, et currentColor avec lui. */
+.gk{position:absolute;top:0;left:var(--l);width:var(--w);
+  color:var(--gold);opacity:0;transform:translate3d(0,-16vh,0)}
+.gk svg{display:block;width:100%;height:auto}
+:root[data-theme="light"] .gk{color:var(--accent-text)}
+@media (prefers-color-scheme:light){
+  :root:not([data-theme="dark"]) .gk{color:var(--accent-text)}
+}
+
+@media (prefers-reduced-motion:no-preference){
+  .gk{animation:gkChute var(--d) linear var(--dl) infinite}
+  @keyframes gkChute{
+    0%  {transform:translate3d(0,-16vh,0) rotate(0deg);opacity:0}
+    7%  {opacity:var(--o)}
+    86% {opacity:var(--o)}
+    100%{transform:translate3d(var(--x),128vh,0) rotate(var(--r));opacity:0}
+  }
+}
+/* Mouvement réduit : la chute s'arrête, les feuilles restent. Le décor
+   ne doit pas disparaître, seul le mouvement. */
+@media (prefers-reduced-motion:reduce){
+  .gk{opacity:var(--o);transform:translate3d(calc(var(--x)/2),0,0) rotate(calc(var(--r)/4))}
+  .gk:nth-child(3n){top:20%}
+  .gk:nth-child(3n+1){top:47%}
+  .gk:nth-child(3n+2){top:70%}
+}
+/* Le voile du milieu. Une feuille d'or derrière un titre blanc, c'est du
+   blanc sur or : 1,9:1, illisible. Ce dégradé de la couleur de fond est
+   posé APRÈS les feuilles, donc au-dessus d'elles, et sous le texte —
+   .rdv-hero est en z-index 2. Les feuilles s'effacent là où on lit, et
+   nulle part ailleurs. */
+.gk-voile{
+  position:absolute;left:50%;top:30%;translate:-50% -50%;
+  width:min(104vw,1180px);aspect-ratio:1.9;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 50%,
+    var(--bg) 0 34%,
+    rgb(from var(--bg) r g b / .82) 54%,
+    rgb(from var(--bg) r g b / 0) 82%);
+}
+/* Sur téléphone une feuille de 64 px occupe un sixième de la largeur :
+   on la réduit et on en retire une sur trois, sinon le décor mange le
+   texte au lieu de l'accompagner. */
+@media (max-width:640px){
+  .gk{width:calc(var(--w)*.56)}
+  .gk:nth-child(3n){display:none}
+  .gk-voile{width:132vw;aspect-ratio:1.5;top:33%}
+}
+/* Mode léger : une feuille sur deux suffit à faire l'effet. */
+body.lite .gk:nth-child(2n){display:none}
+
 /* ── Calendly section ── */
 .rdv-section{max-width:900px;margin:0 auto;padding:0 var(--pad-x) clamp(80px,12vh,140px)}
 .calendly-inline-widget{min-width:320px;height:700px;border-radius:16px;overflow:hidden}
@@ -28,43 +146,27 @@ main{position:relative;z-index:1;padding-top:var(--hdr);overflow:hidden}
 <Header />
 
 <main id="main-content" tabindex="-1">
-  <!-- L'ORBITE — le fond de cette page. SVG et CSS, zéro WebGL.
-       Des anneaux d'or concentriques, deux arcs qui tournent en sens
-       contraires, quatre repères cardinaux et une bille qui fait le tour
-       en 18 secondes : une horloge, ce qui a du sens pour une page de
-       prise de rendez-vous. -->
-  <div class="orbit" aria-hidden="true">
-    <span class="halo"></span>
-    <svg viewBox="0 0 800 800" role="presentation" focusable="false">
-      <defs>
-        <linearGradient id="arcg" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="var(--gold-deep)" stop-opacity="0"/>
-          <stop offset="45%" stop-color="var(--gold)" stop-opacity=".85"/>
-          <stop offset="100%" stop-color="var(--gold-hi)" stop-opacity="0"/>
-        </linearGradient>
-      </defs>
-      <circle class="ring thin" cx="400" cy="400" r="368"/>
-      <circle class="ring"      cx="400" cy="400" r="286"/>
-      <circle class="ring thin" cx="400" cy="400" r="208"/>
-      <circle class="ring"      cx="400" cy="400" r="128"/>
-      <g class="spin">
-        <path class="arc" d="M400 32 A368 368 0 0 1 720 212"/>
-        <path class="arc" d="M400 768 A368 368 0 0 1 80 588"/>
-      </g>
-      <g class="spin rev">
-        <path class="arc" d="M400 114 A286 286 0 0 1 651 262"/>
-      </g>
-      <g class="spin">
-        <line class="tick" x1="400" y1="20"  x2="400" y2="44"/>
-        <line class="tick" x1="780" y1="400" x2="756" y2="400"/>
-        <line class="tick" x1="400" y1="780" x2="400" y2="756"/>
-        <line class="tick" x1="20"  y1="400" x2="44"  y2="400"/>
-      </g>
-      <g class="beadwrap">
-        <circle class="beadglow" cx="400" cy="114" r="13"/>
-        <circle class="bead"     cx="400" cy="114" r="4.2"/>
-      </g>
+  <!-- LES FEUILLES D'OR — le fond de cette page.
+       Des feuilles de ginkgo qui descendent en tournant, rien d'autre :
+       du SVG et deux transformations par feuille, ni WebGL, ni canevas,
+       ni boucle JavaScript. Tout se joue sur le compositeur, et la mise
+       en veille hors ecran de motion.js les arrete des qu'on descend
+       plus bas dans la page. -->
+  <div class="ginkgo" aria-hidden="true" role="presentation">
+    <span class="gk-brume"></span>
+    <svg class="gk-src" width="0" height="0" aria-hidden="true" focusable="false">
+      <symbol id="gk-leaf" viewBox="0 0 32 32">
+        <path fill="currentColor"
+              d="M16 26.4C9.6 24.2 4.6 19.4 3.3 13.1 7.1 8.5 11.1 6.3 15.1 5.9L16 11.4l.9-5.5c4 .4 8 2.6 11.8 7.2-1.3 6.3-6.3 11.1-12.7 13.3Z"/>
+        <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" d="M16 26.4v4.8"/>
+      </symbol>
     </svg>
+    {FEUILLES.map((f) => (
+      <span class="gk" style={`--l:${f.l}%;--w:${f.w}px;--d:${f.d}s;--dl:${f.dl}s;--x:${f.x}vw;--r:${f.r}deg;--o:${f.o}`}>
+        <svg viewBox="0 0 32 32" focusable="false" aria-hidden="true"><use href="#gk-leaf"/></svg>
+      </span>
+    ))}
+    <span class="gk-voile"></span>
   </div>
   <!-- HERO -->
   <div class="rdv-hero">
