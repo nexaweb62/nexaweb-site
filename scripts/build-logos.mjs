@@ -248,11 +248,17 @@ function conceptC(c, mono) {
 function couleeN(sEp, w = 76) {
   const dw = diagW(sEp * 1.08, w - 2 * sEp, H);
   return {
-    /* Le meme polygone que la diagonale du glyphe : les angles coincident
-       au pixel pres avec les futs. */
-    diag: poly([sEp, 0], [sEp + dw, 0], [w - sEp, H], [w - sEp - dw, H]),
+    /* La diagonale du glyphe, mais a bords courbes : elle s'infléchit vers
+       la droite au tiers, revient vers la gauche aux trois quarts. Les
+       quatre angles restent ceux du glyphe, donc l'emboitement dans les
+       futs est exact ; entre les angles, c'est une matiere qui coule. */
+    diag: `M${r2(sEp)} 0L${r2(sEp + dw)} 0`
+        + `C${r2(sEp + dw + sEp * 0.62)} ${r2(H * 0.34)} ${r2(w - sEp - sEp * 0.44)} ${r2(H * 0.70)} ${r2(w - sEp)} ${H}`
+        + `L${r2(w - sEp - dw)} ${H}`
+        + `C${r2(w - sEp - dw - sEp * 0.44)} ${r2(H * 0.70)} ${r2(sEp + sEp * 0.62)} ${r2(H * 0.34)} ${r2(sEp)} 0Z`,
     /* Le reflet suit l'arete superieure gauche, en retrait. */
-    reflet: `M${r2(sEp + dw * 0.3)} ${r2(H * 0.10)}L${r2(w - sEp - dw * 0.7)} ${r2(H * 0.90)}`,
+    reflet: `M${r2(sEp + dw * 0.34)} ${r2(H * 0.10)}`
+          + `C${r2(sEp + dw * 0.34 + sEp * 0.56)} ${r2(H * 0.38)} ${r2(w - sEp - dw * 0.66 - sEp * 0.40)} ${r2(H * 0.68)} ${r2(w - sEp - dw * 0.66)} ${r2(H * 0.90)}`,
     refletEp: sEp * 0.26,
     goutte: [w - sEp / 2, H + sEp * 0.95],
     goutteR: sEp * 0.30,
@@ -292,6 +298,17 @@ function markD(c, side = 140, id = 'd') {
     + `<stop offset="0" stop-color="${c.orClair}"/>`
     + `<stop offset=".45" stop-color="${c.orMoyen}"/>`
     + `<stop offset="1" stop-color="${c.orSombre}"/></linearGradient>\n`
+    + `    <linearGradient id="${id}-dome" x1="0" y1="0" x2="0" y2="1">`
+    + `<stop offset="0" stop-color="${c.eclat}" stop-opacity="${c.domeA}"/>`
+    /* Surtout pas de calcul ici : dans la version « variables », c.domeA
+       vaut la chaine « var(--lg-dome-a) ». Un calcul dessus donne NaN,
+       donc une opacite invalide, donc 1 par defaut — et le dome devenait
+       un aplat blanc. Constate a l'ecran, corrige par un second jeton. */
+    + `<stop offset=".55" stop-color="${c.eclat}" stop-opacity="${c.domeA2}"/>`
+    + `<stop offset="1" stop-color="${c.eclat}" stop-opacity="0"/></linearGradient>\n`
+    + `    <radialGradient id="${id}-rebond">`
+    + `<stop offset="0" stop-color="${c.rim}" stop-opacity="${c.rebondA}"/>`
+    + `<stop offset="1" stop-color="${c.rim}" stop-opacity="0"/></radialGradient>\n`
     + `    <clipPath id="${id}-tuile">`
     + `<rect width="${side}" height="${side}" rx="${r2(r)}"/></clipPath>\n`
     + `  </defs>\n`
@@ -299,8 +316,13 @@ function markD(c, side = 140, id = 'd') {
     + `  <rect width="${side}" height="${side}" rx="${r2(r)}" fill="url(#${id}-verre)"/>\n`
     + `  <g clip-path="url(#${id}-tuile)">\n`
     // 2. le reflet du haut, la poussiere d'or
-    + `    <ellipse cx="${r2(side * .5)}" cy="${r2(side * .10)}" rx="${r2(side * .36)}" ry="${r2(side * .11)}" `
-    + `fill="${c.eclat}" opacity="${c.eclatA}"/>\n`
+    // La calotte et la lumiere de rebond sont des degrades, pas des aplats
+    // d'opacite : un aplat s'arrete net et se lit comme une forme posee,
+    // un degrade se lit comme de la lumiere. Mesure a l'oeil sur planche
+    // de contact — la version a aplats faisait une tache brune en bas.
+    + `    <rect width="${side}" height="${r2(side * .52)}" fill="url(#${id}-dome)"/>\n`
+    + `    <ellipse cx="${r2(side * .5)}" cy="${r2(side * .98)}" rx="${r2(side * .50)}" ry="${r2(side * .26)}" `
+    + `fill="url(#${id}-rebond)"/>\n`
     + `    <g fill="${c.orClair}">`
     + [[30,96,1.8,.40],[106,44,1.3,.34],[46,118,1.1,.30],[118,98,1.6,.26],[86,22,1.0,.30],[24,58,1.2,.22]]
         .map(([x,y,rr,o]) => `<circle cx="${r2(x*k)}" cy="${r2(y*k)}" r="${r2(rr*k)}" opacity="${o}"/>`).join('')
@@ -361,7 +383,10 @@ for (const theme of ['dark', 'light']) {
     tuileBas:   theme === 'dark' ? raw['--raw-black-950'] : raw['--raw-paper-50'],
     rim:        theme === 'dark' ? raw['--raw-gold-400'] : raw['--raw-gold-700'],
     eclat:      raw['--raw-paper-0'],
-    eclatA:     theme === 'dark' ? '.13' : '.55',
+    eclatA:     theme === 'dark' ? '.11' : '.48',
+    domeA:      theme === 'dark' ? '.16' : '.62',
+    domeA2:     theme === 'dark' ? '.045' : '.17',
+    rebondA:    theme === 'dark' ? '.20' : '.16',
     orClair:    theme === 'dark' ? raw['--raw-gold-300'] : raw['--raw-gold-600'],
     orMoyen:    theme === 'dark' ? raw['--raw-gold-400'] : raw['--raw-gold-700'],
     orSombre:   theme === 'dark' ? raw['--raw-gold-600'] : raw['--raw-gold-900'],
@@ -384,6 +409,43 @@ for (const theme of ['dark', 'light']) {
   emit('logo-c-mono', conceptC(c, true));
   emit('logo-d-mono', conceptD(c, true));
 }
+/* ── La marque D en version « variables » ──
+   Les fichiers ci-dessus ont leurs couleurs figées : ils sont faits pour
+   être exportés, envoyés, imprimés. Celui-ci est fait pour être inséré
+   DANS la page : ses couleurs sont des var(--lg-*) que le composant
+   alimente depuis les jetons, donc il suit le sélecteur de thème du site
+   au lieu de suivre le réglage du système. Et ses pièces mobiles portent
+   une classe, pour que l'animation puisse les attraper. */
+{
+  const c = {
+    theme: 'vars',
+    tuileHaut: 'var(--lg-verre-haut)', tuileHautA: 'var(--lg-verre-haut-a)',
+    tuileBas: 'var(--lg-verre-bas)', rim: 'var(--lg-rim)',
+    eclat: 'var(--lg-eclat)', eclatA: 'var(--lg-eclat-a)',
+    domeA: 'var(--lg-dome-a)', domeA2: 'var(--lg-dome-a2)', rebondA: 'var(--lg-rebond-a)',
+    orClair: 'var(--lg-or-clair)', orMoyen: 'var(--lg-or-moyen)', orSombre: 'var(--lg-or-sombre)',
+    lettreFond: 'var(--lg-lettre-fond)', lettreArete: 'var(--lg-lettre-arete)',
+  };
+  let out = svg('0 0 140 140', markD(c, 140, 'lgv'), 'Nexa Web');
+  /* Les trois pièces que l'animation doit pouvoir saisir. */
+  out = out.replace('<path d="' + couleeN(S_HEAVY * 1.05, 76).reflet + '"',
+                    '<path class="lg-reflet" d="' + couleeN(S_HEAVY * 1.05, 76).reflet + '"');
+  out = out.replace(/<circle cx="([\d.]+)" cy="([\d.]+)" r="([\d.]+)" fill="url\(#lgv-or\)"\/>/,
+                    '<circle class="lg-goutte" cx="$1" cy="$2" r="$3" fill="url(#lgv-or)"/>');
+  out = out.replace('<path d="' + couleeN(S_HEAVY * 1.05, 76).diag + '" fill="url(#lgv-or)"/>',
+                    '<path class="lg-or" d="' + couleeN(S_HEAVY * 1.05, 76).diag + '" fill="url(#lgv-or)"/>');
+  writeFileSync(join(OUT, 'mark-d-vars.svg'), out);
+  files.push('mark-d-vars.svg'.padEnd(30) + (out.length / 1024).toFixed(1).padStart(6) + ' Ko');
+  /* Contrôle : les trois crochets doivent exister, sinon l'animation
+     s'appliquerait dans le vide sans que rien ne le signale. */
+  for (const cl of ['lg-reflet', 'lg-goutte', 'lg-or']) {
+    if (!out.includes(`class="${cl}"`)) {
+      console.error(`\n✗ mark-d-vars.svg : la classe ${cl} n'a pas été posée.`);
+      process.exit(1);
+    }
+  }
+}
+
 /* Marque seule de la piste A — favicon, avatar, icônes PWA. */
 for (const theme of ['dark', 'light']) {
   const t = T[theme];

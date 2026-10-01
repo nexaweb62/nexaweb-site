@@ -3,6 +3,7 @@
    noindex : elle n'a pas à être référencée, elle sert à trancher.
    À supprimer une fois la piste choisie. */
 import BaseLayout from '../layouts/BaseLayout.astro';
+import LogoMark from '../components/LogoMark.astro';
 import '../styles/global.css';
 
 const PISTES = [
@@ -91,6 +92,9 @@ const TAILLES_D = [
   .grand { margin-top: var(--sp-5); background: var(--raw-black-950); border-radius: var(--radius-md); padding: var(--sp-6) var(--sp-5); overflow-x: auto }
   .grand .panneau-lbl { color: var(--raw-warm-400) }
   .grand img { display: block; width: auto; max-width: none }
+  .lgm-demo { display: flex; flex-direction: column; align-items: center; gap: var(--sp-4); padding: var(--sp-6) 0 }
+  .lgm-aide { font-size: 12px; color: var(--text-subtle); text-align: center }
+
   .mono-bloc { margin-top: var(--sp-5); border: 1px solid var(--border); border-radius: var(--radius-md); padding: var(--sp-5); background: var(--surface) }
   .mono-bloc .panneau-lbl { color: var(--text-subtle) }
   .mono-plage { background: var(--raw-paper-0); border-radius: var(--radius-sm); padding: var(--sp-5); display: flex; align-items: center; gap: var(--sp-6); flex-wrap: wrap }
@@ -164,6 +168,32 @@ const TAILLES_D = [
       </div>
     </section>
   ))}
+
+  <section class="piste">
+    <div class="piste-h"><h2>Piste D animée</h2><span class="piste-id">Survol et clic</span></div>
+    <p class="piste-pitch">
+      La marque insérée dans la page, pas chargée comme une image : c'est la seule façon
+      qu'elle suive le bouton clair/sombre du site. Au survol, la tuile se soulève et un
+      reflet balaye la coulée. Au clic, la goutte tombe. Tout en SVG et CSS — deux
+      propriétés animées, transform et opacity, aucune bibliothèque, aucune boucle.
+    </p>
+    <div class="duo">
+      <div class="panneau panneau--sombre">
+        <div class="panneau-lbl">Fond noir</div>
+        <div class="lgm-demo">
+          <LogoMark taille={190} class="lgm-sombre" titre="Nexa Web" />
+          <p class="lgm-aide">Passez la souris sur le logo · cliquez pour une goutte</p>
+        </div>
+      </div>
+      <div class="panneau panneau--clair">
+        <div class="panneau-lbl">Fond crème</div>
+        <div class="lgm-demo">
+          <LogoMark taille={190} class="lgm-clair" titre="Nexa Web" />
+          <p class="lgm-aide">Passez la souris sur le logo · cliquez pour une goutte</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <section class="piste">
     <div class="piste-h"><h2>Favicon et avatar</h2><span class="piste-id">Piste A seule</span></div>

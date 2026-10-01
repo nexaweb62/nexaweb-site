@@ -1,0 +1,77 @@
+---
+/**
+ * LA MARQUE, EN LIGNE ET VIVANTE
+ *
+ * Le SVG est inséré dans la page et non chargé par <img> : c'est la seule
+ * façon qu'il suive le sélecteur de thème du site. Une image chargée par
+ * <img> ne voit que le réglage du système d'exploitation, jamais le
+ * bouton clair/sombre de la page.
+ *
+ * Ses couleurs sont des var(--lg-*) alimentées dans global.css depuis les
+ * jetons, et ses trois pièces mobiles portent une classe posée par
+ * scripts/build-logos.mjs, qui vérifie leur présence avant d'écrire le
+ * fichier.
+ *
+ * L'animation est dans global.css et non ici : set:html insère un contenu
+ * qui ne porte pas l'attribut de portée d'Astro, donc un style scopé ne
+ * l'atteindrait pas. Les variables, elles, descendent par héritage.
+ */
+import marqueSource from '../assets/logos/mark-d-vars.svg?raw';
+
+import { uid } from '../lib/uid';
+
+/* Les identifiants des degrades doivent etre uniques par instance.
+   Deux marques inserees dans la meme page partagent sinon les memes
+   « lgv-verre », « lgv-or »… et url(#lgv-verre) resout toujours sur le
+   PREMIER element du document : la seconde marque empruntait les
+   couleurs de la premiere. Constate a l'ecran — la version claire
+   s'affichait avec le verre sombre de sa voisine.
+   Le compteur vit dans un module separe : declare ici, il repartirait a
+   zero a chaque instance, le bloc de tete etant rejoue a chaque rendu.
+   Un compteur plutot qu'un tirage au hasard : deux constructions
+   successives doivent donner le meme fichier. */
+
+export interface Props {
+  taille?: number;        // côté de la tuile, en pixels
+  interactif?: boolean;   // survol et clic
+  titre?: string;         // nom accessible ; vide = décoratif
+  class?: string;
+}
+const {
+  taille = 128,
+  interactif = true,
+  titre = '',
+  class: klass = '',
+} = Astro.props;
+
+const prefixe = uid('lg');
+const marque = marqueSource.replace(/lgv-/g, prefixe + '-');
+---
+
+<span
+  class:list={['lgm', interactif && 'lgm-i', klass]}
+  style={`--lg-taille:${taille}px`}
+  role={titre ? 'img' : 'presentation'}
+  aria-label={titre || undefined}
+  aria-hidden={titre ? undefined : 'true'}
+  set:html={marque}
+/>
+
+{interactif && (
+  <script is:inline>
+    /* La goutte tombe au clic. Six lignes, aucune dépendance, aucune
+       boucle : on pose une classe, l'animation CSS fait le reste, et la
+       classe part d'elle-même à la fin. Sans le retrait, un deuxième clic
+       ne rejouerait rien. */
+    (function () {
+      'use strict';
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      document.addEventListener('click', function (e) {
+        var m = e.target.closest ? e.target.closest('.lgm-i') : null;
+        if (!m || m.classList.contains('lg-tombe')) return;
+        m.classList.add('lg-tombe');
+        setTimeout(function () { m.classList.remove('lg-tombe'); }, 950);
+      }, { passive: true });
+    })();
+  </script>
+)}

@@ -124,6 +124,76 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
 .h-sm{font-size:var(--fs-sub);    letter-spacing:var(--ls-sub);    line-height:var(--lh-sub)}
 .h-xl em,.h-lg em,.cta-hl em{font-style:normal;font-weight:var(--w-semi);color:var(--accent-text)}
 
+/* ═══════════════════════════════════════════════════════════════════════
+   LA MARQUE EN LIGNE — couleurs et animation
+   Les deux vivent ici et non dans le style scopé du composant : le SVG
+   est inséré par set:html, donc il ne porte pas l'attribut de portée
+   d'Astro et un sélecteur scopé ne l'atteindrait pas. Les variables
+   descendent par héritage, les classes posées par le générateur sont
+   atteintes depuis une feuille globale.
+   ═══════════════════════════════════════════════════════════════════════ */
+.lgm{
+  display:inline-block;line-height:0;
+  --lg-verre-haut:var(--raw-gold-900); --lg-verre-haut-a:.55;
+  --lg-verre-bas:var(--raw-black-950);
+  --lg-rim:var(--raw-gold-400);
+  --lg-eclat:var(--raw-paper-0); --lg-eclat-a:.11;
+  --lg-dome-a:.16; --lg-dome-a2:.045; --lg-rebond-a:.20;
+  --lg-or-clair:var(--raw-gold-300); --lg-or-moyen:var(--raw-gold-400); --lg-or-sombre:var(--raw-gold-600);
+  --lg-lettre-fond:var(--raw-black-950); --lg-lettre-arete:var(--raw-gold-400);
+}
+.lgm svg{display:block;width:var(--lg-taille,128px);height:auto}
+:root[data-theme="light"] .lgm,
+.lgm-clair{
+  --lg-verre-haut:var(--raw-gold-300); --lg-verre-haut-a:.42;
+  --lg-verre-bas:var(--raw-paper-50);
+  --lg-rim:var(--raw-gold-700);
+  --lg-eclat-a:.48; --lg-dome-a:.62; --lg-dome-a2:.17; --lg-rebond-a:.16;
+  --lg-or-clair:var(--raw-gold-600); --lg-or-moyen:var(--raw-gold-700); --lg-or-sombre:var(--raw-gold-900);
+  --lg-lettre-fond:var(--raw-paper-50); --lg-lettre-arete:var(--raw-gold-800);
+}
+@media (prefers-color-scheme:light){
+  :root:not([data-theme="dark"]) .lgm{
+    --lg-verre-haut:var(--raw-gold-300); --lg-verre-haut-a:.42;
+    --lg-verre-bas:var(--raw-paper-50);
+    --lg-rim:var(--raw-gold-700);
+    --lg-eclat-a:.48; --lg-dome-a:.62; --lg-dome-a2:.17; --lg-rebond-a:.16;
+    --lg-or-clair:var(--raw-gold-600); --lg-or-moyen:var(--raw-gold-700); --lg-or-sombre:var(--raw-gold-900);
+    --lg-lettre-fond:var(--raw-paper-50); --lg-lettre-arete:var(--raw-gold-800);
+  }
+}
+/* Le panneau clair de la page de comparaison force le thème clair sur une
+   moitié d'écran : la marque doit suivre ce forçage et non le thème. */
+.lgm-sombre{
+  --lg-verre-haut:var(--raw-gold-900); --lg-verre-haut-a:.55;
+  --lg-verre-bas:var(--raw-black-950);
+  --lg-rim:var(--raw-gold-400);
+  --lg-eclat-a:.11; --lg-dome-a:.16; --lg-dome-a2:.045; --lg-rebond-a:.20;
+  --lg-or-clair:var(--raw-gold-300); --lg-or-moyen:var(--raw-gold-400); --lg-or-sombre:var(--raw-gold-600);
+  --lg-lettre-fond:var(--raw-black-950); --lg-lettre-arete:var(--raw-gold-400);
+}
+
+@media (prefers-reduced-motion:no-preference){
+  .lgm-i{cursor:pointer}
+  .lgm-i svg{transition:transform .46s var(--ease-out),filter .46s var(--ease-out)}
+  .lgm-i:hover svg,.lgm-i:focus-visible svg{transform:translateY(-3px) scale(1.025)}
+  /* Le reflet balaye la coulée : on déplace le tiret le long du tracé,
+     donc rien n'est repeint hors de ce trait. */
+  .lgm-i:hover .lg-reflet,.lgm-i:focus-visible .lg-reflet{animation:lgBalai 1.15s var(--ease-inout)}
+  @keyframes lgBalai{from{stroke-dashoffset:66}to{stroke-dashoffset:-66}}
+  /* La goutte tombe au clic, s'étire en tombant et s'efface. */
+  .lg-goutte{transform-box:fill-box;transform-origin:50% 50%}
+  .lgm-i.lg-tombe .lg-goutte{animation:lgGoutte .92s cubic-bezier(.42,0,.72,.52)}
+  @keyframes lgGoutte{
+    0%  {transform:translateY(0) scale(1,1);opacity:1}
+    18% {transform:translateY(1px) scale(1.22,.82);opacity:1}
+    100%{transform:translateY(30px) scale(.62,1.42);opacity:0}
+  }
+}
+/* Mode léger : la marque reste, son mouvement part. */
+body.lite .lgm-i svg{transition:none}
+body.lite .lgm-i:hover .lg-reflet,body.lite .lgm-i.lg-tombe .lg-goutte{animation:none}
+
 /* « Hauts-de-France » ne doit pas se couper en « Hauts-de- » / « France ».
    La regle vit ici et non dans le style scope de la page : i18n.js repose
    le titre par innerHTML au changement de langue, et ce qui est fabrique en

@@ -4,14 +4,17 @@
     <linearGradient id="mdd-verre" x1="0" y1="0" x2="0.35" y2="1"><stop offset="0" stop-color="#6B541B" stop-opacity=".55"/><stop offset="1" stop-color="#0A0A0B"/></linearGradient>
     <linearGradient id="mdd-rim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#D4B36A" stop-opacity=".95"/><stop offset=".45" stop-color="#D4B36A" stop-opacity=".25"/><stop offset="1" stop-color="#D4B36A" stop-opacity=".8"/></linearGradient>
     <linearGradient id="mdd-or" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E3C684"/><stop offset=".45" stop-color="#D4B36A"/><stop offset="1" stop-color="#B8974F"/></linearGradient>
+    <linearGradient id="mdd-dome" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".16"/><stop offset=".55" stop-color="#FFFFFF" stop-opacity=".045"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient>
+    <radialGradient id="mdd-rebond"><stop offset="0" stop-color="#D4B36A" stop-opacity=".20"/><stop offset="1" stop-color="#D4B36A" stop-opacity="0"/></radialGradient>
     <clipPath id="mdd-tuile"><rect width="140" height="140" rx="30.8"/></clipPath>
   </defs>
   <rect width="140" height="140" rx="30.8" fill="url(#mdd-verre)"/>
   <g clip-path="url(#mdd-tuile)">
-    <ellipse cx="70" cy="14" rx="50.4" ry="15.4" fill="#FFFFFF" opacity=".13"/>
+    <rect width="140" height="72.8" fill="url(#mdd-dome)"/>
+    <ellipse cx="70" cy="137.2" rx="70" ry="36.4" fill="url(#mdd-rebond)"/>
     <g fill="#E3C684"><circle cx="30" cy="96" r="1.8" opacity="0.4"/><circle cx="106" cy="44" r="1.3" opacity="0.34"/><circle cx="46" cy="118" r="1.1" opacity="0.3"/><circle cx="118" cy="98" r="1.6" opacity="0.26"/><circle cx="86" cy="22" r="1" opacity="0.3"/><circle cx="24" cy="58" r="1.2" opacity="0.22"/></g>
     <g transform="translate(38.08 28) scale(0.84)"><path d="M0 0h18.9v100h-18.9ZM57.1 0h18.9v100h-18.9Z" fill="#0A0A0B" stroke="#D4B36A" stroke-width="5" stroke-linejoin="round"/></g>
-    <g transform="translate(38.08 28) scale(0.84)"><path d="M18.9 0L40.75 0L57.1 100L35.25 100Z" fill="url(#mdd-or)"/><path d="M25.46 10L41.8 90" fill="none" stroke="#FFFFFF" stroke-width="4.91" stroke-opacity=".45" stroke-linecap="round" stroke-dasharray="22 13"/><circle cx="66.55" cy="117.96" r="5.67" fill="url(#mdd-or)"/></g>
+    <g transform="translate(38.08 28) scale(0.84)"><path d="M18.9 0L40.75 0C52.47 34 48.78 70 57.1 100L35.25 100C26.93 70 30.62 34 18.9 0Z" fill="url(#mdd-or)"/><path d="M26.33 10C36.91 38 35.12 68 42.68 90" fill="none" stroke="#FFFFFF" stroke-width="4.91" stroke-opacity=".45" stroke-linecap="round" stroke-dasharray="22 13"/><circle cx="66.55" cy="117.96" r="5.67" fill="url(#mdd-or)"/></g>
   </g>
   <rect x="2.25" y="2.25" width="135.5" height="135.5" rx="28.55" fill="none" stroke="url(#mdd-rim)" stroke-width="4.5"/>
 </svg>
