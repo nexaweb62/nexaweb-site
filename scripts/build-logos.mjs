@@ -223,6 +223,125 @@ function conceptC(c, mono) {
     'Nexa Web');
 }
 
+/* ═══════════════════════════════════════════════════════════════════════
+   PISTE D — LA TUILE DE VERRE ET L'OR LIQUIDE
+   La commande décrivait un rendu 3D posé sur un noir fixe. Un noir fixe
+   ne peut pas servir d'en-tête en mode clair : la tuile y ferait un
+   carré noir sur le papier. Le dessin est donc refait en vecteur, et
+   chaque couleur vient des jetons — ce qui lui donne une version claire
+   et une version sombre au lieu d'une seule image.
+
+   Le relief est obtenu par des dégradés et deux filets de lumière, pas
+   par un flou : un filter SVG se recalcule à chaque redimensionnement,
+   un dégradé non.
+   ═══════════════════════════════════════════════════════════════════════ */
+/* La diagonale du N EST l'or liquide.
+   Deux essais avant celui-ci. Un ruban en S qui traversait la lettre :
+   regarde en planche de contact, il se lisait comme une rature et rendait
+   le N illisible des 64 px. Puis la meme coulee avec des debords arrondis
+   au-dessus et en dessous de la lettre : les bouts ronds faisaient des
+   tetes d'allumette.
+   Ce qui tient : la coulee occupe EXACTEMENT la diagonale du N, decoupee
+   comme elle, donc elle s'emboite dans les futs sans entaille. Le liquide
+   se lit au degrade et au reflet, pas a un debord. Une seule goutte,
+   detachee, sous le pied droit. */
+function couleeN(sEp, w = 76) {
+  const dw = diagW(sEp * 1.08, w - 2 * sEp, H);
+  return {
+    /* Le meme polygone que la diagonale du glyphe : les angles coincident
+       au pixel pres avec les futs. */
+    diag: poly([sEp, 0], [sEp + dw, 0], [w - sEp, H], [w - sEp - dw, H]),
+    /* Le reflet suit l'arete superieure gauche, en retrait. */
+    reflet: `M${r2(sEp + dw * 0.3)} ${r2(H * 0.10)}L${r2(w - sEp - dw * 0.7)} ${r2(H * 0.90)}`,
+    refletEp: sEp * 0.26,
+    goutte: [w - sEp / 2, H + sEp * 0.95],
+    goutteR: sEp * 0.30,
+  };
+}
+
+function markD(c, side = 140, id = 'd') {
+  const r = side * 0.22;                                  // squircle iOS
+  const k = side / 140;                                   // la grille du ruban
+  const sEp = S_HEAVY * 1.05;
+  const g = GLYPH.N(sEp, 76);
+  const scale = side * 0.60 / H;
+  const tx = (side - g.w * scale) / 2, ty = (side - H * scale) / 2;
+  /* Les deux fûts seuls : la diagonale est remplacée par la coulée. */
+  const stems = rect(0, 0, sEp, H) + rect(76 - sEp, 0, sEp, H);
+  const co = couleeN(sEp, 76);
+
+  if (c.monoOnly) {
+    return `  <rect x="5" y="5" width="${r2(side - 10)}" height="${r2(side - 10)}" rx="${r2(r)}" `
+         + `fill="none" stroke="${c.mono}" stroke-width="10"/>\n`
+         + `  <g transform="translate(${r2(tx)} ${r2(ty)}) scale(${r2(scale)})" fill="${c.mono}">`
+         + `<path d="${stems}"/></g>\n`
+         + `  <g transform="translate(${r2(tx)} ${r2(ty)}) scale(${r2(scale)})" fill="${c.mono}">`
+         + `<path d="${co.diag}"/>`
+         + `<circle cx="${r2(co.goutte[0])}" cy="${r2(co.goutte[1])}" r="${r2(co.goutteR)}"/></g>`;
+  }
+
+  return `  <defs>\n`
+    + `    <linearGradient id="${id}-verre" x1="0" y1="0" x2="0.35" y2="1">`
+    + `<stop offset="0" stop-color="${c.tuileHaut}" stop-opacity="${c.tuileHautA}"/>`
+    + `<stop offset="1" stop-color="${c.tuileBas}"/></linearGradient>\n`
+    + `    <linearGradient id="${id}-rim" x1="0" y1="0" x2="1" y2="1">`
+    + `<stop offset="0" stop-color="${c.rim}" stop-opacity=".95"/>`
+    + `<stop offset=".45" stop-color="${c.rim}" stop-opacity=".25"/>`
+    + `<stop offset="1" stop-color="${c.rim}" stop-opacity=".8"/></linearGradient>\n`
+    + `    <linearGradient id="${id}-or" x1="0" y1="0" x2="1" y2="1">`
+    + `<stop offset="0" stop-color="${c.orClair}"/>`
+    + `<stop offset=".45" stop-color="${c.orMoyen}"/>`
+    + `<stop offset="1" stop-color="${c.orSombre}"/></linearGradient>\n`
+    + `    <clipPath id="${id}-tuile">`
+    + `<rect width="${side}" height="${side}" rx="${r2(r)}"/></clipPath>\n`
+    + `  </defs>\n`
+    // 1. le corps de verre
+    + `  <rect width="${side}" height="${side}" rx="${r2(r)}" fill="url(#${id}-verre)"/>\n`
+    + `  <g clip-path="url(#${id}-tuile)">\n`
+    // 2. le reflet du haut, la poussiere d'or
+    + `    <ellipse cx="${r2(side * .5)}" cy="${r2(side * .10)}" rx="${r2(side * .36)}" ry="${r2(side * .11)}" `
+    + `fill="${c.eclat}" opacity="${c.eclatA}"/>\n`
+    + `    <g fill="${c.orClair}">`
+    + [[30,96,1.8,.40],[106,44,1.3,.34],[46,118,1.1,.30],[118,98,1.6,.26],[86,22,1.0,.30],[24,58,1.2,.22]]
+        .map(([x,y,rr,o]) => `<circle cx="${r2(x*k)}" cy="${r2(y*k)}" r="${r2(rr*k)}" opacity="${o}"/>`).join('')
+    + `</g>\n`
+    // 3. les deux futs du N : interieur sombre, aretes dorees
+    + `    <g transform="translate(${r2(tx)} ${r2(ty)}) scale(${r2(scale)})">`
+    + `<path d="${stems}" fill="${c.lettreFond}" stroke="${c.lettreArete}" stroke-width="5" stroke-linejoin="round"/>`
+    + `</g>\n`
+    // 4. la coulee d'or a la place de la diagonale, son reflet, sa goutte
+    + `    <g transform="translate(${r2(tx)} ${r2(ty)}) scale(${r2(scale)})">`
+    + `<path d="${co.diag}" fill="url(#${id}-or)"/>`
+    + `<path d="${co.reflet}" fill="none" stroke="${c.eclat}" stroke-width="${r2(co.refletEp)}" `
+    + `stroke-opacity=".45" stroke-linecap="round" stroke-dasharray="${r2(H * 0.22)} ${r2(H * 0.13)}"/>`
+    + `<circle cx="${r2(co.goutte[0])}" cy="${r2(co.goutte[1])}" r="${r2(co.goutteR)}" fill="url(#${id}-or)"/>`
+    + `</g>\n`
+    + `  </g>\n`
+    // 5. le filet de lumiere du bord, pose en dernier
+    + `  <rect x="2.25" y="2.25" width="${r2(side - 4.5)}" height="${r2(side - 4.5)}" rx="${r2(r - 2.25)}" `
+    + `fill="none" stroke="url(#${id}-rim)" stroke-width="4.5"/>`;
+}
+
+function conceptD(c, mono) {
+  const nexa = word('NEXA', S_HEAVY, 12);
+  const web  = word('WEB',  S_LIGHT, 34);                 // graisse fine, tres espacee
+  const side = 140, gap = 44;
+  const x0 = side + gap;
+  const total = x0 + nexa.w + 26 + web.w;
+  const ty = (side - H) / 2;
+  const cc = mono ? { ...c, monoOnly: true } : c;
+  const encre = mono ? c.mono : c.text;
+  return svg(`0 0 ${r2(total)} ${side}`,
+    markD(cc, side, mono ? 'dm' : (c.theme === 'light' ? 'dl' : 'dd'))
+    + (mono ? '' : `\n  <defs><linearGradient id="${c.theme === 'light' ? 'dl' : 'dd'}-mot" x1="0" y1="0" x2=".3" y2="1">`
+        + `<stop offset="0" stop-color="${c.orClair}"/><stop offset="1" stop-color="${c.orSombre}"/></linearGradient></defs>`)
+    + `\n  <g transform="translate(${r2(x0)} ${ty})">`
+    + `<path d="${nexa.d}" fill="${mono ? c.mono : `url(#${c.theme === 'light' ? 'dl' : 'dd'}-mot)`}"/>`
+    + `<g transform="translate(${r2(nexa.w + 26)} 0)"><path d="${web.d}" fill="${encre}"/></g>`
+    + `</g>`,
+    'Nexa Web');
+}
+
 /* ── Émission : 3 pistes × (clair, sombre, monochrome) ── */
 for (const theme of ['dark', 'light']) {
   const t = T[theme];
@@ -235,12 +354,27 @@ for (const theme of ['dark', 'light']) {
     // franchement détaché dans les deux thèmes.
     faceDark: theme === 'dark' ? raw['--raw-black-700'] : raw['--raw-black-ink'],
     mono: t.text,
+    theme,
+    /* La tuile de verre : un haut teinte d'or qui se perd dans le fond. */
+    tuileHaut:  theme === 'dark' ? raw['--raw-gold-900'] : raw['--raw-gold-300'],
+    tuileHautA: theme === 'dark' ? '.55' : '.42',
+    tuileBas:   theme === 'dark' ? raw['--raw-black-950'] : raw['--raw-paper-50'],
+    rim:        theme === 'dark' ? raw['--raw-gold-400'] : raw['--raw-gold-700'],
+    eclat:      raw['--raw-paper-0'],
+    eclatA:     theme === 'dark' ? '.13' : '.55',
+    orClair:    theme === 'dark' ? raw['--raw-gold-300'] : raw['--raw-gold-600'],
+    orMoyen:    theme === 'dark' ? raw['--raw-gold-400'] : raw['--raw-gold-700'],
+    orSombre:   theme === 'dark' ? raw['--raw-gold-600'] : raw['--raw-gold-900'],
+    lettreFond: theme === 'dark' ? raw['--raw-black-950'] : raw['--raw-paper-50'],
+    lettreArete: theme === 'dark' ? raw['--raw-gold-400'] : raw['--raw-gold-800'],
   };
   // En clair le badge est noir sur or : on inverse pour respecter la consigne.
   if (theme === 'light') { c.badgeBg = t.accent; c.badgeInk = t.text; }
   emit(`logo-a-${theme}`, conceptA(c, false));
   emit(`logo-b-${theme}`, conceptB(c, false));
   emit(`logo-c-${theme}`, conceptC(c, false));
+  emit(`logo-d-${theme}`, conceptD(c, false));
+  emit(`mark-d-${theme}`, svg('0 0 140 140', markD(c, 140, theme === 'light' ? 'mdl' : 'mdd'), 'Nexa Web'));
 }
 /* Monochrome — tampon, facture, sérigraphie. Un seul ton, encre pleine. */
 {
@@ -248,6 +382,7 @@ for (const theme of ['dark', 'light']) {
   emit('logo-a-mono', conceptA(c, true));
   emit('logo-b-mono', conceptB(c, true));
   emit('logo-c-mono', conceptC(c, true));
+  emit('logo-d-mono', conceptD(c, true));
 }
 /* Marque seule de la piste A — favicon, avatar, icônes PWA. */
 for (const theme of ['dark', 'light']) {
@@ -257,19 +392,32 @@ for (const theme of ['dark', 'light']) {
   emit(`mark-a-${theme}`, svg('0 0 140 140', markA(bg, ink, 140), 'Nexa Web'));
 }
 
-/* ── Contrôle : aucun trait sous 2 px à la taille header (28 px de haut) ── */
-const HEADER_PX = 28, MIN_PX = 2;
+/* ── Contrôle : aucun trait sous 2 px à la taille d'emploi la plus petite.
+      A, B et C servent dans l'en-tête, donc 28 px de haut. D est une icône
+      d'application : tuile de verre, arête biseautée, ruban d'or liquide —
+      trois choses qui demandent de la place. Son plancher est 64 px, la
+      taille d'un favicon moderne et d'un avatar. En dessous elle devient
+      une bouillie : c'est mesuré ci-dessous, pas supposé. ── */
+const MIN_PX = 2;
 const checks = [
-  ['A — fût',            140, S_HEAVY],
-  ['B — fût fin',        126, S_LIGHT],
-  ['B — filet or',       126, 10],
-  ['C — fût',            140, S_HEAVY],
-  ['A/C — contour mono', 140, 10],
+  ['A — fût',            140, S_HEAVY, 28],
+  ['B — fût fin',        126, S_LIGHT, 28],
+  ['B — filet or',       126, 10,      28],
+  ['C — fût',            140, S_HEAVY, 28],
+  ['A/C — contour mono', 140, 10,      28],
+  ['D — arête du N',     140, 5,       64],
+  ['D — coulée d\'or',   140, 11.3,    64],
+  /* Le reflet est un éclat, pas une structure : il a le droit de se fondre
+     dans l'or quand la vignette est petite, comme un vrai reflet. Son
+     plancher est donc 128 px, la taille de l'icône d'application et de
+     l'image de partage, là où il se voit. Le logo reste lisible sans lui. */
+  ['D — reflet',         140, 2.95,   128],
+  ['D — filet du bord',  140, 4.5,     64],
 ];
 const thin = [];
-for (const [what, vbH, units] of checks) {
-  const px = units * (HEADER_PX / vbH);
-  const line = `  ${what.padEnd(22)} ${px.toFixed(2)} px`;
+for (const [what, vbH, units, cible] of checks) {
+  const px = units * (cible / vbH);
+  const line = `  ${what.padEnd(22)} ${px.toFixed(2)} px à ${cible} px de haut`;
   if (px < MIN_PX) thin.push(line + '  ✗ SOUS 2 px');
   else console.log(line + '  ✓');
 }

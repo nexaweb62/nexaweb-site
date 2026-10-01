@@ -27,11 +27,26 @@ const PISTES = [
     force: 'Le plus mémorable et le plus distinctif.',
     reserve: "Ne se lit pas comme un « N » : toujours accompagné du nom tant que la marque est jeune.",
   },
+  {
+    id: 'd',
+    titre: 'Piste D — Verre et or liquide',
+    pitch: "La tuile de verre teinté d'ambre, arête de lumière sur le pourtour, poussière d'or en suspension, « N » en relief dont la diagonale est une coulée d'or avec son reflet et sa goutte. Dessinée en vecteur à partir des jetons : une version sombre et une version claire, là où un rendu 3D posé sur un noir fixe n'en aurait eu qu'une.",
+    force: "La plus distinctive des quatre. Faite pour l'icône d'application, l'avatar et l'image de partage.",
+    reserve: "Elle demande de la place : son plancher mesuré est 64 px. Dans un en-tête à 28 px, le filet du bord tombe à 0,9 px et la tuile devient une tache. Pour la barre de navigation, c'est la piste A ou le logotype actuel.",
+  },
 ];
 const TAILLES = [
   { px: 28, nom: 'En-tête',      note: '28 px — la taille réelle dans la barre de navigation' },
   { px: 16, nom: 'Test 16 px',   note: 'Le seuil de lisibilité' },
   { px: 52, nom: 'Pied de page', note: '52 px' },
+];
+/* La piste D est une icône, pas une marque d'en-tête : on la montre aux
+   tailles où elle est censée servir, et on la montre aussi à 28 px pour
+   que la limite se voie au lieu de se raconter. */
+const TAILLES_D = [
+  { px: 128, nom: 'Icône',       note: "128 px — icône d'application, image de partage" },
+  { px: 64,  nom: 'Avatar',      note: '64 px — son plancher mesuré' },
+  { px: 28,  nom: 'En-tête',     note: "28 px — pour voir pourquoi elle n'y va pas" },
 ];
 ---
 <BaseLayout title="Logos — comparaison des trois pistes" noindex={true}
@@ -110,7 +125,7 @@ const TAILLES = [
       <div class="duo">
         <div class="panneau panneau--sombre">
           <div class="panneau-lbl">Fond noir</div>
-          {TAILLES.map((t) => (
+          {(p.id === 'd' ? TAILLES_D : TAILLES).map((t) => (
             <div class="rangee">
               <div class="rangee-meta">
                 <div class="rangee-nom">{t.nom}</div>
@@ -122,7 +137,7 @@ const TAILLES = [
         </div>
         <div class="panneau panneau--clair">
           <div class="panneau-lbl">Fond crème</div>
-          {TAILLES.map((t) => (
+          {(p.id === 'd' ? TAILLES_D : TAILLES).map((t) => (
             <div class="rangee">
               <div class="rangee-meta">
                 <div class="rangee-nom">{t.nom}</div>
