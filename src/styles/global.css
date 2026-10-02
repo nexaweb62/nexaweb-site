@@ -361,18 +361,19 @@ body.lite .lgm-i:hover .lg-reflet,body.lite .lgm-i.lg-tombe .lg-goutte{animation
 .hdr.is-hidden{transform:translateY(-100%)}
 
 .nav{display:flex;align-items:center;height:var(--hdr);position:relative}
-.nav-logo{display:flex;align-items:center;gap:9px;color:var(--text);flex:0 0 auto}
-/* La tuile dans l'en-tête : le composant est bâti en colonne pour son
-   usage en grand, ici il ne porte qu'une image, on le remet à plat et
-   on lui enlève son écart vertical. */
+/* L'en-tête ne porte plus que la tuile : le mot « NEXAWEB » qui la
+   suivait a été retiré. Les règles qui le peignaient (.nav-logo-svg,
+   .logo-nexa, .logo-web) sont parties avec lui — plus rien ne les
+   appelait. Le nom accessible du lien reste porté par son aria-label,
+   donc un lecteur d'écran annonce toujours « NEXAWEB — Accueil ». */
+.nav-logo{display:flex;align-items:center;color:var(--text);flex:0 0 auto}
+/* Le composant est bâti en colonne pour son usage en grand ; ici il ne
+   porte qu'une image, on lui enlève son écart vertical. */
 .nav-logo .llq{gap:0;flex:0 0 auto}
 /* Le rendu est sombre : sur le thème clair il lui faut un filet, sinon
    la tuile flotte sur le crème sans arête. */
 :root[data-theme="light"] .nav-logo-tuile .llq-tuile,
 :root[data-theme="light"] .foot-tuile .llq-tuile{box-shadow:0 1px 3px var(--shadow-1)}
-.nav-logo-svg{flex-shrink:0;overflow:visible}
-.nav-logo-svg .logo-nexa{fill:var(--text)}
-.nav-logo-svg .logo-web{fill:var(--accent-text)}
 .nav-links{display:none;gap:clamp(16px,3vw,40px);position:absolute;left:50%;transform:translateX(-50%)}
 .nav-link{
   position:relative;font-size:var(--fs-caption);font-weight:500;letter-spacing:0;color:var(--text-muted);
@@ -547,10 +548,9 @@ body.lite .lgm-i:hover .lg-reflet,body.lite .lgm-i.lg-tombe .lg-goutte{animation
   display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:clamp(28px,5vw,80px);
   padding:clamp(40px,6vh,80px) 0;border-bottom:1px solid var(--border);
 }
-.foot-marque{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+/* Même chose au pied de page : la tuile seule, sans le mot. */
+.foot-marque{display:flex;align-items:center;margin-bottom:14px}
 .foot-marque .llq{gap:0;flex:0 0 auto}
-.foot-logo{font-size:1.15rem;font-weight:600;letter-spacing:0;color:var(--text)}
-.foot-logo span{color:var(--accent-text)}
 .foot-tag{font-size:var(--fs-100);font-weight:300;color:var(--text-muted);line-height:var(--lh-body);max-width:230px}
 .foot-col-title{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-subtle);margin-bottom:var(--sp-3)}
 .foot-links{display:flex;flex-direction:column;gap:9px}

@@ -12,7 +12,9 @@
 
    On vérifie donc, à chaque largeur et dans les deux thèmes :
 
-     1. le logo garde sa largeur naturelle (130 px) ;
+     1. le logo garde sa largeur naturelle (34 px — la tuile ; le mot
+        « NEXAWEB » qui la suivait a été retiré de l'en-tête, et avec lui
+        les 130 px que ce contrôle mesurait) ;
      2. le logo n'empiète pas sur la grappe de droite ;
      3. le bouton Retour est présent, visible, dans le cadre, et porte
         son libellé — un chevron seul ne se lit pas comme un bouton ;
@@ -34,7 +36,10 @@ const CHROME = process.env.CHROME_PATH || undefined;
    390 et 430 : les iPhone courants. 1280 : l'ordinateur. */
 const LARGEURS = [320, 360, 390, 430, 1024, 1280];
 const PAGES = ['/tarifs', '/contact', '/404'];
-const LOGO_NATUREL = 130;
+/* La tuile du logo, côté en pixels. On mesure .llq-tuile et non l'image :
+   la tuile tient sa largeur de --llq-taille et vaut donc toujours ce
+   chiffre, que l'image soit chargée ou non. */
+const LOGO_NATUREL = 34;
 
 const navigateur = await chromium.launch(CHROME ? { executablePath: CHROME } : {});
 const echecs = [];
@@ -71,7 +76,7 @@ for (const theme of ['dark', 'light']) {
           const rc = el.getBoundingClientRect();
           return rc.width > 1 && rc.height > 1;
         };
-        const svg = document.querySelector('.nav-logo-svg');
+        const svg = document.querySelector('.nav-logo-tuile .llq-tuile');
         const navr = document.querySelector('.nav-r');
         const back = document.getElementById('hdr-back');
         const out = {
