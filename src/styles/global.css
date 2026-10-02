@@ -187,6 +187,12 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
   font-size:clamp(1.1rem,calc(var(--llq-taille,320px) * .115),2.6rem);
   font-weight:600;letter-spacing:.14em;line-height:1;margin:0;
 }
+/* La flèche du bouton d'appel à l'action. Elle vit ici et non dans la
+   page : i18n.js réécrit le libellé du bouton en innerHTML, et un
+   style scopé n'atteindrait pas le <span> recréé. */
+.cta-arr{display:inline-block;transition:transform .25s}
+.cta-btn:hover .cta-arr{transform:translateX(5px)}
+
 /* Sans lueur : dans l'en-tête, un halo doré permanent autour d'une
    tuile de 26 px est du bruit, pas de la présence. */
 .llq-sec .llq-tuile::before{display:none}

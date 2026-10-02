@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import LogoLiquide from '../components/LogoLiquide.astro';
+import { VITRINE_PRIX } from '../data/formules';
 import '../styles/global.css';
 ---
 <BaseLayout title="Nexa Web — Agence Web Premium · Carvin" description="Nexa Web conçoit des sites internet sur-mesure pour commerçants et artisans. Refonte dès 490 €, livraison en 2 à 4 semaines. Carvin, Hauts-de-France.">
@@ -297,8 +298,12 @@ import '../styles/global.css';
 .cta-btn{display:inline-flex;align-items:center;gap:12px;font-size:var(--fs-caption);font-weight:600;letter-spacing:0;padding:18px 40px;border-radius:var(--radius-pill);transition:background-color .2s,transform .3s cubic-bezier(.16,1,.3,1)}
 .cta-btn:hover{transform:translateY(-2px)}
 .cta-btn:focus-visible{outline:2px solid var(--text);outline-offset:4px}
-.cta-arr{display:inline-block;transition:transform .25s}
-.cta-btn:hover .cta-arr{transform:translateX(5px)}
+/* .cta-arr est stylée dans global.css et non ici : i18n.js réécrit le
+   contenu du bouton en innerHTML, et le <span> ainsi recréé ne porte
+   pas l'attribut de portée d'Astro. Scopées, ces deux règles ne
+   s'appliquaient plus dès que la traduction passait — la flèche ne
+   glissait plus au survol. Trouvé par check:scoped une fois étendu
+   aux scripts de public/. */
 
 /* ── POUR QUI ── */
 .s-who{}
@@ -431,7 +436,7 @@ import '../styles/global.css';
         <h3 class="who-target">Commerçant &amp; artisan local</h3>
         <p class="who-desc">Vous avez une activité locale — restaurant, boutique, artisan — mais aucune présence en ligne convaincante. On vous donne un site qui attire et qui rassure.</p>
         <div>
-          <div class="who-price">à partir de 1 000 €</div>
+          <div class="who-price">à partir de {VITRINE_PRIX}</div>
           <p class="who-price-sub">Offre de lancement · places limitées · SEO local inclus</p>
         </div>
         <a href="/tarifs" class="btn-g" style="align-self:flex-start;margin-top:8px">Voir les formules →</a>

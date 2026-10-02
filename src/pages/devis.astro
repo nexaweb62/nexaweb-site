@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import '../styles/global.css';
-import { REFONTE_PRIX } from '../data/formules';
+import { REFONTE_PRIX, VITRINE_PRIX } from '../data/formules';
 ---
 <BaseLayout title="Devis gratuit — Nexa Web" description="Décrivez votre projet web et recevez un devis gratuit sous 24 h. Site vitrine, e-commerce, refonte — Nexa Web, Carvin, Hauts-de-France.">
 <style>
@@ -280,7 +280,7 @@ import { REFONTE_PRIX } from '../data/formules';
         <!-- OFFRE LANCEMENT -->
         <div class="launch-notice">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-          <p><strong>Offre de lancement :</strong> les 3 premiers clients bénéficient d'un site complet à <strong>1 000 €</strong> tout inclus. Mentionnez-le dans votre description.</p>
+          <p><strong>Offre de lancement :</strong> les 3 premiers clients bénéficient d'un site complet à <strong>{VITRINE_PRIX}</strong> tout inclus. Mentionnez-le dans votre description.</p>
         </div>
 
         <!-- HEAD -->

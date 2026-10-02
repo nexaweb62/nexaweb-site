@@ -129,11 +129,16 @@
     if (reduce.matches) return;
     var cibles = [].slice.call(document.querySelectorAll('.plan-amount, .plan-from, .plan-to, .launch-num'));
     var RE = /\d+(?:[\s\u00A0\u202F]\d{3})*/g;
-    cibles.forEach(function (el) {
-      var txt = el.textContent;
-      if (txt.indexOf('/') > -1) return;
+    /* On écrit dans les NŒUDS DE TEXTE, un par un, et jamais dans
+       textContent de l'élément : lui affecter une chaîne efface ses
+       enfants. Le préfixe « dès » vit dans un <small class="plan-pre">
+       destiné à l'amoindrir ; il était détruit dès le chargement, avant
+       même tout défilement. Constaté à l'écran : zéro élément
+       .plan-pre dans la page, et la règle CSS qui le rapetissait ne
+       s'appliquait donc à rien. */
+    function decoupe(txt) {
       RE.lastIndex = 0;
-      if (!RE.test(txt)) return;
+      if (!RE.test(txt)) return null;
       RE.lastIndex = 0;
       var parts = [], last = 0, m;
       while ((m = RE.exec(txt)) !== null) {
@@ -142,8 +147,19 @@
         last = m.index + m[0].length;
       }
       parts.push({ lit: txt.slice(last) });
-      el.__parts = parts;
-      el.textContent = rendu(parts, 0);
+      return parts;
+    }
+    cibles.forEach(function (el) {
+      if (el.textContent.indexOf('/') > -1) return;
+      var w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+      var morceaux = [], nd;
+      while ((nd = w.nextNode()) !== null) {
+        var parts = decoupe(nd.nodeValue);
+        if (parts) morceaux.push({ noeud: nd, parts: parts });
+      }
+      if (!morceaux.length) return;
+      el.__morceaux = morceaux;
+      morceaux.forEach(function (c) { c.noeud.nodeValue = rendu(c.parts, 0); });
     });
     function fmt(v, raw) {
       var t = String(v);
@@ -156,19 +172,19 @@
       }).join('');
     }
     function lancer(el) {
-      if (el.__ran) return; el.__ran = 1;
+      if (el.__ran || !el.__morceaux) return; el.__ran = 1;
       var t0 = null, D = 1250;
       requestAnimationFrame(function step(ts) {
         if (t0 === null) t0 = ts;
-        var k = Math.min(1, (ts - t0) / D);
-        el.textContent = rendu(el.__parts, 1 - Math.pow(1 - k, 4));
+        var k = Math.min(1, (ts - t0) / D), t = 1 - Math.pow(1 - k, 4);
+        el.__morceaux.forEach(function (c) { c.noeud.nodeValue = rendu(c.parts, t); });
         if (k < 1) requestAnimationFrame(step);
       });
     }
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (e) { if (e.isIntersecting) lancer(e.target); });
     }, { threshold: 0.4 });
-    cibles.forEach(function (el) { if (el.__parts) io.observe(el); });
+    cibles.forEach(function (el) { if (el.__morceaux) io.observe(el); });
   })();
 
   /* ── 6. Le tiroir : lèvre dorée, reflet, et le contenu qui sort ─────

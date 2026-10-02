@@ -28,14 +28,44 @@ export const REFONTE = {
 export const REFONTE_PRIX = prix(REFONTE.prixDepart);          // « 490 € »
 export const REFONTE_DELAI = `${REFONTE.delaiSemaines} semaines`;
 
+export const VITRINE = {
+  /** Prix de lancement, les 3 premiers clients. */
+  prix: 999,
+} as const;
+export const VITRINE_PRIX = prix(VITRINE.prix);                // « 999 € »
+
+export const ENTREPRISE = {
+  /** Le seul montant affiché : la page annonce « à partir de ». */
+  prixDepart: 1200,
+  /** Haut de fourchette, gardé pour la pastille de budget du Devis et
+   *  abaissé de 3 100 à 2 400. Il n'est plus montré sur la page
+   *  Tarifs : c'est lui qui faisait paraître la formule hors de prix. */
+  prixHaut: 2400,
+} as const;
+export const ENTREPRISE_PRIX = prix(ENTREPRISE.prixDepart);    // « 1 200 € »
+
+/* ── Le paiement en plusieurs fois ──────────────────────────────────
+   Trois mensualités, sans majoration : le total payé est exactement le
+   prix comptant. Les montants ci-dessous sont arrondis au supérieur,
+   donc la dernière mensualité absorbe la différence — 490 € donne
+   164 + 164 + 162, et non 163,33 trois fois. La page affiche toujours
+   le total à côté, pour qu'aucun chiffre ne puisse tromper. */
+export const MENSUALITES = 3;
+export function parMois(total: number): string {
+  return prix(Math.ceil(total / MENSUALITES));
+}
+export const REFONTE_MOIS    = parMois(REFONTE.prixDepart);    // « 164 € »
+export const VITRINE_MOIS    = parMois(VITRINE.prix);          // « 333 € »
+export const ENTREPRISE_MOIS = parMois(ENTREPRISE.prixDepart); // « 400 € »
+
 /** Les trois formules, par prix croissant. Chacune a sa pastille de
  *  budget sur la page Devis.
  *  L'ordre du tableau est l'ordre d'affichage : c'est lui qui fait foi,
  *  pas le markup. */
 export const FORMULES = [
   { cle: 'refonte',    budget: `Refonte — dès ${REFONTE_PRIX}` },
-  { cle: 'vitrine',    budget: `Vitrine Pro — 1 000 €` },
-  { cle: 'entreprise', budget: `Entreprise — 1 200 à 3 100 €` },
+  { cle: 'vitrine',    budget: `Vitrine Pro — ${VITRINE_PRIX}` },
+  { cle: 'entreprise', budget: `Entreprise — à partir de ${ENTREPRISE_PRIX}` },
 ] as const;
 
 /** Depuis une carte tarif vers la page Devis : quel type de site

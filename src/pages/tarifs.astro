@@ -3,9 +3,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
-import { REFONTE_PRIX, REFONTE_DELAI } from '../data/formules';
+import {
+  REFONTE_PRIX, REFONTE_DELAI, REFONTE_MOIS,
+  VITRINE_PRIX, VITRINE_MOIS,
+  ENTREPRISE_PRIX, ENTREPRISE_MOIS,
+  MENSUALITES,
+} from '../data/formules';
 ---
-<BaseLayout title="Tarifs — Nexa Web" description="Refonte de site dès 490 €, Vitrine Pro à 1 000 € (offre de lancement, places limitées) et Entreprise de 1 200 à 3 100 €. Devis gratuit — Nexa Web, Carvin.">
+<BaseLayout title="Tarifs — Nexa Web" description="Refonte de site dès 490 €, Vitrine Pro à 999 € (offre de lancement, places limitées) et Entreprise à partir de 1 200 €. Paiement en 3 fois possible. Devis gratuit — Nexa Web, Carvin.">
 <style>
 /* ── HERO ── */
 .prix-hero{padding:clamp(56px,9vh,100px) 0 clamp(32px,5vh,56px);text-align:center;position:relative;z-index:1}
@@ -60,9 +65,51 @@ import { REFONTE_PRIX, REFONTE_DELAI } from '../data/formules';
 .plans-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:clamp(32px,5vw,52px);
   max-width:480px;margin-left:auto;margin-right:auto}
 @media(min-width:900px){.plans-grid{grid-template-columns:repeat(3,1fr);gap:20px;max-width:none}}
-/* « dès » : un prefixe, pas un prix. Il ne doit pas peser autant. */
+/* « dès », « à partir de » : un prefixe, pas un prix. Il ne doit pas
+   peser autant. Cette règle ne s'appliquait à rien jusqu'ici : le
+   compteur de chiffres écrasait le textContent de la carte et
+   détruisait le <small> avant même le premier défilement. Corrigé dans
+   public/scroll-fx.js, qui n'écrit plus que dans les nœuds de texte. */
 .plan-pre{font-size:.46em;font-weight:500;letter-spacing:.02em;color:var(--text-muted);
   margin-right:.12em;vertical-align:.32em}
+
+/* ── PAIEMENT : COMPTANT OU MENSUEL ────────────────────────────────
+   Les deux montants sont écrits dans la page ; la bascule ne fait
+   qu'en cacher un. Conséquences voulues : rien n'est fabriqué en
+   JavaScript, donc rien ne dépend d'un style de portée ; et les
+   mensualités ne portent aucune des classes que le compteur de
+   chiffres observe, donc il ne les met jamais à zéro — un montant
+   caché n'entre jamais dans l'écran, son animation ne partirait
+   jamais, et il resterait figé sur « 0 € ». */
+.paie{border:0;margin:clamp(20px,3vw,28px) 0 0;padding:0;display:flex;justify-content:center}
+.paie-seg{display:inline-flex;gap:4px;align-items:center;padding:3px 5px;
+  border:1px solid var(--border-strong);border-radius:var(--radius-pill);background:var(--surface)}
+.paie-radio{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.paie-lbl{
+  font-size:var(--fs-caption);font-weight:500;letter-spacing:0;color:var(--text);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  min-height:30px;padding:2px 14px;border-radius:var(--radius-pill);
+  transition:color var(--dur-micro) var(--ease-out),background-color var(--dur-micro) var(--ease-out);
+}
+.paie-radio:checked + .paie-lbl{background:var(--accent);color:var(--on-accent);font-weight:600}
+/* Le radio est hors écran : sans cette règle, rien ne montrerait au
+   clavier où l'on se trouve. */
+.paie-radio:focus-visible + .paie-lbl{outline:2px solid var(--focus);outline-offset:2px}
+
+.plan-mois,.plan-mois-note{display:none}
+.plan-mois{font-size:clamp(20px,2.4vw,28px);font-weight:600;letter-spacing:-.03em;line-height:1;
+  white-space:nowrap;font-variant-numeric:tabular-nums}
+.plan-mois-gros{font-size:clamp(23px,3vw,33px);letter-spacing:-.04em}
+.plan-mois-u{font-size:.42em;font-weight:500;color:var(--text-muted);margin-left:.1em}
+.plans-section:has(#paie-3:checked) .plan-comptant{display:none}
+/* « block » et non « inline-flex » : un conteneur flex ne rend pas les
+   nœuds de texte faits d'espaces seuls, et l'espace du gabarit entre
+   « à partir de » et le montant disparaissait. Mesuré : 1,5 px d'écart
+   au premier chiffre contre 8,4 px côté comptant, soit « à partir
+   de400 € ». Le span est de toute façon rendu en bloc : c'est un
+   enfant de .plan-range, qui est en flex. */
+.plans-section:has(#paie-3:checked) .plan-mois{display:block}
+.plans-section:has(#paie-3:checked) .plan-mois-note{display:block}
 @media(max-width:600px){
   .plan-card{padding:14px 14px}
   .plan-name{font-size:var(--fs-caption);margin-bottom:8px}
@@ -173,7 +220,7 @@ import { REFONTE_PRIX, REFONTE_DELAI } from '../data/formules';
         </div>
         <div class="launch-text">
           <p class="launch-tag" data-i18n="trf-launch-tag">Offre de lancement</p>
-          <h2 class="launch-title" data-i18n="trf-launch-h">3 premiers clients à <strong>1 000 €</strong> tout inclus</h2>
+          <h2 class="launch-title" data-i18n="trf-launch-h">3 premiers clients à <strong>999&nbsp;€</strong> tout inclus</h2>
           <p class="launch-desc" data-i18n="trf-launch-d">Site vitrine complet, design sur mesure, responsive, SEO de base et 1 mois de support — à prix de lancement. Places très limitées.</p>
         </div>
         <div class="launch-spots">
@@ -188,6 +235,19 @@ import { REFONTE_PRIX, REFONTE_DELAI } from '../data/formules';
       <p class="section-tag" data-i18n="trf-plans-tag">Choisissez votre formule</p>
       <h2 class="section-title" data-i18n="trf-plans-h">La formule<br>adaptée à votre profil.</h2>
 
+      <!-- Deux vrais boutons radio, et non des <button> pilotés en JS :
+           le clavier, le lecteur d'écran et l'état coché viennent avec,
+           et c'est :checked qui bascule l'affichage. Aucun JavaScript. -->
+      <fieldset class="paie">
+        <legend class="sr-only" data-i18n="trf-paie-legend">Mode de paiement</legend>
+        <div class="paie-seg">
+          <input class="paie-radio" type="radio" name="paie" id="paie-1" checked>
+          <label class="paie-lbl" for="paie-1" data-i18n="trf-paie-1">En une fois</label>
+          <input class="paie-radio" type="radio" name="paie" id="paie-3">
+          <label class="paie-lbl" for="paie-3" data-i18n="trf-paie-3">En {MENSUALITES} fois</label>
+        </div>
+      </fieldset>
+
       <div class="plans-grid">
 
         <!-- Refonte de site -->
@@ -195,9 +255,11 @@ import { REFONTE_PRIX, REFONTE_DELAI } from '../data/formules';
           <p class="plan-name" data-i18n="trf-p4-name">Refonte de site</p>
           <div>
             <div class="plan-range">
-              <span class="plan-from"><small class="plan-pre" data-i18n="trf-p4-pre">dès</small> {REFONTE_PRIX}</span>
+              <span class="plan-from plan-comptant"><small class="plan-pre" data-i18n="trf-p4-pre">dès</small> {REFONTE_PRIX}</span>
+              <span class="plan-mois"><small class="plan-pre" data-i18n="trf-p4-pre">dès</small> {REFONTE_MOIS}<small class="plan-mois-u" data-i18n="trf-mois-u">/mois</small></span>
             </div>
-            <p class="plan-desc" data-i18n="trf-p4-desc">Votre site existe, mais il a vieilli.</p>
+            <p class="plan-desc plan-comptant" data-i18n="trf-p4-desc">Votre site existe, mais il a vieilli.</p>
+            <p class="plan-desc plan-mois-note"><span data-i18n="trf-mois-note">{MENSUALITES} mensualités · soit</span> {REFONTE_PRIX} <span data-i18n="trf-mois-total">au total</span></p>
           </div>
           <hr class="plan-divider">
           <ul class="plan-features">
@@ -231,9 +293,11 @@ import { REFONTE_PRIX, REFONTE_DELAI } from '../data/formules';
           <p class="plan-name" data-i18n="trf-p2-name">Vitrine Pro</p>
           <div>
             <div class="plan-range">
-              <span class="plan-amount" data-i18n="trf-p2-price">1&nbsp;000&nbsp;€</span>
+              <span class="plan-amount plan-comptant" data-i18n="trf-p2-price">{VITRINE_PRIX}</span>
+              <span class="plan-mois plan-mois-gros">{VITRINE_MOIS}<small class="plan-mois-u" data-i18n="trf-mois-u">/mois</small></span>
             </div>
-            <p class="plan-desc" data-i18n="trf-p2-desc">Offre de lancement · places limitées</p>
+            <p class="plan-desc plan-comptant" data-i18n="trf-p2-desc">Offre de lancement · places limitées</p>
+            <p class="plan-desc plan-mois-note"><span data-i18n="trf-mois-note">{MENSUALITES} mensualités · soit</span> {VITRINE_PRIX} <span data-i18n="trf-mois-total">au total</span></p>
           </div>
           <div class="plan-spots">
             <span class="plan-spots-num" id="vp-spots-num">3</span>
@@ -274,11 +338,18 @@ import { REFONTE_PRIX, REFONTE_DELAI } from '../data/formules';
           <p class="plan-name" data-i18n="trf-p3-name">Entreprise</p>
           <div>
             <div class="plan-range">
-              <span class="plan-from" data-i18n="trf-p3-from">1 200 €</span>
-              <span class="plan-sep">—</span>
-              <span class="plan-to" data-i18n="trf-p3-to">3 100 €</span>
+              <!-- La clé est sur le <small> SEUL, comme sur la carte Refonte.
+                   Elle a d'abord porté tout le span, <small> compris : i18n
+                   écrit en innerHTML, et le <small> ainsi recréé ne porte pas
+                   l'attribut de portée d'Astro — la règle .plan-pre ne
+                   l'atteignait plus. Mesuré : 23,33 px au lieu de 12,88, soit
+                   la taille par défaut de <small>. Le montant reste
+                   interpolé depuis formules.ts, donc jamais dupliqué. -->
+              <span class="plan-from plan-comptant"><small class="plan-pre" data-i18n="trf-pre-apd">à partir de</small> {ENTREPRISE_PRIX}</span>
+              <span class="plan-mois"><small class="plan-pre" data-i18n="trf-pre-apd">à partir de</small> {ENTREPRISE_MOIS}<small class="plan-mois-u" data-i18n="trf-mois-u">/mois</small></span>
             </div>
-            <p class="plan-desc" data-i18n="trf-p3-desc">Site professionnel ou e-commerce</p>
+            <p class="plan-desc plan-comptant" data-i18n="trf-p3-desc">Site professionnel ou e-commerce</p>
+            <p class="plan-desc plan-mois-note"><span data-i18n="trf-mois-note">{MENSUALITES} mensualités · soit</span> {ENTREPRISE_PRIX} <span data-i18n="trf-mois-total">au total</span></p>
           </div>
           <hr class="plan-divider">
           <ul class="plan-features">

@@ -35,6 +35,7 @@ for (const d of ['src/pages', 'src/components', 'src/layouts']) {
 }
 
 const pieges = [];
+const toutesScopees = new Map();   // classe -> le fichier qui la style en scopé
 for (const f of fichiers) {
   const src = readFileSync(f, 'utf8');
 
@@ -109,9 +110,39 @@ for (const f of fichiers) {
   for (const [c, raison] of fabriquees) {
     if (scopees.has(c)) pieges.push({ f, c, raison });
   }
+  for (const c of scopees) toutesScopees.set(c, f);
 }
 
-console.log(`${fichiers.length} composants Astro examinés.`);
+/* ── 3. LE MÊME PIÈGE, MAIS D'UN FICHIER À L'AUTRE ─────────────────────
+   Le contrôle ci-dessus compare un fichier à lui-même. Il ne pouvait
+   donc pas voir le cas réel suivant : public/i18n.js remplace du
+   contenu en innerHTML, et une de ses chaînes portait
+   « <small class="plan-pre"> » — une classe définie dans le <style>
+   scopé de src/pages/tarifs.astro. Le <small> recréé n'avait pas
+   l'attribut de portée, la règle ne l'atteignait plus, et le préfixe
+   « à partir de » s'affichait à 23,33 px au lieu de 12,88, c'est-à-dire
+   à la taille d'un prix. Mesuré à l'écran, pas supposé.
+
+   Les scripts de public/ sont chargés par toutes les pages : une classe
+   qu'ils injectent n'est couverte nulle part si elle n'est stylée que
+   dans un scope. */
+const scripts = readdirSync('public').filter((f) => f.endsWith('.js'));
+for (const nom of scripts) {
+  /* Les commentaires sont retirés d'abord : un exemple cité dans une
+     explication n'injecte rien. Sans ça, le commentaire de scroll-fx.js
+     qui cite « <small class="plan-pre"> » se signalait lui-même. */
+  const js = readFileSync(join('public', nom), 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, ' ')
+    .replace(/^\s*\/\/.*$/gm, ' ');
+  for (const m of js.matchAll(/class=\\?["']([^"'\\]+)/g)) {
+    for (const c of m[1].trim().split(/\s+/)) {
+      const ou = toutesScopees.get(c);
+      if (ou) pieges.push({ f: join('public', nom), c, raison: 'innerHTML — stylée dans ' + ou });
+    }
+  }
+}
+
+console.log(`${fichiers.length} composants Astro examinés, plus ${scripts.length} scripts de public/.`);
 if (!pieges.length) {
   console.log('\n✓ Rien de fabriqué en JavaScript ne dépend d\'un style scopé.');
   process.exit(0);
