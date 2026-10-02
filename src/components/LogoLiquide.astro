@@ -33,6 +33,7 @@ export interface Props {
   aide?: boolean;         // afficher la ligne d'invitation
   interactif?: boolean;   // survol et clic
   anime?: boolean;        // l'or ondule sous le curseur (WebGL, à la demande)
+  lueur?: boolean;        // halo chaud derrière la tuile
   prioritaire?: boolean;  // image au-dessus de la ligne de flottaison
   class?: string;
 }
@@ -42,13 +43,14 @@ const {
   aide = false,
   interactif = true,
   anime = false,
+  lueur = true,
   prioritaire = false,
   class: klass = '',
 } = Astro.props;
 ---
 
 <div
-  class:list={['llq', interactif && 'llq-i', klass]}
+  class:list={['llq', interactif && 'llq-i', !lueur && 'llq-sec', klass]}
   style={`--llq-taille:${taille}px`}
 >
   <div class="llq-tuile" data-liquide={anime ? '' : undefined}>

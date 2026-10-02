@@ -59,15 +59,57 @@ const favicon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" rol
   <rect class="mk" x="16" y="51.5" width="27" height="3" rx="1.5"/>
 </svg>
 `;
+/* On continue d'écrire favicon.svg : il ne sert plus d'icône d'onglet —
+   déclaré, il primerait sur les PNG du rendu 3D — mais il reste le
+   monogramme vectoriel de secours, net à toute taille, pour un usage
+   où le rendu photographique ne convient pas. */
 write('favicon.svg', Buffer.from(favicon));
 
-/* ── Icônes PWA : le SVG a un @media, un PNG non. On rastérise la
-      variante sombre, qui est l'identité de la marque. ── */
-const iconPng = (size) => sharp(Buffer.from(
-  favicon.replace(/<style>[\s\S]*?<\/style>/, '')
-         .replace(/class="bg"/, `fill="${T.dark.bg}"`)
-         .replace(/class="mk"/g, `fill="${T.dark.accent}"`)
-), { density: 384 }).resize(size, size).png({ compressionLevel: 9 }).toBuffer();
+/* ── Icônes : le rendu 3D, découpé sur l'arête du verre ──────────────
+      Les angles sont les mêmes qu'à l'écran — encart 7 px et rayon
+      156 px sur 660 —, mesurés dans le fichier et non estimés. En
+      dehors, l'alpha est à zéro : sur une barre d'onglets claire, un
+      carré noir se verrait.
+
+      Le recadrage se resserre quand l'icône rétrécit. Vérifié en
+      agrandissant les pixels : à 16 px l'image entière n'est qu'une
+      tache brune, le N disparaît. En coupant 15 % du pourtour, les
+      trois traits du N retrouvent assez de pixels pour se lire. C'est
+      la même pratique que pour n'importe quelle icône système — le
+      dessin se simplifie à mesure qu'il rapetisse.
+
+      Deux pipelines sharp et non un seul : dans une même chaîne, sharp
+      redimensionne AVANT de composer, et le masque arriverait sur une
+      image déjà réduite. ── */
+const SRC_LOGO = join(ROOT, 'assets/sources/logo-liquide.jpg');
+const S_LOGO = 660, ENCART = 7, RAYON = 156;
+
+const masqueRond = (cote, encart, rayon) => sharp(Buffer.from(
+  `<svg xmlns="http://www.w3.org/2000/svg" width="${cote}" height="${cote}">` +
+  `<rect x="${encart}" y="${encart}" width="${cote - 2 * encart}" height="${cote - 2 * encart}" ` +
+  `rx="${rayon}" ry="${rayon}" fill="#fff"/></svg>`)).resize(cote, cote).png().toBuffer();
+
+/* Plus l'icône est petite, plus on se rapproche. */
+const serrage = (size) => (size <= 16 ? 1.18 : size <= 32 ? 1.08 : 1);
+
+const iconPng = async (size) => {
+  const z = serrage(size);
+  const cote = Math.round(S_LOGO / z);
+  const marge = Math.round((S_LOGO - cote) / 2);
+  const decoupe = await sharp(SRC_LOGO)
+    .extract({ left: marge, top: marge, width: cote, height: cote }).png().toBuffer();
+  const arrondi = await sharp(decoupe).composite([{
+    input: await masqueRond(cote, Math.round(ENCART / z), Math.round(RAYON / z)),
+    blend: 'dest-in',
+  }]).png().toBuffer();
+  /* Palette : un PNG plein sur une image photographique donnait 584 ko
+     pour la 512, soit plus que tout le JavaScript du site. Quantifié sur
+     256 teintes il tombe à quelques dizaines de kilo-octets, et sur un
+     dégradé d'or la différence ne se voit pas — vérifié en comparant les
+     deux côte à côte. */
+  return sharp(arrondi).resize(size, size)
+    .png({ compressionLevel: 9, palette: true, quality: 92, effort: 10 }).toBuffer();
+};
 
 for (const size of [16, 32, 180, 192, 512]) {
   write(`icons/icon-${size}.png`, await iconPng(size));

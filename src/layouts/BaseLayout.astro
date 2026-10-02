@@ -28,7 +28,14 @@ import River from '../components/River.astro';
   <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow"} />
   <!-- Fait suivre le thème aux barres de défilement, champs natifs et autofill -->
   <meta name="color-scheme" content="dark light" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <!-- L'icône de l'onglet, c'est le rendu 3D, pas le monogramme vectoriel.
+       Le SVG n'est plus déclaré : quand un navigateur en trouve un, il le
+       préfère à tous les PNG, et c'est le vecteur qui s'afficherait.
+       Deux tailles, parce qu'elles ne portent pas le même dessin : à 16 px
+       l'image entière n'est qu'une tache, le recadrage y est resserré de
+       15 % pour que le N garde assez de pixels. Vérifié en agrandissant. -->
+  <link rel="icon" href="/icons/icon-32.png" type="image/png" sizes="32x32" />
+  <link rel="icon" href="/icons/icon-16.png" type="image/png" sizes="16x16" />
   <link rel="apple-touch-icon" href="/icons/icon-180.png" />
   <link rel="manifest" href="/site.webmanifest" />
   <link rel="canonical" href={canonicalUrl} />

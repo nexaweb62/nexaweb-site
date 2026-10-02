@@ -1,4 +1,6 @@
 ---
+import LogoLiquide from './LogoLiquide.astro';
+
 export interface Props {
   cta?: string;
   ctaHref?: string;
@@ -10,6 +12,17 @@ const { cta = 'Démarrer un projet', ctaHref = '/devis', back = true } = Astro.p
   <div class="wrap">
     <nav class="nav" aria-label="Navigation principale">
       <a href="/" class="nav-logo" aria-label="NEXAWEB — Accueil">
+        {/* La tuile est chargée tout de suite et jamais en différé : elle est
+            au-dessus de la ligne de flottaison sur les 22 pages, et apparaître
+            après coup ferait sauter le mot à côté. 0,8 ko en AVIF à 64 px. */}
+        <LogoLiquide
+          class="nav-logo-tuile"
+          taille={26}
+          nom={false}
+          interactif={false}
+          lueur={false}
+          prioritaire={true}
+        />
         <svg viewBox="0 0 130 28" height="28" aria-hidden="true" class="nav-logo-svg">
           <text x="0" y="22" font-family="Arial Black,Arial,Helvetica,sans-serif" font-weight="900" font-size="22"><tspan class="logo-nexa">NEXA</tspan><tspan class="logo-web">WEB</tspan></text>
         </svg>

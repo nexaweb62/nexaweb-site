@@ -187,6 +187,10 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
   font-size:clamp(1.1rem,calc(var(--llq-taille,320px) * .115),2.6rem);
   font-weight:600;letter-spacing:.14em;line-height:1;margin:0;
 }
+/* Sans lueur : dans l'en-tête, un halo doré permanent autour d'une
+   tuile de 26 px est du bruit, pas de la présence. */
+.llq-sec .llq-tuile::before{display:none}
+
 .llq-nexa{color:var(--accent-text)}
 .llq-web{color:var(--text);font-weight:300}
 .llq-aide{font-size:12px;color:var(--text-subtle);margin:0;text-align:center}
@@ -357,7 +361,15 @@ body.lite .lgm-i:hover .lg-reflet,body.lite .lgm-i.lg-tombe .lg-goutte{animation
 .hdr.is-hidden{transform:translateY(-100%)}
 
 .nav{display:flex;align-items:center;height:var(--hdr);position:relative}
-.nav-logo{display:flex;align-items:center;color:var(--text);flex:0 0 auto}
+.nav-logo{display:flex;align-items:center;gap:9px;color:var(--text);flex:0 0 auto}
+/* La tuile dans l'en-tête : le composant est bâti en colonne pour son
+   usage en grand, ici il ne porte qu'une image, on le remet à plat et
+   on lui enlève son écart vertical. */
+.nav-logo .llq{gap:0;flex:0 0 auto}
+/* Le rendu est sombre : sur le thème clair il lui faut un filet, sinon
+   la tuile flotte sur le crème sans arête. */
+:root[data-theme="light"] .nav-logo-tuile .llq-tuile,
+:root[data-theme="light"] .foot-tuile .llq-tuile{box-shadow:0 1px 3px var(--shadow-1)}
 .nav-logo-svg{flex-shrink:0;overflow:visible}
 .nav-logo-svg .logo-nexa{fill:var(--text)}
 .nav-logo-svg .logo-web{fill:var(--accent-text)}
@@ -535,7 +547,9 @@ body.lite .lgm-i:hover .lg-reflet,body.lite .lgm-i.lg-tombe .lg-goutte{animation
   display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:clamp(28px,5vw,80px);
   padding:clamp(40px,6vh,80px) 0;border-bottom:1px solid var(--border);
 }
-.foot-logo{font-size:1.15rem;font-weight:600;letter-spacing:0;margin-bottom:10px;color:var(--text)}
+.foot-marque{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.foot-marque .llq{gap:0;flex:0 0 auto}
+.foot-logo{font-size:1.15rem;font-weight:600;letter-spacing:0;color:var(--text)}
 .foot-logo span{color:var(--accent-text)}
 .foot-tag{font-size:var(--fs-100);font-weight:300;color:var(--text-muted);line-height:var(--lh-body);max-width:230px}
 .foot-col-title{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-subtle);margin-bottom:var(--sp-3)}
