@@ -1,0 +1,44 @@
+# ─── Netlify — Nexa Web ───────────────────────────────────────────────────────
+# Ce fichier avait disparu pendant la migration vers Astro, avec le reste de
+# l'ancien site. Il est remis parce qu'on ne sait pas avec certitude qui sert
+# nexaaweb.com : GitHub Pages construit bien la branche, mais aucun CNAME n'a
+# jamais existé dans ce dépôt, alors que l'ancienne branche portait ce fichier
+# et que la note de mise en ligne documentait Netlify. S'il reste branché, il
+# doit savoir construire Astro ; s'il ne l'est pas, ce fichier ne coûte rien.
+#
+# Ce qui change par rapport à l'ancienne version : le site n'est plus du HTML
+# posé à la racine. Il faut le CONSTRUIRE, et publier « dist ».
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # package.json exige >= 22.12.0
+  NODE_VERSION = "22"
+
+# ─── En-têtes de sécurité (toutes les pages) ─────────────────────────────────
+# Conservés tels quels. Le cache des fichiers versionnés est déjà décrit dans
+# public/_headers, qui part dans dist et que Netlify lit aussi.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options            = "SAMEORIGIN"
+    X-Content-Type-Options     = "nosniff"
+    Referrer-Policy            = "strict-origin-when-cross-origin"
+    Permissions-Policy         = "camera=(), microphone=(), geolocation=()"
+    Strict-Transport-Security  = "max-age=31536000; includeSubDomains; preload"
+
+# ─── Domaine canonique : www → nexaaweb.com (évite split de localStorage) ────
+[[redirects]]
+  from   = "https://www.nexaaweb.com/*"
+  to     = "https://nexaaweb.com/:splat"
+  status = 301
+  force  = true
+
+# ─── Page 404 personnalisée ───────────────────────────────────────────────────
+# Astro produit dist/404.html ; la règle ne change pas.
+[[redirects]]
+  from   = "/*"
+  to     = "/404.html"
+  status = 404

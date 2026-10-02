@@ -1,0 +1,72 @@
+# ════════════════════════════════════════════════════════════════════
+#  DÉPLOIEMENT DU SITE SUR GITHUB PAGES
+#
+#  Pourquoi ce fichier existe. Jusqu'ici, Pages était réglé sur
+#  « déployer depuis une branche » : il lançait Jekyll sur la racine du
+#  dépôt. L'ancien site, en HTML écrit à la main, passait tel quel.
+#  Astro ne peut pas : Jekyll lit chaque fichier et prend le « --- » de
+#  tête des composants pour du YAML. Le build du 2 octobre est mort
+#  là-dessus, sur Footer.astro.
+#
+#  Un site Astro doit être CONSTRUIT avant d'être publié. C'est ce que
+#  fait ce workflow : il installe, il construit, il envoie « dist » à
+#  Pages.
+#
+#  ⚠ Pour qu'il serve à quelque chose, il faut une fois pour toutes
+#  régler Réglages → Pages → Source sur « GitHub Actions ». Tant que la
+#  source reste « Deploy from a branch », c'est Jekyll qui tourne et ce
+#  fichier est ignoré.
+# ════════════════════════════════════════════════════════════════════
+name: Déploiement du site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:        # permet de relancer à la main depuis l'onglet Actions
+
+# Les trois droits exigés par le déploiement Pages, et rien de plus.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Deux poussées rapprochées ne doivent pas se marcher dessus. On ne
+# coupe pas celui qui tourne : un déploiement interrompu en plein
+# transfert laisse le site dans un état incertain.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  construire:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # package.json exige >= 22.12.0
+          node-version: '22'
+          cache: npm
+
+      # « ci » et non « install » : on installe exactement ce que décrit
+      # package-lock.json, sans jamais le modifier en silence.
+      - run: npm ci
+
+      - run: npm run build
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deployer:
+    needs: construire
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploiement.outputs.page_url }}
+    steps:
+      - id: deploiement
+        uses: actions/deploy-pages@v4
