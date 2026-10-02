@@ -1,12 +1,15 @@
-# ─── Cloudflare Pages — Nexa Web ─────────────────────────────────────────────
-# Ce fichier était écrit au format Workers : une section « [assets] » avec
-# « directory ». Cloudflare PAGES ne lit pas cette forme. Quand il trouve un
-# wrangler.toml sans « pages_build_output_dir », il refuse le build au lieu de
-# l'ignorer — c'est la cause la plus probable du run en échec.
+# ─── Cloudflare Workers (Static Assets) — Nexa Web ───────────────────────────
+# ⚠ Ce projet est un WORKER, pas un projet Pages. Le tableau de bord le déploie
+# avec « npx wrangler deploy », et cette commande refuse un fichier contenant
+# « pages_build_output_dir » : elle renvoie vers « wrangler pages deploy ».
+# Le 2 octobre, ce fichier a été réécrit au format Pages sur la foi d'une
+# supposition ; le build est passé, le déploiement a échoué. Format Workers,
+# donc, et on n'y touche pas sans avoir lu les réglages du projet.
 #
-# Le format Pages n'a qu'une clé utile ici : le dossier produit par le build.
-# La COMMANDE de build, elle, ne se met pas dans ce fichier : elle vit dans le
-# tableau de bord Cloudflare (Build command). Elle doit être « npm run build ».
+# La commande de build vit dans le tableau de bord (« npm run build »), pas ici.
 name = "nexaweb-site"
 compatibility_date = "2024-09-23"
-pages_build_output_dir = "dist"
+
+[assets]
+directory = "dist"
+not_found_handling = "404-page"
