@@ -37,6 +37,11 @@
   /* Blancs chauds — les textes du mode sombre */
   --raw-warm-50:  #F4F2EE;
   /* Un seul gris pour TOUT le secondaire en sombre — le gris d'Apple. */
+  /* Gris intermédiaire, né d'un besoin mesuré : sur la vidéo de la page
+     Tarifs, le texte secondaire en #86868B tombe à 3,3:1 contre les
+     coulées d'or les plus claires. Le calcul donne ~162 pour tenir
+     4,5:1 sur le pire pixel ; celui-ci est à 182. */
+  --raw-warm-200: #B6B4B1;
   --raw-warm-300: #86868B;
   --raw-warm-400: #86868B;
 
@@ -517,7 +522,16 @@
    3d. MAPPING SÉMANTIQUE — SOMBRE choisi explicitement
        Nécessaire pour reprendre la main sur 3b quand l'OS est en clair.
    ─────────────────────────────────────────────────────────────────────── */
-:root[data-theme="dark"] {
+/* « [data-theme-sombre] » : le même jeu de valeurs, applicable à un
+   SOUS-ARBRE et non plus seulement à la racine. Né d'un besoin réel —
+   la section Tarifs pose son contenu sur une vidéo sombre et doit
+   rester sombre dans les deux thèmes. Recopier les jetons à la main
+   dans la page marchait pour le texte et ratait les trente jetons de
+   verre des boutons, qui ressortaient clairs sur fond noir. Les
+   règles « :root[...] » ne touchent jamais cet élément, puisqu'il
+   n'est pas la racine : il n'y a donc pas de conflit de priorité. */
+:root[data-theme="dark"],
+[data-theme-sombre] {
   color-scheme: dark;
 
   --bg:            var(--raw-black-950);
