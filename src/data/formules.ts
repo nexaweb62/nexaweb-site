@@ -45,18 +45,21 @@ export const ENTREPRISE = {
 export const ENTREPRISE_PRIX = prix(ENTREPRISE.prixDepart);    // « 1 200 € »
 
 /* ── Le paiement en plusieurs fois ──────────────────────────────────
-   Trois mensualités, sans majoration : le total payé est exactement le
-   prix comptant. Les montants ci-dessous sont arrondis au supérieur,
-   donc la dernière mensualité absorbe la différence — 490 € donne
+   Deux échéanciers, sans majoration : le total payé est exactement le
+   prix comptant. Les montants sont arrondis au SUPÉRIEUR, donc la
+   dernière mensualité absorbe la différence — 490 € en trois fois donne
    164 + 164 + 162, et non 163,33 trois fois. La page affiche toujours
    le total à côté, pour qu'aucun chiffre ne puisse tromper. */
-export const MENSUALITES = 3;
-export function parMois(total: number): string {
-  return prix(Math.ceil(total / MENSUALITES));
+export const PLANS = [3, 4] as const;
+export function parMois(total: number, n: number): string {
+  return prix(Math.ceil(total / n));
 }
-export const REFONTE_MOIS    = parMois(REFONTE.prixDepart);    // « 164 € »
-export const VITRINE_MOIS    = parMois(VITRINE.prix);          // « 333 € »
-export const ENTREPRISE_MOIS = parMois(ENTREPRISE.prixDepart); // « 400 € »
+export const REFONTE_M3    = parMois(REFONTE.prixDepart, 3);    // « 164 € »
+export const REFONTE_M4    = parMois(REFONTE.prixDepart, 4);    // « 123 € »
+export const VITRINE_M3    = parMois(VITRINE.prix, 3);          // « 333 € »
+export const VITRINE_M4    = parMois(VITRINE.prix, 4);          // « 250 € »
+export const ENTREPRISE_M3 = parMois(ENTREPRISE.prixDepart, 3); // « 400 € »
+export const ENTREPRISE_M4 = parMois(ENTREPRISE.prixDepart, 4); // « 300 € »
 
 /** Les trois formules, par prix croissant. Chacune a sa pastille de
  *  budget sur la page Devis.

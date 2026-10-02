@@ -4,13 +4,12 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 import {
-  REFONTE_PRIX, REFONTE_DELAI, REFONTE_MOIS,
-  VITRINE_PRIX, VITRINE_MOIS,
-  ENTREPRISE_PRIX, ENTREPRISE_MOIS,
-  MENSUALITES,
+  REFONTE_PRIX, REFONTE_DELAI, REFONTE_M3, REFONTE_M4,
+  VITRINE_PRIX, VITRINE_M3, VITRINE_M4,
+  ENTREPRISE_PRIX, ENTREPRISE_M3, ENTREPRISE_M4,
 } from '../data/formules';
 ---
-<BaseLayout title="Tarifs — Nexa Web" description="Refonte de site dès 490 €, Vitrine Pro à 999 € (offre de lancement, places limitées) et Entreprise à partir de 1 200 €. Paiement en 3 fois possible. Devis gratuit — Nexa Web, Carvin.">
+<BaseLayout title="Tarifs — Nexa Web" description="Refonte de site dès 490 €, Vitrine Pro à 999 € (offre de lancement, places limitées) et Entreprise à partir de 1 200 €. Paiement en 3 ou 4 fois possible. Devis gratuit — Nexa Web, Carvin.">
 <style>
 /* ── HERO ── */
 .prix-hero{padding:clamp(56px,9vh,100px) 0 clamp(32px,5vh,56px);text-align:center;position:relative;z-index:1}
@@ -96,20 +95,24 @@ import {
    clavier où l'on se trouve. */
 .paie-radio:focus-visible + .paie-lbl{outline:2px solid var(--focus);outline-offset:2px}
 
-.plan-mois,.plan-mois-note{display:none}
+/* .plan-mois et .plan-mois-note portent la TYPOGRAPHIE ; .plan-m3 et
+   .plan-m4 portent la VISIBILITÉ. Séparer les deux permet d'ajouter un
+   échéancier sans toucher aux styles. */
+.plan-m3,.plan-m4{display:none}
 .plan-mois{font-size:clamp(20px,2.4vw,28px);font-weight:600;letter-spacing:-.03em;line-height:1;
   white-space:nowrap;font-variant-numeric:tabular-nums}
 .plan-mois-gros{font-size:clamp(23px,3vw,33px);letter-spacing:-.04em}
 .plan-mois-u{font-size:.42em;font-weight:500;color:var(--text-muted);margin-left:.1em}
-.plans-section:has(#paie-3:checked) .plan-comptant{display:none}
+.plans-section:has(#paie-3:checked) .plan-comptant,
+.plans-section:has(#paie-4:checked) .plan-comptant{display:none}
 /* « block » et non « inline-flex » : un conteneur flex ne rend pas les
    nœuds de texte faits d'espaces seuls, et l'espace du gabarit entre
    « à partir de » et le montant disparaissait. Mesuré : 1,5 px d'écart
    au premier chiffre contre 8,4 px côté comptant, soit « à partir
    de400 € ». Le span est de toute façon rendu en bloc : c'est un
    enfant de .plan-range, qui est en flex. */
-.plans-section:has(#paie-3:checked) .plan-mois{display:block}
-.plans-section:has(#paie-3:checked) .plan-mois-note{display:block}
+.plans-section:has(#paie-3:checked) .plan-m3{display:block}
+.plans-section:has(#paie-4:checked) .plan-m4{display:block}
 @media(max-width:600px){
   .plan-card{padding:14px 14px}
   .plan-name{font-size:var(--fs-caption);margin-bottom:8px}
@@ -244,7 +247,9 @@ import {
           <input class="paie-radio" type="radio" name="paie" id="paie-1" checked>
           <label class="paie-lbl" for="paie-1" data-i18n="trf-paie-1">En une fois</label>
           <input class="paie-radio" type="radio" name="paie" id="paie-3">
-          <label class="paie-lbl" for="paie-3" data-i18n="trf-paie-3">En {MENSUALITES} fois</label>
+          <label class="paie-lbl" for="paie-3" data-i18n="trf-paie-3">En 3 fois</label>
+          <input class="paie-radio" type="radio" name="paie" id="paie-4">
+          <label class="paie-lbl" for="paie-4" data-i18n="trf-paie-4">En 4 fois</label>
         </div>
       </fieldset>
 
@@ -256,10 +261,12 @@ import {
           <div>
             <div class="plan-range">
               <span class="plan-from plan-comptant"><small class="plan-pre" data-i18n="trf-p4-pre">dès</small> {REFONTE_PRIX}</span>
-              <span class="plan-mois"><small class="plan-pre" data-i18n="trf-p4-pre">dès</small> {REFONTE_MOIS}<small class="plan-mois-u" data-i18n="trf-mois-u">/mois</small></span>
+              <span class="plan-mois plan-m3"><small class="plan-pre" data-i18n="trf-p4-pre">dès</small> {REFONTE_M3}<small class="plan-mois-u" data-i18n="trf-mois-u">/mois</small></span>
+              <span class="plan-mois plan-m4"><small class="plan-pre" data-i18n="trf-p4-pre">dès</small> {REFONTE_M4}<small class="plan-mois-u" data-i18n="trf-mois-u">/mois</small></span>
             </div>
             <p class="plan-desc plan-comptant" data-i18n="trf-p4-desc">Votre site existe, mais il a vieilli.</p>
-            <p class="plan-desc plan-mois-note"><span data-i18n="trf-mois-note">{MENSUALITES} mensualités · soit</span> {REFONTE_PRIX} <span data-i18n="trf-mois-total">au total</span></p>
+            <p class="plan-desc plan-mois-note plan-m3"><span data-i18n="trf-mois-note-3">3 mensualités · soit</span> {REFONTE_PRIX} <span data-i18n="trf-mois-total">au total</span></p>
+            <p class="plan-desc plan-mois-note plan-m4"><span data-i18n="trf-mois-note-4">4 mensualités · soit</span> {REFONTE_PRIX} <span data-i18n="trf-mois-total">au total</span></p>
           </div>
           <hr class="plan-divider">
           <ul class="plan-features">
@@ -294,10 +301,12 @@ import {
           <div>
             <div class="plan-range">
               <span class="plan-amount plan-comptant" data-i18n="trf-p2-price">{VITRINE_PRIX}</span>
-              <span class="plan-mois plan-mois-gros">{VITRINE_MOIS}<small class="plan-mois-u" data-i18n="trf-mois-u">/mois</small></span>
+              <span class="plan-mois plan-mois-gros plan-m3">{VITRINE_M3}<small class="plan-mois-u" data-i18n="trf-mois-u">/mois</small></span>
+              <span class="plan-mois plan-mois-gros plan-m4">{VITRINE_M4}<small class="plan-mois-u" data-i18n="trf-mois-u">/mois</small></span>
             </div>
             <p class="plan-desc plan-comptant" data-i18n="trf-p2-desc">Offre de lancement · places limitées</p>
-            <p class="plan-desc plan-mois-note"><span data-i18n="trf-mois-note">{MENSUALITES} mensualités · soit</span> {VITRINE_PRIX} <span data-i18n="trf-mois-total">au total</span></p>
+            <p class="plan-desc plan-mois-note plan-m3"><span data-i18n="trf-mois-note-3">3 mensualités · soit</span> {VITRINE_PRIX} <span data-i18n="trf-mois-total">au total</span></p>
+            <p class="plan-desc plan-mois-note plan-m4"><span data-i18n="trf-mois-note-4">4 mensualités · soit</span> {VITRINE_PRIX} <span data-i18n="trf-mois-total">au total</span></p>
           </div>
           <div class="plan-spots">
             <span class="plan-spots-num" id="vp-spots-num">3</span>
@@ -346,10 +355,12 @@ import {
                    la taille par défaut de <small>. Le montant reste
                    interpolé depuis formules.ts, donc jamais dupliqué. -->
               <span class="plan-from plan-comptant"><small class="plan-pre" data-i18n="trf-pre-apd">à partir de</small> {ENTREPRISE_PRIX}</span>
-              <span class="plan-mois"><small class="plan-pre" data-i18n="trf-pre-apd">à partir de</small> {ENTREPRISE_MOIS}<small class="plan-mois-u" data-i18n="trf-mois-u">/mois</small></span>
+              <span class="plan-mois plan-m3"><small class="plan-pre" data-i18n="trf-pre-apd">à partir de</small> {ENTREPRISE_M3}<small class="plan-mois-u" data-i18n="trf-mois-u">/mois</small></span>
+              <span class="plan-mois plan-m4"><small class="plan-pre" data-i18n="trf-pre-apd">à partir de</small> {ENTREPRISE_M4}<small class="plan-mois-u" data-i18n="trf-mois-u">/mois</small></span>
             </div>
             <p class="plan-desc plan-comptant" data-i18n="trf-p3-desc">Site professionnel ou e-commerce</p>
-            <p class="plan-desc plan-mois-note"><span data-i18n="trf-mois-note">{MENSUALITES} mensualités · soit</span> {ENTREPRISE_PRIX} <span data-i18n="trf-mois-total">au total</span></p>
+            <p class="plan-desc plan-mois-note plan-m3"><span data-i18n="trf-mois-note-3">3 mensualités · soit</span> {ENTREPRISE_PRIX} <span data-i18n="trf-mois-total">au total</span></p>
+            <p class="plan-desc plan-mois-note plan-m4"><span data-i18n="trf-mois-note-4">4 mensualités · soit</span> {ENTREPRISE_PRIX} <span data-i18n="trf-mois-total">au total</span></p>
           </div>
           <hr class="plan-divider">
           <ul class="plan-features">
