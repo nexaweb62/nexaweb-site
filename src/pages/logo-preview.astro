@@ -4,6 +4,7 @@
    À supprimer une fois la piste choisie. */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import LogoMark from '../components/LogoMark.astro';
+import LogoLiquide from '../components/LogoLiquide.astro';
 import '../styles/global.css';
 
 const PISTES = [
@@ -72,25 +73,46 @@ const TAILLES_D = [
   /* Deux fonds côte à côte : c'est la seule façon de juger un logo. */
   .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden }
   .panneau { padding: var(--sp-6) var(--sp-5) }
-  /* Les deux thèmes sont montrés côte à côte : on cible donc les variables
-     BRUTES, définies sur :root quel que soit le thème actif, et non les
-     tokens sémantiques qui basculent avec lui. */
-  .panneau--sombre { background: var(--raw-black-950) }
-  .panneau--clair  { background: var(--raw-paper-50) }
-  .panneau-lbl { font-size: var(--fs-25); font-weight: 600; letter-spacing:0; margin-bottom: var(--sp-5) }
-  .panneau--sombre .panneau-lbl { color: var(--raw-warm-400) }
-  .panneau--clair  .panneau-lbl { color: var(--raw-stone-500) }
+  /* Les deux thèmes sont montrés côte à côte, sur une page qui n'a qu'un
+     thème actif. Un panneau ne peut donc pas se contenter de changer son
+     fond : il doit redéfinir les JETONS que son contenu lit. Les propriétés
+     personnalisées héritent, donc les redéclarer ici en fait une île de
+     thème, composants inclus.
+     Sans cela, un composant qui écrit var(--text) prenait la couleur du
+     thème de la page : « WEB » en blanc sur le panneau crème, illisible.
+     Constaté à l'écran. Les valeurs sont celles des deux blocs de thème
+     de tokens.css, les seules couleurs littérales du site. */
+  .panneau--sombre {
+    background: var(--raw-black-950);
+    --bg: var(--raw-black-950); --surface: var(--raw-black-900);
+    --border: var(--raw-black-800);
+    --text: var(--raw-warm-50); --text-muted: var(--raw-warm-300);
+    --text-subtle: var(--raw-warm-400);
+    --accent: var(--raw-gold-400); --accent-text: var(--raw-gold-400);
+  }
+  .panneau--clair {
+    background: var(--raw-paper-50);
+    --bg: var(--raw-paper-50); --surface: var(--raw-paper-0);
+    --border: var(--raw-sand-200);
+    --text: var(--raw-black-ink); --text-muted: var(--raw-stone-600);
+    --text-subtle: var(--raw-stone-500);
+    --accent: var(--raw-gold-700); --accent-text: var(--raw-gold-800);
+  }
+  .panneau-lbl { font-size: var(--fs-25); font-weight: 600; letter-spacing:0; margin-bottom: var(--sp-5); color: var(--text-subtle) }
   .rangee { padding: var(--sp-4) 0; border-top: 1px dashed color-mix(in srgb, currentColor 18%, transparent) }
   .rangee:first-of-type { border-top: none }
   .rangee img { display: block; width: auto; max-width: 100% }
   .rangee-meta { margin-bottom: var(--sp-3) }
-  .rangee-nom { font-size: var(--fs-50); font-weight: 600; letter-spacing:0; }
-  .rangee-note { font-size:var(--fs-caption); margin-top: 3px }
-  .panneau--sombre .rangee-nom { color: var(--raw-warm-50) } .panneau--sombre .rangee-note { color: var(--raw-warm-400) }
-  .panneau--clair  .rangee-nom { color: var(--raw-black-ink) } .panneau--clair  .rangee-note { color: var(--raw-stone-500) }
+  .rangee-nom { font-size: var(--fs-50); font-weight: 600; letter-spacing:0; color: var(--text) }
+  .rangee-note { font-size:var(--fs-caption); margin-top: 3px; color: var(--text-subtle) }
 
-  .grand { margin-top: var(--sp-5); background: var(--raw-black-950); border-radius: var(--radius-md); padding: var(--sp-6) var(--sp-5); overflow-x: auto }
-  .grand .panneau-lbl { color: var(--raw-warm-400) }
+  .grand {
+    margin-top: var(--sp-5); background: var(--raw-black-950);
+    border-radius: var(--radius-md); padding: var(--sp-6) var(--sp-5); overflow-x: auto;
+    --bg: var(--raw-black-950); --text: var(--raw-warm-50);
+    --text-muted: var(--raw-warm-300); --text-subtle: var(--raw-warm-400);
+    --accent: var(--raw-gold-400); --accent-text: var(--raw-gold-400);
+  }
   .grand img { display: block; width: auto; max-width: none }
   .lgm-demo { display: flex; flex-direction: column; align-items: center; gap: var(--sp-4); padding: var(--sp-6) 0 }
   .lgm-aide { font-size: 12px; color: var(--text-subtle); text-align: center }
@@ -168,6 +190,28 @@ const TAILLES_D = [
       </div>
     </section>
   ))}
+
+  <section class="piste">
+    <div class="piste-h"><h2>Piste E — le rendu fourni</h2><span class="piste-id">Image + animation</span></div>
+    <p class="piste-pitch">
+      Votre rendu 3D, passé par la chaîne d'images du site : AVIF, WebP, repli JPEG,
+      trois largeurs, dimensions connues à l'avance donc aucun saut de mise en page.
+      Le fichier est livré sur un noir plein : la découpe suit l'arête du verre,
+      mesurée sur l'image — rayon 160 px sur 660, centre à 163,5 px du bord — sinon
+      le thème clair montrerait ce noir aux quatre coins. Le mot reste du texte :
+      net à toutes les tailles, traduit avec le reste du site.
+    </p>
+    <div class="duo">
+      <div class="panneau panneau--sombre">
+        <div class="panneau-lbl">Fond noir</div>
+        <div class="lgm-demo"><LogoLiquide taille={260} aide={true} /></div>
+      </div>
+      <div class="panneau panneau--clair">
+        <div class="panneau-lbl">Fond crème</div>
+        <div class="lgm-demo"><LogoLiquide taille={260} aide={true} /></div>
+      </div>
+    </div>
+  </section>
 
   <section class="piste">
     <div class="piste-h"><h2>Piste D animée</h2><span class="piste-id">Survol et clic</span></div>

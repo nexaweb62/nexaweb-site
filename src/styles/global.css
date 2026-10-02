@@ -125,6 +125,71 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
 .h-xl em,.h-lg em,.cta-hl em{font-style:normal;font-weight:var(--w-semi);color:var(--accent-text)}
 
 /* ═══════════════════════════════════════════════════════════════════════
+   LE LOGO LIQUIDE — le rendu fourni, sa lueur, sa goutte
+   Les styles sont ici et non dans le composant : <Picture> est un enfant,
+   son <picture> ne porte pas l'attribut de portée du parent, et un
+   sélecteur scopé ne l'atteindrait pas.
+   ═══════════════════════════════════════════════════════════════════════ */
+.llq{display:inline-flex;flex-direction:column;align-items:center;gap:clamp(14px,2vh,22px)}
+.llq-tuile{
+  position:relative;width:var(--llq-taille,320px);aspect-ratio:1;
+  /* La lueur chaude derrière la tuile : un dégradé, pas un flou. */
+  isolation:isolate;
+}
+.llq-tuile::before{
+  content:"";position:absolute;inset:-22%;z-index:-1;pointer-events:none;
+  background:radial-gradient(closest-side,
+    rgb(from var(--accent) r g b / .30), rgb(from var(--accent) r g b / 0) 72%);
+  opacity:.9;
+}
+/* Le rendu est livré sur un noir plein : sans découpe, le thème clair
+   montrerait ce noir autour de la tuile.
+   L'arête du verre a été mesurée sur le fichier, pas estimée : rayon
+   160 px sur 660, centre de courbure à 163,5 px du bord du cadre, soit
+   un encart de 3,5 px (écart-type 1,65 px sur 78 points). Un simple
+   border-radius ne peut pas suivre cette arête — il part du coin du
+   cadre, elle part de 3,5 px plus loin — et laissait un coin noir de
+   3,3 px à 260 px d'affichage. Un rectangle arrondi ENCARTÉ la suit :
+   centre à 163,1 px, rayon 156,5 px, donc la découpe mord 3,9 px dans
+   le verre au lieu de laisser le noir. L'encart de 1 % enlève aussi le
+   liseré sombre des quatre bords droits (1 à 6 px selon le côté).
+   Le border-radius reste comme repli là où clip-path manque. */
+.llq-tuile picture,.llq-tuile img{
+  display:block;width:100%;height:auto;
+  border-radius:24%;clip-path:inset(1% round 24%);
+}
+.llq-goutte{
+  position:absolute;left:50%;bottom:9%;width:4.6%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,var(--raw-gold-300),var(--raw-gold-600));
+  translate:-50% 0;opacity:0;pointer-events:none;
+}
+.llq-nom{
+  display:flex;align-items:baseline;gap:.55em;
+  font-size:clamp(1.1rem,calc(var(--llq-taille,320px) * .115),2.6rem);
+  font-weight:600;letter-spacing:.14em;line-height:1;margin:0;
+}
+.llq-nexa{color:var(--accent-text)}
+.llq-web{color:var(--text);font-weight:300}
+.llq-aide{font-size:12px;color:var(--text-subtle);margin:0;text-align:center}
+
+@media (prefers-reduced-motion:no-preference){
+  .llq-i{cursor:pointer}
+  .llq-i .llq-tuile{transition:transform .5s var(--ease-out)}
+  .llq-i .llq-tuile::before{transition:opacity .5s var(--ease-out),transform .5s var(--ease-out)}
+  .llq-i:hover .llq-tuile,.llq-i:focus-visible .llq-tuile{transform:translateY(-6px) scale(1.015)}
+  .llq-i:hover .llq-tuile::before{opacity:1;transform:scale(1.12)}
+  .llq-i.llq-tombe .llq-goutte{animation:llqGoutte 1s cubic-bezier(.42,0,.72,.52)}
+  @keyframes llqGoutte{
+    0%  {opacity:0;transform:translateY(-8%) scale(.6,.6)}
+    14% {opacity:1;transform:translateY(0) scale(1.18,.84)}
+    100%{opacity:0;transform:translateY(330%) scale(.6,1.5)}
+  }
+}
+/* Mode léger : le logo reste, son mouvement part. */
+body.lite .llq-i .llq-tuile,body.lite .llq-i .llq-tuile::before{transition:none}
+body.lite .llq-i.llq-tombe .llq-goutte{animation:none}
+
+/* ═══════════════════════════════════════════════════════════════════════
    LA MARQUE EN LIGNE — couleurs et animation
    Les deux vivent ici et non dans le style scopé du composant : le SVG
    est inséré par set:html, donc il ne porte pas l'attribut de portée

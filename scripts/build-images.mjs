@@ -26,6 +26,10 @@ const PROFILES = {
   hero:    { widths: [1280, 1920, 2560], budgetAvif: { 1920: 180 } },
   vignette:{ widths: [ 480,  800, 1600], budgetAvif: {  800:  90 } },
   texture: { widths: [1200, 1800, 2400], budgetAvif: { 1800: 120 } },
+  /* Le logo est carre et sert petit : 220 px pour une vignette, 440 pour
+     un ecran courant, 660 pour un ecran dense. Sa source fait 660 px de
+     cote, on ne l'agrandit pas. */
+  logo:    { widths: [ 220,  440,  660], budgetAvif: {  440:  60 } },
 };
 /* Le profil se déduit du préfixe du fichier : hero-*.jpg, vignette-*.jpg… */
 const profileOf = name => Object.keys(PROFILES).find(p => name.startsWith(p)) || 'vignette';
