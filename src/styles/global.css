@@ -158,6 +158,25 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
   display:block;width:100%;height:auto;
   border-radius:24%;clip-path:inset(1% round 24%);
 }
+/* Le canevas se superpose exactement au rendu fixe, découpe comprise :
+   le moteur peint la même image, fond noir inclus, donc sans la même
+   découpe il rendrait les coins que l'image a perdus.
+   Il arrive en fondu pour que le passage du fixe au vivant ne soit pas
+   un à-coup. Tant qu'il n'est pas vivant il ne reçoit pas les clics,
+   sans quoi il avalerait ceux destinés à la goutte. */
+.llq-canvas{
+  position:absolute;inset:0;width:100%;height:100%;display:block;
+  border-radius:24%;clip-path:inset(1% round 24%);
+  opacity:0;transition:opacity .6s var(--ease-out);pointer-events:none;
+}
+.llq-tuile.llq-vivant .llq-canvas{opacity:1;pointer-events:auto;touch-action:none}
+/* Le rendu fixe reste en dessous, opaque, pendant et après le fondu.
+   On avait d'abord essayé de l'effacer en même temps : les deux couches
+   se retrouvaient alors à moitié transparentes en même temps, et le
+   fond du panneau transparaissait à travers le logo — visible sur le
+   crème. Le laisser tel quel ne coûte rien, le canevas le recouvre
+   entièrement une fois opaque, et il n'y a plus de trou possible. */
+
 .llq-goutte{
   position:absolute;left:50%;bottom:9%;width:4.6%;aspect-ratio:1;border-radius:50%;
   background:radial-gradient(circle at 35% 30%,var(--raw-gold-300),var(--raw-gold-600));

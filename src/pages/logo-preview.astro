@@ -211,6 +211,19 @@ const TAILLES_D = [
         <div class="lgm-demo"><LogoLiquide taille={260} aide={true} /></div>
       </div>
     </div>
+
+    <div class="grand">
+      <div class="panneau-lbl">L'or liquide — WebGL, à la demande</div>
+      <p class="piste-pitch">
+        La même tuile, vivante : l'or ondule sous le curseur. Le moteur pèse 509 ko
+        bruts, 125 ko compressés — 1,4 fois tout le JavaScript du site réuni. Il n'est
+        donc téléchargé que lorsque la tuile entre à l'écran, détruit dès qu'elle en
+        sort, et jamais demandé si la machine a dit non : « réduire les animations »,
+        mode léger du site, ou pas de WebGL. Dans tous ces cas le rendu fixe reste,
+        et c'est lui qu'on voit d'abord de toute façon.
+      </p>
+      <div class="lgm-demo"><LogoLiquide taille={300} anime={true} aide={false} /></div>
+    </div>
   </section>
 
   <section class="piste">
