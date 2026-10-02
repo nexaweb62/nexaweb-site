@@ -19,11 +19,6 @@
 /vendor/*
   Cache-Control: public, max-age=31536000, immutable
 
-# La vidéo de fond et son affiche portent « -v1 » : une nouvelle version
-# prendra un nouveau nom. 618 ko qu'on ne veut retélécharger à aucun prix.
-/video/*
-  Cache-Control: public, max-age=31536000, immutable
-
 # Les scripts de public/ ne sont PAS versionnés : ils gardent leur nom
 # d'une version à l'autre. Un cache long y figerait du code corrigé chez
 # les visiteurs déjà venus. Une heure, puis revalidation.

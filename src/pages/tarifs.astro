@@ -47,71 +47,7 @@ import {
 @media(max-width:600px){.launch-band{flex-direction:column;text-align:center}.launch-spots{flex-direction:row;gap:12px;justify-content:center}}
 
 /* ── FORMULES ── */
-/* ══ LA RIVIÈRE D'OR EN FOND DE SECTION ════════════════════════════
-   La vidéo est sombre et vaut pour les deux thèmes. La section devient
-   donc une ÎLE DE JETONS calée sur les valeurs du thème sombre : sans
-   ça, en thème clair, l'encre noire du texte se poserait sur une vidéo
-   noire et deviendrait illisible. Les propriétés personnalisées
-   héritent, donc tout ce qui est à l'intérieur suit, cartes comprises.
-   C'est le seul endroit du site où une section impose son thème. */
-.plans-section{
-  padding:clamp(32px,5vh,56px) 0 clamp(48px,7vh,72px);position:relative;z-index:1;
-  /* Les jetons du thème sombre viennent de l'attribut data-theme-sombre
-     posé sur cette section dans le gabarit : tous, y compris les trente
-     jetons de verre des boutons, et non la poignée qu'on recopiait ici.
-     Reste à poser la couleur héritée — redéfinir --text ne suffit pas,
-     un élément qui ne cite pas la variable hérite de <body>. Constaté :
-     le titre ressortait à rgb(20,20,22) sur la vidéo, soit 1,00:1. */
-  color:var(--text);
-  /* Un fond opaque sous la vidéo, et pas seulement pour la forme :
-     si le fichier ne se charge pas, c'est lui qu'on voit, et le texte
-     clair y reste lisible. Il rend aussi son travail possible à
-     check:contrast:rendered, qui remonte les parents pour trouver une
-     couleur de fond : sans elle il tombait sur celle de la PAGE —
-     papier en thème clair — et annonçait 1,05:1 là où les pixels
-     réellement composités donnent largement AA. */
-  background:var(--bg);
-}
-/* Pleine largeur alors que la colonne fait 1040 px : inset-inline part
-   du bord de la fenêtre. Pas de transform — un translate ici créerait
-   un bloc conteneur pour les cartes, qui sont en position absolue au
-   survol. overflow:hidden est sur CE conteneur et non sur la section :
-   la section rogné couperait la pastille « Populaire », posée à
-   -13 px du bord haut de sa carte. */
-.riv{position:absolute;inset-block:0;inset-inline:calc(50% - 50vw);
-  z-index:-1;overflow:hidden;pointer-events:none}
-.riv-v{display:block;width:100%;height:100%;object-fit:cover}
-/* Le voile : 40 % en haut, 70 % en bas, comme demandé. Le noir vient
-   d'un jeton brut — aucune couleur littérale hors de tokens.css. */
-.riv-voile{position:absolute;inset:0;
-  background:linear-gradient(180deg,
-    rgb(from var(--raw-black-950) r g b / .40),
-    rgb(from var(--raw-black-950) r g b / .70));
-}
-/* Le chapeau et le titre se posent directement sur la vidéo, sans
-   carte pour les porter. Mesuré : sur les coulées les plus claires, le
-   pire pixel monte à rgb(130,107,65) — contre lequel MÊME DU BLANC PUR
-   ne donne que 3,9:1 en petit texte. Aucune couleur d'encre ne peut
-   sauver ça : c'est le fond qu'il faut assombrir. D'où ce renfort
-   local, un dégradé qui s'éteint avant les cartes et ne touche pas au
-   voile de 40 à 70 % demandé pour la section. */
-.plans-section>.section-tag,.plans-section>.section-title{position:relative;z-index:1}
-.riv-tete{position:absolute;inset-inline:calc(50% - 50vw);top:0;height:clamp(150px,22vh,230px);
-  pointer-events:none;z-index:-1;
-  background:linear-gradient(180deg,
-    rgb(from var(--raw-black-950) r g b / .55),
-    rgb(from var(--raw-black-950) r g b / 0));
-}
-/* Mouvement réduit : la vidéo disparaît, l'affiche prend sa place en
-   image fixe. Le voile reste, sinon le texte perdrait son contraste. */
-@media (prefers-reduced-motion:reduce){
-  .riv-v{display:none}
-  .riv{background:url('/video/riviere-or-v1.jpg') center/cover no-repeat}
-}
-/* Mode léger : même traitement. Une vidéo qui tourne en continu est
-   exactement ce que ce mode existe pour couper. */
-body.lite .riv-v{display:none}
-body.lite .riv{background:url('/video/riviere-or-v1.jpg') center/cover no-repeat}
+.plans-section{padding:clamp(32px,5vh,56px) 0 clamp(48px,7vh,72px);position:relative;z-index:1}
 /* Ces deux classes existaient dans le balisage depuis l'origine sans
    qu'aucune règle ne les cible : le titre de section tombait sur le
    style h2 par défaut du navigateur — trop petit, interligne trop
@@ -193,30 +129,12 @@ body.lite .riv{background:url('/video/riviere-or-v1.jpg') center/cover no-repeat
   .plan-features{gap:7px;margin-bottom:16px}
   .btn,.btn-g{font-size:var(--fs-caption);padding:10px 16px}
 }
-/* Les cartes posent sur la vidéo : fond translucide, flou d'arrière-plan
-   et filet clair. L'or coule derrière sans que les prix deviennent
-   difficiles à lire — les niveaux d'opacité ont été choisis puis
-   mesurés sur les pixels réellement composités, image de vidéo par
-   image de vidéo, et non supposés. */
 .plan-card{
   position:relative;display:flex;flex-direction:column;
-  background:rgb(from var(--raw-black-950) r g b / .74);
-  backdrop-filter:blur(16px) saturate(130%);
-  -webkit-backdrop-filter:blur(16px) saturate(130%);
-  border:1px solid rgb(from var(--raw-warm-50) r g b / .16);border-radius:16px;
+  background:var(--surface);border:1px solid var(--border-strong);border-radius:16px;
   padding:clamp(18px,2.2vw,26px);transition:border-color .25s,transform .2s ease-out;
   will-change:transform;transform-style:preserve-3d;
 }
-/* Là où le flou d'arrière-plan manque, le fond translucide laisserait
-   passer la vidéo en entier derrière les prix. On le rend opaque. */
-@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  .plan-card{background:rgb(from var(--raw-black-950) r g b / .92)}
-}
-/* La bascule de paiement est posée sur la vidéo elle aussi. */
-.paie-seg{background:rgb(from var(--raw-black-950) r g b / .74);
-  backdrop-filter:blur(16px) saturate(130%);
-  -webkit-backdrop-filter:blur(16px) saturate(130%);
-  border-color:rgb(from var(--raw-warm-50) r g b / .16)}
 .plan-card:hover{border-color:var(--accent)}
 /* INJECTÉ EN JAVASCRIPT dans chaque .plan-card — d'où :global().
    Scopées, ces deux règles ne s'appliquaient à rien : Astro les compile
@@ -229,8 +147,6 @@ body.lite .riv{background:url('/video/riviere-or-v1.jpg') center/cover no-repeat
 .plan-card.plan-featured{
   border-color:var(--accent);
   box-shadow:0 0 0 1px var(--accent),var(--shadow-2);
-  /* Un peu plus dense : c'est elle qui porte le prix le plus lu. */
-  background:rgb(from var(--raw-black-950) r g b / .82);
 }
 .plan-badge{position:absolute;inset-x:0;top:-13px;display:flex;justify-content:center}
 .plan-badge span{
@@ -318,29 +234,7 @@ body.lite .riv{background:url('/video/riviere-or-v1.jpg') center/cover no-repeat
     </div>
 
     <!-- FORMULES -->
-    <div class="plans-section" data-theme-sombre>
-      <!-- La rivière d'or, en fond de section.
-           aria-hidden et role=presentation : c'est un décor, il n'a rien
-           à annoncer. Pas de contrôles, pas de son — le fichier n'a même
-           pas de piste audio.
-           Deux sources, WebM d'abord. En octets le MP4 gagne — 618 ko
-           pour un SSIM de 0,981, contre 672 ko pour 0,978 au WebM — mais
-           l'octet n'est pas le seul critère : un Chromium construit sans
-           les codecs propriétaires ne lit PAS le H.264. Vérifié ici même,
-           canPlayType('video/mp4; codecs="avc1.42E01E"') répond non,
-           alors que VP9 répond probably. Le WebM est donc la source qui
-           marche partout, et le MP4 le repli pour Safari et iOS.
-           Les 54 ko d'écart sont le prix de cette garantie. -->
-      <div class="riv" aria-hidden="true" role="presentation">
-        <video class="riv-v" autoplay muted loop playsinline preload="auto"
-               poster="/video/riviere-or-v1.jpg" tabindex="-1">
-          <source src="/video/riviere-or-v1.webm" type="video/webm">
-          <source src="/video/riviere-or-v1.mp4" type="video/mp4">
-        </video>
-        <div class="riv-voile"></div>
-      </div>
-      <div class="riv-tete" aria-hidden="true" role="presentation"></div>
-
+    <div class="plans-section">
       <p class="section-tag" data-i18n="trf-plans-tag">Choisissez votre formule</p>
       <h2 class="section-title" data-i18n="trf-plans-h">La formule<br>adaptée à votre profil.</h2>
 
