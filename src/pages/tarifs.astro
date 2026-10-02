@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Silk from '../components/Silk.astro';
 import '../styles/global.css';
 import {
   REFONTE_PRIX, REFONTE_DELAI, REFONTE_M3, REFONTE_M4,
@@ -12,7 +13,29 @@ import {
 <BaseLayout title="Tarifs — Nexa Web" description="Refonte de site dès 490 €, Vitrine Pro à 999 € (offre de lancement, places limitées) et Entreprise à partir de 1 200 €. Paiement en 3 ou 4 fois possible. Devis gratuit — Nexa Web, Carvin.">
 <style>
 /* ── HERO ── */
+/* Le texte secondaire de cette page se pose sur une soie animée, pas
+   sur un aplat. Mesuré : le gris habituel du site y descend jusqu'à
+   1,67:1. Il passe donc d'un cran plus clair en sombre, d'un cran plus
+   foncé en clair — sur CETTE page seulement, et seulement la couleur :
+   aucun mot, aucun prix, aucune animation ne bouge. */
+main{--text-muted:var(--raw-warm-200)}
+/* En clair, le gris du site est déjà sombre (#55514A) et la soie y est
+   pâle : on le laisse tel quel, et la mesure le confirme. Écrire ici un
+   --raw-stone-700 inexistant aurait rendu la déclaration invalide et
+   fait retomber --text-muted sur l'héritage — vérifié avant de pousser. */
+:root[data-theme="light"] main,
+:root:not([data-theme="dark"]) main{--text-muted:var(--raw-stone-600)}
+
 .prix-hero{padding:clamp(56px,9vh,100px) 0 clamp(32px,5vh,56px);text-align:center;position:relative;z-index:1}
+/* Le chapeau et le sous-titre n'ont aucune carte pour les porter :
+   mesuré, le sous-titre tombe à 2,64:1 sur les passages clairs. Un
+   renfort sombre local, qui s'éteint avant le bandeau de lancement. */
+.prix-hero::before{
+  content:"";position:absolute;inset-inline:calc(50% - 50vw);inset-block:-8% 0;
+  z-index:-1;pointer-events:none;
+  background:radial-gradient(120% 70% at 50% 40%,
+    rgb(from var(--bg) r g b / .82), rgb(from var(--bg) r g b / 0) 70%);
+}
 .prix-pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border-strong);border-radius:100px;padding:6px 16px;font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-muted);margin-bottom:24px}
 .prix-pill-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
 .prix-h1{font-size:clamp(32px,5.5vw,72px);font-weight:600;line-height:1.06;letter-spacing:-.03em;margin-bottom:16px}
@@ -22,7 +45,13 @@ import {
 .launch-band{
   margin:clamp(32px,5vh,56px) auto 0;
   max-width:780px;
-  background:var(--success-glow);
+  /* Même verre que les cartes : ce bandeau porte du texte secondaire
+     directement sur la soie, et y tombait à 1,67:1. Sa teinte et sa
+     bordure ne changent pas, seul un fond opaque s'ajoute dessous. */
+  background:var(--bg);
+  background-image:linear-gradient(var(--success-glow),var(--success-glow));
+  backdrop-filter:blur(14px) saturate(125%);
+  -webkit-backdrop-filter:blur(14px) saturate(125%);
   border:1px solid var(--success);
   border-radius:14px;
   padding:clamp(24px,3vw,36px) clamp(24px,4vw,48px);
@@ -48,6 +77,15 @@ import {
 
 /* ── FORMULES ── */
 .plans-section{padding:clamp(32px,5vh,56px) 0 clamp(48px,7vh,72px);position:relative;z-index:1}
+/* Le chapeau et le titre de section n'ont, eux non plus, aucune carte
+   pour les porter : ils tombent directement sur la soie, qui bouge. Le
+   meme renfort sombre que le hero, limite a la hauteur de l'en-tete. */
+.plans-section::before{
+  content:"";position:absolute;inset-block-start:0;inset-inline:calc(50% - 50vw);
+  height:clamp(190px,26vh,260px);z-index:-1;pointer-events:none;
+  background:linear-gradient(180deg,
+    rgb(from var(--bg) r g b / .82) 0 48%, rgb(from var(--bg) r g b / 0) 100%);
+}
 /* Ces deux classes existaient dans le balisage depuis l'origine sans
    qu'aucune règle ne les cible : le titre de section tombait sur le
    style h2 par défaut du navigateur — trop petit, interligne trop
@@ -82,7 +120,15 @@ import {
    jamais, et il resterait figé sur « 0 € ». */
 .paie{border:0;margin:clamp(20px,3vw,28px) 0 0;padding:0;display:flex;justify-content:center}
 .paie-seg{display:inline-flex;gap:4px;align-items:center;padding:3px 5px;
-  border:1px solid var(--border-strong);border-radius:var(--radius-pill);background:var(--surface)}
+  border:1px solid var(--border-strong);border-radius:var(--radius-pill);
+  background:rgb(from var(--surface) r g b / .94);
+  backdrop-filter:blur(14px) saturate(125%);
+  -webkit-backdrop-filter:blur(14px) saturate(125%)}
+/* Là où le flou d'arrière-plan manque, la soie passerait entière
+   derrière les prix. On rend le fond opaque. */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .plan-card,.paie-seg{background:var(--surface)}
+}
 .paie-radio{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
 .paie-lbl{
   font-size:var(--fs-caption);font-weight:500;letter-spacing:0;color:var(--text);
@@ -129,9 +175,15 @@ import {
   .plan-features{gap:7px;margin-bottom:16px}
   .btn,.btn-g{font-size:var(--fs-caption);padding:10px 16px}
 }
+/* Les cartes laissent voir la soie : même couleur de fond qu'avant,
+   simplement rendue translucide, et un flou d'arrière-plan pour que les
+   prix restent nets. Bordures et couleurs inchangées. */
 .plan-card{
   position:relative;display:flex;flex-direction:column;
-  background:var(--surface);border:1px solid var(--border-strong);border-radius:16px;
+  background:rgb(from var(--surface) r g b / .94);
+  backdrop-filter:blur(14px) saturate(125%);
+  -webkit-backdrop-filter:blur(14px) saturate(125%);
+  border:1px solid var(--border-strong);border-radius:16px;
   padding:clamp(18px,2.2vw,26px);transition:border-color .25s,transform .2s ease-out;
   will-change:transform;transform-style:preserve-3d;
 }
@@ -164,7 +216,14 @@ import {
    cran pour que « 1 200 € — 3 100 € » tienne encore sur une ligne. */
 .plan-amount{font-size:clamp(23px,3vw,33px);font-weight:600;letter-spacing:-.04em;line-height:1;white-space:nowrap;font-variant-numeric:tabular-nums}
 .plan-desc{font-size:var(--fs-caption);color:var(--text-muted);margin-top:5px;line-height:1.5}
-.plan-spots{display:inline-flex;align-items:center;gap:5px;font-size:var(--fs-caption);font-weight:600;color:var(--accent-text);padding:4px 9px;background:var(--accent-glow);border:1px solid var(--accent);border-radius:6px;margin-bottom:14px}
+/* La pastille des places restantes n'avait qu'une lueur doree pour
+   fond : posee sur une carte deja translucide a 94 %, la soie remontait
+   jusqu'a 83,74,52 sous son texte et le faisait tomber a 3,72:1. Teinte
+   et bordure inchangees, un fond opaque s'ajoute dessous. */
+.plan-spots{display:inline-flex;align-items:center;gap:5px;font-size:var(--fs-caption);font-weight:600;color:var(--accent-text);padding:4px 9px;
+  background:var(--surface);
+  background-image:linear-gradient(var(--accent-glow),var(--accent-glow));
+  border:1px solid var(--accent);border-radius:6px;margin-bottom:14px}
 .plan-spots-num{font-size:12px;font-weight:600;line-height:1}
 .plan-divider{border:none;border-top:1px dashed var(--border-strong);margin:16px 0}
 .plan-features{list-style:none;padding:0;margin:0 0 20px;display:flex;flex-direction:column;gap:8px;flex:1}
@@ -175,9 +234,17 @@ import {
 
 /* ── CTA ── */
 .cta-section{padding:clamp(32px,5vh,64px) 0 clamp(64px,10vh,120px);text-align:center;position:relative;z-index:1}
+/* Même verre que les cartes : ce panneau n'avait qu'une lueur dorée
+   translucide pour fond, la soie passait entière derrière son titre.
+   Sa teinte et sa bordure ne changent pas, un fond opaque s'ajoute
+   dessous. */
 .cta-inner{
   max-width:580px;margin:0 auto;
-  background:var(--accent-glow);border:1px solid var(--accent);border-radius:16px;
+  background:var(--bg);
+  background-image:linear-gradient(var(--accent-glow),var(--accent-glow));
+  backdrop-filter:blur(14px) saturate(125%);
+  -webkit-backdrop-filter:blur(14px) saturate(125%);
+  border:1px solid var(--accent);border-radius:16px;
   padding:clamp(32px,4vw,52px);
 }
 .cta-title{font-size:clamp(20px,3vw,30px);font-weight:600;letter-spacing:-.02em;margin-bottom:12px}
@@ -200,6 +267,8 @@ import {
   filter:blur(28px);transform:rotate(-28deg);
 }
 </style>
+
+<Silk />
 
 <div class="ambience" aria-hidden="true" role="presentation">
   <div class="amb-depth"></div>

@@ -562,6 +562,27 @@ body.lite .lgm-i:hover .lg-reflet,body.lite .lgm-i.lg-tombe .lg-goutte{animation
 .foot-links{display:flex;flex-direction:column;gap:9px}
 .foot-lnk{font-size:13px;font-weight:300;color:var(--text-muted);transition:color var(--dur-micro) var(--ease-out)}
 .foot-lnk:hover{color:var(--accent-text)}
+/* ── LE PIED DE PAGE SUR LA SOIE ────────────────────────────────────
+   La page Tarifs pose un fond anime, fixe a l'ecran : le pied de page
+   y passe aussi. Mesure, le gris secondaire du site y tombe entre
+   3,72:1 et 4,44:1 selon le passage de soie — sous AA. Il prend donc
+   un cran de plus, comme le fait deja <main> sur cette page.
+
+   La regle vit ici et non dans tarifs.astro : un style scope ne porte
+   que sur les elements ecrits dans SON gabarit, et <Footer /> ecrit les
+   siens dans Footer.astro. Un « footer{...} » scope dans la page se
+   compilerait en « footer[data-astro-cid-de-la-page] » et ne toucherait
+   rien. Le crochet est la presence du fond lui-meme : aucune classe de
+   page a inventer, et la regle s'eteint d'elle-meme si le fond part. */
+body:has(.fond-tarifs) footer{
+  --text-muted:var(--raw-warm-200);
+  --text-subtle:var(--raw-warm-200);
+}
+:root[data-theme="light"] body:has(.fond-tarifs) footer,
+:root:not([data-theme="dark"]) body:has(.fond-tarifs) footer{
+  --text-muted:var(--raw-stone-600);
+  --text-subtle:var(--raw-stone-600);
+}
 .foot-team-lnk{
   display:inline-flex;align-items:center;gap:var(--sp-2);
   font-size:var(--fs-100);font-weight:600;letter-spacing:0;

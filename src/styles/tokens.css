@@ -37,6 +37,11 @@
   /* Blancs chauds — les textes du mode sombre */
   --raw-warm-50:  #F4F2EE;
   /* Un seul gris pour TOUT le secondaire en sombre — le gris d'Apple. */
+  /* Gris intermédiaire, né d'une mesure : sur un fond animé, le gris
+     secondaire du site tombe sous 3:1 contre les passages clairs. Le
+     calcul donne ~162 pour tenir 4,5:1 sur le pire pixel ; celui-ci
+     est à 182. */
+  --raw-warm-200: #B6B4B1;
   --raw-warm-300: #86868B;
   --raw-warm-400: #86868B;
 

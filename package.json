@@ -22,7 +22,8 @@
     "check:anim": "node scripts/check-anim.mjs",
     "check:header": "node scripts/check-header.mjs",
     "check:scoped": "node scripts/check-scoped.mjs",
-    "check:liquid": "node scripts/check-liquid.mjs"
+    "check:liquid": "node scripts/check-liquid.mjs",
+    "check:soie": "node scripts/check-soie.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^6.0.4",
