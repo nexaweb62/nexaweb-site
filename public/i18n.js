@@ -109,6 +109,7 @@ var D={
     'prenom':'First name','nom':'Last name','email':'E-mail','tel':'Phone',
     'entreprise':'Company / Activity','sec2':'Your project',
     'type':'Site type','delai':'Desired timeline','budget':'Estimated budget',
+    'dvs-paiement':'Payment','dvs-mois':'/month',
     'desc':'Describe your project','siteActuel':'Do you have an existing site?',
     'submit':'Send my request',
     /* ── Tarifs ── */
@@ -336,6 +337,7 @@ var D={
     'prenom':'Prénom','nom':'Nom','email':'E-mail','tel':'Téléphone',
     'entreprise':'Entreprise / Activité','sec2':'Votre projet',
     'type':'Type de site','delai':'Délai souhaité','budget':'Budget estimé',
+    'dvs-paiement':'Paiement','dvs-mois':'/mois',
     'desc':'Décrivez votre projet','siteActuel':'Avez-vous un site existant ?',
     'submit':'Envoyer ma demande',
     /* ── Tarifs ── */

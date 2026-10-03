@@ -62,13 +62,30 @@ export const ENTREPRISE_M3 = parMois(ENTREPRISE.prixDepart, 3); // « 400 € »
 export const ENTREPRISE_M4 = parMois(ENTREPRISE.prixDepart, 4); // « 300 € »
 
 /** Les trois formules, par prix croissant. Chacune a sa pastille de
- *  budget sur la page Devis.
+ *  budget sur la page Devis, et chaque pastille porte ses deux
+ *  mensualités : c'est la page Devis qui les affiche, selon l'échéancier
+ *  choisi ici ou rapporté de la page Tarifs par l'adresse.
+ *
  *  L'ordre du tableau est l'ordre d'affichage : c'est lui qui fait foi,
- *  pas le markup. */
+ *  pas le markup. Les prix écrits en dur dans devis.astro — « 1 000 € »
+ *  pour la Vitrine, « 1 200 à 3 100 € » pour l'Entreprise — avaient
+ *  dérivé de ceux de la page Tarifs ; ils viennent d'ici désormais. */
 export const FORMULES = [
-  { cle: 'refonte',    budget: `Refonte — dès ${REFONTE_PRIX}` },
-  { cle: 'vitrine',    budget: `Vitrine Pro — ${VITRINE_PRIX}` },
-  { cle: 'entreprise', budget: `Entreprise — à partir de ${ENTREPRISE_PRIX}` },
+  { cle: 'refonte',    nom: 'Refonte',     pre: 'dès',         preCle: 'trf-p4-pre',
+    total: REFONTE_PRIX,    m3: REFONTE_M3,    m4: REFONTE_M4 },
+  { cle: 'vitrine',    nom: 'Vitrine Pro', pre: '',            preCle: '',
+    total: VITRINE_PRIX,    m3: VITRINE_M3,    m4: VITRINE_M4 },
+  { cle: 'entreprise', nom: 'Entreprise',  pre: 'à partir de', preCle: 'trf-pre-apd',
+    total: ENTREPRISE_PRIX, m3: ENTREPRISE_M3, m4: ENTREPRISE_M4 },
+] as const;
+
+/** Les trois échéanciers, du comptant au plus étalé. La valeur est
+ *  celle qui voyage dans l'adresse (/devis?paiement=4) et celle qui
+ *  part avec la demande. */
+export const PAIEMENTS = [
+  { cle: 'comptant', n: 1 },
+  { cle: '3',        n: 3 },
+  { cle: '4',        n: 4 },
 ] as const;
 
 /** Depuis une carte tarif vers la page Devis : quel type de site

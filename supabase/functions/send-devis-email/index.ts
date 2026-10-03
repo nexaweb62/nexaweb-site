@@ -54,14 +54,26 @@ Deno.serve(async (req) => {
     );
   }
 
+  // Les trois formules du site, aux prix de src/data/formules.ts.
+  // Les anciens libellés avaient dérivé : « 1 000 € » pour la Vitrine
+  // quand la page annonce 999 €, et une fourchette « 1 200 – 3 100 € »
+  // que la page Tarifs n'affiche plus.
   const formuleLabels: Record<string, string> = {
-    etudiant:    "Étudiant — 100 €",
-    "vitrine-pro": "Vitrine Pro — 1 000 €",
-    entreprise:  "Entreprise — 1 200 – 3 100 €",
+    refonte:     "Refonte — dès 490 €",
+    vitrine:     "Vitrine Pro — 999 €",
+    entreprise:  "Entreprise — à partir de 1 200 €",
     // anciens alias (rétro-compatibilité)
-    vitrine:     "Vitrine",
-    business:    "Business",
-    premium:     "Premium",
+    etudiant:      "Étudiant — 100 €",
+    "vitrine-pro": "Vitrine Pro",
+    business:      "Business",
+    premium:       "Premium",
+  };
+
+  // L'échéancier choisi sur la page Tarifs ou sur le formulaire.
+  const paiementLabels: Record<string, string> = {
+    comptant: "En une fois",
+    "3":      "En 3 mensualités",
+    "4":      "En 4 mensualités",
   };
 
   const typeSiteLabels: Record<string, string> = {
@@ -81,9 +93,14 @@ Deno.serve(async (req) => {
     flexible: "Flexible",
   };
 
+  // Les pastilles du formulaire valent refonte | vitrine | entreprise.
+  // Aucune des deux premières n'était ici : l'e-mail affichait le mot nu
+  // « refonte » à la place du libellé et de son prix.
   const budgetLabels: Record<string, string> = {
+    refonte:     "Refonte — dès 490 €",
+    vitrine:     "Vitrine Pro — 999 €",
+    entreprise:  "Entreprise — à partir de 1 200 €",
     etudiant:    "Étudiant — 100 – 200 €",
-    entreprise:  "Entreprise — 1 200 – 3 100 €",
     "<500":      "Moins de 500 €",
     "500-1000":  "500 – 1 000 €",
     "1000-2000": "1 000 – 2 000 €",
@@ -95,7 +112,7 @@ Deno.serve(async (req) => {
     formuleLabels[data.formule] ?? (data.formule || "Formule non précisée")
   }`;
 
-  const html = buildTeamEmailHtml(data, formuleLabels, typeSiteLabels, delaiLabels, budgetLabels);
+  const html = buildTeamEmailHtml(data, formuleLabels, typeSiteLabels, delaiLabels, budgetLabels, paiementLabels);
 
   // ── 1. Notification à l'équipe Nexa Web ──────────────────────────────────
   const teamRes = await fetch("https://api.resend.com/emails", {
@@ -123,7 +140,7 @@ Deno.serve(async (req) => {
   }
 
   // ── 2. Accusé de réception au client ────────────────────────────────────
-  const confirmHtml = buildConfirmationHtml(data, formuleLabels, typeSiteLabels, delaiLabels, budgetLabels);
+  const confirmHtml = buildConfirmationHtml(data, formuleLabels, typeSiteLabels, delaiLabels, budgetLabels, paiementLabels);
   const clientRes = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
@@ -160,6 +177,7 @@ function buildTeamEmailHtml(
   typeSiteLabels: Record<string, string>,
   delaiLabels: Record<string, string>,
   budgetLabels: Record<string, string>,
+  paiementLabels: Record<string, string>,
 ): string {
   const row = (label: string, value: string | undefined | null) => {
     if (!value) return "";
@@ -240,6 +258,7 @@ function buildTeamEmailHtml(
           ${row("Type de site", esc(typeSiteLabels[d.type_site] ?? d.type_site))}
           ${row("Délai souhaité", esc(delaiLabels[d.delai_souhaite] ?? d.delai_souhaite))}
           ${row("Budget estimé", esc(budgetLabels[d.budget_estime] ?? d.budget_estime))}
+          ${row("Paiement", esc(paiementLabels[d.paiement] ?? d.paiement ?? "En une fois"))}
           ${row("Site existant", siteLink)}
         </tbody>
       </table>
@@ -290,6 +309,7 @@ function buildConfirmationHtml(
   typeSiteLabels: Record<string, string>,
   delaiLabels: Record<string, string>,
   budgetLabels: Record<string, string>,
+  paiementLabels: Record<string, string>,
 ): string {
   const row = (label: string, value: string | undefined | null) => {
     if (!value) return "";
@@ -307,8 +327,9 @@ function buildConfirmationHtml(
   const typeLbl    = typeSiteLabels[d.type_site] ?? (d.type_site || null);
   const delaiLbl   = delaiLabels[d.delai_souhaite] ?? (d.delai_souhaite || null);
   const budgetLbl  = budgetLabels[d.budget_estime] ?? (d.budget_estime || null);
+  const paieLbl    = paiementLabels[d.paiement] ?? (d.paiement || null);
 
-  const hasRecap = formuleLbl || typeLbl || d.entreprise || delaiLbl || budgetLbl;
+  const hasRecap = formuleLbl || typeLbl || d.entreprise || delaiLbl || budgetLbl || paieLbl;
 
   return `<!DOCTYPE html>
 <html lang="fr">
@@ -355,6 +376,7 @@ function buildConfirmationHtml(
           ${row("Entreprise",esc(d.entreprise))}
           ${row("Délai",     esc(delaiLbl))}
           ${row("Budget",    esc(budgetLbl))}
+          ${row("Paiement",  esc(paieLbl))}
         </tbody>
       </table>` : ""}
 

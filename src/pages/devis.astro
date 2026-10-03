@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import '../styles/global.css';
-import { REFONTE_PRIX, VITRINE_PRIX } from '../data/formules';
+import { FORMULES, VITRINE_PRIX } from '../data/formules';
 ---
 <BaseLayout title="Devis gratuit — Nexa Web" description="Décrivez votre projet web et recevez un devis gratuit sous 24 h. Site vitrine, e-commerce, refonte — Nexa Web, Carvin, Hauts-de-France.">
 <style>
@@ -164,7 +164,25 @@ import { REFONTE_PRIX, VITRINE_PRIX } from '../data/formules';
 /* Masqué mais jamais display:none : sinon il ne reçoit plus le focus
    clavier et les flèches ne parcourent plus le groupe. 1px, pas 0. */
 .budget-pill input{position:absolute;opacity:0;width:1px;height:1px;margin:0;pointer-events:none}
-.budget-pill:hover{border-color:var(--border-strong);color:var(--text)}
+.budget-pill:hover{border-color:var(--border-strong)}
+/* ── LES TROIS COULEURS DE LA PASTILLE, AU BON POIDS ────────────────
+   « .field label » pèse 0,3,1 une fois le marqueur de portée d'Astro
+   compté ; « .budget-pill.selected » ne pesait que 0,3,0. Les trois
+   couleurs de la pastille étaient donc écrasées par celle des
+   étiquettes de champ : aucune pastille ne virait jamais à l'or, et
+   toutes restaient sur --text-subtle. Personne ne l'avait vu parce que
+   la sélection se lit aussi à sa bordure, à son fond teinté et à son
+   halo — et parce qu'aucun garde-fou ne sélectionne de pastille :
+   ils visitent tous la page à l'état par défaut.
+
+   Mesuré sur la pastille allumée en sombre : --text-subtle y donnait
+   3,83:1, sous AA. --accent-text y donne 7,40:1, et 5,09:1 en clair.
+
+   Le commentaire plus haut avait tiré la leçon pour les MAJUSCULES
+   sans la tirer pour la couleur. */
+.field label.budget-pill{color:var(--text-muted)}
+.field label.budget-pill:hover{color:var(--text)}
+.field label.budget-pill.selected{color:var(--accent-text)}
 /* Le focus ne se voit pas sur un radio invisible : il se voit ici. */
 .budget-pill:has(input:focus-visible){outline:3px solid var(--accent-hover);outline-offset:3px}
 .budget-pill.selected{border-color:var(--accent);background:var(--accent-glow);color:var(--accent-text);
@@ -173,6 +191,38 @@ import { REFONTE_PRIX, VITRINE_PRIX } from '../data/formules';
   .budget-pill.selected{animation:pillPick 420ms cubic-bezier(.22,.9,.24,1)}
   @keyframes pillPick{0%{transform:scale(1)}38%{transform:scale(1.06)}100%{transform:scale(1)}}
 }
+
+/* ── LA MENSUALITÉ DANS LA PASTILLE ─────────────────────────────────
+   Une seule des deux lignes s'affiche, celle de l'échéancier choisi
+   juste au-dessus — ou aucune, en paiement comptant. La visibilité est
+   portée par .budget-m3 / .budget-m4, la typographie par .budget-mois :
+   la même séparation que sur la page Tarifs, pour qu'un troisième
+   échéancier n'ait qu'une classe à ajouter.
+
+   Le :has() s'ancre sur le formulaire, seul ancêtre commun aux deux
+   groupes de pastilles. Aucun JavaScript : le lien entre le choix et
+   l'affichage tient dans le sélecteur, comme sur la page Tarifs. */
+.budget-m3,.budget-m4{display:none}
+#devis-form:has(input[name="paiement"][value="3"]:checked) .budget-m3,
+#devis-form:has(input[name="paiement"][value="4"]:checked) .budget-m4{display:block}
+.budget-mois{
+  font-size:var(--fs-100);font-weight:500;
+  /* La pastille sélectionnée passe en doré : la mensualité suit sa
+     couleur au lieu d'un gris qui y perdrait son contraste.
+
+     PAS d'opacité pour l'adoucir : mesuré, un 0,82 la faisait tomber
+     entre 3,24:1 et 3,86:1 dans les quatre combinaisons de thème et de
+     largeur — sous AA. Le garde-fou général du site ne pouvait pas
+     l'attraper : il visite la page au comptant, où ces lignes sont en
+     display:none. En héritant simplement de la pastille, la mensualité
+     a exactement le contraste de son libellé, déjà validé. La
+     différence se fait sur la taille et la graisse. */
+  color:inherit;margin-top:2px;
+}
+/* Sans ceci la pastille garde la largeur de sa plus longue ligne mais
+   centre la première : « Entreprise — à partir de 1 200 € » se
+   retrouvait décalé au-dessus de sa mensualité. */
+.budget-pill:has(.budget-mois){text-align:left}
 
 /* ── SUBMIT ── */
 .submit-row{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:32px;padding-top:24px;border-top:1px solid var(--border)}
@@ -345,12 +395,36 @@ import { REFONTE_PRIX, VITRINE_PRIX } from '../data/formules';
                 <option value="flexible">Flexible</option>
               </select>
             </div>
+            <!-- L'échéancier d'abord : il décide de ce que les pastilles
+                 de budget affichent juste en dessous. Il arrive déjà
+                 choisi quand on vient d'une carte de la page Tarifs
+                 (/devis?formule=vitrine&paiement=4). -->
+            <div class="field field-full">
+              <label><span data-i18n="dvs-paiement">Paiement</span></label>
+              <div class="budget-pills" role="radiogroup" aria-label="Paiement" data-obligatoire>
+                <label class="budget-pill selected"><input type="radio" name="paiement" value="comptant" checked><span data-i18n="trf-paie-1">En une fois</span></label>
+                <label class="budget-pill"><input type="radio" name="paiement" value="3"><span data-i18n="trf-paie-3">En 3 fois</span></label>
+                <label class="budget-pill"><input type="radio" name="paiement" value="4"><span data-i18n="trf-paie-4">En 4 fois</span></label>
+              </div>
+            </div>
             <div class="field field-full">
               <label><span data-i18n="budget">Budget estimé</span></label>
               <div class="budget-pills" role="radiogroup" aria-label="Budget estimé">
-                <label class="budget-pill"><input type="radio" name="budget" value="refonte"><span>Refonte — dès {REFONTE_PRIX}</span></label>
-                <label class="budget-pill"><input type="radio" name="budget" value="vitrine"><span>Vitrine Pro — 1&#8239;000&nbsp;€</span></label>
-                <label class="budget-pill"><input type="radio" name="budget" value="entreprise"><span>Entreprise — 1&#8239;200 à 3&#8239;100&nbsp;€</span></label>
+                {FORMULES.map((f) => (
+                  <label class="budget-pill">
+                    <input type="radio" name="budget" value={f.cle} />
+                    <span>
+                      {/* Le préfixe porte sa clé de traduction — les mêmes que
+                          la page Tarifs, « dès » et « à partir de ». Il vit dans
+                          son propre <span> : i18n.js remplace le texte de
+                          l'élément qu'il cible, et le poser sur la pastille
+                          entière effacerait le prix et les mensualités. */}
+                      {f.nom} — {f.pre && <span data-i18n={f.preCle}>{f.pre}</span>}{f.pre ? ' ' : ''}{f.total}
+                      <small class="budget-mois budget-m3">{f.m3}<span data-i18n="dvs-mois">/mois</span></small>
+                      <small class="budget-mois budget-m4">{f.m4}<span data-i18n="dvs-mois">/mois</span></small>
+                    </span>
+                  </label>
+                ))}
               </div>
             </div>
             <div class="field field-full">
@@ -418,57 +492,91 @@ import { REFONTE_PRIX, VITRINE_PRIX } from '../data/formules';
 <script is:inline src="/supabase-client.js"></script>
 
 <script>
-/* ── BUDGET : les pastilles ──────────────────────────────────────────
+/* ── LES PASTILLES : BUDGET ET ÉCHÉANCIER ────────────────────────────
+   Deux groupes désormais, un seul comportement. Il est donc décrit par
+   GROUPE et non pour toute la page : la version précédente ramassait
+   « .budget-pill » partout et décochait tout le monde à chaque clic —
+   choisir un échéancier aurait effacé le budget.
+
    Deux entrées, un seul état. La souris passe par le clic (avec le
    reclique qui décoche) ; le clavier passe par les flèches, qui
    déclenchent un change sur le radio. Sans l'écoute de change, la
    sélection au clavier cocherait le radio sans jamais allumer la
-   pastille — le focus serait visible, la sélection non. */
+   pastille — le focus serait visible, la sélection non.
+
+   Un groupe marqué data-obligatoire ne se décoche pas : l'échéancier a
+   toujours une valeur, le comptant par défaut. */
 (function(){
-  var pills = Array.from(document.querySelectorAll('.budget-pill'));
-  if(!pills.length) return;
+  var groupes = Array.prototype.slice.call(document.querySelectorAll('.budget-pills'));
 
-  /* Le rang de chaque pastille : l'animation d'apparition s'en sert
-     pour les faire arriver l'une après l'autre. */
-  pills.forEach(function(p,i){ p.style.setProperty('--k', i); });
+  groupes.forEach(function(groupe){
+    var pills = Array.prototype.slice.call(groupe.querySelectorAll('.budget-pill'));
+    if(!pills.length) return;
+    var obligatoire = groupe.hasAttribute('data-obligatoire');
 
-  function sync(){
-    pills.forEach(function(p){
-      p.classList.toggle('selected', p.querySelector('input').checked);
+    /* Le rang de chaque pastille DANS SON GROUPE : l'animation
+       d'apparition s'en sert pour les faire arriver l'une après
+       l'autre. Compté sur toute la page, le second groupe serait parti
+       avec le retard du premier. */
+    pills.forEach(function(p,i){ p.style.setProperty('--k', i); });
+
+    function sync(){
+      pills.forEach(function(p){
+        p.classList.toggle('selected', p.querySelector('input').checked);
+      });
+    }
+    groupe.__sync = sync;
+
+    pills.forEach(function(pill){
+      var radio = pill.querySelector('input');
+      pill.addEventListener('click', function(e){
+        /* Les flèches du clavier COCHENT le radio puis emettent un clic.
+           Sans cette garde, « avant » vaut deja true et la logique de
+           reclique decoche aussitot ce que la fleche vient de choisir :
+           le focus avance, la selection disparait. e.detail vaut 0 quand
+           le clic ne vient pas d'un pointeur — on laisse alors faire le
+           comportement natif. */
+        if(e.detail === 0){ sync(); return; }
+        e.preventDefault();                  // souris : on gère le reclique
+        var avant = radio.checked;
+        pills.forEach(function(p){ p.querySelector('input').checked = false; });
+        if(!avant || obligatoire) radio.checked = true;
+        sync();
+        radio.dispatchEvent(new Event('change', {bubbles:true}));
+      });
+      radio.addEventListener('change', sync);   // flèches du clavier
     });
-  }
-  pills.forEach(function(pill){
-    var radio = pill.querySelector('input');
-    pill.addEventListener('click', function(e){
-      /* Les flèches du clavier COCHENT le radio puis emettent un clic.
-         Sans cette garde, « avant » vaut deja true et la logique de
-         reclique decoche aussitot ce que la fleche vient de choisir :
-         le focus avance, la selection disparait. e.detail vaut 0 quand
-         le clic ne vient pas d'un pointeur — on laisse alors faire le
-         comportement natif. */
-      if(e.detail === 0){ sync(); return; }
-      e.preventDefault();                  // souris : on gère le reclique
-      var avant = radio.checked;
-      pills.forEach(function(p){ p.querySelector('input').checked = false; });
-      if(!avant) radio.checked = true;
-      sync();
-      radio.dispatchEvent(new Event('change', {bubbles:true}));
-    });
-    radio.addEventListener('change', sync);   // flèches du clavier
+    sync();
   });
 
-  /* ── Depuis une carte tarif : /devis?formule=refonte ──
-     La pastille est cochée et le type de site pré-rempli. Les trois
+  /* ── Depuis une carte tarif : /devis?formule=refonte&paiement=4 ──
+     La pastille de budget est cochée, le type de site pré-rempli, et
+     l'échéancier repris tel qu'il était sur la page Tarifs. Les trois
      formules ont leur pastille ; « entreprise » retombe sur le type
      vitrine, faute de type qui lui corresponde.
-     Une valeur inventée ne trouve simplement rien — c'est voulu. */
+     Une valeur inventée ne trouve simplement rien — c'est voulu, et
+     « paiement=12 » laisse donc le comptant en place. */
+  function coche(sel){
+    var r = document.querySelector(sel);
+    if(!r) return;
+    r.checked = true;
+    var g = r.closest('.budget-pills');
+    if(g && g.__sync) g.__sync();
+  }
+  var q = new URLSearchParams(location.search);
+  var echappe = function(v){ return window.CSS && CSS.escape ? CSS.escape(v) : v; };
+
   var TYPE = { refonte:'refonte', vitrine:'vitrine', entreprise:'vitrine' };
-  var f = new URLSearchParams(location.search).get('formule');
+  var f = q.get('formule');
   if(f){
-    var r = document.querySelector('.budget-pill input[value="' + (CSS.escape ? CSS.escape(f) : f) + '"]');
-    if(r){ r.checked = true; sync(); }
+    coche('.budget-pill input[name="budget"][value="' + echappe(f) + '"]');
     var t = document.getElementById('type');
     if(t && TYPE[f]) t.value = TYPE[f];
+  }
+
+  var p = q.get('paiement');
+  if(p === '3' || p === '4'){
+    coche('.budget-pill input[name="paiement"][value="' + p + '"]');
   }
 })();
 
@@ -538,6 +646,10 @@ import { REFONTE_PRIX, VITRINE_PRIX } from '../data/formules';
     const rgpd=document.getElementById('rgpd-consent').checked;
     const budgetEl=document.querySelector('input[name="budget"]:checked');
     const budget=budgetEl?budgetEl.value:'';
+    /* L'échéancier choisi — ou rapporté de la page Tarifs. Toujours une
+       valeur : le groupe est obligatoire et part sur le comptant. */
+    const paieEl=document.querySelector('input[name="paiement"]:checked');
+    const paiement=paieEl?paieEl.value:'comptant';
 
     let ok=true;
     if(!prenom){setErr('err-prenom','Le prénom est requis.');ok=false}
@@ -560,19 +672,39 @@ import { REFONTE_PRIX, VITRINE_PRIX } from '../data/formules';
 
     setLoading(true);
     try{
-      var planParam=new URLSearchParams(location.search).get('plan')||null;
-      const{error:insertErr}=await window.sb.from('demandes_devis').insert({
+      /* La formule vient du lien de la carte tarif. On lisait « plan »,
+         que rien n'écrit jamais : les cartes pointent vers
+         /devis?formule=… depuis toujours, et la colonne formule est donc
+         restée vide à chaque demande. On lit le bon paramètre, et on
+         retombe sur la pastille de budget cochée si le visiteur est
+         arrivé directement sur la page. */
+      var q=new URLSearchParams(location.search);
+      var planParam=q.get('formule')||q.get('plan')||budget||null;
+      var ligne={
         prenom,nom,email:emailVal,telephone:tel||null,entreprise:entreprise||null,
         type_site:type||null,delai_souhaite:delai||null,budget_estime:budget||null,
-        description:desc,site_existant:siteActuel||null,formule:planParam
-      });
+        description:desc,site_existant:siteActuel||null,formule:planParam,
+        paiement:paiement
+      };
+      var{error:insertErr}=await window.sb.from('demandes_devis').insert(ligne);
+      /* La colonne « paiement » arrive avec la migration
+         supabase/migrations/20261003_devis_paiement.sql. Tant qu'elle
+         n'a pas été passée, PostgREST refuse la ligne entière (PGRST204,
+         « column not found »). Une demande perdue coûte infiniment plus
+         cher qu'un champ manquant : on renvoie alors la ligne sans lui.
+         L'échéancier reste dans l'e-mail, qui n'a pas de schéma. */
+      if(insertErr&&/paiement/.test(insertErr.message||'')){
+        console.warn('[devis] colonne paiement absente — migration non passée');
+        delete ligne.paiement;
+        insertErr=(await window.sb.from('demandes_devis').insert(ligne)).error;
+      }
       if(insertErr){showBanner("Erreur lors de l'enregistrement. Contactez-nous directement à contact.nexaweb62@gmail.com");return}
       stampSubmit();
       /* Décrémente les places Vitrine Pro si applicable */
       if(planParam==='vitrine-pro'){
         try{await window.sb.rpc('decrement_vitrine_spots');}catch(e){console.warn('[spots]',e);}
       }
-      try{await window.sb.functions.invoke('send-devis-email',{body:{prenom,nom,email:emailVal,telephone:tel,entreprise,formule:planParam,type_site:type,delai_souhaite:delai,budget_estime:budget,description:desc,site_existant:siteActuel}})}
+      try{await window.sb.functions.invoke('send-devis-email',{body:{prenom,nom,email:emailVal,telephone:tel,entreprise,formule:planParam,type_site:type,delai_souhaite:delai,budget_estime:budget,paiement,description:desc,site_existant:siteActuel}})}
       catch(e){console.warn('[devis] email failed (data saved):',e)}
       form.classList.add('hide');overlay.classList.add('show');window.scrollTo({top:0,behavior:'smooth'});
     }catch(err){

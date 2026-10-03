@@ -485,6 +485,43 @@ main{--text-muted:var(--raw-warm-200)}
 (function(){
 'use strict';
 
+/* ── L'ÉCHÉANCIER SUIT LE VISITEUR JUSQU'AU DEVIS ───────────────────
+   Le choix « en une fois / en 3 fois / en 4 fois » est un basculement
+   purement CSS : trois radios et des :has(). Rien ne le transportait
+   plus loin, et la page Devis l'ignorait donc complètement.
+
+   On l'écrit dans l'adresse des trois boutons de formule. Sans
+   JavaScript le lien marche toujours, simplement sans le paramètre :
+   la page Devis retombe alors sur le comptant, son état par défaut.
+
+   On reconstruit l'adresse au lieu d'y coller « &paiement=… » : un
+   second choix ajouterait sinon un second paramètre, et le dernier
+   gagnerait — « ?formule=vitrine&paiement=3&paiement=4 ». */
+(function echeancier(){
+  var seg = document.querySelector('.paie-seg');
+  if(!seg) return;
+  var liens = [].slice.call(document.querySelectorAll('.plan-cta[href^="/devis"]'));
+  if(!liens.length) return;
+  liens.forEach(function(a){ a.dataset.base = a.getAttribute('href'); });
+
+  function choix(){
+    var r = seg.querySelector('.paie-radio:checked');
+    if(!r) return 'comptant';
+    return r.id === 'paie-3' ? '3' : r.id === 'paie-4' ? '4' : 'comptant';
+  }
+  function peindre(){
+    var p = choix();
+    liens.forEach(function(a){
+      var u = new URL(a.dataset.base, location.origin);
+      if(p === 'comptant') u.searchParams.delete('paiement');
+      else u.searchParams.set('paiement', p);
+      a.setAttribute('href', u.pathname + u.search);
+    });
+  }
+  seg.addEventListener('change', peindre);
+  peindre();
+})();
+
 /* ── Vitrine Pro : spots restants depuis Supabase ── */
 function initSpots(){
   if(!window.sb)return;
