@@ -20,7 +20,11 @@ import { chromium } from 'playwright-core';
 import sharp from 'sharp';
 
 const BASE   = process.env.BASE   || 'http://localhost:4321';
-const PAGES  = (process.env.PAGES || '/').split(',');
+/* L'accueil porte la rivière, Tarifs porte la soie : ce sont les deux
+   pages à fond animé, donc les deux où un renfort de lisibilité peut
+   laisser une arête. La cassure de /tarifs est passée inaperçue tant
+   que cette liste n'avait que l'accueil. */
+const PAGES  = (process.env.PAGES || '/,/tarifs').split(',');
 const THEMES = (process.env.THEMES || 'dark').split(',');
 const W = 1440, VH = 900;
 const GUTTER = 56;                      // colonnes de fond pur, de chaque bord

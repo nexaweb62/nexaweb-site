@@ -82,9 +82,20 @@ main{--text-muted:var(--raw-warm-200)}
    meme renfort sombre que le hero, limite a la hauteur de l'en-tete. */
 .plans-section::before{
   content:"";position:absolute;inset-block-start:0;inset-inline:calc(50% - 50vw);
-  height:clamp(190px,26vh,260px);z-index:-1;pointer-events:none;
+  height:clamp(230px,30vh,300px);z-index:-1;pointer-events:none;
+  /* Le renfort MONTE avant de redescendre. La première version partait
+     à 0,82 dès son premier pixel : la soie changeait de clarté d'un
+     coup sur toute la largeur, à la limite exacte de la section.
+     Mesuré par check:seams, ΔL* 18,83 en sombre et 6,57 en clair — une
+     barre horizontale franche, visible à l'œil nu.
+     Le palier haut commence là où commence le chapeau, et finit après
+     le titre ; aux deux bouts, la pente est assez longue pour qu'aucune
+     arête ne se forme. */
   background:linear-gradient(180deg,
-    rgb(from var(--bg) r g b / .82) 0 48%, rgb(from var(--bg) r g b / 0) 100%);
+    rgb(from var(--bg) r g b / 0)   0,
+    rgb(from var(--bg) r g b / .82) 20%,
+    rgb(from var(--bg) r g b / .82) 62%,
+    rgb(from var(--bg) r g b / 0)   100%);
 }
 /* Ces deux classes existaient dans le balisage depuis l'origine sans
    qu'aucune règle ne les cible : le titre de section tombait sur le
