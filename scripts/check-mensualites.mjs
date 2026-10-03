@@ -14,7 +14,11 @@
      4. on change de budget, et on verifie que l'echeancier tient : les
         deux groupes de pastilles partageaient un seul gestionnaire, qui
         decochait tout le monde a chaque clic ;
-     5. on mesure le CONTRASTE de la mensualite, pastille eteinte et
+     5. on reclique la pastille deja choisie, dans les DEUX groupes :
+        le budget se decoche, l'echeancier revient a « En une fois ».
+        Rester bloque sur son choix est ce que faisait la premiere
+        version, et ce que l'oeil ne distingue pas d'une panne ;
+     6. on mesure le CONTRASTE de la mensualite, pastille eteinte et
         pastille allumee, dans les deux themes. Le garde-fou general du
         site ne peut pas le faire : il visite la page a l'etat par
         defaut, ou l'echeancier est au comptant et ou ces lignes sont en
@@ -120,7 +124,37 @@ for (const vp of [{ width: 1280, height: 900 }, { width: 390, height: 844 }]) {
     if (apres.budget !== 'entreprise') fails.push(`${vp.width} ${plan}x : le clic sur Entreprise donne ${apres.budget}`);
     if (apres.paiement !== plan) fails.push(`${vp.width} ${plan}x : changer de budget a remis l'echeancier a ${apres.paiement}`);
 
-    /* ── 5. En comptant, aucune mensualite ne doit s'afficher ── */
+    /* ── 5. Le reclique : chaque groupe doit pouvoir revenir en arriere ── */
+    await page.goto(`${BASE}/devis/?formule=vitrine&paiement=${plan}`, { waitUntil: 'load' });
+    await page.waitForTimeout(700);
+    const lu = () => page.evaluate(() => {
+      const c = n => { const e = document.querySelector(`input[name="${n}"]:checked`); return e ? e.value : null; };
+      return { budget: c('budget'), paiement: c('paiement'),
+        mois: [...document.querySelectorAll('.budget-mois')].filter(e => getComputedStyle(e).display !== 'none').length,
+        allumees: [...document.querySelectorAll('.budget-pill.selected')].length };
+    });
+    /* L'echeancier : reclique -> retour au comptant, et plus aucune
+       mensualite affichee. Et il reste toujours une pastille allumee. */
+    await page.locator(`.budget-pill input[name="paiement"][value="${plan}"]`).locator('..').click();
+    await page.waitForTimeout(250);
+    const r1 = await lu();
+    verifs += 4;
+    if (r1.paiement !== 'comptant') fails.push(`${vp.width} ${plan}x : reclique sur l'echeancier -> ${r1.paiement} au lieu de comptant`);
+    if (r1.mois !== 0) fails.push(`${vp.width} ${plan}x : reclique sur l'echeancier -> ${r1.mois} mensualites encore affichees`);
+    if (r1.budget !== 'vitrine') fails.push(`${vp.width} ${plan}x : reclique sur l'echeancier a change le budget (${r1.budget})`);
+    /* Une pastille d'echeancier allumee + la pastille de budget. */
+    if (r1.allumees !== 2) fails.push(`${vp.width} ${plan}x : ${r1.allumees} pastilles allumees apres reclique au lieu de 2`);
+
+    /* Le budget, lui, se decoche entierement : c'est une information
+       facultative, et « je ne sais pas » est une reponse valable. */
+    await page.locator('.budget-pill input[name="budget"][value="vitrine"]').locator('..').click();
+    await page.waitForTimeout(250);
+    const r2 = await lu();
+    verifs += 2;
+    if (r2.budget !== null) fails.push(`${vp.width} ${plan}x : reclique sur le budget -> ${r2.budget} au lieu de rien`);
+    if (r2.paiement !== 'comptant') fails.push(`${vp.width} ${plan}x : reclique sur le budget a change l'echeancier (${r2.paiement})`);
+
+    /* ── 6. En comptant, aucune mensualite ne doit s'afficher ── */
     await page.goto(BASE + '/devis/', { waitUntil: 'load' });
     await page.waitForTimeout(700);
     const nues = await page.evaluate(() => ({
@@ -131,7 +165,7 @@ for (const vp of [{ width: 1280, height: 900 }, { width: 390, height: 844 }]) {
     if (nues.visibles !== 0) fails.push(`${vp.width} : ${nues.visibles} mensualites affichees en paiement comptant`);
     if (nues.paiement !== 'comptant') fails.push(`${vp.width} : sans parametre, l'echeancier vaut ${nues.paiement}`);
 
-    /* ── 6. Le contraste de la mensualite, dans les deux etats ── */
+    /* ── 7. Le contraste de la mensualite, dans les deux etats ── */
     for (const theme of ['dark', 'light']) {
       const c2 = await browser.newContext({ viewport: vp, colorScheme: theme });
       await c2.addInitScript(t => { try { localStorage.setItem('nw-theme', t); } catch (e) {} }, theme);

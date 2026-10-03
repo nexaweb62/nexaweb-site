@@ -401,7 +401,7 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
                  (/devis?formule=vitrine&paiement=4). -->
             <div class="field field-full">
               <label><span data-i18n="dvs-paiement">Paiement</span></label>
-              <div class="budget-pills" role="radiogroup" aria-label="Paiement" data-obligatoire>
+              <div class="budget-pills" role="radiogroup" aria-label="Paiement" data-defaut>
                 <label class="budget-pill selected"><input type="radio" name="paiement" value="comptant" checked><span data-i18n="trf-paie-1">En une fois</span></label>
                 <label class="budget-pill"><input type="radio" name="paiement" value="3"><span data-i18n="trf-paie-3">En 3 fois</span></label>
                 <label class="budget-pill"><input type="radio" name="paiement" value="4"><span data-i18n="trf-paie-4">En 4 fois</span></label>
@@ -504,15 +504,28 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
    sélection au clavier cocherait le radio sans jamais allumer la
    pastille — le focus serait visible, la sélection non.
 
-   Un groupe marqué data-obligatoire ne se décoche pas : l'échéancier a
-   toujours une valeur, le comptant par défaut. */
+   Un groupe marqué data-defaut REVIENT À SON DÉFAUT au reclique au lieu
+   de rester bloqué sur son choix. La première version s'y accrochait :
+   on pouvait choisir « en 4 fois » et plus jamais revenir en arrière
+   d'un second clic, alors que les pastilles de budget, identiques à
+   l'œil, se décochent. Laisser le groupe entièrement vide n'irait pas
+   non plus : une demande a toujours un mode de paiement, et le champ
+   paraîtrait sans réponse. Le reclique rallume donc « En une fois »,
+   qui est précisément ce que « pas d'échéancier » veut dire. */
 (function(){
   var groupes = Array.prototype.slice.call(document.querySelectorAll('.budget-pills'));
 
   groupes.forEach(function(groupe){
     var pills = Array.prototype.slice.call(groupe.querySelectorAll('.budget-pill'));
     if(!pills.length) return;
-    var obligatoire = groupe.hasAttribute('data-obligatoire');
+    /* La pastille à rallumer au reclique : celle qui porte « checked »
+       dans le balisage. Lue une fois, car la propriété .checked bouge
+       au fil des clics — c'est .defaultChecked qui garde l'original. */
+    var defaut = groupe.hasAttribute('data-defaut')
+      ? (pills.map(function(p){ return p.querySelector('input'); })
+              .filter(function(i){ return i.defaultChecked; })[0]
+         || pills[0].querySelector('input'))
+      : null;
 
     /* Le rang de chaque pastille DANS SON GROUPE : l'animation
        d'apparition s'en sert pour les faire arriver l'une après
@@ -540,7 +553,8 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
         e.preventDefault();                  // souris : on gère le reclique
         var avant = radio.checked;
         pills.forEach(function(p){ p.querySelector('input').checked = false; });
-        if(!avant || obligatoire) radio.checked = true;
+        if(!avant) radio.checked = true;
+        else if(defaut) defaut.checked = true;
         sync();
         radio.dispatchEvent(new Event('change', {bubbles:true}));
       });
@@ -646,8 +660,10 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
     const rgpd=document.getElementById('rgpd-consent').checked;
     const budgetEl=document.querySelector('input[name="budget"]:checked');
     const budget=budgetEl?budgetEl.value:'';
-    /* L'échéancier choisi — ou rapporté de la page Tarifs. Toujours une
-       valeur : le groupe est obligatoire et part sur le comptant. */
+    /* L'échéancier choisi — ou rapporté de la page Tarifs. Le groupe
+       revient toujours à « En une fois » quand on le déselectionne,
+       mais on garde le repli : sans JavaScript, rien ne garantit
+       qu'une pastille soit cochée. */
     const paieEl=document.querySelector('input[name="paiement"]:checked');
     const paiement=paieEl?paieEl.value:'comptant';
 
