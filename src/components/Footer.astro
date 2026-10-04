@@ -49,7 +49,24 @@ import LogoLiquide from './LogoLiquide.astro';
       <nav class="foot-legal" aria-label="Liens légaux">
         <a href="/mentions-legales">Mentions légales</a>
         <a href="/politique-confidentialite">Confidentialité</a>
+        <!-- Un choix se retire aussi facilement qu'il se donne : ce
+             bouton rouvre le panneau, sur n'importe quelle page. Un
+             <button> et non un <a> — il ne mène nulle part. -->
+        <button type="button" class="foot-ck" id="foot-ck" data-i18n="ftr-cookies">Cookies</button>
       </nav>
     </div>
   </div>
 </footer>
+
+<script is:inline>
+  /* Le panneau vit dans le gabarit, le lien dans le pied de page : on
+     passe par l'interface publique plutot que d'aller chercher le
+     bandeau a la main. */
+  (function(){
+    var b = document.getElementById('foot-ck');
+    if(!b) return;
+    b.addEventListener('click', function(){
+      if(window.nwConsent) window.nwConsent.ouvrir();
+    });
+  })();
+</script>

@@ -1,0 +1,261 @@
+---
+/**
+ * COOKIES ET AUTRES TRACEURS — le bandeau, et ce qu'il commande vraiment.
+ *
+ * Un bandeau qui ne commande rien est pire que pas de bandeau : il
+ * affirme au visiteur qu'il a le choix alors que les appels tiers sont
+ * déjà partis. Celui-ci commande réellement le seul service qui en a
+ * besoin, et on le vérifie par la mesure (npm run check:cookies).
+ *
+ * L'ÉTAT DES LIEUX, MESURÉ ET NON SUPPOSÉ. Ce que le site dépose
+ * lui-même : rien en cookies, et dans le stockage du navigateur
+ * seulement nw-theme, nw-lang (le choix du visiteur), nw-vues,
+ * nw-curtain et nw_devis_ts (le fonctionnement de la page). Tout cela
+ * est exempté de consentement : ce sont des préférences exprimées par
+ * le visiteur et des mesures strictement nécessaires.
+ *
+ * Ce que le site appelle chez des tiers, sans que le visiteur l'ait
+ * demandé :
+ *   - assets.calendly.com sur /rendez-vous. Service tiers, dépose ses
+ *     propres cookies. C'EST LE SEUL QUI EXIGE UN CONSENTEMENT, et le
+ *     seul que ce bandeau commande.
+ *   - js.hcaptcha.com sur /login et /inscription. Mesure anti-fraude :
+ *     la CNIL l'exempte de consentement au titre de la sécurité. On ne
+ *     le bloque donc pas, mais on le déclare.
+ *   - cdn.jsdelivr.net, qui sert la bibliothèque Supabase. Aucun
+ *     cookie, mais l'adresse IP du visiteur est vue par ce tiers : on
+ *     le déclare aussi.
+ *
+ * Il n'y a AUCUNE mesure d'audience sur ce site — ni Analytics, ni
+ * Matomo, ni pixel. Le bandeau n'invente donc pas une case
+ * « statistiques » qui ne commanderait rien.
+ *
+ * LES RÈGLES QUI ONT DICTÉ LA FORME :
+ *   - refuser doit être aussi simple qu'accepter. Les deux boutons sont
+ *     strictement identiques : même style, même taille, même rang. Le
+ *     garde-fou mesure leurs surfaces et refuse tout écart.
+ *   - pas de mur : le visiteur peut continuer sans choisir, et tant
+ *     qu'il n'a pas choisi, rien de facultatif ne part.
+ *   - un choix se retire aussi facilement qu'il se donne : le lien
+ *     « Cookies » du pied de page rouvre ce panneau.
+ *   - le choix est daté et périmé au bout de six mois, durée
+ *     recommandée par la CNIL, après quoi la question est reposée.
+ */
+---
+
+<section class="ck" id="ck" role="region" aria-labelledby="ck-titre" hidden>
+  <div class="ck-carte">
+    <h2 class="ck-titre" id="ck-titre" data-i18n="ck-titre">Cookies et traceurs</h2>
+    <p class="ck-txt" data-i18n="ck-txt">
+      Ce site ne dépose aucun cookie publicitaire et ne mesure pas votre
+      audience. Seule la prise de rendez-vous fait appel à un service
+      tiers, Calendly, qui dépose ses propres cookies. Vous décidez.
+    </p>
+
+    <div class="ck-detail" id="ck-detail" hidden>
+      <div class="ck-ligne">
+        <div class="ck-ligne-txt">
+          <p class="ck-ligne-nom" data-i18n="ck-nec-nom">Nécessaires</p>
+          <p class="ck-ligne-sub" data-i18n="ck-nec-sub">
+            Votre thème, votre langue, votre session et la protection
+            anti-robot des formulaires. Sans eux le site ne fonctionne
+            pas. Aucun consentement requis.
+          </p>
+        </div>
+        <span class="ck-fixe" data-i18n="ck-toujours">Toujours actifs</span>
+      </div>
+      <div class="ck-ligne">
+        <div class="ck-ligne-txt">
+          <label class="ck-ligne-nom" for="ck-rdv" data-i18n="ck-rdv-nom">Prise de rendez-vous</label>
+          <p class="ck-ligne-sub" data-i18n="ck-rdv-sub">
+            Le calendrier Calendly, sur la page Rendez-vous. Tant que
+            vous ne l'autorisez pas, il n'est pas chargé du tout.
+          </p>
+        </div>
+        <!-- Un vrai interrupteur : une case à cocher, habillée. Jamais
+             masquée par display:none, sinon elle ne reçoit plus le
+             focus clavier et l'interrupteur devient inatteignable. -->
+        <span class="ck-bascule">
+          <input type="checkbox" id="ck-rdv">
+          <span class="ck-piste" aria-hidden="true"></span>
+        </span>
+      </div>
+    </div>
+
+    <div class="ck-actions">
+      <!-- Accepter et refuser sont le MÊME bouton, à l'étiquette près.
+           Donner au refus un style plus discret est exactement ce que
+           la CNIL sanctionne, et le garde-fou mesure l'écart. -->
+      <button type="button" class="btn-g btn-sm ck-b" id="ck-ok" data-i18n="ck-ok">Tout accepter</button>
+      <button type="button" class="btn-g btn-sm ck-b" id="ck-non" data-i18n="ck-non">Tout refuser</button>
+      <button type="button" class="ck-lien" id="ck-perso" aria-expanded="false" aria-controls="ck-detail" data-i18n="ck-perso">Personnaliser</button>
+      <button type="button" class="ck-lien" id="ck-save" hidden data-i18n="ck-save">Enregistrer mes choix</button>
+      <a class="ck-lien" href="/politique-confidentialite" data-i18n="ck-plus">En savoir plus</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Sous le menu plein écran (9000) et sous le lien d'évitement
+     (10000) : un bandeau qui passerait devant eux les rendrait
+     inutilisables. Au-dessus de tout le reste. */
+  .ck{
+    position:fixed;inset-inline:0;bottom:0;z-index:8000;
+    padding:clamp(10px,2vw,18px);pointer-events:none;
+  }
+  .ck[hidden]{display:none}
+  .ck-carte{
+    pointer-events:auto;
+    max-width:820px;margin:0 auto;
+    background:var(--surface);
+    border:1px solid var(--border-strong);border-radius:16px;
+    box-shadow:var(--shadow-2);
+    padding:clamp(16px,2.4vw,22px) clamp(16px,2.6vw,26px);
+  }
+  @media (prefers-reduced-motion:no-preference){
+    .ck-carte{animation:ckIn .42s cubic-bezier(.22,.9,.24,1) both}
+    @keyframes ckIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  }
+  .ck-titre{font-size:var(--fs-body);font-weight:var(--w-semi);letter-spacing:-.01em;margin:0 0 6px}
+  .ck-txt{font-size:var(--fs-caption);color:var(--text-muted);line-height:1.6;margin:0;max-width:62ch}
+
+  /* ── Le détail, replié par défaut ── */
+  .ck-detail{margin-top:16px;border-top:1px solid var(--border);padding-top:14px;
+    display:flex;flex-direction:column;gap:14px}
+  .ck-detail[hidden]{display:none}
+  .ck-ligne{display:flex;align-items:flex-start;gap:16px;justify-content:space-between}
+  .ck-ligne-txt{min-width:0}
+  .ck-ligne-nom{font-size:var(--fs-caption);font-weight:var(--w-semi);margin:0 0 3px;display:block}
+  .ck-ligne-sub{font-size:var(--fs-100);color:var(--text-muted);line-height:1.55;margin:0;max-width:52ch}
+  .ck-fixe{font-size:var(--fs-100);font-weight:500;color:var(--text-muted);white-space:nowrap;
+    padding-top:1px;flex:0 0 auto}
+
+  /* ── L'interrupteur ── */
+  .ck-bascule{position:relative;flex:0 0 auto;display:inline-flex;width:44px;height:26px}
+  /* Opacité zéro et non display:none : le focus clavier doit encore
+     l'atteindre, c'est lui qui dessine l'anneau sur la piste. */
+  .ck-bascule input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer;z-index:1}
+  .ck-piste{
+    position:absolute;inset:0;border-radius:980px;
+    background:var(--surface-2);border:1px solid var(--border-strong);
+    transition:background-color var(--dur-micro) var(--ease-out),
+               border-color var(--dur-micro) var(--ease-out);
+  }
+  .ck-piste::after{
+    content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;
+    background:var(--text-muted);
+    transition:transform var(--dur-micro) var(--ease-out),background-color var(--dur-micro) var(--ease-out);
+  }
+  .ck-bascule input:checked ~ .ck-piste{background:var(--accent-glow);border-color:var(--accent)}
+  .ck-bascule input:checked ~ .ck-piste::after{transform:translateX(18px);background:var(--accent)}
+  .ck-bascule input:focus-visible ~ .ck-piste{outline:3px solid var(--accent-hover);outline-offset:3px}
+
+  /* ── Les actions ── */
+  .ck-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:16px}
+  /* Les deux boutons de décision partagent la MÊME règle : aucun des
+     deux ne peut dériver sans l'autre. */
+  .ck-b{flex:0 0 auto}
+  .ck-lien{
+    background:none;border:0;padding:6px 2px;cursor:pointer;
+    font:500 var(--fs-caption)/1.3 var(--font);letter-spacing:0;
+    color:var(--text-muted);text-decoration:underline;text-underline-offset:3px;
+    transition:color var(--dur-micro) var(--ease-out);
+  }
+  .ck-lien:hover{color:var(--text)}
+  .ck-lien[hidden]{display:none}
+  .ck-lien:focus-visible{outline:3px solid var(--accent-hover);outline-offset:3px;border-radius:4px}
+
+  @media(max-width:560px){
+    .ck-ligne{flex-wrap:wrap;gap:10px}
+    .ck-actions{gap:8px}
+    /* Les deux décisions prennent chacune la moitié d'une ligne : elles
+       restent exactement de même poids, et le pouce les atteint. */
+    .ck-b{flex:1 1 calc(50% - 4px)}
+  }
+</style>
+
+<script is:inline>
+/* ── LE CONSENTEMENT ──────────────────────────────────────────────────
+   Une seule source de vérité, exposée en window.nwConsent, et un
+   événement « nw-consent » pour que les pages s'y accrochent au lieu
+   de relire le stockage chacune de leur côté.
+
+   Le choix est daté. Passé six mois — la durée que recommande la CNIL —
+   il est périmé et la question est reposée. Un refus se garde aussi
+   longtemps qu'une acceptation : le redemander à chaque visite serait
+   une façon de forcer la main. */
+(function(){
+  'use strict';
+  var CLE = 'nw-consent', VERSION = 1, DUREE = 182 * 24 * 3600 * 1000;
+
+  function lire(){
+    try{
+      var o = JSON.parse(localStorage.getItem(CLE) || 'null');
+      if(!o || o.v !== VERSION) return null;
+      if(!o.t || Date.now() - o.t > DUREE) return null;
+      return o;
+    }catch(e){ return null; }
+  }
+  function ecrire(rdv){
+    var o = { v:VERSION, t:Date.now(), rdv: rdv ? 1 : 0 };
+    try{ localStorage.setItem(CLE, JSON.stringify(o)); }catch(e){}
+    /* Même si l'écriture échoue — navigation privée, stockage bloqué —
+       le choix vaut pour la page en cours : on le tient en mémoire. */
+    courant = o;
+    document.dispatchEvent(new CustomEvent('nw-consent', { detail:o }));
+    return o;
+  }
+  var courant = lire();
+
+  var bandeau = document.getElementById('ck');
+  var detail  = document.getElementById('ck-detail');
+  var bRdv    = document.getElementById('ck-rdv');
+  var bPerso  = document.getElementById('ck-perso');
+  var bSave   = document.getElementById('ck-save');
+
+  function montrer(ouvrirDetail){
+    if(!bandeau) return;
+    if(courant && bRdv) bRdv.checked = !!courant.rdv;
+    bandeau.hidden = false;
+    if(ouvrirDetail) basculerDetail(true);
+  }
+  function cacher(){ if(bandeau) bandeau.hidden = true; }
+
+  function basculerDetail(ouvert){
+    if(!detail) return;
+    detail.hidden = !ouvert;
+    if(bPerso) bPerso.setAttribute('aria-expanded', ouvert ? 'true' : 'false');
+    /* « Personnaliser » cède la place à « Enregistrer mes choix » :
+       deux boutons qui font la même chose à deux endroits seraient une
+       hésitation de plus pour le visiteur. */
+    if(bPerso) bPerso.hidden = ouvert;
+    if(bSave)  bSave.hidden  = !ouvert;
+  }
+
+  window.nwConsent = {
+    /* true, false, ou null tant que le visiteur n'a rien dit. */
+    rdv: function(){ return courant ? !!courant.rdv : null; },
+    /* Rouvre le panneau — c'est ce qu'appelle le lien du pied de page. */
+    ouvrir: function(){ montrer(true); },
+    accepter: function(){ ecrire(true); cacher(); },
+    refuser:  function(){ ecrire(false); cacher(); },
+  };
+
+  if(bandeau){
+    document.getElementById('ck-ok').addEventListener('click', function(){
+      if(bRdv) bRdv.checked = true;
+      ecrire(true); cacher();
+    });
+    document.getElementById('ck-non').addEventListener('click', function(){
+      if(bRdv) bRdv.checked = false;
+      ecrire(false); cacher();
+    });
+    if(bPerso) bPerso.addEventListener('click', function(){ basculerDetail(true); });
+    if(bSave)  bSave.addEventListener('click', function(){
+      ecrire(bRdv && bRdv.checked); cacher();
+    });
+    /* Rien n'a encore été dit : on demande. Sinon on se tait. */
+    if(!courant) montrer(false);
+  }
+})();
+</script>

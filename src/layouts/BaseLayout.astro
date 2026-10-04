@@ -18,6 +18,7 @@ const canonicalUrl = siteOrigin + Astro.url.pathname;
 const ogImageUrl = siteOrigin + '/og-image.png';
 const ogImageLightUrl = siteOrigin + '/og-image-light.png';
 import River from '../components/River.astro';
+import Cookies from '../components/Cookies.astro';
 ---
 <!doctype html>
 <html lang="fr">
@@ -116,6 +117,19 @@ import River from '../components/River.astro';
     <div class="amb-streak-2"></div>
   </div>
   <div class="read-bar" aria-hidden="true"></div>
+
+  <!-- Cookies et traceurs. AVANT le contenu, et c'est délibéré : son
+       script publie window.nwConsent, que les pages interrogent pour
+       savoir si elles ont le droit de charger un tiers. Posé après le
+       <slot />, il s'exécutait après elles — mesuré, la page
+       Rendez-vous retombait alors sur « pas encore de réponse » et
+       n'affichait plus le calendrier même à un visiteur qui venait de
+       l'autoriser. Le bandeau reste visuellement en bas, il est en
+       position fixe ; seul l'ordre du document change, et un lecteur
+       d'écran rencontre la question avant la page, comme un visiteur
+       qui la voit en arrivant. -->
+  <Cookies />
+
   <slot />
 
   <!-- La couleur de la barre du navigateur suit le thème. Lue dans les

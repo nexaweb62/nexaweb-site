@@ -141,6 +141,18 @@ body.lite .gk:nth-child(2n){display:none}
 .rdv-section{max-width:900px;margin:0 auto;padding:0 var(--pad-x) clamp(80px,12vh,140px)}
 .calendly-inline-widget{min-width:320px;height:700px;border-radius:16px;overflow:hidden}
 @media(max-width:600px){.calendly-inline-widget{height:580px}}
+/* Le panneau d'attente occupe la même place que le calendrier : sans
+   hauteur propre, la page sauterait de 700 px au moment du chargement. */
+.rdv-garde{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;gap:10px;min-height:360px;
+  padding:clamp(24px,4vw,44px);
+  background:var(--surface);border:1px solid var(--border-strong);border-radius:16px;
+}
+.rdv-garde[hidden]{display:none}
+.rdv-garde-t{font-size:var(--fs-body);font-weight:var(--w-semi);margin:0}
+.rdv-garde-s{font-size:var(--fs-caption);color:var(--text-muted);line-height:1.6;margin:0;max-width:46ch}
+.rdv-garde-b{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:6px}
 </style>
 
 <Header />
@@ -188,6 +200,21 @@ body.lite .gk:nth-child(2n){display:none}
     <div class="calendly-inline-widget" id="calendly"
          data-cal-base="https://calendly.com/contact-nexaweb62/30min"
          style="min-width:320px;height:700px"></div>
+    <!-- Tant que le visiteur n'a pas autorisé Calendly, rien n'est
+         appelé chez eux et c'est ce panneau qui occupe la place. Il
+         n'est pas une excuse : il porte le bouton qui autorise et
+         charge dans la foulée, en un clic. -->
+    <div class="rdv-garde" id="rdv-garde" hidden>
+      <p class="rdv-garde-t" data-i18n="rdv-garde-t">Le calendrier est fourni par Calendly</p>
+      <p class="rdv-garde-s" data-i18n="rdv-garde-s">
+        L'afficher charge un service tiers, qui dépose ses propres
+        cookies. Nous ne le chargeons pas sans votre accord.
+      </p>
+      <div class="rdv-garde-b">
+        <button type="button" class="btn btn-sm" id="rdv-ok" data-i18n="rdv-garde-ok">Afficher le calendrier</button>
+        <a class="btn-g btn-sm" href="/contact" data-i18n="rdv-garde-alt">Écrire un message</a>
+      </div>
+    </div>
   </div>
 </main>
 
@@ -199,6 +226,7 @@ body.lite .gk:nth-child(2n){display:none}
 (function(){
   var el = document.getElementById('calendly');
   if(!el) return;
+  var garde = document.getElementById('rdv-garde');
   function hex(name){
     var v = (window.nwToken ? window.nwToken(name) : '').replace('#','');
     return v.length === 3 ? v[0]+v[0]+v[1]+v[1]+v[2]+v[2] : v;
@@ -213,10 +241,41 @@ body.lite .gk:nth-child(2n){display:none}
       + '&locale=' + lang);
   }
   build();
-  var s = document.createElement('script');
-  s.src = 'https://assets.calendly.com/assets/external/widget.js';
-  s.async = true;
-  document.body.appendChild(s);
+
+  /* Le script Calendly ne part qu'une fois, et seulement sur accord.
+     Avant, il partait au chargement de la page : le bandeau de
+     consentement serait arrivé APRÈS l'appel qu'il prétend commander. */
+  var charge = false;
+  function charger(){
+    if(charge) return;
+    charge = true;
+    if(garde) garde.hidden = true;
+    el.style.removeProperty('display');
+    var s = document.createElement('script');
+    s.src = 'https://assets.calendly.com/assets/external/widget.js';
+    s.async = true;
+    document.body.appendChild(s);
+  }
+  function attendre(){
+    if(garde) garde.hidden = false;
+    /* Le conteneur du widget est retiré du flux, sinon ses 700 px de
+       vide s'ajoutent sous le panneau d'attente. */
+    el.style.display = 'none';
+  }
+
+  function decider(){
+    var ok = window.nwConsent ? window.nwConsent.rdv() : null;
+    if(ok) charger(); else attendre();
+  }
+  decider();
+  /* Le visiteur peut changer d'avis depuis le bandeau sans recharger. */
+  document.addEventListener('nw-consent', decider);
+  /* Et depuis ce panneau-ci, en un seul clic : le bouton donne l'accord
+     ET affiche, au lieu de renvoyer vers un réglage à trouver. */
+  var b = document.getElementById('rdv-ok');
+  if(b) b.addEventListener('click', function(){
+    if(window.nwConsent) window.nwConsent.accepter(); else charger();
+  });
 
   // Rebascule : Calendly ne relit pas l'URL tout seul, on réinitialise l'iframe.
   document.addEventListener('nw-theme', function(){

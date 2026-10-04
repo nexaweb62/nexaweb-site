@@ -608,9 +608,16 @@ body:has(.fond-tarifs) footer{
 .foot-soc.whatsapp:hover{background:var(--brand-whatsapp);border-color:var(--brand-whatsapp)}
 .foot-bot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding:18px 0}
 .foot-copy{font-size:var(--fs-caption);color:var(--text-subtle);letter-spacing:0}
-.foot-legal{display:flex;gap:var(--sp-5)}
-.foot-legal a{font-size:var(--fs-caption);color:var(--text-subtle);transition:color var(--dur-micro) var(--ease-out)}
-.foot-legal a:hover{color:var(--accent-text)}
+.foot-legal{display:flex;gap:var(--sp-5);flex-wrap:wrap;align-items:center}
+/* Le bouton « Cookies » rouvre le panneau : il ne mene nulle part, donc
+   ce n'est pas un lien — mais il se tient exactement comme ses voisins.
+   Sans la remise a zero, il garderait la police et le fond du
+   navigateur au milieu de deux liens. */
+.foot-legal a,.foot-ck{font-size:var(--fs-caption);color:var(--text-subtle);transition:color var(--dur-micro) var(--ease-out)}
+.foot-ck{background:none;border:0;padding:0;cursor:pointer;font-family:var(--font);
+  font-weight:var(--w-reg);letter-spacing:inherit;line-height:inherit}
+.foot-legal a:hover,.foot-ck:hover{color:var(--accent-text)}
+.foot-ck:focus-visible{outline:3px solid var(--accent-hover);outline-offset:3px;border-radius:4px}
 @media(max-width:860px){.foot-in{grid-template-columns:1fr 1fr}}
 @media(max-width:440px){.foot-in{grid-template-columns:1fr}.foot-bot{flex-direction:column;align-items:flex-start}}
 

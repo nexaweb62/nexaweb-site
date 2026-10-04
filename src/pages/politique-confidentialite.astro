@@ -22,6 +22,26 @@ import '../styles/global.css';
 .legal-body ul li{margin-bottom:4px}
 .legal-body a{color:var(--accent-text);text-decoration:underline;text-underline-offset:3px}
 .legal-body strong{color:var(--text);font-weight:600}
+/* Le tableau des traceurs. Il hérite du gris secondaire du corps, comme
+   les paragraphes voisins ; les en-têtes prennent l'encre pleine. */
+.pc-table{width:100%;border-collapse:collapse;margin:16px 0 18px;
+  font-size:14px;line-height:1.6;color:var(--text-muted)}
+.pc-table th,.pc-table td{text-align:left;vertical-align:top;
+  padding:9px 12px;border-bottom:1px solid var(--border)}
+.pc-table th{color:var(--text);font-weight:600;font-size:13px;
+  letter-spacing:0;border-bottom-color:var(--border-strong)}
+.pc-table td:first-child{color:var(--text);font-weight:500;white-space:nowrap}
+/* Sous 560 px, trois colonnes ne tiennent pas : le tableau se lit en
+   blocs empiles, chaque cellule precedee de son en-tete. Mesure : en
+   colonnes, il debordait de 84 px a 390 px de large. */
+@media(max-width:560px){
+  .pc-table,.pc-table tbody,.pc-table tr,.pc-table td{display:block;width:100%}
+  .pc-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+  .pc-table tr{border-bottom:1px solid var(--border-strong);padding:10px 0}
+  .pc-table td{border:0;padding:2px 0}
+  .pc-table td:first-child{white-space:normal}
+  .pc-table td:nth-child(3)::before{content:"Durée : ";color:var(--text-subtle)}
+}
 .site-footer{border-top:1px solid var(--border);padding:24px 0}
 .site-footer .foot-in{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .foot-copy{font-size:var(--fs-caption);color:var(--text-muted)}
@@ -64,6 +84,9 @@ import '../styles/global.css';
         <h2>4. Destinataires</h2>
         <ul>
           <li><strong>Supabase Inc.</strong> — base de données et authentification, infrastructure conforme RGPD, serveurs UE.</li>
+          <li><strong>Calendly LLC</strong> — prise de rendez-vous, uniquement si vous l'autorisez.</li>
+          <li><strong>Intuition Machines (hCaptcha)</strong> — protection anti-robot des formulaires de connexion et d'inscription.</li>
+          <li><strong>jsDelivr</strong> — diffusion des bibliothèques techniques du site.</li>
         </ul>
         <p>Nous ne revendons jamais vos données.</p>
       </section>
@@ -79,8 +102,28 @@ import '../styles/global.css';
         <p>Accès, rectification, effacement, limitation, portabilité, opposition — écrivez à <a href="mailto:contact.nexaweb62@gmail.com">contact.nexaweb62@gmail.com</a>. En cas de litige : <a href="https://www.cnil.fr" target="_blank" rel="noopener">cnil.fr</a>.</p>
       </section>
       <section>
-        <h2>7. Cookies</h2>
-        <p>Uniquement des cookies techniques strictement nécessaires (thème préféré, langue). Aucun cookie publicitaire tiers.</p>
+        <h2>7. Cookies et autres traceurs</h2>
+        <p><strong>Ce site ne dépose aucun cookie.</strong> Il n'y a ni mesure d'audience, ni publicité, ni pixel de suivi : ni Google Analytics, ni Matomo, ni aucun équivalent. Ce qu'il enregistre reste dans votre navigateur et ne nous est jamais transmis.</p>
+        <table class="pc-table">
+          <thead>
+            <tr><th>Ce qui est enregistré</th><th>À quoi ça sert</th><th>Combien de temps</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>nw-theme</td><td>Le thème clair ou sombre que vous avez choisi.</td><td>Jusqu'à effacement</td></tr>
+            <tr><td>nw-lang</td><td>La langue que vous avez choisie.</td><td>Jusqu'à effacement</td></tr>
+            <tr><td>nw-consent</td><td>Votre choix sur cette page. Sans lui, la question vous serait reposée à chaque visite.</td><td>6 mois</td></tr>
+            <tr><td>nw-vues, nw-curtain</td><td>Éviter de rejouer l'animation d'accueil à chaque page.</td><td>Le temps de l'onglet</td></tr>
+            <tr><td>nw_devis_ts</td><td>Empêcher l'envoi en double d'une demande de devis.</td><td>Le temps de l'onglet</td></tr>
+            <tr><td>Session Supabase</td><td>Vous garder connecté à votre espace client.</td><td>Jusqu'à déconnexion</td></tr>
+          </tbody>
+        </table>
+        <p>Trois services extérieurs sont appelés par le site, et voient à cette occasion votre adresse IP :</p>
+        <ul>
+          <li><strong>Calendly</strong>, sur la page Rendez-vous, dépose ses propres cookies. C'est le seul qui demande votre accord : tant que vous ne l'avez pas donné, il n'est pas chargé du tout, et la page vous propose de le faire en un clic.</li>
+          <li><strong>hCaptcha</strong>, sur les pages Connexion et Inscription, empêche les robots de créer des comptes. C'est une mesure de sécurité strictement nécessaire, exemptée de consentement.</li>
+          <li><strong>jsDelivr</strong> sert les bibliothèques techniques du site et ne dépose aucun cookie.</li>
+        </ul>
+        <p>Vous pouvez revenir sur votre choix à tout moment : le lien <strong>Cookies</strong>, en bas de chaque page, rouvre le panneau. Passé six mois, la question vous est reposée.</p>
       </section>
       <section>
         <h2>8. Sécurité</h2>
