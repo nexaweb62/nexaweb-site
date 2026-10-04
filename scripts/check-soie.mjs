@@ -19,7 +19,7 @@
        --surface, a quelques points pres (le grain du site assombrit
        toute capture).
 
-   Limite assumee : on ne mesure que l'etat STABLE. Un element encore
+   Limite assumee : on ne mesure que ce qui est VISIBLE et STABLE. Un element encore
    transforme ou a demi transparent — une carte en train de s'ouvrir —
    est saute, sinon le harnais accuse le fond de ce que fait l'animation
    d'entree. Un texte qui resterait transforme pour toujours serait, lui,
@@ -214,6 +214,28 @@ for (const theme of ['dark', 'light']) {
             const cs = getComputedStyle(n);
             if (cs.transform !== 'none' || +cs.opacity < 0.999) return null;
             n = n.parentElement;
+          }
+          /* CE QUI EST RECOUVERT N'EST PAS SUR LA SOIE.
+             Le bandeau cookies est en position fixe, en bas de l'ecran :
+             il passe DEVANT le pied de page et le selecteur de paiement.
+             Le harnais lisait alors la carte du bandeau comme « le fond
+             derriere le texte » et criait au defaut de contraste sur un
+             texte que le visiteur ne voit meme pas a cet instant.
+             Constate : « pire fond 255,255,255 » en clair, soit --surface
+             du bandeau, et 244,242,238 en sombre, soit la couleur de son
+             titre. Aucune de ces valeurs n'existe dans la soie.
+
+             Le test : la cible est deja masquee, donc elementFromPoint
+             rend ce qu'il y a dessous. Pour un element non recouvert,
+             c'est un de ses ANCETRES — la carte, main, body. Pour un
+             element recouvert, c'est l'intrus. On echantillonne plusieurs
+             points : un bandeau ne masque souvent qu'une partie. */
+          const pts = [[0.5, 0.5], [0.08, 0.5], [0.92, 0.5], [0.5, 0.12], [0.5, 0.88]];
+          for (const [fx, fy] of pts) {
+            const x = Math.min(innerWidth - 1, Math.max(0, b.left + b.width * fx));
+            const y = Math.min(innerHeight - 1, Math.max(0, b.top + b.height * fy));
+            const sous = document.elementFromPoint(x, y);
+            if (sous && !sous.contains(e)) return null;
           }
           const x = Math.max(0, b.x), y = Math.max(0, b.y);
           return { x, y, width: Math.min(b.width, innerWidth - x), height: Math.min(b.height, innerHeight - y) };
