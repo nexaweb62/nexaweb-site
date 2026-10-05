@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import Silk from '../components/Silk.astro';
+import FondTarifs from '../components/FondTarifs.astro';
 import GarantieBadge from '../components/GarantieBadge.astro';
 import '../styles/global.css';
 import {
@@ -13,6 +13,19 @@ import {
 ---
 <BaseLayout title="Tarifs — Nexa Web" description="Refonte de site dès 490 €, Vitrine Pro à 999 € (offre de lancement, places limitées) et Entreprise à partir de 1 200 €. Paiement en 3 ou 4 fois possible. Devis gratuit — Nexa Web, Carvin.">
 <style>
+/* ── NOTE D'HISTOIRE ──────────────────────────────────────────────────
+   Le fond de cette page fut longtemps une SOIE ANIMEE : un shader WebGL
+   dont la clarte changeait sous le texte. Les commentaires ci-dessous
+   citent des contrastes mesures CONTRE CETTE SOIE — ils disent pourquoi
+   chaque compensation existe, et restent justes au passe.
+
+   La soie a ete remplacee par un fond statique (voir FondTarifs.astro).
+   Les compensations sont gardees : elles ne font que choisir un gris un
+   cran plus franc, ce qui ne coute rien et sert toujours. Elles ont ete
+   revalidees contre le nouveau fond, au pixel, par `npm run check:fond`
+   — 168 mesures, aucune sous le seuil AA, en clair comme en sombre, en
+   1280 comme en 390. */
+
 /* ── HERO ── */
 /* Le texte secondaire de cette page se pose sur une soie animée, pas
    sur un aplat. Mesuré : le gris habituel du site y descend jusqu'à
@@ -284,7 +297,7 @@ main{--text-muted:var(--raw-warm-200)}
 }
 </style>
 
-<Silk />
+<FondTarifs />
 
 <div class="ambience" aria-hidden="true" role="presentation">
   <div class="amb-depth"></div>

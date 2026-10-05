@@ -87,7 +87,7 @@ for (const vp of VUES) {
 
       /* 3 — la barre s'etire et ne disparait pas.
          On ATTEND que le defilement ait vraiment eu lieu avant de
-         mesurer : sur /tarifs, ou tourne le shader de la soie,
+         mesurer : sur /tarifs, qui fut longtemps la page la plus lourde,
          scrollTo met jusqu'a 600 ms a prendre effet. Un delai fixe
          mesurait une page encore en haut et criait au defaut. */
       await page.evaluate(() => scrollTo(0, 700));
@@ -96,7 +96,7 @@ for (const vp of VUES) {
         .catch(() => {});
       /* Puis on attend que la hauteur se STABILISE, au lieu de parier
          sur la duree annoncee de 0,7 s. Sur /tarifs, le shader de la
-         soie affame le fil principal : la transition est juste, mais
+         page chargeait le fil principal : la transition est juste, mais
          les images tardent, et une mesure a instant fixe lisait 80 px
          au lieu de 64. C'est l'etat final qui compte. */
       await page.waitForFunction(() => {

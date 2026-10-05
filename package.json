@@ -23,10 +23,10 @@
     "check:header": "node scripts/check-header.mjs",
     "check:scoped": "node scripts/check-scoped.mjs",
     "check:liquid": "node scripts/check-liquid.mjs",
-    "check:soie": "node scripts/check-soie.mjs",
     "check:mensualites": "node scripts/check-mensualites.mjs",
     "check:cookies": "node scripts/check-cookies.mjs",
     "check:garantie": "node scripts/check-garantie.mjs",
+    "check:fond": "node scripts/check-fond.mjs",
     "check:logo": "node scripts/check-logo.mjs"
   },
   "dependencies": {

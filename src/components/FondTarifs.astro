@@ -1,0 +1,50 @@
+---
+/**
+ * LE FOND DE LA PAGE TARIFS.
+ *
+ * Statique. Il remplace la soie animee (un shader WebGL de ~300 lignes,
+ * ajoutee puis retiree) : trois halos dores sur un fond sombre, plus une
+ * grille tres discrete qui s'efface sur les bords.
+ *
+ * POURQUOI DES JETONS ET NON LES VALEURS ECRITES A LA MAIN.
+ * En sombre, --bg VAUT #0A0A0B et --raw-gold-400 VAUT rgb(212,179,106) :
+ * le rendu sombre est donc exactement celui demande, au pixel. Mais un
+ * fond fixe en dur resterait noir sous le theme clair, ou le texte est
+ * sombre — la page deviendrait illisible d'un bout a l'autre. Les jetons
+ * donnent le meme sombre et un clair qui tient debout.
+ *
+ * La grille suit --text pour la meme raison : des traits blancs sur le
+ * creme du theme clair ne se verraient pas. Le masque n'utilise que le
+ * canal alpha de sa couleur, donc --text y sert de « opaque » sans rien
+ * teinter.
+ */
+---
+
+<div class="fond-tarifs" aria-hidden="true" role="presentation"></div>
+
+<style>
+  /* Fixe derriere toute la page, le contenu passe au-dessus : <main>
+     porte deja position:relative et z-index:1. */
+  .fond-tarifs{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(ellipse 70% 45% at 50% -5%,
+        rgb(from var(--raw-gold-400) r g b / .16), transparent 70%),
+      radial-gradient(ellipse 50% 40% at 100% 60%,
+        rgb(from var(--raw-gold-400) r g b / .06), transparent 70%),
+      radial-gradient(ellipse 50% 40% at 0% 90%,
+        rgb(from var(--raw-gold-400) r g b / .05), transparent 70%),
+      var(--bg);
+  }
+
+  /* La grille, posee par dessus les halos et fondue sur les bords. */
+  .fond-tarifs::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background-image:
+      linear-gradient(rgb(from var(--text) r g b / .025) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(from var(--text) r g b / .025) 1px, transparent 1px);
+    background-size:64px 64px;
+    -webkit-mask-image:radial-gradient(ellipse 80% 60% at 50% 30%, var(--text), transparent 80%);
+    mask-image:radial-gradient(ellipse 80% 60% at 50% 30%, var(--text), transparent 80%);
+  }
+</style>

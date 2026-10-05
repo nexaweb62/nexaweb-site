@@ -20,7 +20,7 @@ import { chromium } from 'playwright-core';
 import sharp from 'sharp';
 
 const BASE   = process.env.BASE   || 'http://localhost:4321';
-/* L'accueil porte la rivière, Tarifs porte la soie : ce sont les deux
+/* L'accueil porte la rivière, Tarifs porte son fond : ce sont les deux
    pages à fond animé, donc les deux où un renfort de lisibilité peut
    laisser une arête. La cassure de /tarifs est passée inaperçue tant
    que cette liste n'avait que l'accueil. */

@@ -1,11 +1,17 @@
 #!/usr/bin/env node
 /* Prerequis : npm run build && npx astro preview (port 4321).
-   Usage : npm run check:soie
+   Usage : npm run check:fond
 
-   LE CONTRASTE DES TEXTES POSES SUR LA SOIE, MESURE.
+   LE CONTRASTE DES TEXTES POSES SUR LE FOND DE TARIFS, MESURE.
 
-   La soie bouge : une seule image ne prouve rien. On echantillonne
-   plusieurs instants et on garde le PIRE pixel vu.
+   Ce controle existe parce que check:contrast:rendered lit des couleurs
+   CALCULEES : derriere une carte translucide il voit le jeton --surface,
+   pas ce qui est reellement peint. Ici on lit les pixels.
+
+   Le fond etait une soie animee ; il est desormais statique, donc les
+   instants echantillonnes se ressemblent. On les garde quand meme : ils
+   ne coutent presque rien, et ils attrapent ce qui bouge encore par
+   dessus le fond (apparitions au defilement, cartes qui s'ouvrent).
 
    Methode, et ses deux temoins :
      - on masque le texte par visibility:hidden — et non par
@@ -209,10 +215,34 @@ for (const theme of ['dark', 'light']) {
              9,9,10. On n'echantillonne donc que ce qui a fini de
              bouger. C'est une limite assumee du harnais : il juge l'etat
              stable, pas les quelques centiemes de seconde de l'entree. */
+          /* UNE MATRICE D'IDENTITE N'EST PAS UNE ANIMATION EN COURS.
+             Mesure : a 390 px, les textes de /tarifs se reposent sur
+             « matrix(1, 0, 0, 1, 0, 0) » — aucune transformation
+             visible, mais la chaine n'est pas « none ». Le harnais les
+             sautait donc TOUS et se declarait muet, faute d'avoir pu
+             capturer son propre temoin : la largeur mobile n'etait pas
+             verifiee, elle etait seulement silencieuse.
+             On compare a l'identite avec une tolerance serree : un
+             demi-pixel de deplacement, 0,002 sur les coefficients. De
+             quoi accepter un repos imparfait sans laisser passer une
+             carte a mi-chemin, relevee a 2 px de deplacement. */
+          const posee = t => {
+            if (t === 'none') return true;
+            const m = /^matrix(3d)?\(([^)]+)\)$/.exec(t);
+            if (!m) return false;
+            const v = m[2].split(',').map(Number);
+            if (v.some(Number.isNaN)) return false;
+            const id = m[1] ? [1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1] : [1,0,0,1,0,0];
+            if (v.length !== id.length) return false;
+            return v.every((x, k) => {
+              const estDecalage = m[1] ? (k >= 12 && k <= 14) : k >= 4;
+              return Math.abs(x - id[k]) <= (estDecalage ? 0.5 : 0.002);
+            });
+          };
           let n = e;
           while (n && n !== document.body) {
             const cs = getComputedStyle(n);
-            if (cs.transform !== 'none' || +cs.opacity < 0.999) return null;
+            if (!posee(cs.transform) || +cs.opacity < 0.999) return null;
             n = n.parentElement;
           }
           /* CE QUI EST RECOUVERT N'EST PAS SUR LA SOIE.
