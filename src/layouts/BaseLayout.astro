@@ -19,6 +19,7 @@ const ogImageUrl = siteOrigin + '/og-image.png';
 const ogImageLightUrl = siteOrigin + '/og-image-light.png';
 import River from '../components/River.astro';
 import Cookies from '../components/Cookies.astro';
+import Intro from '../components/Intro.astro';
 ---
 <!doctype html>
 <html lang="fr">
@@ -35,9 +36,15 @@ import Cookies from '../components/Cookies.astro';
        Deux tailles, parce qu'elles ne portent pas le même dessin : à 16 px
        l'image entière n'est qu'une tache, le recadrage y est resserré de
        15 % pour que le N garde assez de pixels. Vérifié en agrandissant. -->
+  {/* L'ICO d'abord, pour les vieux navigateurs et les agregateurs qui
+      ne lisent que /favicon.ico ; les PNG ensuite, que tout le reste
+      prefere. Le SVG n'est PAS declare comme icone : declare, il
+      primerait sur les PNG, et son fond arrondi se rend mal dans
+      certaines barres d'onglets. */}
+  <link rel="icon" href="/favicon.ico" sizes="32x32" />
   <link rel="icon" href="/icons/icon-32.png" type="image/png" sizes="32x32" />
   <link rel="icon" href="/icons/icon-16.png" type="image/png" sizes="16x16" />
-  <link rel="apple-touch-icon" href="/icons/icon-180.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
   <link rel="manifest" href="/site.webmanifest" />
   <link rel="canonical" href={canonicalUrl} />
   <title>{title}</title>
@@ -51,6 +58,37 @@ import Cookies from '../components/Cookies.astro';
   <meta property="og:image" content={ogImageLightUrl} />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
+
+  {/* DONNÉES STRUCTURÉES. Il n'y en avait aucune : ce bloc est ce que
+      Google lit pour composer une fiche d'entreprise, et « logo » est
+      exactement l'image qu'il affiche à côté du nom. On n'y met que ce
+      que le site dit déjà publiquement — mentions légales et pied de
+      page —, rien d'inventé. */}
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'ProfessionalService',
+    name: 'Nexa Web',
+    url: siteOrigin,
+    logo: siteOrigin + '/icons/icon-512.png',
+    image: ogImageUrl,
+    description: "Agence web à Carvin, Hauts-de-France : création de sites vitrine, e-commerce et refonte.",
+    email: 'contact.nexaweb62@gmail.com',
+    telephone: '+33641467898',
+    founder: { '@type': 'Person', name: 'Ahmed Chteoui' },
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: "3 rue d'Albi",
+      postalCode: '62220',
+      addressLocality: 'Carvin',
+      addressRegion: 'Hauts-de-France',
+      addressCountry: 'FR',
+    },
+    areaServed: 'Hauts-de-France',
+    sameAs: [
+      'https://www.linkedin.com/in/ahmed-chteoui-049211429/',
+      'https://www.facebook.com/people/Nexaweb/61593685250868/',
+    ],
+  })} />
   <meta property="og:locale" content="fr_FR" />
   <meta property="og:site_name" content="Nexa Web" />
   <!-- Twitter / X -->
@@ -97,6 +135,8 @@ import Cookies from '../components/Cookies.astro';
 </head>
 <body data-page={Astro.url.pathname === "/" ? "home" : "page"}>
   <a class="skip-link" href="#main-content">Aller au contenu</a>
+  {/* L'intro : une fois par visite, sur la premiere page ouverte. */}
+  <Intro />
   <River />
   <div class="grain" aria-hidden="true" role="presentation"></div>
   <div class="lamp" aria-hidden="true" role="presentation"></div>

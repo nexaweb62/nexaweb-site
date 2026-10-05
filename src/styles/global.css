@@ -130,18 +130,6 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
    son <picture> ne porte pas l'attribut de portée du parent, et un
    sélecteur scopé ne l'atteindrait pas.
    ═══════════════════════════════════════════════════════════════════════ */
-.llq{display:inline-flex;flex-direction:column;align-items:center;gap:clamp(14px,2vh,22px)}
-.llq-tuile{
-  position:relative;width:var(--llq-taille,320px);aspect-ratio:1;
-  /* La lueur chaude derrière la tuile : un dégradé, pas un flou. */
-  isolation:isolate;
-}
-.llq-tuile::before{
-  content:"";position:absolute;inset:-22%;z-index:-1;pointer-events:none;
-  background:radial-gradient(closest-side,
-    rgb(from var(--accent) r g b / .30), rgb(from var(--accent) r g b / 0) 72%);
-  opacity:.9;
-}
 /* Le rendu est livré sur un noir plein : sans découpe, le thème clair
    montrerait ce noir autour de la tuile.
    L'arête du verre a été mesurée sur le fichier, pas estimée : rayon
@@ -154,22 +142,12 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
    le verre au lieu de laisser le noir. L'encart de 1 % enlève aussi le
    liseré sombre des quatre bords droits (1 à 6 px selon le côté).
    Le border-radius reste comme repli là où clip-path manque. */
-.llq-tuile picture,.llq-tuile img{
-  display:block;width:100%;height:auto;
-  border-radius:24%;clip-path:inset(1% round 24%);
-}
 /* Le canevas se superpose exactement au rendu fixe, découpe comprise :
    le moteur peint la même image, fond noir inclus, donc sans la même
    découpe il rendrait les coins que l'image a perdus.
    Il arrive en fondu pour que le passage du fixe au vivant ne soit pas
    un à-coup. Tant qu'il n'est pas vivant il ne reçoit pas les clics,
    sans quoi il avalerait ceux destinés à la goutte. */
-.llq-canvas{
-  position:absolute;inset:0;width:100%;height:100%;display:block;
-  border-radius:24%;clip-path:inset(1% round 24%);
-  opacity:0;transition:opacity .6s var(--ease-out);pointer-events:none;
-}
-.llq-tuile.llq-vivant .llq-canvas{opacity:1;pointer-events:auto;touch-action:none}
 /* Le rendu fixe reste en dessous, opaque, pendant et après le fondu.
    On avait d'abord essayé de l'effacer en même temps : les deux couches
    se retrouvaient alors à moitié transparentes en même temps, et le
@@ -177,16 +155,6 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
    crème. Le laisser tel quel ne coûte rien, le canevas le recouvre
    entièrement une fois opaque, et il n'y a plus de trou possible. */
 
-.llq-goutte{
-  position:absolute;left:50%;bottom:9%;width:4.6%;aspect-ratio:1;border-radius:50%;
-  background:radial-gradient(circle at 35% 30%,var(--raw-gold-300),var(--raw-gold-600));
-  translate:-50% 0;opacity:0;pointer-events:none;
-}
-.llq-nom{
-  display:flex;align-items:baseline;gap:.55em;
-  font-size:clamp(1.1rem,calc(var(--llq-taille,320px) * .115),2.6rem);
-  font-weight:600;letter-spacing:.14em;line-height:1;margin:0;
-}
 /* La flèche du bouton d'appel à l'action. Elle vit ici et non dans la
    page : i18n.js réécrit le libellé du bouton en innerHTML, et un
    style scopé n'atteindrait pas le <span> recréé. */
@@ -195,29 +163,9 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
 
 /* Sans lueur : dans l'en-tête, un halo doré permanent autour d'une
    tuile de 26 px est du bruit, pas de la présence. */
-.llq-sec .llq-tuile::before{display:none}
-
-.llq-nexa{color:var(--accent-text)}
-.llq-web{color:var(--text);font-weight:300}
-.llq-aide{font-size:12px;color:var(--text-subtle);margin:0;text-align:center}
-
 @media (prefers-reduced-motion:no-preference){
-  .llq-i{cursor:pointer}
-  .llq-i .llq-tuile{transition:transform .5s var(--ease-out)}
-  .llq-i .llq-tuile::before{transition:opacity .5s var(--ease-out),transform .5s var(--ease-out)}
-  .llq-i:hover .llq-tuile,.llq-i:focus-visible .llq-tuile{transform:translateY(-6px) scale(1.015)}
-  .llq-i:hover .llq-tuile::before{opacity:1;transform:scale(1.12)}
-  .llq-i.llq-tombe .llq-goutte{animation:llqGoutte 1s cubic-bezier(.42,0,.72,.52)}
-  @keyframes llqGoutte{
-    0%  {opacity:0;transform:translateY(-8%) scale(.6,.6)}
-    14% {opacity:1;transform:translateY(0) scale(1.18,.84)}
-    100%{opacity:0;transform:translateY(330%) scale(.6,1.5)}
-  }
-}
+              }
 /* Mode léger : le logo reste, son mouvement part. */
-body.lite .llq-i .llq-tuile,body.lite .llq-i .llq-tuile::before{transition:none}
-body.lite .llq-i.llq-tombe .llq-goutte{animation:none}
-
 /* ═══════════════════════════════════════════════════════════════════════
    LA MARQUE EN LIGNE — couleurs et animation
    Les deux vivent ici et non dans le style scopé du composant : le SVG
@@ -343,43 +291,96 @@ body.lite .lgm-i:hover .lg-reflet,body.lite .lgm-i.lg-tombe .lg-goutte{animation
 /* ═══════════════════════════════════════════════════════════════════════
    EN-TÊTE
    ═══════════════════════════════════════════════════════════════════════ */
+/* ── LA BARRE QUI S'ÉTIRE ────────────────────────────────────────────
+   En haut de page elle est compacte et centrée, comme une pastille
+   posée sur le contenu ; passé quarante pixels elle prend toute la
+   largeur et se pose sur un verre flouté.
+
+   Elle ne se cache PLUS au défilement. L'ancienne règle .is-hidden la
+   sortait de l'écran dès qu'on descendait : il fallait remonter pour
+   retrouver le menu. */
 .hdr{
-  position:fixed;inset:0 0 auto;height:var(--hdr);z-index:100;
-  border-bottom:1px solid transparent;isolation:isolate;
-  transition:background-color var(--dur-micro) var(--ease-out),
-             border-color var(--dur-micro) var(--ease-out),
-             transform 300ms var(--ease-out);
+  position:fixed;inset:0 0 auto;height:80px;z-index:100;
+  background:transparent;isolation:isolate;
+  transition:height .7s cubic-bezier(.19,1,.22,1),
+             background-color .7s cubic-bezier(.19,1,.22,1),
+             box-shadow .7s cubic-bezier(.19,1,.22,1);
 }
-.hdr.is-scrolled{
-  background:var(--bg);
-  border-bottom-color:var(--border);
+/* .hdr-in et non .wrap : .wrap porte la largeur de tout le site et
+   n'avait pas à apprendre ce tour-là. */
+.hdr-in{
+  max-width:900px;margin:0 auto;height:100%;padding:0 var(--pad-x);
+  transition:max-width .7s cubic-bezier(.19,1,.22,1),
+             padding .7s cubic-bezier(.19,1,.22,1);
 }
-@supports (backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px)){
-  .hdr.is-scrolled{
-    background:color-mix(in srgb,var(--bg) 82%,transparent);
-    -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+.hdr.scrolled{height:64px}
+.hdr.scrolled .hdr-in{max-width:100%;padding:0 32px}
+/* Le filet du bas est une ombre intérieure et non une bordure : une
+   bordure ajouterait un pixel à la hauteur et ferait sauter la
+   transition d'un cran. */
+.hdr.scrolled{
+  background:rgb(from var(--raw-black-950) r g b / .72);
+  box-shadow:inset 0 -1px 0 rgb(from var(--raw-gold-400) r g b / .16);
+}
+:root[data-theme="light"] .hdr.scrolled{
+  background:rgb(from var(--raw-paper-0) r g b / .72);
+  box-shadow:inset 0 -1px 0 rgb(from var(--raw-black-ink) r g b / .08);
+}
+@media(prefers-color-scheme:light){
+  :root:not([data-theme="dark"]) .hdr.scrolled{
+    background:rgb(from var(--raw-paper-0) r g b / .72);
+    box-shadow:inset 0 -1px 0 rgb(from var(--raw-black-ink) r g b / .08);
   }
 }
-/* Repli sans transparence si l'utilisateur la refuse */
-@media (prefers-reduced-transparency:reduce){
-  .hdr.is-scrolled{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none}
+@supports (backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px)){
+  .hdr.scrolled{-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px)}
 }
-.hdr.is-hidden{transform:translateY(-100%)}
+@media (prefers-reduced-transparency:reduce){
+  .hdr.scrolled{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none}
+}
+/* Le symbole rétrécit avec la barre. */
+.nav-logo-mk .lg-svg{
+  width:30px;height:32px;
+  transition:width .7s cubic-bezier(.19,1,.22,1),height .7s cubic-bezier(.19,1,.22,1);
+}
+.hdr.scrolled .nav-logo-mk .lg-svg{width:24px;height:26px}
+@media(max-width:760px){
+  .hdr{height:64px}
+  .hdr.scrolled{height:56px}
+  .hdr.scrolled .hdr-in{padding:0 var(--pad-x)}
+}
+@media (prefers-reduced-motion:reduce){
+  .hdr,.hdr-in,.nav-logo-mk .lg-svg{transition:none}
+}
 
-.nav{display:flex;align-items:center;height:var(--hdr);position:relative}
+/* ── L'APPARITION DU CONTENU (etape 4 de l'intro) ────────────────────
+   Les classes sont posees par JavaScript, jamais dans le HTML : sans
+   JavaScript rien n'est cache, et un robot d'indexation voit la page
+   entiere. C'est la seule facon d'animer une entree sans parier le
+   referencement dessus. */
+.rv-ln{overflow:hidden;display:block}
+.rv-ln > *{display:inline-block;transform:translateY(110%);
+  transition:transform 1.1s cubic-bezier(.19,1,.22,1)}
+.rv-ln.rv-on > *{transform:none}
+.rv-bloc{opacity:0;transform:translateY(16px);
+  transition:opacity .9s ease,transform .9s cubic-bezier(.19,1,.22,1)}
+.rv-bloc.rv-on{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .rv-ln > *,.rv-bloc{transform:none!important;opacity:1!important;transition:none}
+}
+
+.nav{display:flex;align-items:center;height:100%;position:relative}
 /* L'en-tête ne porte plus que la tuile : le mot « NEXAWEB » qui la
    suivait a été retiré. Les règles qui le peignaient (.nav-logo-svg,
    .logo-nexa, .logo-web) sont parties avec lui — plus rien ne les
    appelait. Le nom accessible du lien reste porté par son aria-label,
    donc un lecteur d'écran annonce toujours « NEXAWEB — Accueil ». */
 .nav-logo{display:flex;align-items:center;color:var(--text);flex:0 0 auto}
+.cnav-logo{display:inline-flex;color:var(--text);margin-bottom:var(--sp-5)}
 /* Le composant est bâti en colonne pour son usage en grand ; ici il ne
    porte qu'une image, on lui enlève son écart vertical. */
-.nav-logo .llq{gap:0;flex:0 0 auto}
 /* Le rendu est sombre : sur le thème clair il lui faut un filet, sinon
    la tuile flotte sur le crème sans arête. */
-:root[data-theme="light"] .nav-logo-tuile .llq-tuile,
-:root[data-theme="light"] .foot-tuile .llq-tuile{box-shadow:0 1px 3px var(--shadow-1)}
 .nav-links{display:none;gap:clamp(16px,3vw,40px);position:absolute;left:50%;transform:translateX(-50%)}
 .nav-link{
   position:relative;font-size:var(--fs-caption);font-weight:500;letter-spacing:0;color:var(--text-muted);
@@ -554,9 +555,12 @@ body.lite .lgm-i:hover .lg-reflet,body.lite .lgm-i.lg-tombe .lg-goutte{animation
   display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:clamp(28px,5vw,80px);
   padding:clamp(40px,6vh,80px) 0;border-bottom:1px solid var(--border);
 }
-/* Même chose au pied de page : la tuile seule, sans le mot. */
-.foot-marque{display:flex;align-items:center;margin-bottom:14px}
-.foot-marque .llq{gap:0;flex:0 0 auto}
+/* Le logo du pied de page : un lien vers l'accueil, aligné à gauche
+   au-dessus des colonnes. */
+.foot-marque{display:inline-flex;align-items:center;margin-bottom:14px;color:var(--text)}
+/* Le filet qui sépare les colonnes de la ligne de copyright existe
+   déjà : c'est la bordure basse de .foot-in, juste au-dessus. En
+   ajouter un second en dessinait deux, à quarante pixels d'écart. */
 .foot-tag{font-size:var(--fs-100);font-weight:300;color:var(--text-muted);line-height:var(--lh-body);max-width:230px}
 .foot-col-title{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-subtle);margin-bottom:var(--sp-3)}
 .foot-links{display:flex;flex-direction:column;gap:9px}

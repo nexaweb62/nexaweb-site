@@ -26,7 +26,8 @@
     "check:soie": "node scripts/check-soie.mjs",
     "check:mensualites": "node scripts/check-mensualites.mjs",
     "check:cookies": "node scripts/check-cookies.mjs",
-    "check:garantie": "node scripts/check-garantie.mjs"
+    "check:garantie": "node scripts/check-garantie.mjs",
+    "check:logo": "node scripts/check-logo.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^6.0.4",

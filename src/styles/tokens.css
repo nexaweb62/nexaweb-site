@@ -65,6 +65,9 @@
   --raw-gold-300: #E3C684;
   --raw-gold-400: #D4B36A;
   --raw-gold-600: #B8974F;
+  /* L'arete doree du logo en mode clair : un or un peu plus
+     chaud que le 700, pour tenir sur fond pale sans virer au brun. */
+  --raw-gold-450: #A8853F;
   --raw-gold-700: #A6822E;
   --raw-gold-800: #7D6320;
   --raw-gold-850: #8E6F26;
@@ -275,6 +278,8 @@ chaque bascule clair / sombre, donc le fond change de couleur sans
 être reconstruit. Aucune valeur littérale — les sept teintes
 demandées existaient déjà comme jetons bruts. */
   /* Timeline : la lumiere vive des carres allumes, et l'inerte. */
+  /* L'arete en relief du logo. */
+  --logo-depth: var(--raw-gold-400);
   --tl-vive:   var(--raw-gold-50);
   --tl-eteint: var(--raw-black-800);
   --silk-1: var(--raw-black-950);
@@ -395,6 +400,8 @@ demandées existaient déjà comme jetons bruts. */
     /* Timeline : sur fond pale, la lumiere vive ne peut pas etre un
        blanc chaud — elle serait invisible. C'est l'or sombre qui joue
        ce role, et le gris des bordures l'inerte. */
+    /* L'arete en relief du logo. */
+    --logo-depth: var(--raw-gold-450);
     --tl-vive:   var(--accent-text);
     --tl-eteint: var(--border);
     --silk-1: var(--raw-paper-50);
@@ -504,6 +511,8 @@ demandées existaient déjà comme jetons bruts. */
   /* Timeline : sur fond pale, la lumiere vive ne peut pas etre un
      blanc chaud — elle serait invisible. C'est l'or sombre qui joue
      ce role, et le gris des bordures l'inerte. */
+  /* L'arete en relief du logo. */
+  --logo-depth: var(--raw-gold-450);
   --tl-vive:   var(--accent-text);
   --tl-eteint: var(--border);
   --silk-1: var(--raw-paper-50);
@@ -616,6 +625,8 @@ chaque bascule clair / sombre, donc le fond change de couleur sans
 être reconstruit. Aucune valeur littérale — les sept teintes
 demandées existaient déjà comme jetons bruts. */
   /* Timeline : la lumiere vive des carres allumes, et l'inerte. */
+  /* L'arete en relief du logo. */
+  --logo-depth: var(--raw-gold-400);
   --tl-vive:   var(--raw-gold-50);
   --tl-eteint: var(--raw-black-800);
   --silk-1: var(--raw-black-950);

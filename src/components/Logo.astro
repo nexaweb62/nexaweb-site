@@ -1,0 +1,107 @@
+---
+/**
+ * LE LOGO — un « N » en fil de fer, vu de trois quarts.
+ *
+ * Deux groupes de traits : la FACE, qui prend currentColor et suit donc
+ * la couleur du texte autour d'elle, et la PROFONDEUR, l'arête dorée
+ * qui donne le relief. Aucune couleur n'est écrite ici : la face hérite,
+ * la profondeur passe par --logo-depth, qui vit dans tokens.css et
+ * bascule avec le thème. Changer de thème sans recharger suffit donc à
+ * le repeindre, et le mode « système » marche sans une ligne de plus.
+ *
+ * Le rapport du dessin est 90:95. La hauteur se déduit de la largeur,
+ * pour qu'aucun appel ne puisse le déformer par inadvertance.
+ */
+export interface Props {
+  /** Largeur du symbole, en pixels. La hauteur suit le rapport 90:95. */
+  largeur?: number;
+  /** Épaisseur du trait. */
+  trait?: number;
+  /** Afficher « NEXA » et « WEB · AGENCE » à droite du symbole. */
+  texte?: boolean;
+  /** Taille de « NEXA », en pixels. */
+  tailleNom?: number;
+  /** Taille de « WEB · AGENCE », en pixels. */
+  tailleSous?: number;
+  /** Classe passée au conteneur par l'appelant. */
+  class?: string;
+}
+const {
+  largeur = 30,
+  trait = 2.2,
+  texte = false,
+  tailleNom = 13,
+  tailleSous = 7,
+  class: classe = '',
+} = Astro.props;
+const hauteur = Math.round(largeur * 95 / 90);
+---
+
+<span class:list={['lg', classe]} data-logo>
+  <svg
+    class="lg-svg"
+    width={largeur} height={hauteur}
+    viewBox="10 0 90 95"
+    fill="none"
+    stroke-width={trait}
+    stroke-linecap="round" stroke-linejoin="round"
+    aria-hidden="true" focusable="false"
+  >
+    <g class="logo-face" stroke="currentColor">
+      <path d="M20 85L20 15"/><path d="M20 15L34 15"/><path d="M34 15L66 62"/>
+      <path d="M66 62L66 15"/><path d="M66 15L80 15"/><path d="M80 15L80 85"/>
+      <path d="M80 85L66 85"/><path d="M66 85L34 38"/><path d="M34 38L34 85"/>
+      <path d="M34 85L20 85"/>
+    </g>
+    <g class="logo-depth" stroke="var(--logo-depth)">
+      <path d="M20 15L28 7"/><path d="M34 15L42 7"/><path d="M66 15L74 7"/>
+      <path d="M80 15L88 7"/><path d="M80 85L88 77"/><path d="M28 7L42 7"/>
+      <path d="M42 7L66 42.25"/><path d="M74 7L88 7"/><path d="M88 7L88 77"/>
+    </g>
+  </svg>
+
+  {texte && (
+    <span class="lg-txt">
+      <span class="lg-nom" style={`font-size:${tailleNom}px`}>NEXA</span>
+      <span class="lg-sous" style={`font-size:${tailleSous}px`}>WEB · AGENCE</span>
+    </span>
+  )}
+</span>
+
+<style>
+  .lg{display:inline-flex;align-items:center;gap:10px;line-height:1}
+  .lg-svg{display:block;flex:0 0 auto;overflow:visible}
+  /* La règle bat l'attribut de présentation du <g>, qui n'est là que
+     comme repli pour un rendu hors page (favicon, fichier isolé). */
+  .logo-depth{stroke:var(--logo-depth)}
+
+  .lg-txt{display:flex;flex-direction:column;gap:3px;min-width:0}
+  .lg-nom{
+    font-weight:700;letter-spacing:.28em;line-height:1;
+    color:currentColor;white-space:nowrap;
+  }
+  .lg-sous{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-weight:500;letter-spacing:.32em;line-height:1;white-space:nowrap;
+    /* La teinte demandée, rgba(244,242,238,.55), vaut rgb(139,138,135)
+       sur le fond sombre — à deux points près le gris secondaire du
+       site, qui a l'avantage d'être réglé pour chaque thème et de tenir
+       le seuil AA. On prend donc le jeton. */
+    color:var(--text-muted);
+  }
+
+  /* Au survol du lien qui le porte, le symbole passe à l'or.
+     :where() garde la spécificité à zéro : la page hôte peut toujours
+     reprendre la main sans se battre. */
+  :global(a:hover) .lg-svg .logo-face,
+  :global(button:hover) .lg-svg .logo-face{stroke:var(--logo-depth)}
+  .lg-svg .logo-face{transition:stroke var(--dur-micro) var(--ease-out)}
+
+  /* Sous 420 px, l'en-tête ne garde que le symbole. La règle vit ici
+     plutôt que dans la page : c'est une propriété du logo, pas de
+     l'endroit où on le pose. */
+  @media(max-width:420px){
+    .lg[data-logo].lg-compact .lg-txt{display:none}
+    .lg[data-logo].lg-compact{gap:0}
+  }
+</style>

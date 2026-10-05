@@ -1,13 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Nexa Web">
-  <style>
-    .bg { fill: #0A0A0B }
-    .mk { fill: #D4B36A }
-    @media (prefers-color-scheme: light) {
-      .bg { fill: #FAF8F4 }
-      .mk { fill: #A6822E }
-    }
-  </style>
-  <rect class="bg" width="64" height="64" rx="14"/>
-  <path class="mk" d="M16 47V17h6.4l14.6 19.1V17H43v30h-6.4L22 27.9V47z"/>
-  <rect class="mk" x="16" y="51.5" width="27" height="3" rx="1.5"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Nexa Web">
+  <rect width="64" height="64" rx="14" fill="#0A0A0B"/>
+  <svg x="12" y="12" width="40" height="40" viewBox="10 0 90 95" preserveAspectRatio="xMidYMid meet"><g fill="none" stroke="#F4F2EE" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 85L20 15"/><path d="M20 15L34 15"/><path d="M34 15L66 62"/><path d="M66 62L66 15"/><path d="M66 15L80 15"/><path d="M80 15L80 85"/><path d="M80 85L66 85"/><path d="M66 85L34 38"/><path d="M34 38L34 85"/><path d="M34 85L20 85"/></g><g fill="none" stroke="#D4B36A" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 15L28 7"/><path d="M34 15L42 7"/><path d="M66 15L74 7"/><path d="M80 15L88 7"/><path d="M80 85L88 77"/><path d="M28 7L42 7"/><path d="M42 7L66 42.25"/><path d="M74 7L88 7"/><path d="M88 7L88 77"/></g></svg>
 </svg>

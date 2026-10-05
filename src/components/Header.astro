@@ -1,5 +1,5 @@
 ---
-import LogoLiquide from './LogoLiquide.astro';
+import Logo from './Logo.astro';
 
 export interface Props {
   cta?: string;
@@ -9,24 +9,17 @@ export interface Props {
 const { cta = 'Démarrer un projet', ctaHref = '/devis', back = true } = Astro.props;
 ---
 <header class="hdr" id="hdr">
-  <div class="wrap">
+  {/* .hdr-in remplace .wrap : c'est lui qui s'étire au défilement, de
+      900 px à toute la largeur. .wrap a une largeur fixe pour tout le
+      site et n'avait pas à apprendre ce tour-là. */}
+  <div class="hdr-in">
     <nav class="nav" aria-label="Navigation principale">
       <a href="/" class="nav-logo" aria-label="NEXAWEB — Accueil">
-        {/* La tuile est chargée tout de suite et jamais en différé : elle est
-            au-dessus de la ligne de flottaison sur les 22 pages, et apparaître
-            après coup ferait sauter le mot à côté. 0,8 ko en AVIF à 64 px. */}
-        <LogoLiquide
-          class="nav-logo-tuile"
-          taille={34}
-          nom={false}
-          interactif={false}
-          lueur={false}
-          prioritaire={true}
-        />
+        <Logo class="nav-logo-mk lg-compact" largeur={30} trait={2.2} texte={true} tailleNom={13} tailleSous={7} />
       </a>
       <ul class="nav-links" role="list">
         <li><a href="/#accueil"  class="nav-link" data-i18n="hdr-nav-home">Accueil</a></li>
-        <li><a href="/#services" class="nav-link" data-i18n="hdr-nav-services">Services</a></li>
+        <li><a href="/services" class="nav-link" data-i18n="hdr-nav-services">Services</a></li>
         <li><a href="/#apropos"  class="nav-link" data-i18n="hdr-nav-about">À propos</a></li>
         <li><a href="/tarifs"    class="nav-link" data-i18n="hdr-nav-pricing">Tarifs</a></li>
         <li><a href="/#faq"     class="nav-link" data-i18n="hdr-nav-faq">FAQ</a></li>
@@ -83,6 +76,11 @@ const { cta = 'Démarrer un projet', ctaHref = '/devis', back = true } = Astro.p
 <!-- CIRCULAR NAV OVERLAY -->
 <div class="cnav" id="cnav" role="dialog" aria-modal="true" aria-label="Navigation" inert>
   <div class="cnav-ring" id="cnav-ring">
+    {/* Le logo en haut du panneau : on sait chez qui on est, même
+        quand la barre est recouverte. */}
+    <a href="/" class="cnav-logo" aria-label="NEXAWEB — Accueil">
+      <Logo largeur={34} trait={2.2} texte={true} tailleNom={14} tailleSous={7} />
+    </a>
     <button class="cnav-close" id="cnav-close" aria-label="Fermer la navigation">
       <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
@@ -93,7 +91,7 @@ const { cta = 'Démarrer un projet', ctaHref = '/devis', back = true } = Astro.p
       </a>
     </div>
     <div class="cnav-item">
-      <a href="/#services" class="cnav-link">
+      <a href="/services" class="cnav-link">
         <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
         <span class="cnav-name" data-i18n="hdr-nav-services">Services</span>
       </a>

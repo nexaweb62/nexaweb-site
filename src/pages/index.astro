@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
-import LogoLiquide from '../components/LogoLiquide.astro';
+import Logo from '../components/Logo.astro';
 import GarantieBadge from '../components/GarantieBadge.astro';
 import { VITRINE_PRIX, REFONTE_PRIX, ENTREPRISE, prix } from '../data/formules';
 import '../styles/global.css';
@@ -44,6 +44,10 @@ import '../styles/global.css';
 /* ── SERVICES ── */
 .s-svc{}
 .svc-hdr{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:24px;margin-bottom:clamp(36px,6vh,72px)}
+.svc-tout{display:inline-block;margin-top:12px;font-size:var(--fs-caption);font-weight:600;
+  letter-spacing:0;color:var(--accent-text);border-bottom:1px solid transparent;
+  transition:border-color var(--dur-micro) var(--ease-out)}
+.svc-tout:hover{border-bottom-color:var(--accent)}
 /* ═══════════════════════════════════════════════════════════════════
    DES LIGNES, PAS DES CARTES — recopie de la reference.
    Aucun rayon, aucun fond : des filets fins, et c'est tout. Le
@@ -383,7 +387,13 @@ import '../styles/global.css';
         <span class="label" id="svc-h" data-i18n="idx-svc-lbl">Ce que nous créons</span>
         <h2 class="h-lg" style="margin-top:14px" data-i18n="idx-svc-h">Nos services.</h2>
       </div>
-      <p class="body" style="max-width:300px;text-align:right" data-i18n="idx-svc-sub">Chaque prestation est pensée pour maximiser l'impact de votre présence en ligne.</p>
+      <div style="max-width:300px;text-align:right">
+        <p class="body" data-i18n="idx-svc-sub">Chaque prestation est pensée pour maximiser l'impact de votre présence en ligne.</p>
+        {/* Les cinq lignes ci-dessous gardent chacune leur page : les
+            faire toutes mener à /services ferait cinq liens vers le
+            même endroit. C'est la section qui y mène. */}
+        <a href="/services" class="svc-tout" data-i18n="idx-svc-tout">Voir notre méthode →</a>
+      </div>
     </div>
     <div class="svc-list">
       <a href="/site-vitrine" class="svc-row r">
@@ -616,9 +626,11 @@ import '../styles/global.css';
   <div class="wrap">
     <div class="foot-in">
       <div>
-        <div class="foot-marque">
-          <LogoLiquide class="foot-tuile" taille={48} nom={false} interactif={false} lueur={false} />
-        </div>
+        {/* Le logo du pied de page ramène à l'accueil : c'est la
+            convention, et c'est le dernier endroit où on la cherche. */}
+        <a href="/" class="foot-marque" aria-label="NEXAWEB — Accueil">
+          <Logo largeur={40} trait={2.2} texte={true} tailleNom={16} tailleSous={8} />
+        </a>
         <p class="foot-tag" data-i18n="ftr-tag">Agence web premium · Carvin, Hauts-de-France</p>
         <div class="foot-socials" aria-label="Réseaux sociaux">
           <a href="https://www.linkedin.com/in/ahmed-chteoui-049211429/" class="foot-soc linkedin" aria-label="LinkedIn" target="_blank" rel="noopener">
@@ -637,7 +649,7 @@ import '../styles/global.css';
         <nav aria-label="Liens de navigation">
           <ul class="foot-links">
             <li><a href="/#accueil"  class="foot-lnk" data-i18n="ftr-home">Accueil</a></li>
-            <li><a href="/#services" class="foot-lnk" data-i18n="ftr-services">Services</a></li>
+            <li><a href="/services" class="foot-lnk" data-i18n="ftr-services">Services</a></li>
             <li><a href="/#faq"      class="foot-lnk" data-i18n="ftr-faq">FAQ</a></li>
           </ul>
         </nav>

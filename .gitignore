@@ -27,3 +27,7 @@ Thumbs.db
 
 # Sorties de scripts de diagnostic lancés sans répertoire de travail défini
 /undefined/
+
+# Captures de contrôle : on les regarde, on ne les versionne pas
+apercu/
+.probe-*.mjs

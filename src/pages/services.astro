@@ -1,0 +1,512 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import GarantieBadge from '../components/GarantieBadge.astro';
+import '../styles/global.css';
+
+/* Les trois temps de la méthode. Le dessin de chacun vit plus bas, en
+   SVG : trois traits animés lentement, pas une illustration. */
+const ETAPES = [
+  { n: '01', cle: 'sv-m1', nom: 'CONCEPTION', fin: 'DESIGN', gras: 'SUR MESURE',
+    phrase: 'Une identité, pas un template.',
+    lignes: [
+      { t: 'DÉCOUVRIR', d: 'Votre métier, vos clients, ce qui vous distingue.' },
+      { t: 'DESSINER',  d: 'Une maquette complète, pensée pour votre activité.' },
+      { t: 'VALIDER',   d: '14 jours, 2 séries de retouches, satisfait ou remboursé.' },
+    ] },
+  { n: '02', cle: 'sv-m2', nom: 'DÉVELOPPEMENT', fin: 'CODE', gras: 'RAPIDE',
+    phrase: 'Rapide sur mobile. Simple à gérer.',
+    lignes: [
+      { t: 'CONSTRUIRE', d: 'Un site écrit à la main, sans surcouche inutile.' },
+      { t: 'OPTIMISER',  d: 'Images, polices, scripts : chaque kilo-octet compte.' },
+      { t: 'TESTER',     d: 'Sur téléphone, tablette et ordinateur, avant la mise en ligne.' },
+    ] },
+  { n: '03', cle: 'sv-m3', nom: 'VISIBILITÉ', fin: 'SEO', gras: 'LOCAL',
+    phrase: 'Trouvé là où vos clients cherchent.',
+    lignes: [
+      { t: 'RÉFÉRENCER', d: 'Structure, balises et fiche locale soignées dès le départ.' },
+      { t: 'MESURER',    d: 'Ce que les visiteurs cherchent, et ce qu’ils trouvent.' },
+      { t: 'AMÉLIORER',  d: 'Des ajustements réguliers plutôt qu’une refonte de plus.' },
+    ] },
+];
+
+/* Les prestations, telles qu'elles existent déjà sur le site. */
+const PRESTATIONS = [
+  { cle: 'sv-p1', nom: 'Site vitrine',        href: '/site-vitrine' },
+  { cle: 'sv-p2', nom: 'Boutique en ligne',   href: '/ecommerce' },
+  { cle: 'sv-p3', nom: 'Refonte de site',     href: '/refonte' },
+  { cle: 'sv-p4', nom: 'Référencement local', href: '/seo' },
+  { cle: 'sv-p5', nom: 'Design UI/UX',        href: '/design-uiux' },
+];
+---
+<BaseLayout
+  title="Services — Nexa Web"
+  description="Conception, développement et référencement de sites sur mesure. Prix affiché, délai fixé dès le premier appel. Nexa Web, Carvin, Hauts-de-France."
+>
+<style>
+/* ── CADRE ── */
+.sv{overflow-x:clip}
+.sv-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+
+/* ── HERO ── */
+.sv-hero{padding:clamp(56px,10vh,120px) 0 clamp(40px,6vh,80px)}
+.sv-sur{
+  display:flex;align-items:center;gap:16px;margin:0 0 22px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--accent-text);
+}
+.sv-sur::after{content:"";flex:0 0 130px;height:1px;
+  background:linear-gradient(90deg,var(--accent),rgb(from var(--accent) r g b / 0))}
+.sv-titre{
+  font-size:clamp(46px,9vw,104px);line-height:.92;letter-spacing:-.04em;
+  margin:0 0 clamp(24px,4vh,40px);
+}
+.sv-titre span{display:block}
+.sv-l1{font-weight:200}
+.sv-l2{font-weight:800}
+/* Les deux lignes arrivent en contour, puis se remplissent. L'état de
+   départ est posé par JavaScript (.sv-trace) : sans JavaScript le titre
+   est plein dès le premier rendu, et reste lisible pour un robot. */
+.sv-trace{
+  -webkit-text-stroke:1px var(--text);color:transparent;
+  transition:color 1.2s ease,-webkit-text-stroke-color 1.2s ease;
+}
+.sv-trace.sv-plein{color:var(--text);-webkit-text-stroke-color:transparent}
+.sv-intro{font-size:clamp(15px,1.5vw,18px);line-height:1.7;color:var(--text-muted);max-width:52ch;margin:0}
+
+/* ── SECTIONS ── */
+.sv-sec{padding:clamp(48px,8vh,104px) 0}
+.sv-sec-tag{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--text-subtle);margin:0 0 10px;
+}
+.sv-sec-tag b{color:var(--accent-text);font-weight:500}
+.sv-sec-h{font-size:clamp(24px,3.6vw,38px);font-weight:var(--w-semi);
+  letter-spacing:-.025em;line-height:1.12;margin:0 0 clamp(28px,4vh,48px)}
+
+/* ── 01 · AVANT / APRÈS ── */
+.sv-duo{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,2.4vw,28px)}
+@media(max-width:760px){.sv-duo{grid-template-columns:1fr}}
+.sv-carte{
+  border:1px solid var(--border);border-radius:16px;
+  padding:clamp(22px,3vw,34px);background:var(--surface);
+  transition:border-color .3s var(--ease-out),transform .3s var(--ease-out);
+}
+.sv-carte:hover{border-color:var(--accent);transform:translateY(-3px)}
+.sv-carte-lbl{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--text-subtle);margin:0 0 14px;
+}
+.sv-carte.sv-cible .sv-carte-lbl{color:var(--accent-text)}
+.sv-carte.sv-cible{border-color:rgb(from var(--accent) r g b / .55)}
+.sv-carte-h{font-size:clamp(18px,2.2vw,24px);font-weight:var(--w-semi);
+  letter-spacing:-.02em;margin:0 0 10px}
+.sv-carte-p{font-size:14px;line-height:1.7;margin:0;color:var(--text-muted)}
+.sv-carte.sv-avant .sv-carte-h{color:var(--text-muted)}
+
+/* ── 02 · LA MÉTHODE, CARTES EMPILÉES ── */
+.sv-raccourcis{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:clamp(24px,4vh,40px)}
+.sv-rac{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 15px;border:1px solid var(--border);border-radius:var(--radius-pill);
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--text-muted);cursor:pointer;background:none;
+  transition:border-color var(--dur-micro) var(--ease-out),color var(--dur-micro) var(--ease-out);
+}
+.sv-rac:hover{border-color:var(--accent);color:var(--accent-text)}
+.sv-rac:focus-visible{outline:3px solid var(--accent-hover);outline-offset:3px}
+
+.sv-pile{display:flex;flex-direction:column;gap:clamp(20px,3vh,32px)}
+.sv-etape{
+  position:sticky;top:84px;
+  background:var(--surface);border:1px solid var(--border-strong);border-radius:18px;
+  overflow:hidden;
+  transition:transform .4s var(--ease-out),filter .4s var(--ease-out);
+}
+/* Quand la suivante monte dessus, la précédente recule. La classe est
+   posée au défilement : en CSS seul, rien ne sait qu'une carte est
+   recouverte. */
+.sv-etape.sv-recule{transform:scale(.95);filter:brightness(.55)}
+@media(max-width:760px){.sv-etape{top:70px}}
+
+.sv-barre{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:12px clamp(18px,2.4vw,28px);border-bottom:1px solid var(--border);
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-subtle);
+}
+.sv-barre b{color:var(--accent-text);font-weight:500}
+.sv-corps{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(24px,4vw,56px);
+  padding:clamp(24px,3.4vw,42px)}
+@media(max-width:860px){.sv-corps{grid-template-columns:1fr}}
+.sv-et-h{font-size:clamp(26px,3.4vw,40px);line-height:1.05;letter-spacing:-.03em;margin:0 0 14px}
+.sv-et-h i{font-style:normal;font-weight:200;display:block}
+.sv-et-h b{font-weight:800;display:block}
+.sv-et-p{font-size:14px;line-height:1.7;color:var(--text-muted);margin:0 0 18px;max-width:38ch}
+.sv-et-tag{
+  display:inline-block;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-text);
+  border:1px solid rgb(from var(--accent) r g b / .4);border-radius:var(--radius-pill);
+  padding:5px 12px;margin-bottom:20px;
+}
+/* Le dessin est injecté par set:html : ses éléments ne reçoivent PAS le
+   marqueur de portée d'Astro, qui scope la règle sur son dernier
+   sélecteur. Mesuré avant correction : stroke « none » et un SVG de
+   512 px au lieu de 280 — aucune des règles ne l'atteignait. Le
+   conteneur, lui, est écrit dans le gabarit : il garde sa portée, et
+   :global() ouvre la porte à ses enfants. */
+.sv-boite :global(svg){width:100%;max-width:280px;height:auto;overflow:visible}
+.sv-boite :global(path),.sv-boite :global(line),
+.sv-boite :global(circle),.sv-boite :global(rect){
+  fill:none;stroke:rgb(from var(--accent) r g b / .55);stroke-width:1;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+@media (prefers-reduced-motion:no-preference){
+  .sv-boite :global(.anim){animation:svDerive 9s ease-in-out infinite alternate}
+  .sv-boite :global(.anim2){animation:svDerive2 11s ease-in-out infinite alternate}
+  @keyframes svDerive{to{transform:translateY(-6px)}}
+  @keyframes svDerive2{to{transform:translateX(7px)}}
+}
+.sv-droite{display:flex;flex-direction:column}
+.sv-phrase{font-size:clamp(17px,2vw,22px);font-weight:400;line-height:1.4;
+  letter-spacing:-.015em;margin:0 0 22px}
+.sv-ln{display:grid;grid-template-columns:118px 1fr;gap:14px;
+  padding:14px 0;border-top:1px solid var(--border)}
+.sv-ln:last-child{border-bottom:1px solid var(--border)}
+.sv-ln dt{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-text);
+  padding-top:2px;
+}
+.sv-ln dd{margin:0;font-size:13px;line-height:1.65;color:var(--text-muted)}
+@media(max-width:480px){.sv-ln{grid-template-columns:1fr;gap:5px}}
+
+/* ── SOMMAIRE FIXE ── */
+.sv-somm{display:none}
+@media(min-width:1500px){
+  .sv-somm{
+    display:block;position:fixed;right:40px;top:50%;transform:translateY(-50%);
+    z-index:60;pointer-events:auto;
+  }
+  .sv-somm-t{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--text-subtle);margin:0 0 14px;
+  }
+  .sv-somm ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:11px}
+  .sv-somm a{
+    display:flex;align-items:center;gap:10px;font-size:11px;letter-spacing:.06em;
+    color:var(--text-subtle);transition:color var(--dur-micro) var(--ease-out);
+  }
+  .sv-somm a::before{
+    content:"";width:14px;height:1px;background:var(--border-strong);
+    transition:width .45s var(--ease-out),background-color .45s var(--ease-out);
+  }
+  .sv-somm a:hover{color:var(--text)}
+  .sv-somm a.ici{color:var(--accent-text)}
+  .sv-somm a.ici::before{width:34px;background:var(--accent)}
+}
+
+/* ── LISTE DES PRESTATIONS ── */
+.sv-liste{list-style:none;margin:0;padding:0;border-top:1px solid var(--border)}
+.sv-liste li{border-bottom:1px solid var(--border)}
+.sv-liste a{
+  display:flex;align-items:center;gap:14px;padding:18px 4px;
+  font-size:clamp(16px,2vw,21px);font-weight:500;letter-spacing:-.02em;
+  color:var(--text);transition:color var(--dur-micro) var(--ease-out),padding-left .3s var(--ease-out);
+}
+.sv-liste a:hover{color:var(--accent-text);padding-left:12px}
+.sv-carre{width:7px;height:7px;background:var(--accent);flex:0 0 auto}
+.sv-suite{
+  display:inline-flex;align-items:center;gap:10px;margin-top:clamp(24px,4vh,40px);
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-subtle);
+}
+.sv-suite a{color:var(--accent-text);text-decoration:underline;text-underline-offset:4px}
+
+/* ── FIN ── */
+.sv-fin{padding:clamp(56px,10vh,128px) 0 clamp(64px,12vh,140px);text-align:center}
+.sv-fin-h{font-size:clamp(32px,6vw,70px);line-height:1.02;letter-spacing:-.035em;margin:0 0 clamp(28px,4vh,44px)}
+.sv-fin-h i{font-style:normal;font-weight:300;display:block;color:var(--text-muted)}
+.sv-fin-h b{font-weight:800;display:block}
+.sv-cta{
+  display:inline-flex;align-items:center;gap:16px;
+  padding:16px 18px 16px 26px;border:1px solid var(--border-strong);border-radius:4px;
+  font-size:15px;font-weight:var(--w-semi);letter-spacing:0;color:var(--text);
+  transition:border-color .3s var(--ease-out),color .3s var(--ease-out);
+}
+.sv-cta:hover{border-color:var(--accent);color:var(--accent-text)}
+.sv-cta-c{
+  width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid var(--border-strong);font-size:13px;
+  transition:border-color .3s var(--ease-out),background-color .3s var(--ease-out),color .3s var(--ease-out);
+}
+.sv-cta:hover .sv-cta-c{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+
+/* ── APPARITION AU DÉFILEMENT ──
+   Posée en JavaScript, comme partout ailleurs : sans lui, rien n'est
+   caché. */
+.sv-rv{opacity:0;transform:translateY(24px);
+  transition:opacity .8s ease,transform .8s cubic-bezier(.19,1,.22,1)}
+.sv-rv.sv-vu{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .sv-rv,.sv-rv.sv-vu{opacity:1!important;transform:none!important;transition:none}
+  .sv-trace{-webkit-text-stroke:0;color:var(--text)}
+  .sv-etape{position:static;transform:none!important;filter:none!important}
+}
+</style>
+
+<Header backBtn={true} />
+
+<main id="main-content" tabindex="-1" class="sv">
+
+  <!-- SOMMAIRE -->
+  <nav class="sv-somm" aria-label="Sur cette page">
+    <p class="sv-somm-t" data-i18n="sv-somm">Sur cette page</p>
+    <ol>
+      <li><a href="#sv-changement" data-i18n="sv-somm-1">Le changement</a></li>
+      <li><a href="#sv-methode" data-i18n="sv-somm-2">Notre méthode</a></li>
+      <li><a href="#sv-prestations" data-i18n="sv-somm-3">Prestations</a></li>
+    </ol>
+  </nav>
+
+  <!-- HERO -->
+  <section class="sv-hero">
+    <div class="wrap">
+      <p class="sv-sur" data-i18n="sv-sur">Services · 05 · Création web</p>
+      <h1 class="sv-titre">
+        <span class="sv-l1" data-i18n="sv-t1">Sites</span>
+        <span class="sv-l2" data-i18n="sv-t2">sur mesure.</span>
+      </h1>
+      <p class="sv-intro" data-i18n="sv-intro">On conçoit, on développe et on met en ligne des sites qui attirent des clients. Prix affiché, délai fixé dès le premier appel.</p>
+    </div>
+  </section>
+
+  <!-- 01 · LE CHANGEMENT -->
+  <section class="sv-sec" id="sv-changement" aria-labelledby="sv-h1">
+    <div class="wrap">
+      <p class="sv-sec-tag sv-rv"><b>01</b> / <span data-i18n="sv-s1-tag">Le changement</span></p>
+      <h2 class="sv-sec-h sv-rv" id="sv-h1" data-i18n="sv-s1-h">Avant vs Après</h2>
+      <div class="sv-duo">
+        <div class="sv-carte sv-avant sv-rv">
+          <p class="sv-carte-lbl" data-i18n="sv-av-lbl">Aujourd'hui</p>
+          <h3 class="sv-carte-h" data-i18n="sv-av-h">Un site invisible</h3>
+          <p class="sv-carte-p" data-i18n="sv-av-p">Introuvable sur Google, lent sur mobile, design daté. Les clients comparent et partent chez le concurrent.</p>
+        </div>
+        <div class="sv-carte sv-cible sv-rv">
+          <p class="sv-carte-lbl" data-i18n="sv-ap-lbl">Objectif</p>
+          <h3 class="sv-carte-h" data-i18n="sv-ap-h">Un site qui travaille pour vous</h3>
+          <p class="sv-carte-p" data-i18n="sv-ap-p">Trouvé localement, rapide, rassurant. Les demandes de devis arrivent pendant que vous travaillez.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 · LA MÉTHODE -->
+  <section class="sv-sec" id="sv-methode" aria-labelledby="sv-h2">
+    <div class="wrap">
+      <p class="sv-sec-tag sv-rv"><b>02</b> / <span data-i18n="sv-s2-tag">Notre méthode</span></p>
+      <h2 class="sv-sec-h sv-rv" id="sv-h2" data-i18n="sv-s2-h">Du premier appel à la mise en ligne</h2>
+
+      <div class="sv-raccourcis sv-rv">
+        {ETAPES.map((e, i) => (
+          <button type="button" class="sv-rac" data-vers={`sv-et-${i}`}>
+            {e.n} <span data-i18n={e.cle + '-n'}>{e.nom}</span> ↓
+          </button>
+        ))}
+      </div>
+
+      <div class="sv-pile">
+        {ETAPES.map((e, i) => (
+          <article class="sv-etape" id={`sv-et-${i}`} data-etape={i}>
+            <div class="sv-barre">
+              <span>{e.n} / <b data-i18n={e.cle + '-n'}>{e.nom}</b></span>
+              <span>{e.n} / 03</span>
+            </div>
+            <div class="sv-corps">
+              <div>
+                <h3 class="sv-et-h">
+                  <i data-i18n={e.cle + '-fin'}>{e.fin}</i>
+                  <b data-i18n={e.cle + '-gras'}>{e.gras}</b>
+                </h3>
+                <p class="sv-et-p" data-i18n={e.cle + '-p'}>{e.lignes[0].d}</p>
+                <span class="sv-et-tag" data-i18n={e.cle + '-tag'}>{e.nom}</span>
+                <div class="sv-boite" set:html={[
+                  /* 01 — une grille de lignes, trois branches vers des points. */
+                  `<svg class="sv-dessin" viewBox="0 0 280 150" aria-hidden="true">
+                     <g class="anim">
+                       ${Array.from({length:7},(_,k)=>`<line x1="${10+k*28}" y1="12" x2="${10+k*28}" y2="138"/>`).join('')}
+                       ${Array.from({length:5},(_,k)=>`<line x1="10" y1="${16+k*30}" x2="178" y2="${16+k*30}"/>`).join('')}
+                     </g>
+                     <g class="anim2">
+                       <path d="M178 76 C 214 76 216 30 258 30"/><circle cx="262" cy="30" r="3.5"/>
+                       <path d="M178 76 C 216 76 220 76 254 76"/><circle cx="258" cy="76" r="3.5"/>
+                       <path d="M178 76 C 214 76 216 122 258 122"/><circle cx="262" cy="122" r="3.5"/>
+                     </g>
+                   </svg>`,
+                  /* 02 — des barres qui varient entre deux bornes. */
+                  `<svg class="sv-dessin" viewBox="0 0 280 150" aria-hidden="true">
+                     <line x1="12" y1="10" x2="12" y2="140"/><line x1="268" y1="10" x2="268" y2="140"/>
+                     <g class="anim">
+                       ${[0,1,2,3,4,5,6].map(k=>{const w=[210,96,168,62,232,120,186][k];
+                         return `<line x1="12" y1="${22+k*18}" x2="${12+w}" y2="${22+k*18}"/>`;}).join('')}
+                     </g>
+                   </svg>`,
+                  /* 03 — un éventail de lignes qui converge. */
+                  `<svg class="sv-dessin" viewBox="0 0 280 150" aria-hidden="true">
+                     <g class="anim">
+                       ${Array.from({length:9},(_,k)=>`<path d="M8 ${10+k*16} C 120 ${10+k*16} 150 75 262 75"/>`).join('')}
+                     </g>
+                     <circle cx="266" cy="75" r="4"/>
+                   </svg>`,
+                ][i]} />
+              </div>
+              <div class="sv-droite">
+                <p class="sv-phrase" data-i18n={e.cle + '-phrase'}>{e.phrase}</p>
+                <dl style="margin:0">
+                  {e.lignes.map((l, j) => (
+                    <div class="sv-ln">
+                      <dt data-i18n={`${e.cle}-l${j + 1}-t`}>{l.t}</dt>
+                      <dd data-i18n={`${e.cle}-l${j + 1}-d`}>{l.d}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- PRESTATIONS -->
+  <section class="sv-sec" id="sv-prestations" aria-labelledby="sv-h3">
+    <div class="wrap">
+      <p class="sv-sec-tag sv-rv"><b>03</b> / <span data-i18n="sv-s3-tag">Prestations</span></p>
+      <h2 class="sv-sec-h sv-rv" id="sv-h3" data-i18n="sv-s3-h">Ce que nous faisons</h2>
+      <ul class="sv-liste sv-rv">
+        {PRESTATIONS.map(p => (
+          <li><a href={p.href}>
+            <span class="sv-carre" aria-hidden="true"></span>
+            <span data-i18n={p.cle}>{p.nom}</span>
+          </a></li>
+        ))}
+      </ul>
+      <p class="sv-suite sv-rv">
+        <span data-i18n="sv-suite">Étape suivante</span> —
+        <a href="/tarifs" data-i18n="sv-suite-l">Voir les tarifs ↗</a>
+      </p>
+      <div class="sv-rv" style="margin-top:clamp(22px,3vh,34px)"><GarantieBadge /></div>
+    </div>
+  </section>
+
+  <!-- FIN -->
+  <section class="sv-fin">
+    <div class="wrap">
+      <h2 class="sv-fin-h sv-rv">
+        <i data-i18n="sv-fin-1">Votre projet.</i>
+        <b data-i18n="sv-fin-2">On le construit.</b>
+      </h2>
+      <a href="/devis" class="sv-cta sv-rv">
+        <span data-i18n="sv-fin-cta">Démarrer un projet</span>
+        <span class="sv-cta-c" aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<Footer />
+
+<script is:inline>
+/* ── LA PAGE SERVICES ─────────────────────────────────────────────────
+   Quatre mécanismes, et pas un de plus : le titre qui se remplit, les
+   blocs qui montent, les cartes empilées qui reculent, et le sommaire
+   qui suit la section en cours. */
+(function(){
+  'use strict';
+  var doux = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  /* ── Le titre : contour, puis remplissage, ligne après ligne ── */
+  var lignes = [].slice.call(document.querySelectorAll('.sv-l1,.sv-l2'));
+  if(!doux && lignes.length){
+    lignes.forEach(function(l){ l.classList.add('sv-trace'); });
+    lignes.forEach(function(l, i){
+      setTimeout(function(){ l.classList.add('sv-plein'); }, 250 + i * 450);
+    });
+  }
+
+  /* ── Les blocs montent quand ils entrent ── */
+  var blocs = [].slice.call(document.querySelectorAll('.sv-rv'));
+  if(doux){
+    blocs.forEach(function(b){ b.classList.add('sv-vu'); });
+  }else{
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(!e.isIntersecting) return;
+        e.target.classList.add('sv-vu');
+        io.unobserve(e.target);
+      });
+    }, { threshold:0.2 });
+    blocs.forEach(function(b){ io.observe(b); });
+  }
+
+  /* ── Les cartes empilées ──
+     Une carte recule dès que la suivante est montée par-dessus. On
+     compare les positions : en CSS seul, une carte collante ne sait pas
+     qu'une autre la recouvre. */
+  var etapes = [].slice.call(document.querySelectorAll('.sv-etape'));
+  function empiler(){
+    for(var i = 0; i < etapes.length - 1; i++){
+      var moi = etapes[i].getBoundingClientRect();
+      var suiv = etapes[i + 1].getBoundingClientRect();
+      etapes[i].classList.toggle('sv-recule', suiv.top <= moi.top + 24);
+    }
+  }
+
+  /* ── Le sommaire suit la section visible ── */
+  var liens = [].slice.call(document.querySelectorAll('.sv-somm a'));
+  var sections = liens.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+  function sommaire(){
+    var milieu = window.innerHeight * 0.4, actif = -1;
+    for(var i = 0; i < sections.length; i++){
+      if(!sections[i]) continue;
+      var r = sections[i].getBoundingClientRect();
+      if(r.top <= milieu && r.bottom > milieu) actif = i;
+    }
+    liens.forEach(function(a, i){ a.classList.toggle('ici', i === actif); });
+  }
+
+  var attente = false;
+  function auScroll(){
+    if(attente) return;
+    attente = true;
+    requestAnimationFrame(function(){ attente = false; empiler(); sommaire(); });
+  }
+  if(!doux) window.addEventListener('scroll', auScroll, { passive:true });
+  window.addEventListener('resize', auScroll, { passive:true });
+  auScroll();
+
+  /* ── Les raccourcis et le sommaire : défilement doux ── */
+  function versId(id){
+    var el = document.getElementById(id);
+    if(!el) return;
+    el.scrollIntoView({ behavior: doux ? 'auto' : 'smooth', block:'start' });
+  }
+  document.querySelectorAll('.sv-rac').forEach(function(b){
+    b.addEventListener('click', function(){ versId(b.dataset.vers); });
+  });
+  liens.forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      versId(a.getAttribute('href').slice(1));
+    });
+  });
+})();
+</script>
+</BaseLayout>

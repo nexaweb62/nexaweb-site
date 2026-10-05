@@ -222,9 +222,11 @@
 
       /* 9 — En-tête intelligent : se rétracte vers le bas, revient vers le haut */
       if (hdr) {
-        hdr.classList.toggle('is-scrolled', y > 40);
-        var menuOpen = document.body.classList.contains('nav-open');
-        hdr.classList.toggle('is-hidden', !menuOpen && y > 120 && y > lastY);
+        /* La barre s'etire passe quarante pixels. Elle ne se cache
+           plus : l'ancienne ligne .is-hidden la sortait de l'ecran
+           des qu'on descendait, et il fallait remonter pour
+           retrouver le menu. */
+        hdr.classList.toggle('scrolled', y > 40);
       }
 
       /* 3 — Parallaxe douce : 0,88× la vitesse du scroll, PLAFONNÉE à ±60 px.
@@ -244,6 +246,15 @@
 
     function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }
     window.addEventListener('scroll', onScroll, { passive: true });
+    /* L'etat de la barre doit etre juste SUR UNE PAGE DEJA DEFILEE.
+       Le navigateur restaure la position apres l'execution des
+       scripts : frame() plus bas tourne donc avec scrollY a zero, et la
+       barre restait compacte au-dessus d'un contenu deja descendu.
+       Mesure : classe « hdr » seule apres un rechargement a y=900.
+       On repasse donc au chargement complet, et au retour par le cache
+       de navigation, qui ne rejoue aucun des deux. */
+    window.addEventListener('load', frame);
+    window.addEventListener('pageshow', frame);
     window.addEventListener('resize', onScroll, { passive: true });
     frame();
   }

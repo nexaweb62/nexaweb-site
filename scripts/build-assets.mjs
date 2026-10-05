@@ -45,74 +45,114 @@ const write = (p, buf) => {
    1. FAVICON — le monogramme suit le thème du système d'exploitation
       grâce au @media embarqué dans le SVG.
    ═══════════════════════════════════════════════════════════════════════ */
-const favicon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Nexa Web">
-  <style>
-    .bg { fill: ${T.dark.bg} }
-    .mk { fill: ${T.dark.accent} }
-    @media (prefers-color-scheme: light) {
-      .bg { fill: ${T.light.bg} }
-      .mk { fill: ${T.light.accent} }
-    }
-  </style>
-  <rect class="bg" width="64" height="64" rx="14"/>
-  <path class="mk" d="M16 47V17h6.4l14.6 19.1V17H43v30h-6.4L22 27.9V47z"/>
-  <rect class="mk" x="16" y="51.5" width="27" height="3" rx="1.5"/>
+/* ── LE SYMBOLE, SOURCE UNIQUE ───────────────────────────────────────
+   Le meme « N » fil de fer que src/components/Logo.astro. Dans la page
+   il prend ses couleurs des jetons ; ici il ne peut pas — un favicon
+   n'a pas acces au CSS du site — donc les teintes sont passees en
+   parametre, et ce fichier est l'un des rares que check:colors
+   autorise a en contenir.
+
+   Les coordonnees sont celles du composant, au caractere pres. Si le
+   dessin change la-bas, il change ici : c'est le seul endroit ou la
+   duplication est inevitable, autant qu'elle soit visible. */
+const FACE = [
+  'M20 85L20 15','M20 15L34 15','M34 15L66 62','M66 62L66 15','M66 15L80 15',
+  'M80 15L80 85','M80 85L66 85','M66 85L34 38','M34 38L34 85','M34 85L20 85',
+];
+const PROFONDEUR = [
+  'M20 15L28 7','M34 15L42 7','M66 15L74 7','M80 15L88 7','M80 85L88 77',
+  'M28 7L42 7','M42 7L66 42.25','M74 7L88 7','M88 7L88 77',
+];
+/* viewBox "10 0 90 95" : le dessin deborde a gauche et en haut du
+   carre 100x100 d'origine, on le recadre sur son encombrement reel. */
+const symbole = ({ face, depth, trait = 2.2, pad = 0 }) => {
+  const x = 10 - pad, y = 0 - pad, w = 90 + pad * 2, h = 95 + pad * 2;
+  const g = (liste, couleur) =>
+    `<g fill="none" stroke="${couleur}" stroke-width="${trait}" ` +
+    `stroke-linecap="round" stroke-linejoin="round">` +
+    liste.map(d => `<path d="${d}"/>`).join('') + `</g>`;
+  return { viewBox: `${x} ${y} ${w} ${h}`, corps: g(FACE, face) + g(PROFONDEUR, depth) };
+};
+
+/* ── Le favicon : fond arrondi sombre + symbole ──
+   Le fond reste sombre dans les deux themes. Une icone d'onglet qui
+   change de couleur avec le systeme devient invisible sur la moitie
+   des barres d'onglets ; celle-ci a toujours son propre fond. */
+const FOND_ICONE = T.dark.bg;
+/* Le trait grossit et la marge fond quand l'icone rapetisse. Mesure sur
+   la premiere version, a trait constant : 5 pixels clairs sur 256 a
+   16 px — le N avait disparu, les traits passaient sous le pixel. Et
+   sous 24 px on ne garde que la face : deux jeux de traits qui se
+   croisent dans seize pixels ne font plus qu'une bouillie. */
+const reglage = (cote) =>
+  cote <= 16 ? { trait: 9,   marge: 2,  relief: false }
+: cote <= 32 ? { trait: 6,   marge: 5,  relief: true  }
+: cote <= 64 ? { trait: 4.2, marge: 9,  relief: true  }
+:              { trait: 3.4, marge: 12, relief: true  };
+
+const iconeSvg = (cote) => {
+  const r = reglage(cote);
+  const { viewBox, corps } = symbole({
+    face: T.dark.text, depth: r.relief ? T.dark.accent : T.dark.text, trait: r.trait,
+  });
+  const inner = r.relief ? corps : corps.slice(0, corps.indexOf('</g>') + 4);
+  const d = 64 - r.marge * 2;
+  const rayon = Math.round(64 * 14 / 64);
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Nexa Web">
+  <rect width="64" height="64" rx="${rayon}" fill="${FOND_ICONE}"/>
+  <svg x="${r.marge}" y="${r.marge}" width="${d}" height="${d}" viewBox="${viewBox}" preserveAspectRatio="xMidYMid meet">${inner}</svg>
 </svg>
 `;
-/* On continue d'écrire favicon.svg : il ne sert plus d'icône d'onglet —
-   déclaré, il primerait sur les PNG du rendu 3D — mais il reste le
-   monogramme vectoriel de secours, net à toute taille, pour un usage
-   où le rendu photographique ne convient pas. */
-write('favicon.svg', Buffer.from(favicon));
-
-/* ── Icônes : le rendu 3D, découpé sur l'arête du verre ──────────────
-      Les angles sont les mêmes qu'à l'écran — encart 7 px et rayon
-      156 px sur 660 —, mesurés dans le fichier et non estimés. En
-      dehors, l'alpha est à zéro : sur une barre d'onglets claire, un
-      carré noir se verrait.
-
-      Le recadrage se resserre quand l'icône rétrécit. Vérifié en
-      agrandissant les pixels : à 16 px l'image entière n'est qu'une
-      tache brune, le N disparaît. En coupant 15 % du pourtour, les
-      trois traits du N retrouvent assez de pixels pour se lire. C'est
-      la même pratique que pour n'importe quelle icône système — le
-      dessin se simplifie à mesure qu'il rapetisse.
-
-      Deux pipelines sharp et non un seul : dans une même chaîne, sharp
-      redimensionne AVANT de composer, et le masque arriverait sur une
-      image déjà réduite. ── */
-const SRC_LOGO = join(ROOT, 'assets/sources/logo-liquide.jpg');
-const S_LOGO = 660, ENCART = 7, RAYON = 156;
-
-const masqueRond = (cote, encart, rayon) => sharp(Buffer.from(
-  `<svg xmlns="http://www.w3.org/2000/svg" width="${cote}" height="${cote}">` +
-  `<rect x="${encart}" y="${encart}" width="${cote - 2 * encart}" height="${cote - 2 * encart}" ` +
-  `rx="${rayon}" ry="${rayon}" fill="#fff"/></svg>`)).resize(cote, cote).png().toBuffer();
-
-/* Plus l'icône est petite, plus on se rapproche. */
-const serrage = (size) => (size <= 16 ? 1.18 : size <= 32 ? 1.08 : 1);
-
-const iconPng = async (size) => {
-  const z = serrage(size);
-  const cote = Math.round(S_LOGO / z);
-  const marge = Math.round((S_LOGO - cote) / 2);
-  const decoupe = await sharp(SRC_LOGO)
-    .extract({ left: marge, top: marge, width: cote, height: cote }).png().toBuffer();
-  const arrondi = await sharp(decoupe).composite([{
-    input: await masqueRond(cote, Math.round(ENCART / z), Math.round(RAYON / z)),
-    blend: 'dest-in',
-  }]).png().toBuffer();
-  /* Palette : un PNG plein sur une image photographique donnait 584 ko
-     pour la 512, soit plus que tout le JavaScript du site. Quantifié sur
-     256 teintes il tombe à quelques dizaines de kilo-octets, et sur un
-     dégradé d'or la différence ne se voit pas — vérifié en comparant les
-     deux côte à côte. */
-  return sharp(arrondi).resize(size, size)
-    .png({ compressionLevel: 9, palette: true, quality: 92, effort: 10 }).toBuffer();
 };
+const faviconSvg = iconeSvg(180);
+write('favicon.svg', Buffer.from(faviconSvg));
+
+/* ── Les deux SVG publics, pour un usage hors du site ──
+   logo.svg : le symbole seul, fond transparent, en or et blanc chaud.
+   logo-complet.svg : le symbole et le nom, tels qu'ils paraissent. */
+{
+  const { viewBox, corps } = symbole({ face: T.dark.text, depth: T.dark.accent });
+  write('logo.svg', Buffer.from(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}" width="90" height="95" role="img" aria-label="Nexa Web">${corps}</svg>\n`));
+
+  write('logo-complet.svg', Buffer.from(
+`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 95" width="300" height="95" role="img" aria-label="Nexa Web — Agence">
+  <svg x="0" y="0" width="90" height="95" viewBox="${viewBox}" preserveAspectRatio="xMidYMid meet">${corps}</svg>
+  <text x="108" y="46" font-family="${FONT}" font-weight="700" font-size="26" letter-spacing="7.3" fill="${T.dark.text}">NEXA</text>
+  <text x="108" y="66" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-weight="500" font-size="11" letter-spacing="3.5" fill="${T.dark['text-muted']}">WEB · AGENCE</text>
+</svg>
+`));
+}
+
+/* ── Les PNG, rendus depuis le favicon vectoriel ──
+   Plus de recadrage ni de serrage : le fil de fer est un dessin, pas
+   une photo. Il reste net a 16 px parce qu'il n'a que dix traits, la
+   ou le rendu 3D precedent devenait une tache brune qu'il fallait
+   rogner de 15 % pour sauver. */
+const iconPng = (size) => sharp(Buffer.from(iconeSvg(size)), { density: 384 })
+  .resize(size, size)
+  .png({ compressionLevel: 9, effort: 10 }).toBuffer();
 
 for (const size of [16, 32, 180, 192, 512]) {
   write(`icons/icon-${size}.png`, await iconPng(size));
+}
+/* Apple lit ce nom-la en premier quand le <link> manque. */
+write('apple-touch-icon.png', await iconPng(180));
+
+/* ── favicon.ico ──
+   sharp ne sait pas ecrire d'ICO. Le format accepte un PNG tel quel
+   dans son entree : six octets d'en-tete, seize de description, puis
+   l'image. On l'assemble a la main plutot que d'ajouter une
+   dependance pour vingt-deux octets. */
+{
+  const png = await iconPng(32);
+  const dir = Buffer.alloc(6);
+  dir.writeUInt16LE(0, 0); dir.writeUInt16LE(1, 2); dir.writeUInt16LE(1, 4);
+  const ent = Buffer.alloc(16);
+  ent[0] = 32; ent[1] = 32; ent[2] = 0; ent[3] = 0;
+  ent.writeUInt16LE(1, 4); ent.writeUInt16LE(32, 6);
+  ent.writeUInt32LE(png.length, 8); ent.writeUInt32LE(22, 12);
+  write('favicon.ico', Buffer.concat([dir, ent, png]));
 }
 
 /* ── Manifeste PWA ── */
@@ -142,11 +182,10 @@ const ogSvg = (c) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 
   <rect width="1200" height="630" fill="url(#depth)" opacity="0.7"/>
   <rect width="1200" height="630" fill="url(#halo)"/>
 
-  <!-- La traînée de cuivre, en écho au hero -->
-  <g transform="rotate(-28 980 300)" opacity="0.5">
-    <rect x="700" y="292" width="760" height="7" rx="3.5" fill="${c.accent}"/>
-    <rect x="700" y="330" width="420" height="3" rx="1.5" fill="${c.accent}" opacity="0.55"/>
-  </g>
+  <!-- Le symbole, a la place de la trainee de cuivre : c'est lui que
+       l'on doit reconnaitre dans un fil d'actualite. -->
+  ${(() => { const k = symbole({ face: c.text, depth: c.accent, trait: 2.4 });
+     return `<svg x="760" y="150" width="310" height="327" viewBox="${k.viewBox}" preserveAspectRatio="xMidYMid meet" opacity="0.92">${k.corps}</svg>`; })()}
 
   <text x="80" y="268" font-family="${FONT}" font-weight="bold" font-size="128" fill="${c.text}" letter-spacing="-3">NEXA</text>
   <text x="80" y="392" font-family="${FONT}" font-weight="bold" font-size="128" fill="${c.accent}" letter-spacing="-3">WEB</text>

@@ -36,10 +36,10 @@ const CHROME = process.env.CHROME_PATH || undefined;
    390 et 430 : les iPhone courants. 1280 : l'ordinateur. */
 const LARGEURS = [320, 360, 390, 430, 1024, 1280];
 const PAGES = ['/tarifs', '/contact', '/404'];
-/* La tuile du logo, côté en pixels. On mesure .llq-tuile et non l'image :
-   la tuile tient sa largeur de --llq-taille et vaut donc toujours ce
+/* Le symbole du logo, largeur en pixels. On mesure le <svg> et non le
+   lien : le lien porte aussi le texte, et sa largeur change donc avec
    chiffre, que l'image soit chargée ou non. */
-const LOGO_NATUREL = 34;
+const LOGO_NATUREL = 30;
 
 const navigateur = await chromium.launch(CHROME ? { executablePath: CHROME } : {});
 const echecs = [];
@@ -76,7 +76,7 @@ for (const theme of ['dark', 'light']) {
           const rc = el.getBoundingClientRect();
           return rc.width > 1 && rc.height > 1;
         };
-        const svg = document.querySelector('.nav-logo-tuile .llq-tuile');
+        const svg = document.querySelector('.nav-logo-mk .lg-svg');
         const navr = document.querySelector('.nav-r');
         const back = document.getElementById('hdr-back');
         const out = {

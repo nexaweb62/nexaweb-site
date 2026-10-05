@@ -1,13 +1,15 @@
 ---
-import LogoLiquide from './LogoLiquide.astro';
+import Logo from './Logo.astro';
 ---
 <footer class="s-foot sec-seam" aria-label="Pied de page">
   <div class="wrap">
     <div class="foot-in">
       <div>
-        <div class="foot-marque">
-          <LogoLiquide class="foot-tuile" taille={48} nom={false} interactif={false} lueur={false} />
-        </div>
+        {/* Le logo du pied de page ramène à l'accueil : c'est la
+            convention, et c'est le dernier endroit où on la cherche. */}
+        <a href="/" class="foot-marque" aria-label="NEXAWEB — Accueil">
+          <Logo largeur={40} trait={2.2} texte={true} tailleNom={16} tailleSous={8} />
+        </a>
         <p class="foot-tag" data-i18n="ftr-tag">Agence web premium · Carvin, Hauts-de-France</p>
         <div class="foot-socials" aria-label="Réseaux sociaux">
           <a href="https://www.linkedin.com/in/ahmed-chteoui-049211429/" class="foot-soc linkedin" aria-label="LinkedIn" target="_blank" rel="noopener">
@@ -26,7 +28,7 @@ import LogoLiquide from './LogoLiquide.astro';
         <nav aria-label="Liens de navigation">
           <ul class="foot-links">
             <li><a href="/#accueil"  class="foot-lnk" data-i18n="ftr-home">Accueil</a></li>
-            <li><a href="/#services" class="foot-lnk" data-i18n="ftr-services">Services</a></li>
+            <li><a href="/services" class="foot-lnk" data-i18n="ftr-services">Services</a></li>
             <li><a href="/tarifs"    class="foot-lnk">Tarifs</a></li>
             <li><a href="/avis"      class="foot-lnk">Avis clients</a></li>
             <li><a href="/#faq"      class="foot-lnk" data-i18n="ftr-faq">FAQ</a></li>

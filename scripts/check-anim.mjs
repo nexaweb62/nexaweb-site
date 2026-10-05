@@ -30,7 +30,7 @@ import { chromium } from 'playwright-core';
 const BASE = process.env.BASE || 'http://localhost:4321';
 const CHROME = process.env.CHROME_PATH || undefined;
 const PAGES = (process.env.PAGES || [
-  '/', '/tarifs', '/devis', '/contact', '/equipe', '/avis', '/login', '/inscription',
+  '/', '/services', '/tarifs', '/devis', '/contact', '/equipe', '/avis', '/login', '/inscription',
   '/site-vitrine', '/ecommerce', '/refonte', '/seo', '/design-uiux', '/comment-ca-marche',
   '/404', '/rendez-vous', '/mentions-legales', '/politique-confidentialite', '/cgv',
   '/site-internet-artisan', '/site-internet-commerce', '/site-internet-restaurant',
@@ -70,6 +70,18 @@ for (const theme of ['dark', 'light']) {
     for (const path of PAGES) {
       errs.length = 0;
       await page.goto(BASE + path, { waitUntil: 'networkidle' }).catch(() => {});
+
+      /* L'intro masque volontairement la barre (opacité 0) le temps qu'elle
+         se joue — environ 4,6 s, UNE fois par visite. Mesurer pendant ce
+         laps rapportait « fantôme span.hdr-btn-lbl à 0 » : la barre n'est
+         pas éteinte, elle est en train d'entrer. On attend donc que le
+         calque soit retiré du DOM avant de juger quoi que ce soit.
+         Borne de sécurité : si l'intro ne se retire pas, on mesure quand
+         même — un calque qui reste serait un vrai défaut, et c'est au
+         contrôle de le faire voir, pas de l'attendre indéfiniment. */
+      await page.waitForFunction(() => !document.getElementById('intro'), null, { timeout: 9000 })
+        .catch(() => {});
+
       /* On descend toute la page puis on remonte : exactement ce qu'un
          visiteur fait, et ce qui déclenche tout ce qui doit l'être. */
       await page.evaluate(async () => {

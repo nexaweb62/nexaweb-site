@@ -19,6 +19,11 @@ const TOKENS = 'src/styles/tokens.css';
    main — relancer le générateur. */
 const GENERATED = new Set([
   'public/favicon.svg',
+  /* Generes par build-assets.mjs depuis le meme symbole que le
+     composant Logo. Un fichier SVG isole ne peut pas lire les jetons
+     du site : ses couleurs sont forcement ecrites. */
+  'public/logo.svg',
+  'public/logo-complet.svg',
   'public/site.webmanifest',
 ]);
 /* Répertoires entièrement produits par un générateur lisant les tokens. */

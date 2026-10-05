@@ -30,8 +30,6 @@
   Cache-Control: public, max-age=3600, must-revalidate
 /i18n.js
   Cache-Control: public, max-age=3600, must-revalidate
-/liquide.js
-  Cache-Control: public, max-age=3600, must-revalidate
 /motion.js
   Cache-Control: public, max-age=3600, must-revalidate
 /scroll-fx.js

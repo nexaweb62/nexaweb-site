@@ -1,0 +1,231 @@
+---
+/**
+ * L'INTRO — le logo se dessine, puis vole se poser dans la barre.
+ *
+ * Elle ne se joue qu'UNE FOIS par visite, sur la première page ouverte.
+ * Ensuite, chaque page garde seulement l'apparition du contenu.
+ *
+ * RIEN N'EST CACHÉ PAR LE CSS STATIQUE. Tout ce qui disparaît le fait
+ * par une classe posée en JavaScript. Sans JavaScript — et pour un
+ * robot d'indexation — la page est entière et visible : c'est la seule
+ * façon d'animer une entrée sans parier le référencement dessus.
+ *
+ * Le calque reste sombre même en thème clair : c'est une transition,
+ * pas une page, et un flash blanc puis noir puis blanc serait pire que
+ * pas d'intro du tout.
+ */
+---
+
+<div class="intro" id="intro" aria-hidden="true" hidden>
+  <div class="intro-centre">
+    <svg class="intro-logo" viewBox="10 0 90 95" fill="none"
+         stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <g class="logo-face">
+        <path d="M20 85L20 15"/><path d="M20 15L34 15"/><path d="M34 15L66 62"/>
+        <path d="M66 62L66 15"/><path d="M66 15L80 15"/><path d="M80 15L80 85"/>
+        <path d="M80 85L66 85"/><path d="M66 85L34 38"/><path d="M34 38L34 85"/>
+        <path d="M34 85L20 85"/>
+      </g>
+      <g class="logo-depth">
+        <path d="M20 15L28 7"/><path d="M34 15L42 7"/><path d="M66 15L74 7"/>
+        <path d="M80 15L88 7"/><path d="M80 85L88 77"/><path d="M28 7L42 7"/>
+        <path d="M42 7L66 42.25"/><path d="M74 7L88 7"/><path d="M88 7L88 77"/>
+      </g>
+    </svg>
+    <p class="intro-nom">NEXA WEB</p>
+  </div>
+  <div class="intro-barre"><span></span></div>
+</div>
+
+<style>
+  /* Au-dessus de tout, sauf de l'anneau du curseur. */
+  .intro{
+    position:fixed;inset:0;z-index:9500;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:var(--raw-black-950);
+    transition:opacity .9s ease;
+  }
+  .intro[hidden]{display:none}
+  .intro.part{opacity:0}
+
+  .intro-centre{display:flex;flex-direction:column;align-items:center;gap:22px}
+  .intro-logo{
+    width:96px;height:102px;overflow:visible;
+    transform-origin:50% 50%;
+    /* Le halo part d'une ombre DEJA dorée, simplement transparente et sans
+       rayon. Interpoler depuis « none » laissait Chrome fabriquer une teinte
+       batarde : mesuré, le halo tirait au gris (64,61,56) au lieu de l'or.
+       Deux ombres de meme forme s'interpolent proprement. */
+    filter:drop-shadow(0 0 0 rgb(from var(--raw-gold-300) r g b / 0));
+    /* Le vol vers la barre. La durée vit ici, la destination en JS.
+       Le halo, lui, va deux fois plus vite : il doit etre ARRIVE quand le
+       vol commence (0,9 s plus tard), sinon on ne le voit jamais en entier. */
+    transition:transform .9s cubic-bezier(.19,1,.22,1),filter .45s ease;
+  }
+  /* L'intro garde ses propres teintes : elle ne suit pas le thème. */
+  @keyframes introTrait{
+    from{stroke-dashoffset:var(--L)}
+    to{stroke-dashoffset:0}
+  }
+  .intro-logo .logo-face{stroke:var(--raw-warm-50)}
+  .intro-logo .logo-depth{stroke:var(--raw-gold-400)}
+  .intro.halo .intro-logo{filter:drop-shadow(0 0 8px rgb(from var(--raw-gold-300) r g b / .55))}
+  .intro.vole .intro-logo{filter:drop-shadow(0 0 0 rgb(from var(--raw-gold-300) r g b / 0))}
+
+  .intro-nom{
+    margin:0;opacity:0;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:10px;letter-spacing:.5em;text-indent:.5em;
+    color:var(--raw-warm-300);
+    transition:opacity .5s ease;
+  }
+  .intro.halo .intro-nom{opacity:1}
+  .intro.vole .intro-nom{opacity:0}
+
+  .intro-barre{
+    position:absolute;bottom:14vh;width:120px;height:1px;
+    background:rgb(from var(--raw-warm-50) r g b / .12);
+  }
+  .intro-barre span{
+    display:block;height:100%;width:0;background:var(--raw-gold-400);
+    transition:width 2.2s linear;
+  }
+  .intro.trace .intro-barre span{width:100%}
+  .intro.vole .intro-barre{opacity:0;transition:opacity .4s ease}
+
+  /* Pendant l'intro, la barre du site s'efface pour que le logo ait
+     l'air de venir s'y poser. */
+  :global(html.intro-en-cours) :global(.hdr){opacity:0}
+  :global(html.intro-en-cours) :global(body){overflow:hidden}
+  :global(.hdr){transition:opacity .5s ease}
+</style>
+
+<script is:inline>
+/* ── L'INTRO, ET L'APPARITION DU CONTENU ──────────────────────────────
+   Deux choses distinctes : l'intro (une fois par visite) et l'étape 4,
+   l'apparition du contenu, qui se joue sur CHAQUE page. */
+(function(){
+  'use strict';
+  var CLE = 'nexa-intro';
+  var doux = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var intro = document.getElementById('intro');
+
+  function vue(){ try{ return sessionStorage.getItem(CLE) === '1'; }catch(e){ return false; } }
+  function marquer(){ try{ sessionStorage.setItem(CLE, '1'); }catch(e){} }
+
+  /* ── ÉTAPE 4 : le contenu monte ───────────────────────────────────
+     Le titre principal ligne par ligne depuis un masque quand la page
+     en fournit (.ln / .li, déjà en place sur l'accueil) ; sinon le
+     titre entier, en fondu, comme le reste.
+
+     Les classes sont posées ICI et non dans le HTML : sans JavaScript,
+     rien n'est caché. */
+  function reveler(retard){
+    var main = document.querySelector('main') || document.body;
+    var h1 = main.querySelector('h1');
+    var lignes = h1 ? h1.querySelectorAll('.ln') : [];
+    var t = retard || 0;
+
+    if(lignes.length){
+      for(var i = 0; i < lignes.length; i++){
+        lignes[i].classList.add('rv-ln');
+        (function(el, d){ setTimeout(function(){ el.classList.add('rv-on'); }, d); })(lignes[i], t + i * 120);
+      }
+      t += lignes.length * 120;
+    }else if(h1){
+      h1.classList.add('rv-bloc');
+      setTimeout(function(){ h1.classList.add('rv-on'); }, t);
+    }
+
+    /* Le reste du premier écran : surtitre, texte, boutons. On ne
+       descend pas plus bas que la première section — en dessous, le
+       système d'animation au défilement s'en charge déjà. */
+    var sec = main.querySelector('section, .wrap') || main;
+    var suite = sec.querySelectorAll(':scope > .label, :scope > p, :scope > .btn, :scope > .btn-g, ' +
+      ':scope > div > .label, :scope > div > p, :scope > div > .hero-cta, :scope > .hero-cta');
+    var apres = t + 450;
+    for(var j = 0; j < suite.length && j < 8; j++){
+      suite[j].classList.add('rv-bloc');
+      (function(el){ setTimeout(function(){ el.classList.add('rv-on'); }, apres); })(suite[j]);
+    }
+  }
+
+  if(doux){
+    /* Mouvement réduit : ni intro, ni glissement. La page est déjà là. */
+    if(intro) intro.remove();
+    return;
+  }
+
+  if(!intro || vue()){
+    if(intro) intro.remove();
+    reveler(0);
+    return;
+  }
+
+  /* ── L'INTRO ────────────────────────────────────────────────────── */
+  marquer();
+  document.documentElement.classList.add('intro-en-cours');
+  intro.hidden = false;
+
+  var svg = intro.querySelector('.intro-logo');
+  var traits = [].slice.call(svg.querySelectorAll('path'));
+  var fini = false;
+
+  /* Étape 1 — chaque trait se dessine, le suivant partant à 55 % du
+     précédent. La durée suit la longueur : un trait court ne doit pas
+     mettre le même temps qu'une diagonale. */
+  /* UNE ANIMATION, PAS UNE TRANSITION. Une transition ne part que si le
+     navigateur a observé l'état de départ avant l'état d'arrivée. Ici
+     les deux sont posés dans le même tour de script, pendant que la
+     page s'analyse encore : mesuré, strokeDashoffset valait déjà 0 à
+     150 ms alors que la durée annoncée était de 389 ms — le N
+     apparaissait d'un coup. Ni un requestAnimationFrame ni une lecture
+     de géométrie n'y changeaient rien.
+     Une animation, elle, démarre toute seule : elle n'a pas besoin
+     qu'on lui montre un avant. */
+  var depart = 0, finDessin = 0;
+  traits.forEach(function(t){
+    var L = t.getTotalLength();
+    var d = Math.max(0.12, L / 90 * 0.5);
+    t.style.strokeDasharray = L;
+    t.style.setProperty('--L', L);
+    t.style.animation = 'introTrait ' + d + 's cubic-bezier(.65,0,.35,1) ' + depart + 's both';
+    depart += d * 0.55;
+    finDessin = Math.max(finDessin, depart + d);
+  });
+  intro.classList.add('trace');
+
+  /* Étape 2 — le halo et le nom. */
+  var tHalo = setTimeout(function(){ intro.classList.add('halo'); }, finDessin * 1000);
+  /* Étape 3 — le vol, 0,9 s plus tard. */
+  var tVol = setTimeout(voler, finDessin * 1000 + 900);
+
+  function voler(){
+    if(fini) return;
+    fini = true;
+    clearTimeout(tHalo); clearTimeout(tVol);
+    intro.classList.add('halo', 'vole');
+
+    /* La destination : la position EXACTE du logo de la barre. On la
+       mesure au dernier moment — la barre a pu changer de taille. */
+    var cible = document.querySelector('.nav-logo-mk .lg-svg');
+    if(cible){
+      var a = svg.getBoundingClientRect(), b = cible.getBoundingClientRect();
+      var k = b.width / a.width;
+      var dx = (b.left + b.width / 2) - (a.left + a.width / 2);
+      var dy = (b.top + b.height / 2) - (a.top + a.height / 2);
+      svg.style.transform = 'translate(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px) scale(' + k.toFixed(3) + ')';
+    }
+
+    setTimeout(function(){
+      intro.classList.add('part');
+      document.documentElement.classList.remove('intro-en-cours');
+      reveler(120);
+      setTimeout(function(){ if(intro.parentNode) intro.remove(); }, 950);
+    }, 900);
+  }
+
+  /* Un clic abrège : on passe directement au vol. */
+  intro.addEventListener('click', voler);
+})();
+</script>
