@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import '../styles/global.css';
 import GarantieBadge from '../components/GarantieBadge.astro';
+import Timeline from '../components/Timeline.astro';
 import { FORMULES, VITRINE_PRIX } from '../data/formules';
 ---
 <BaseLayout title="Devis gratuit — Nexa Web" description="Décrivez votre projet web et recevez un devis gratuit sous 24 h. Site vitrine, e-commerce, refonte — Nexa Web, Carvin, Hauts-de-France.">
@@ -24,25 +25,14 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
 .dv-title em{font-style:normal}
 .dv-lede{margin:18px auto 0;max-width:52ch;color:var(--text-muted);font-weight:300;line-height:1.7}
 
-/* ── DEUX COLONNES ── */
-.devis-grid{display:grid;grid-template-columns:1fr;gap:clamp(20px,3vw,32px);align-items:start}
-@media(min-width:900px){
-  .devis-grid{grid-template-columns:minmax(0,1fr) 340px}
-  /* Le panneau reste sous les yeux pendant qu'on remplit le formulaire.
-     124px = la hauteur de l'en-tête plus une respiration. */
-  .devis-side{position:sticky;top:124px}
-}
-.devis-main{min-width:0}
-.dv-aside-h{font-size:1.05rem;font-weight:600;letter-spacing:-.02em;margin:0 0 18px}
-.dv-next{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:18px}
-.dv-next li{display:flex;gap:13px;align-items:flex-start}
-.dv-next-n{flex:none;width:23px;height:23px;border-radius:50%;display:flex;align-items:center;
-  justify-content:center;font-size:11px;font-weight:600;color:var(--on-accent);background:var(--accent);
-  font-variant-numeric:tabular-nums}
-.dv-next b{display:block;font-size:var(--fs-caption);font-weight:600;margin-bottom:4px}
-.dv-next p{margin:0;font-size:12.5px;font-weight:300;line-height:1.6;color:var(--text-muted)}
-.dv-aside-fine{margin:20px 0 0;padding-top:16px;border-top:1px solid var(--border);
-  font-size:11.5px;font-weight:300;line-height:1.6;color:var(--text-subtle)}
+/* ── LE FORMULAIRE, SEUL ET CENTRÉ ──
+   La colonne « Ce qui se passe ensuite » est partie : ses trois étapes
+   vivent maintenant dans la timeline, sous le formulaire, où elles ont
+   la place de respirer. La grille à deux colonnes n'avait plus qu'une
+   seule chose à placer — elle devient une largeur centrée, celle que la
+   carte avait déjà. */
+.devis-grid{display:flex;justify-content:center}
+.devis-main{min-width:0;width:100%;max-width:760px}
 
 /* ── CARD ── */
 .devis-card{width:100%;background:var(--surface);border:1px solid var(--border-strong);border-radius:16px;padding:clamp(32px,5vw,56px) clamp(24px,5vw,52px);box-shadow:var(--shadow-2)}
@@ -136,7 +126,7 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
 @keyframes rvIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 @supports (animation-timeline: view()){
   @media (prefers-reduced-motion:no-preference){
-    .devis-card .field,.devis-card .fstep,.devis-card .launch-notice,.dv-next li{
+    .devis-card .field,.devis-card .fstep,.devis-card .launch-notice{
       animation:rvIn linear both;animation-timeline:view();
       animation-range:entry 4% cover 26%}
     .budget-pill{animation:rvIn linear both;animation-timeline:view();
@@ -477,26 +467,10 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
     </div>
       </div>
 
-      <!-- CE QUI SE PASSE ENSUITE — collé en haut pendant qu'on remplit -->
-      <aside class="devis-side" aria-labelledby="ensuite-h">
-        <div class="aside">
-          <h2 class="dv-aside-h" id="ensuite-h" data-i18n="dv-next-h">Ce qui se passe ensuite</h2>
-          <ol class="dv-next">
-            <li><span class="dv-next-n" aria-hidden="true">1</span>
-              <div><b data-i18n="dv-next-t1">On lit votre demande</b>
-                <p data-i18n="dv-next-d1">Le jour même. Si un point manque, nous vous écrivons pour le préciser.</p></div></li>
-            <li><span class="dv-next-n" aria-hidden="true">2</span>
-              <div><b data-i18n="dv-next-t2">Vous recevez un prix ferme</b>
-                <p data-i18n="dv-next-d2">Sous 48 heures ouvrées, détaillé poste par poste. Pas de fourchette vague.</p></div></li>
-            <li><span class="dv-next-n" aria-hidden="true">3</span>
-              <div><b data-i18n="dv-next-t3">On en parle</b>
-                <p data-i18n="dv-next-d3">Un appel de vingt minutes pour valider, ajuster, ou simplement répondre à vos questions.</p></div></li>
-          </ol>
-          <p class="dv-aside-fine" data-i18n="dv-next-fine">Gratuit et sans engagement. Vos données servent
-            uniquement à traiter cette demande.</p>
-        </div>
-      </aside>
     </div>
+
+    <!-- Les six étapes, de la demande à la mise en ligne. -->
+    <Timeline />
   </div>
 </main>
 

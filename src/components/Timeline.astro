@@ -1,0 +1,432 @@
+---
+/**
+ * LA TIMELINE — six étapes le long d'une ligne qui ondule.
+ *
+ * Une ligne verticale au centre, qui se remplit d'or au fil du
+ * défilement. Chaque étape porte un carré sur cette ligne : il s'allume
+ * quand le remplissage l'atteint, et la ligne fait une vague amortie
+ * du côté du texte — au défilement comme au survol.
+ *
+ * POURQUOI UN SVG ET PAS UNE BORDURE. Une bordure CSS ne sait pas se
+ * courber. Le tracé est donc recalculé point par point, tous les six
+ * pixels, par la somme des cloches de chaque carré :
+ *     x(y) = centre + Σ amp_i · exp(−((y − y_i)/SPREAD)²)
+ * Au repos toutes les amplitudes valent zéro : la ligne est droite, au
+ * centre, à toutes les tailles d'écran.
+ *
+ * LES COULEURS PASSENT PAR LES JETONS, pas par des valeurs écrites en
+ * dur — c'est la règle du projet, et c'est aussi ce qui fait marcher le
+ * mode clair sans une seule ligne de plus. Les teintes demandées y
+ * correspondent exactement : #d4b36a est --accent, #f4f2ee est --text en
+ * sombre, et #fff7e6 a rejoint tokens.css sous le nom --tl-vive, avec sa
+ * contrepartie claire.
+ */
+export interface Props {
+  /** Classe de placement, passée par la page hôte. */
+  class?: string;
+}
+const { class: classe = '' } = Astro.props;
+
+/* Les six étapes. Le texte par défaut est le français ; i18n.js
+   remplace par la clé au chargement. Les deux doivent rester d'accord. */
+const ETAPES = [
+  { n: '01', cle: 'tl-1', titre: 'Vous décrivez votre projet',
+    txt: 'Le formulaire ci-dessus suffit. Plus vous êtes précis, plus le devis est juste.',
+    duree: '2 minutes' },
+  { n: '02', cle: 'tl-2', titre: 'On lit votre demande',
+    txt: 'Si un point manque, nous vous écrivons pour le préciser.',
+    duree: 'Le jour même' },
+  { n: '03', cle: 'tl-3', titre: 'Vous recevez un prix ferme',
+    txt: 'Détaillé poste par poste. Pas de fourchette vague.',
+    duree: 'Sous 48 h ouvrées' },
+  { n: '04', cle: 'tl-4', titre: 'On en parle',
+    txt: 'Un appel pour valider, ajuster ou répondre à vos questions.',
+    duree: '20 minutes' },
+  { n: '05', cle: 'tl-5', titre: 'Design & développement',
+    txt: 'Maquette validée avec vous, puis construction du site et optimisation SEO.',
+    duree: 'Selon le projet' },
+  { n: '06', cle: 'tl-6', titre: 'Mise en ligne',
+    txt: 'Votre site est en ligne, avec une garantie de 14 jours après livraison.',
+    duree: 'Garantie 14 jours' },
+];
+---
+
+<section class:list={['tl', classe]} aria-labelledby="tl-h">
+  <div class="wrap">
+    <header class="tl-tete">
+      <p class="tl-sur" data-i18n="tl-sur">Le processus</p>
+      <!-- « la mise en ligne » porte .liquid, l'or coulant du hero.
+           La classe vit dans global.css, donc elle survit au
+           remplacement par innerHTML que fait la traduction. -->
+      <h2 class="tl-h" id="tl-h" data-i18n="tl-h">De votre demande à <em class="liquid">la mise en ligne</em></h2>
+    </header>
+
+    <div class="tl-piste" data-tl>
+      <svg class="tl-svg" aria-hidden="true" focusable="false" preserveAspectRatio="none">
+        <defs>
+          <linearGradient data-grad gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="0">
+            <stop offset="0" stop-color="var(--accent)" stop-opacity=".1"></stop>
+            <stop offset="1" stop-color="var(--accent)" stop-opacity="1"></stop>
+          </linearGradient>
+        </defs>
+        <path data-track class="tl-track" fill="none"></path>
+        <path data-fill class="tl-fill" fill="none"></path>
+      </svg>
+      <!-- La tête lumineuse au bout du remplissage. -->
+      <span class="tl-tetelum" data-tete aria-hidden="true"></span>
+
+      <ol class="tl-liste">
+        {ETAPES.map((e, i) => (
+          <li class="tl-et" data-et={i}>
+            <div class="tl-txt">
+              <h3 class="tl-t" data-i18n={e.cle + '-t'}>{e.titre}</h3>
+              <p class="tl-d" data-i18n={e.cle + '-d'}>{e.txt}</p>
+              <p class="tl-dur" data-i18n={e.cle + '-u'}>{e.duree}</p>
+            </div>
+            <span class="tl-marque" aria-hidden="true">
+              <span class="tl-num">{e.n}</span>
+              <span class="tl-tiret"></span>
+            </span>
+            <span class="tl-carre" data-carre aria-hidden="true"></span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* overflow-x:clip et non hidden : hidden sur un axe force l'autre à
+     auto et casserait le position:sticky du reste de la page. */
+  .tl{margin-top:clamp(80px,14vh,120px);overflow-x:clip}
+
+  /* ── L'EN-TÊTE ── */
+  .tl-tete{margin-bottom:clamp(32px,6vh,64px)}
+  .tl-sur{
+    display:flex;align-items:center;gap:16px;margin:0 0 14px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--accent-text);
+  }
+  /* Le trait doré qui s'estompe. */
+  .tl-sur::after{
+    content:"";flex:0 0 130px;height:1px;
+    background:linear-gradient(90deg,var(--accent),rgb(from var(--accent) r g b / 0));
+  }
+  .tl-h{
+    font-size:clamp(26px,4.2vw,44px);font-weight:var(--w-semi);
+    letter-spacing:-.025em;line-height:1.1;margin:0;text-wrap:balance;
+  }
+
+  /* ── LA PISTE ── */
+  .tl-piste{position:relative}
+  .tl-svg{
+    position:absolute;inset:0;width:100%;height:100%;
+    overflow:visible;pointer-events:none;
+  }
+  .tl-track{stroke:rgb(from var(--text) r g b / .07);stroke-width:1}
+  .tl-fill{stroke-width:1}
+
+  .tl-tetelum{
+    position:absolute;top:0;left:0;width:3px;height:44px;
+    margin:-22px 0 0 -1.5px;           /* centrée sur le point suivi */
+    border-radius:2px;pointer-events:none;opacity:0;
+    background:linear-gradient(180deg,rgb(from var(--tl-vive) r g b / 0),var(--tl-vive));
+    filter:blur(1px);
+    box-shadow:0 0 14px 3px rgb(from var(--accent-hover) r g b / .55);
+  }
+
+  /* ── LES ÉTAPES ── */
+  .tl-liste{list-style:none;margin:0;padding:0}
+  .tl-et{
+    position:relative;display:grid;grid-template-columns:1fr 1fr;
+    min-height:210px;padding:0 48px;align-items:center;
+  }
+  .tl-txt{max-width:320px}
+  /* Impaires à gauche, paires à droite. La marge écarte le texte de la
+     colonne du milieu, où vivent le numéro et son trait. */
+  .tl-et:nth-child(odd) .tl-txt{grid-column:1;justify-self:end;text-align:right;margin-right:132px}
+  .tl-et:nth-child(even) .tl-txt{grid-column:2;justify-self:start;text-align:left;margin-left:132px}
+
+  .tl-t{font-size:24px;font-weight:500;letter-spacing:-.015em;line-height:1.25;margin:0 0 9px}
+  /* La teinte demandée, rgba(244,242,238,.55), vaut rgb(139,138,135) sur
+     le fond sombre — à deux points près le --text-muted du site. On prend
+     donc le jeton : en sombre l'œil ne voit pas la différence, et en
+     clair il évite le défaut que la formule produisait. Mesuré par
+     check:contrast:rendered : 4:1 contre un seuil de 4,5. */
+  .tl-d{font-size:13px;font-weight:300;line-height:1.65;margin:0;color:var(--text-muted)}
+  .tl-dur{
+    margin:12px 0 0;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent-text);
+  }
+
+  /* Le numéro et son trait, collés à la ligne du milieu. */
+  .tl-marque{
+    position:absolute;top:50%;display:flex;align-items:center;gap:14px;
+    transform:translateY(-50%);pointer-events:none;
+  }
+  /* Le trait se tient TOUJOURS entre le numéro et la ligne du milieu.
+     À gauche l'ordre naturel suffit — numéro puis trait ; à droite il
+     faut l'inverser, sinon le trait part du mauvais côté du numéro.
+     Constaté à l'écran avant correction : « — 01 » au lieu de
+     « 01 — », et « 04 — » au lieu de « — 04 ». */
+  .tl-et:nth-child(odd) .tl-marque{right:50%}
+  .tl-et:nth-child(even) .tl-marque{left:50%;flex-direction:row-reverse}
+  .tl-num{
+    font-size:64px;font-weight:200;line-height:1;letter-spacing:-.04em;
+    font-variant-numeric:tabular-nums;
+    color:rgb(from var(--text) r g b / .1);
+    transition:color .6s var(--ease-out);
+  }
+  .tl-et.on .tl-num{color:rgb(from var(--accent) r g b / .28)}
+  .tl-tiret{
+    display:block;width:0;height:1px;background:rgb(from var(--accent) r g b / .6);
+    transition:width .6s var(--ease-out);
+  }
+  .tl-et.vu .tl-tiret{width:24px}
+
+  /* Le carré. Jamais tourné : un carré, pas un losange. */
+  .tl-carre{
+    position:absolute;left:50%;top:50%;width:9px;height:9px;
+    margin:-4.5px 0 0 -4.5px;          /* le centrage, pour laisser
+                                          translate libre à la vague */
+    background:var(--tl-eteint);
+    transform:scale(.6);
+    transition:background-color .6s var(--ease-out),transform .6s var(--ease-out),
+               box-shadow .6s var(--ease-out);
+  }
+  .tl-et.on .tl-carre{
+    background:var(--tl-vive);transform:scale(1);
+    box-shadow:0 0 10px 3px rgb(from var(--accent-hover) r g b / .75),
+               0 0 34px 10px rgb(from var(--accent) r g b / .18);
+  }
+
+  /* ── L'APPARITION DU TEXTE ── */
+  @media (prefers-reduced-motion:no-preference){
+    .tl-txt{opacity:.12;transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+    .tl-et:nth-child(odd) .tl-txt{transform:translateX(-40px)}
+    .tl-et:nth-child(even) .tl-txt{transform:translateX(40px)}
+    .tl-et.vu .tl-txt{opacity:1;transform:none}
+    /* Le trait se rétracte puis revient : la vague se voit aussi ici. */
+    .tl-et.onde .tl-tiret{animation:tlTiret 1.6s cubic-bezier(.25,.8,.3,1)}
+    @keyframes tlTiret{0%{width:24px}18%{width:8px}100%{width:24px}}
+  }
+
+  /* ── MOBILE ──
+     La ligne RESTE au centre et les étapes alternent toujours : seules
+     les tailles changent. */
+  @media(max-width:760px){
+    .tl-et{min-height:190px;padding:0 18px}
+    .tl-num{font-size:44px}
+    .tl-t{font-size:17px;margin-bottom:7px}
+    .tl-d{font-size:12px}
+    .tl-et:nth-child(odd) .tl-txt{margin-right:72px}
+    .tl-et:nth-child(even) .tl-txt{margin-left:72px}
+    .tl-marque{gap:9px}
+    .tl-et.vu .tl-tiret{width:14px}
+    @keyframes tlTiret{0%{width:14px}18%{width:5px}100%{width:14px}}
+  }
+  @media(max-width:420px){
+    .tl-et:nth-child(odd) .tl-txt{margin-right:58px}
+    .tl-et:nth-child(even) .tl-txt{margin-left:58px}
+    .tl-num{font-size:34px}
+  }
+</style>
+
+<script is:inline>
+/* ── LA LIGNE QUI ONDULE ──────────────────────────────────────────────
+   Trois choses à tenir à jour : le tracé des deux chemins, la tête
+   lumineuse, et l'état allumé/éteint des carrés.
+
+   La boucle d'animation ne tourne QUE pendant une oscillation. Le reste
+   du temps, le défilement redessine une ligne droite, ce qui coûte un
+   parcours de quelques centaines de points — pas une boucle permanente. */
+(function(){
+  'use strict';
+  var piste = document.querySelector('[data-tl]');
+  if(!piste) return;
+
+  var AMP = 24,        // amplitude de la vague, en pixels
+      PERIOD = 1.4,    // durée d'une oscillation complète, en secondes
+      DAMP = 1.5,      // amortissement : e^(-DAMP·t)
+      SPREAD = 110,    // largeur de la cloche autour d'un carré
+      LIFE = 2.6,      // au-delà, l'oscillation est éteinte
+      PAS = 6;         // un point de tracé tous les 6 px
+
+  var svg    = piste.querySelector('.tl-svg'),
+      track  = piste.querySelector('[data-track]'),
+      fill   = piste.querySelector('[data-fill]'),
+      grad   = piste.querySelector('[data-grad]'),
+      tete   = piste.querySelector('[data-tete]'),
+      etapes = [].slice.call(piste.querySelectorAll('.tl-et'));
+
+  var doux = window.matchMedia('(prefers-reduced-motion:reduce)');
+
+  /* Géométrie, remesurée au redimensionnement. */
+  var H = 0, CX = 0, ys = [], carres = etapes.map(function(e){ return e.querySelector('[data-carre]'); });
+
+  function mesurer(){
+    var r = piste.getBoundingClientRect();
+    H = r.height;
+    CX = r.width / 2;
+    ys = carres.map(function(c){
+      var rc = c.getBoundingClientRect();
+      return rc.top + rc.height / 2 - r.top;
+    });
+    svg.setAttribute('viewBox', '0 0 ' + Math.max(1, r.width) + ' ' + Math.max(1, H));
+  }
+
+  /* L'état des oscillations : un temps de départ par étape, ou null. */
+  var depart = etapes.map(function(){ return null; });
+  var sens   = etapes.map(function(_, i){ return (i % 2 === 0) ? -1 : 1; });
+  /* Impaires à l'écran (01, 03, 05) = index pairs ici : texte à gauche,
+     donc la vague part vers la gauche. */
+
+  function amplitude(i, now){
+    var d = depart[i];
+    if(d === null) return 0;
+    var t = (now - d) / 1000;
+    if(t >= LIFE){ depart[i] = null; return 0; }
+    return sens[i] * AMP * Math.sin(2 * Math.PI * t / PERIOD) * Math.exp(-DAMP * t);
+  }
+
+  var amps = etapes.map(function(){ return 0; });
+
+  function x(y){
+    var v = CX;
+    for(var i = 0; i < amps.length; i++){
+      if(!amps[i]) continue;
+      var k = (y - ys[i]) / SPREAD;
+      v += amps[i] * Math.exp(-k * k);
+    }
+    return v;
+  }
+
+  function tracer(jusqua){
+    if(jusqua <= 0) return '';
+    var d = 'M ' + x(0).toFixed(2) + ' 0';
+    for(var y = PAS; y < jusqua; y += PAS) d += ' L ' + x(y).toFixed(2) + ' ' + y;
+    d += ' L ' + x(jusqua).toFixed(2) + ' ' + jusqua.toFixed(2);
+    return d;
+  }
+
+  var fillH = 0;
+
+  function calculerRemplissage(){
+    var r = piste.getBoundingClientRect();
+    /* La ligne se remplit jusqu'aux 60 % de la hauteur de l'écran. */
+    var v = window.innerHeight * 0.6 - r.top;
+    fillH = Math.max(0, Math.min(H, v));
+  }
+
+  function peindre(){
+    track.setAttribute('d', tracer(H));
+    if(fillH > 0){
+      fill.setAttribute('d', tracer(fillH));
+      fill.setAttribute('stroke', 'url(#' + idGrad + ')');
+      grad.setAttribute('y2', fillH);
+      tete.style.opacity = '1';
+      tete.style.transform = 'translate(' + x(fillH).toFixed(2) + 'px,' + fillH.toFixed(2) + 'px)';
+    }else{
+      fill.setAttribute('d', '');
+      tete.style.opacity = '0';
+    }
+  }
+
+  /* Un identifiant unique par instance : deux timelines sur une page
+     partageraient sinon le même dégradé. */
+  var idGrad = 'tl-grad-' + Math.random().toString(36).slice(2, 9);
+  grad.id = idGrad;
+
+  /* ── Allumage des carrés, et vague au passage ── */
+  var actif = etapes.map(function(){ return false; });
+
+  function majEtats(now){
+    for(var i = 0; i < etapes.length; i++){
+      var a = fillH >= ys[i];
+      if(a === actif[i]) continue;      // seulement quand ça CHANGE
+      actif[i] = a;
+      etapes[i].classList.toggle('on', a);
+      lancerOnde(i, now);
+    }
+  }
+
+  function lancerOnde(i, now){
+    if(doux.matches) return;
+    depart[i] = now;
+    var e = etapes[i];
+    e.classList.remove('onde');
+    void e.offsetWidth;                 // redémarre l'animation du trait
+    e.classList.add('onde');
+    demarrer();
+  }
+
+  /* ── La boucle, qui ne tourne que s'il y a une vague ── */
+  var raf = 0;
+  function boucle(ts){
+    var vivant = false;
+    for(var i = 0; i < amps.length; i++){
+      amps[i] = amplitude(i, ts);
+      if(depart[i] !== null) vivant = true;
+    }
+    peindre();
+    raf = vivant ? requestAnimationFrame(boucle) : 0;
+    if(!vivant){ for(var j = 0; j < amps.length; j++) amps[j] = 0; peindre(); }
+  }
+  function demarrer(){ if(!raf) raf = requestAnimationFrame(boucle); }
+
+  /* ── Le défilement ── */
+  var enAttente = false;
+  function auScroll(){
+    if(enAttente) return;
+    enAttente = true;
+    requestAnimationFrame(function(ts){
+      enAttente = false;
+      calculerRemplissage();
+      majEtats(ts);
+      if(!raf) peindre();               // ligne droite : un seul tracé
+    });
+  }
+  window.addEventListener('scroll', auScroll, { passive:true });
+  window.addEventListener('resize', function(){
+    mesurer(); calculerRemplissage(); peindre();
+  }, { passive:true });
+
+  /* ── Le survol ──
+     Toute la ligne de l'étape est sensible : texte, carré ou ligne. */
+  etapes.forEach(function(e, i){
+    e.addEventListener('pointerenter', function(ev){
+      if(ev.pointerType === 'touch') return;
+      if(doux.matches) return;
+      /* Pas de relance si l'onde de CETTE étape est jeune : sinon le
+         survol la hache au lieu de la bercer. */
+      var d = depart[i];
+      if(d !== null && (performance.now() - d) / 1000 < LIFE * 0.6) return;
+      lancerOnde(i, performance.now());
+    });
+  });
+
+  /* ── L'apparition du texte, une seule fois ── */
+  if(doux.matches){
+    etapes.forEach(function(e){ e.classList.add('vu'); });
+  }else{
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(en){
+        if(!en.isIntersecting) return;
+        en.target.classList.add('vu');
+        io.unobserve(en.target);
+      });
+    }, { threshold:0.35 });
+    etapes.forEach(function(e){ io.observe(e); });
+  }
+
+  /* Les polices changent la hauteur des blocs : on remesure une fois
+     qu'elles sont posées, sinon les carrés visent à côté. */
+  function init(){ mesurer(); calculerRemplissage(); peindre(); }
+  init();
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(init);
+  window.addEventListener('load', init, { once:true });
+})();
+</script>
