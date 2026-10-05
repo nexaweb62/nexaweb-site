@@ -1,43 +1,96 @@
 ---
 /**
- * LE FOND DE LA PAGE TARIFS.
+ * LE FOND DE LA PAGE TARIFS — trois aurores d'or qui derivent.
  *
- * Statique. Il remplace la soie animee (un shader WebGL de ~300 lignes,
- * ajoutee puis retiree) : trois halos dores sur un fond sombre, plus une
- * grille tres discrete qui s'efface sur les bords.
+ * Aucun canvas, aucun WebGL, aucun JavaScript : trois disques de degrade
+ * dore sur l'aplat du theme, qui respirent lentement, plus une grille de
+ * 64 px fondue sur les bords.
  *
- * POURQUOI DES JETONS ET NON LES VALEURS ECRITES A LA MAIN.
- * En sombre, --bg VAUT #0A0A0B et --raw-gold-400 VAUT rgb(212,179,106) :
- * le rendu sombre est donc exactement celui demande, au pixel. Mais un
- * fond fixe en dur resterait noir sous le theme clair, ou le texte est
- * sombre — la page deviendrait illisible d'un bout a l'autre. Les jetons
- * donnent le meme sombre et un clair qui tient debout.
+ * POURQUOI PAS UN SHADER. Le fond d'origine etait une soie WebGL de
+ * ~300 lignes qui affamait le fil principal. Ici tout se joue en
+ * `transform` et en `opacity`, les deux seules proprietes qu'un
+ * navigateur peut animer sans repeindre : le travail part au
+ * compositeur, et la page ne ralentit pas.
  *
- * La grille suit --text pour la meme raison : des traits blancs sur le
- * creme du theme clair ne se verraient pas. Le masque n'utilise que le
- * canal alpha de sa couleur, donc --text y sert de « opaque » sans rien
- * teinter.
+ * POURQUOI DES JETONS ET NON DES VALEURS EN DUR. En sombre, --bg VAUT
+ * #0A0A0B et --raw-gold-400 VAUT rgb(212,179,106) : le rendu sombre est
+ * exactement celui voulu, au pixel. Mais un fond sombre fige resterait
+ * noir sous le theme clair, ou le texte est sombre — la page serait
+ * illisible d'un bout a l'autre. Meme raison pour la grille, qui suit
+ * --text : des traits blancs sur le creme ne se verraient pas. Le masque
+ * n'utilise que le canal alpha de sa couleur, donc --text y sert
+ * d'« opaque » sans rien teinter.
+ *
+ * LE MOUVEMENT S'ARRETE DE LUI-MEME dans deux cas : quand le visiteur a
+ * demande moins d'animation, et quand le site est passe en mode leger
+ * parce qu'il manque d'images par seconde. Dans les deux cas il reste un
+ * fond fixe, complet et lisible — rien ne disparait.
  */
 ---
 
-<div class="fond-tarifs" aria-hidden="true" role="presentation"></div>
+<div class="fond-tarifs" aria-hidden="true" role="presentation">
+  <span class="ft-aura ft-a1"></span>
+  <span class="ft-aura ft-a2"></span>
+  <span class="ft-aura ft-a3"></span>
+</div>
 
 <style>
   /* Fixe derriere toute la page, le contenu passe au-dessus : <main>
-     porte deja position:relative et z-index:1. */
+     porte deja position:relative et z-index:1.
+     overflow:hidden : les aurores debordent largement du cadre, et rien
+     ne doit pouvoir creer une barre de defilement horizontale. */
   .fond-tarifs{
-    position:fixed;inset:0;z-index:0;pointer-events:none;
-    background:
-      radial-gradient(ellipse 70% 45% at 50% -5%,
-        rgb(from var(--raw-gold-400) r g b / .16), transparent 70%),
-      radial-gradient(ellipse 50% 40% at 100% 60%,
-        rgb(from var(--raw-gold-400) r g b / .06), transparent 70%),
-      radial-gradient(ellipse 50% 40% at 0% 90%,
-        rgb(from var(--raw-gold-400) r g b / .05), transparent 70%),
-      var(--bg);
+    position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+    background:var(--bg);
   }
 
-  /* La grille, posee par dessus les halos et fondue sur les bords. */
+  /* Les aurores. vmax et non vw : sur un ecran haut et etroit, une taille
+     en vw laisserait le haut et le bas nus. */
+  .ft-aura{
+    position:absolute;border-radius:50%;
+    will-change:transform;
+  }
+  /* TROIS TONS D'OR, PAS UN SEUL. Avec une seule teinte, les trois
+     disques se superposaient en une brume grise : mesure, les zones
+     eclairees ne montaient qu'a rgb(30,28,24), pour un rapport
+     rouge/bleu de 1,25 la ou l'or en donne 2,00. Un or clair en haut,
+     l'or de la marque au milieu, un or profond en bas : la lumiere a
+     une direction, et elle reste doree partout. */
+  .ft-a1{
+    width:92vmax;height:92vmax;left:-24vmax;top:-48vmax;
+    background:radial-gradient(circle at 50% 50%,
+      rgb(from var(--raw-gold-300) r g b / .30), transparent 70%);
+    animation:ftDerive1 38s ease-in-out infinite alternate;
+  }
+  .ft-a2{
+    width:70vmax;height:70vmax;right:-26vmax;top:22vmax;
+    background:radial-gradient(circle at 50% 50%,
+      rgb(from var(--raw-gold-400) r g b / .24), transparent 70%);
+    animation:ftDerive2 53s ease-in-out infinite alternate;
+  }
+  .ft-a3{
+    width:76vmax;height:76vmax;left:-30vmax;bottom:-36vmax;
+    background:radial-gradient(circle at 50% 50%,
+      rgb(from var(--raw-gold-600) r g b / .30), transparent 70%);
+    animation:ftDerive3 67s ease-in-out infinite alternate;
+  }
+
+  /* Trois durees premieres entre elles : la boucle commune est si longue
+     qu'on ne voit jamais le motif se repeter. */
+  @keyframes ftDerive1{
+    from{transform:translate3d(0,0,0) scale(1)}
+    to  {transform:translate3d(5vmax,3vmax,0) scale(1.16)}
+  }
+  @keyframes ftDerive2{
+    from{transform:translate3d(0,0,0) scale(1.08)}
+    to  {transform:translate3d(-6vmax,-4vmax,0) scale(.92)}
+  }
+  @keyframes ftDerive3{
+    from{transform:translate3d(0,0,0) scale(.95)}
+    to  {transform:translate3d(4vmax,-5vmax,0) scale(1.12)}
+  }
+
+  /* La grille, posee par dessus les aurores et fondue sur les bords. */
   .fond-tarifs::after{
     content:"";position:absolute;inset:0;pointer-events:none;
     background-image:
@@ -47,4 +100,10 @@
     -webkit-mask-image:radial-gradient(ellipse 80% 60% at 50% 30%, var(--text), transparent 80%);
     mask-image:radial-gradient(ellipse 80% 60% at 50% 30%, var(--text), transparent 80%);
   }
+
+  /* On arrete le mouvement, on ne retire pas le fond. */
+  @media (prefers-reduced-motion:reduce){
+    .ft-aura{animation:none}
+  }
+  :global(body.lite) .ft-aura{animation:none}
 </style>

@@ -8,10 +8,11 @@
    CALCULEES : derriere une carte translucide il voit le jeton --surface,
    pas ce qui est reellement peint. Ici on lit les pixels.
 
-   Le fond etait une soie animee ; il est desormais statique, donc les
-   instants echantillonnes se ressemblent. On les garde quand meme : ils
-   ne coutent presque rien, et ils attrapent ce qui bouge encore par
-   dessus le fond (apparitions au defilement, cartes qui s'ouvrent).
+   Le fond bouge : trois aurores dorees qui derivent lentement. Une seule
+   image ne prouverait donc rien — on echantillonne plusieurs instants et
+   on garde le PIRE pixel vu derriere chaque texte. Cela attrape aussi ce
+   qui bouge par dessus le fond : apparitions au defilement, cartes qui
+   s'ouvrent.
 
    Methode, et ses deux temoins :
      - on masque le texte par visibility:hidden — et non par
@@ -148,7 +149,7 @@ for (const theme of ['dark', 'light']) {
     /* ── Les textes sans fond opaque, trouves par composition d'alphas. ── */
     const cibles = await page.evaluate(() => {
       const alpha = c => { const m = c.match(/-?[\d.]+/g); return !m ? 0 : (m.length > 3 ? +m[3] : 1); };
-      /* Le pied de page aussi passe sur la soie : elle est fixee a
+      /* Le pied de page aussi passe sur le fond : il est fixe a
          l'ecran, pas bornee a <main>. L'oublier revenait a ne mesurer
          que la moitie de ce que le visiteur lit. */
       const racines = [...document.querySelectorAll('main, footer')];
@@ -170,24 +171,24 @@ for (const theme of ['dark', 'light']) {
           n = n.parentElement;
         }
         if (cover >= 0.995) return;
-        el.setAttribute('data-soie', 's' + (i++));
+        el.setAttribute('data-fond', 's' + (i++));
         const px = parseFloat(cs.fontSize), gras = +cs.fontWeight >= 700;
         out.push({
-          id: el.getAttribute('data-soie'), cover: +cover.toFixed(2),
+          id: el.getAttribute('data-fond'), cover: +cover.toFixed(2),
           cls: String(el.className || el.tagName).slice(0, 32), txt: txt.slice(0, 30),
           col: cs.color, grand: px >= 24 || (px >= 18.66 && gras), px: Math.round(px),
         });
       });
       /* TEMOIN B : un texte de carte, fond cense etre opaque. */
       const carte = document.querySelector('.plan-card .plan-name');
-      if (carte) carte.setAttribute('data-soie', 'temoinB');
+      if (carte) carte.setAttribute('data-fond', 'temoinB');
       return out;
     });
 
     /* On masque TOUS les textes vises d'un coup, puis on echantillonne
-       la soie a plusieurs instants et on garde le pire pixel par cible. */
+       le fond a plusieurs instants et on garde le pire pixel par cible. */
     await page.evaluate(() => {
-      document.querySelectorAll('[data-soie]').forEach(e => { e.style.visibility = 'hidden'; });
+      document.querySelectorAll('[data-fond]').forEach(e => { e.style.visibility = 'hidden'; });
     });
     await page.waitForTimeout(200);
 
@@ -195,15 +196,15 @@ for (const theme of ['dark', 'light']) {
     const pas = await page.evaluate(n => Math.max(
       120, Math.ceil((document.documentElement.scrollHeight - innerHeight) / n)), ECH);
     for (let k = 0; k < ECH; k++) {
-      const ids = await page.evaluate(() => [...document.querySelectorAll('[data-soie]')]
-        .map(e => e.getAttribute('data-soie')));
+      const ids = await page.evaluate(() => [...document.querySelectorAll('[data-fond]')]
+        .map(e => e.getAttribute('data-fond')));
       for (const id of ids) {
         /* Le rectangle est relu JUSTE avant sa capture. Mesure a l'appui :
            les relever tous d'un coup puis capturer un a un decalait les
            pastilles de paiement d'une case — on lisait l'or de la pastille
            voisine et on criait au defaut de contraste. */
         const r = await page.evaluate(i => {
-          const e = document.querySelector('[data-soie="' + i + '"]');
+          const e = document.querySelector('[data-fond="' + i + '"]');
           const b = e.getBoundingClientRect();
           if (b.width < 2 || b.height < 2 || b.bottom <= 0 || b.top >= innerHeight) return null;
           /* UN INSTANT DE TIROIR N'EST PAS UN DEFAUT DE LISIBILITE.
@@ -253,7 +254,7 @@ for (const theme of ['dark', 'light']) {
              texte que le visiteur ne voit meme pas a cet instant.
              Constate : « pire fond 255,255,255 » en clair, soit --surface
              du bandeau, et 244,242,238 en sombre, soit la couleur de son
-             titre. Aucune de ces valeurs n'existe dans la soie.
+             titre. Aucune de ces valeurs n'existe dans le fond.
 
              Le test : la cible est deja masquee, donc elementFromPoint
              rend ce qu'il y a dessous. Pour un element non recouvert,
@@ -280,14 +281,14 @@ for (const theme of ['dark', 'light']) {
         pires.set(id, p);
       }
       /* On avance dans la page pour voir d'autres textes ET d'autres
-         instants de la soie. Les paliers couvrent TOUTE la hauteur du
+         instants du fond. Les paliers couvrent TOUTE la hauteur du
          document, pied de page compris : un pas fixe de 420 px
          s'arretait au milieu de la page et laissait le pied non mesure. */
       await page.evaluate(y => scrollTo(0, y), Math.round((k + 1) * pas));
       await page.waitForTimeout(900);
     }
     await page.evaluate(() => {
-      document.querySelectorAll('[data-soie]').forEach(e => { e.style.visibility = ''; });
+      document.querySelectorAll('[data-fond]').forEach(e => { e.style.visibility = ''; });
     });
 
     /* ── TEMOIN B : le fond d'un texte de carte doit etre --surface. ── */
@@ -317,7 +318,7 @@ for (const theme of ['dark', 'light']) {
       if (r < seuil) defauts.push({ theme, vp: vp.width, ...c, r: +r.toFixed(2), seuil,
         hi: p.hi, lo: p.lo });
     }
-    console.log('  ' + theme + ' ' + vp.width + ' : ' + cibles.length + ' textes sur la soie, ' +
+    console.log('  ' + theme + ' ' + vp.width + ' : ' + cibles.length + ' textes sur le fond, ' +
       'temoins OK (magenta ' + mag.moy + ', carte ' + tb.moy + ' vs --surface ' + surf + ')');
     await ctx.close();
   }

@@ -38,8 +38,8 @@ const { cta = 'Démarrer un projet', ctaHref = '/devis', back = true } = Astro.p
           <span class="hdr-btn-lbl">Menu</span>
         </button>
 
-        <!-- Sélecteur de thème — clair / sombre / système.
-             role=radiogroup : un choix parmi trois, pas un état actif/inactif.
+        <!-- Sélecteur de thème — clair / sombre.
+             role=radiogroup : un choix parmi deux, pas un état actif/inactif.
              aria-pressed serait sémantiquement faux ici. -->
         <div class="theme-sel" id="theme-sel" role="radiogroup" aria-label="Thème d'affichage">
           <button type="button" class="theme-opt" role="radio" data-theme-opt="light"
@@ -51,11 +51,6 @@ const { cta = 'Démarrer un projet', ctaHref = '/devis', back = true } = Astro.p
                   aria-checked="false" tabindex="-1" title="Mode sombre">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.2A8.2 8.2 0 0 1 9.8 4a8.4 8.4 0 1 0 10.2 10.2z"/></svg>
             <span class="sr-only">Mode sombre</span>
-          </button>
-          <button type="button" class="theme-opt" role="radio" data-theme-opt="system"
-                  aria-checked="false" tabindex="-1" title="Suivre le système">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.8" y="4.2" width="18.4" height="12.6" rx="1.8"/><path d="M8.5 20.5h7"/></svg>
-            <span class="sr-only">Suivre le système</span>
           </button>
         </div>
 
@@ -155,11 +150,6 @@ const { cta = 'Démarrer un projet', ctaHref = '/devis', back = true } = Astro.p
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.2A8.2 8.2 0 0 1 9.8 4a8.4 8.4 0 1 0 10.2 10.2z"/></svg>
         <span class="sr-only">Mode sombre</span>
       </button>
-      <button type="button" class="theme-opt" role="radio" data-theme-opt="system"
-              aria-checked="false" tabindex="-1" title="Suivre le système">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.8" y="4.2" width="18.4" height="12.6" rx="1.8"/><path d="M8.5 20.5h7"/></svg>
-        <span class="sr-only">Suivre le système</span>
-      </button>
     </div>
   </div>
 </div>
@@ -171,10 +161,24 @@ const { cta = 'Démarrer un projet', ctaHref = '/devis', back = true } = Astro.p
   var root = document.documentElement;
 
   /* ═══════════════════════════════════════════════════════════════════
-     THÈME — clair / sombre / système
+     THÈME — clair / sombre
      Le sombre est l'identité de la marque : il s'applique quand aucune
      préférence n'est exprimée. Une préférence système « clair » explicite
      est respectée ; un choix utilisateur prime sur tout.
+
+     LE BOUTON « SUIVRE LE SYSTÈME » A ÉTÉ RETIRÉ, PAS LE COMPORTEMENT.
+     Tant que le visiteur n'a rien choisi, le site suit toujours l'OS —
+     c'est la feuille de styles qui s'en charge, via ses media queries.
+     Seul le troisième bouton disparaît.
+
+     Conséquence à connaître : une fois un choix fait, il est explicite
+     et le reste. Sans troisième bouton, on ne peut plus revenir à
+     « suivre l'OS » depuis l'interface.
+
+     Et puisque « système » n'est plus un bouton, on ne peut plus le
+     peindre : on peint le thème RÉELLEMENT EN VIGUEUR. Sans cela aucun
+     bouton ne serait coché au premier chargement, tous resteraient à
+     tabindex -1, et le groupe deviendrait injoignable au clavier.
      ═══════════════════════════════════════════════════════════════════ */
   var mqDark = window.matchMedia('(prefers-color-scheme: dark)');
   /* Deux exemplaires : celui de la barre et celui du menu plein écran.
@@ -184,6 +188,17 @@ const { cta = 'Démarrer un projet', ctaHref = '/devis', back = true } = Astro.p
   function stored(){
     try{ var t = localStorage.getItem('nw-theme'); return (t==='light'||t==='dark') ? t : 'system'; }
     catch(e){ return 'system'; }
+  }
+
+  /* Le thème qui S'AFFICHE, choix explicite ou non. Il suit la meme regle
+     que la feuille de styles : le clair ne s'applique que si l'OS le
+     demande explicitement, sinon c'est le sombre de la marque. C'est lui
+     qu'on peint sur les boutons, pour qu'il y en ait toujours un de
+     coche — donc toujours un arret de tabulation. */
+  function effectif(){
+    var c = stored();
+    if(c === 'light' || c === 'dark') return c;
+    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
   }
 
   function apply(choice, animate){
@@ -202,7 +217,7 @@ const { cta = 'Démarrer un projet', ctaHref = '/devis', back = true } = Astro.p
       root.setAttribute('data-theme', choice);
       try{ localStorage.setItem('nw-theme', choice); }catch(e){}
     }
-    paint(choice);
+    paint(choice === 'system' ? effectif() : choice);
     document.dispatchEvent(new CustomEvent('nw-theme', { detail: choice }));
   }
 
@@ -219,7 +234,7 @@ const { cta = 'Démarrer un projet', ctaHref = '/devis', back = true } = Astro.p
   }
 
   if(sels.length){
-    paint(stored());
+    paint(effectif());
 
     sels.forEach(function(sel){
       var opts = Array.prototype.slice.call(sel.querySelectorAll('.theme-opt'));
@@ -242,9 +257,13 @@ const { cta = 'Démarrer un projet', ctaHref = '/devis', back = true } = Astro.p
       });
     });
 
-    // En mode « système », le site suit l'OS en direct, sans rechargement.
+    // Sans choix explicite, le site suit l'OS en direct, sans rechargement.
+    // On repeint aussi les boutons : le thème en vigueur vient de changer.
     mqDark.addEventListener('change', function(){
-      if(stored() === 'system') document.dispatchEvent(new CustomEvent('nw-theme', { detail: 'system' }));
+      if(stored() === 'system'){
+        paint(effectif());
+        document.dispatchEvent(new CustomEvent('nw-theme', { detail: 'system' }));
+      }
     });
   }
 

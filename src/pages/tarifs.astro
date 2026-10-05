@@ -19,11 +19,12 @@ import {
    citent des contrastes mesures CONTRE CETTE SOIE — ils disent pourquoi
    chaque compensation existe, et restent justes au passe.
 
-   La soie a ete remplacee par un fond statique (voir FondTarifs.astro).
-   Les compensations sont gardees : elles ne font que choisir un gris un
-   cran plus franc, ce qui ne coute rien et sert toujours. Elles ont ete
-   revalidees contre le nouveau fond, au pixel, par `npm run check:fond`
-   — 168 mesures, aucune sous le seuil AA, en clair comme en sombre, en
+   La soie a ete remplacee par trois aurores doree qui derivent, en CSS
+   pur (voir FondTarifs.astro) : le fond bouge toujours, mais sans shader
+   ni canvas. Les compensations sont donc gardees, et pour la meme raison
+   qu'avant : la clarte change encore sous le texte. Elles ont ete
+   revalidees contre ce nouveau fond, au pixel, par `npm run check:fond`
+   — 174 mesures, aucune sous le seuil AA, en clair comme en sombre, en
    1280 comme en 390. */
 
 /* ── HERO ── */
