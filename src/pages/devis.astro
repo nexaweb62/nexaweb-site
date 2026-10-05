@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import '../styles/global.css';
+import GarantieBadge from '../components/GarantieBadge.astro';
 import { FORMULES, VITRINE_PRIX } from '../data/formules';
 ---
 <BaseLayout title="Devis gratuit — Nexa Web" description="Décrivez votre projet web et recevez un devis gratuit sous 24 h. Site vitrine, e-commerce, refonte — Nexa Web, Carvin, Hauts-de-France.">
@@ -228,8 +229,16 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
 .submit-row{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:32px;padding-top:24px;border-top:1px solid var(--border)}
 :root[data-theme="light"] .submit-row{border-top-color:var(--border)}
 @media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .submit-row{border-top-color:var(--border)}}
-.submit-note{font-size:var(--fs-caption);color:var(--text-muted);line-height:1.55}
-.submit-note svg{display:inline;width:12px;height:12px;stroke:var(--success);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;margin-right:4px;vertical-align:-1px}
+/* Le badge et les deux promesses restantes sur une même ligne, qui se
+   replie quand la place manque. L'ancienne règle visait un <svg> enfant
+   direct, en vert ; le bouclier vit maintenant dans le composant. */
+/* Le badge au-dessus des deux promesses restantes, en colonne : mesure,
+   sur une seule ligne le bloc faisait 434 px et la rangee n'en offre que
+   574 une fois le bouton pose — il passait sous lui a toutes les
+   largeurs. En colonne il n'en fait plus que 244 et se tient bien a cote
+   du bouton, comme le texte qu'il remplace. */
+.submit-note{display:flex;flex-direction:column;align-items:flex-start;gap:9px;
+  font-size:var(--fs-caption);color:var(--text-muted);line-height:1.55}
 .submit-btn{display:inline-flex;align-items:center;gap:10px;padding:15px 32px;border-radius:var(--radius-pill);font-size:var(--fs-caption);font-weight:600;letter-spacing:0;cursor:pointer;transition:background-color .2s,transform .2s;white-space:nowrap}
 .submit-btn:hover{transform:translateY(-2px)}
 .submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none!important}
@@ -450,10 +459,13 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
 
         <!-- SUBMIT -->
         <div class="submit-row">
-          <p class="submit-note">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-            Garantie 14 jours · Réponse sous 24 h · 100 % gratuit
-          </p>
+          <!-- « Garantie 14 jours » ne disait ni ce qu'elle couvrait ni
+               à compter de quand : le badge le dit, en un clic. Les deux
+               autres promesses restent, elles n'ont rien d'obscur. -->
+          <div class="submit-note">
+            <GarantieBadge />
+            <span class="submit-note-txt" data-i18n="dvs-note">Réponse sous 24 h · 100 % gratuit</span>
+          </div>
           <button type="submit" class="submit-btn" id="submit-btn">
             <span class="submit-btn-label" data-i18n="submit">Envoyer ma demande</span>
             <span class="submit-btn-spinner" aria-hidden="true"></span>

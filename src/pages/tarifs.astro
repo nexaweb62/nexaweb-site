@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Silk from '../components/Silk.astro';
+import GarantieBadge from '../components/GarantieBadge.astro';
 import '../styles/global.css';
 import {
   REFONTE_PRIX, REFONTE_DELAI, REFONTE_M3, REFONTE_M4,
@@ -243,6 +244,10 @@ main{--text-muted:var(--raw-warm-200)}
 .plan-feature-icon svg{width:8px;height:8px;stroke:var(--success);stroke-width:2.5;fill:none}
 .plan-cta{display:block;text-align:center;margin-top:auto}
 
+/* Le badge de garantie, centré sous la grille. Sa fenêtre et son
+   habillage vivent dans le composant ; ici, seule sa place. */
+.plans-gar{margin-top:clamp(26px,4vh,40px)}
+
 /* ── CTA ── */
 .cta-section{padding:clamp(32px,5vh,64px) 0 clamp(64px,10vh,120px);text-align:center;position:relative;z-index:1}
 /* Même verre que les cartes : ce panneau n'avait qu'une lueur dorée
@@ -473,6 +478,10 @@ main{--text-muted:var(--raw-warm-200)}
         </div>
 
       </div>
+
+      <!-- La garantie, sous les trois cartes : c'est ici que la
+           question « et si ça ne me plaît pas ? » se pose. -->
+      <GarantieBadge variante="plein" class="plans-gar" />
     </div>
 
     <!-- CTA -->

@@ -1,0 +1,314 @@
+---
+/**
+ * LE BADGE DE GARANTIE — « Satisfait ou remboursé · 14 jours »
+ *
+ * « Garantie 14 jours » figurait au bas du formulaire de devis sans
+ * qu'aucune page ne dise ce qu'elle couvrait, ni quatorze jours à
+ * compter de quoi. Ce badge le dit, partout où la promesse est faite.
+ *
+ * POURQUOI UNE FENÊTRE ET PAS UN LIEN. La garantie tient en quatre
+ * phrases : faire quitter la page de tarifs pour les lire coûte plus
+ * cher que de les montrer sur place. Le lien vers les conditions
+ * complètes reste dans la fenêtre, pour qui veut le texte exact.
+ *
+ * POURQUOI PAS <dialog>. showModal() place la fenêtre dans le « top
+ * layer », au-dessus de TOUT — y compris l'anneau doré qui remplace le
+ * curseur système sur ce site. Le visiteur perdrait son curseur le
+ * temps de la lecture. C'est exactement le défaut que le menu plein
+ * écran a connu (z-index 9000 contre 420), et le garde-fou check:anim
+ * le surveille par le z-index — qu'un <dialog> contourne sans être vu.
+ * On reprend donc le motif maison : une div, un z-index sous l'anneau,
+ * et le piège à focus écrit à la main, comme dans Header.astro.
+ *
+ * AU CLIC, PAS AU SURVOL. Une fenêtre qui s'ouvre au survol est
+ * inatteignable au doigt et s'ouvre par accident à la souris. Le survol
+ * sert à signaler que le badge se clique ; le clic ouvre.
+ *
+ * Le badge et sa fenêtre sont frères dans un même conteneur : le script
+ * les relie par le DOM et non par un identifiant, donc deux badges sur
+ * une même page ne se marchent pas dessus.
+ */
+export interface Props {
+  /** Classe de placement, passée au conteneur par la page hôte. */
+  class?: string;
+  /** « pill » (défaut) ou « plein » pour un badge pleine largeur. */
+  variante?: 'pill' | 'plein';
+}
+const { class: classe = '', variante = 'pill' } = Astro.props;
+---
+
+<span class:list={['gar', classe, variante === 'plein' && 'gar-plein']}>
+  <button type="button" class="gar-b" aria-haspopup="dialog" aria-expanded="false">
+    <!-- Le bouclier du site, repris du bas du formulaire de devis. En
+         or et non en vert : la page Tarifs bannit le vert, et le
+         garde-fou check:anim le vérifie. -->
+    <svg class="gar-ico" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      <polyline points="9 12 11 14 15 10"/>
+    </svg>
+    <span data-i18n="gar-badge">Satisfait ou remboursé · 14 jours</span>
+  </button>
+
+  <div class="gar-f" role="dialog" aria-modal="true" aria-label="Garantie satisfait ou remboursé" inert>
+    <div class="gar-carte" role="document">
+      <div class="gar-tete">
+        <svg class="gar-ico gar-ico-g" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <polyline points="9 12 11 14 15 10"/>
+        </svg>
+        <h2 class="gar-titre" data-i18n="gar-titre">Satisfait ou remboursé sur la maquette</h2>
+        <button type="button" class="gar-x" aria-label="Fermer">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <ol class="gar-liste">
+        <li class="gar-pt">
+          <span class="gar-num" aria-hidden="true">1</span>
+          <span data-i18n="gar-p1">Nous vous présentons la maquette de votre site. Vous avez <strong>14 jours</strong> pour la valider.</span>
+        </li>
+        <li class="gar-pt">
+          <span class="gar-num" aria-hidden="true">2</span>
+          <span data-i18n="gar-p2">Vous avez droit à <strong>2 séries de retouches</strong>, incluses dans le prix.</span>
+        </li>
+        <li class="gar-pt">
+          <span class="gar-num" aria-hidden="true">3</span>
+          <span data-i18n="gar-p3">Si la maquette ne vous convient toujours pas, nous vous remboursons <strong>100 % de l'acompte</strong>. Sans justification à donner.</span>
+        </li>
+        <li class="gar-pt">
+          <span class="gar-num" aria-hidden="true">4</span>
+          <span data-i18n="gar-p4">La garantie couvre la phase maquette. Une fois la maquette validée, le développement commence et la garantie prend fin.</span>
+        </li>
+      </ol>
+
+      <p class="gar-pied">
+        <a href="/cgv" data-i18n="gar-cgv">Lire les conditions complètes</a>
+      </p>
+    </div>
+  </div>
+</span>
+
+<style>
+  /* ── LE BADGE ── */
+  .gar{display:inline-flex}
+  .gar-plein{display:flex;width:100%;justify-content:center}
+  .gar-b{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:9px 16px;border-radius:var(--radius-pill);
+    border:1px solid var(--border-strong);background:var(--surface);
+    font:var(--w-semi) var(--fs-caption)/1.3 var(--font);letter-spacing:0;
+    color:var(--text);cursor:pointer;text-align:left;
+    transition:border-color var(--dur-micro) var(--ease-out),
+               color var(--dur-micro) var(--ease-out),
+               background-color var(--dur-micro) var(--ease-out);
+  }
+  /* Le survol ne fait qu'annoncer que ça se clique. */
+  .gar-b:hover{border-color:var(--accent);color:var(--accent-text)}
+  .gar-b:focus-visible{outline:3px solid var(--accent-hover);outline-offset:3px}
+  .gar-ico{
+    width:15px;height:15px;flex:0 0 auto;
+    stroke:var(--accent-text);fill:none;stroke-width:2;
+    stroke-linecap:round;stroke-linejoin:round;
+  }
+
+  /* ── LA FENÊTRE ──
+     8500 : au-dessus du bandeau cookies (8000), sous le menu plein
+     écran (9000) et très loin sous l'anneau du curseur. */
+  .gar-f{
+    position:fixed;inset:0;z-index:8500;
+    display:flex;align-items:center;justify-content:center;
+    padding:clamp(14px,3vw,28px);
+    background:rgb(from var(--raw-black-950) r g b / .62);
+    opacity:0;visibility:hidden;
+    /* visibility est une propriété DISCRÈTE : transitionnée sur 240 ms,
+       elle bascule à mi-parcours, donc la fenêtre restait invisible
+       120 ms après l'ouverture. focus() sur un élément invisible est
+       refusé en silence — mesuré, le focus restait sur le badge et la
+       tabulation parcourait la page DERRIÈRE la fenêtre. Pire, le défaut
+       dépendait de la vitesse des images : il passait sur une page
+       courte et échouait sur les autres.
+       On la bascule donc instantanément à l'ouverture, et on ne retarde
+       que la fermeture, le temps que le fondu se voie. */
+    transition:opacity .24s var(--ease-out),visibility 0s linear .24s;
+  }
+  /* inert retire l'élément du clavier ET du lecteur d'écran ; l'opacité
+     et la visibilité le retirent de l'œil. Les trois vont ensemble. */
+  .gar-f.open{opacity:1;visibility:visible;transition:opacity .24s var(--ease-out),visibility 0s}
+  .gar-carte{
+    width:min(520px,100%);max-height:86vh;overflow:auto;
+    background:var(--surface);
+    border:1px solid var(--border-strong);border-radius:18px;
+    box-shadow:var(--shadow-2);
+    padding:clamp(20px,3vw,28px);
+    transform:translateY(12px) scale(.985);
+    transition:transform .3s cubic-bezier(.22,.9,.24,1);
+  }
+  .gar-f.open .gar-carte{transform:none}
+  @media (prefers-reduced-motion:reduce){
+    .gar-f,.gar-carte{transition:none}
+    .gar-carte{transform:none}
+  }
+
+  .gar-tete{display:flex;align-items:flex-start;gap:10px;margin-bottom:16px}
+  .gar-ico-g{width:20px;height:20px;margin-top:2px}
+  .gar-titre{flex:1;font-size:var(--fs-body);font-weight:var(--w-semi);
+    letter-spacing:-.01em;line-height:1.3;margin:0}
+  .gar-x{
+    flex:0 0 auto;width:30px;height:30px;display:inline-flex;
+    align-items:center;justify-content:center;
+    background:none;border:1px solid var(--border);border-radius:50%;
+    cursor:pointer;transition:border-color var(--dur-micro) var(--ease-out);
+  }
+  .gar-x svg{width:14px;height:14px;stroke:var(--text-muted);fill:none;stroke-width:2;stroke-linecap:round}
+  .gar-x:hover{border-color:var(--border-strong)}
+  .gar-x:hover svg{stroke:var(--text)}
+  .gar-x:focus-visible{outline:3px solid var(--accent-hover);outline-offset:2px}
+
+  .gar-liste{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:13px}
+  .gar-pt{
+    display:flex;gap:11px;align-items:flex-start;
+    font-size:var(--fs-caption);line-height:1.6;color:var(--text-muted);
+  }
+  /* :global() EST OBLIGATOIRE ICI. i18n.js traduit en écrivant dans
+     innerHTML : le <strong> de la page est détruit et recréé SANS le
+     marqueur de portée d'Astro, qui scope la règle sur son dernier
+     sélecteur. Mesuré avant correction : graisse 700 au lieu de 600 et
+     couleur héritée du gris secondaire — la règle ne s'appliquait à
+     rien, dans les deux langues. Avec :global(), la portée reste sur
+     .gar-pt, qui lui est bien écrit dans le gabarit. */
+  .gar-pt :global(strong){color:var(--text);font-weight:var(--w-semi)}
+  .gar-num{
+    flex:0 0 auto;width:21px;height:21px;margin-top:1px;
+    display:inline-flex;align-items:center;justify-content:center;
+    border-radius:50%;background:var(--accent-glow);
+    border:1px solid var(--accent);
+    font-size:11px;font-weight:var(--w-semi);color:var(--accent-text);
+  }
+  .gar-pied{margin:18px 0 0;padding-top:14px;border-top:1px solid var(--border);
+    font-size:var(--fs-100)}
+  .gar-pied a{color:var(--accent-text);text-decoration:underline;text-underline-offset:3px}
+
+  @media(max-width:460px){
+    .gar-b{padding:8px 13px;font-size:var(--fs-100)}
+    .gar-ico{width:13px;height:13px}
+  }
+</style>
+
+<script is:inline>
+/* ── L'OUVERTURE ET LE PIÈGE À FOCUS ─────────────────────────────────
+   Même motif que le menu plein écran de Header.astro : inert quand
+   c'est fermé, classe .open quand c'est ouvert, tabulation qui tourne
+   en boucle à l'intérieur, Échap et clic sur le fond pour fermer, et
+   le focus qui revient sur le badge.
+
+   Le script s'enregistre une seule fois pour toute la page, puis
+   travaille par délégation : chaque badge trouve SA fenêtre par le DOM
+   (son frère dans le même .gar) et non par un identifiant, donc rien
+   ne collisionne si la page en porte plusieurs. La référence est ensuite
+   gardée sur le bouton, car la fenêtre déménage — voir ouvrir(). */
+(function(){
+  'use strict';
+  if(window.__garPret) return;        // un seul exemplaire par page
+  window.__garPret = 1;
+
+  var ouverte = null, declencheur = null, scrollY = 0;
+
+  function focusables(f){
+    return Array.prototype.slice.call(f.querySelectorAll('a[href],button:not([disabled])'))
+      .filter(function(el){ return el.offsetParent !== null && el.tabIndex >= 0; });
+  }
+
+  function ouvrir(btn){
+    var f = btn.__f;
+    if(!f){
+      f = btn.parentElement.querySelector('.gar-f');
+      if(!f) return;
+      /* LA FENÊTRE DÉMÉNAGE SUR <body> À LA PREMIÈRE OUVERTURE.
+         Un z-index ne vaut que dans SON contexte d'empilement. Née
+         dans .plans-section, qui porte z-index:1, la fenêtre restait
+         plafonnée à ce niveau : constaté à l'écran, le panneau « Obtenez
+         votre devis » passait devant elle et mangeait son quatrième
+         point. Sur <body>, elle est enfin dans le contexte racine, donc
+         au-dessus du bandeau cookies (8000) et sous l'anneau du curseur.
+         Le marqueur de portée d'Astro est un attribut : il voyage avec
+         le nœud, et les styles scopés continuent de s'appliquer. */
+      document.body.appendChild(f);
+      btn.__f = f;
+    }
+    declencheur = btn;
+    ouverte = f;
+    scrollY = window.scrollY;
+    f.removeAttribute('inert');
+    f.classList.add('open');
+    btn.setAttribute('aria-expanded','true');
+    /* Verrou de défilement partagé avec le menu : la page ne bouge pas
+       sous la fenêtre. On note qu'on l'a pose nous-mêmes, pour ne pas
+       le retirer si quelqu'un d'autre l'avait déjà mis. */
+    if(!document.body.classList.contains('nav-open')){
+      document.body.classList.add('nav-open');
+      document.body.style.top = (-scrollY) + 'px';
+      f.__verrou = 1;
+    }
+    /* LE FOCUS ATTEND QUE LA FENÊTRE SOIT VISIBLE.
+       .gar-f part en visibility:hidden, et focus() sur un élément encore
+       invisible est ignoré sans rien dire : la tabulation continuait
+       alors de parcourir le formulaire DERRIÈRE la fenêtre.
+
+       On ne PARIE pas sur le moment où le style sera recalculé. Lire
+       offsetWidth force le navigateur à le faire tout de suite : au
+       focus() suivant, la fenêtre est visible, point. Deux
+       requestAnimationFrame y parvenaient presque toujours — presque :
+       un échec sur seize combinaisons, et seulement quand la machine
+       était chargée. Une course rare est une course quand même.
+
+       Le rappel différé reste en garde-fou, et ne touche à rien si le
+       focus a bien atterri ou si le visiteur est déjà reparti ailleurs. */
+    var x = f.querySelector('.gar-x');
+    if(x){
+      void f.offsetWidth;
+      x.focus();
+      if(document.activeElement !== x){
+        requestAnimationFrame(function(){
+          if(ouverte === f && document.activeElement === btn) x.focus();
+        });
+      }
+    }
+  }
+
+  function fermer(){
+    if(!ouverte) return;
+    var f = ouverte;
+    f.classList.remove('open');
+    f.setAttribute('inert','');
+    if(declencheur) declencheur.setAttribute('aria-expanded','false');
+    if(f.__verrou){
+      document.body.classList.remove('nav-open');
+      document.body.style.top = '';
+      window.scrollTo(0, scrollY);
+      f.__verrou = 0;
+    }
+    if(declencheur) declencheur.focus();
+    ouverte = null; declencheur = null;
+  }
+
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest ? e.target.closest('.gar-b') : null;
+    if(btn){ ouvrir(btn); return; }
+    if(!ouverte) return;
+    /* Le fond ferme, la carte non. */
+    if(e.target === ouverte){ fermer(); return; }
+    if(e.target.closest && e.target.closest('.gar-x')) fermer();
+  });
+
+  document.addEventListener('keydown', function(e){
+    if(!ouverte) return;
+    if(e.key === 'Escape'){ fermer(); return; }
+    if(e.key !== 'Tab') return;
+    var l = focusables(ouverte);
+    if(!l.length) return;
+    var p = l[0], d = l[l.length - 1];
+    if(e.shiftKey && document.activeElement === p){ e.preventDefault(); d.focus(); }
+    else if(!e.shiftKey && document.activeElement === d){ e.preventDefault(); p.focus(); }
+  });
+})();
+</script>

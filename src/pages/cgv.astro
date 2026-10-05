@@ -1,0 +1,97 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import GarantieBadge from '../components/GarantieBadge.astro';
+import '../styles/global.css';
+---
+<BaseLayout title="Conditions de vente — Nexa Web" description="Les conditions de la garantie satisfait ou remboursé de Nexa Web : 14 jours pour valider la maquette, 2 séries de retouches incluses, remboursement intégral de l'acompte sans justification.">
+<style>
+.legal-hero{padding:clamp(48px,8vh,96px) 0 clamp(32px,4vh,56px)}
+.legal-tag{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--accent-text);margin-bottom:16px}
+.legal-title{font-size:clamp(28px,5vw,48px);font-weight:600;letter-spacing:-.02em;line-height:1.1;margin-bottom:16px}
+.legal-date{font-size:12px;color:var(--text-muted)}
+.legal-body{padding-bottom:clamp(64px,10vh,120px)}
+.legal-body section{margin-bottom:40px}
+.legal-body h2{font-size:16px;font-weight:600;letter-spacing:0;color:var(--text-muted);border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:16px}
+/* Même remarque que sur les autres pages légales : l'opacité n'est pas
+   une couleur, le gris secondaire fait l'effet voulu et passe AA. */
+.legal-body p{font-size:15px;line-height:1.75;color:var(--text-muted);margin-bottom:12px}
+.legal-body ul,.legal-body ol{font-size:15px;line-height:1.75;color:var(--text-muted);padding-left:20px;margin-bottom:12px}
+.legal-body ul{list-style:disc}
+.legal-body ol{list-style:decimal}
+.legal-body li{margin-bottom:6px}
+/* :global() parce que les paragraphes de cette page sont traduits, et
+   que i18n.js les réécrit par innerHTML : le <a> et le <strong> sont
+   recréés sans le marqueur de portée d'Astro. Mesuré avant correction :
+   les liens sortaient en gris secondaire au lieu de l'or, sans
+   soulignement. Les autres pages légales gardent leurs règles scopées :
+   leur balisage est statique. */
+.legal-body :global(a){color:var(--accent-text);text-decoration:underline;text-underline-offset:3px}
+.legal-body :global(strong){color:var(--text);font-weight:600}
+/* Le badge en tête de page : la même chose que ce que le visiteur a
+   cliqué pour arriver ici, pour qu'il sache qu'il est au bon endroit. */
+.cgv-badge{margin-top:22px}
+/* L'encadré de synthèse : la garantie en une phrase, avant le détail. */
+.cgv-resume{
+  background:var(--surface);border:1px solid var(--accent);border-radius:14px;
+  padding:clamp(16px,2.4vw,22px);margin-bottom:28px;
+}
+.cgv-resume p{margin:0;color:var(--text)}
+</style>
+
+<Header backBtn={true} />
+
+<main id="main-content" tabindex="-1">
+  <div class="wrap" style="max-width:800px">
+    <div class="legal-hero">
+      <p class="legal-tag" data-i18n="cgv-tag">Conditions de vente</p>
+      <h1 class="legal-title" data-i18n="cgv-h1">Garantie satisfait<br>ou remboursé</h1>
+      <p class="legal-date" data-i18n="cgv-date">Dernière mise à jour : octobre 2026</p>
+      <div class="cgv-badge"><GarantieBadge /></div>
+    </div>
+    <div class="legal-body">
+
+      <div class="cgv-resume">
+        <p data-i18n="cgv-resume"><strong>En une phrase :</strong> si la maquette de votre site ne vous convient pas après deux séries de retouches, nous vous remboursons l'intégralité de l'acompte, sans avoir à vous justifier.</p>
+      </div>
+
+      <section>
+        <h2 data-i18n="cgv-h2-1">1. Objet de la garantie</h2>
+        <p data-i18n="cgv-p1">La garantie « satisfait ou remboursé » porte sur <strong>la maquette</strong> du site, c'est-à-dire la proposition de design qui vous est présentée avant tout développement. Elle ne porte pas sur le site développé, ni sur les prestations d'hébergement, de maintenance ou de référencement.</p>
+      </section>
+
+      <section>
+        <h2 data-i18n="cgv-h2-2">2. Délai de validation</h2>
+        <p data-i18n="cgv-p2">À compter du jour de la <strong>présentation de la maquette</strong>, vous disposez de <strong>14 jours calendaires</strong> pour la valider, demander des retouches ou faire jouer la garantie. Le délai court à partir de la présentation, et non de la commande ni du paiement de l'acompte.</p>
+        <p data-i18n="cgv-p2b">Sans réponse de votre part passé ce délai, la maquette est considérée comme validée et la garantie prend fin.</p>
+      </section>
+
+      <section>
+        <h2 data-i18n="cgv-h2-3">3. Retouches incluses</h2>
+        <p data-i18n="cgv-p3">Vous avez droit à <strong>deux séries de retouches</strong>, comprises dans le prix convenu. Une série de retouches est un ensemble de demandes transmises en une seule fois ; nous vous présentons une maquette corrigée après chacune d'elles. Ces deux séries s'exercent à l'intérieur du délai de 14 jours.</p>
+      </section>
+
+      <section>
+        <h2 data-i18n="cgv-h2-4">4. Remboursement</h2>
+        <p data-i18n="cgv-p4">Si, après ces deux séries de retouches, la maquette ne vous convient toujours pas, vous nous le signalez par e-mail avant la fin du délai de 14 jours. Nous vous remboursons alors <strong>100 % de l'acompte versé</strong>, <strong>sans justification à fournir</strong>.</p>
+        <p data-i18n="cgv-p4b">Le remboursement est effectué sous 14 jours à compter de votre demande, par le même moyen de paiement que celui utilisé pour l'acompte. Les maquettes produites restent notre propriété et ne peuvent pas être utilisées.</p>
+      </section>
+
+      <section>
+        <h2 data-i18n="cgv-h2-5">5. Fin de la garantie</h2>
+        <p data-i18n="cgv-p5">La garantie s'applique <strong>avant le début du développement</strong>. Dès que la maquette est validée — explicitement, ou par l'écoulement du délai de 14 jours — le développement commence et <strong>la garantie prend fin</strong>. L'acompte n'est alors plus remboursable au titre de la présente garantie.</p>
+      </section>
+
+      <section>
+        <h2 data-i18n="cgv-h2-6">6. Portée de cette page</h2>
+        <p data-i18n="cgv-p6">Cette page décrit uniquement la garantie satisfait ou remboursé. Les autres conditions de la prestation — périmètre, prix, échéancier de paiement, délais de livraison, propriété des livrables — sont fixées dans le devis qui vous est adressé et que vous acceptez avant le début des travaux. Le devis fait foi.</p>
+        <p data-i18n="cgv-p6b">Pour toute question : <a href="mailto:contact.nexaweb62@gmail.com">contact.nexaweb62@gmail.com</a>. Voir aussi nos <a href="/mentions-legales">mentions légales</a> et notre <a href="/politique-confidentialite">politique de confidentialité</a>.</p>
+      </section>
+
+    </div>
+  </div>
+</main>
+
+<Footer />
+</BaseLayout>

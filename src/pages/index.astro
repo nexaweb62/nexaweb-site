@@ -2,7 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import LogoLiquide from '../components/LogoLiquide.astro';
-import { VITRINE_PRIX } from '../data/formules';
+import GarantieBadge from '../components/GarantieBadge.astro';
+import { VITRINE_PRIX, REFONTE_PRIX, ENTREPRISE, prix } from '../data/formules';
 import '../styles/global.css';
 ---
 <BaseLayout title="Nexa Web — Agence Web Premium · Carvin" description="Nexa Web conçoit des sites internet sur-mesure pour commerçants et artisans. Refonte dès 490 €, livraison en 2 à 4 semaines. Carvin, Hauts-de-France.">
@@ -205,6 +206,10 @@ import '../styles/global.css';
 .why-bio{display:flex;flex-direction:column;gap:18px;padding:4px 0}
 .why-bio-lead{font-size:clamp(1.35rem,2.4vw,1.9rem);font-weight:600;line-height:1.18;letter-spacing:-.03em;color:var(--text)}
 .why-bio-body{font-size:13px;font-weight:300;line-height:1.72;color:var(--text-muted)}
+/* .why-bio est une colonne en flex avec 18 px de gouttière : le badge
+   s'y range comme les paragraphes, et s'aligne à gauche au lieu de
+   s'étirer sur toute la largeur de la colonne. */
+.why-gar{align-self:flex-start;margin-top:4px}
 .why-bio-cta{display:inline-flex;align-items:center;gap:8px;margin-top:8px;font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text);border-bottom:1px solid var(--border-strong);padding-bottom:4px;transition:color .2s,border-color .2s;align-self:flex-start}
 .why-bio-cta:hover{color:var(--text);border-color:var(--text)}
 @media(max-width:720px){.why-in{grid-template-columns:1fr}}
@@ -494,6 +499,9 @@ import '../styles/global.css';
         <p class="why-bio-body" data-i18n="idx-why-b1">Nexa Web est née de la conviction de deux passionnés du web que les petites entreprises méritent des sites aussi soignés que ceux des grandes marques — sans les prix prohibitifs.</p>
         <p class="why-bio-body" data-i18n="idx-why-b2">Nous démarrons notre aventure sans catalogue de réalisations. Pas parce que nous manquons de compétences, mais parce que nous avons choisi de ne pas gonfler un portfolio avec des projets fictifs. Ce que nous offrons à la place, c'est une implication totale : chaque ligne de code, chaque détail de design, pensés uniquement pour vous.</p>
         <p class="why-bio-body" data-i18n="idx-why-b3">Nos premiers clients bénéficient d'une attention rare — celle qu'une agence qui n'a pas encore cent projets en parallèle peut vraiment offrir.</p>
+        <!-- La promesse qui rassure le plus se tient à côté de l'appel
+             à l'action, pas en bas du formulaire de devis. -->
+        <GarantieBadge class="why-gar" />
         <a href="/devis" class="why-bio-cta" data-i18n="idx-why-cta">Être parmi les premiers →</a>
       </div>
     </div>
@@ -544,7 +552,14 @@ import '../styles/global.css';
               <span class="qt" data-i18n="idx-faq-q1">Quel est le coût d'un site web ?</span>
               <span class="plus" aria-hidden="true"></span>
             </button>
-            <div class="panel"><div><p class="ans" data-i18n="idx-faq-a1">De 490 € pour la refonte d'un site existant à 3 100 € pour un site d'entreprise complet. Le site vitrine complet est à 1 000 € en tarif de lancement — places limitées. Le devis est fixe et détaillé avant de commencer, aucune surprise en cours de route. Facilités de paiement possibles sur demande.</p></div></div>
+            <div class="panel"><div><p class="ans" data-i18n="idx-faq-a1">De {REFONTE_PRIX} pour la refonte d'un site existant à {prix(ENTREPRISE.prixHaut)} pour un site d'entreprise complet. Le site vitrine complet est à {VITRINE_PRIX} en tarif de lancement — places limitées. Le devis est fixe et détaillé avant de commencer, aucune surprise en cours de route. Facilités de paiement possibles sur demande.</p></div></div>
+          </li>
+          <li class="qa"><span class="bar" aria-hidden="true"></span>
+            <button class="q" type="button" aria-expanded="false">
+              <span class="qt" data-i18n="idx-faq-q6">Et si le résultat ne me plaît pas ?</span>
+              <span class="plus" aria-hidden="true"></span>
+            </button>
+            <div class="panel"><div><p class="ans" data-i18n="idx-faq-a6">Vous êtes couvert par notre garantie satisfait ou remboursé. Après la présentation de la maquette, vous avez 14 jours pour la valider et deux séries de retouches incluses. Si elle ne vous convient toujours pas, nous vous remboursons 100 % de l'acompte, sans justification à donner. La garantie couvre la phase maquette : une fois celle-ci validée, le développement commence et la garantie prend fin.</p></div></div>
           </li>
           <li class="qa"><span class="bar" aria-hidden="true"></span>
             <button class="q" type="button" aria-expanded="false">
