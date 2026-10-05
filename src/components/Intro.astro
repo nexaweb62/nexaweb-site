@@ -34,7 +34,6 @@
     </svg>
     <p class="intro-nom">NEXA WEB</p>
   </div>
-  <div class="intro-barre"><span></span></div>
 </div>
 
 <style>
@@ -81,17 +80,6 @@
   }
   .intro.halo .intro-nom{opacity:1}
   .intro.vole .intro-nom{opacity:0}
-
-  .intro-barre{
-    position:absolute;bottom:14vh;width:120px;height:1px;
-    background:rgb(from var(--raw-warm-50) r g b / .12);
-  }
-  .intro-barre span{
-    display:block;height:100%;width:0;background:var(--raw-gold-400);
-    transition:width 2.2s linear;
-  }
-  .intro.trace .intro-barre span{width:100%}
-  .intro.vole .intro-barre{opacity:0;transition:opacity .4s ease}
 
   /* Pendant l'intro, la barre du site s'efface pour que le logo ait
      l'air de venir s'y poser. */
@@ -193,6 +181,9 @@
     depart += d * 0.55;
     finDessin = Math.max(finDessin, depart + d);
   });
+  /* Plus aucune regle ne s'accroche a « trace » depuis le retrait de la barre
+     de chargement : la classe reste comme marqueur d'etape, et les controles
+     l'utilisent pour saisir l'intro au bon moment. */
   intro.classList.add('trace');
 
   /* Étape 2 — le halo et le nom. */
