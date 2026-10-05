@@ -376,11 +376,6 @@ body.lite .lgm-i:hover .lg-reflet,body.lite .lgm-i.lg-tombe .lg-goutte{animation
    appelait. Le nom accessible du lien reste porté par son aria-label,
    donc un lecteur d'écran annonce toujours « NEXAWEB — Accueil ». */
 .nav-logo{display:flex;align-items:center;color:var(--text);flex:0 0 auto}
-.cnav-logo{display:inline-flex;color:var(--text);margin-bottom:var(--sp-5)}
-/* Le composant est bâti en colonne pour son usage en grand ; ici il ne
-   porte qu'une image, on lui enlève son écart vertical. */
-/* Le rendu est sombre : sur le thème clair il lui faut un filet, sinon
-   la tuile flotte sur le crème sans arête. */
 .nav-links{display:none;gap:clamp(16px,3vw,40px);position:absolute;left:50%;transform:translateX(-50%)}
 .nav-link{
   position:relative;font-size:var(--fs-caption);font-weight:500;letter-spacing:0;color:var(--text-muted);

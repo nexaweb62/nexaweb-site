@@ -76,11 +76,6 @@ const { cta = 'Démarrer un projet', ctaHref = '/devis', back = true } = Astro.p
 <!-- CIRCULAR NAV OVERLAY -->
 <div class="cnav" id="cnav" role="dialog" aria-modal="true" aria-label="Navigation" inert>
   <div class="cnav-ring" id="cnav-ring">
-    {/* Le logo en haut du panneau : on sait chez qui on est, même
-        quand la barre est recouverte. */}
-    <a href="/" class="cnav-logo" aria-label="NEXAWEB — Accueil">
-      <Logo largeur={34} trait={2.2} texte={true} tailleNom={14} tailleSous={7} />
-    </a>
     <button class="cnav-close" id="cnav-close" aria-label="Fermer la navigation">
       <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
