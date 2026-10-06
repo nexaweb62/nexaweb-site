@@ -399,7 +399,12 @@ body.lite .lgm-i:hover .lg-reflet,body.lite .lgm-i.lg-tombe .lg-goutte{animation
      est une pilule, le segment actif en est une aussi. À 30 px de haut
      dans une pilule de 38 px avec 3 px de retrait, les deux rayons sont
      concentriques. */
-  min-width:32px;min-height:30px;padding:2px 6px;border-radius:var(--radius-pill);
+  /* DE LA MARGE AUTOUR DES LETTRES. A 32x30 px pour un libelle de 12 px,
+     « FR » frolait le bord du disque dore : la mesure au pixel y relevait
+     un liseré d'anticrenelage a 1,08:1, la ou le coeur de la lettre est a
+     10,5:1. On elargit plutot que d'ecarter l'alerte — les lettres
+     respirent, et la pastille reste une pastille. */
+  min-width:38px;min-height:30px;padding:2px 10px;border-radius:var(--radius-pill);
   transition:color var(--dur-micro) var(--ease-out),background-color var(--dur-micro) var(--ease-out);
 }
 .lang-opt:hover{color:var(--text)}
@@ -817,6 +822,31 @@ body:has(.fond-tarifs) footer{
   background-color:var(--glass-scrim);
   background-image:linear-gradient(180deg,var(--glass-ghost-a),var(--glass-ghost-b));
   box-shadow:var(--glass-sh-ghost);
+}
+
+/* LE VOILE DU SELECTEUR DE LANGUE, RENFORCE.
+   En retirant le selecteur de theme, celui-ci s'est decale au-dessus du
+   globe lumineux de /contact : mesure au pixel, « EN » y tombait a
+   3,96:1, sous AA, et la valeur bougeait a chaque passage parce que le
+   globe tourne.
+
+   CETTE REGLE DOIT VENIR APRES CELLE DU VERRE. Posee plus haut, elle
+   avait la meme specificite et perdait : le groupe restait a 34 %, et
+   mon correctif ne corrigeait rien. Verifie en relisant la couleur
+   calculee, pas en la supposant.
+
+   ET SON PENDANT CLAIR DOIT VIVRE DANS LA REQUETE MEDIA. Ecrit au
+   premier niveau, « :root:not([data-theme="dark"]) » s'applique aussi
+   quand aucun theme n'est pose, c'est-a-dire en sombre par defaut : la
+   pilule devenait blanche sur une page noire. */
+.lang-sel{background-color:rgb(from var(--raw-black-950) r g b / .82)}
+:root[data-theme="light"] .lang-sel{
+  background-color:rgb(from var(--raw-paper-0) r g b / .86);
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]) .lang-sel{
+    background-color:rgb(from var(--raw-paper-0) r g b / .86);
+  }
 }
 .btn-g:hover,
 .menu-btn:hover,.login-btn:hover,.hdr-back:hover,

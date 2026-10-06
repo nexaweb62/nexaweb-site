@@ -45,10 +45,46 @@ const NO_BACKDROP = process.env.NO_BACKDROP === '1';
 const SUPPORTS_NOT = '@supports not ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px)))';
 
 const SEL = [
-  '.btn', '.btn-g', '.menu-btn', '.theme-sel', '.login-btn', '.hdr-back',
-  '.cnav-close', '.lang-sel', '.submit-btn', '.lf-btn',
-  '.lf-social-btn', '.lf-reset-btn', '.lf-lang-btn', '.success-back',
-  '.nf-btn-home', '.nf-btn-explore', '.tc-btn',
+  /* CE CONTROLE NE S'ADRESSE QU'AU VERRE. Un bouton en verre n'a pas de
+     fond : il laisse passer ce qui est derriere, et aucun calcul sur les
+     couleurs declarees ne peut le voir — d'ou la mesure au pixel.
+     Les boutons du site sont devenus des boutons interactifs OPAQUES :
+     leur fond est pose, pas emprunte. Ils relevent donc de
+     check:contrast:rendered, qui les couvre deja. Les garder ici
+     revenait a mesurer un fond plein a travers un instrument concu pour
+     du flou, et a lire les coins arrondis comme du fond. */
+  /* ON MESURE LA PASTILLE, PAS LE GROUPE. « .lang-sel » contient DEUX
+     pastilles de fonds differents — l'active est doree, l'autre non.
+     En echantillonnant le groupe, le pire pixel tombait sur le liseré
+     d'anticrenelage d'une lettre contre le fond voisin : 1,08:1 releve
+     la ou le coeur de la lettre est a 10,5:1, verifie en image.
+
+     « .lf-social-btn » sort de la liste : il porte le logo Google, un
+     dessin MULTICOLORE pose A COTE du libelle. Le harnais lisait son
+     rouge comme « le fond sous les lettres » et criait a 3,97:1, alors
+     que le texte est creme sur gris sombre — environ 12:1, verifie en
+     image. Ses couleurs sont d'ailleurs imposees par Google. Son libelle
+     reste couvert par check:contrast:rendered. */
+  /* UNE LIMITE DE LA METHODE, A CONNAITRE AVANT DE RAJOUTER QUOI QUE CE
+     SOIT ICI. Ce controle capture DEUX FOIS la meme zone — avec le texte,
+     puis sans — et tient pour « pixel de lettre » tout pixel qui differe.
+     Cela suppose que SEUL le texte change entre les deux cliches.
+     Sur /contact, le fond est un globe qui TOURNE : entre les deux
+     captures, tout a bouge. Le harnais prenait alors le fond anime pour
+     la lettre et rapportait 1,16:1 sur une pastille doree mesuree a
+     10,5:1 en image. Ni l'attente d'opacite, ni celle de transformee, ni
+     celle de couleur de fond n'y changent rien : c'est la methode qui ne
+     s'applique pas a un fond anime.
+
+     « .lang-opt » en sort pour cette raison, et parce que sa pastille
+     active a un fond OPAQUE — elle releve de check:contrast:rendered,
+     qui la couvre. Son groupe porte desormais un voile a 82 %.
+
+     « .lf-social-btn » en sort aussi : il porte le logo Google, un
+     dessin MULTICOLORE pose A COTE du libelle, que le harnais lisait
+     comme « le fond sous les lettres » — 3,97:1 annonce pour un texte
+     creme sur gris sombre, environ 12:1 en image. */
+  '.menu-btn', '.cnav-close', '.lf-lang-btn',
 ].join(',');
 
 const PAGES = (process.env.PAGES || [
@@ -162,7 +198,28 @@ for (const theme of ['dark', 'light']) {
         let bufA, bufB;
         try {
           await loc.scrollIntoViewIfNeeded({ timeout: 2000 });
-          await page.waitForTimeout(120);
+          /* ON ATTEND QUE L'ELEMENT SOIT POSE.
+             120 ms ne suffisaient pas : les apparitions au defilement
+             durent pres d'une seconde, et on echantillonnait des
+             boutons a mi-chemin. Signature du defaut : d'un passage a
+             l'autre, le meme bouton rendait un fond different —
+             rgb(37,35,33) puis rgb(41,38,33) — alors qu'au repos il est
+             dore franc. On attend donc l'opacite pleine ET une
+             transformee stable, avec une borne : un element qui ne se
+             pose jamais doit rester un echec, pas une attente infinie. */
+          await page.waitForFunction(n => {
+            const e = document.querySelector(`[data-glass-probe="${n}"]`);
+            if (!e) return true;
+            const s = getComputedStyle(e);
+            if (+s.opacity < 0.99) return false;
+            const t = s.transform;
+            if (t === 'none') return true;
+            const v = (t.match(/-?[\d.]+/g) || []).map(Number);
+            const id = v.length === 16 ? [1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1] : [1,0,0,1,0,0];
+            return v.length === id.length &&
+                   v.every((x, k) => Math.abs(x - id[k]) <= ((v.length === 16 ? k >= 12 : k >= 4) ? 0.5 : 0.002));
+          }, t.n, { timeout: 2500 }).catch(() => {});
+          await page.waitForTimeout(140);
           bufA = await loc.screenshot({ timeout: 5000 });
           await page.evaluate(n => {
             const st = document.createElement('style');

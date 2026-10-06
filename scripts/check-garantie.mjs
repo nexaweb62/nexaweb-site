@@ -72,8 +72,13 @@ for (const vp of VIEWPORTS) {
       const badge = await page.evaluate(() => {
         const b = document.querySelector('.gar-b');
         const r = b.getBoundingClientRect();
-        const ico = getComputedStyle(b.querySelector('.gar-ico')).stroke;
-        const m = ico.match(/-?\d+/g) || [0, 0, 0];
+        /* LE BOUCLIER A DISPARU avec le passage au bouton interactif.
+           C'est lui qui portait la teinte a verifier. On regarde donc
+           desormais la couleur du LIBELLE, qui est ce qu'il reste de
+           visible — et la regle ne change pas : pas de vert. */
+        const ico = getComputedStyle(b.querySelector('.gar-ico') || b).stroke;
+        const src = (ico && ico !== 'none') ? ico : getComputedStyle(b).color;
+        const m = src.match(/-?\d+/g) || [0, 0, 0];
         /* Teinte verte : le site la bannit, la page Tarifs surtout. */
         const [R, G, B] = m.map(Number);
         const mx = Math.max(R, G, B), mn = Math.min(R, G, B);
@@ -84,7 +89,7 @@ for (const vp of VIEWPORTS) {
           h = Math.round(h * 60); if (h < 0) h += 360;
         }
         return { w: Math.round(r.width), h: Math.round(r.height), texte: b.textContent.trim(),
-          teinte: h, sat: mx ? (mx - mn) / mx : 0, ico };
+          teinte: h, sat: mx ? (mx - mn) / mx : 0, ico: src };
       });
       verifs += 3;
       if (badge.w < 60 || badge.h < 24) fails.push(`${ou} : badge trop petit (${badge.w}x${badge.h})`);
