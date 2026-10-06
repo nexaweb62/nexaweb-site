@@ -1,4 +1,5 @@
 ---
+import InteractiveButton from './ui/InteractiveButton.astro';
 /**
  * COOKIES ET AUTRES TRACEURS — le bandeau, et ce qu'il commande vraiment.
  *
@@ -86,8 +87,8 @@
       <!-- Accepter et refuser sont le MÊME bouton, à l'étiquette près.
            Donner au refus un style plus discret est exactement ce que
            la CNIL sanctionne, et le garde-fou mesure l'écart. -->
-      <button type="button" class="btn-g btn-sm ck-b" id="ck-ok" data-i18n="ck-ok">Tout accepter</button>
-      <button type="button" class="btn-g btn-sm ck-b" id="ck-non" data-i18n="ck-non">Tout refuser</button>
+      <InteractiveButton text="Tout accepter" class="ck-b" id="ck-ok" data-i18n="ck-ok" />
+      <InteractiveButton text="Tout refuser" class="ck-b" id="ck-non" data-i18n="ck-non" />
       <button type="button" class="ck-lien" id="ck-perso" aria-expanded="false" aria-controls="ck-detail" data-i18n="ck-perso">Personnaliser</button>
       <button type="button" class="ck-lien" id="ck-save" hidden data-i18n="ck-save">Enregistrer mes choix</button>
       <a class="ck-lien" href="/politique-confidentialite" data-i18n="ck-plus">En savoir plus</a>
@@ -152,9 +153,6 @@
 
   /* ── Les actions ── */
   .ck-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:16px}
-  /* Les deux boutons de décision partagent la MÊME règle : aucun des
-     deux ne peut dériver sans l'autre. */
-  .ck-b{flex:0 0 auto}
   .ck-lien{
     background:none;border:0;padding:6px 2px;cursor:pointer;
     font:500 var(--fs-caption)/1.3 var(--font);letter-spacing:0;

@@ -1,4 +1,5 @@
 ---
+import InteractiveButton from '../components/ui/InteractiveButton.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -73,7 +74,7 @@ main { padding-top: var(--hdr) }
       <span class="hero-tag r">Artisans &amp; TPE</span>
       <h1 class="hero-title r d1">Vous dépendez du bouche-à-oreille<br>et les chantiers se font rares.</h1>
       <p class="hero-sub r d2">8 artisans sur 10 n'ont pas de site. Résultat : le client appelle le premier qui sort sur Google — et ce n'est pas vous.</p>
-      <a href="/devis?plan=vitrine-pro" class="btn r d3">Avoir mon site artisan →</a>
+      <InteractiveButton text="Avoir mon site artisan" href="/devis?plan=vitrine-pro" class="r d3" r />
     </div>
   </section>
 
@@ -161,8 +162,8 @@ main { padding-top: var(--hdr) }
       <div class="prix-block r d2">
         <p class="prix-desc">Tarif actuel et détail des places disponibles sur notre page tarifs.</p>
         <div class="prix-links">
-          <a href="/tarifs" class="btn-g">Voir le détail des tarifs →</a>
-          <a href="/devis?plan=vitrine-pro" class="btn">Demander un devis →</a>
+          <InteractiveButton text="Voir le détail des tarifs" href="/tarifs" />
+          <InteractiveButton text="Demander un devis" href="/devis?plan=vitrine-pro" />
         </div>
       </div>
     </div>
@@ -200,8 +201,8 @@ main { padding-top: var(--hdr) }
       <h2 class="s-title r">Prêt à vous lancer ?</h2>
       <p class="s-sub r d1">Décrivez votre projet en 2 minutes. On vous revient sous 24 h, sans engagement.</p>
       <div class="cta-btns r d2">
-        <a href="/devis?plan=vitrine-pro" class="btn">Demander un devis gratuit →</a>
-        <a href="/rendez-vous" class="btn-g">Réserver un créneau →</a>
+        <InteractiveButton text="Demander un devis gratuit" href="/devis?plan=vitrine-pro" />
+        <InteractiveButton text="Réserver un créneau" href="/rendez-vous" />
       </div>
       <div class="other-pages r d3">
         <p>Autres pages métier</p>

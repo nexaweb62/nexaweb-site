@@ -1,4 +1,5 @@
 ---
+import InteractiveButton from '../components/ui/InteractiveButton.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -43,25 +44,6 @@ import '../styles/global.css';
 
 /* ── BUTTONS ── */
 .nf-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
-
-.nf-btn-home{
-  display:inline-flex;align-items:center;gap:9px;
-  font-size:var(--fs-caption);font-weight:600;letter-spacing:0;
-  border-radius:var(--radius-pill);padding:13px 26px;
-  transition:background-color .2s,transform .2s;
-}
-.nf-btn-home:hover{transform:translateY(-1px)}
-.nf-btn-home svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-
-.nf-btn-explore{
-  display:inline-flex;align-items:center;gap:9px;
-  font-size:var(--fs-caption);font-weight:600;letter-spacing:0;
-  color:var(--text);
-  border-radius:var(--radius-pill);padding:13px 26px;
-  transition:background-color .2s,color .2s,transform .2s;
-}
-.nf-btn-explore:hover{color:var(--text);transform:translateY(-1px)}
-.nf-btn-explore svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 </style>
 
 <canvas id="nf-cv" aria-hidden="true"></canvas>
@@ -74,14 +56,8 @@ import '../styles/global.css';
       La page que vous cherchez a peut-être été déplacée<br>ou n'existe pas.
     </p>
     <div class="nf-btns">
-      <a href="/" class="nf-btn-home">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        Accueil
-      </a>
-      <a href="/#services" class="nf-btn-explore">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        Explorer
-      </a>
+      <InteractiveButton text="Accueil" href="/" class="nf-btn-home" />
+      <InteractiveButton text="Explorer" href="/#services" class="nf-btn-explore" />
     </div>
   </div>
 </main>

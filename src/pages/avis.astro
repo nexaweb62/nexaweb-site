@@ -1,4 +1,5 @@
 ---
+import InteractiveButton from '../components/ui/InteractiveButton.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -174,10 +175,7 @@ import '../styles/global.css';
               <textarea id="rv-msg" placeholder="Décrivez votre expérience avec Nexa Web…" required maxlength="600"></textarea>
             </div>
             <div class="form-submit">
-              <button type="submit" class="btn" id="rv-submit">
-                <span data-i18n="av-submit">Envoyer mon avis</span>
-                <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </button>
+              <InteractiveButton text="Envoyer mon avis" type="submit" variant="gold" id="rv-submit" data-i18n="av-submit" />
               <span class="form-note" data-i18n="av-note">Modéré avant publication</span>
             </div>
           </form>
@@ -209,8 +207,8 @@ import '../styles/global.css';
         <div class="cta-super" data-i18n="av-cta-super">Travaillons ensemble</div>
         <h2 class="cta-hl r d1" id="avis-cta-h" data-i18n="av-cta-h">Votre projet mérite<br>une présence <em>remarquable.</em></h2>
         <div class="cta-btns r d2">
-          <a href="/devis" class="btn" data-i18n="av-cta-btn1">Démarrer un projet</a>
-          <a href="/tarifs" class="btn-g" data-i18n="av-cta-btn2">Voir les tarifs</a>
+          <InteractiveButton text="Démarrer un projet" href="/devis" variant="gold" data-i18n="av-cta-btn1" />
+          <InteractiveButton text="Voir les tarifs" href="/tarifs" data-i18n="av-cta-btn2" />
         </div>
       </div>
     </div>

@@ -1,4 +1,5 @@
 ---
+import InteractiveButton from '../components/ui/InteractiveButton.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -211,8 +212,8 @@ body.lite .gk:nth-child(2n){display:none}
         cookies. Nous ne le chargeons pas sans votre accord.
       </p>
       <div class="rdv-garde-b">
-        <button type="button" class="btn btn-sm" id="rdv-ok" data-i18n="rdv-garde-ok">Afficher le calendrier</button>
-        <a class="btn-g btn-sm" href="/contact" data-i18n="rdv-garde-alt">Écrire un message</a>
+        <InteractiveButton text="Afficher le calendrier" type="button" id="rdv-ok" data-i18n="rdv-garde-ok" />
+        <InteractiveButton text="Écrire un message" href="/contact" data-i18n="rdv-garde-alt" />
       </div>
     </div>
   </div>

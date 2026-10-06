@@ -27,6 +27,9 @@
   /* Noir — neutre, très légèrement chaud. Surtout PAS de noir pur #000 :
      les ombres et les bordures y deviennent invisibles et le rendu dur. */
   --raw-black-950: #0A0A0B;
+  /* Le fond du bouton interactif. Entre le 950 et le 900, et ni l'un ni
+     l'autre : la valeur vient de la maquette, on la garde telle quelle. */
+  --raw-black-925: #0F0F10;
   --raw-black-900: #121214;
   --raw-black-850: #1A1A1D;
   --raw-black-800: #26262A;
@@ -35,6 +38,8 @@
   --raw-black-ink: #141416;
 
   /* Blancs chauds — les textes du mode sombre */
+  /* Le creme du bouton interactif : un cheveu plus chaud que le 50. */
+  --raw-warm-40:  #F4F1EA;
   --raw-warm-50:  #F4F2EE;
   /* Un seul gris pour TOUT le secondaire en sombre — le gris d'Apple. */
   /* Gris intermédiaire, né d'une mesure : sur un fond animé, le gris
@@ -64,6 +69,9 @@
   --raw-gold-50:  #FFF7E6;
   --raw-gold-300: #E3C684;
   --raw-gold-400: #D4B36A;
+  /* L'encre posee SUR l'or : presque noire, mais chaude, pour ne pas
+     trancher froid au milieu du dore. */
+  --raw-gold-950: #121008;
   --raw-gold-600: #B8974F;
   /* L'arete doree du logo en mode clair : un or un peu plus
      chaud que le 700, pour tenir sur fond pale sans virer au brun. */

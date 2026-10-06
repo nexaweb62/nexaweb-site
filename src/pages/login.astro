@@ -1,4 +1,5 @@
 ---
+import InteractiveButton from '../components/ui/InteractiveButton.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import '../styles/global.css';
 ---
@@ -43,13 +44,6 @@ html,body{height:100%;overflow:hidden}
 .lf-input{display:block;width:100%;padding:13px 16px;background:var(--surface);border:1px solid var(--border);border-radius:3px;font:inherit;font-size:13px;color:var(--text);outline:none;transition:border-color .2s,box-shadow .2s}
 .lf-input::placeholder{color:var(--text-muted)}
 .lf-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
-
-.lf-btn{display:flex;align-items:center;justify-content:center;width:100%;margin-top:8px;padding:14px 20px;border-radius:var(--radius-pill);font-size:var(--fs-caption);font-weight:600;letter-spacing:0;transition:background-color .2s,transform .2s;cursor:pointer}
-.lf-btn:hover{transform:translateY(-1px)}
-.lf-btn.loading{opacity:.6;pointer-events:none}
-.lf-btn-spinner{width:14px;height:14px;border:2px solid var(--glass-edge-r);border-top-color:currentColor;border-radius:50%;animation:spin .7s linear infinite;display:none}
-.lf-btn.loading .lf-btn-spinner{display:block}
-.lf-btn.loading .lf-btn-label{display:none}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 .lf-foot{display:flex;flex-direction:column;gap:16px;margin-top:36px;text-align:center}
@@ -97,8 +91,6 @@ html,body{height:100%;overflow:hidden}
 .lf-reset-input{flex:1;padding:10px 13px;background:var(--surface);border:1px solid var(--border);border-radius:3px;font:inherit;font-size:12px;color:var(--text);outline:none;transition:border-color .2s}
 .lf-reset-input:focus{border-color:var(--accent)}
 .lf-reset-input::placeholder{color:var(--text-muted)}
-.lf-reset-btn{padding:10px 16px;border-radius:var(--radius-pill);font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text);cursor:pointer;white-space:nowrap;transition:color .2s,background-color .2s}
-.lf-reset-btn:hover{color:var(--text)}
 :focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:2px}
 </style>
 
@@ -163,10 +155,7 @@ html,body{height:100%;overflow:hidden}
 
           <div class="h-captcha" data-sitekey="5a7ee49c-3bac-4284-a130-5d76459a0fd2" style="margin-bottom:16px"></div>
 
-          <button type="submit" class="lf-btn" id="submit-btn">
-            <span class="lf-btn-label" data-i18n="login-submit">Se connecter</span>
-            <span class="lf-btn-spinner" aria-hidden="true"></span>
-          </button>
+          <InteractiveButton text="Se connecter" type="submit" variant="gold" class="lf-btn" id="submit-btn" data-i18n="login-submit" />
 
           <div class="lf-foot" style="margin-top:18px">
             <p class="lf-magic"><a href="#" id="forgot-link" data-i18n="login-forgot">Mot de passe oublié ?</a></p>
@@ -177,7 +166,7 @@ html,body{height:100%;overflow:hidden}
             <p class="lf-reset-note" data-i18n="login-reset-note">Entrez votre e-mail pour recevoir un lien de réinitialisation.</p>
             <div class="lf-reset-row">
               <input type="email" id="reset-email" class="lf-reset-input" placeholder="votre@email.fr" autocomplete="email">
-              <button type="button" id="reset-btn" class="lf-reset-btn" data-i18n="login-reset-btn">Envoyer</button>
+              <InteractiveButton text="Envoyer" id="reset-btn" class="lf-reset-btn" data-i18n="login-reset-btn" />
             </div>
           </div>
 

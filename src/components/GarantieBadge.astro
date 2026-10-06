@@ -1,4 +1,5 @@
 ---
+import InteractiveButton from './ui/InteractiveButton.astro';
 /**
  * LE BADGE DE GARANTIE — « Satisfait ou remboursé · 14 jours »
  *
@@ -38,16 +39,13 @@ const { class: classe = '', variante = 'pill' } = Astro.props;
 ---
 
 <span class:list={['gar', classe, variante === 'plein' && 'gar-plein']}>
-  <button type="button" class="gar-b" aria-haspopup="dialog" aria-expanded="false">
-    <!-- Le bouclier du site, repris du bas du formulaire de devis. En
-         or et non en vert : la page Tarifs bannit le vert, et le
-         garde-fou check:anim le vérifie. -->
-    <svg class="gar-ico" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-      <polyline points="9 12 11 14 15 10"/>
-    </svg>
-    <span data-i18n="gar-badge">Satisfait ou remboursé · 14 jours</span>
-  </button>
+  <!-- LE BOUCLIER A DISPARU AVEC LA CONVERSION. Ce badge portait une
+       icone de bouclier, qui disait « garantie » avant meme qu'on lise.
+       Le bouton interactif n'a qu'une fleche : le signal visuel est
+       perdu, le sens repose desormais sur le seul libelle. A revoir si
+       le badge perd de sa force. -->
+  <InteractiveButton text="Satisfait ou remboursé · 14 jours" class="gar-b"
+                     aria-haspopup="dialog" aria-expanded="false" data-i18n="gar-badge" />
 
   <div class="gar-f" role="dialog" aria-modal="true" aria-label="Garantie satisfait ou remboursé" inert>
     <div class="gar-carte" role="document">
@@ -92,19 +90,6 @@ const { class: classe = '', variante = 'pill' } = Astro.props;
   /* ── LE BADGE ── */
   .gar{display:inline-flex}
   .gar-plein{display:flex;width:100%;justify-content:center}
-  .gar-b{
-    display:inline-flex;align-items:center;gap:8px;
-    padding:9px 16px;border-radius:var(--radius-pill);
-    border:1px solid var(--border-strong);background:var(--surface);
-    font:var(--w-semi) var(--fs-caption)/1.3 var(--font);letter-spacing:0;
-    color:var(--text);cursor:pointer;text-align:left;
-    transition:border-color var(--dur-micro) var(--ease-out),
-               color var(--dur-micro) var(--ease-out),
-               background-color var(--dur-micro) var(--ease-out);
-  }
-  /* Le survol ne fait qu'annoncer que ça se clique. */
-  .gar-b:hover{border-color:var(--accent);color:var(--accent-text)}
-  .gar-b:focus-visible{outline:3px solid var(--accent-hover);outline-offset:3px}
   .gar-ico{
     width:15px;height:15px;flex:0 0 auto;
     stroke:var(--accent-text);fill:none;stroke-width:2;
@@ -189,7 +174,6 @@ const { class: classe = '', variante = 'pill' } = Astro.props;
   .gar-pied a{color:var(--accent-text);text-decoration:underline;text-underline-offset:3px}
 
   @media(max-width:460px){
-    .gar-b{padding:8px 13px;font-size:var(--fs-100)}
     .gar-ico{width:13px;height:13px}
   }
 </style>

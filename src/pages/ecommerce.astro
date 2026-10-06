@@ -1,4 +1,5 @@
 ---
+import InteractiveButton from '../components/ui/InteractiveButton.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -15,8 +16,6 @@ main{padding-top:var(--hdr)}
 .svc-title{font-size:clamp(2.8rem,7vw,5.5rem);font-weight:600;letter-spacing:-.03em;line-height:1;margin-bottom:28px;position:relative;z-index:1}
 .svc-title span{color:var(--accent-text)}
 .svc-desc{font-size:clamp(1rem,1.8vw,1.15rem);color:var(--text-muted);line-height:1.75;max-width:640px;margin-bottom:40px;position:relative;z-index:1}
-.svc-cta{display:inline-flex;align-items:center;gap:10px;font-size:var(--fs-caption);font-weight:600;letter-spacing:0;padding:16px 32px;border-radius:var(--radius-pill);transition:background-color .2s,transform .2s;position:relative;z-index:1}
-.svc-cta:hover{transform:translateY(-2px)}
 
 .svc-features{padding:60px var(--pad-x);max-width:1100px;margin:0 auto}
 /* Ce libellé introduit les <h3> de la grille : c'est un niveau 2,
@@ -44,7 +43,7 @@ main{padding-top:var(--hdr)}
     <p class="svc-eyebrow">Service · Conversion</p>
     <h1 class="svc-title">Site <span>E-commerce</span></h1>
     <p class="svc-desc">Vendez en ligne 24h/24 avec une boutique qui inspire confiance et pousse à l'achat. Paiement sécurisé, gestion des stocks, fiches produits optimisées — tout est inclus pour maximiser vos ventes dès le premier jour.</p>
-    <a href="/devis" class="svc-cta">Obtenir un devis gratuit →</a>
+    <InteractiveButton text="Obtenir un devis gratuit" href="/devis" class="svc-cta" />
   </div>
 
   <div class="svc-divider"></div>
@@ -92,7 +91,7 @@ main{padding-top:var(--hdr)}
       <h2>Prêt à vendre en ligne ?</h2>
       <p>Devis gratuit en 24h. On commence dès cette semaine.</p>
     </div>
-    <a href="/devis" class="btn">Démarrer mon projet →</a>
+    <InteractiveButton text="Démarrer mon projet" href="/devis" />
   </div>
 </main>
 

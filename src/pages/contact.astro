@@ -1,4 +1,5 @@
 ---
+import InteractiveButton from '../components/ui/InteractiveButton.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import '../styles/global.css';
@@ -35,15 +36,8 @@ html,body{overflow:hidden;height:100%}
 .carvin-line{width:1px;height:12px;background:linear-gradient(to bottom,var(--accent),rgb(from var(--accent) r g b / 0))}
 .carvin-dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 var(--accent-glow);animation:carvin-beat 2s ease-out infinite}
 @keyframes carvin-beat{0%{box-shadow:0 0 0 0 var(--accent-glow)}70%{box-shadow:0 0 0 14px transparent}100%{box-shadow:0 0 0 0 transparent}}
-
-/* Floating contact buttons */
-.c-btn{position:fixed;z-index:50;display:inline-flex;align-items:center;gap:10px;padding:11px 20px;border-radius:var(--radius-pill);color:var(--text);font-family:var(--font);font-size:var(--fs-caption);font-weight:500;letter-spacing:0;text-decoration:none;white-space:nowrap;cursor:pointer;transition:background-color .25s,transform .25s;user-select:none}
-.c-btn:hover{transform:translateY(-3px) !important}
-.c-btn svg{width:14px;height:14px;flex-shrink:0;color:var(--accent-text)}
-.c-btn-3{bottom:12%;left:50%;transform:translateX(-50%);animation:fl3 4.8s ease-in-out infinite}
 @keyframes fl3{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-9px)}}
-.c-btn-3:hover{transform:translateX(-50%) translateY(-3px) !important}
-@media(max-width:600px){.c-btn{font-size:var(--fs-caption);padding:9px 15px;gap:8px}.c-btn-3{bottom:10%}}
+@media(max-width:600px){}
 </style>
 
 <Header />
@@ -73,10 +67,7 @@ html,body{overflow:hidden;height:100%}
 </div>
 
 <!-- Floating contact button — email uniquement -->
-<a href="mailto:contact.nexaweb62@gmail.com" class="c-btn c-btn-3" aria-label="Envoyer un email à contact.nexaweb62@gmail.com">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-  contact.nexaweb62@gmail.com
-</a>
+<InteractiveButton text="contact.nexaweb62@gmail.com" href="mailto:contact.nexaweb62@gmail.com" class="c-btn c-btn-3" aria-label="Envoyer un email à contact.nexaweb62@gmail.com" />
 
 </main>
 

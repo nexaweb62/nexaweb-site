@@ -1,4 +1,5 @@
 ﻿---
+import InteractiveButton from '../components/ui/InteractiveButton.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -78,7 +79,6 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
   .field label{font-size:var(--fs-caption)}
   .field input:not([type=checkbox]):not([type=radio]),.field textarea,.field select{font-size:12px;padding:10px 13px}
   .section-label{font-size:var(--fs-caption)}
-  .submit-btn{font-size:var(--fs-caption);padding:12px 22px}
   .budget-pill{font-size:var(--fs-caption);padding:7px 13px}
 }
 .field{display:flex;flex-direction:column;gap:6px}
@@ -230,13 +230,6 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
    du bouton, comme le texte qu'il remplace. */
 .submit-note{display:flex;flex-direction:column;align-items:flex-start;gap:9px;
   font-size:var(--fs-caption);color:var(--text-muted);line-height:1.55}
-.submit-btn{display:inline-flex;align-items:center;gap:10px;padding:15px 32px;border-radius:var(--radius-pill);font-size:var(--fs-caption);font-weight:600;letter-spacing:0;cursor:pointer;transition:background-color .2s,transform .2s;white-space:nowrap}
-.submit-btn:hover{transform:translateY(-2px)}
-.submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none!important}
-.submit-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.submit-btn-spinner{display:none;width:14px;height:14px;border:2px solid var(--glass-edge-r);border-top-color:currentColor;border-radius:50%;animation:spin .7s linear infinite}
-.submit-btn.loading .submit-btn-icon{display:none}
-.submit-btn.loading .submit-btn-spinner{display:block}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* ── RGPD ── */
@@ -273,8 +266,6 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
 .success-icon svg{width:30px;height:30px;stroke:var(--success);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .success-title{font-size:1.5rem;font-weight:600;letter-spacing:-.03em}
 .success-text{font-size:13px;color:var(--text-muted);line-height:1.65;max-width:380px}
-.success-back{display:inline-flex;align-items:center;gap:8px;font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text);border-radius:var(--radius-pill);padding:11px 22px;transition:color .2s,background-color .2s,transform .2s;cursor:pointer}
-.success-back:hover{color:var(--text)}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px}
 
 /* ── AETHER CANVAS ── */
@@ -307,10 +298,7 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
         </div>
         <h2 class="success-title">Devis envoyé !</h2>
         <p class="success-text">Merci pour votre demande. Nous vous recontacterons sous <strong>24 heures ouvrées</strong> avec une proposition personnalisée.</p>
-        <button class="success-back" id="success-back-btn">
-          <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" style="stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round"><polyline points="15 18 9 12 15 6"/></svg>
-          Retour à l'accueil
-        </button>
+        <InteractiveButton text="Retour à l'accueil" class="success-back" id="success-back-btn" />
       </div>
 
       <!-- FORM -->
@@ -457,11 +445,7 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
             <GarantieBadge />
             <span class="submit-note-txt" data-i18n="dvs-note">Réponse sous 24 h · 100 % gratuit</span>
           </div>
-          <button type="submit" class="submit-btn" id="submit-btn">
-            <span class="submit-btn-label" data-i18n="submit">Envoyer ma demande</span>
-            <span class="submit-btn-spinner" aria-hidden="true"></span>
-            <svg class="submit-btn-icon" viewBox="0 0 24 24" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-          </button>
+          <InteractiveButton text="Envoyer ma demande" type="submit" variant="gold" class="submit-btn" id="submit-btn" data-i18n="submit" />
         </div>
 
       </form>

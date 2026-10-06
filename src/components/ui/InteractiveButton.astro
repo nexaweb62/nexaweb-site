@@ -1,0 +1,71 @@
+---
+/**
+ * LE BOUTON INTERACTIF — un seul bouton pour tout le site.
+ *
+ * Au repos : le libelle, et une pastille doree a gauche.
+ * Au survol : le libelle s'efface vers la droite, la pastille s'etale
+ * pour remplir le bouton, et le libelle revient dessus avec une fleche.
+ *
+ * Inspire de l'« Interactive Hover Button » de magicui, mais REECRIT en
+ * Astro pur : pas de React, pas de Tailwind, pas de lucide-react. La
+ * fleche est un SVG ecrit a la main.
+ *
+ * ── LE PIEGE DES TRADUCTIONS ─────────────────────────────────────────
+ * public/i18n.js applique les traductions par « el.innerHTML = t[k] ».
+ * Une cle data-i18n posee sur la RACINE de ce bouton remplacerait donc
+ * tout son contenu par du texte nu — adieu les trois couches, adieu
+ * l'animation, au premier changement de langue.
+ * La cle est donc posee sur les DEUX libelles internes. i18n.js parcourt
+ * tous les [data-i18n] : il les sert l'un et l'autre, et la structure
+ * reste intacte.
+ *
+ * ── LE LIBELLE EST ECRIT DEUX FOIS ───────────────────────────────────
+ * Une copie visible au repos, une copie qui arrive au survol. La seconde
+ * est aria-hidden : un lecteur d'ecran ne doit entendre le libelle
+ * qu'UNE fois.
+ */
+interface Props {
+  text: string;
+  href?: string;
+  type?: string;
+  variant?: 'dark' | 'gold';
+  class?: string;
+  [cle: string]: any;
+}
+
+const {
+  text,
+  href,
+  type,
+  variant = 'dark',
+  class: classe = '',
+  ...reste
+} = Astro.props;
+
+/* Un lien s'il mene quelque part, un bouton sinon. */
+const Balise = href ? 'a' : 'button';
+
+/* La cle de traduction descend sur les libelles (voir plus haut). */
+const { 'data-i18n': cleI18n, ...autres } = reste;
+
+/* Un <button> sans type vaut « submit » dans un formulaire : on ne veut
+   pas qu'un bouton d'affichage envoie le formulaire par surprise. */
+const typeFinal = href ? undefined : (type ?? 'button');
+---
+
+<Balise
+  class={`ihb ihb-${variant}${classe ? ' ' + classe : ''}`}
+  href={href}
+  type={typeFinal}
+  {...autres}
+>
+  <span class="ihb-t" data-i18n={cleI18n}>{text}</span>
+  <span class="ihb-h" aria-hidden="true">
+    <span data-i18n={cleI18n}>{text}</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M5 12h14M12 5l7 7-7 7"/>
+    </svg>
+  </span>
+  <span class="ihb-d" aria-hidden="true"></span>
+</Balise>

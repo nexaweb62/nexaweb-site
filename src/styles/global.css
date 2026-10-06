@@ -159,7 +159,6 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
    page : i18n.js réécrit le libellé du bouton en innerHTML, et un
    style scopé n'atteindrait pas le <span> recréé. */
 .cta-arr{display:inline-block;transition:transform .25s}
-.cta-btn:hover .cta-arr{transform:translateX(5px)}
 
 /* Sans lueur : dans l'en-tête, un halo doré permanent autour d'une
    tuile de 26 px est du bruit, pas de la présence. */
@@ -270,10 +269,6 @@ body.lite .lgm-i:hover .lg-reflet,body.lite .lgm-i.lg-tombe .lg-goutte{animation
              box-shadow var(--dur-micro) var(--ease-out),
              background-color var(--dur-micro) var(--ease-out);
 }
-.btn-g{color:var(--text)}
-
-/* ── Tailles ── */
-.btn-sm{min-height:32px;padding:7px 17px;font-size:14px}
 .btn-lg{min-height:54px;padding:16px 32px;font-size:19px}
 .btn-round{padding:0;width:54px;min-height:54px;font-size:22px}
 
@@ -446,20 +441,11 @@ body.lite .lgm-i:hover .lg-reflet,body.lite .lgm-i.lg-tombe .lg-goutte{animation
 }
 .login-btn:hover{color:var(--text)}
 .login-btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-
-.hdr-back{
-  display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:0 15px;
-  border-radius:var(--radius-pill);font-size:var(--fs-caption);font-weight:var(--w-semi);
-  letter-spacing:0;color:var(--text);
-  transition:color var(--dur-micro) var(--ease-out);white-space:nowrap;
-}
 /* Le pointeur grossier n'a pas 1 px de précision : 44 px de haut, la
    recommandation WCAG 2.5.8, sinon le bouton se rate une fois sur trois.
    APRÈS la règle de base : une media query n'ajoute aucune spécificité,
    placée avant elle se ferait écraser par le min-height:38px. */
 @media(pointer:coarse){ .hdr-back{min-height:44px} }
-.hdr-back:hover{color:var(--accent-text)}
-.hdr-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 
 /* Infobulles de l'en-tête */
 .hdr-tip{position:relative}
@@ -582,14 +568,6 @@ body:has(.fond-tarifs) footer{
   --text-muted:var(--raw-stone-600);
   --text-subtle:var(--raw-stone-600);
 }
-.foot-team-lnk{
-  display:inline-flex;align-items:center;gap:var(--sp-2);
-  font-size:var(--fs-100);font-weight:600;letter-spacing:0;
-  color:var(--accent-text);border:1px solid var(--accent);
-  padding:9px var(--sp-4);border-radius:var(--radius-sm);margin-top:6px;
-  transition:background-color var(--dur-micro) var(--ease-out),color var(--dur-micro) var(--ease-out);
-}
-.foot-team-lnk:hover{background:var(--accent);color:var(--on-accent)}
 .foot-socials{display:flex;gap:var(--sp-3);margin-top:var(--sp-5);flex-wrap:wrap}
 .foot-soc{
   width:48px;height:48px;border-radius:50%;
@@ -831,8 +809,6 @@ body:has(.fond-tarifs) footer{
              inset 0 -1px 0 var(--glass-edge-b),
              inset 0 0 0 1px var(--glass-edge-r);
 }
-.btn > *,.btn-g > *,.submit-btn > *,.lf-btn > *,
-.svc-cta > *,.cta-btn > *,.c-btn > *{position:relative;z-index:1}
 
 /* ── Teinte NEUTRE ── */
 .btn-g,
@@ -874,7 +850,6 @@ body:has(.fond-tarifs) footer{
 .btn:hover,.btn-g:hover,.submit-btn:hover,.lf-btn:hover,
 .nf-btn-home:hover,.nf-btn-explore:hover,.success-back:hover,
 .svc-cta:hover,.cta-btn:hover{transform:translateY(-2px)}
-.btn:active,.btn-g:active,.submit-btn:active,.lf-btn:active{transform:translateY(0)}
 
 /* Le repli opaque a disparu avec le flou : les boutons ne dependent plus
    de backdrop-filter, il n'y a donc plus rien dont se replier. Les jetons
@@ -1339,12 +1314,6 @@ body[data-page="home"] main>section{position:relative;z-index:2}
 .btn .t,.btn-g .t,.svc-cta .t,.cta-btn .t,.submit-btn .t,.lf-btn .t,
 .nf-btn-home .t,.nf-btn-explore .t,.success-back .t{
   position:relative;z-index:2;display:inline-flex;align-items:center;gap:9px}
-.btn .sh,.btn .fill,.btn .rip,
-.btn-g .sh,.btn-g .fill,.btn-g .rip,
-.svc-cta .sh,.svc-cta .fill,.svc-cta .rip,
-.cta-btn .sh,.cta-btn .fill,.cta-btn .rip,
-.submit-btn .sh,.submit-btn .fill,.submit-btn .rip,
-.lf-btn .sh,.lf-btn .fill,.lf-btn .rip{position:absolute;pointer-events:none}
 /* background-repeat:no-repeat est indispensable. Sans lui le dégradé se
    RÉPÈTE : la bande claire réapparaît dans le bouton quelle que soit la
    position, y compris hors animation. Mesuré : le libellé tombait à
@@ -1355,23 +1324,7 @@ body[data-page="home"] main>section{position:relative;z-index:2}
   inset:0;border-radius:inherit;z-index:0;
   background:linear-gradient(105deg,transparent 40%,rgba(var(--spec),.18) 50%,transparent 60%);
   background-repeat:no-repeat;background-size:300% 100%;background-position:200% 0}
-.btn .fill,.btn-g .fill,.svc-cta .fill,.cta-btn .fill,.submit-btn .fill,.lf-btn .fill{
-  left:var(--bx,50%);top:var(--by,50%);width:0;height:0;border-radius:50%;z-index:0;opacity:0;
-  transform:translate(-50%,-50%);
-  background:radial-gradient(circle,rgba(var(--glow),.42),rgb(from var(--gold-hi) r g b / .22) 58%,
-             rgb(from var(--gold-hi) r g b / 0) 72%);
-  transition:width .66s var(--ease-out),height .66s var(--ease-out),opacity .34s linear}
-.btn:hover .fill,.btn-g:hover .fill,.svc-cta:hover .fill,.cta-btn:hover .fill,
-.submit-btn:hover .fill,.lf-btn:hover .fill{width:330%;height:330%;opacity:1}
-.btn .rip,.btn-g .rip,.svc-cta .rip,.cta-btn .rip,.submit-btn .rip,.lf-btn .rip{
-  width:14px;height:14px;border-radius:50%;z-index:0;
-  background:radial-gradient(circle,rgba(var(--spec),.62),rgba(var(--spec),0) 70%)}
-.btn .ar,.btn-g .ar,.svc-cta .ar,.cta-btn .ar,.submit-btn .ar,.lf-btn .ar{
-  display:inline-block;transition:transform .44s var(--ease-out)}
-.btn:hover .ar,.btn-g:hover .ar,.svc-cta:hover .ar,.cta-btn:hover .ar,
-.submit-btn:hover .ar,.lf-btn:hover .ar{transform:translateX(7px)}
 @media (prefers-reduced-motion:no-preference){
-  .btn .sh,.btn-g .sh,.svc-cta .sh,.cta-btn .sh{animation:btnSheen 5.4s cubic-bezier(.45,0,.18,1) infinite}
   @keyframes btnSheen{0%{background-position:200% 0}40%,100%{background-position:-130% 0}}
   @keyframes ripGo{from{transform:translate(-50%,-50%) scale(1);opacity:.85}
                    to{transform:translate(-50%,-50%) scale(28);opacity:0}}
@@ -1403,35 +1356,15 @@ body[data-page="home"] main>section{position:relative;z-index:2}
              rgba(var(--glow),.09),rgba(var(--glow),.03) 42%,transparent 66%);
   transition:opacity .5s var(--curve)}
 body.pointer .lamp{opacity:1}
-/* LE PLAFOND DU SITE. Le curseur système est masqué (body.pointer
-   {cursor:none}) et remplacé par cet anneau : s'il passe DERRIÈRE quoi
-   que ce soit, il ne reste plus rien à l'écran pour savoir où l'on
-   clique. C'est ce qui arrivait quand le menu plein écran s'ouvrait —
-   .cnav est en z-index:9000, l'anneau était à 420.
-   Il est en pointer-events:none, donc le monter tout en haut ne gêne
-   aucun clic. AUCUN élément du site ne doit dépasser cette valeur :
-   menu, modale, bandeau, rideau de transition — tout reste en dessous. */
-.ring,.cur-dot{position:fixed;left:0;top:0;z-index:2147483000;pointer-events:none;border-radius:50%;
-  opacity:0;transition:opacity .35s linear}
-body.pointer .ring,body.pointer .cur-dot{opacity:1}
-.ring{width:34px;height:34px;margin:-17px 0 0 -17px;
-  box-shadow:inset 0 0 0 1px rgb(from var(--gold) r g b / .75),0 0 18px rgb(from var(--gold) r g b / .22);
-  transform:translate3d(var(--rx2,-200px),var(--ry3,-200px),0) scale(var(--rs,1));
-  transition:opacity .35s linear,box-shadow .32s var(--curve),background .32s var(--curve)}
-.cur-dot{width:5px;height:5px;margin:-2.5px 0 0 -2.5px;background:var(--gold-hi);
-  transform:translate3d(var(--dx2,-200px),var(--dy2,-200px),0) scale(var(--ds,1));
-  box-shadow:0 0 10px rgb(from var(--gold-hi) r g b / .8)}
-body.grab .ring{background:rgb(from var(--gold) r g b / .14);
-  box-shadow:inset 0 0 0 1px rgb(from var(--gold-hi) r g b / .95),0 0 34px rgb(from var(--gold) r g b / .42)}
-body.press .ring{--rs:.78}
-@media (hover:hover) and (pointer:fine){
-  body.pointer{cursor:none}
-  body.pointer a,body.pointer button,body.pointer .qa .q,body.pointer label{cursor:none}
-  body.pointer input,body.pointer textarea,body.pointer select{cursor:auto}
-}
-@media (hover:none),(pointer:coarse){.ring,.cur-dot,.lamp{display:none}}
+/* LE CURSEUR PERSONNALISE A ETE RETIRE.
+   Le site affichait un anneau dore a la place du curseur systeme. Il
+   n'est plus la : on rend au visiteur le curseur qu'il connait, et le
+   « plafond » de z-index qu'il imposait (2147483000) n'a plus de raison
+   d'exister. La lampe, elle, reste : c'est une lueur de fond, pas un
+   curseur. */
+@media (hover:none),(pointer:coarse){.lamp{display:none}}
 @media (prefers-reduced-motion:reduce){
-  .grain{animation:none}.ring,.cur-dot,.lamp{display:none}body.pointer{cursor:auto}
+  .grain{animation:none}.lamp{display:none}
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -1527,7 +1460,6 @@ body.lite .split .w{transition-duration:.35s}
   .nav-r{gap:7px}
   .nav-r .lang-sel{gap:1px}
   .nav-r .lang-opt{padding:2px 3px}
-  .hdr-back{padding:0 12px}
 }
 /* En dessous de 340 px le mot « Menu » ne rentre plus ; le trait triple
    est compris sans lui, « Retour » ne l'est pas sans le sien. */
@@ -1535,3 +1467,72 @@ body.lite .split .w{transition-duration:.35s}
   .hdr-btn-lbl{display:none}
   .menu-btn{padding:0 11px}
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   LE BOUTON INTERACTIF — voir src/components/ui/InteractiveButton.astro
+
+   Les couleurs passent par des jetons, mais ce sont EXACTEMENT celles
+   de la maquette : --raw-black-925 vaut #0F0F10, --raw-warm-40 vaut
+   #F4F1EA, --raw-gold-400 vaut #D4B36A et --raw-gold-950 vaut #121008.
+   Seule tokens.css a le droit d'ecrire une couleur en clair ici, et
+   check:colors le verifie a chaque passage.
+   ═══════════════════════════════════════════════════════════════════ */
+.ihb{
+  position:relative;overflow:hidden;isolation:isolate;
+  display:inline-flex;align-items:center;justify-content:center;
+  border-radius:999px;
+  border:1px solid rgb(from var(--raw-paper-0) r g b / .14);
+  background:var(--raw-black-925);
+  color:var(--raw-warm-40);
+  font-weight:600;
+  padding:12px 22px 12px 34px;
+  cursor:pointer;text-decoration:none;white-space:nowrap;
+}
+.ihb-t{display:inline-block;transition:transform .3s,opacity .3s}
+.ihb-h{
+  position:absolute;inset:0;z-index:2;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  color:var(--raw-gold-950);
+  opacity:0;transform:translateX(48px);
+  transition:transform .3s,opacity .3s;
+}
+.ihb-h svg{width:18px;height:18px;flex:none}
+.ihb-d{
+  position:absolute;left:16px;top:50%;width:8px;height:8px;margin-top:-4px;
+  border-radius:999px;background:var(--raw-gold-400);z-index:1;
+  transition:all .3s;
+}
+.ihb:hover .ihb-t,.ihb:focus-visible .ihb-t{transform:translateX(48px);opacity:0}
+.ihb:hover .ihb-h,.ihb:focus-visible .ihb-h{transform:translateX(-4px);opacity:1}
+.ihb:hover .ihb-d,.ihb:focus-visible .ihb-d{
+  left:0;top:0;margin-top:0;width:100%;height:100%;transform:scale(1.8);
+}
+.ihb:focus-visible{outline:2px solid var(--raw-gold-400);outline-offset:3px}
+
+.ihb-gold{
+  background:var(--raw-gold-400);
+  color:var(--raw-gold-950);
+  border-color:var(--raw-gold-400);
+}
+.ihb-gold .ihb-d{background:var(--raw-warm-40)}
+
+@media (prefers-reduced-motion:reduce){ .ihb *{transition:none} }
+/* Sur un ecran tactile il n'y a pas de survol : la pastille resterait
+   plantee a gauche sans jamais s'ouvrir. On ne la montre pas. */
+@media (hover:none){ .ihb-d{display:none} }
+
+/* L'ENVOI EN COURS. Les anciens boutons de formulaire portaient un
+   spinner dans leur balisage ; le bouton interactif n'en a pas. Plutot
+   que de perdre le retour visuel sur les deux formulaires les plus
+   importants du site — le devis et la connexion — c'est la pastille
+   doree qui bat. Le script pose deja « loading » et « disabled ». */
+.ihb.loading{cursor:not-allowed}
+.ihb.loading .ihb-d{animation:ihbPouls .9s ease-in-out infinite}
+@keyframes ihbPouls{
+  0%,100%{transform:scale(1);opacity:1}
+  50%    {transform:scale(2.4);opacity:.45}
+}
+/* Sur tactile la pastille est masquee : on la rend le temps de l'envoi,
+   sinon l'ecran ou le retour compte le plus n'en donnerait aucun. */
+@media (hover:none){ .ihb.loading .ihb-d{display:block} }
+@media (prefers-reduced-motion:reduce){ .ihb.loading .ihb-d{animation:none} }

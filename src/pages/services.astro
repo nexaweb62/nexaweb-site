@@ -1,4 +1,5 @@
 ---
+import InteractiveButton from '../components/ui/InteractiveButton.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -234,19 +235,6 @@ const PRESTATIONS = [
 .sv-fin-h{font-size:clamp(32px,6vw,70px);line-height:1.02;letter-spacing:-.035em;margin:0 0 clamp(28px,4vh,44px)}
 .sv-fin-h i{font-style:normal;font-weight:300;display:block;color:var(--text-muted)}
 .sv-fin-h b{font-weight:800;display:block}
-.sv-cta{
-  display:inline-flex;align-items:center;gap:16px;
-  padding:16px 18px 16px 26px;border:1px solid var(--border-strong);border-radius:4px;
-  font-size:15px;font-weight:var(--w-semi);letter-spacing:0;color:var(--text);
-  transition:border-color .3s var(--ease-out),color .3s var(--ease-out);
-}
-.sv-cta:hover{border-color:var(--accent);color:var(--accent-text)}
-.sv-cta-c{
-  width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;
-  border:1px solid var(--border-strong);font-size:13px;
-  transition:border-color .3s var(--ease-out),background-color .3s var(--ease-out),color .3s var(--ease-out);
-}
-.sv-cta:hover .sv-cta-c{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 
 /* ── APPARITION AU DÉFILEMENT ──
    Posée en JavaScript, comme partout ailleurs : sans lui, rien n'est
@@ -412,10 +400,7 @@ const PRESTATIONS = [
         <i data-i18n="sv-fin-1">Votre projet.</i>
         <b data-i18n="sv-fin-2">On le construit.</b>
       </h2>
-      <a href="/devis" class="sv-cta sv-rv">
-        <span data-i18n="sv-fin-cta">Démarrer un projet</span>
-        <span class="sv-cta-c" aria-hidden="true">↗</span>
-      </a>
+      <InteractiveButton text="Démarrer un projet" href="/devis" variant="gold" class="sv-rv" data-i18n="sv-fin-cta" />
     </div>
   </section>
 

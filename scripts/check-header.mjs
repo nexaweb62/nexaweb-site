@@ -94,7 +94,9 @@ for (const theme of ['dark', 'light']) {
         };
         if (back) {
           const rc = back.getBoundingClientRect();
-          const lbl = back.querySelector('.back-label');
+          /* Le bouton Retour est devenu un bouton interactif : son
+             libelle vit dans .ihb-t, plus dans .back-label. */
+          const lbl = back.querySelector('.ihb-t') || back.querySelector('.back-label');
           const cible = document.elementFromPoint(rc.x + rc.width / 2, rc.y + rc.height / 2);
           out.back = {
             visible: vu(back),
@@ -128,14 +130,12 @@ for (const theme of ['dark', 'light']) {
         }
       }
 
-      /* Langue et thème : présents une fois, jamais deux, jamais zéro. */
-      const dansLaBarre = r.barreLangue && r.barreTheme;
-      if (dansLaBarre && r.outils) echecs.push(`${tag}  langue et thème présents en double`);
-      if (!dansLaBarre && !r.outils) echecs.push(`${tag}  ni la langue ni le thème ne sont atteignables`);
-      if (r.groupes !== 2) echecs.push(`${tag}  ${r.groupes} sélecteur(s) de thème dans le DOM, attendu 2`);
-      if (new Set(r.coches).size > 1) {
-        echecs.push(`${tag}  les deux sélecteurs de thème ne s'accordent pas : ${r.coches.join(' / ')}`);
-      }
+      /* LE SELECTEUR DE THEME A ETE RETIRE DU SITE : le visiteur suit
+         desormais le reglage de son systeme. Ce controle ne le cherche
+         donc plus — mais il verifie l'inverse, qu'aucun ne revienne par
+         megarde, et que la LANGUE, elle, reste atteignable. */
+      if (r.groupes !== 0) echecs.push(`${tag}  ${r.groupes} sélecteur(s) de thème : il ne doit plus y en avoir`);
+      if (!r.barreLangue && !r.outils) echecs.push(`${tag}  la langue n'est atteignable nulle part`);
     }
     await ctx.close();
   }
@@ -170,23 +170,15 @@ await page.waitForTimeout(900);
 ou = new URL(page.url()).pathname;
 if (ou !== '/contact') echecs.push(`parcours interne : le Retour mène à ${ou}, attendu /contact`);
 
-/* Le sélecteur du menu plein écran pilote bien le site. */
+/* Le menu plein écran pilote bien la langue. Le thème n'y est plus. */
 await page.goto(BASE + '/tarifs', { waitUntil: 'domcontentloaded' });
 await page.click('#menu-btn').catch(() => {});
 await page.waitForTimeout(600);
-await page.click('.cnav-tools .theme-opt[data-theme-opt="light"]').catch(() => {});
-await page.waitForTimeout(400);
 const etat = await page.evaluate(() => ({
-  attr: document.documentElement.getAttribute('data-theme'),
-  coches: [...document.querySelectorAll('.theme-opt')]
-    .filter(b => b.getAttribute('aria-checked') === 'true')
-    .map(b => b.getAttribute('data-theme-opt')),
+  themes: document.querySelectorAll('.theme-sel,.theme-opt').length,
   langues: [...document.querySelectorAll('.lang-opt.active')].map(b => b.getAttribute('data-lang')),
 }));
-if (etat.attr !== 'light') echecs.push(`le thème choisi dans le menu ne s'applique pas (data-theme=${etat.attr})`);
-if (etat.coches.length !== 2 || new Set(etat.coches).size !== 1) {
-  echecs.push(`après un choix dans le menu, les deux sélecteurs divergent : ${etat.coches.join(' / ')}`);
-}
+if (etat.themes !== 0) echecs.push(`le menu porte encore ${etat.themes} élément(s) de thème`);
 if (etat.langues.length !== 2 || new Set(etat.langues).size !== 1) {
   echecs.push(`les deux sélecteurs de langue divergent : ${etat.langues.join(' / ')}`);
 }

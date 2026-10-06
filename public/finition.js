@@ -100,40 +100,9 @@
   })();
 
   /* ── 3. Le curseur ──────────────────────────────────────────────────
-     body.pointer n'est posée QUE d'ici : si ce script échoue, le curseur
-     système reste. Rien n'est masqué à l'aveugle. */
-  (function curseur() {
-    if (!fin.matches || reduce.matches) return;
-    var ring = document.querySelector('.ring'), dot = document.querySelector('.cur-dot'),
-        lamp = document.querySelector('.lamp'), body = document.body;
-    if (!ring || !dot) return;
-    var tx = innerWidth / 2, ty = innerHeight / 2, rx = tx, ry = ty, raf = null, on = false;
-    var GRAB = '.btn, .btn-g, a, button, .plan-card, .card, .who-card, .team-card, .stat,' +
-               ' .step, .constat-item, .qa .q, .svc-row, .feat-item';
-    function loop() {
-      raf = null;
-      rx += (tx - rx) * 0.19; ry += (ty - ry) * 0.19;
-      ring.style.setProperty('--rx2', rx.toFixed(1) + 'px');
-      ring.style.setProperty('--ry3', ry.toFixed(1) + 'px');
-      if (Math.abs(tx - rx) > 0.4 || Math.abs(ty - ry) > 0.4) raf = requestAnimationFrame(loop);
-    }
-    document.addEventListener('pointermove', function (e) {
-      if (e.pointerType && e.pointerType !== 'mouse') return;
-      tx = e.clientX; ty = e.clientY;
-      dot.style.setProperty('--dx2', tx + 'px'); dot.style.setProperty('--dy2', ty + 'px');
-      if (lamp) { lamp.style.setProperty('--lx', tx + 'px'); lamp.style.setProperty('--ly2', ty + 'px'); }
-      if (!on) { on = true; body.classList.add('pointer'); }
-      var g = e.target && e.target.closest ? e.target.closest(GRAB) : null;
-      body.classList.toggle('grab', !!g);
-      ring.style.setProperty('--rs', g ? '2.05' : '1');
-      dot.style.setProperty('--ds', g ? '0' : '1');
-      if (!raf) raf = requestAnimationFrame(loop);
-    }, { passive: true });
-    document.addEventListener('pointerdown', function () { body.classList.add('press'); }, { passive: true });
-    document.addEventListener('pointerup', function () { body.classList.remove('press'); }, { passive: true });
-    document.addEventListener('mouseleave', function () { body.classList.remove('pointer', 'grab'); on = false; });
-    document.addEventListener('mouseenter', function () { body.classList.add('pointer'); on = true; });
-  })();
+     RETIRE. Le site rend le curseur du systeme : c'est celui que le
+     visiteur connait, et il ne demandait pas a etre remplace. */
+
 
   /* ── 5. Le mode léger automatique ───────────────────────────────────
      On mesure la fluidité réelle pendant 1,1 s au premier défilement.

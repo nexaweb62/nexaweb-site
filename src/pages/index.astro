@@ -1,4 +1,5 @@
 ---
+import InteractiveButton from '../components/ui/InteractiveButton.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Logo from '../components/Logo.astro';
@@ -44,10 +45,6 @@ import '../styles/global.css';
 /* ── SERVICES ── */
 .s-svc{}
 .svc-hdr{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:24px;margin-bottom:clamp(36px,6vh,72px)}
-.svc-tout{display:inline-block;margin-top:12px;font-size:var(--fs-caption);font-weight:600;
-  letter-spacing:0;color:var(--accent-text);border-bottom:1px solid transparent;
-  transition:border-color var(--dur-micro) var(--ease-out)}
-.svc-tout:hover{border-bottom-color:var(--accent)}
 /* ═══════════════════════════════════════════════════════════════════
    DES LIGNES, PAS DES CARTES — recopie de la reference.
    Aucun rayon, aucun fond : des filets fins, et c'est tout. Le
@@ -214,8 +211,6 @@ import '../styles/global.css';
    s'y range comme les paragraphes, et s'aligne à gauche au lieu de
    s'étirer sur toute la largeur de la colonne. */
 .why-gar{align-self:flex-start;margin-top:4px}
-.why-bio-cta{display:inline-flex;align-items:center;gap:8px;margin-top:8px;font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text);border-bottom:1px solid var(--border-strong);padding-bottom:4px;transition:color .2s,border-color .2s;align-self:flex-start}
-.why-bio-cta:hover{color:var(--text);border-color:var(--text)}
 @media(max-width:720px){.why-in{grid-template-columns:1fr}}
 
 /* ── STATS ── */
@@ -304,9 +299,6 @@ import '../styles/global.css';
 .cta-super{font-size:clamp(.6rem,1vw,.75rem);font-weight:600;letter-spacing:0;color:var(--text-muted);margin-bottom:32px}
 .cta-hl{font-size:clamp(3rem,8vw,9.5rem);font-weight:600;line-height:.92;letter-spacing:-.04em;margin-bottom:48px;text-wrap:balance}
 .cta-hl em{font-style:italic;font-weight:600}
-.cta-btn{display:inline-flex;align-items:center;gap:12px;font-size:var(--fs-caption);font-weight:600;letter-spacing:0;padding:18px 40px;border-radius:var(--radius-pill);transition:background-color .2s,transform .3s cubic-bezier(.16,1,.3,1)}
-.cta-btn:hover{transform:translateY(-2px)}
-.cta-btn:focus-visible{outline:2px solid var(--text);outline-offset:4px}
 /* .cta-arr est stylée dans global.css et non ici : i18n.js réécrit le
    contenu du bouton en innerHTML, et le <span> ainsi recréé ne porte
    pas l'attribut de portée d'Astro. Scopées, ces deux règles ne
@@ -354,8 +346,8 @@ import '../styles/global.css';
         Site vitrine, boutique en ligne ou refonte : on conçoit, on développe, on met en ligne. Tarifs affichés, calendrier fixé dès le premier appel.
       </p>
       <div class="hero-ctas">
-        <a href="/devis" class="btn" data-i18n="idx-cta1">Démarrer un projet <span aria-hidden="true">→</span></a>
-        <a href="/avis" class="btn-g" data-i18n="idx-cta2">Nos avis clients</a>
+        <InteractiveButton text="Démarrer un projet" href="/devis" variant="gold" data-i18n="idx-cta1" />
+        <InteractiveButton text="Nos avis clients" href="/avis" data-i18n="idx-cta2" />
       </div>
     </div>
   </div>
@@ -392,7 +384,7 @@ import '../styles/global.css';
         {/* Les cinq lignes ci-dessous gardent chacune leur page : les
             faire toutes mener à /services ferait cinq liens vers le
             même endroit. C'est la section qui y mène. */}
-        <a href="/services" class="svc-tout" data-i18n="idx-svc-tout">Voir notre méthode →</a>
+        <InteractiveButton text="Voir notre méthode" href="/services" class="svc-tout" data-i18n="idx-svc-tout" />
       </div>
     </div>
     <div class="svc-list">
@@ -444,7 +436,7 @@ import '../styles/global.css';
           <div class="who-price">dès 490 €</div>
           <p class="who-price-sub">Nouveau design · Contenus repris · Livré en 2 semaines</p>
         </div>
-        <a href="/tarifs" class="btn-g" style="align-self:flex-start;margin-top:8px">Voir la formule →</a>
+        <InteractiveButton text="Voir la formule" href="/tarifs" style="align-self:flex-start;margin-top:8px" />
       </div>
       <div class="who-card r d1">
         <div class="who-marker">02</div>
@@ -454,7 +446,7 @@ import '../styles/global.css';
           <div class="who-price">à partir de {VITRINE_PRIX}</div>
           <p class="who-price-sub">Offre de lancement · places limitées · SEO local inclus</p>
         </div>
-        <a href="/tarifs" class="btn-g" style="align-self:flex-start;margin-top:8px">Voir les formules →</a>
+        <InteractiveButton text="Voir les formules" href="/tarifs" style="align-self:flex-start;margin-top:8px" />
       </div>
     </div>
   </div>
@@ -512,7 +504,7 @@ import '../styles/global.css';
         <!-- La promesse qui rassure le plus se tient à côté de l'appel
              à l'action, pas en bas du formulaire de devis. -->
         <GarantieBadge class="why-gar" />
-        <a href="/devis" class="why-bio-cta" data-i18n="idx-why-cta">Être parmi les premiers →</a>
+        <InteractiveButton text="Être parmi les premiers" href="/devis" class="why-bio-cta" data-i18n="idx-why-cta" />
       </div>
     </div>
   </div>
@@ -553,7 +545,7 @@ import '../styles/global.css';
         <span class="label r" id="faq-h" data-i18n="idx-faq-lbl">Questions fréquentes</span>
         <h2 class="h-md" style="margin-top:14px" data-i18n="idx-faq-h">On répond à vos questions.</h2>
         <p class="body faq-side r d2" style="margin-top:18px;font-size:13px" data-i18n="idx-faq-sub">Une question absente de cette liste ? Contactez-nous directement.</p>
-        <a href="/contact" class="btn-g r d3" style="margin-top:28px;display:inline-flex" data-i18n="idx-faq-contact">Nous contacter</a>
+        <InteractiveButton text="Nous contacter" href="/contact" class="r d3" style="margin-top:28px;display:inline-flex" data-i18n="idx-faq-contact" r />
       </div>
       <div>
         <ul class="faq-list" aria-label="Foire aux questions">
@@ -613,7 +605,7 @@ import '../styles/global.css';
       <div class="cta-super r" data-i18n="idx-cta-super">Passons à l'action</div>
       <h2 class="cta-hl" id="cta-h" data-i18n="idx-cta-h">Votre prochain<br>site commence <em>ici.</em></h2>
       <div class="r d2">
-        <a href="/devis" class="cta-btn" data-i18n="idx-cta-btn">Démarrer un projet <span class="cta-arr" aria-hidden="true">→</span></a>
+        <InteractiveButton text="Démarrer un projet" href="/devis" variant="gold" data-i18n="idx-cta-btn" />
       </div>
     </div>
   </div>
@@ -657,7 +649,7 @@ import '../styles/global.css';
       <div>
         <div class="foot-col-title" data-i18n="ftr-team-h">L'équipe</div>
         <p class="foot-tag" style="margin-bottom:14px" data-i18n="ftr-team-tag">Deux passionnés du digital derrière chaque projet Nexa Web.</p>
-        <a href="/equipe" class="foot-team-lnk" data-i18n="ftr-team-lnk">Découvrir l'équipe →</a>
+        <InteractiveButton text="Découvrir l'équipe" href="/equipe" class="foot-team-lnk" data-i18n="ftr-team-lnk" />
       </div>
     </div>
     <div class="foot-bot">

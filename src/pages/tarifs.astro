@@ -1,4 +1,5 @@
 ---
+import InteractiveButton from '../components/ui/InteractiveButton.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -199,7 +200,6 @@ main{--text-muted:var(--raw-warm-200)}
   .plan-spots-num{font-size:12px}
   .plan-divider{margin:12px 0}
   .plan-features{gap:7px;margin-bottom:16px}
-  .btn,.btn-g{font-size:var(--fs-caption);padding:10px 16px}
 }
 /* Les cartes laissent voir la soie : même couleur de fond qu'avant,
    simplement rendue translucide, et un flou d'arrière-plan pour que les
@@ -256,7 +256,6 @@ main{--text-muted:var(--raw-warm-200)}
 .plan-feature{display:flex;align-items:flex-start;gap:8px;font-size:var(--fs-caption);color:var(--text-muted);line-height:1.4}
 .plan-feature-icon{width:16px;height:16px;border-radius:50%;background:var(--success-glow);border:1px solid var(--success);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
 .plan-feature-icon svg{width:8px;height:8px;stroke:var(--success);stroke-width:2.5;fill:none}
-.plan-cta{display:block;text-align:center;margin-top:auto}
 
 /* Le badge de garantie, centré sous la grille. Sa fenêtre et son
    habillage vivent dans le composant ; ici, seule sa place. */
@@ -390,7 +389,7 @@ main{--text-muted:var(--raw-warm-200)}
               <span data-i18n="trf-p4-f5">Livraison sous {REFONTE_DELAI}</span>
             </li>
           </ul>
-          <a href="/devis?formule=refonte" class="btn-g plan-cta" data-plan="refonte" data-i18n="trf-p4-cta">Demander un devis</a>
+          <InteractiveButton text="Demander un devis" href="/devis?formule=refonte" class="plan-cta" data-plan="refonte" data-i18n="trf-p4-cta" />
         </div>
 
         <!-- Vitrine Pro — populaire -->
@@ -438,7 +437,7 @@ main{--text-muted:var(--raw-warm-200)}
               <span data-i18n="trf-p2-f6">1 mois de support inclus</span>
             </li>
           </ul>
-          <a href="/devis?formule=vitrine" class="btn plan-cta" data-plan="vitrine" data-i18n="trf-p2-cta">Démarrer mon projet</a>
+          <InteractiveButton text="Démarrer mon projet" href="/devis?formule=vitrine" variant="gold" class="plan-cta" data-plan="vitrine" data-i18n="trf-p2-cta" />
         </div>
 
         <!-- Entreprise -->
@@ -488,7 +487,7 @@ main{--text-muted:var(--raw-warm-200)}
               <span data-i18n="trf-p3-f6">Support étendu</span>
             </li>
           </ul>
-          <a href="/devis?formule=entreprise" class="btn-g plan-cta" data-plan="entreprise" data-i18n="trf-p3-cta">Obtenir un devis</a>
+          <InteractiveButton text="Obtenir un devis" href="/devis?formule=entreprise" class="plan-cta" data-plan="entreprise" data-i18n="trf-p3-cta" />
         </div>
 
       </div>
@@ -504,8 +503,8 @@ main{--text-muted:var(--raw-warm-200)}
         <h2 class="cta-title" data-i18n="trf-cta-h">Obtenez votre devis en 2 minutes</h2>
         <p class="cta-sub" data-i18n="trf-cta-sub">Décrivez votre projet, on vous répond sous 24 h avec une estimation précise — gratuit et sans engagement.</p>
         <div class="cta-btns">
-          <a href="/devis" class="btn" data-i18n="trf-cta-btn1">Demander un devis gratuit →</a>
-          <a href="/contact" class="btn-g" data-i18n="trf-cta-btn2">Nous contacter</a>
+          <InteractiveButton text="Demander un devis gratuit" href="/devis" data-i18n="trf-cta-btn1" />
+          <InteractiveButton text="Nous contacter" href="/contact" data-i18n="trf-cta-btn2" />
         </div>
       </div>
     </div>
