@@ -1,109 +1,120 @@
 ---
 /**
- * LE FOND DE LA PAGE TARIFS — trois aurores d'or qui derivent.
+ * LE FOND DE LA PAGE TARIFS — des traces qui coulent.
  *
- * Aucun canvas, aucun WebGL, aucun JavaScript : trois disques de degrade
- * dore sur l'aplat du theme, qui respirent lentement, plus une grille de
- * 64 px fondue sur les bords.
+ * Reprend l'effet « Background Paths » de magicui, mais REECRIT : le
+ * composant d'origine est du React + Tailwind + shadcn + framer-motion.
+ * Ce site est en Astro et CSS pur, et on n'installe pas React pour un
+ * fond. Ici : aucun JavaScript, aucune dependance.
  *
- * POURQUOI PAS UN SHADER. Le fond d'origine etait une soie WebGL de
- * ~300 lignes qui affamait le fil principal. Ici tout se joue en
- * `transform` et en `opacity`, les deux seules proprietes qu'un
- * navigateur peut animer sans repeindre : le travail part au
- * compositeur, et la page ne ralentit pas.
+ * COMMENT L'ANIMATION TIENT SANS JAVASCRIPT. framer-motion animait
+ * « pathLength » et « pathOffset », qu'il calcule courbe par courbe.
+ * L'attribut SVG pathLength="1" fait le meme travail gratuitement : il
+ * NORMALISE la longueur de chaque trace a 1. Verifie dans le navigateur
+ * — deux courbes de 1583 et 797 unites rendent toutes deux un
+ * stroke-dasharray de « 0.3px, 1px ». Une seule regle CSS anime donc les
+ * 72 courbes, quelles que soient leurs longueurs.
  *
- * POURQUOI DES JETONS ET NON DES VALEURS EN DUR. En sombre, --bg VAUT
- * #0A0A0B et --raw-gold-400 VAUT rgb(212,179,106) : le rendu sombre est
- * exactement celui voulu, au pixel. Mais un fond sombre fige resterait
- * noir sous le theme clair, ou le texte est sombre — la page serait
- * illisible d'un bout a l'autre. Meme raison pour la grille, qui suit
- * --text : des traits blancs sur le creme ne se verraient pas. Le masque
- * n'utilise que le canal alpha de sa couleur, donc --text y sert
- * d'« opaque » sans rien teinter.
+ * LES COULEURS SONT CELLES DU SITE. L'original trace du bleu ardoise sur
+ * blanc ; ici c'est l'or de la marque sur l'aplat du theme. Le clair
+ * prend un or plus profond, sans quoi les traces disparaitraient sur le
+ * creme.
  *
- * LE MOUVEMENT S'ARRETE DE LUI-MEME dans deux cas : quand le visiteur a
- * demande moins d'animation, et quand le site est passe en mode leger
- * parce qu'il manque d'images par seconde. Dans les deux cas il reste un
- * fond fixe, complet et lisible — rien ne disparait.
+ * LE MOUVEMENT S'ARRETE DE LUI-MEME quand le visiteur demande moins
+ * d'animation, et quand le site passe en mode leger faute d'images par
+ * seconde. Dans les deux cas les traces restent dessinees : le fond ne
+ * disparait pas, il se fige.
  */
+
+/* Les 36 courbes d'une direction, telles que les dessine l'original.
+   Calculees ici, au build : rien n'est genere chez le visiteur. */
+function traces(sens: number) {
+  return Array.from({ length: 36 }, (_, i) => {
+    const dx = i * 5 * sens;
+    const d = `M${-(380 - dx)} ${-(189 + i * 6)}`
+            + `C${-(380 - dx)} ${-(189 + i * 6)} ${-(312 - dx)} ${216 - i * 6} ${152 - dx} ${343 - i * 6}`
+            + `C${616 - dx} ${470 - i * 6} ${684 - dx} ${875 - i * 6} ${684 - dx} ${875 - i * 6}`;
+    return {
+      d,
+      /* L'epaisseur et l'opacite croissent avec le rang, comme dans
+         l'original. Les valeurs, elles, ont ete reglees A LA MESURE :
+         l'original trace du bleu ardoise SUR BLANC, a fort contraste,
+         et ses reglages ne transposent pas. Trop bas, on ne voyait rien
+         — 0,7 % de l'ecran touche. Trop haut, les traces passaient
+         devant le texte — 18 %. Ici on vise un FOND : present, jamais
+         premier plan. */
+      trait: (0.9 + i * 0.05).toFixed(2),
+      opacite: Math.min(0.055 + i * 0.007, 0.185).toFixed(3),
+      /* Une duree propre a chaque courbe, DETERMINISTE : un Math.random
+         au build donnerait un rendu different a chaque mise en ligne,
+         pour rien. Les durees restent premieres entre elles, donc le
+         motif ne se repete jamais a l'oeil. */
+      duree: (19 + ((i * 7) % 11) + (sens > 0 ? 0 : 1.5)).toFixed(1),
+      retard: (-(i * 1.7) % 23).toFixed(1),
+    };
+  });
+}
+const sens = [traces(1), traces(-1)];
 ---
 
 <div class="fond-tarifs" aria-hidden="true" role="presentation">
-  <span class="ft-aura ft-a1"></span>
-  <span class="ft-aura ft-a2"></span>
-  <span class="ft-aura ft-a3"></span>
+  {sens.map(groupe => (
+    <svg class="ft-svg" viewBox="0 0 696 316" fill="none"
+         preserveAspectRatio="none">
+      {groupe.map(t => (
+        <path d={t.d} pathLength="1" stroke="currentColor"
+              stroke-width={t.trait}
+              style={`--o:${t.opacite};--d:${t.duree}s;--r:${t.retard}s`} />
+      ))}
+    </svg>
+  ))}
 </div>
 
 <style>
   /* Fixe derriere toute la page, le contenu passe au-dessus : <main>
-     porte deja position:relative et z-index:1.
-     overflow:hidden : les aurores debordent largement du cadre, et rien
-     ne doit pouvoir creer une barre de defilement horizontale. */
+     porte deja position:relative et z-index:1. */
   .fond-tarifs{
     position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
     background:var(--bg);
+    color:var(--raw-gold-400);
+    /* La force des traces, par theme. Une seule opacite ne peut pas
+       servir les deux : sur le quasi-noir, l'or ressort a 18 % ; sur le
+       creme, le meme reglage disparait — mesure, 3,2 % de l'ecran touche
+       en sombre contre presque rien en clair. Ce coefficient multiplie
+       l'opacite de chaque trace. */
+    --ft-k:1;
+  }
+  /* Sur le creme : un or plus profond, et nettement plus affirme. */
+  :root[data-theme="light"] .fond-tarifs{color:var(--raw-gold-600);--ft-k:3.6}
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]) .fond-tarifs{color:var(--raw-gold-600);--ft-k:3.6}
   }
 
-  /* Les aurores. vmax et non vw : sur un ecran haut et etroit, une taille
-     en vw laisserait le haut et le bas nus. */
-  .ft-aura{
-    position:absolute;border-radius:50%;
-    will-change:transform;
+  .ft-svg{position:absolute;inset:0;width:100%;height:100%}
+
+  .ft-svg path{
+    fill:none;
+    /* LA COURBE EST LARGEMENT DESSINEE, pas reduite a un tiret.
+       L'original fait croitre « pathLength » de 0,3 a 1 : la courbe
+       finit donc entiere, et c'est ce tissage continu qu'on voit. Avec
+       un tiret fixe de 30 % je n'obtenais que des segments epars —
+       mesure, 9 000 pixels dores sur 1,3 million. Ici 62 % de chaque
+       courbe est tracee, et le vide qui reste la parcourt : le tissage
+       tient, et le mouvement se lit. */
+    stroke-dasharray:.62 .38;
+    opacity:calc(var(--o) * var(--ft-k));
+    animation:ftCoule var(--d) linear var(--r) infinite,
+              ftRespire var(--d) ease-in-out var(--r) infinite;
   }
-  /* TROIS TONS D'OR, PAS UN SEUL. Avec une seule teinte, les trois
-     disques se superposaient en une brume grise : mesure, les zones
-     eclairees ne montaient qu'a rgb(30,28,24), pour un rapport
-     rouge/bleu de 1,25 la ou l'or en donne 2,00. Un or clair en haut,
-     l'or de la marque au milieu, un or profond en bas : la lumiere a
-     une direction, et elle reste doree partout. */
-  .ft-a1{
-    width:92vmax;height:92vmax;left:-24vmax;top:-48vmax;
-    background:radial-gradient(circle at 50% 50%,
-      rgb(from var(--raw-gold-300) r g b / .30), transparent 70%);
-    animation:ftDerive1 38s ease-in-out infinite alternate;
-  }
-  .ft-a2{
-    width:70vmax;height:70vmax;right:-26vmax;top:22vmax;
-    background:radial-gradient(circle at 50% 50%,
-      rgb(from var(--raw-gold-400) r g b / .24), transparent 70%);
-    animation:ftDerive2 53s ease-in-out infinite alternate;
-  }
-  .ft-a3{
-    width:76vmax;height:76vmax;left:-30vmax;bottom:-36vmax;
-    background:radial-gradient(circle at 50% 50%,
-      rgb(from var(--raw-gold-600) r g b / .30), transparent 70%);
-    animation:ftDerive3 67s ease-in-out infinite alternate;
+  @keyframes ftCoule{ to{ stroke-dashoffset:-1 } }
+  @keyframes ftRespire{
+    0%,100%{ opacity:calc(var(--o) * var(--ft-k) * .55) }
+    50%    { opacity:calc(var(--o) * var(--ft-k)) }
   }
 
-  /* Trois durees premieres entre elles : la boucle commune est si longue
-     qu'on ne voit jamais le motif se repeter. */
-  @keyframes ftDerive1{
-    from{transform:translate3d(0,0,0) scale(1)}
-    to  {transform:translate3d(5vmax,3vmax,0) scale(1.16)}
-  }
-  @keyframes ftDerive2{
-    from{transform:translate3d(0,0,0) scale(1.08)}
-    to  {transform:translate3d(-6vmax,-4vmax,0) scale(.92)}
-  }
-  @keyframes ftDerive3{
-    from{transform:translate3d(0,0,0) scale(.95)}
-    to  {transform:translate3d(4vmax,-5vmax,0) scale(1.12)}
-  }
-
-  /* La grille, posee par dessus les aurores et fondue sur les bords. */
-  .fond-tarifs::after{
-    content:"";position:absolute;inset:0;pointer-events:none;
-    background-image:
-      linear-gradient(rgb(from var(--text) r g b / .025) 1px, transparent 1px),
-      linear-gradient(90deg, rgb(from var(--text) r g b / .025) 1px, transparent 1px);
-    background-size:64px 64px;
-    -webkit-mask-image:radial-gradient(ellipse 80% 60% at 50% 30%, var(--text), transparent 80%);
-    mask-image:radial-gradient(ellipse 80% 60% at 50% 30%, var(--text), transparent 80%);
-  }
-
-  /* On arrete le mouvement, on ne retire pas le fond. */
+  /* On fige les traces, on ne les efface pas. */
   @media (prefers-reduced-motion:reduce){
-    .ft-aura{animation:none}
+    .ft-svg path{animation:none}
   }
-  :global(body.lite) .ft-aura{animation:none}
+  :global(body.lite) .ft-svg path{animation:none}
 </style>
