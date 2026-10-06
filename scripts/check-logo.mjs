@@ -72,9 +72,22 @@ for (const vp of VUES) {
       verifs += 5;
       if (!vu.hd) fails.push(`${ou} : pas de logo dans l'en-tete`);
       else if (vu.hd !== '30x32') fails.push(`${ou} : logo d'en-tete ${vu.hd} au lieu de 30x32`);
-      if (!vu.pd) fails.push(`${ou} : pas de logo dans le pied de page`);
-      else if (vu.pd !== '40x42') fails.push(`${ou} : logo de pied ${vu.pd} au lieu de 40x42`);
-      if (!vu.pdLien) fails.push(`${ou} : le logo du pied n'est pas un lien`);
+      /* SANS PIED DE PAGE, ET C'EST VOULU. /contact est une carte plein
+         ecran : son titre, son epingle et son bouton sont TOUS en
+         position:fixed, donc <main> mesure 0 px de haut. Un pied de page
+         s'y place a l'ordonnee 0 et recouvre le titre — c'est exactement
+         ce qui est arrive quand ce controle a reclame un pied ici, et
+         qu'on lui en a ajoute un sans regarder le resultat.
+         La page garde le logo de sa barre ; le reste du site garde son
+         pied. */
+      const sansPied = chemin === '/contact';
+      if (!sansPied) {
+        if (!vu.pd) fails.push(`${ou} : pas de logo dans le pied de page`);
+        else if (vu.pd !== '40x42') fails.push(`${ou} : logo de pied ${vu.pd} au lieu de 40x42`);
+        if (!vu.pdLien) fails.push(`${ou} : le logo du pied n'est pas un lien`);
+      } else if (vu.pd) {
+        fails.push(`${ou} : cette page plein ecran ne doit PAS porter de pied de page`);
+      }
       if (vu.deborde) fails.push(`${ou} : debordement horizontal ${vu.deborde}`);
       /* L'arete doree doit suivre le theme, jamais etre une couleur figee. */
       if (vu.prof) {
