@@ -87,8 +87,16 @@ const SEL = [
   '.menu-btn', '.cnav-close', '.lf-lang-btn',
 ].join(',');
 
+/* /contact N'EST PAS MESURABLE PAR CETTE METHODE, et c'est la page qui
+   est en cause, pas tel ou tel bouton. Son fond est un globe qui TOURNE :
+   entre les deux captures — avec le texte, puis sans — tout a bouge, donc
+   tout pixel differe, et le harnais prend le fond anime pour la lettre.
+   Il y annoncait 3,38:1 sur un « Menu » creme pose sur gris sombre.
+   Exclure la page plutot que les selecteurs : sinon chaque bouton qu'on
+   y ajoute rouvrira la meme fausse alerte. Les libelles de /contact
+   restent couverts par check:contrast:rendered. */
 const PAGES = (process.env.PAGES || [
-  '/', '/tarifs', '/devis', '/contact', '/equipe', '/avis', '/login',
+  '/', '/tarifs', '/devis', '/equipe', '/avis', '/login',
   '/inscription', '/404', '/site-vitrine', '/rendez-vous',
 ].join(',')).split(',');
 

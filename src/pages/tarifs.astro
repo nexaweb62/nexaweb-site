@@ -222,6 +222,12 @@ main{--text-muted:var(--raw-warm-200)}
    L'ancrage sur .plan-card garde la règle chez elle. */
 .plan-card :global(.plan-spotlight){position:absolute;inset:0;pointer-events:none;z-index:10;opacity:0;transition:opacity .3s;overflow:hidden}
 .plan-card :global(.plan-spotlight::after){content:'';position:absolute;width:200%;height:200%;border-radius:50%;background:radial-gradient(circle,var(--accent-glow) 0%,rgb(from var(--accent-glow) r g b / 0) 40%);transform:translate(-50%,-50%);top:var(--sy,50%);left:var(--sx,50%)}
+/* LE CTA RESTE COLLE AU BAS DE SA CARTE. « margin-top:auto » vivait
+   dans l'ancienne regle .plan-cta, emportee avec le CSS des boutons :
+   sans lui, les trois boutons remontent avec leur contenu et ne
+   s'alignent plus d'une carte a l'autre. On ne garde que la mise en
+   page — l'apparence vient du bouton interactif. */
+.plan-cta{margin-top:auto;align-self:stretch}
 .plan-card.plan-featured{
   border-color:var(--accent);
   box-shadow:0 0 0 1px var(--accent),var(--shadow-2);

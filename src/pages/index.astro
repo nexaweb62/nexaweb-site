@@ -207,6 +207,10 @@ import '../styles/global.css';
 .why-bio{display:flex;flex-direction:column;gap:18px;padding:4px 0}
 .why-bio-lead{font-size:clamp(1.35rem,2.4vw,1.9rem);font-weight:600;line-height:1.18;letter-spacing:-.03em;color:var(--text)}
 .why-bio-body{font-size:13px;font-weight:300;line-height:1.72;color:var(--text-muted)}
+/* Sans « align-self:flex-start », ce bouton s'etire sur toute la largeur
+   de sa colonne : mesure, 510 px pour un parent de 510 px. La regle
+   vivait dans l'ancien .why-bio-cta, emporte avec le CSS des boutons. */
+.why-bio-cta{align-self:flex-start;margin-top:8px}
 /* .why-bio est une colonne en flex avec 18 px de gouttière : le badge
    s'y range comme les paragraphes, et s'aligne à gauche au lieu de
    s'étirer sur toute la largeur de la colonne. */

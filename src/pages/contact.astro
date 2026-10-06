@@ -37,6 +37,16 @@ html,body{overflow:hidden;height:100%}
 .carvin-dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 var(--accent-glow);animation:carvin-beat 2s ease-out infinite}
 @keyframes carvin-beat{0%{box-shadow:0 0 0 0 var(--accent-glow)}70%{box-shadow:0 0 0 14px transparent}100%{box-shadow:0 0 0 0 transparent}}
 @keyframes fl3{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-9px)}}
+/* L'ADRESSE FLOTTE EN BAS, AU CENTRE.
+   Son placement vivait dans les regles .c-btn / .c-btn-3, emportees avec
+   l'ancien CSS des boutons quand elle est devenue un bouton interactif.
+   Sans elles, elle retombait dans le flux : en haut a gauche, par dessus
+   la barre. On ne garde ici que le PLACEMENT — l'apparence, elle, vient
+   desormais du bouton interactif. */
+.c-btn{position:fixed;z-index:50;left:50%;bottom:12%;transform:translateX(-50%);
+  animation:fl3 4.8s ease-in-out infinite}
+@media(max-width:600px){.c-btn{bottom:10%}}
+@media (prefers-reduced-motion:reduce){.c-btn{animation:none}}
 @media(max-width:600px){}
 </style>
 
