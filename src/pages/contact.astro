@@ -80,11 +80,31 @@ html,body{overflow:hidden;height:100%}
 
 </main>
 
-<script is:inline src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<!-- LE GLOBE NE DEPEND PLUS D'UN CDN.
+     Cette page n'a qu'un seul contenu : la carte. Quand elle allait
+     chercher d3 sur jsdelivr, un reseau d'entreprise, un bloqueur ou un
+     pays qui filtre ce domaine laissait le visiteur devant une page vide
+     — constate ici meme, ou le proxy bloque jsdelivr.
+     Et elle chargeait d3 ENTIER, 280 Ko, pour quatre fonctions :
+     geoOrthographic, geoPath, geoGraticule, geoBounds. Elles vivent
+     toutes dans d3-geo. Avec d3-array dont il depend : 53 Ko, cinq fois
+     moins, et servis par le site lui-meme. -->
+<script is:inline src="/vendor/d3-array-3.2.4.min.js"></script>
+<script is:inline src="/vendor/d3-geo-3.1.1.min.js"></script>
 <script is:inline>
 (function(){
   var CARVIN   = [2.9598, 50.4914];
-  var GEOJSON  = 'https://raw.githubusercontent.com/martynafford/natural-earth-geojson/refs/heads/master/110m/physical/ne_110m_land.json';
+  /* LA GEOMETRIE DES CONTINENTS, SERVIE PAR LE SITE.
+     Elle venait de raw.githubusercontent.com, c'est-a-dire du depot
+     personnel d'un particulier, sur une URL qui pointe une BRANCHE :
+     renommee, archivee ou supprimee, le globe disparaissait. GitHub
+     deconseille d'ailleurs explicitement de servir du contenu brut en
+     production. Et c'etait un tiers de plus voyant l'adresse IP de
+     chaque visiteur.
+     Donnee d'origine : Natural Earth, domaine public, 110m physical
+     land, via martynafford/natural-earth-geojson. Copiee telle quelle,
+     seulement compactee (232 Ko -> 202 Ko). */
+  var GEOJSON  = '/data/terres-110m.json';
   var DOT_STEP = 1.8;
 
   var canvas   = document.getElementById('globe-canvas');

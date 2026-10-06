@@ -209,10 +209,27 @@ html,body{height:100%;overflow:hidden}
 <script is:inline>
 (function(){
   if(window.matchMedia('(max-width:768px)').matches)return;
-  var s=document.createElement('script');
-  s.src='https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js';
-  s.onload=initGlobe;
-  document.head.appendChild(s);
+  /* D3 SERVI PAR LE SITE, ET REDUIT A CE QU'ON UTILISE.
+     Cette page allait chercher d3 ENTIER (280 Ko) sur jsdelivr pour cinq
+     fonctions : geoOrthographic, geoPath, geoGraticule, geoBounds et
+     timer. Elles tiennent dans d3-geo et d3-timer, soit 55 Ko avec
+     d3-array dont d3-geo depend — cinq fois moins, et plus aucun tiers
+     a joindre pour que le globe apparaisse.
+     L'ordre compte : d3-geo lit d3-array sur l'objet global. */
+  charger(['/vendor/d3-array-3.2.4.min.js',
+           '/vendor/d3-geo-3.1.1.min.js',
+           '/vendor/d3-timer-3.0.1.min.js'], initGlobe);
+
+  function charger(liste, fini){
+    var i = 0;
+    (function suite(){
+      if(i >= liste.length) return fini();
+      var s = document.createElement('script');
+      s.src = liste[i++];
+      s.onload = suite;
+      document.head.appendChild(s);
+    })();
+  }
 
   function initGlobe(){
     var canvas=document.getElementById('globe-canvas');
@@ -296,7 +313,7 @@ html,body{height:100%;overflow:hidden}
       });
     }
 
-    fetch('https://raw.githubusercontent.com/martynafford/natural-earth-geojson/refs/heads/master/110m/physical/ne_110m_land.json')
+    fetch('/data/terres-110m.json')
       .then(function(r){return r.json();})
       .then(function(data){
         land=data;
