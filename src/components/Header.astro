@@ -32,6 +32,16 @@ const { cta = 'Démarrer un projet', ctaHref = '/devis', back = true } = Astro.p
           <button class="lang-opt" data-lang="en">EN</button>
         </div>
 
+        <!-- Bouton Menu. Il ouvre la navigation plein ecran, et sur
+             telephone c'est la SEULE facon d'atteindre les pages : il ne
+             doit jamais disparaitre. Il a ete emporte une fois par un
+             retrait du selecteur de theme voisin — d'ou le garde-fou qui
+             le reclame desormais sur chaque page. -->
+        <button class="menu-btn" id="menu-btn"
+          aria-label="Menu — ouvrir la navigation" aria-expanded="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
+          <span class="hdr-btn-lbl">Menu</span>
+        </button>
 
 <!-- Bouton Retour -->
         {back && (

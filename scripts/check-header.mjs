@@ -88,6 +88,12 @@ for (const theme of ['dark', 'light']) {
           outils: vu(document.querySelector('.cnav-tools')) ||
                   getComputedStyle(document.querySelector('.cnav-tools') || document.body).display === 'flex',
           groupes: document.querySelectorAll('.theme-sel').length,
+          menu: (() => {
+            const m = document.querySelector('.menu-btn');
+            if (!m) return null;
+            const rm = m.getBoundingClientRect();
+            return { visible: vu(m), h: Math.round(rm.height) };
+          })(),
           coches: [...document.querySelectorAll('.theme-opt')]
             .filter(b => b.getAttribute('aria-checked') === 'true')
             .map(b => b.getAttribute('data-theme-opt')),
@@ -134,6 +140,16 @@ for (const theme of ['dark', 'light']) {
          desormais le reglage de son systeme. Ce controle ne le cherche
          donc plus — mais il verifie l'inverse, qu'aucun ne revienne par
          megarde, et que la LANGUE, elle, reste atteignable. */
+      /* LE BOUTON MENU DOIT EXISTER ET SE VOIR, SUR CHAQUE PAGE.
+         Il a disparu une fois : en retirant le selecteur de theme voisin,
+         une expression reguliere trop large l'a emporte avec lui, et
+         personne ne l'a vu avant que le site soit en ligne. Sur telephone
+         c'est la SEULE facon d'atteindre les autres pages — un header
+         sans lui est un cul-de-sac. */
+      if (!r.menu) echecs.push(`${tag}  pas de bouton Menu`);
+      else if (!r.menu.visible) echecs.push(`${tag}  bouton Menu invisible`);
+      else if (r.menu.h < 36) echecs.push(`${tag}  bouton Menu de ${r.menu.h} px de haut seulement`);
+
       if (r.groupes !== 0) echecs.push(`${tag}  ${r.groupes} sélecteur(s) de thème : il ne doit plus y en avoir`);
       if (!r.barreLangue && !r.outils) echecs.push(`${tag}  la langue n'est atteignable nulle part`);
     }
