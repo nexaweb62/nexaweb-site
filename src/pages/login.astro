@@ -369,10 +369,21 @@ html,body{height:100%;overflow:hidden}
 /* Theme toggle */
 (function(){
   var root=document.documentElement,btn=document.getElementById('theme-btn');
-  function sync(){btn.textContent=root.getAttribute('data-theme')==='light'?'●':'○'}
+  /* LE THÈME EN VIGUEUR, pas l'attribut. Sans choix explicite,
+     data-theme est ABSENT et le site suit le système. L'ancienne
+     bascule lisait l'attribut nu : depuis un système en sombre elle
+     trouvait null, concluait « on n'est pas en sombre » et posait
+     « sombre » — il fallait deux clics pour aller au clair, et le
+     premier ne changeait rien à l'écran. */
+  function effectif(){
+    var a=root.getAttribute('data-theme');
+    if(a==='light'||a==='dark') return a;
+    return matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';
+  }
+  function sync(){btn.textContent=effectif()==='light'?'●':'○'}
   sync();
   btn.addEventListener('click',function(){
-    var next=root.getAttribute('data-theme')==='dark'?'light':'dark';
+    var next=effectif()==='dark'?'light':'dark';
     root.setAttribute('data-theme',next);localStorage.setItem('nw-theme',next);sync();
   });
 })();

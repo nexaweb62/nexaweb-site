@@ -24,9 +24,12 @@
         grand écran, dans le menu plein écran sur mobile — et jamais
         aux deux endroits à la fois ;
      7. un seul état pour deux exemplaires : les boutons cochés du
-        sélecteur de thème s'accordent ;
+        sélecteur de thème s'accordent, et il y en a toujours un ;
      8. AUCUN ÉLÉMENT DE LA BARRE NE SORT DE L'ÉCRAN, et il reste une
-        gouttière des deux côtés.
+        gouttière des deux côtés ;
+     9. UN THÈME ENREGISTRÉ RESTE RÉVERSIBLE : on part d'un visiteur
+        enfermé en sombre, on clique « clair », et le fond change
+        vraiment — sur téléphone comme sur ordinateur.
 
    Le point 3 se mesure sur une page intérieure : l'accueil n'a pas de
    bouton Retour, et c'est voulu.
@@ -50,7 +53,22 @@
    posée en absolu avec translateX(48px), donc son rectangle dépasse
    toujours de 48 px à droite. Elle est à opacité 0 et rognée par
    l'overflow:hidden du bouton — la signaler serait une fausse alerte
-   permanente, et une alerte permanente ne se lit plus. */
+   permanente, et une alerte permanente ne se lit plus.
+
+   ── POURQUOI LE POINT 9 EXISTE ──────────────────────────────────────
+   Lui aussi est né d'un défaut parti en ligne. Le sélecteur de thème a
+   été retiré du balisage, mais le script de démarrage de BaseLayout a
+   continué d'appliquer la préférence gardée dans localStorage. Un
+   visiteur qui avait choisi « sombre » se retrouvait donc enfermé
+   dedans : téléphone en clair, site en noir, et aucun bouton nulle part
+   pour en sortir. Mesuré avant correction — nw-theme=dark en mémoire,
+   système en clair : fond rgb(10,10,11), zéro contrôle sur la page.
+
+   La règle qui en sort est générale : TANT QUE LE DÉMARRAGE LIT UNE
+   PRÉFÉRENCE, UNE COMMANDE DOIT POUVOIR LA RÉÉCRIRE. Compter les
+   contrôles ne suffit pas — le point 9 part d'un thème enregistré, va
+   chercher la commande là où elle se trouve, clique, et vérifie que la
+   couleur du fond a vraiment changé. */
 import { chromium } from 'playwright-core';
 
 const BASE = process.env.BASE || 'http://localhost:4321';
@@ -176,10 +194,8 @@ for (const theme of ['dark', 'light']) {
         }
       }
 
-      /* LE SELECTEUR DE THEME A ETE RETIRE DU SITE : le visiteur suit
-         desormais le reglage de son systeme. Ce controle ne le cherche
-         donc plus — mais il verifie l'inverse, qu'aucun ne revienne par
-         megarde, et que la LANGUE, elle, reste atteignable. */
+      /* LE SELECTEUR DE THEME DOIT ETRE LA. Deux exemplaires — la barre
+         et le menu plein ecran — et un seul etat peint sur les deux. */
       /* LE BOUTON MENU DOIT EXISTER ET SE VOIR, SUR CHAQUE PAGE.
          Il a disparu une fois : en retirant le selecteur de theme voisin,
          une expression reguliere trop large l'a emporte avec lui, et
@@ -190,8 +206,16 @@ for (const theme of ['dark', 'light']) {
       else if (!r.menu.visible) echecs.push(`${tag}  bouton Menu invisible`);
       else if (r.menu.h < 36) echecs.push(`${tag}  bouton Menu de ${r.menu.h} px de haut seulement`);
 
-      if (r.groupes !== 0) echecs.push(`${tag}  ${r.groupes} sélecteur(s) de thème : il ne doit plus y en avoir`);
+      if (r.groupes !== 2) {
+        echecs.push(`${tag}  ${r.groupes} sélecteur(s) de thème, attendu 2 (barre + menu)`);
+      }
+      if (r.coches.length !== 2) {
+        echecs.push(`${tag}  ${r.coches.length} bouton(s) de thème coché(s), attendu 2 (un par exemplaire)`);
+      } else if (r.coches[0] !== r.coches[1]) {
+        echecs.push(`${tag}  les deux sélecteurs de thème divergent : ${r.coches.join(' / ')}`);
+      }
       if (!r.barreLangue && !r.outils) echecs.push(`${tag}  la langue n'est atteignable nulle part`);
+      if (!r.barreTheme && !r.outils) echecs.push(`${tag}  le thème n'est atteignable nulle part`);
 
       /* POINT 8 — la barre tient dans l'écran, avec de l'air aux deux
          bouts. « Ça rentre au pixel près » n'est pas une mise en page :
@@ -256,17 +280,94 @@ await page.goto(BASE + '/tarifs', { waitUntil: 'domcontentloaded' });
 await page.click('#menu-btn').catch(() => {});
 await page.waitForTimeout(600);
 const etat = await page.evaluate(() => ({
-  themes: document.querySelectorAll('.theme-sel,.theme-opt').length,
+  themes: document.querySelectorAll('.cnav-tools .theme-opt').length,
   langues: [...document.querySelectorAll('.lang-opt.active')].map(b => b.getAttribute('data-lang')),
 }));
-if (etat.themes !== 0) echecs.push(`le menu porte encore ${etat.themes} élément(s) de thème`);
+if (etat.themes !== 3) {
+  echecs.push(`le menu porte ${etat.themes} bouton(s) de thème, attendu 3 (système, clair, sombre)`);
+}
 if (etat.langues.length !== 2 || new Set(etat.langues).size !== 1) {
   echecs.push(`les deux sélecteurs de langue divergent : ${etat.langues.join(' / ')}`);
 }
 await ctx.close();
+
+/* ── POINT 9 — une préférence enregistrée reste réversible ──────────
+   On part d'un visiteur enfermé : « sombre » en mémoire, téléphone en
+   clair. Puis on fait ce qu'il ferait — ouvrir le menu, cliquer
+   « clair » — et on regarde la couleur du fond, pas l'attribut. C'est
+   la couleur qui dit si le site a obéi.
+
+   On rejoue le tout sur les deux largeurs qui comptent, parce que la
+   commande n'est pas au même endroit : dans la barre sur ordinateur,
+   dans le menu plein écran sur téléphone. Un site réglable sur l'un et
+   bloqué sur l'autre serait exactement le défaut qu'on vient de
+   corriger. */
+const SOMBRE = 'rgb(10, 10, 11)';
+for (const [largeur, ou] of [[390, 'téléphone'], [1280, 'ordinateur']]) {
+  const c = await navigateur.newContext({
+    viewport: { width: largeur, height: 844 },
+    colorScheme: 'light',
+    hasTouch: largeur < 640, isMobile: largeur < 640,
+    reducedMotion: 'reduce',
+  });
+  await c.addInitScript(() => { try { localStorage.setItem('nw-theme', 'dark'); } catch (e) {} });
+  const pg = await c.newPage();
+  await pg.goto(BASE + '/tarifs', { waitUntil: 'domcontentloaded' });
+  await pg.waitForTimeout(350);
+
+  const depart = await pg.evaluate(() => getComputedStyle(document.body).backgroundColor);
+  if (depart !== SOMBRE) {
+    echecs.push(`[${ou}] le thème enregistré n'est pas appliqué au chargement : fond ${depart}`);
+  }
+
+  /* Sur téléphone la commande vit dans le menu plein écran. */
+  if (largeur < 640) await pg.click('#menu-btn').catch(() => {});
+  await pg.waitForTimeout(500);
+
+  const clic = await pg.evaluate(() => {
+    const b = [...document.querySelectorAll('.theme-opt[data-theme-opt="light"]')]
+      .find(e => e.getBoundingClientRect().width > 1);
+    if (!b) return 'aucun bouton « clair » visible';
+    b.click();
+    return null;
+  });
+  if (clic) { echecs.push(`[${ou}] ${clic} — le thème enregistré est irréversible`); }
+  await pg.waitForTimeout(450);
+
+  const apres = await pg.evaluate(() => ({
+    fond: getComputedStyle(document.body).backgroundColor,
+    attr: document.documentElement.getAttribute('data-theme'),
+    garde: (() => { try { return localStorage.getItem('nw-theme'); } catch (e) { return '?'; } })(),
+  }));
+  if (apres.fond === SOMBRE) {
+    echecs.push(`[${ou}] clic sur « clair » : le fond reste ${apres.fond}`);
+  }
+  if (apres.attr !== 'light') echecs.push(`[${ou}] clic sur « clair » : data-theme vaut ${apres.attr}`);
+  if (apres.garde !== 'light') echecs.push(`[${ou}] clic sur « clair » : nw-theme vaut ${apres.garde}`);
+
+  /* Et le retour au réglage du système : la clé doit DISPARAÎTRE, sans
+     quoi « système » serait un troisième choix figé de plus. */
+  await pg.evaluate(() => {
+    const b = [...document.querySelectorAll('.theme-opt[data-theme-opt="system"]')]
+      .find(e => e.getBoundingClientRect().width > 1);
+    if (b) b.click();
+  });
+  await pg.waitForTimeout(450);
+  const auto = await pg.evaluate(() => ({
+    attr: document.documentElement.getAttribute('data-theme'),
+    garde: (() => { try { return localStorage.getItem('nw-theme'); } catch (e) { return '?'; } })(),
+    fond: getComputedStyle(document.body).backgroundColor,
+  }));
+  if (auto.attr !== null) echecs.push(`[${ou}] retour au système : data-theme reste ${auto.attr}`);
+  if (auto.garde !== null) echecs.push(`[${ou}] retour au système : nw-theme reste ${auto.garde}`);
+  if (auto.fond === SOMBRE) {
+    echecs.push(`[${ou}] retour au système : fond ${auto.fond} alors que l'OS est en clair`);
+  }
+  await c.close();
+}
 await navigateur.close();
 
-console.log(`${mesures} en-têtes mesurés (${LARGEURS.length} largeurs × 2 thèmes × ${PAGES.length} pages), plus 4 essais de comportement.`);
+console.log(`${mesures} en-têtes mesurés (${LARGEURS.length} largeurs × 2 thèmes × ${PAGES.length} pages), plus 4 essais de comportement et 2 essais de réversibilité du thème.`);
 if (!echecs.length) { console.log("\n✓ En-tête : tout passe."); process.exit(0); }
 console.log(`\n✗ ${echecs.length} point(s) en échec :\n`);
 for (const e of echecs) console.log('  ' + e);

@@ -8,6 +8,22 @@ export interface Props {
 }
 import InteractiveButton from './ui/InteractiveButton.astro';
 const { cta = 'Démarrer un projet', ctaHref = '/devis', back = true } = Astro.props;
+
+/* LES TROIS ÉTATS DU THÈME, écrits une seule fois : la barre et le menu
+   plein écran en portent chacun un exemplaire, et deux listes séparées
+   finiraient par diverger. */
+const THEMES = [
+  { cle: 'system', nom: 'Thème du système',
+    svg: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.4"/>' +
+         '<path d="M12 3.6a8.4 8.4 0 0 0 0 16.8z" fill="currentColor" stroke="none"/></svg>' },
+  { cle: 'light', nom: 'Mode clair',
+    svg: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/>' +
+         '<path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4' +
+         'M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4"/></svg>' },
+  { cle: 'dark', nom: 'Mode sombre',
+    svg: '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+         '<path d="M20 14.2A8.2 8.2 0 0 1 9.8 4a8.4 8.4 0 1 0 10.2 10.2z"/></svg>' },
+];
 ---
 <header class="hdr" id="hdr">
   {/* .hdr-in remplace .wrap : c'est lui qui s'étire au défilement, de
@@ -30,6 +46,31 @@ const { cta = 'Démarrer un projet', ctaHref = '/devis', back = true } = Astro.p
         <div class="lang-sel" role="group" aria-label="Language">
           <button class="lang-opt" data-lang="fr">FR</button>
           <button class="lang-opt" data-lang="en">EN</button>
+        </div>
+
+        <!-- SÉLECTEUR DE THÈME — système / clair / sombre.
+             role=radiogroup : un choix parmi trois, pas trois bascules.
+
+             IL A ÉTÉ SUPPRIMÉ UNE FOIS, ET LE SITE S'EST RETROUVÉ ENFERMÉ.
+             Le script de démarrage de BaseLayout applique le choix gardé
+             dans localStorage ; sans ce groupe, plus rien ne pouvait le
+             changer. Mesuré : « nw-theme=dark » en mémoire + système en
+             clair = fond noir, et zéro contrôle sur la page pour en
+             sortir. Tant que le démarrage lit une préférence, une
+             commande doit pouvoir la réécrire — c'est désormais vérifié
+             par check:header.
+
+             D'où aussi le troisième état. À deux options on pouvait
+             choisir clair ou sombre, jamais revenir à « suis mon
+             téléphone » : le choix était définitif par construction. -->
+        <div class="theme-sel" id="theme-sel" role="radiogroup" aria-label="Thème d'affichage">
+          {THEMES.map(o => (
+            <button type="button" class="theme-opt" role="radio" data-theme-opt={o.cle}
+                    aria-checked="false" tabindex="-1" title={o.nom}>
+              <Fragment set:html={o.svg} />
+              <span class="sr-only">{o.nom}</span>
+            </button>
+          ))}
         </div>
 
         <!-- Bouton Menu. Il ouvre la navigation plein ecran, et sur
@@ -126,6 +167,15 @@ const { cta = 'Démarrer un projet', ctaHref = '/devis', back = true } = Astro.p
       <button class="lang-opt" data-lang="fr">FR</button>
       <button class="lang-opt" data-lang="en">EN</button>
     </div>
+    <div class="theme-sel" role="radiogroup" aria-label="Thème d'affichage">
+      {THEMES.map(o => (
+        <button type="button" class="theme-opt" role="radio" data-theme-opt={o.cle}
+                aria-checked="false" tabindex="-1" title={o.nom}>
+          <Fragment set:html={o.svg} />
+          <span class="sr-only">{o.nom}</span>
+        </button>
+      ))}
+    </div>
   </div>
 </div>
 
@@ -135,12 +185,93 @@ const { cta = 'Démarrer un projet', ctaHref = '/devis', back = true } = Astro.p
 
   var root = document.documentElement;
 
-  /* LE SELECTEUR DE THEME A ETE RETIRE, MARQUAGE ET SCRIPT.
-     Le site suit desormais le reglage du systeme, via les media queries
-     de tokens.css : rien a cliquer, et l'apparence par defaut ne change
-     pas. Les ecouteurs « nw-theme » ailleurs dans le site restent en
-     place : ils ne coutent rien, et servent encore aux pages qui posent
-     elles-memes data-theme (connexion, inscription). */
+  /* ═══════════════════════════════════════════════════════════════════
+     LE THÈME — système, clair, sombre
+
+     Le choix vit dans localStorage sous « nw-theme », et BaseLayout
+     l'applique avant le premier pixel pour qu'aucune page ne clignote
+     dans la mauvaise couleur. « système » n'est pas une valeur stockée :
+     c'est l'ABSENCE de valeur. On efface la clé, et les media queries de
+     tokens.css reprennent la main.
+
+     UN SEUL ÉTAT PEINT SUR DEUX EXEMPLAIRES — celui de la barre et celui
+     du menu plein écran. Sur téléphone la barre est pleine : le groupe y
+     est masqué sous 640 px et c'est le menu qui le porte.
+
+     On peint le CHOIX, pas le thème qui en résulte. La version
+     précédente n'avait que deux boutons et peignait le thème effectif,
+     faute de quoi aucun n'aurait été coché en mode système — et un
+     radiogroup sans bouton coché n'a plus d'arrêt de tabulation, donc
+     devient injoignable au clavier. Avec « système » comme vrai bouton,
+     il y a toujours exactement un coché, sans détour. */
+  var mqDark = window.matchMedia('(prefers-color-scheme: dark)');
+  var sels = Array.prototype.slice.call(document.querySelectorAll('.theme-sel'));
+
+  function choixGarde(){
+    try{ var t = localStorage.getItem('nw-theme'); return (t==='light'||t==='dark') ? t : 'system'; }
+    catch(e){ return 'system'; }
+  }
+
+  function peindre(choix){
+    sels.forEach(function(sel){
+      sel.querySelectorAll('.theme-opt').forEach(function(b){
+        var on = b.getAttribute('data-theme-opt') === choix;
+        b.setAttribute('aria-checked', on ? 'true' : 'false');
+        /* Un seul arrêt de tabulation par groupe — motif radiogroup. */
+        b.tabIndex = on ? 0 : -1;
+        b.classList.toggle('on', on);
+      });
+    });
+  }
+
+  function appliquer(choix){
+    /* On coupe les transitions le temps de la bascule : sinon les
+       couleurs traversent des teintes intermédiaires et l'écran
+       clignote. */
+    document.body.classList.add('theme-switching');
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){ document.body.classList.remove('theme-switching'); });
+    });
+    if(choix === 'system'){
+      root.removeAttribute('data-theme');
+      try{ localStorage.removeItem('nw-theme'); }catch(e){}
+    }else{
+      root.setAttribute('data-theme', choix);
+      try{ localStorage.setItem('nw-theme', choix); }catch(e){}
+    }
+    peindre(choix);
+    document.dispatchEvent(new CustomEvent('nw-theme', { detail: choix }));
+  }
+
+  if(sels.length){
+    peindre(choixGarde());
+    sels.forEach(function(sel){
+      var opts = Array.prototype.slice.call(sel.querySelectorAll('.theme-opt'));
+      opts.forEach(function(b){
+        b.addEventListener('click', function(){ appliquer(b.getAttribute('data-theme-opt')); b.focus(); });
+      });
+      /* Flèches directionnelles : la navigation attendue dans un
+         radiogroup. */
+      sel.addEventListener('keydown', function(e){
+        var i = opts.indexOf(document.activeElement);
+        if(i < 0) return;
+        var n = null;
+        if(e.key === 'ArrowRight' || e.key === 'ArrowDown') n = (i + 1) % opts.length;
+        if(e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   n = (i - 1 + opts.length) % opts.length;
+        if(n === null) return;
+        e.preventDefault();
+        appliquer(opts[n].getAttribute('data-theme-opt'));
+        opts[n].focus();
+      });
+    });
+    /* En mode système, l'OS peut basculer pendant la visite : le site
+       suit sans rechargement, et les écouteurs du site sont prévenus. */
+    mqDark.addEventListener('change', function(){
+      if(choixGarde() === 'system'){
+        document.dispatchEvent(new CustomEvent('nw-theme', { detail: 'system' }));
+      }
+    });
+  }
 
 
   /* ── Retour ──────────────────────────────────────────────────────────

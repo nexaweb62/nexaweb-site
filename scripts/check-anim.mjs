@@ -163,8 +163,43 @@ for (const theme of ['dark', 'light']) {
           const el = document.querySelector(`[data-ghost-probe="${n}"]`);
           if (!el) return 1;
           el.scrollIntoView({ block: 'center', behavior: 'instant' });
-          await new Promise(r => setTimeout(r, 220));
-          return +window.__opDe(el).toFixed(2);
+
+          /* ON ATTEND QUE L'OPACITÉ SE POSE, on ne compte plus un délai
+             fixe. Amener l'élément au centre peut DÉCLENCHER sa
+             révélation : la lecture tombe alors au milieu du fondu, et
+             un mot parfaitement sain se lit comme un fantôme.
+
+             Constaté sur /tarifs à 390 px : le premier mot du titre
+             « La formule » relevait 0,48 — exactement la moitié d'une
+             transition de 0,35 s lue à 220 ms. Le même contrôle rejoué
+             seul passait, parce que le mot avait déjà été révélé par le
+             parcours. Un contrôle qui dépend de l'ordre des pages ne
+             mesure plus rien.
+
+             Un délai fixe plus long ne suffirait pas non plus : les mots
+             d'un titre partent en cascade, 46 ms de décalage chacun, et
+             la durée vient de la feuille de styles — 0,35 s en mode
+             léger, davantage sinon. On lit donc les durées SUR
+             L'ÉLÉMENT, on attend ce qu'il annonce, puis on continue tant
+             que la valeur monte encore. */
+          const cs = getComputedStyle(el);
+          const ms = v => Math.max(0, ...String(v).split(',').map(x => {
+            const n = parseFloat(x);
+            return isNaN(n) ? 0 : (x.indexOf('ms') >= 0 ? n : n * 1000);
+          }));
+          const budget = Math.min(2200,
+            ms(cs.transitionDelay) + ms(cs.transitionDuration) +
+            ms(cs.animationDelay) + ms(cs.animationDuration) + 200);
+          await new Promise(r => setTimeout(r, Math.max(220, budget)));
+
+          let val = +window.__opDe(el).toFixed(2), prec;
+          let tours = 0;
+          do {
+            prec = val;
+            await new Promise(r => setTimeout(r, 140));
+            val = +window.__opDe(el).toFixed(2);
+          } while (val > prec && val < 0.55 && ++tours < 12);
+          return val;
         }, c.probe);
         if (op < 0.55) ghosts.push({ ...c, op });
       }
