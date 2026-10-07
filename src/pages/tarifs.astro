@@ -66,8 +66,6 @@ main{--text-muted:var(--raw-warm-200)}
      bordure ne changent pas, seul un fond opaque s'ajoute dessous. */
   background:var(--bg);
   background-image:linear-gradient(var(--success-glow),var(--success-glow));
-  backdrop-filter:blur(14px) saturate(125%);
-  -webkit-backdrop-filter:blur(14px) saturate(125%);
   border:1px solid var(--success);
   border-radius:14px;
   padding:clamp(24px,3vw,36px) clamp(24px,4vw,48px);
@@ -148,14 +146,19 @@ main{--text-muted:var(--raw-warm-200)}
 .paie{border:0;margin:clamp(20px,3vw,28px) 0 0;padding:0;display:flex;justify-content:center}
 .paie-seg{display:inline-flex;gap:4px;align-items:center;padding:3px 5px;
   border:1px solid var(--border-strong);border-radius:var(--radius-pill);
-  background:rgb(from var(--surface) r g b / .94);
-  backdrop-filter:blur(14px) saturate(125%);
-  -webkit-backdrop-filter:blur(14px) saturate(125%)}
-/* Là où le flou d'arrière-plan manque, la soie passerait entière
-   derrière les prix. On rend le fond opaque. */
-@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  .plan-card,.paie-seg{background:var(--surface)}
-}
+  background:var(--surface)}
+/* IL N'Y A PLUS DE FLOU D'ARRIERE-PLAN SUR CETTE PAGE, ET C'EST VOULU.
+   Les cartes, le bandeau, le segment de paiement et l'encart final en
+   portaient un — cinq a sept elements selon le defilement. Chacun
+   obligeait le navigateur a relire et reflouter, A CHAQUE IMAGE, la
+   portion de decor situee derriere lui. Or le decor de cette page est
+   un tissage qui derive : il ne cesse jamais de changer. C'est
+   l'addition qui a fait rendre les armes au compositeur, et la page
+   est devenue noire, texte compris.
+
+   Ce qu'on perd est mince : ces fonds etaient deja opaques a 94 %, le
+   flou ne jouait que sur les 6 % restants. Ils sont desormais pleins.
+   Ce qu'on gagne, c'est une page qui se peint. */
 .paie-radio{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
 .paie-lbl{
   font-size:var(--fs-caption);font-weight:500;letter-spacing:0;color:var(--text);
@@ -206,12 +209,10 @@ main{--text-muted:var(--raw-warm-200)}
    prix restent nets. Bordures et couleurs inchangées. */
 .plan-card{
   position:relative;display:flex;flex-direction:column;
-  background:rgb(from var(--surface) r g b / .94);
-  backdrop-filter:blur(14px) saturate(125%);
-  -webkit-backdrop-filter:blur(14px) saturate(125%);
+  background:var(--surface);
   border:1px solid var(--border-strong);border-radius:16px;
   padding:clamp(18px,2.2vw,26px);transition:border-color .25s,transform .2s ease-out;
-  will-change:transform;transform-style:preserve-3d;
+  transform-style:preserve-3d;
 }
 .plan-card:hover{border-color:var(--accent)}
 /* INJECTÉ EN JAVASCRIPT dans chaque .plan-card — d'où :global().
@@ -277,8 +278,6 @@ main{--text-muted:var(--raw-warm-200)}
   max-width:580px;margin:0 auto;
   background:var(--bg);
   background-image:linear-gradient(var(--accent-glow),var(--accent-glow));
-  backdrop-filter:blur(14px) saturate(125%);
-  -webkit-backdrop-filter:blur(14px) saturate(125%);
   border:1px solid var(--accent);border-radius:16px;
   padding:clamp(32px,4vw,52px);
 }

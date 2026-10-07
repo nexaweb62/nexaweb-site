@@ -1,29 +1,51 @@
 ---
 /**
- * LE FOND DE LA PAGE TARIFS — des traces qui coulent.
+ * LE FOND DE LA PAGE TARIFS — un tissage qui derive.
  *
  * Reprend l'effet « Background Paths » de magicui, mais REECRIT : le
  * composant d'origine est du React + Tailwind + shadcn + framer-motion.
- * Ce site est en Astro et CSS pur, et on n'installe pas React pour un
- * fond. Ici : aucun JavaScript, aucune dependance.
+ * Ce site est en Astro et CSS pur. Ici : aucun JavaScript, aucune
+ * dependance.
  *
- * COMMENT L'ANIMATION TIENT SANS JAVASCRIPT. framer-motion animait
- * « pathLength » et « pathOffset », qu'il calcule courbe par courbe.
- * L'attribut SVG pathLength="1" fait le meme travail gratuitement : il
- * NORMALISE la longueur de chaque trace a 1. Verifie dans le navigateur
- * — deux courbes de 1583 et 797 unites rendent toutes deux un
- * stroke-dasharray de « 0.3px, 1px ». Une seule regle CSS anime donc les
- * 72 courbes, quelles que soient leurs longueurs.
+ * ── DEUX ANIMATIONS, PAS CENT QUARANTE-QUATRE ───────────────────────
+ * La premiere version animait CHAQUE tracé : 72 courbes x 2 animations.
+ * Mesure au protocole DevTools, mode leger neutralise, /tarifs en
+ * 1280x900 :
  *
- * LES COULEURS SONT CELLES DU SITE. L'original trace du bleu ardoise sur
- * blanc ; ici c'est l'or de la marque sur l'aplat du theme. Le clair
- * prend un or plus profond, sans quoi les traces disparaitraient sur le
- * creme.
+ *     avant   161 couches composees   229 animations
+ *     les autres pages du site : 25 a 103 couches, 8 a 135 animations
+ *
+ * Chrome promeut en couche tout element anime, et six elements de la
+ * page portent un backdrop-filter pose PAR-DESSUS ce fond : a chaque
+ * image il devait relire et reflouter un calque qui ne cesse jamais de
+ * changer. Au-dela d'un certain budget le compositeur cesse de peindre
+ * — la page devient noire, texte compris. C'est ce qui est arrive en
+ * production.
+ *
+ * La correction tient a une propriete du dessin : stroke-dashoffset
+ * S'HERITE. Animee sur le <g> parent, une seule declaration entraine
+ * les 36 courbes qu'il contient. Deux groupes, deux animations, et le
+ * meme mouvement a l'ecran.
+ *
+ * Les courbes restent 72, mais DESSINEES SANS ETRE ANIMEES : un tracé
+ * statique ne coute pas de couche. Ce n'est pas leur nombre qui pesait,
+ * c'est le fait que chacune bougeait pour son compte.
+ *
+ * Ce qui se perd : chaque courbe avait sa duree propre et une
+ * respiration d'opacite. A l'oeil, le tissage derive desormais d'un
+ * seul tenant par direction, les deux directions a des vitesses
+ * differentes. Le mouvement se lit toujours ; il est simplement
+ * solidaire au lieu d'etre disperse.
+ *
+ * LES COULEURS SONT CELLES DU SITE. L'original trace du bleu ardoise
+ * sur blanc ; ici c'est l'or de la marque sur l'aplat du theme. Le
+ * clair prend un or plus profond, sans quoi les traces disparaitraient
+ * sur le creme.
  *
  * LE MOUVEMENT S'ARRETE DE LUI-MEME quand le visiteur demande moins
- * d'animation, et quand le site passe en mode leger faute d'images par
- * seconde. Dans les deux cas les traces restent dessinees : le fond ne
- * disparait pas, il se fige.
+ * d'animation, quand le site passe en mode leger, et quand la page
+ * n'est pas a l'ecran. Dans tous les cas les traces restent dessinees :
+ * le fond ne disparait pas, il se fige.
  */
 
 /* Les 36 courbes d'une direction, telles que les dessine l'original.
@@ -45,27 +67,32 @@ function traces(sens: number) {
          premier plan. */
       trait: (0.9 + i * 0.05).toFixed(2),
       opacite: Math.min(0.055 + i * 0.007, 0.185).toFixed(3),
-      /* Une duree propre a chaque courbe, DETERMINISTE : un Math.random
-         au build donnerait un rendu different a chaque mise en ligne,
-         pour rien. Les durees restent premieres entre elles, donc le
-         motif ne se repete jamais a l'oeil. */
-      duree: (19 + ((i * 7) % 11) + (sens > 0 ? 0 : 1.5)).toFixed(1),
-      retard: (-(i * 1.7) % 23).toFixed(1),
     };
   });
 }
-const sens = [traces(1), traces(-1)];
+/* Deux directions, deux durees : le tissage ne doit pas avoir l'air
+   d'un seul bloc qui glisse. 23 et 31 secondes sont premiers entre eux,
+   donc les deux nappes ne se resynchronisent jamais a l'oeil. */
+const groupes = [
+  { traces: traces(1),  duree: 23 },
+  { traces: traces(-1), duree: 31 },
+];
 ---
 
 <div class="fond-tarifs" aria-hidden="true" role="presentation">
-  {sens.map(groupe => (
+  {groupes.map(g => (
     <svg class="ft-svg" viewBox="0 0 696 316" fill="none"
          preserveAspectRatio="none">
-      {groupe.map(t => (
-        <path d={t.d} pathLength="1" stroke="currentColor"
-              stroke-width={t.trait}
-              style={`--o:${t.opacite};--d:${t.duree}s;--r:${t.retard}s`} />
-      ))}
+      {/* L'ANIMATION EST ICI, SUR LE GROUPE, ET NULLE PART AILLEURS.
+          stroke-dashoffset s'herite : une seule declaration entraine les
+          36 courbes de ce groupe. */}
+      <g class="ft-g" style={`--d:${g.duree}s`}>
+        {g.traces.map(t => (
+          <path d={t.d} pathLength="1" stroke="currentColor"
+                stroke-width={t.trait}
+                style={`--o:${t.opacite}`} />
+        ))}
+      </g>
     </svg>
   ))}
 </div>
@@ -81,16 +108,36 @@ const sens = [traces(1), traces(-1)];
        servir les deux : sur le quasi-noir, l'or ressort a 18 % ; sur le
        creme, le meme reglage disparait — mesure, 3,2 % de l'ecran touche
        en sombre contre presque rien en clair. Ce coefficient multiplie
-       l'opacite de chaque trace. */
-    --ft-k:1;
+       l'opacite de chaque trace.
+
+       IL A ETE BAISSE DE 22,5 % EN PERDANT LA RESPIRATION. Chaque
+       courbe oscillait entre 55 % et 100 % de son opacite, en
+       ease-in-out : sa moyenne dans le temps valait 77,5 % du maximum.
+       C'est cette moyenne que l'oeil retenait. Sans oscillation, la
+       meme valeur rendrait le tissage un tiers plus present qu'il ne
+       l'etait — vu sur la capture en clair, ou il se mettait a
+       concurrencer le texte. On multiplie donc par 0,775 : l'ecran
+       retrouve exactement l'aspect d'avant, a une animation par groupe
+       au lieu de deux par courbe. */
+    --ft-k:.775;
   }
   /* Sur le creme : un or plus profond, et nettement plus affirme. */
-  :root[data-theme="light"] .fond-tarifs{color:var(--raw-gold-600);--ft-k:3.6}
+  :root[data-theme="light"] .fond-tarifs{color:var(--raw-gold-600);--ft-k:2.79}
   @media (prefers-color-scheme: light){
-    :root:not([data-theme="dark"]) .fond-tarifs{color:var(--raw-gold-600);--ft-k:3.6}
+    :root:not([data-theme="dark"]) .fond-tarifs{color:var(--raw-gold-600);--ft-k:2.79}
   }
 
   .ft-svg{position:absolute;inset:0;width:100%;height:100%}
+
+  /* LE MOUVEMENT, EN UNE SEULE DECLARATION PAR GROUPE.
+     stroke-dashoffset est une propriete HERITEE : animee sur le <g>,
+     sa valeur descend sur les 36 courbes. C'est tout le gain — 2
+     animations la ou il y en avait 144. */
+  .ft-g{
+    animation:ftCoule var(--d) linear infinite;
+    stroke-dashoffset:0;
+  }
+  @keyframes ftCoule{ to{ stroke-dashoffset:-1 } }
 
   .ft-svg path{
     fill:none;
@@ -102,19 +149,28 @@ const sens = [traces(1), traces(-1)];
        courbe est tracee, et le vide qui reste la parcourt : le tissage
        tient, et le mouvement se lit. */
     stroke-dasharray:.62 .38;
+    /* AUCUN DECALAGE PAR COURBE, ET IL N'EN FAUT PAS. On pourrait
+       craindre que des pointilles identiques alignent les courbes comme
+       les dents d'un peigne. C'est pathLength="1" qui l'empeche : il
+       NORMALISE chaque courbe a la longueur 1, or elles n'ont pas la
+       meme longueur reelle — 1583 et 797 unites pour deux d'entre
+       elles. Le meme offset normalise tombe donc a des endroits
+       differents en pixels. Le decalage est deja dans le dessin.
+
+       Et il FAUT que l'enfant ne pose rien ici : la moindre valeur de
+       stroke-dashoffset sur le <path> remplacerait celle qu'il herite
+       du groupe, et l'animation ne l'atteindrait plus. */
     opacity:calc(var(--o) * var(--ft-k));
-    animation:ftCoule var(--d) linear var(--r) infinite,
-              ftRespire var(--d) ease-in-out var(--r) infinite;
-  }
-  @keyframes ftCoule{ to{ stroke-dashoffset:-1 } }
-  @keyframes ftRespire{
-    0%,100%{ opacity:calc(var(--o) * var(--ft-k) * .55) }
-    50%    { opacity:calc(var(--o) * var(--ft-k)) }
   }
 
-  /* On fige les traces, on ne les efface pas. */
-  @media (prefers-reduced-motion:reduce){
-    .ft-svg path{animation:none}
-  }
-  :global(body.lite) .ft-svg path{animation:none}
+  /* ON FIGE LE MOUVEMENT, ON N'EFFACE PAS LE DESSIN. Dans les trois
+     cas le tissage reste la, exactement ou il est : seule la derive
+     s'arrete. Un fond qui disparait serait une page qui change
+     d'apparence sous les yeux du visiteur. */
+  @media (prefers-reduced-motion:reduce){ .ft-g{animation:none} }
+  :global(body.lite) .ft-g{animation:none}
+  /* Hors champ, rien ne doit tourner. La page Tarifs est longue : le
+     fond est en position:fixed, donc toujours « visible » au sens du
+     navigateur, mais l'onglet, lui, peut etre en arriere-plan. */
+  :global(body.hors-champ) .ft-g{animation-play-state:paused}
 </style>

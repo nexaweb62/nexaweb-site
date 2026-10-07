@@ -51,7 +51,26 @@
     }
     document.querySelectorAll(SEL).forEach(decouper);
     var io = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (e.isIntersecting) e.target.classList.add('in'); });
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var el = e.target;
+        el.classList.add('in');
+        io.unobserve(el);
+        /* ON EFFACE LE FILTRE UNE FOIS L'ARRIVEE JOUEE.
+           Les mots terminent sur filter:blur(0px) — on ne peut pas
+           finir sur « none », les deux valeurs ne s'interpolent pas et
+           le flou sauterait. Mais un blur(0) laisse chaque mot sur sa
+           propre couche de composition, repeinte a chaque image, pour
+           plus rien. Sur une page de titres cela se compte par
+           dizaines, et c'est l'une des causes du defaut d'affichage :
+           au-dela d'un certain budget, le compositeur cesse de peindre.
+
+           Le retard, c'est la cascade elle-meme : 46 ms par mot, plus
+           les 600 ms du fondu, plus une marge. */
+        var mots = el.querySelectorAll('.w').length;
+        setTimeout(function () { el.classList.add('pose'); },
+                   (Math.max(mots - 1, 0) * 46) + 600 + 140);
+      });
     }, { rootMargin: '0px 0px -12% 0px', threshold: 0.15 });
     document.querySelectorAll('.split').forEach(function (el) { io.observe(el); });
   })();

@@ -121,6 +121,33 @@ import Intro from '../components/Intro.astro';
         sessionStorage.setItem('nw-vues', String(Math.min(vues + 1, 99)));
       } catch (e) { /* stockage bloqué : on retombera sur l'accueil */ }
       r.classList.add('js-enabled');
+
+      /* ── LE FILET DE SÉCURITÉ ──────────────────────────────────────
+         C'est cette ligne, juste au-dessus, qui autorise le système
+         d'animation à masquer le contenu au départ. Si le script qui
+         doit ensuite le révéler échoue — une erreur, un fichier qui
+         n'arrive pas, un observateur qui ne se déclenche jamais — le
+         texte reste invisible, et la page a l'air vide.
+
+         Le minuteur est armé ICI, dans le même script que .js-enabled,
+         et pas dans le fichier d'animation : les deux doivent vivre ou
+         mourir ensemble. Si ce script ne tourne pas, rien n'a été
+         masqué et il n'y a rien à rattraper ; s'il tourne, le filet
+         existe quoi qu'il arrive ensuite.
+
+         Six secondes : une arrivée normale en dure moins de deux. Ce
+         filet ne doit jamais se voir. */
+      setTimeout(function () { r.classList.add('tout-visible'); }, 6000);
+
+      /* ── RIEN NE TOURNE QUAND PERSONNE NE REGARDE ──────────────────
+         Les fonds décoratifs — le grain, les traînées, le tissage de la
+         page Tarifs — sont des animations infinies. Dans un onglet
+         d'arrière-plan elles continuent de consommer, et au retour le
+         navigateur doit rattraper tout ce qu'il a manqué. On les met en
+         pause par une classe ; le CSS décide lesquelles. */
+      document.addEventListener('visibilitychange', function () {
+        document.body.classList.toggle('hors-champ', document.hidden);
+      });
     })();
   </script>
 

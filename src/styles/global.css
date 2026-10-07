@@ -330,6 +330,14 @@ body.lite .lgm-i:hover .lg-reflet,body.lite .lgm-i.lg-tombe .lg-goutte{animation
 @supports (backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px)){
   .hdr.scrolled{-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px)}
 }
+/* LA OU LE FLOU N'EXISTE PAS, LE FOND DEVIENT OPAQUE. Sans lui, la
+   barre reste a 72 % sur un fond qui bouge, et le libelle des boutons
+   se lit par-dessus le decor. C'est le repli que reclamait le defaut
+   d'affichage : ne jamais dependre du flou pour la lisibilite. */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .hdr.scrolled{background:var(--bg)}
+  :root[data-theme="light"] .hdr.scrolled{background:var(--bg)}
+}
 @media (prefers-reduced-transparency:reduce){
   .hdr.scrolled{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none}
 }
@@ -608,6 +616,51 @@ body:has(.fond-tarifs) footer{
    État de départ appliqué UNIQUEMENT sous html.js-enabled : sans JS,
    tout le contenu reste visible.
    ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── LE FILET DE SÉCURITÉ ────────────────────────────────────────────
+   L'ANIMATION EST UN BONUS. LE TEXTE, NON.
+
+   Tout l'état de départ de ce système est caché derrière .js-enabled :
+   sans JavaScript, rien ne disparaît. Restait un trou : si le script
+   d'animation démarre, masque le contenu, PUIS échoue — une erreur, un
+   observateur qui ne se déclenche jamais, un fichier qui n'arrive pas —
+   le texte reste invisible pour toujours.
+
+   BaseLayout pose donc « tout-visible » sur <html> au bout de six
+   secondes, depuis le MÊME script en ligne qui pose .js-enabled. Les
+   deux vivent ou meurent ensemble : si ce script ne tourne pas, rien
+   n'a été masqué, et il n'y a rien à rattraper. Si un autre script
+   échoue après lui, celui-ci a déjà armé son minuteur.
+
+   Six secondes, parce qu'une arrivée normale dure moins de deux. Ce
+   filet ne doit jamais se voir ; il n'existe que pour les jours où le
+   reste casse. */
+.tout-visible [data-anim],
+.tout-visible [data-anim] .li,
+.tout-visible [data-anim] .ln,
+.tout-visible .split,
+.tout-visible .split .w{
+  /* Les quatre proprietes que le systeme d'animation utilise pour
+     masquer, et AUCUNE AUTRE.
+
+     Il y avait « visibility:visible!important » ici. C'etait de trop,
+     et c'etait nuisible. Le systeme de revelation ne se sert jamais de
+     visibility — verifie, aucune de ses regles ne la touche. En
+     revanche la forcer ecrase le masquage de QUELQU'UN D'AUTRE :
+     n'importe quel titre legitimement cache par visibility:hidden —
+     un tiroir ferme, un calque inerte — serait reapparu tout seul au
+     bout de six secondes.
+
+     C'est check:fond qui l'a trouve. Il masque le texte par
+     visibility:hidden pour lire le fond peint derriere lui ; ma regle
+     annulait ce masquage, et il relisait les pixels de la lettre :
+     contraste 1:1, « pire fond » egal a la couleur du texte. Le
+     symptome etait dans l'instrument, la cause etait bien ici. */
+  opacity:1!important;
+  transform:none!important;
+  filter:none!important;
+  clip-path:none!important;
+}
 .js-enabled [data-anim]{will-change:opacity,transform}
 .js-enabled [data-anim].is-in{will-change:auto}
 
@@ -1326,6 +1379,26 @@ body[data-page="home"] main>section{position:relative;z-index:2}
                filter .60s var(--ease-out) var(--dl,0ms)}
   .split.in .w{opacity:1;transform:none}
   .split-h.in .w{filter:blur(0)}
+  /* UN FLOU DE ZERO RESTE UN FLOU. « filter:blur(0px) » n'est pas
+     « filter:none » : Chrome garde l'element sur sa propre couche de
+     composition et refait passer le filtre a chaque image. Une page en
+     comptait jusqu'a vingt-cinq — mesure sur l'accueil — qui ne
+     servaient plus a rien une fois l'arrivee jouee.
+
+     On ne peut pas pour autant finir la transition sur « none » : les
+     deux valeurs ne s'interpolent pas, le flou sauterait d'un coup. Le
+     mot termine donc sur blur(0), puis finition.js pose « pose » quand
+     l'arrivee est finie, et le filtre s'efface alors vraiment. */
+  .split-h.pose .w{
+    filter:none;will-change:auto;
+    /* ET PLUS AUCUNE TRANSITION. A cet instant l'arrivee est jouee :
+       les transitions qui restaient declarees n'ont plus rien a animer,
+       mais elles retardaient le passage a « none » de 600 ms — blur(0)
+       et none ne s'interpolant pas, le navigateur attendait la fin de
+       la duree pour appliquer la valeur finale. Mesure : « pose » pose,
+       et le filtre encore a blur(0px) une seconde apres. */
+    transition:none;
+  }
 }
 @media (prefers-reduced-motion:reduce){
   .split .w{opacity:1!important;transform:none!important;filter:none!important}
@@ -1453,6 +1526,21 @@ body.pointer .lamp{opacity:1}
    lecture mot à mot, plus de lèvre ni de lumière de passage.
    ═══════════════════════════════════════════════════════════════════════ */
 body.lite .grain{animation:none}
+
+/* ── RIEN NE TOURNE QUAND PERSONNE NE REGARDE ───────────────────────
+   BaseLayout pose « hors-champ » sur le corps quand l'onglet passe en
+   arriere-plan. Les fonds decoratifs sont des animations INFINIES :
+   sans cela elles continuent dans un onglet que personne ne regarde,
+   et au retour le navigateur doit rattraper ce qu'il a manque.
+
+   On met en PAUSE, on n'annule pas : au retour le mouvement reprend ou
+   il en etait, sans saut. Et le dessin reste a l'ecran dans tous les
+   cas — un fond qui disparait serait une page qui change d'apparence
+   sous les yeux du visiteur. */
+body.hors-champ .grain,
+body.hors-champ .amb-streak,
+body.hors-champ .amb-streak-2,
+body.hors-champ .river{animation-play-state:paused}
 body.lite .pass,body.lite .lip,body.lite .lamp{display:none}
 body.lite .reader .rw{animation:none!important;color:var(--rlit)}
 body.lite .drwi,body.lite .plan-features li,body.lite .card li,
@@ -1544,7 +1632,12 @@ body.lite .split .w{transition-duration:.35s}
 .ihb-d{
   position:absolute;left:16px;top:50%;width:8px;height:8px;margin-top:-4px;
   border-radius:999px;background:var(--raw-gold-400);z-index:1;
-  transition:all .3s;
+  /* ON NOMME LES PROPRIETES. « transition:all » en fabrique une par
+     propriete animable du navigateur : le releve des animations en
+     cours remontait jusqu'a treize entrees « scrollbar-color » pour une
+     seule pastille, sur une page qui en compte des dizaines. Seules ces
+     cinq-la bougent au survol. */
+  transition:left .3s,top .3s,width .3s,height .3s,margin-top .3s,transform .3s;
 }
 .ihb:hover .ihb-t,.ihb:focus-visible .ihb-t{transform:translateX(48px);opacity:0}
 .ihb:hover .ihb-h,.ihb:focus-visible .ihb-h{transform:translateX(-4px);opacity:1}
