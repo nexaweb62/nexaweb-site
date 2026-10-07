@@ -1,176 +1,295 @@
 ---
 /**
- * LE FOND DE LA PAGE TARIFS — un tissage qui derive.
+ * LE FOND DE LA PAGE TARIFS — un champ de particules dans un courant.
  *
- * Reprend l'effet « Background Paths » de magicui, mais REECRIT : le
- * composant d'origine est du React + Tailwind + shadcn + framer-motion.
- * Ce site est en Astro et CSS pur. Ici : aucun JavaScript, aucune
- * dependance.
+ * Des milliers de points derivent, pousses par un bruit de Perlin : le
+ * champ se tord lentement, forme des veines, les defait. Chaque point
+ * naît, s'allume, s'eteint et renaît ailleurs. La trainee vient de ce
+ * que l'image precedente n'est pas effacee mais recouverte d'un voile.
  *
- * ── DEUX ANIMATIONS, PAS CENT QUARANTE-QUATRE ───────────────────────
- * La premiere version animait CHAQUE tracé : 72 courbes x 2 animations.
- * Mesure au protocole DevTools, mode leger neutralise, /tarifs en
- * 1280x900 :
+ * Reprend l'effet « Fluid Particles » mais REECRIT : l'original est du
+ * React + Tailwind + shadcn. Ce site est en Astro et CSS pur, et on
+ * n'installe pas React pour un fond. Ici : un <canvas>, du JavaScript
+ * sans dependance, et les jetons de couleur du site.
  *
- *     avant   161 couches composees   229 animations
- *     les autres pages du site : 25 a 103 couches, 8 a 135 animations
+ * ── POURQUOI UN CANEVAS, ET PAS DU CSS ──────────────────────────────
+ * Le fond precedent etait un tissage de 72 courbes SVG. Il a fait
+ * passer cette page a 161 couches de composition, et Chrome a cesse de
+ * la peindre : elle est partie en production ENTIEREMENT NOIRE.
  *
- * Chrome promeut en couche tout element anime, et six elements de la
- * page portent un backdrop-filter pose PAR-DESSUS ce fond : a chaque
- * image il devait relire et reflouter un calque qui ne cesse jamais de
- * changer. Au-dela d'un certain budget le compositeur cesse de peindre
- * — la page devient noire, texte compris. C'est ce qui est arrive en
- * production.
+ * Un canevas, c'est UNE couche, quel que soit le nombre de points
+ * dessines dedans. C'est le bon outil pour ca — et c'est la raison
+ * principale de ce choix, pas l'effet.
  *
- * La correction tient a une propriete du dessin : stroke-dashoffset
- * S'HERITE. Animee sur le <g> parent, une seule declaration entraine
- * les 36 courbes qu'il contient. Deux groupes, deux animations, et le
- * meme mouvement a l'ecran.
+ * ── CE QUI A ETE CHANGE A L'ORIGINAL, ET POURQUOI ───────────────────
  *
- * Les courbes restent 72, mais DESSINEES SANS ETRE ANIMEES : un tracé
- * statique ne coute pas de couche. Ce n'est pas leur nombre qui pesait,
- * c'est le fait que chacune bougeait pour son compte.
+ * 1. LA BOUCLE S'ARRETE. L'original lance requestAnimationFrame et ne
+ *    l'annule jamais : il tourne dans un onglet d'arriere-plan, et
+ *    survit meme au demontage du composant. Ici elle s'arrete quand
+ *    l'onglet passe derriere, quand le visiteur demande moins
+ *    d'animation, et quand le site passe en mode leger.
  *
- * Ce qui se perd : chaque courbe avait sa duree propre et une
- * respiration d'opacite. A l'oeil, le tissage derive desormais d'un
- * seul tenant par direction, les deux directions a des vitesses
- * differentes. Le mouvement se lit toujours ; il est simplement
- * solidaire au lieu d'etre disperse.
+ * 2. LE NOMBRE DE POINTS SUIT LA SURFACE. L'original en met 2000, que
+ *    l'ecran fasse 390 px ou 2560. Un telephone peignait donc la meme
+ *    charge qu'un ecran large pour un dixieme de la surface. Ici :
+ *    environ un point pour 1500 pixels, entre 260 et 1400.
  *
- * LES COULEURS SONT CELLES DU SITE. L'original trace du bleu ardoise
- * sur blanc ; ici c'est l'or de la marque sur l'aplat du theme. Le
- * clair prend un or plus profond, sans quoi les traces disparaitraient
- * sur le creme.
+ * 3. LES COULEURS SONT CELLES DU SITE. L'original peint du blanc sur
+ *    noir et du noir sur blanc, et lit « document.documentElement
+ *    .classList.contains('dark') » — une convention Tailwind que ce
+ *    site n'a pas. Ici on lit les JETONS (--bg, --raw-gold-400), et le
+ *    theme vient de data-theme ou du reglage systeme, comme partout
+ *    ailleurs. Aucune couleur n'est ecrite en clair dans ce fichier :
+ *    seul tokens.css en a le droit, et check:colors le verifie.
  *
- * LE MOUVEMENT S'ARRETE DE LUI-MEME quand le visiteur demande moins
- * d'animation, quand le site passe en mode leger, et quand la page
- * n'est pas a l'ecran. Dans tous les cas les traces restent dessinees :
- * le fond ne disparait pas, il se fige.
+ * 4. ON NE FABRIQUE PAS 2000 CHAINES PAR IMAGE. L'original ecrit
+ *    « rgba(255,255,255,0.0731) » pour chaque point, a chaque image :
+ *    c'est une allocation de chaine et un changement d'etat du contexte
+ *    par point. Ici l'opacite est arrondie a huit paliers, les points
+ *    sont groupes par palier, et le contexte ne change que huit fois.
+ *
+ * 5. DES CARRES, PAS DES DISQUES. A 0,5 a 2 px, un arc et un rectangle
+ *    rendent la meme tache une fois lissee — mais fillRect ne construit
+ *    pas de chemin. Mesure a l'oeil sur capture : indiscernable.
+ *
+ * 6. LE FOND NE DISPARAIT JAMAIS. Quand l'animation est coupee, une
+ *    image fixe est tout de meme dessinee. Un fond qui s'efface serait
+ *    une page qui change d'apparence selon les reglages du visiteur.
  */
-
-/* Les 36 courbes d'une direction, telles que les dessine l'original.
-   Calculees ici, au build : rien n'est genere chez le visiteur. */
-function traces(sens: number) {
-  return Array.from({ length: 36 }, (_, i) => {
-    const dx = i * 5 * sens;
-    const d = `M${-(380 - dx)} ${-(189 + i * 6)}`
-            + `C${-(380 - dx)} ${-(189 + i * 6)} ${-(312 - dx)} ${216 - i * 6} ${152 - dx} ${343 - i * 6}`
-            + `C${616 - dx} ${470 - i * 6} ${684 - dx} ${875 - i * 6} ${684 - dx} ${875 - i * 6}`;
-    return {
-      d,
-      /* L'epaisseur et l'opacite croissent avec le rang, comme dans
-         l'original. Les valeurs, elles, ont ete reglees A LA MESURE :
-         l'original trace du bleu ardoise SUR BLANC, a fort contraste,
-         et ses reglages ne transposent pas. Trop bas, on ne voyait rien
-         — 0,7 % de l'ecran touche. Trop haut, les traces passaient
-         devant le texte — 18 %. Ici on vise un FOND : present, jamais
-         premier plan. */
-      trait: (0.9 + i * 0.05).toFixed(2),
-      opacite: Math.min(0.055 + i * 0.007, 0.185).toFixed(3),
-    };
-  });
-}
-/* Deux directions, deux durees : le tissage ne doit pas avoir l'air
-   d'un seul bloc qui glisse. 23 et 31 secondes sont premiers entre eux,
-   donc les deux nappes ne se resynchronisent jamais a l'oeil. */
-const groupes = [
-  { traces: traces(1),  duree: 23 },
-  { traces: traces(-1), duree: 31 },
-];
 ---
 
 <div class="fond-tarifs" aria-hidden="true" role="presentation">
-  {groupes.map(g => (
-    <svg class="ft-svg" viewBox="0 0 696 316" fill="none"
-         preserveAspectRatio="none">
-      {/* L'ANIMATION EST ICI, SUR LE GROUPE, ET NULLE PART AILLEURS.
-          stroke-dashoffset s'herite : une seule declaration entraine les
-          36 courbes de ce groupe. */}
-      <g class="ft-g" style={`--d:${g.duree}s`}>
-        {g.traces.map(t => (
-          <path d={t.d} pathLength="1" stroke="currentColor"
-                stroke-width={t.trait}
-                style={`--o:${t.opacite}`} />
-        ))}
-      </g>
-    </svg>
-  ))}
+  <canvas class="ft-toile" id="ft-toile"></canvas>
 </div>
 
 <style>
-  /* Fixe derriere toute la page, le contenu passe au-dessus : <main>
+  /* Fixe derriere toute la page ; le contenu passe au-dessus, <main>
      porte deja position:relative et z-index:1. */
   .fond-tarifs{
     position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
     background:var(--bg);
-    color:var(--raw-gold-400);
-    /* La force des traces, par theme. Une seule opacite ne peut pas
-       servir les deux : sur le quasi-noir, l'or ressort a 18 % ; sur le
-       creme, le meme reglage disparait — mesure, 3,2 % de l'ecran touche
-       en sombre contre presque rien en clair. Ce coefficient multiplie
-       l'opacite de chaque trace.
-
-       IL A ETE BAISSE DE 22,5 % EN PERDANT LA RESPIRATION. Chaque
-       courbe oscillait entre 55 % et 100 % de son opacite, en
-       ease-in-out : sa moyenne dans le temps valait 77,5 % du maximum.
-       C'est cette moyenne que l'oeil retenait. Sans oscillation, la
-       meme valeur rendrait le tissage un tiers plus present qu'il ne
-       l'etait — vu sur la capture en clair, ou il se mettait a
-       concurrencer le texte. On multiplie donc par 0,775 : l'ecran
-       retrouve exactement l'aspect d'avant, a une animation par groupe
-       au lieu de deux par courbe. */
-    --ft-k:.775;
   }
-  /* Sur le creme : un or plus profond, et nettement plus affirme. */
-  :root[data-theme="light"] .fond-tarifs{color:var(--raw-gold-600);--ft-k:2.79}
-  @media (prefers-color-scheme: light){
-    :root:not([data-theme="dark"]) .fond-tarifs{color:var(--raw-gold-600);--ft-k:2.79}
-  }
-
-  .ft-svg{position:absolute;inset:0;width:100%;height:100%}
-
-  /* LE MOUVEMENT, EN UNE SEULE DECLARATION PAR GROUPE.
-     stroke-dashoffset est une propriete HERITEE : animee sur le <g>,
-     sa valeur descend sur les 36 courbes. C'est tout le gain — 2
-     animations la ou il y en avait 144. */
-  .ft-g{
-    animation:ftCoule var(--d) linear infinite;
-    stroke-dashoffset:0;
-  }
-  @keyframes ftCoule{ to{ stroke-dashoffset:-1 } }
-
-  .ft-svg path{
-    fill:none;
-    /* LA COURBE EST LARGEMENT DESSINEE, pas reduite a un tiret.
-       L'original fait croitre « pathLength » de 0,3 a 1 : la courbe
-       finit donc entiere, et c'est ce tissage continu qu'on voit. Avec
-       un tiret fixe de 30 % je n'obtenais que des segments epars —
-       mesure, 9 000 pixels dores sur 1,3 million. Ici 62 % de chaque
-       courbe est tracee, et le vide qui reste la parcourt : le tissage
-       tient, et le mouvement se lit. */
-    stroke-dasharray:.62 .38;
-    /* AUCUN DECALAGE PAR COURBE, ET IL N'EN FAUT PAS. On pourrait
-       craindre que des pointilles identiques alignent les courbes comme
-       les dents d'un peigne. C'est pathLength="1" qui l'empeche : il
-       NORMALISE chaque courbe a la longueur 1, or elles n'ont pas la
-       meme longueur reelle — 1583 et 797 unites pour deux d'entre
-       elles. Le meme offset normalise tombe donc a des endroits
-       differents en pixels. Le decalage est deja dans le dessin.
-
-       Et il FAUT que l'enfant ne pose rien ici : la moindre valeur de
-       stroke-dashoffset sur le <path> remplacerait celle qu'il herite
-       du groupe, et l'animation ne l'atteindrait plus. */
-    opacity:calc(var(--o) * var(--ft-k));
-  }
-
-  /* ON FIGE LE MOUVEMENT, ON N'EFFACE PAS LE DESSIN. Dans les trois
-     cas le tissage reste la, exactement ou il est : seule la derive
-     s'arrete. Un fond qui disparait serait une page qui change
-     d'apparence sous les yeux du visiteur. */
-  @media (prefers-reduced-motion:reduce){ .ft-g{animation:none} }
-  :global(body.lite) .ft-g{animation:none}
-  /* Hors champ, rien ne doit tourner. La page Tarifs est longue : le
-     fond est en position:fixed, donc toujours « visible » au sens du
-     navigateur, mais l'onglet, lui, peut etre en arriere-plan. */
-  :global(body.hors-champ) .ft-g{animation-play-state:paused}
+  .ft-toile{display:block;width:100%;height:100%}
 </style>
+
+<script is:inline>
+(function(){
+  'use strict';
+  var toile = document.getElementById('ft-toile');
+  if (!toile) return;
+  var ctx = toile.getContext('2d', { alpha: false });
+  if (!ctx) return;
+
+  var racine = document.documentElement;
+  var moinsDeMouvement = matchMedia('(prefers-reduced-motion: reduce)');
+
+  /* ── LE BRUIT DE PERLIN ────────────────────────────────────────────
+     La table de permutation d'origine de Ken Perlin. Ce sont les memes
+     256 valeurs que dans l'original : les changer changerait la forme
+     du courant, sans rien ameliorer. */
+  var PERM = [151,160,137,91,90,15,131,13,201,95,96,53,194,233,7,225,140,36,103,30,
+    69,142,8,99,37,240,21,10,23,190,6,148,247,120,234,75,0,26,197,62,94,252,219,203,
+    117,35,11,32,57,177,33,88,237,149,56,87,174,20,125,136,171,168,68,175,74,165,71,
+    134,139,48,27,166,77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,55,
+    46,245,40,244,102,143,54,65,25,63,161,1,216,80,73,209,76,132,187,208,89,18,169,
+    200,196,135,130,116,188,159,86,164,100,109,198,173,186,3,64,52,217,226,250,124,
+    123,5,202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,189,28,42,
+    223,183,170,213,119,248,152,2,44,154,163,70,221,153,101,155,167,43,172,9,129,22,
+    39,253,19,98,108,110,79,113,224,232,178,185,112,104,218,246,97,228,251,34,242,
+    193,238,210,144,12,191,179,162,241,81,51,145,235,249,14,239,107,49,192,214,31,
+    181,199,106,157,184,84,204,176,115,121,50,45,127,4,150,254,138,236,205,93,222,
+    114,67,29,24,72,243,141,128,195,78,66,215,61,156,180];
+  var p = new Uint8Array(512);
+  for (var i = 0; i < 256; i++) { p[i] = PERM[i]; p[256 + i] = PERM[i]; }
+  function adoucir(t){ return t * t * t * (t * (t * 6 - 15) + 10); }
+  function entre(t, a, b){ return a + t * (b - a); }
+  function pente(h, x, y, z){
+    h &= 15;
+    var u = h < 8 ? x : y;
+    var v = h < 4 ? y : (h === 12 || h === 14) ? x : z;
+    return ((h & 1) === 0 ? u : -u) + ((h & 2) === 0 ? v : -v);
+  }
+  function bruit(x, y, z){
+    var X = Math.floor(x) & 255, Y = Math.floor(y) & 255, Z = Math.floor(z) & 255;
+    x -= Math.floor(x); y -= Math.floor(y); z -= Math.floor(z);
+    var u = adoucir(x), v = adoucir(y), w = adoucir(z);
+    var A = p[X] + Y, AA = p[A] + Z, AB = p[A + 1] + Z;
+    var B = p[X + 1] + Y, BA = p[B] + Z, BB = p[B + 1] + Z;
+    return entre(w,
+      entre(v, entre(u, pente(p[AA], x, y, z),         pente(p[BA], x - 1, y, z)),
+               entre(u, pente(p[AB], x, y - 1, z),     pente(p[BB], x - 1, y - 1, z))),
+      entre(v, entre(u, pente(p[AA + 1], x, y, z - 1), pente(p[BA + 1], x - 1, y, z - 1)),
+               entre(u, pente(p[AB + 1], x, y - 1, z - 1), pente(p[BB + 1], x - 1, y - 1, z - 1))));
+  }
+
+  /* ── LES REGLAGES ─────────────────────────────────────────────────
+     L'echelle du bruit decide de la taille des veines : plus la valeur
+     est basse, plus le courant est large et lent a tourner. */
+  var ECHELLE = 0.0022;      // finesse du courant
+  var VITESSE = 1.5;         // pixels par image
+  var VOILE   = 0.085;       // opacite du voile qui fait la trainee
+  var PALIERS = 8;           // niveaux d'opacite distincts
+
+  /* La force du trait, par theme. Sur le quasi-noir l'or ressort tout
+     de suite ; sur le creme il faut l'appuyer, sinon il n'en reste
+     rien. Ces deux valeurs sont le pendant du coefficient qu'avait le
+     fond precedent, et elles ont ete reglees a la mesure. */
+  var FORCE = { sombre: 0.30, clair: 0.46 };
+
+  var larg = 0, haut = 0, dpr = 1, points = [], n = 0;
+  var couleurPoint = '', couleurFond = '', force = FORCE.sombre;
+  var boucle = 0, temps = 0;
+  var seaux = [];            // les points groupes par palier d'opacite
+
+  /* LES COULEURS VIENNENT DES JETONS, jamais d'une valeur ecrite ici.
+     On relit a chaque changement de theme : le visiteur peut basculer
+     en cours de route. */
+  function lireCouleurs(){
+    var cs = getComputedStyle(document.body);
+    couleurFond = cs.getPropertyValue('--bg').trim();
+    var clair = estClair();
+    couleurPoint = cs.getPropertyValue(clair ? '--raw-gold-600' : '--raw-gold-400').trim();
+    force = clair ? FORCE.clair : FORCE.sombre;
+  }
+  function estClair(){
+    var a = racine.getAttribute('data-theme');
+    if (a === 'light') return true;
+    if (a === 'dark') return false;
+    return matchMedia('(prefers-color-scheme: light)').matches;
+  }
+
+  /* LA DEFINITION EST PLAFONNEE A 1,5. Le voile repeint TOUTE la
+     surface a chaque image : a definition 3 sur un ecran large, cela
+     fait quatre fois plus de pixels a couvrir pour un flou que
+     personne ne regarde de pres. 1,5 garde les points nets sans payer
+     ce prix. */
+  function dimensionner(){
+    larg = innerWidth; haut = innerHeight;
+    dpr = Math.min(devicePixelRatio || 1, 1.5);
+    toile.width  = Math.round(larg * dpr);
+    toile.height = Math.round(haut * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    /* UN POINT POUR ENVIRON 1500 PIXELS, entre 260 et 1400. L'original
+       en posait 2000 quelle que soit la taille de l'ecran : un
+       telephone peignait la meme charge qu'un ecran large pour un
+       dixieme de la surface. */
+    n = Math.round(Math.min(1400, Math.max(260, (larg * haut) / 1500)));
+    points = new Array(n);
+    for (var k = 0; k < n; k++) points[k] = neuf(true);
+    seaux = new Array(PALIERS);
+    for (var s = 0; s < PALIERS; s++) seaux[s] = [];
+    peindreFond();
+  }
+
+  function neuf(premier){
+    return {
+      x: Math.random() * larg,
+      y: Math.random() * haut,
+      t: 0.5 + Math.random() * 1.5,                  // taille en pixels
+      v: premier ? Math.random() * 100 : 0,          // age
+      m: 100 + Math.random() * 60,                   // age maximal
+    };
+  }
+
+  function peindreFond(){
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = couleurFond;
+    ctx.fillRect(0, 0, larg, haut);
+  }
+
+  /* UNE IMAGE. Le voile d'abord — c'est lui qui fait la trainee : les
+     points de l'image precedente s'effacent progressivement au lieu de
+     disparaitre d'un coup. Puis les points, groupes par palier
+     d'opacite pour ne changer l'etat du contexte que huit fois au lieu
+     de mille. */
+  function image(avance){
+    ctx.globalAlpha = avance ? VOILE : 1;
+    ctx.fillStyle = couleurFond;
+    ctx.fillRect(0, 0, larg, haut);
+
+    for (var s = 0; s < PALIERS; s++) seaux[s].length = 0;
+
+    for (var k = 0; k < n; k++) {
+      var q = points[k];
+      if (avance) {
+        q.v += 1;
+        if (q.v > q.m) { points[k] = q = neuf(false); }
+        var a = bruit(q.x * ECHELLE, q.y * ECHELLE, temps) * Math.PI * 4;
+        q.x += Math.cos(a) * VITESSE;
+        q.y += Math.sin(a) * VITESSE;
+        /* Le champ est un tore : un point qui sort d'un bord rentre par
+           l'autre, et la densite reste constante. */
+        if (q.x < 0) q.x = larg; else if (q.x > larg) q.x = 0;
+        if (q.y < 0) q.y = haut; else if (q.y > haut) q.y = 0;
+      }
+      /* L'opacite suit l'age : le point s'allume, culmine, s'eteint. */
+      var o = Math.sin((q.v / q.m) * Math.PI) * force;
+      var pal = (o * PALIERS / force) | 0;
+      if (pal >= PALIERS) pal = PALIERS - 1;
+      if (pal > 0) seaux[pal].push(q);
+    }
+
+    ctx.fillStyle = couleurPoint;
+    for (var s2 = 1; s2 < PALIERS; s2++) {
+      var lot = seaux[s2];
+      if (!lot.length) continue;
+      ctx.globalAlpha = (s2 + 0.5) * force / PALIERS;
+      for (var j = 0; j < lot.length; j++) {
+        var e = lot[j];
+        ctx.fillRect(e.x, e.y, e.t, e.t);
+      }
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  /* ON NE TOURNE QUE QUAND CA SERT. Onglet cache, mouvement reduit,
+     mode leger : la boucle s'arrete. Mais le fond reste dessine — une
+     image fixe est posee pour que la page ne change pas d'apparence
+     selon les reglages du visiteur. */
+  function autorise(){
+    return !document.hidden
+        && !moinsDeMouvement.matches
+        && !document.body.classList.contains('lite');
+  }
+
+  function tour(){
+    if (!autorise()) { boucle = 0; return; }
+    temps += 0.0012;
+    image(true);
+    boucle = requestAnimationFrame(tour);
+  }
+
+  function relancer(){
+    if (boucle) { cancelAnimationFrame(boucle); boucle = 0; }
+    if (autorise()) boucle = requestAnimationFrame(tour);
+    else { peindreFond(); image(false); }   // une image fixe, jamais rien
+  }
+
+  /* Le redimensionnement est amorti : une fenetre qu'on etire en
+     declenche des dizaines par seconde, et chacun reseme tous les
+     points. */
+  var minuteur = 0;
+  addEventListener('resize', function(){
+    clearTimeout(minuteur);
+    minuteur = setTimeout(function(){ dimensionner(); relancer(); }, 160);
+  }, { passive: true });
+
+  document.addEventListener('visibilitychange', relancer);
+  document.addEventListener('nw-theme', function(){ lireCouleurs(); peindreFond(); relancer(); });
+  matchMedia('(prefers-color-scheme: light)').addEventListener('change', function(){
+    lireCouleurs(); peindreFond(); relancer();
+  });
+  moinsDeMouvement.addEventListener('change', relancer);
+
+  /* Le mode leger s'installe APRES coup, quand le site mesure trop peu
+     d'images par seconde. On le guette sur la classe du corps. */
+  new MutationObserver(relancer).observe(document.body, {
+    attributes: true, attributeFilter: ['class'],
+  });
+
+  lireCouleurs();
+  dimensionner();
+  relancer();
+})();
+</script>
