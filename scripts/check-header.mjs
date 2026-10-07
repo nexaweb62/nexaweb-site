@@ -24,10 +24,33 @@
         grand écran, dans le menu plein écran sur mobile — et jamais
         aux deux endroits à la fois ;
      7. un seul état pour deux exemplaires : les boutons cochés du
-        sélecteur de thème s'accordent.
+        sélecteur de thème s'accordent ;
+     8. AUCUN ÉLÉMENT DE LA BARRE NE SORT DE L'ÉCRAN, et il reste une
+        gouttière des deux côtés.
 
    Le point 3 se mesure sur une page intérieure : l'accueil n'a pas de
-   bouton Retour, et c'est voulu. */
+   bouton Retour, et c'est voulu.
+
+   ── POURQUOI LE POINT 8 EXISTE ──────────────────────────────────────
+   Il est né d'un défaut parti en ligne. Sur téléphone, le bouton
+   « Démarrer un projet » dépassait de 51 px à droite : mesuré sur
+   /tarifs à 390 px, il commençait à 234 et finissait à 441. Toutes les
+   pages intérieures étaient touchées, l'accueil non — elle n'a pas de
+   bouton Retour, donc 113 px de moins à loger.
+
+   Aucune mesure existante ne pouvait l'attraper. La barre est en
+   position:fixed : elle n'élargit PAS le document, donc
+   scrollWidth - clientWidth reste à zéro pendant qu'un bouton pend
+   hors de l'écran. Et le contrôle du cadre ne portait que sur le
+   bouton Retour — celui qui tenait. La seule mesure qui voit ce défaut
+   compare le bord droit de CHAQUE élément de la barre à innerWidth.
+
+   On mesure le logo et les enfants DIRECTS de .nav-r, pas tous les
+   descendants : la copie de survol du bouton interactif (.ihb-h) est
+   posée en absolu avec translateX(48px), donc son rectangle dépasse
+   toujours de 48 px à droite. Elle est à opacité 0 et rognée par
+   l'overflow:hidden du bouton — la signaler serait une fausse alerte
+   permanente, et une alerte permanente ne se lit plus. */
 import { chromium } from 'playwright-core';
 
 const BASE = process.env.BASE || 'http://localhost:4321';
@@ -97,6 +120,23 @@ for (const theme of ['dark', 'light']) {
           coches: [...document.querySelectorAll('.theme-opt')]
             .filter(b => b.getAttribute('aria-checked') === 'true')
             .map(b => b.getAttribute('data-theme-opt')),
+          /* Les éléments qui composent la barre, de gauche à droite. */
+          barre: (() => {
+            const nr = document.querySelector('.nav-r');
+            const els = [document.querySelector('.nav-logo'), ...(nr ? nr.children : [])]
+              .filter(vu);
+            return els.map(e => {
+              const b = e.getBoundingClientRect();
+              /* Nommer le bouton par son libellé : « ihb » ne dit rien à
+                 qui lit le rapport, « Démarrer un projet » dit tout. */
+              const t = e.querySelector('.ihb-t,.hdr-btn-lbl');
+              const nom = (t && t.textContent.trim()) ||
+                          e.getAttribute('aria-label') ||
+                          (e.id || e.className || e.tagName).toString().split(' ')[0];
+              return { nom, g: Math.round(b.left), d: Math.round(b.right) };
+            }).sort((a, b) => a.g - b.g);
+          })(),
+          fenetre: innerWidth,
         };
         if (back) {
           const rc = back.getBoundingClientRect();
@@ -152,6 +192,31 @@ for (const theme of ['dark', 'light']) {
 
       if (r.groupes !== 0) echecs.push(`${tag}  ${r.groupes} sélecteur(s) de thème : il ne doit plus y en avoir`);
       if (!r.barreLangue && !r.outils) echecs.push(`${tag}  la langue n'est atteignable nulle part`);
+
+      /* POINT 8 — la barre tient dans l'écran, avec de l'air aux deux
+         bouts. « Ça rentre au pixel près » n'est pas une mise en page :
+         8 px de gouttière, c'est le minimum en dessous duquel un bouton
+         a l'air d'avoir été coupé. */
+      const GOUTTIERE = 8, ECART = 4;
+      for (const e of r.barre) {
+        if (e.d > r.fenetre + 0.5 || e.g < -0.5) {
+          echecs.push(`${tag}  « ${e.nom} » sort de l'écran : ${e.g}→${e.d} pour ${r.fenetre} px de large`);
+        }
+      }
+      if (r.barre.length) {
+        const prem = r.barre[0], dern = r.barre[r.barre.length - 1];
+        if (prem.g < GOUTTIERE) echecs.push(`${tag}  « ${prem.nom} » colle au bord gauche (${prem.g} px)`);
+        if (r.fenetre - dern.d < GOUTTIERE) {
+          echecs.push(`${tag}  « ${dern.nom} » colle au bord droit (${r.fenetre - dern.d} px)`);
+        }
+        /* Deux contrôles qui se touchent se lisent comme un seul. */
+        for (let i = 1; i < r.barre.length; i++) {
+          const trou = r.barre[i].g - r.barre[i - 1].d;
+          if (trou < ECART) {
+            echecs.push(`${tag}  « ${r.barre[i - 1].nom} » et « ${r.barre[i].nom} » se touchent (${trou} px)`);
+          }
+        }
+      }
     }
     await ctx.close();
   }

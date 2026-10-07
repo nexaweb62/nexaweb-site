@@ -1491,11 +1491,25 @@ body.lite .split .w{transition-duration:.35s}
   .nav-r .lang-sel{gap:1px}
   .nav-r .lang-opt{padding:2px 3px}
 }
-/* En dessous de 340 px le mot « Menu » ne rentre plus ; le trait triple
-   est compris sans lui, « Retour » ne l'est pas sans le sien. */
-@media(max-width:340px){
+/* LE MOT « MENU » TOMBE, LE MOT « RETOUR » RESTE.
+   Le trait triple est compris sans son libellé — c'est le symbole le
+   plus établi de l'interface mobile. « Retour » ne l'est pas sans le
+   sien : un bouton nu n'annonce rien, et il a été demandé qu'il reste
+   lisible sur téléphone. Alors quand la barre manque de place, c'est le
+   mot « Menu » qui part, jamais l'autre.
+
+   Le seuil passe de 340 à 480 px : à 390 px, les quatre éléments —
+   logo, Retour, Menu, « Démarrer un projet » — occupaient 350 px sur
+   362 disponibles. Ils tenaient, mais sans un souffle. Les 20 px rendus
+   ici sont ce qui sépare « ça rentre » de « c'est propre ».
+
+   Le bouton devient alors une cible carrée. Sur un pointeur grossier
+   elle passe à 44 px, comme le bouton Retour voisin : en dessous on le
+   rate une fois sur trois. */
+@media(max-width:480px){
   .hdr-btn-lbl{display:none}
   .menu-btn{padding:0 11px}
+  @media(pointer:coarse){ .menu-btn{min-width:44px;min-height:44px} }
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -1566,3 +1580,58 @@ body.lite .split .w{transition-duration:.35s}
    sinon l'ecran ou le retour compte le plus n'en donnerait aucun. */
 @media (hover:none){ .ihb.loading .ihb-d{display:block} }
 @media (prefers-reduced-motion:reduce){ .ihb.loading .ihb-d{animation:none} }
+
+/* ── LA BARRE SUR UN ECRAN ETROIT ────────────────────────────────────
+   Les boutons interactifs sont larges : un rembourrage genereux, et
+   34 px a gauche pour loger la pastille doree. Sur telephone cela ne
+   passe plus. Mesure sur /tarifs a 390 px : logo + Retour (113) + Menu
+   (57) + « Demarrer un projet » (207) — le bouton d'appel commencait a
+   234 et finissait a 441, soit 51 px HORS DE L'ECRAN.
+
+   Pourquoi aucun controle ne l'a vu : la barre est en position:fixed,
+   donc elle n'elargit pas le document. Chercher un debordement
+   horizontal du document ne peut pas attraper ca — il faut comparer le
+   bord droit de chaque bouton a la largeur de la fenetre.
+
+   Et pourquoi l'accueil restait propre : elle n'a pas de bouton Retour,
+   donc 113 px de moins.
+
+   Sur un ecran tactile la pastille est deja masquee (hover:none) : le
+   rembourrage asymetrique qui lui faisait place n'a plus d'objet. */
+@media (max-width:480px){
+  .hdr .ihb{padding:10px 14px;font-size:var(--fs-100)}
+  .hdr .ihb .ihb-h{gap:5px}
+  .hdr .ihb .ihb-h svg{width:15px;height:15px}
+  .nav-r{gap:6px}
+
+  /* UN ÉCART GARANTI ENTRE LE LOGO ET LA GRAPPE.
+     .nav-r est poussé à droite par margin-left:auto. Quand la ligne est
+     pleine, cet « auto » vaut zéro et les deux se touchent : mesuré à
+     320 px, le logo finissait à 50 et le bouton Retour commençait à 50.
+     Un gap de flex, lui, n'est pas une marge automatique : il reste dû
+     même quand il ne reste plus rien à distribuer. C'est donc lui qui
+     tient l'écart, pas une marge. */
+  .nav{column-gap:14px}
+
+  /* La gouttière de la barre se resserre — et elle seule : --pad-x
+     continue de régler tout le reste du site. Ce sont les 12 px rendus
+     ici qui payent l'écart ci-dessus. */
+  .hdr-in,.hdr.scrolled .hdr-in{padding:0 14px}
+}
+/* Le plus petit téléphone encore en service. Les boutons y perdent
+   3 px de rembourrage de chaque côté : à 320 px, c'est la différence
+   entre 5 px de jeu et un débordement. */
+@media (max-width:360px){
+  .hdr .ihb{padding:10px 11px}
+  .nav{column-gap:10px}
+}
+/* 320 px, le plancher. Mesuré à ce palier : le contenu réclamait 297 px
+   pour 292 disponibles — la grappe ne sortait pas de l'écran, mais elle
+   mordait sur la gouttière de droite, 9 px au lieu de 14. Les derniers
+   pixels se prennent ici, sur les écarts et le rembourrage, et nulle
+   part ailleurs : rogner le libellé serait rendre le bouton muet. */
+@media (max-width:340px){
+  .hdr .ihb{padding:10px 9px}
+  .nav-r{gap:4px}
+  .nav{column-gap:8px}
+}

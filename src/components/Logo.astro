@@ -97,10 +97,20 @@ const hauteur = Math.round(largeur * 95 / 90);
   :global(button:hover) .lg-svg .logo-face{stroke:var(--logo-depth)}
   .lg-svg .logo-face{transition:stroke var(--dur-micro) var(--ease-out)}
 
-  /* Sous 420 px, l'en-tête ne garde que le symbole. La règle vit ici
-     plutôt que dans la page : c'est une propriété du logo, pas de
-     l'endroit où on le pose. */
-  @media(max-width:420px){
+  /* L'en-tête ne garde que le symbole tant qu'il n'y a pas la place
+     pour le bloc complet. La règle vit ici plutôt que dans la page :
+     c'est une propriété du logo, pas de l'endroit où on le pose.
+
+     LE SEUIL EST MESURÉ, pas choisi. Le bloc complet fait 117 px de
+     large. En face, la grappe de droite d'une page intérieure — Retour,
+     Menu, « Démarrer un projet » — en fait 255. Avec les 28 px de
+     gouttière et un écart décent entre les deux, il faut 117 + 255 + 28
+     + 24 = 424 px de contenu, soit une fenêtre d'au moins ~460 px. À
+     420 px le seuil se déclenchait donc EXACTEMENT UN CRAN TROP TÔT :
+     à 430 px le texte revenait et la grappe le touchait, bord à bord,
+     mesure à l'appui (logo 22→139, Retour commençant à 139). D'où 560,
+     qui laisse une marge franche au lieu d'un pixel. */
+  @media(max-width:560px){
     .lg[data-logo].lg-compact .lg-txt{display:none}
     .lg[data-logo].lg-compact{gap:0}
   }
