@@ -43,7 +43,11 @@ const EXCEPTIONS = [
   { re: /^(LinkedIn|Facebook|WhatsApp|Instagram|Google|Calendly|Supabase|Stripe|Cloudflare)$/i, quoi: 'nom de service tiers' },
   { re: /^(Carvin|Hauts-de-France|France|Lens|Lille|Douai|Béthune|Arras)$/i, quoi: 'nom de lieu' },
   { re: /^\d[\d\s]{8,}$/, quoi: 'numéro (SIRET, téléphone)' },
-  { re: /^(SIRET|RCS|TVA|SAS|SASU|EI|URL|SEO|UI|UX|FAQ|RGPD|GDPR|CGV|HTML|CSS|JS)\b/i, quoi: 'sigle' },
+  { re: /^(SIRET|RCS|TVA|SAS|SASU|EI|URL|SEO|UI|UX|FAQ|RGPD|GDPR|CGV|HTML|CSS|JS|PDF|CMS|SSL|API)\b/i, quoi: 'sigle' },
+  /* « vs » est du latin, identique dans les deux langues. */
+  { re: /^vs\.?$/i, quoi: 'abreviation latine' },
+  /* « 8/10 », « 24/7 » : un rapport chiffre ne se traduit pas. */
+  { re: /^\d+\s*\/\s*\d+$/, quoi: 'proportion chiffree' },
   { re: /^https?:\/\//i, quoi: 'adresse web' },
 ];
 /* Les noms de l'equipe, lus dans la page Equipe : ils ne se traduisent
@@ -234,6 +238,12 @@ const parPage = new Map();
 for (const m of manques) {
   if (!parPage.has(m.page)) parPage.set(m.page, []);
   parPage.get(m.page).push(m);
+}
+
+/* Sortie machine, pour l'outil qui pose les cles. */
+if (process.env.JSON) {
+  console.log(JSON.stringify(manques, null, 1));
+  process.exit(manques.length ? 1 : 0);
 }
 
 console.log(`${pagesVues} pages parcourues en anglais.`);
