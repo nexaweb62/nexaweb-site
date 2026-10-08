@@ -46,7 +46,7 @@ const EXCEPTIONS = [
   { re: /^(SIRET|RCS|TVA|SAS|SASU|EI|URL|SEO|UI|UX|FAQ|RGPD|GDPR|CGV|HTML|CSS|JS|PDF|CMS|SSL|API)\b/i, quoi: 'sigle' },
   /* Les noms des cles de stockage du navigateur. Ce sont des
      identifiants techniques : les traduire les casserait. */
-  { re: /^(nw[-_][a-z]+|nexa-[a-z]+)(,\s*(nw[-_][a-z]+|nexa-[a-z]+))*$/i, quoi: 'identifiant technique' },
+  { re: /^(nw[-_][a-z_]+|nexa-[a-z_]+)(,\s*(nw[-_][a-z_]+|nexa-[a-z_]+))*$/i, quoi: 'identifiant technique' },
   /* « vs » est du latin, identique dans les deux langues. */
   { re: /^vs\.?$/i, quoi: 'abreviation latine' },
   /* « 8/10 », « 24/7 » : un rapport chiffre ne se traduit pas. */
