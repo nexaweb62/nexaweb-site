@@ -24,6 +24,29 @@ var D={
     'hdr-nav-rdv':'Book','hdr-nav-team':'Team','hdr-nav-reviews':'Reviews',
     'hdr-cta':'Start a project',
     'hdr-back':'Back',
+    'hdr-menu':'Menu',
+    /* ── Thème ── */
+    'theme-systeme':'System theme','theme-clair':'Light mode','theme-sombre':'Dark mode',
+    /* ── Noms accessibles : lus par les lecteurs d'écran, jamais vus.
+       Ils étaient restés en français sur tout le site. ── */
+    'a11y-skip':'Skip to content',
+    'a11y-nav-main':'Main navigation',
+    'a11y-nav':'Navigation',
+    'a11y-logo':'NEXAWEB — Home',
+    'a11y-langue':'Language',
+    'a11y-theme':'Display theme',
+    'a11y-menu':'Menu — open navigation',
+    'a11y-retour':'Back — previous page',
+    'a11y-fermer':'Close navigation',
+    'a11y-pied':'Footer',
+    'a11y-sociaux':'Social media',
+    'a11y-liens-nav':'Navigation links',
+    'a11y-liens-legaux':'Legal links',
+    /* ── Pied de page ── */
+    'ftr-tarifs':'Pricing','ftr-avis':'Client reviews','ftr-ccm':'How it works',
+    'ftr-metier':'By trade','ftr-resto':'Restaurants','ftr-commerce':'Shops',
+    'ftr-artisan':'Tradespeople','ftr-equipe':'The team',
+    'ftr-mentions':'Legal notice','ftr-confid':'Privacy',
     /* ── Index hero ── */
     'idx-eye':'Web agency · Carvin',
     'idx-hl1':'Websites for the',
@@ -314,7 +337,105 @@ var D={
     'rdv-badge3':'Video or phone',
     'rdv-badge4':'Zero commitment',
     'rdv-card-title':'Choose a time slot',
-    'rdv-available':'Available'
+    'rdv-available':'Available',
+    /* ── Devis ── */
+    'dv-title':'A firm price within <em class="liquid">48 hours</em>.',
+    'dv-ok-t':'Quote sent!',
+    'dv-ok-s':'Thank you for your request. We will get back to you within <strong>24 business hours</strong> with a tailored proposal.',
+    'dv-ok-btn':'Back to home',
+    'dv-offre-t':'Launch offer:',
+    'dv-offre-1':'the first 3 clients get a complete website for',
+    'dv-offre-2':'all included. Mention it in your description.',
+    'dv-ph-prenom':'John','dv-ph-nom':'Smith','dv-ph-email':'john@company.com',
+    'dv-ph-societe':'My Bakery, Freelance…',
+    'dv-ph-desc':'Tell us about your business, your goals, the features you need… The more specific you are, the more accurate our quote will be.',
+    'dv-ph-url':'https://my-current-site.com (optional)',
+    'dv-opt-choisir':'Select…','dv-opt-vitrine':'Showcase website',
+    'dv-opt-ecom':'Online shop','dv-opt-blog':'Blog / Magazine',
+    'dv-opt-app':'Web application','dv-opt-refonte':'Redesign of an existing site',
+    'dv-opt-autre':'Other','dv-opt-asap':'As soon as possible',
+    'dv-opt-1m':'Within 1 month','dv-opt-3m':'In 2 to 3 months','dv-opt-flex':'Flexible',
+    'dv-rgpd':'I agree that my data (name, email, phone, project description) may be used by Nexa Web for the sole purpose of handling my quote request and getting back to me. No data is ever sold. <span class="req">*</span>',
+    /* Messages de validation, injectes en JavaScript. */
+    'dv-err-prenom':'First name is required.',
+    'dv-err-nom':'Last name is required.',
+    'dv-err-email':'Email is required.',
+    'dv-err-email-format':'Invalid email address.',
+    'dv-err-type':'Please select a type of website.',
+    'dv-err-desc':'A description is required.',
+    'dv-err-desc-court':'Please describe your project in at least 20 characters.',
+    'dv-err-rgpd':'You must accept the processing of your data to continue.',
+    'dv-err-trop-vite':'A request has already been sent. Please wait a minute before trying again.',
+    'dv-err-connexion':'Connection error. Write to us at',
+    'dv-err-enreg':'Error while saving. Contact us directly at',
+    'dv-err-inattendu':'An unexpected error occurred. Write to us at',
+    /* ── Accueil · Fait pour vous ── */
+    'who-lbl':'Made for you',
+    'who-h':'A plan for<br>every profile.',
+    'who-sub':'A site to refresh, a local business, a company that is growing — every need has its plan.',
+    'who-t1':'A site to refresh',
+    'who-d1':'Your site exists but it has aged: dated design, slow on mobile, hard to update. We rebuild it from scratch while keeping your content and your search ranking.',
+    'who-prix1':'from €490',
+    'who-prix1-sub':'New design · Content kept · Delivered in 2 weeks',
+    'who-cta1':'See the plan',
+    'who-t2':'Local shop &amp; tradesperson',
+    'who-d2':'You run a local business — restaurant, shop, trade — but have no convincing online presence. We give you a site that attracts and reassures.',
+    'who-prix2-pre':'from',
+    'who-prix2-sub':'Launch offer · limited spots · local SEO included',
+    'who-cta2':'See the plans',
+    /* ── Titres d'onglet et descriptions, une paire par page ── */
+    'meta-t-404':'Page not found — Nexa Web',
+    'meta-d-404':'Nexa Web designs custom websites for shops and tradespeople. Redesign from €490, delivered in 2 to 4 weeks. Carvin, Hauts-de-France.',
+    'meta-t-accueil':'Nexa Web — Premium Web Agency · Carvin',
+    'meta-d-accueil':'Nexa Web designs custom websites for shops and tradespeople. Redesign from €490, delivered in 2 to 4 weeks. Carvin, Hauts-de-France.',
+    'meta-t-avis':'Client reviews — Nexa Web',
+    'meta-d-avis':'What Nexa Web clients say. Read the reviews or share your own experience.',
+    'meta-t-cgv':'Terms of sale — Nexa Web',
+    'meta-d-cgv':'The terms of the Nexa Web money-back guarantee: 14 days to change your mind, full refund, no questions asked.',
+    'meta-t-comment-ca-marche':'How it works — Nexa Web',
+    'meta-d-comment-ca-marche':'From the first call to going live: the four steps of a Nexa Web project, with timings and what is expected from you.',
+    'meta-t-contact':'Location — Nexa Web',
+    'meta-d-contact':'Nexa Web is based in Carvin, Hauts-de-France. Find our location and how to reach us.',
+    'meta-t-design-uiux':'UI/UX Design — Nexa Web',
+    'meta-d-design-uiux':'Interface and user experience design: mockups, prototypes and a design system built for conversion.',
+    'meta-t-devis':'Free quote — Nexa Web',
+    'meta-d-devis':'Describe your web project and get a free quote within 24 hours. Showcase site, online shop or redesign.',
+    'meta-t-ecommerce':'E-commerce website — Nexa Web',
+    'meta-d-ecommerce':'Online shops built to sell: secure payment, stock management and a checkout designed to convert.',
+    'meta-t-equipe':'The team — Nexa Web',
+    'meta-d-equipe':'Meet the Nexa Web team — two digital enthusiasts at the service of your project.',
+    'meta-t-inscription':'Create an account — Nexa Web',
+    'meta-d-inscription':'Create your Nexa Web client account to follow your project.',
+    'meta-t-login':'Sign in — Nexa Web',
+    'meta-d-login':'Sign in to your Nexa Web client area.',
+    'meta-t-mentions-legales':'Legal notice — Nexa Web',
+    'meta-d-mentions-legales':'Legal information about the Nexa Web site: publisher, hosting, intellectual property and liability.',
+    'meta-t-politique-confidentialite':'Privacy policy — Nexa Web',
+    'meta-d-politique-confidentialite':'How Nexa Web collects, uses and protects your personal data, in compliance with GDPR.',
+    'meta-t-refonte':'Website redesign — Nexa Web',
+    'meta-d-refonte':'Your site rebuilt from scratch, keeping your content and your search ranking. From €490, delivered in 2 weeks.',
+    'meta-t-rendez-vous':'Book a call — Nexa Web',
+    'meta-d-rendez-vous':'Book a free 30-minute consultation with Nexa Web. Video or phone, zero commitment.',
+    'meta-t-seo':'SEO &amp; Performance — Nexa Web',
+    'meta-d-seo':'Local SEO and loading speed: being found, and being fast. Technical audit and ongoing optimisation.',
+    'meta-t-services':'Services — Nexa Web',
+    'meta-d-services':'Showcase sites, online shops, redesigns, UI/UX design and SEO: everything Nexa Web builds, with published prices.',
+    'meta-t-site-internet-artisan':'Website for tradespeople — Nexa Web',
+    'meta-d-site-internet-artisan':'A website for tradespeople: showcase your work, get quote requests and be found locally.',
+    'meta-t-site-internet-commerce':'Website for local shops — Nexa Web',
+    'meta-d-site-internet-commerce':'A website for local shops: opening hours, catalogue and local SEO so nearby customers find you.',
+    'meta-t-site-internet-restaurant':'Website for restaurants — Nexa Web',
+    'meta-d-site-internet-restaurant':'A website for restaurants: menu, bookings and reviews, on a site that makes people want to come.',
+    'meta-t-site-vitrine':'Showcase website — Nexa Web',
+    'meta-d-site-vitrine':'A complete showcase website: custom design, mobile-ready, basic SEO included. Launch offer at €999.',
+    'meta-t-tarifs':'Pricing — Nexa Web',
+    'meta-d-tarifs':'Website redesign from €490, Showcase Pro at €999 (launch offer, limited spots). Published prices, payment in 3 or 4 instalments.',
+    /* ── Divers partages ── */
+    'gar-aria':'Money-back guarantee',
+    'a11y-fermer-court':'Close',
+    'ct-aria':'Contact Nexa Web',
+    'ct-badge':'Carvin, France',
+    'dv-ph-tel':'+33 6 00 00 00 00',
   },
   fr:{
     /* ── Login / espace client ── */
@@ -336,6 +457,28 @@ var D={
     'hdr-nav-rdv':'RDV','hdr-nav-team':'Équipe','hdr-nav-reviews':'Avis',
     'hdr-cta':'Démarrer un projet',
     'hdr-back':'Retour',
+    'hdr-menu':'Menu',
+    /* ── Thème ── */
+    'theme-systeme':'Thème du système','theme-clair':'Mode clair','theme-sombre':'Mode sombre',
+    /* ── Noms accessibles ── */
+    'a11y-skip':'Aller au contenu',
+    'a11y-nav-main':'Navigation principale',
+    'a11y-nav':'Navigation',
+    'a11y-logo':'NEXAWEB — Accueil',
+    'a11y-langue':'Langue',
+    'a11y-theme':'Thème d\'affichage',
+    'a11y-menu':'Menu — ouvrir la navigation',
+    'a11y-retour':'Retour — page précédente',
+    'a11y-fermer':'Fermer la navigation',
+    'a11y-pied':'Pied de page',
+    'a11y-sociaux':'Réseaux sociaux',
+    'a11y-liens-nav':'Liens de navigation',
+    'a11y-liens-legaux':'Liens légaux',
+    /* ── Pied de page ── */
+    'ftr-tarifs':'Tarifs','ftr-avis':'Avis clients','ftr-ccm':'Comment ça marche',
+    'ftr-metier':'Par métier','ftr-resto':'Restaurants','ftr-commerce':'Commerces',
+    'ftr-artisan':'Artisans','ftr-equipe':'L\'équipe',
+    'ftr-mentions':'Mentions légales','ftr-confid':'Confidentialité',
     /* ── Index hero ── */
     'idx-eye':'Agence web · Carvin',
     'idx-hl1':'Des sites pour les',
@@ -627,26 +770,222 @@ var D={
     'rdv-badge3':'Visio ou téléphone',
     'rdv-badge4':'Zéro engagement',
     'rdv-card-title':'Choisissez un créneau',
-    'rdv-available':'Disponible'
+    'rdv-available':'Disponible',
+    /* ── Devis ── */
+    'dv-title':'Un prix ferme en <em class="liquid">48 heures</em>.',
+    'dv-ok-t':'Devis envoyé !',
+    'dv-ok-s':'Merci pour votre demande. Nous vous recontacterons sous <strong>24 heures ouvrées</strong> avec une proposition personnalisée.',
+    'dv-ok-btn':'Retour à l\'accueil',
+    'dv-offre-t':'Offre de lancement :',
+    'dv-offre-1':'les 3 premiers clients bénéficient d\'un site complet à',
+    'dv-offre-2':'tout inclus. Mentionnez-le dans votre description.',
+    'dv-ph-prenom':'Jean','dv-ph-nom':'Dupont','dv-ph-email':'jean@entreprise.fr',
+    'dv-ph-societe':'Ma Boulangerie, Auto-entrepreneur…',
+    'dv-ph-desc':'Parlez-nous de votre activité, de vos objectifs, des fonctionnalités souhaitées… Plus vous êtes précis, plus notre devis sera juste.',
+    'dv-ph-url':'https://monsite-actuel.fr (optionnel)',
+    'dv-opt-choisir':'Sélectionner…','dv-opt-vitrine':'Site vitrine',
+    'dv-opt-ecom':'Boutique e-commerce','dv-opt-blog':'Blog / Magazine',
+    'dv-opt-app':'Application web','dv-opt-refonte':'Refonte de site existant',
+    'dv-opt-autre':'Autre','dv-opt-asap':'Dès que possible',
+    'dv-opt-1m':'Dans 1 mois','dv-opt-3m':'Dans 2 à 3 mois','dv-opt-flex':'Flexible',
+    'dv-rgpd':'J\'accepte que mes données (nom, e-mail, téléphone, description du projet) soient utilisées par Nexa Web dans le seul but de traiter ma demande de devis et de me recontacter. Aucune donnée n\'est revendue. <span class="req">*</span>',
+    'dv-err-prenom':'Le prénom est requis.',
+    'dv-err-nom':'Le nom est requis.',
+    'dv-err-email':'L\'e-mail est requis.',
+    'dv-err-email-format':'Adresse e-mail invalide.',
+    'dv-err-type':'Veuillez sélectionner un type de site.',
+    'dv-err-desc':'La description est requise.',
+    'dv-err-desc-court':'Décrivez votre projet en au moins 20 caractères.',
+    'dv-err-rgpd':'Vous devez accepter le traitement de vos données pour continuer.',
+    'dv-err-trop-vite':'Une demande a déjà été envoyée. Attendez une minute avant de réessayer.',
+    'dv-err-connexion':'Erreur de connexion. Écrivez-nous à',
+    'dv-err-enreg':'Erreur lors de l\'enregistrement. Contactez-nous directement à',
+    'dv-err-inattendu':'Une erreur inattendue est survenue. Écrivez-nous à',
+    /* ── Accueil · Fait pour vous ── */
+    'who-lbl':'Fait pour vous',
+    'who-h':'Une formule pour<br>chaque profil.',
+    'who-sub':'Un site à rafraîchir, une activité locale, une entreprise qui grandit — chaque besoin a sa formule.',
+    'who-t1':'Site à rafraîchir',
+    'who-d1':'Votre site existe mais il a vieilli : design daté, lent sur mobile, difficile à mettre à jour. On le reprend de zéro en gardant vos contenus et votre référencement.',
+    'who-prix1':'dès 490 €',
+    'who-prix1-sub':'Nouveau design · Contenus repris · Livré en 2 semaines',
+    'who-cta1':'Voir la formule',
+    'who-t2':'Commerçant &amp; artisan local',
+    'who-d2':'Vous avez une activité locale — restaurant, boutique, artisan — mais aucune présence en ligne convaincante. On vous donne un site qui attire et qui rassure.',
+    'who-prix2-pre':'à partir de',
+    'who-prix2-sub':'Offre de lancement · places limitées · SEO local inclus',
+    'who-cta2':'Voir les formules',
+    /* ── Titres d'onglet et descriptions, une paire par page ── */
+    'meta-t-404':'Page introuvable — Nexa Web',
+    'meta-d-404':'',
+    'meta-t-accueil':'Nexa Web — Agence Web Premium · Carvin',
+    'meta-d-accueil':'Nexa Web conçoit des sites internet sur-mesure pour commerçants et artisans. Refonte dès 490 €, livraison en 2 à 4 semaines. Carvin, Hauts-de-France.',
+    'meta-t-avis':'Avis clients — Nexa Web',
+    'meta-d-avis':'Avis clients Nexa Web — découvrez ce que nos clients pensent de nos prestations web. Carvin, Hauts-de-France.',
+    'meta-t-cgv':'Conditions de vente — Nexa Web',
+    'meta-d-cgv':'Les conditions de la garantie satisfait ou remboursé de Nexa Web : 14 jours pour valider la maquette, 2 séries de retouches incluses, remboursement intégral de l\'acompte sans justification.',
+    'meta-t-comment-ca-marche':'Comment ça marche — Nexa Web',
+    'meta-d-comment-ca-marche':'De la prise de contact à la mise en ligne : découvrez les 6 étapes d\'un projet web chez Nexa Web. Livraison en 2 à 4 semaines, accompagnement inclus.',
+    'meta-t-contact':'Localisation — Nexa Web',
+    'meta-d-contact':'Nexa Web est basée à Carvin, Hauts-de-France. Retrouvez notre localisation et contactez-nous par email.',
+    'meta-t-design-uiux':'Design UI/UX — Nexa Web',
+    'meta-d-design-uiux':'Design UI/UX soigné pour interfaces web et apps mobiles. Maquettes Figma, prototypes interactifs — Nexa Web.',
+    'meta-t-devis':'Devis gratuit — Nexa Web',
+    'meta-d-devis':'Décrivez votre projet web et recevez un devis gratuit sous 24 h. Site vitrine, e-commerce, refonte — Nexa Web, Carvin, Hauts-de-France.',
+    'meta-t-ecommerce':'Site E-commerce — Nexa Web',
+    'meta-d-ecommerce':'Boutiques e-commerce performantes et sécurisées. Nexa Web conçoit votre shop en ligne à Carvin.',
+    'meta-t-equipe':'L\'Équipe — Nexa Web',
+    'meta-d-equipe':'Découvrez l\'équipe Nexa Web — deux passionnés du digital au service de votre présence en ligne. Carvin, Hauts-de-France.',
+    'meta-t-inscription':'Créer un compte — Nexa Web',
+    'meta-d-inscription':'',
+    'meta-t-login':'Connexion — Nexa Web',
+    'meta-d-login':'',
+    'meta-t-mentions-legales':'Mentions légales — Nexa Web',
+    'meta-d-mentions-legales':'',
+    'meta-t-politique-confidentialite':'Politique de confidentialité — Nexa Web',
+    'meta-d-politique-confidentialite':'',
+    'meta-t-refonte':'Refonte de Site — Nexa Web',
+    'meta-d-refonte':'Refonte complète de site web — design moderne, performance et SEO améliorés. Nexa Web, Carvin.',
+    'meta-t-rendez-vous':'Rendez-vous — Nexa Web',
+    'meta-d-rendez-vous':'Réservez une consultation gratuite de 30 min avec Nexa Web. Visio ou téléphone. Zéro engagement.',
+    'meta-t-seo':'SEO & Performance — Nexa Web',
+    'meta-d-seo':'Audit SEO, optimisation technique et performance web. Nexa Web booste votre visibilité Google à Carvin.',
+    'meta-t-services':'Services — Nexa Web',
+    'meta-d-services':'Conception, développement et référencement de sites sur mesure. Prix affiché, délai fixé dès le premier appel. Nexa Web, Carvin, Hauts-de-France.',
+    'meta-t-site-internet-artisan':'Site Internet pour Artisan — Nexa Web',
+    'meta-d-site-internet-artisan':'Un site pour artisan avec galerie réalisations, formulaire de devis et SEO local. Livraison en 2 à 4 semaines — Nexa Web, Carvin, Hauts-de-France.',
+    'meta-t-site-internet-commerce':'Site Internet pour Commerce de Proximité — Nexa Web',
+    'meta-d-site-internet-commerce':'Un site vitrine pour votre commerce local : catalogue, horaires, formulaire de commande et SEO local. Nexa Web, Carvin, Hauts-de-France.',
+    'meta-t-site-internet-restaurant':'Site Internet pour Restaurant — Nexa Web',
+    'meta-d-site-internet-restaurant':'Un site restaurant avec menu en ligne, formulaire de réservation et SEO local. Livraison rapide — Nexa Web, Carvin, Hauts-de-France.',
+    'meta-t-site-vitrine':'Site Vitrine — Nexa Web',
+    'meta-d-site-vitrine':'Création de sites vitrines sur mesure, rapides et élégants. Nexa Web, agence web à Carvin.',
+    'meta-t-tarifs':'Tarifs — Nexa Web',
+    'meta-d-tarifs':'Refonte de site dès 490 €, Vitrine Pro à 999 € (offre de lancement, places limitées) et Entreprise à partir de 1 200 €. Paiement en 3 ou 4 fois possible. Devis gratuit — Nexa Web, Carvin.',
+    /* ── Divers partages ── */
+    'gar-aria':'Garantie satisfait ou remboursé',
+    'a11y-fermer-court':'Fermer',
+    'ct-aria':'Contact Nexa Web',
+    'ct-badge':'Carvin, France',
+    'dv-ph-tel':'+33 6 00 00 00 00',
   }
 };
 
-function applyLang(lang){
-  var t=D[lang]||D.fr;
-  document.querySelectorAll('[data-i18n]').forEach(function(el){
-    var k=el.getAttribute('data-i18n');
-    if(t[k]!==undefined)el.innerHTML=t[k];
-  });
-  document.querySelectorAll('[data-i18n-ph]').forEach(function(el){
-    var k=el.getAttribute('data-i18n-ph');
-    if(t[k]!==undefined)el.placeholder=t[k];
-  });
+/* ═══════════════════════════════════════════════════════════════════
+   L'APPLICATION
+
+   Le moteur ne touche QUE ce qui porte une cle. Tout le reste est
+   invisible pour lui, et reste donc en francais pour toujours sans que
+   rien ne le signale — c'est ce qui a laisse six pages entieres non
+   traduites. scripts/check-i18n.mjs fait desormais l'inventaire
+   inverse et refuse qu'un texte lisible echappe au systeme.
+
+   Les attributs reconnus :
+     data-i18n        le contenu       (innerHTML)
+     data-i18n-ph     le placeholder
+     data-i18n-aria   le nom accessible (aria-label)
+     data-i18n-title  l'infobulle      (title)
+     data-i18n-alt    la description d'image
+     data-i18n-value  le libelle d'un <input type=submit|button>
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Les attributs, et la propriete a ecrire. */
+var ATTRS=[['data-i18n-ph','placeholder'],['data-i18n-aria','aria-label'],
+           ['data-i18n-title','title'],['data-i18n-alt','alt'],
+           ['data-i18n-value','value']];
+
+var LANG='fr';
+
+/* LA TRADUCTION, ACCESSIBLE AU RESTE DU SITE.
+   Les messages de validation, les bulles, les avis charges depuis
+   Supabase : tout ce qui est injecte en JavaScript doit passer par
+   ici, sinon il arrive en francais quelle que soit la langue. */
+function t(cle,defaut){
+  var d=D[LANG]||D.fr;
+  if(d[cle]!==undefined)return d[cle];
+  if(D.fr[cle]!==undefined)return D.fr[cle];
+  return defaut!==undefined?defaut:cle;
 }
 
-function init(){
-  var cur=localStorage.getItem('nw-lang')||'fr';
-  applyLang(cur);
+function applyLang(lang){
+  LANG=(lang==='en')?'en':'fr';
+  var d=D[LANG]||D.fr;
+
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var k=el.getAttribute('data-i18n');
+    if(d[k]!==undefined)el.innerHTML=d[k];
+  });
+  ATTRS.forEach(function(paire){
+    document.querySelectorAll('['+paire[0]+']').forEach(function(el){
+      var k=el.getAttribute(paire[0]);
+      if(d[k]===undefined)return;
+      /* Un placeholder et une value sont des proprietes ; aria-label,
+         title et alt sont des attributs. Ecrire au mauvais endroit ne
+         leve aucune erreur et ne fait rien — d'ou la distinction. */
+      if(paire[1]==='placeholder'||paire[1]==='value')el[paire[1]]=d[k];
+      else el.setAttribute(paire[1],d[k]);
+    });
+  });
+
+  /* ── LES PRIX CHANGENT DE FORME, PAS DE VALEUR ────────────────────
+     Le francais ecrit « 1 200 € », l'anglais « €1,200 » : le symbole
+     passe devant et le separateur de milliers change. Le MONTANT, lui,
+     ne bouge pas — il vient de src/data/formules.ts, seule source, et
+     le recopier dans le dictionnaire le ferait deriver au premier
+     changement de tarif.
+
+     On garde donc l'original francais dans l'element, une fois pour
+     toutes, et on reformate a l'affichage. Repasser en francais rend
+     exactement la chaine de depart. */
+  document.querySelectorAll('[data-i18n-prix]').forEach(function(el){
+    if(!el.hasAttribute('data-prix-fr'))el.setAttribute('data-prix-fr',el.textContent.trim());
+    var fr=el.getAttribute('data-prix-fr');
+    if(LANG!=='en'){el.textContent=fr;return;}
+    var n=fr.replace(/[\u202F\u00A0\s]/g,'').match(/^(\d+)€$/);
+    el.textContent=n?('€'+Number(n[1]).toLocaleString('en-US')):fr;
+  });
+
+  /* ── LA PAGE ELLE-MEME ────────────────────────────────────────────
+     La langue du document, son titre et sa description ne vivent pas
+     dans le corps : personne ne les traduisait. Un <html lang="fr">
+     sur une page anglaise, c'est un lecteur d'ecran qui prononce
+     l'anglais avec les regles du francais, et un moteur de recherche
+     qui indexe la page sous la mauvaise langue. */
+  document.documentElement.setAttribute('lang',LANG);
+  var cT=document.documentElement.getAttribute('data-i18n-doctitle');
+  if(cT&&d[cT]!==undefined)document.title=d[cT];
+  var cD=document.documentElement.getAttribute('data-i18n-docdescr');
+  if(cD&&d[cD]!==undefined){
+    var m=document.querySelector('meta[name="description"]');
+    if(m)m.setAttribute('content',d[cD]);
+  }
+
+  /* Le reste du site peut reagir : les avis deja affichés, les
+     messages d'erreur en place, les bulles ouvertes. */
+  document.dispatchEvent(new CustomEvent('nw-lang-applied',{detail:LANG}));
 }
+
+/* ── UNE SEULE CLE DE STOCKAGE ──────────────────────────────────────
+   Il en existait deux, « nw-lang » et « nexaweb-lang », ecrites par
+   des endroits differents du site : selon la page visitee, le choix du
+   visiteur etait relu dans l'une ou dans l'autre, donc perdu une fois
+   sur deux. On garde « nw-lang », on recupere l'ancienne valeur si
+   elle existe, et on efface l'autre pour qu'elle ne revienne pas. */
+function langueGardee(){
+  var v=null;
+  try{
+    v=localStorage.getItem('nw-lang');
+    var ancienne=localStorage.getItem('nexaweb-lang');
+    if(ancienne){
+      if(!v)v=ancienne;
+      localStorage.removeItem('nexaweb-lang');
+      if(v)localStorage.setItem('nw-lang',v);
+    }
+  }catch(e){}
+  return (v==='en')?'en':'fr';
+}
+
+function init(){ applyLang(langueGardee()); }
 
 if(document.readyState==='loading'){
   document.addEventListener('DOMContentLoaded',init);
@@ -655,4 +994,8 @@ if(document.readyState==='loading'){
 }
 
 document.addEventListener('nw-lang',function(e){applyLang(e.detail);});
+
+/* Expose au reste du site. nwT traduit, nwLang dit ou on en est. */
+window.nwT=t;
+window.nwLang=function(){return LANG;};
 })();

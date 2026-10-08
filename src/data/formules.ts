@@ -71,11 +71,11 @@ export const ENTREPRISE_M4 = parMois(ENTREPRISE.prixDepart, 4); // « 300 € »
  *  pour la Vitrine, « 1 200 à 3 100 € » pour l'Entreprise — avaient
  *  dérivé de ceux de la page Tarifs ; ils viennent d'ici désormais. */
 export const FORMULES = [
-  { cle: 'refonte',    nom: 'Refonte',     pre: 'dès',         preCle: 'trf-p4-pre',
+  { cle: 'refonte',    nom: 'Refonte',     nomCle: 'trf-p4-name', pre: 'dès',         preCle: 'trf-p4-pre',
     total: REFONTE_PRIX,    m3: REFONTE_M3,    m4: REFONTE_M4 },
-  { cle: 'vitrine',    nom: 'Vitrine Pro', pre: '',            preCle: '',
+  { cle: 'vitrine',    nom: 'Vitrine Pro', nomCle: 'trf-p2-name', pre: '',            preCle: '',
     total: VITRINE_PRIX,    m3: VITRINE_M3,    m4: VITRINE_M4 },
-  { cle: 'entreprise', nom: 'Entreprise',  pre: 'à partir de', preCle: 'trf-pre-apd',
+  { cle: 'entreprise', nom: 'Entreprise',  nomCle: 'trf-p3-name', pre: 'à partir de', preCle: 'trf-pre-apd',
     total: ENTREPRISE_PRIX, m3: ENTREPRISE_M3, m4: ENTREPRISE_M4 },
 ] as const;
 

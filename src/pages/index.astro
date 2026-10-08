@@ -426,31 +426,33 @@ import '../styles/global.css';
   <div class="wrap">
     <div class="svc-hdr r">
       <div>
-        <span class="label" id="who-h">Fait pour vous</span>
-        <h2 class="h-lg" style="margin-top:14px">Une formule pour<br>chaque profil.</h2>
+        <span class="label" id="who-h" data-i18n="who-lbl">Fait pour vous</span>
+        <h2 class="h-lg" style="margin-top:14px" data-i18n="who-h">Une formule pour<br>chaque profil.</h2>
       </div>
-      <p class="body" style="max-width:300px;text-align:right">Un site à rafraîchir, une activité locale, une entreprise qui grandit — chaque besoin a sa formule.</p>
+      <p class="body" style="max-width:300px;text-align:right" data-i18n="who-sub">Un site à rafraîchir, une activité locale, une entreprise qui grandit — chaque besoin a sa formule.</p>
     </div>
     <div class="who-grid">
       <div class="who-card r">
         <div class="who-marker">01</div>
-        <h3 class="who-target">Site à rafraîchir</h3>
-        <p class="who-desc">Votre site existe mais il a vieilli : design daté, lent sur mobile, difficile à mettre à jour. On le reprend de zéro en gardant vos contenus et votre référencement.</p>
+        <h3 class="who-target" data-i18n="who-t1">Site à rafraîchir</h3>
+        <p class="who-desc" data-i18n="who-d1">Votre site existe mais il a vieilli : design daté, lent sur mobile, difficile à mettre à jour. On le reprend de zéro en gardant vos contenus et votre référencement.</p>
         <div>
-          <div class="who-price">dès 490 €</div>
-          <p class="who-price-sub">Nouveau design · Contenus repris · Livré en 2 semaines</p>
+          <div class="who-price" data-i18n="who-prix1">dès 490 €</div>
+          <p class="who-price-sub" data-i18n="who-prix1-sub">Nouveau design · Contenus repris · Livré en 2 semaines</p>
         </div>
-        <InteractiveButton text="Voir la formule" href="/tarifs" style="align-self:flex-start;margin-top:8px" />
+        <InteractiveButton text="Voir la formule" href="/tarifs" data-i18n="who-cta1" style="align-self:flex-start;margin-top:8px" />
       </div>
       <div class="who-card r d1">
         <div class="who-marker">02</div>
-        <h3 class="who-target">Commerçant &amp; artisan local</h3>
-        <p class="who-desc">Vous avez une activité locale — restaurant, boutique, artisan — mais aucune présence en ligne convaincante. On vous donne un site qui attire et qui rassure.</p>
+        <h3 class="who-target" data-i18n="who-t2">Commerçant &amp; artisan local</h3>
+        <p class="who-desc" data-i18n="who-d2">Vous avez une activité locale — restaurant, boutique, artisan — mais aucune présence en ligne convaincante. On vous donne un site qui attire et qui rassure.</p>
         <div>
-          <div class="who-price">à partir de {VITRINE_PRIX}</div>
-          <p class="who-price-sub">Offre de lancement · places limitées · SEO local inclus</p>
+          <!-- Le montant vient des donnees, le prefixe de la traduction :
+               « a partir de 999 € » devient « from €999 » en anglais. -->
+          <div class="who-price"><span data-i18n="who-prix2-pre">à partir de</span> <span data-i18n-prix>{VITRINE_PRIX}</span></div>
+          <p class="who-price-sub" data-i18n="who-prix2-sub">Offre de lancement · places limitées · SEO local inclus</p>
         </div>
-        <InteractiveButton text="Voir les formules" href="/tarifs" style="align-self:flex-start;margin-top:8px" />
+        <InteractiveButton text="Voir les formules" href="/tarifs" data-i18n="who-cta2" style="align-self:flex-start;margin-top:8px" />
       </div>
     </div>
   </div>

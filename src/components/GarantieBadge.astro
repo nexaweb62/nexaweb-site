@@ -47,7 +47,7 @@ const { class: classe = '', variante = 'pill' } = Astro.props;
   <InteractiveButton text="Satisfait ou remboursé · 14 jours" class="gar-b"
                      aria-haspopup="dialog" aria-expanded="false" data-i18n="gar-badge" />
 
-  <div class="gar-f" role="dialog" aria-modal="true" aria-label="Garantie satisfait ou remboursé" inert>
+  <div class="gar-f" role="dialog" aria-modal="true" aria-label="Garantie satisfait ou remboursé" data-i18n-aria="gar-aria" inert>
     <div class="gar-carte" role="document">
       <div class="gar-tete">
         <svg class="gar-ico gar-ico-g" viewBox="0 0 24 24" aria-hidden="true">
@@ -55,7 +55,7 @@ const { class: classe = '', variante = 'pill' } = Astro.props;
           <polyline points="9 12 11 14 15 10"/>
         </svg>
         <h2 class="gar-titre" data-i18n="gar-titre">Satisfait ou remboursé sur la maquette</h2>
-        <button type="button" class="gar-x" aria-label="Fermer">
+        <button type="button" class="gar-x" aria-label="Fermer" data-i18n-aria="a11y-fermer-court">
           <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>

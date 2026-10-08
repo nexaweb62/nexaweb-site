@@ -285,7 +285,7 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
     <!-- LE HÉROS -->
     <header class="dv-hero">
       <span class="dv-pill"><span class="dv-pill-dot" aria-hidden="true"></span><span data-i18n="dv-pill">Devis gratuit</span></span>
-      <h1 class="dv-title">Un prix ferme en <em class="liquid">48 heures</em>.</h1>
+      <h1 class="dv-title" data-i18n="dv-title">Un prix ferme en <em class="liquid">48 heures</em>.</h1>
       <p class="dv-lede" data-i18n="dv-lede">Décrivez votre projet. Nous revenons vers vous avec un devis
         détaillé, sans engagement — et sans mauvaise surprise.</p>
     </header>
@@ -299,9 +299,9 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
         <div class="success-icon">
           <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
-        <h2 class="success-title">Devis envoyé !</h2>
-        <p class="success-text">Merci pour votre demande. Nous vous recontacterons sous <strong>24 heures ouvrées</strong> avec une proposition personnalisée.</p>
-        <InteractiveButton text="Retour à l'accueil" class="success-back" id="success-back-btn" />
+        <h2 class="success-title" data-i18n="dv-ok-t">Devis envoyé !</h2>
+        <p class="success-text" data-i18n="dv-ok-s">Merci pour votre demande. Nous vous recontacterons sous <strong>24 heures ouvrées</strong> avec une proposition personnalisée.</p>
+        <InteractiveButton text="Retour à l'accueil" class="success-back" id="success-back-btn" data-i18n="dv-ok-btn" />
       </div>
 
       <!-- FORM -->
@@ -321,7 +321,11 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
         <!-- OFFRE LANCEMENT -->
         <div class="launch-notice">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-          <p><strong>Offre de lancement :</strong> les 3 premiers clients bénéficient d'un site complet à <strong>{VITRINE_PRIX}</strong> tout inclus. Mentionnez-le dans votre description.</p>
+          <!-- Le prix vit dans son propre <strong> : i18n.js remplace le
+               contenu de l'element qu'il cible, et une cle posee sur le
+               paragraphe entier effacerait le montant. La phrase est donc
+               coupee de part et d'autre du prix. -->
+          <p><strong data-i18n="dv-offre-t">Offre de lancement :</strong> <span data-i18n="dv-offre-1">les 3 premiers clients bénéficient d'un site complet à</span> <strong>{VITRINE_PRIX}</strong> <span data-i18n="dv-offre-2">tout inclus. Mentionnez-le dans votre description.</span></p>
         </div>
 
         <!-- HEAD -->
@@ -335,26 +339,26 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
           <div class="field-grid">
             <div class="field">
               <label for="prenom"><span data-i18n="prenom">Prénom</span> <span class="req">*</span></label>
-              <input type="text" id="prenom" name="prenom" placeholder="Jean" autocomplete="given-name" required>
+              <input type="text" id="prenom" name="prenom" placeholder="Jean" data-i18n-ph="dv-ph-prenom" autocomplete="given-name" required>
               <span class="field-err" id="err-prenom"></span>
             </div>
             <div class="field">
               <label for="nom"><span data-i18n="nom">Nom</span> <span class="req">*</span></label>
-              <input type="text" id="nom" name="nom" placeholder="Dupont" autocomplete="family-name" required>
+              <input type="text" id="nom" name="nom" placeholder="Dupont" data-i18n-ph="dv-ph-nom" autocomplete="family-name" required>
               <span class="field-err" id="err-nom"></span>
             </div>
             <div class="field">
               <label for="email"><span data-i18n="email">E-mail</span> <span class="req">*</span></label>
-              <input type="email" id="email" name="email" placeholder="jean@entreprise.fr" autocomplete="email" required>
+              <input type="email" id="email" name="email" placeholder="jean@entreprise.fr" data-i18n-ph="dv-ph-email" autocomplete="email" required>
               <span class="field-err" id="err-email"></span>
             </div>
             <div class="field">
               <label for="tel"><span data-i18n="tel">Téléphone</span></label>
-              <input type="tel" id="tel" name="tel" placeholder="+33 6 00 00 00 00" autocomplete="tel">
+              <input type="tel" id="tel" name="tel" placeholder="+33 6 00 00 00 00" data-i18n-ph="dv-ph-tel" autocomplete="tel">
             </div>
             <div class="field field-full">
               <label for="entreprise"><span data-i18n="entreprise">Entreprise / Activité</span></label>
-              <input type="text" id="entreprise" name="entreprise" placeholder="Ma Boulangerie, Auto-entrepreneur…" autocomplete="organization">
+              <input type="text" id="entreprise" name="entreprise" placeholder="Ma Boulangerie, Auto-entrepreneur…" data-i18n-ph="dv-ph-societe" autocomplete="organization">
             </div>
           </div>
         </div>
@@ -366,24 +370,24 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
             <div class="field">
               <label for="type"><span data-i18n="type">Type de site</span> <span class="req">*</span></label>
               <select id="type" name="type" required>
-                <option value="" disabled selected>Sélectionner…</option>
-                <option value="vitrine">Site vitrine</option>
-                <option value="ecommerce">Boutique e-commerce</option>
-                <option value="blog">Blog / Magazine</option>
-                <option value="app">Application web</option>
-                <option value="refonte">Refonte de site existant</option>
-                <option value="autre">Autre</option>
+                <option value="" disabled selected data-i18n="dv-opt-choisir">Sélectionner…</option>
+                <option value="vitrine" data-i18n="dv-opt-vitrine">Site vitrine</option>
+                <option value="ecommerce" data-i18n="dv-opt-ecom">Boutique e-commerce</option>
+                <option value="blog" data-i18n="dv-opt-blog">Blog / Magazine</option>
+                <option value="app" data-i18n="dv-opt-app">Application web</option>
+                <option value="refonte" data-i18n="dv-opt-refonte">Refonte de site existant</option>
+                <option value="autre" data-i18n="dv-opt-autre">Autre</option>
               </select>
               <span class="field-err" id="err-type"></span>
             </div>
             <div class="field">
               <label for="delai"><span data-i18n="delai">Délai souhaité</span></label>
               <select id="delai" name="delai">
-                <option value="" disabled selected>Sélectionner…</option>
-                <option value="urgent">Dès que possible</option>
-                <option value="1mois">Dans 1 mois</option>
-                <option value="3mois">Dans 2 à 3 mois</option>
-                <option value="flexible">Flexible</option>
+                <option value="" disabled selected data-i18n="dv-opt-choisir">Sélectionner…</option>
+                <option value="urgent" data-i18n="dv-opt-asap">Dès que possible</option>
+                <option value="1mois" data-i18n="dv-opt-1m">Dans 1 mois</option>
+                <option value="3mois" data-i18n="dv-opt-3m">Dans 2 à 3 mois</option>
+                <option value="flexible" data-i18n="dv-opt-flex">Flexible</option>
               </select>
             </div>
             <!-- L'échéancier d'abord : il décide de ce que les pastilles
@@ -392,7 +396,7 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
                  (/devis?formule=vitrine&paiement=4). -->
             <div class="field field-full">
               <label><span data-i18n="dvs-paiement">Paiement</span></label>
-              <div class="budget-pills" role="radiogroup" aria-label="Paiement" data-defaut>
+              <div class="budget-pills" role="radiogroup" aria-label="Paiement" data-i18n-aria="dvs-paiement" data-defaut>
                 <label class="budget-pill selected"><input type="radio" name="paiement" value="comptant" checked><span data-i18n="trf-paie-1">En une fois</span></label>
                 <label class="budget-pill"><input type="radio" name="paiement" value="3"><span data-i18n="trf-paie-3">En 3 fois</span></label>
                 <label class="budget-pill"><input type="radio" name="paiement" value="4"><span data-i18n="trf-paie-4">En 4 fois</span></label>
@@ -400,7 +404,7 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
             </div>
             <div class="field field-full">
               <label><span data-i18n="budget">Budget estimé</span></label>
-              <div class="budget-pills" role="radiogroup" aria-label="Budget estimé">
+              <div class="budget-pills" role="radiogroup" aria-label="Budget estimé" data-i18n-aria="budget">
                 {FORMULES.map((f) => (
                   <label class="budget-pill">
                     <input type="radio" name="budget" value={f.cle} />
@@ -410,7 +414,7 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
                           son propre <span> : i18n.js remplace le texte de
                           l'élément qu'il cible, et le poser sur la pastille
                           entière effacerait le prix et les mensualités. */}
-                      {f.nom} — {f.pre && <span data-i18n={f.preCle}>{f.pre}</span>}{f.pre ? ' ' : ''}{f.total}
+                      <span data-i18n={f.nomCle}>{f.nom}</span> — {f.pre && <span data-i18n={f.preCle}>{f.pre}</span>}{f.pre ? ' ' : ''}{f.total}
                       <small class="budget-mois budget-m3">{f.m3}<span data-i18n="dvs-mois">/mois</span></small>
                       <small class="budget-mois budget-m4">{f.m4}<span data-i18n="dvs-mois">/mois</span></small>
                     </span>
@@ -420,12 +424,12 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
             </div>
             <div class="field field-full">
               <label for="description"><span data-i18n="desc">Décrivez votre projet</span> <span class="req">*</span></label>
-              <textarea id="description" name="description" placeholder="Parlez-nous de votre activité, de vos objectifs, des fonctionnalités souhaitées… Plus vous êtes précis, plus notre devis sera juste." required></textarea>
+              <textarea id="description" name="description" placeholder="Parlez-nous de votre activité, de vos objectifs, des fonctionnalités souhaitées… Plus vous êtes précis, plus notre devis sera juste." data-i18n-ph="dv-ph-desc" required></textarea>
               <span class="field-err" id="err-desc"></span>
             </div>
             <div class="field field-full">
               <label for="site-actuel"><span data-i18n="siteActuel">Avez-vous un site existant ?</span></label>
-              <input type="url" id="site-actuel" name="site-actuel" placeholder="https://monsite-actuel.fr (optionnel)">
+              <input type="url" id="site-actuel" name="site-actuel" placeholder="https://monsite-actuel.fr (optionnel)" data-i18n-ph="dv-ph-url">
             </div>
           </div>
         </div>
@@ -434,7 +438,7 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
         <div class="field field-full rgpd-row">
           <label class="rgpd-label">
             <input type="checkbox" id="rgpd-consent" name="rgpd-consent" required>
-            <span>J'accepte que mes données (nom, e-mail, téléphone, description du projet) soient utilisées par Nexa Web dans le seul but de traiter ma demande de devis et de me recontacter. Aucune donnée n'est revendue. <span class="req">*</span></span>
+            <span data-i18n="dv-rgpd">J'accepte que mes données (nom, e-mail, téléphone, description du projet) soient utilisées par Nexa Web dans le seul but de traiter ma demande de devis et de me recontacter. Aucune donnée n'est revendue. <span class="req">*</span></span>
           </label>
           <span class="field-err" id="err-rgpd"></span>
         </div>
@@ -585,6 +589,13 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
   var CHAMP = { 'err-prenom':'prenom','err-nom':'nom','err-email':'email','err-type':'type',
                 'err-desc':'description','err-rgpd':'rgpd-consent' };
   var premierFautif = null;
+  /* TOUT TEXTE INJECTE EN JAVASCRIPT PASSE PAR LA TRADUCTION.
+     Ces messages etaient ecrits en dur : en anglais, le formulaire
+     repondait en francais. i18n.js expose nwT(cle, defaut) — le second
+     argument est le francais, qui sert aussi de repli si le fichier de
+     traduction n'a pas charge. */
+  function T(cle,defaut){ return (window.nwT?window.nwT(cle,defaut):defaut); }
+
   function setErr(id,msg){
     var el=document.getElementById(id); if(el) el.textContent=msg;
     var ch=document.getElementById(CHAMP[id]);
@@ -620,7 +631,7 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
     e.preventDefault();clearErrors();
 
     if(document.getElementById('website_url').value.length>0){form.classList.add('hide');overlay.classList.add('show');return}
-    if(!canSubmit()){showBanner('Une demande a déjà été envoyée. Attendez une minute avant de réessayer.');return}
+    if(!canSubmit()){showBanner(T('dv-err-trop-vite','Une demande a déjà été envoyée. Attendez une minute avant de réessayer.'));return}
 
     const prenom=document.getElementById('prenom').value.trim();
     const nom=document.getElementById('nom').value.trim();
@@ -642,14 +653,14 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
     const paiement=paieEl?paieEl.value:'comptant';
 
     let ok=true;
-    if(!prenom){setErr('err-prenom','Le prénom est requis.');ok=false}
-    if(!nom){setErr('err-nom','Le nom est requis.');ok=false}
-    if(!emailVal){setErr('err-email',"L'e-mail est requis.");ok=false}
-    else if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(emailVal)){setErr('err-email','Adresse e-mail invalide.');ok=false}
-    if(!type){setErr('err-type','Veuillez sélectionner un type de site.');ok=false}
-    if(!desc){setErr('err-desc','La description est requise.');ok=false}
-    else if(desc.length<20){setErr('err-desc','Décrivez votre projet en au moins 20 caractères.');ok=false}
-    if(!rgpd){setErr('err-rgpd','Vous devez accepter le traitement de vos données pour continuer.');ok=false}
+    if(!prenom){setErr('err-prenom',T('dv-err-prenom','Le prénom est requis.'));ok=false}
+    if(!nom){setErr('err-nom',T('dv-err-nom','Le nom est requis.'));ok=false}
+    if(!emailVal){setErr('err-email',T('dv-err-email',"L'e-mail est requis."));ok=false}
+    else if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(emailVal)){setErr('err-email',T('dv-err-email-format','Adresse e-mail invalide.'));ok=false}
+    if(!type){setErr('err-type',T('dv-err-type','Veuillez sélectionner un type de site.'));ok=false}
+    if(!desc){setErr('err-desc',T('dv-err-desc','La description est requise.'));ok=false}
+    else if(desc.length<20){setErr('err-desc',T('dv-err-desc-court','Décrivez votre projet en au moins 20 caractères.'));ok=false}
+    if(!rgpd){setErr('err-rgpd',T('dv-err-rgpd','Vous devez accepter le traitement de vos données pour continuer.'));ok=false}
     if(!ok){
       if(premierFautif){
         premierFautif.focus({preventScroll:true});
@@ -658,7 +669,7 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
       return;
     }
 
-    if(!window.sb){showBanner('Erreur de connexion. Écrivez-nous à contact.nexaweb62@gmail.com');return}
+    if(!window.sb){showBanner(T('dv-err-connexion','Erreur de connexion. Écrivez-nous à')+' contact.nexaweb62@gmail.com');return}
 
     setLoading(true);
     try{
@@ -688,7 +699,7 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
         delete ligne.paiement;
         insertErr=(await window.sb.from('demandes_devis').insert(ligne)).error;
       }
-      if(insertErr){showBanner("Erreur lors de l'enregistrement. Contactez-nous directement à contact.nexaweb62@gmail.com");return}
+      if(insertErr){showBanner(T('dv-err-enreg',"Erreur lors de l'enregistrement. Contactez-nous directement à")+' contact.nexaweb62@gmail.com');return}
       stampSubmit();
       /* Décrémente les places Vitrine Pro si applicable */
       if(planParam==='vitrine-pro'){
@@ -699,7 +710,7 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
       form.classList.add('hide');overlay.classList.add('show');window.scrollTo({top:0,behavior:'smooth'});
     }catch(err){
       console.error('[devis] unexpected:',err);
-      showBanner("Une erreur inattendue est survenue. Écrivez-nous à contact.nexaweb62@gmail.com");
+      showBanner(T('dv-err-inattendu',"Une erreur inattendue est survenue. Écrivez-nous à")+' contact.nexaweb62@gmail.com');
     }finally{setLoading(false)}
   });
 })();

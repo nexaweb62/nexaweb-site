@@ -4,6 +4,20 @@ export interface Props {
   description?: string;
   noindex?: boolean;
 }
+/* LA CLE DU TITRE ET DE LA DESCRIPTION SE DEDUIT DE L'ADRESSE.
+   Chaque page a son <title> et sa meta description, et aucun des deux
+   n'etait traduit : en anglais, l'onglet et le resultat de recherche
+   restaient en francais. Deduire la cle du chemin evite d'editer
+   vingt-trois pages pour y poser deux attributs, et evite surtout
+   qu'une page nouvelle soit oubliee — elle herite du mecanisme sans
+   rien faire. i18n.js pose aussi lang="en" au passage : un
+   <html lang="fr"> sur une page anglaise, c'est un lecteur d'ecran qui
+   prononce l'anglais avec les regles du francais.
+
+   « / » devient « accueil », « /mentions-legales » reste tel quel. */
+const clePage = (Astro.url.pathname.replace(/^\/|\/$/g, '') || 'accueil')
+  .replace(/[^a-z0-9-]/gi, '-');
+
 const {
   title,
   description = "Nexa Web conçoit des sites internet sur-mesure pour commerçants et artisans. Refonte dès 490 €, livraison en 2 à 4 semaines. Carvin, Hauts-de-France.",
@@ -22,7 +36,9 @@ import Cookies from '../components/Cookies.astro';
 import Intro from '../components/Intro.astro';
 ---
 <!doctype html>
-<html lang="fr">
+<html lang="fr"
+      data-i18n-doctitle={`meta-t-${clePage}`}
+      data-i18n-docdescr={`meta-d-${clePage}`}>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -164,7 +180,7 @@ import Intro from '../components/Intro.astro';
   <script src="/metal.js" defer></script>
 </head>
 <body data-page={Astro.url.pathname === "/" ? "home" : "page"}>
-  <a class="skip-link" href="#main-content">Aller au contenu</a>
+  <a class="skip-link" href="#main-content" data-i18n="a11y-skip">Aller au contenu</a>
   {/* L'intro : une fois par visite, sur la premiere page ouverte. */}
   <Intro />
   <River />

@@ -1,17 +1,17 @@
 ---
 import Logo from './Logo.astro';
 ---
-<footer class="s-foot sec-seam" aria-label="Pied de page">
+<footer class="s-foot sec-seam" aria-label="Pied de page" data-i18n-aria="a11y-pied">
   <div class="wrap">
     <div class="foot-in">
       <div>
         {/* Le logo du pied de page ramène à l'accueil : c'est la
             convention, et c'est le dernier endroit où on la cherche. */}
-        <a href="/" class="foot-marque" aria-label="NEXAWEB — Accueil">
+        <a href="/" class="foot-marque" aria-label="NEXAWEB — Accueil" data-i18n-aria="a11y-logo">
           <Logo largeur={40} trait={2.2} texte={true} tailleNom={16} tailleSous={8} />
         </a>
         <p class="foot-tag" data-i18n="ftr-tag">Agence web premium · Carvin, Hauts-de-France</p>
-        <div class="foot-socials" aria-label="Réseaux sociaux">
+        <div class="foot-socials" aria-label="Réseaux sociaux" data-i18n-aria="a11y-sociaux">
           <a href="https://www.linkedin.com/in/ahmed-chteoui-049211429/" class="foot-soc linkedin" aria-label="LinkedIn" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
           </a>
@@ -25,33 +25,33 @@ import Logo from './Logo.astro';
       </div>
       <div>
         <div class="foot-col-title" data-i18n="ftr-nav">Navigation</div>
-        <nav aria-label="Liens de navigation">
+        <nav aria-label="Liens de navigation" data-i18n-aria="a11y-liens-nav">
           <ul class="foot-links">
             <li><a href="/#accueil"  class="foot-lnk" data-i18n="ftr-home">Accueil</a></li>
             <li><a href="/services" class="foot-lnk" data-i18n="ftr-services">Services</a></li>
-            <li><a href="/tarifs"    class="foot-lnk">Tarifs</a></li>
-            <li><a href="/avis"      class="foot-lnk">Avis clients</a></li>
+            <li><a href="/tarifs"    class="foot-lnk" data-i18n="ftr-tarifs">Tarifs</a></li>
+            <li><a href="/avis"      class="foot-lnk" data-i18n="ftr-avis">Avis clients</a></li>
             <li><a href="/#faq"      class="foot-lnk" data-i18n="ftr-faq">FAQ</a></li>
-            <li><a href="/comment-ca-marche" class="foot-lnk">Comment ça marche</a></li>
+            <li><a href="/comment-ca-marche" class="foot-lnk" data-i18n="ftr-ccm">Comment ça marche</a></li>
           </ul>
         </nav>
       </div>
       <div>
-        <div class="foot-col-title">Par métier</div>
+        <div class="foot-col-title" data-i18n="ftr-metier">Par métier</div>
         <ul class="foot-links">
-          <li><a href="/site-internet-restaurant" class="foot-lnk">Restaurants</a></li>
-          <li><a href="/site-internet-commerce"   class="foot-lnk">Commerces</a></li>
-          <li><a href="/site-internet-artisan"    class="foot-lnk">Artisans</a></li>
-          <li><a href="/equipe"                   class="foot-lnk">L'équipe</a></li>
+          <li><a href="/site-internet-restaurant" class="foot-lnk" data-i18n="ftr-resto">Restaurants</a></li>
+          <li><a href="/site-internet-commerce"   class="foot-lnk" data-i18n="ftr-commerce">Commerces</a></li>
+          <li><a href="/site-internet-artisan"    class="foot-lnk" data-i18n="ftr-artisan">Artisans</a></li>
+          <li><a href="/equipe"                   class="foot-lnk" data-i18n="ftr-equipe">L'équipe</a></li>
         </ul>
       </div>
     </div>
     <div class="foot-bot">
       <span class="foot-copy" data-i18n="ftr-copy">© 2026 Nexa Web. Tous droits réservés.</span>
-      <nav class="foot-legal" aria-label="Liens légaux">
+      <nav class="foot-legal" aria-label="Liens légaux" data-i18n-aria="a11y-liens-legaux">
         <a href="/cgv" data-i18n="ftr-garantie">Garantie</a>
-        <a href="/mentions-legales">Mentions légales</a>
-        <a href="/politique-confidentialite">Confidentialité</a>
+        <a href="/mentions-legales" data-i18n="ftr-mentions">Mentions légales</a>
+        <a href="/politique-confidentialite" data-i18n="ftr-confid">Confidentialité</a>
         <!-- Un choix se retire aussi facilement qu'il se donne : ce
              bouton rouvre le panneau, sur n'importe quelle page. Un
              <button> et non un <a> — il ne mène nulle part. -->

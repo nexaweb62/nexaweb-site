@@ -28,7 +28,8 @@
     "check:garantie": "node scripts/check-garantie.mjs",
     "check:fond": "node scripts/check-fond.mjs",
     "check:logo": "node scripts/check-logo.mjs",
-    "check:peinture": "node scripts/check-peinture.mjs"
+    "check:peinture": "node scripts/check-peinture.mjs",
+    "check:i18n": "node scripts/check-i18n.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^6.0.4",
