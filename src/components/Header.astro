@@ -2,7 +2,8 @@
 import Logo from './Logo.astro';
 
 export interface Props {
-  cta?: string;
+  /* false retire completement l'appel a l'action de la barre. */
+  cta?: string | false;
   ctaHref?: string;
   back?: boolean;
 }
@@ -90,7 +91,12 @@ const THEMES = [
                              aria-label="Retour — page précédente" data-i18n="hdr-back" />
         )}
 
-        <InteractiveButton text={cta} href={ctaHref} variant="gold" data-i18n="hdr-cta" />
+        {/* L'APPEL A L'ACTION PEUT ETRE RETIRE. Sur /devis il menait a
+            /devis : la page etait deja celle vers laquelle il invitait,
+            et le bouton n'y proposait que de rester sur place. */}
+        {cta !== false && (
+          <InteractiveButton text={cta} href={ctaHref} variant="gold" data-i18n="hdr-cta" />
+        )}
       </div>
     </nav>
   </div>

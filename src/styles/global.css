@@ -1617,33 +1617,30 @@ body.lite .split .w{transition-duration:.35s}
   background:var(--raw-black-925);
   color:var(--raw-warm-40);
   font-weight:600;
-  padding:12px 22px 12px 34px;
+  /* LE REMBOURRAGE REDEVIENT SYMETRIQUE. Les 34 px de gauche
+     logeaient la pastille doree, qui a ete retiree : sans elle le
+     libelle etait pousse hors du centre. */
+  padding:12px 22px;
   cursor:pointer;text-decoration:none;white-space:nowrap;
 }
 .ihb-t{display:inline-block;transition:transform .3s,opacity .3s}
 .ihb-h{
   position:absolute;inset:0;z-index:2;
   display:flex;align-items:center;justify-content:center;gap:8px;
-  color:var(--raw-gold-950);
+  /* LA COPIE DE SURVOL PREND LA COULEUR DU BOUTON, pas une couleur a
+     elle. Elle etait a --raw-gold-950, presque noire, parce qu'une
+     pastille doree s'etalait derriere elle au survol et lui servait de
+     fond. La pastille a ete retiree : gardee telle quelle, cette copie
+     serait du noir sur du chrome sombre, illisible au moment precis ou
+     le visiteur la regarde. Elle herite donc, et reste exactement aussi
+     lisible que le libelle au repos. */
+  color:inherit;
   opacity:0;transform:translateX(48px);
   transition:transform .3s,opacity .3s;
 }
 .ihb-h svg{width:18px;height:18px;flex:none}
-.ihb-d{
-  position:absolute;left:16px;top:50%;width:8px;height:8px;margin-top:-4px;
-  border-radius:999px;background:var(--raw-gold-400);z-index:1;
-  /* ON NOMME LES PROPRIETES. « transition:all » en fabrique une par
-     propriete animable du navigateur : le releve des animations en
-     cours remontait jusqu'a treize entrees « scrollbar-color » pour une
-     seule pastille, sur une page qui en compte des dizaines. Seules ces
-     cinq-la bougent au survol. */
-  transition:left .3s,top .3s,width .3s,height .3s,margin-top .3s,transform .3s;
-}
 .ihb:hover .ihb-t,.ihb:focus-visible .ihb-t{transform:translateX(48px);opacity:0}
 .ihb:hover .ihb-h,.ihb:focus-visible .ihb-h{transform:translateX(-4px);opacity:1}
-.ihb:hover .ihb-d,.ihb:focus-visible .ihb-d{
-  left:0;top:0;margin-top:0;width:100%;height:100%;transform:scale(1.8);
-}
 .ihb:focus-visible{outline:2px solid var(--raw-gold-400);outline-offset:3px}
 
 .ihb-gold{
@@ -1651,7 +1648,6 @@ body.lite .split .w{transition-duration:.35s}
   color:var(--raw-gold-950);
   border-color:var(--raw-gold-400);
 }
-.ihb-gold .ihb-d{background:var(--raw-warm-40)}
 
 /* ═══════════════════════════════════════════════════════════════════
    LA MATIÈRE — un chrome liquide sur chaque bouton
@@ -1704,30 +1700,33 @@ body.lite .split .w{transition-duration:.35s}
 body.lite .ihb-gold{animation:none}
 
 @media (prefers-reduced-motion:reduce){ .ihb *{transition:none} }
-/* Sur un ecran tactile il n'y a pas de survol : la pastille resterait
-   plantee a gauche sans jamais s'ouvrir. On ne la montre pas. */
-@media (hover:none){ .ihb-d{display:none} }
 
 /* L'ENVOI EN COURS. Les anciens boutons de formulaire portaient un
-   spinner dans leur balisage ; le bouton interactif n'en a pas. Plutot
-   que de perdre le retour visuel sur les deux formulaires les plus
-   importants du site — le devis et la connexion — c'est la pastille
-   doree qui bat. Le script pose deja « loading » et « disabled ». */
-.ihb.loading{cursor:not-allowed}
-.ihb.loading .ihb-d{animation:ihbPouls .9s ease-in-out infinite}
-@keyframes ihbPouls{
-  0%,100%{transform:scale(1);opacity:1}
-  50%    {transform:scale(2.4);opacity:.45}
+   spinner dans leur balisage ; le bouton interactif n'en a pas. Le
+   retour visuel passait par la pastille doree qui battait — elle a ete
+   retiree, et il ne fallait pas perdre ce retour sur les deux
+   formulaires les plus importants du site, le devis et la connexion.
+
+   C'est donc LA MATIERE qui coule : la plaque de chrome defile en
+   boucle le temps de l'envoi. Rien a ajouter dans le balisage, aucun
+   element de plus, et le signal occupe tout le bouton au lieu d'un
+   point de huit pixels. Le script pose deja « loading » et
+   « disabled ». */
+.ihb.loading{
+  cursor:not-allowed;
+  /* En aller-retour : une boucle simple ramenerait la plaque a son
+     point de depart d'un coup, et le saut se verrait. */
+  animation:ihbCoulee .9s var(--ease-inout) infinite alternate;
 }
-/* Sur tactile la pastille est masquee : on la rend le temps de l'envoi,
-   sinon l'ecran ou le retour compte le plus n'en donnerait aucun. */
-@media (hover:none){ .ihb.loading .ihb-d{display:block} }
-@media (prefers-reduced-motion:reduce){ .ihb.loading .ihb-d{animation:none} }
+@media (prefers-reduced-motion:reduce){
+  /* Sans mouvement, le retour passe par l'opacite : il doit rester
+     perceptible, c'est l'ecran ou il compte le plus. */
+  .ihb.loading{animation:none;opacity:.6}
+}
 
 /* ── LA BARRE SUR UN ECRAN ETROIT ────────────────────────────────────
-   Les boutons interactifs sont larges : un rembourrage genereux, et
-   34 px a gauche pour loger la pastille doree. Sur telephone cela ne
-   passe plus. Mesure sur /tarifs a 390 px : logo + Retour (113) + Menu
+   Les boutons interactifs sont larges. Sur telephone cela ne passe
+   plus. Mesure sur /tarifs a 390 px : logo + Retour (113) + Menu
    (57) + « Demarrer un projet » (207) — le bouton d'appel commencait a
    234 et finissait a 441, soit 51 px HORS DE L'ECRAN.
 
@@ -1739,8 +1738,7 @@ body.lite .ihb-gold{animation:none}
    Et pourquoi l'accueil restait propre : elle n'a pas de bouton Retour,
    donc 113 px de moins.
 
-   Sur un ecran tactile la pastille est deja masquee (hover:none) : le
-   rembourrage asymetrique qui lui faisait place n'a plus d'objet. */
+   Le rembourrage se resserre encore ici. */
 @media (max-width:480px){
   .hdr .ihb{padding:10px 14px;font-size:var(--fs-100)}
   .hdr .ihb .ihb-h{gap:5px}

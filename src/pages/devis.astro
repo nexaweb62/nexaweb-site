@@ -274,7 +274,10 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
 </style>
 
 <canvas id="aether-cv" aria-hidden="true"></canvas>
-<Header backBtn={true} />
+<!-- Pas d'appel a l'action dans la barre : il menait a /devis, et
+     c'est cette page. Le seul bouton d'action ici, c'est l'envoi du
+     formulaire. -->
+<Header back={true} cta={false} />
 
 <main id="main-content" tabindex="-1">
   <div class="devis-page">

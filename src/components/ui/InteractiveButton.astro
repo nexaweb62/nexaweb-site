@@ -2,9 +2,17 @@
 /**
  * LE BOUTON INTERACTIF — un seul bouton pour tout le site.
  *
- * Au repos : le libelle, et une pastille doree a gauche.
- * Au survol : le libelle s'efface vers la droite, la pastille s'etale
- * pour remplir le bouton, et le libelle revient dessus avec une fleche.
+ * Au repos : le libelle, sur une plaque de chrome liquide.
+ * Au survol : le libelle s'efface vers la droite, puis revient avec une
+ * fleche, pendant que le reflet de la plaque glisse.
+ *
+ * ── LA PASTILLE A ETE RETIREE ────────────────────────────────────────
+ * Il y avait un petit rond dore a gauche, qui s'etalait au survol pour
+ * remplir le bouton et servir de fond au libelle de retour. Il a ete
+ * retire a la demande. Deux consequences, traitees dans global.css :
+ * le rembourrage redevient symetrique — les 34 px de gauche ne logeaient
+ * que lui — et la copie de survol herite desormais de la couleur du
+ * bouton, faute de quoi elle serait restee noire sur du chrome sombre.
  *
  * Inspire de l'« Interactive Hover Button » de magicui, mais REECRIT en
  * Astro pur : pas de React, pas de Tailwind, pas de lucide-react. La
@@ -67,5 +75,4 @@ const typeFinal = href ? undefined : (type ?? 'button');
       <path d="M5 12h14M12 5l7 7-7 7"/>
     </svg>
   </span>
-  <span class="ihb-d" aria-hidden="true"></span>
 </Balise>
