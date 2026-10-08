@@ -303,12 +303,6 @@ import '../styles/global.css';
 .cta-super{font-size:clamp(.6rem,1vw,.75rem);font-weight:600;letter-spacing:0;color:var(--text-muted);margin-bottom:32px}
 .cta-hl{font-size:clamp(3rem,8vw,9.5rem);font-weight:600;line-height:.92;letter-spacing:-.04em;margin-bottom:48px;text-wrap:balance}
 .cta-hl em{font-style:italic;font-weight:600}
-/* .cta-arr est stylée dans global.css et non ici : i18n.js réécrit le
-   contenu du bouton en innerHTML, et le <span> ainsi recréé ne porte
-   pas l'attribut de portée d'Astro. Scopées, ces deux règles ne
-   s'appliquaient plus dès que la traduction passait — la flèche ne
-   glissait plus au survol. Trouvé par check:scoped une fois étendu
-   aux scripts de public/. */
 
 /* ── POUR QUI ── */
 .s-who{}

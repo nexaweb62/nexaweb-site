@@ -155,11 +155,6 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
    crème. Le laisser tel quel ne coûte rien, le canevas le recouvre
    entièrement une fois opaque, et il n'y a plus de trou possible. */
 
-/* La flèche du bouton d'appel à l'action. Elle vit ici et non dans la
-   page : i18n.js réécrit le libellé du bouton en innerHTML, et un
-   style scopé n'atteindrait pas le <span> recréé. */
-.cta-arr{display:inline-block;transition:transform .25s}
-
 /* Sans lueur : dans l'en-tête, un halo doré permanent autour d'une
    tuile de 26 px est du bruit, pas de la présence. */
 @media (prefers-reduced-motion:no-preference){

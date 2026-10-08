@@ -53,7 +53,7 @@ var D={
     'idx-hl2':'<em>shops</em> and trades',
     'idx-hl3':'of <span class="nb">Hauts-de-France.</span>',
     'idx-sub':'Brochure sites, online shops and redesigns: we design it, build it and put it live. Published prices, and a schedule agreed on the first call.',
-    'idx-cta1':'Start a project <span aria-hidden="true">→</span>',
+    'idx-cta1':'Start a project',
     'idx-cta2':'Client reviews',
     'idx-scroll':'Scroll to discover',
     /* ── Index philosophy ── */
@@ -87,7 +87,7 @@ var D={
     'idx-why-b1':'Nexa Web was born from the conviction of two web enthusiasts that small businesses deserve sites as polished as those of major brands — without the prohibitive prices.',
     'idx-why-b2':'We\'re starting our journey without a portfolio of past work. Not because we lack skills, but because we chose not to pad a portfolio with fictional projects. What we offer instead is total commitment: every line of code, every design detail, thought exclusively for you.',
     'idx-why-b3':'Our first clients benefit from rare attention — the kind an agency that doesn\'t yet have a hundred projects running in parallel can truly offer.',
-    'idx-why-cta':'Be among the first →',
+    'idx-why-cta':'Be among the first',
     /* ── Index stats ── */
     'idx-stat1':'Custom','idx-stat2':'Digital presence','idx-stat3':'Possibilities',
     /* ── Index FAQ ── */
@@ -108,13 +108,13 @@ var D={
     /* ── Index CTA ── */
     'idx-cta-super':'Let\'s take action',
     'idx-cta-h':'Your next<br>site starts <em>here.</em>',
-    'idx-cta-btn':'Start a project <span class="cta-arr" aria-hidden="true">→</span>',
+    'idx-cta-btn':'Start a project',
     /* ── Footer ── */
     'ftr-tag':'Premium web agency · Carvin, Hauts-de-France',
     'ftr-nav':'Navigation',
     'ftr-team-h':'The team',
     'ftr-team-tag':'Two digital enthusiasts behind every Nexa Web project.',
-    'ftr-team-lnk':'Meet the team →',
+    'ftr-team-lnk':'Meet the team',
     'ftr-home':'Home','ftr-services':'Services','ftr-faq':'FAQ',
     'ftr-copy':'© 2026 Nexa Web. All rights reserved.',
     /* ── Devis ── */
@@ -185,7 +185,7 @@ var D={
     'sv-p4':'Local SEO','sv-p5':'UI/UX design',
     'sv-suite':'Next step','sv-suite-l':'See pricing ↗',
     'sv-fin-1':'Your project.','sv-fin-2':'We build it.','sv-fin-cta':'Start a project',
-    'idx-svc-tout':'See our method →',
+    'idx-svc-tout':'See our method',
     /* Garantie satisfait ou remboursé */
     'gar-badge':'Money-back guarantee · 14 days',
     'gar-titre':'Money-back guarantee on the design',
@@ -290,7 +290,7 @@ var D={
     'trf-p4-cta':'Request a quote',
     'trf-cta-h':'Get your quote in 2 minutes',
     'trf-cta-sub':'Describe your project, we\'ll reply within 24h with a precise estimate — free and no commitment.',
-    'trf-cta-btn1':'Request a free quote →',
+    'trf-cta-btn1':'Request a free quote',
     'trf-cta-btn2':'Contact us',
     /* ── Contact ── */
     'ctt-eyebrow':'Our location',
@@ -861,7 +861,7 @@ var D={
     'idx-hl2':'<em>commerçants</em> et artisans',
     'idx-hl3':'des <span class="nb">Hauts-de-France.</span>',
     'idx-sub':'Site vitrine, boutique en ligne ou refonte : on conçoit, on développe, on met en ligne. Tarifs affichés, calendrier fixé dès le premier appel.',
-    'idx-cta1':'Démarrer un projet <span aria-hidden="true">→</span>',
+    'idx-cta1':'Démarrer un projet',
     'idx-cta2':'Nos avis clients',
     'idx-scroll':'Défiler pour découvrir',
     /* ── Index philosophy ── */
@@ -895,7 +895,7 @@ var D={
     'idx-why-b1':'Nexa Web est née de la conviction de deux passionnés du web que les petites entreprises méritent des sites aussi soignés que ceux des grandes marques — sans les prix prohibitifs.',
     'idx-why-b2':'Nous démarrons notre aventure sans catalogue de réalisations. Pas parce que nous manquons de compétences, mais parce que nous avons choisi de ne pas gonfler un portfolio avec des projets fictifs. Ce que nous offrons à la place, c\'est une implication totale : chaque ligne de code, chaque détail de design, pensés uniquement pour vous.',
     'idx-why-b3':'Nos premiers clients bénéficient d\'une attention rare — celle qu\'une agence qui n\'a pas encore cent projets en parallèle peut vraiment offrir.',
-    'idx-why-cta':'Être parmi les premiers →',
+    'idx-why-cta':'Être parmi les premiers',
     /* ── Index stats ── */
     'idx-stat1':'Sur mesure','idx-stat2':'Présence digitale','idx-stat3':'Possibilités',
     /* ── Index FAQ ── */
@@ -916,13 +916,13 @@ var D={
     /* ── Index CTA ── */
     'idx-cta-super':'Passons à l\'action',
     'idx-cta-h':'Votre prochain<br>site commence <em>ici.</em>',
-    'idx-cta-btn':'Démarrer un projet <span class="cta-arr" aria-hidden="true">→</span>',
+    'idx-cta-btn':'Démarrer un projet',
     /* ── Footer ── */
     'ftr-tag':'Agence web premium · Carvin, Hauts-de-France',
     'ftr-nav':'Navigation',
     'ftr-team-h':'L\'équipe',
     'ftr-team-tag':'Deux passionnés du digital derrière chaque projet Nexa Web.',
-    'ftr-team-lnk':'Découvrir l\'équipe →',
+    'ftr-team-lnk':'Découvrir l\'équipe',
     'ftr-home':'Accueil','ftr-services':'Services','ftr-faq':'FAQ',
     'ftr-copy':'© 2026 Nexa Web. Tous droits réservés.',
     /* ── Devis ── */
@@ -993,7 +993,7 @@ var D={
     'sv-p4':'Référencement local','sv-p5':'Design UI/UX',
     'sv-suite':'Étape suivante','sv-suite-l':'Voir les tarifs ↗',
     'sv-fin-1':'Votre projet.','sv-fin-2':'On le construit.','sv-fin-cta':'Démarrer un projet',
-    'idx-svc-tout':'Voir notre méthode →',
+    'idx-svc-tout':'Voir notre méthode',
     /* Garantie satisfait ou remboursé */
     'gar-badge':'Satisfait ou remboursé · 14 jours',
     'gar-titre':'Satisfait ou remboursé sur la maquette',
@@ -1099,7 +1099,7 @@ var D={
     'trf-p4-cta':'Demander un devis',
     'trf-cta-h':'Obtenez votre devis en 2 minutes',
     'trf-cta-sub':'Décrivez votre projet, on vous répond sous 24 h avec une estimation précise — gratuit et sans engagement.',
-    'trf-cta-btn1':'Demander un devis gratuit →',
+    'trf-cta-btn1':'Demander un devis gratuit',
     'trf-cta-btn2':'Nous contacter',
     /* ── Contact ── */
     'ctt-eyebrow':'Notre localisation',
