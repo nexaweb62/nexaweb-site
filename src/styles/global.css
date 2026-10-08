@@ -1653,6 +1653,56 @@ body.lite .split .w{transition-duration:.35s}
 }
 .ihb-gold .ihb-d{background:var(--raw-warm-40)}
 
+/* ═══════════════════════════════════════════════════════════════════
+   LA MATIÈRE — un chrome liquide sur chaque bouton
+
+   La plaque est rendue UNE FOIS par public/metal.js, dans un unique
+   contexte WebGL aussitôt relâché, et arrive ici sous forme de deux
+   variables CSS. Mesuré avant d'écrire une ligne : un contexte par
+   bouton était intenable — le navigateur n'en garde que 16 par page,
+   et l'accueil porte 13 boutons.
+
+   LA COULEUR DE FOND RESTE SOUS LA PLAQUE. .ihb pose déjà
+   background:var(--raw-black-925), et .ihb-gold son or. La plaque
+   s'ajoute PAR-DESSUS, en background-image. Si metal.js n'a rien posé
+   — pas de WebGL, nuanceur refusé, navigateur ancien — var() retombe
+   sur « none » et le bouton garde exactement l'aspect qu'il avait.
+   Un bouton ne perd jamais sa lisibilité, seulement son reflet.
+   ═══════════════════════════════════════════════════════════════════ */
+.ihb{
+  background-image:var(--ihb-metal,none);
+  background-size:260% 100%;
+  background-position:18% 50%;
+  background-repeat:no-repeat;
+}
+.ihb-gold{ background-image:var(--ihb-metal-or,none) }
+
+/* LE REFLET GLISSE AU SURVOL, PAS EN PERMANENCE.
+   Le temps n'entre dans ce nuanceur que par « direction -= t », suivi
+   d'un fract() : il DÉCALE le motif sans le transformer. Faire glisser
+   l'image reproduit donc l'animation d'origine, sans rien recalculer.
+
+   Mais une animation infinie par bouton, c'est treize animations
+   infinies sur l'accueil — au-dessus du plafond que check:peinture
+   fait respecter depuis la page devenue noire. Au repos la plaque est
+   donc immobile ; elle s'anime là où le visiteur regarde. */
+.ihb{ transition:background-position 1.1s var(--ease-out) }
+.ihb:hover,.ihb:focus-visible{ background-position:82% 50% }
+
+/* SAUF L'APPEL À L'ACTION, qui vit en continu. Il y en a un ou deux
+   par page : deux animations infinies, le budget les porte, et c'est
+   l'endroit où le regard doit aller. */
+@keyframes ihbCoulee{ to{ background-position:82% 50% } }
+.ihb-gold{
+  animation:ihbCoulee 7s var(--ease-inout) infinite alternate;
+  transition:none;
+}
+@media (prefers-reduced-motion:reduce){
+  .ihb-gold{animation:none}
+  .ihb{transition:none}
+}
+body.lite .ihb-gold{animation:none}
+
 @media (prefers-reduced-motion:reduce){ .ihb *{transition:none} }
 /* Sur un ecran tactile il n'y a pas de survol : la pastille resterait
    plantee a gauche sans jamais s'ouvrir. On ne la montre pas. */
