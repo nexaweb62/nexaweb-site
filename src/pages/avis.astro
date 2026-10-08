@@ -149,21 +149,21 @@ import '../styles/global.css';
             <div class="star-field">
               <span class="field-label" id="star-label" data-i18n="av-star-lbl">Votre note</span>
               <div class="stars" role="group" aria-labelledby="star-label" id="stars">
-                <button class="star-btn" type="button" data-val="1" aria-label="1 étoile"><svg class="ico-star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.6l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.4l-5.8 3.06 1.11-6.46-4.7-4.58 6.49-.94z"/></svg></button>
-                <button class="star-btn" type="button" data-val="2" aria-label="2 étoiles"><svg class="ico-star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.6l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.4l-5.8 3.06 1.11-6.46-4.7-4.58 6.49-.94z"/></svg></button>
-                <button class="star-btn" type="button" data-val="3" aria-label="3 étoiles"><svg class="ico-star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.6l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.4l-5.8 3.06 1.11-6.46-4.7-4.58 6.49-.94z"/></svg></button>
-                <button class="star-btn" type="button" data-val="4" aria-label="4 étoiles"><svg class="ico-star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.6l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.4l-5.8 3.06 1.11-6.46-4.7-4.58 6.49-.94z"/></svg></button>
-                <button class="star-btn" type="button" data-val="5" aria-label="5 étoiles"><svg class="ico-star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.6l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.4l-5.8 3.06 1.11-6.46-4.7-4.58 6.49-.94z"/></svg></button>
+                <button class="star-btn" type="button" data-val="1" aria-label="1 étoile" data-i18n-aria="av-star1"><svg class="ico-star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.6l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.4l-5.8 3.06 1.11-6.46-4.7-4.58 6.49-.94z"/></svg></button>
+                <button class="star-btn" type="button" data-val="2" aria-label="2 étoiles" data-i18n-aria="av-star2"><svg class="ico-star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.6l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.4l-5.8 3.06 1.11-6.46-4.7-4.58 6.49-.94z"/></svg></button>
+                <button class="star-btn" type="button" data-val="3" aria-label="3 étoiles" data-i18n-aria="av-star3"><svg class="ico-star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.6l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.4l-5.8 3.06 1.11-6.46-4.7-4.58 6.49-.94z"/></svg></button>
+                <button class="star-btn" type="button" data-val="4" aria-label="4 étoiles" data-i18n-aria="av-star4"><svg class="ico-star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.6l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.4l-5.8 3.06 1.11-6.46-4.7-4.58 6.49-.94z"/></svg></button>
+                <button class="star-btn" type="button" data-val="5" aria-label="5 étoiles" data-i18n-aria="av-star5"><svg class="ico-star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.6l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.4l-5.8 3.06 1.11-6.46-4.7-4.58 6.49-.94z"/></svg></button>
               </div>
             </div>
             <div class="fields-row">
               <div class="field">
                 <label class="field-label" for="rv-name" data-i18n="av-nom-label">Votre nom *</label>
-                <input id="rv-name" type="text" placeholder="Jean Dupont" required maxlength="80">
+                <input id="rv-name" type="text" placeholder="Jean Dupont" data-i18n-ph="av-ph-nom" required maxlength="80">
               </div>
               <div class="field">
                 <label class="field-label" for="rv-company" data-i18n="av-entreprise-label">Entreprise (optionnel)</label>
-                <input id="rv-company" type="text" placeholder="Acme SAS" maxlength="80">
+                <input id="rv-company" type="text" placeholder="Acme SAS" data-i18n-ph="av-ph-soc" maxlength="80">
               </div>
             </div>
             <div class="field">
@@ -172,7 +172,7 @@ import '../styles/global.css';
             </div>
             <div class="field">
               <label class="field-label" for="rv-msg" data-i18n="av-msg-label">Votre avis *</label>
-              <textarea id="rv-msg" placeholder="Décrivez votre expérience avec Nexa Web…" required maxlength="600"></textarea>
+              <textarea id="rv-msg" placeholder="Décrivez votre expérience avec Nexa Web…" data-i18n-ph="av-ph-msg" required maxlength="600"></textarea>
             </div>
             <div class="form-submit">
               <InteractiveButton text="Envoyer mon avis" type="submit" variant="gold" id="rv-submit" data-i18n="av-submit" />
@@ -194,7 +194,7 @@ import '../styles/global.css';
     <div class="wrap">
       <div class="reviews-top r">
         <h2 class="reviews-hl" id="reviews-h" data-i18n="av-reviews-h">Avis publiés</h2>
-        <span class="reviews-count" id="reviews-count">Chargement…</span>
+        <span class="reviews-count" id="reviews-count" data-i18n="av-chargement">Chargement…</span>
       </div>
       <div id="reviews-container"></div>
     </div>
@@ -263,7 +263,7 @@ import '../styles/global.css';
     if(rating === 0){ alert('Veuillez sélectionner une note.'); return; }
     if(!window.sb){ alert('Erreur de connexion. Réessayez dans un instant.'); return; }
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Envoi…';
+    submitBtn.textContent = (window.nwT ? window.nwT('av-envoi','Envoi…') : 'Envoi…');
     window.sb.from('reviews').insert({ author_name: name, company: company||null, author_email: emailVal||null, rating: rating, message: msg, status: 'pending' }).then(function(res){
       if(res.error){
         submitBtn.disabled = false;
@@ -302,8 +302,13 @@ import '../styles/global.css';
   };
 
   function emptyStateHtml(){
-    var s = AV_STRINGS[localStorage.getItem('nw-lang') || 'fr'] || AV_STRINGS.fr;
-    return '<div class="empty-wrap"><div class="empty-stars-row">'+STAR+STAR+STAR+STAR+STAR+'</div><p class="empty-title">'+s.title+'</p><p class="empty-sub">'+s.sub+'</p></div>';
+    /* La traduction passe par le systeme commun : la table locale ne
+       sert plus que de repli si i18n.js n'a pas charge. */
+    var s = window.nwT
+      ? { title: window.nwT('av-vide-t', AV_STRINGS.fr.title),
+          sub:   window.nwT('av-vide-s', AV_STRINGS.fr.sub) }
+      : (AV_STRINGS[localStorage.getItem('nw-lang') || 'fr'] || AV_STRINGS.fr);
+    return '<div class="empty-wrap"><div class="empty-stars-row">'+STAR+STAR+STAR+STAR+STAR+'</div><p class="empty-title" data-i18n="av-vide-t">'+s.title+'</p><p class="empty-sub" data-i18n="av-vide-s">'+s.sub+'</p></div>';
   }
 
   function loadReviews(){
@@ -321,7 +326,7 @@ import '../styles/global.css';
         return;
       }
       var reviews = res.data;
-      countEl.textContent = reviews.length + ' avis';
+      countEl.textContent = reviews.length + ' ' + (window.nwT ? window.nwT('av-compte','avis') : 'avis');
       var grid = document.createElement('div');
       grid.className = 'reviews-grid';
       reviews.forEach(function(rv){

@@ -101,14 +101,14 @@ html,body{height:100%;overflow:hidden}
     <div class="lf-top">
       <a href="/" class="lf-logo">NEXA<span>WEB</span></a>
       <div style="display:flex;align-items:center;gap:12px">
-        <div class="lf-lang" role="group" aria-label="Langue">
+        <div class="lf-lang" role="group" aria-label="Langue" data-i18n-aria="a11y-langue">
           <button class="lf-lang-btn" data-lang="fr">FR</button>
           <button class="lf-lang-btn" data-lang="en">EN</button>
         </div>
-        <button id="theme-btn" aria-label="Basculer le thème" style="width:28px;height:28px;border:1px solid var(--border-strong);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text-muted);background:none;cursor:pointer;transition:border-color .2s,color .2s">○</button>
+        <button id="theme-btn" aria-label="Basculer le thème" data-i18n-aria="lf-theme" style="width:28px;height:28px;border:1px solid var(--border-strong);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text-muted);background:none;cursor:pointer;transition:border-color .2s,color .2s">○</button>
         <a href="/" class="lf-back">
           <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
-          Retour
+          <span data-i18n="hdr-back">Retour</span>
         </a>
       </div>
     </div>
@@ -147,7 +147,7 @@ html,body{height:100%;overflow:hidden}
 
           <div class="lf-field lf-pwd-wrap">
             <input class="lf-input" type="password" id="password" name="password" placeholder="Mot de passe" data-i18n-ph="login-pwd-ph" autocomplete="current-password" required>
-            <button type="button" class="lf-eye" id="pwd-toggle" aria-label="Afficher le mot de passe">
+            <button type="button" class="lf-eye" id="pwd-toggle" aria-label="Afficher le mot de passe" data-i18n-aria="lf-pwd">
               <svg id="eye-open" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
               <svg id="eye-close" viewBox="0 0 24 24" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
             </button>
@@ -188,7 +188,7 @@ html,body{height:100%;overflow:hidden}
         <span class="lr-logo-pill">SSL</span>
         <span class="lr-logo-pill">RGPD</span>
         <span class="lr-logo-pill">2FA</span>
-        <span class="lr-logo-pill">Chiffré</span>
+        <span class="lr-logo-pill" data-i18n="lf-chiffre">Chiffré</span>
       </div>
     </div>
   </div>

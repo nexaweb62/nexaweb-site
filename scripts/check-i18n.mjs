@@ -37,13 +37,20 @@ const PAGES = (process.env.PAGES || [
 const EXCEPTIONS = [
   { re: /^[\s ·—–\-—→←↓↑✓✗|/\\•#*+()[\]{}:;,.…"'«»]+$/u, quoi: 'ponctuation seule' },
   { re: /^\d+([.,]\d+)?\s*(€|%|px|h|j|min|s|ms|Go|Mo|ko)?$/i, quoi: 'nombre ou unité' },
-  { re: /^(Nexa\s?Web|NEXAWEB|NEXA|WEB · AGENCE|WEB\s*·\s*AGENCE)$/i, quoi: 'nom de la marque' },
+  /* « — 999 € », « 1 200 € », « €999 » : un montant, avec ou sans
+     separateur et quelle que soit la place du symbole. */
+  { re: /^[—–\-]?\s*€?\s*[\d\s\u202F\u00A0,.]+\s*€?$/u, quoi: 'montant' },
+  /* « 01 / », « 02 / » : la numerotation d'une liste. */
+  { re: /^\d{1,2}\s*\/?$/, quoi: 'numerotation' },
+  /* « NEXA » et « WEB » apparaissent separement : le logo coupe le nom
+     en deux pour peindre la seconde moitie autrement. */
+  { re: /^(Nexa\s?Web|NEXAWEB|NEXA|WEB|WEB\s*·\s*AGENCE)$/i, quoi: 'nom de la marque' },
   { re: /@/, quoi: 'adresse e-mail' },
   { re: /^(FR|EN)$/, quoi: 'code de langue' },
   { re: /^(LinkedIn|Facebook|WhatsApp|Instagram|Google|Calendly|Supabase|Stripe|Cloudflare)$/i, quoi: 'nom de service tiers' },
   { re: /^(Carvin|Hauts-de-France|France|Lens|Lille|Douai|Béthune|Arras)$/i, quoi: 'nom de lieu' },
   { re: /^\d[\d\s]{8,}$/, quoi: 'numéro (SIRET, téléphone)' },
-  { re: /^(SIRET|RCS|TVA|SAS|SASU|EI|URL|SEO|UI|UX|FAQ|RGPD|GDPR|CGV|HTML|CSS|JS|PDF|CMS|SSL|API)\b/i, quoi: 'sigle' },
+  { re: /^(SIRET|RCS|TVA|SAS|SASU|EI|URL|SEO|UI|UX|FAQ|RGPD|GDPR|CGV|HTML|CSS|JS|PDF|CMS|SSL|API|2FA|RGPD)\b/i, quoi: 'sigle' },
   /* Les noms des cles de stockage du navigateur. Ce sont des
      identifiants techniques : les traduire les casserait. */
   { re: /^(nw[-_][a-z_]+|nexa-[a-z_]+)(,\s*(nw[-_][a-z_]+|nexa-[a-z_]+))*$/i, quoi: 'identifiant technique' },
@@ -100,7 +107,8 @@ for (const chemin of PAGES) {
     const couvert = el => { /* lui ou un ancetre porte une cle */
       let n = el;
       while (n && n !== document.documentElement) {
-        if (n.hasAttribute && n.hasAttribute('data-i18n')) return true;
+        if (n.hasAttribute && (n.hasAttribute('data-i18n') ||
+            n.hasAttribute('data-i18n-prix'))) return true;
         n = n.parentElement;
       }
       return false;

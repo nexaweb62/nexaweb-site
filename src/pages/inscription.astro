@@ -17,6 +17,14 @@ html,body{height:100%;overflow:hidden}
 .lf-top{display:flex;align-items:center;justify-content:space-between;padding:28px 40px;position:relative;z-index:1}
 .lf-logo{font-size:14px;font-weight:600;letter-spacing:0;color:var(--text)}
 .lf-logo span{color:var(--text-muted)}
+/* LE SELECTEUR DE LANGUE, repris de la page Connexion. Il n'existait
+   pas ici : un visiteur qui arrivait directement sur l'inscription
+   n'avait aucun moyen de passer en anglais — la seule page du site
+   dans ce cas. */
+.lf-lang{display:flex;align-items:center;gap:4px}
+.lf-lang-btn{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text);border-radius:var(--radius-pill);padding:4px 9px;cursor:pointer;transition:color .18s,background-color .18s}
+.lf-lang-btn:hover{color:var(--text)}
+.lf-lang-btn.active{background:var(--accent);color:var(--on-accent)}
 .lf-back{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-muted);display:flex;align-items:center;gap:6px;transition:color .2s}
 .lf-back:hover{color:var(--text)}
 .lf-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
@@ -101,10 +109,14 @@ spline-viewer{width:100%;height:100%;display:block}
     <div class="lf-top">
       <a href="/" class="lf-logo">NEXA<span>WEB</span></a>
       <div style="display:flex;align-items:center;gap:12px">
-        <button id="theme-btn" aria-label="Basculer le thème" style="width:28px;height:28px;border:1px solid var(--border-strong);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text-muted);background:none;cursor:pointer;transition:border-color .2s,color .2s">○</button>
+        <div class="lf-lang" role="group" aria-label="Langue" data-i18n-aria="a11y-langue">
+          <button class="lf-lang-btn" data-lang="fr">FR</button>
+          <button class="lf-lang-btn" data-lang="en">EN</button>
+        </div>
+        <button id="theme-btn" aria-label="Basculer le thème" data-i18n-aria="lf-theme" style="width:28px;height:28px;border:1px solid var(--border-strong);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text-muted);background:none;cursor:pointer;transition:border-color .2s,color .2s">○</button>
         <a href="/login" class="lf-back">
           <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
-          Connexion
+          <span data-i18n="ins-retour">Connexion</span>
         </a>
       </div>
     </div>
@@ -112,16 +124,16 @@ spline-viewer{width:100%;height:100%;display:block}
     <div class="lf-body">
       <div class="lf-form-wrap">
 
-        <h1 class="lf-headline">Créez votre<br>espace <em>client.</em></h1>
+        <h1 class="lf-headline" data-i18n="ins-h">Créez votre<br>espace <em>client.</em></h1>
 
         <!-- SUCCESS -->
         <div class="insc-success" id="insc-success">
           <div class="insc-success-icon">
             <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
           </div>
-          <h2>Vérifiez votre boîte mail</h2>
-          <p>Un email de confirmation a été envoyé à <strong id="success-email"></strong>.</p>
-          <p>Cliquez sur le lien dans cet email pour activer votre compte, puis <a href="/login" style="color:var(--text);text-decoration:underline;text-underline-offset:3px">connectez-vous</a>.</p>
+          <h2 data-i18n="ins-ok-h">Vérifiez votre boîte mail</h2>
+          <p><span data-i18n="ins-ok-1">Un email de confirmation a été envoyé à</span> <strong id="success-email"></strong>.</p>
+          <p data-i18n="ins-ok-2">Cliquez sur le lien dans cet email pour activer votre compte, puis <a href="/login" style="color:var(--text);text-decoration:underline;text-underline-offset:3px">connectez-vous</a>.</p>
         </div>
 
         <!-- FORM -->
@@ -134,10 +146,10 @@ spline-viewer{width:100%;height:100%;display:block}
               <path style="fill:var(--brand-google-yellow)" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
               <path style="fill:var(--brand-google-red)" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
             </svg>
-            Continuer avec Google
+            <span data-i18n="login-google">Continuer avec Google</span>
           </button>
 
-          <div class="lf-divider"><span>ou</span></div>
+          <div class="lf-divider"><span data-i18n="login-or">ou</span></div>
 
           <form id="insc-form" novalidate>
             <div class="insc-hp" aria-hidden="true">
@@ -151,66 +163,66 @@ spline-viewer{width:100%;height:100%;display:block}
 
             <div class="insc-row">
               <div class="lf-field">
-                <label class="lf-label" for="prenom">Prénom</label>
-                <input class="lf-input" type="text" id="prenom" name="prenom" placeholder="Ahmed" autocomplete="given-name" required>
+                <label class="lf-label" for="prenom" data-i18n="ins-prenom">Prénom</label>
+                <input class="lf-input" type="text" id="prenom" name="prenom" placeholder="Ahmed" data-i18n-ph="dv-ph-prenom" autocomplete="given-name" required>
               </div>
               <div class="lf-field">
-                <label class="lf-label" for="nom">Nom</label>
-                <input class="lf-input" type="text" id="nom" name="nom" placeholder="Dupont" autocomplete="family-name" required>
+                <label class="lf-label" for="nom" data-i18n="ins-nom">Nom</label>
+                <input class="lf-input" type="text" id="nom" name="nom" placeholder="Dupont" data-i18n-ph="dv-ph-nom" autocomplete="family-name" required>
               </div>
             </div>
 
             <div class="lf-field">
-              <label class="lf-label" for="email">Adresse e-mail</label>
+              <label class="lf-label" for="email" data-i18n="ins-email">Adresse e-mail</label>
               <input class="lf-input" type="email" id="email" name="email" placeholder="vous@example.com" autocomplete="email" required>
             </div>
 
             <div class="insc-row">
               <div class="lf-field">
-                <label class="lf-label" for="telephone">Téléphone <span class="lf-opt">(optionnel)</span></label>
-                <input class="lf-input" type="tel" id="telephone" name="telephone" placeholder="+33 6 …" autocomplete="tel">
+                <label class="lf-label" for="telephone"><span data-i18n="ins-tel">Téléphone</span> <span class="lf-opt" data-i18n="ins-opt">(optionnel)</span></label>
+                <input class="lf-input" type="tel" id="telephone" name="telephone" placeholder="+33 6 …" data-i18n-ph="ins-ph-tel" autocomplete="tel">
               </div>
               <div class="lf-field">
-                <label class="lf-label" for="entreprise">Entreprise <span class="lf-opt">(optionnel)</span></label>
-                <input class="lf-input" type="text" id="entreprise" name="entreprise" placeholder="Votre société" autocomplete="organization">
+                <label class="lf-label" for="entreprise"><span data-i18n="ins-societe">Entreprise</span> <span class="lf-opt" data-i18n="ins-opt">(optionnel)</span></label>
+                <input class="lf-input" type="text" id="entreprise" name="entreprise" placeholder="Votre société" data-i18n-ph="ins-ph-soc" autocomplete="organization">
               </div>
             </div>
 
             <div class="lf-field">
-              <label class="lf-label" for="password">Mot de passe</label>
+              <label class="lf-label" for="password" data-i18n="ins-mdp">Mot de passe</label>
               <div style="position:relative">
                 <input class="lf-input" type="password" id="password" name="password" placeholder="••••••••••••" autocomplete="new-password" required style="padding-right:44px">
-                <button type="button" id="pwd-toggle" aria-label="Afficher le mot de passe" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);width:28px;height:28px;color:var(--text-subtle);background:none;border:none;padding:0;display:flex;align-items:center;justify-content:center;cursor:pointer">
+                <button type="button" id="pwd-toggle" aria-label="Afficher le mot de passe" data-i18n-aria="lf-pwd" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);width:28px;height:28px;color:var(--text-subtle);background:none;border:none;padding:0;display:flex;align-items:center;justify-content:center;cursor:pointer">
                   <svg id="eye-open" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                   <svg id="eye-close" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
                 </button>
               </div>
               <div class="insc-criteria" aria-live="polite">
-                <span class="insc-crit" id="crit-length">12 caractères minimum</span>
-                <span class="insc-crit" id="crit-upper">Une lettre majuscule</span>
-                <span class="insc-crit" id="crit-digit">Un chiffre</span>
-                <span class="insc-crit" id="crit-special">Un caractère spécial</span>
+                <span class="insc-crit" id="crit-length" data-i18n="ins-c1">12 caractères minimum</span>
+                <span class="insc-crit" id="crit-upper" data-i18n="ins-c2">Une lettre majuscule</span>
+                <span class="insc-crit" id="crit-digit" data-i18n="ins-c3">Un chiffre</span>
+                <span class="insc-crit" id="crit-special" data-i18n="ins-c4">Un caractère spécial</span>
               </div>
             </div>
 
             <div class="lf-field">
-              <label class="lf-label" for="confirm">Confirmer le mot de passe</label>
+              <label class="lf-label" for="confirm" data-i18n="ins-mdp2">Confirmer le mot de passe</label>
               <input class="lf-input" type="password" id="confirm" name="confirm" placeholder="••••••••••••" autocomplete="new-password" required>
               <p class="insc-match" id="match-indicator"></p>
             </div>
 
             <div class="insc-rgpd">
               <input type="checkbox" id="rgpd" name="rgpd" required>
-              <label for="rgpd">J'accepte la <a href="/politique-confidentialite" target="_blank">politique de confidentialité</a> et le traitement de mes données à des fins de gestion de mon compte client.</label>
+              <label for="rgpd" data-i18n="ins-rgpd">J'accepte la <a href="/politique-confidentialite" target="_blank">politique de confidentialité</a> et le traitement de mes données à des fins de gestion de mon compte client.</label>
             </div>
 
             <div class="h-captcha" data-sitekey="5a7ee49c-3bac-4284-a130-5d76459a0fd2" style="margin-top:16px"></div>
 
-            <InteractiveButton text="Créer mon compte" type="submit" variant="gold" class="lf-btn" id="submit-btn" />
+            <InteractiveButton text="Créer mon compte" data-i18n="ins-submit" type="submit" variant="gold" class="lf-btn" id="submit-btn" />
           </form>
 
           <div class="lf-foot">
-            <p class="lf-register">Déjà un compte ? <a href="/login">Se connecter</a></p>
+            <p class="lf-register" data-i18n="ins-deja">Déjà un compte ? <a href="/login">Se connecter</a></p>
           </div>
         </div>
 
@@ -218,7 +230,7 @@ spline-viewer{width:100%;height:100%;display:block}
     </div>
 
     <div class="lf-bottom">
-      <p>Vos données sont traitées conformément au RGPD. <a href="/politique-confidentialite">Politique de confidentialité</a> · <a href="/mentions-legales">Mentions légales</a></p>
+      <p data-i18n="ins-pied">Vos données sont traitées conformément au RGPD. <a href="/politique-confidentialite">Politique de confidentialité</a> · <a href="/mentions-legales">Mentions légales</a></p>
     </div>
   </div>
 
@@ -226,11 +238,11 @@ spline-viewer{width:100%;height:100%;display:block}
   <div class="login-right" aria-hidden="true">
     <spline-viewer url="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode" background="transparent" loading-anim-type="none"></spline-viewer>
     <div class="lr-trust">
-      <span class="lr-trust-label">Inscription sécurisée</span>
+      <span class="lr-trust-label" data-i18n="ins-trust">Inscription sécurisée</span>
       <div class="lr-logos">
         <span class="lr-logo-pill">SSL</span>
         <span class="lr-logo-pill">RGPD</span>
-        <span class="lr-logo-pill">Chiffré</span>
+        <span class="lr-logo-pill" data-i18n="lf-chiffre">Chiffré</span>
       </div>
     </div>
   </div>
@@ -254,6 +266,22 @@ if(!window.matchMedia('(max-width:768px)').matches){
   if(!window.sb)return;
   var s=await window.sb.auth.getSession();
   if(s.data.session)window.location.replace('/espace-client');
+})();
+
+/* Lang FR/EN */
+(function(){
+  var savedLang=localStorage.getItem('nw-lang')||'fr';
+  document.querySelectorAll('.lf-lang-btn').forEach(function(b){
+    b.classList.toggle('active',b.getAttribute('data-lang')===savedLang);
+    b.addEventListener('click',function(){
+      var lang=b.getAttribute('data-lang');
+      localStorage.setItem('nw-lang',lang);
+      document.querySelectorAll('.lf-lang-btn').forEach(function(x){
+        x.classList.toggle('active',x.getAttribute('data-lang')===lang);
+      });
+      document.dispatchEvent(new CustomEvent('nw-lang',{detail:lang}));
+    });
+  });
 })();
 
 /* Theme toggle */

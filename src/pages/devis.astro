@@ -325,7 +325,7 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
                contenu de l'element qu'il cible, et une cle posee sur le
                paragraphe entier effacerait le montant. La phrase est donc
                coupee de part et d'autre du prix. -->
-          <p><strong data-i18n="dv-offre-t">Offre de lancement :</strong> <span data-i18n="dv-offre-1">les 3 premiers clients bénéficient d'un site complet à</span> <strong>{VITRINE_PRIX}</strong> <span data-i18n="dv-offre-2">tout inclus. Mentionnez-le dans votre description.</span></p>
+          <p><strong data-i18n="dv-offre-t">Offre de lancement :</strong> <span data-i18n="dv-offre-1">les 3 premiers clients bénéficient d'un site complet à</span> <strong data-i18n-prix>{VITRINE_PRIX}</strong> <span data-i18n="dv-offre-2">tout inclus. Mentionnez-le dans votre description.</span></p>
         </div>
 
         <!-- HEAD -->
@@ -414,7 +414,7 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
                           son propre <span> : i18n.js remplace le texte de
                           l'élément qu'il cible, et le poser sur la pastille
                           entière effacerait le prix et les mensualités. */}
-                      <span data-i18n={f.nomCle}>{f.nom}</span> — {f.pre && <span data-i18n={f.preCle}>{f.pre}</span>}{f.pre ? ' ' : ''}{f.total}
+                      <span data-i18n={f.nomCle}>{f.nom}</span> — {f.pre && <span data-i18n={f.preCle}>{f.pre}</span>}{f.pre ? ' ' : ''}<span data-i18n-prix>{f.total}</span>
                       <small class="budget-mois budget-m3">{f.m3}<span data-i18n="dvs-mois">/mois</span></small>
                       <small class="budget-mois budget-m4">{f.m4}<span data-i18n="dvs-mois">/mois</span></small>
                     </span>
@@ -438,7 +438,7 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
         <div class="field field-full rgpd-row">
           <label class="rgpd-label">
             <input type="checkbox" id="rgpd-consent" name="rgpd-consent" required>
-            <span data-i18n="dv-rgpd">J'accepte que mes données (nom, e-mail, téléphone, description du projet) soient utilisées par Nexa Web dans le seul but de traiter ma demande de devis et de me recontacter. Aucune donnée n'est revendue. <span class="req">*</span></span>
+            <span><span data-i18n="dv-rgpd">J'accepte que mes données (nom, e-mail, téléphone, description du projet) soient utilisées par Nexa Web dans le seul but de traiter ma demande de devis et de me recontacter. Aucune donnée n'est revendue.</span> <span class="req">*</span></span>
           </label>
           <span class="field-err" id="err-rgpd"></span>
         </div>

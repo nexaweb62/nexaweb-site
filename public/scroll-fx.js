@@ -161,16 +161,58 @@
       el.__morceaux = morceaux;
       morceaux.forEach(function (c) { c.noeud.nodeValue = rendu(c.parts, 0); });
     });
+    /* ── LE COMPTEUR EST BILINGUE ──────────────────────────────────
+       Le francais ecrit « 1 200 € », l'anglais « €1,200 » : le symbole
+       passe devant et le separateur de milliers change.
+
+       C'est ICI que ca doit se faire, et nulle part ailleurs. Le
+       systeme de traduction sait reformater un prix — mais ces
+       montants-la sont ANIMES : le compteur reecrit leurs noeuds de
+       texte a chaque image. Les deux systemes se marchaient dessus, et
+       la traduction, qui lisait le texte avant le premier defilement,
+       y trouvait « 0 € » et le figeait. Relevé : « €0 » sur la page
+       Tarifs en anglais, et « 0 € » en francais au retour — le prix
+       etait perdu dans les deux langues.
+
+       Un seul proprietaire par noeud de texte. Ici, le compteur. */
+    function enAnglais() {
+      try { return window.nwLang && window.nwLang() === 'en'; } catch (e) { return false; }
+    }
     function fmt(v, raw) {
       var t = String(v);
-      if (/[\s\u00A0\u202F]/.test(raw)) t = t.replace(/\B(?=(\d{3})+(?!\d))/g, '\u202F');
+      var groupe = /[\s\u00A0\u202F]/.test(raw);
+      if (enAnglais()) return groupe ? v.toLocaleString('en-US') : t;
+      if (groupe) t = t.replace(/\B(?=(\d{3})+(?!\d))/g, '\u202F');
       return t;
     }
     function rendu(parts, t) {
-      return parts.map(function (p) {
-        return p.lit !== undefined ? p.lit : fmt(Math.round(p.num * t), p.raw);
-      }).join('');
+      var en = enAnglais();
+      var out = parts.map(function (p, i) {
+        if (p.lit === undefined) {
+          var n = fmt(Math.round(p.num * t), p.raw);
+          /* En anglais le symbole precede le montant — a condition
+             qu'il suive effectivement ce nombre dans le texte. */
+          var suite = parts[i + 1];
+          if (en && suite && suite.lit !== undefined && /^[\s\u00A0\u202F]*€/.test(suite.lit)) {
+            return '€' + n;
+          }
+          return n;
+        }
+        if (en && i > 0 && parts[i - 1].lit === undefined && /^[\s\u00A0\u202F]*€/.test(p.lit)) {
+          /* Le symbole a deja ete pose devant : on retire celui d'ici. */
+          return p.lit.replace(/^[\s\u00A0\u202F]*€/, '');
+        }
+        return p.lit;
+      });
+      return out.join('');
     }
+    /* Au changement de langue, les montants deja comptes se refont. */
+    document.addEventListener('nw-lang-applied', function () {
+      cibles.forEach(function (el) {
+        if (!el.__morceaux) return;
+        el.__morceaux.forEach(function (c) { c.noeud.nodeValue = rendu(c.parts, el.__ran ? 1 : 0); });
+      });
+    });
     function lancer(el) {
       if (el.__ran || !el.__morceaux) return; el.__ran = 1;
       var t0 = null, D = 1250;

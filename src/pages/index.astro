@@ -334,7 +334,7 @@ import '../styles/global.css';
 <main id="main-content" tabindex="-1">
 
 <!-- HERO -->
-<section class="s-hero has-glow" id="accueil" aria-label="Accueil">
+<section class="s-hero has-glow" id="accueil" aria-label="Accueil" data-i18n-aria="a11y-accueil">
   <div class="wrap hero-cols">
     <div class="hero-main">
       <div class="hero-eye" aria-hidden="true">
@@ -517,7 +517,7 @@ import '../styles/global.css';
 </section>
 
 <!-- STATS -->
-<section class="s-stats sec-seam" style="padding:var(--sec) 0" aria-label="Chiffres clés">
+<section class="s-stats sec-seam" style="padding:var(--sec) 0" aria-label="Chiffres clés" data-i18n-aria="a11y-chiffres">
   <div class="wrap">
     <div class="stats-grid" data-count-group>
       <div class="stat r">
@@ -554,7 +554,7 @@ import '../styles/global.css';
         <InteractiveButton text="Nous contacter" href="/contact" class="r d3" style="margin-top:28px;display:inline-flex" data-i18n="idx-faq-contact" r />
       </div>
       <div>
-        <ul class="faq-list" aria-label="Foire aux questions">
+        <ul class="faq-list" aria-label="Foire aux questions" data-i18n-aria="a11y-faq">
           <li class="qa"><span class="bar" aria-hidden="true"></span>
             <button class="q" type="button" aria-expanded="false">
               <span class="qt" data-i18n="idx-faq-q1">Quel est le coût d'un site web ?</span>
@@ -620,17 +620,17 @@ import '../styles/global.css';
 </main>
 
 <!-- FOOTER -->
-<footer class="s-foot sec-seam" aria-label="Pied de page">
+<footer class="s-foot sec-seam" aria-label="Pied de page" data-i18n-aria="a11y-pied">
   <div class="wrap">
     <div class="foot-in">
       <div>
         {/* Le logo du pied de page ramène à l'accueil : c'est la
             convention, et c'est le dernier endroit où on la cherche. */}
-        <a href="/" class="foot-marque" aria-label="NEXAWEB — Accueil">
+        <a href="/" class="foot-marque" aria-label="NEXAWEB — Accueil" data-i18n-aria="a11y-logo">
           <Logo largeur={40} trait={2.2} texte={true} tailleNom={16} tailleSous={8} />
         </a>
         <p class="foot-tag" data-i18n="ftr-tag">Agence web premium · Carvin, Hauts-de-France</p>
-        <div class="foot-socials" aria-label="Réseaux sociaux">
+        <div class="foot-socials" aria-label="Réseaux sociaux" data-i18n-aria="a11y-sociaux">
           <a href="https://www.linkedin.com/in/ahmed-chteoui-049211429/" class="foot-soc linkedin" aria-label="LinkedIn" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
           </a>
@@ -644,7 +644,7 @@ import '../styles/global.css';
       </div>
       <div>
         <div class="foot-col-title" data-i18n="ftr-nav">Navigation</div>
-        <nav aria-label="Liens de navigation">
+        <nav aria-label="Liens de navigation" data-i18n-aria="a11y-liens-nav">
           <ul class="foot-links">
             <li><a href="/#accueil"  class="foot-lnk" data-i18n="ftr-home">Accueil</a></li>
             <li><a href="/services" class="foot-lnk" data-i18n="ftr-services">Services</a></li>
@@ -660,9 +660,9 @@ import '../styles/global.css';
     </div>
     <div class="foot-bot">
       <span class="foot-copy" data-i18n="ftr-copy">© 2026 Nexa Web. Tous droits réservés.</span>
-      <nav class="foot-legal" aria-label="Liens légaux">
-        <a href="/mentions-legales">Mentions légales</a>
-        <a href="/politique-confidentialite">Confidentialité</a>
+      <nav class="foot-legal" aria-label="Liens légaux" data-i18n-aria="a11y-liens-legaux">
+        <a href="/mentions-legales" data-i18n="ftr-mentions">Mentions légales</a>
+        <a href="/politique-confidentialite" data-i18n="ftr-confid">Confidentialité</a>
       </nav>
     </div>
   </div>
