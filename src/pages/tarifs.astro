@@ -266,7 +266,24 @@ main{--text-muted:var(--raw-warm-200)}
 
 /* Le badge de garantie, centré sous la grille. Sa fenêtre et son
    habillage vivent dans le composant ; ici, seule sa place. */
-.plans-gar{margin-top:clamp(26px,4vh,40px)}
+/* LA GARANTIE, CENTREE SOUS LES CARTES.
+
+   Cette regle etait MORTE. « plans-gar » est passee en prop a
+   GarantieBadge, et c'est le composant qui pose la classe sur son
+   <span> : ce <span> porte donc le marqueur de portee du COMPOSANT,
+   pas celui de cette page. Astro compilait « .plans-gar[...-ndm5nux2] »
+   quand l'element portait « ...-o32cia7a » — le selecteur ne pouvait
+   pas mordre. Releve au pixel : margin-top calcule a 0px, et la
+   pastille collee au bas des cartes, jusqu'a les chevaucher de 2 px a
+   960 px de large.
+
+   On sort donc la regle de la portee, ancree sur le <main> de la page
+   pour qu'elle ne fuie pas ailleurs. Le centrage horizontal, lui, vient
+   de .gar-plein (flex + justify-content:center) qui vit dans le
+   composant et s'applique bien : il ne manquait que l'air au-dessus. */
+#main-content :global(.plans-gar){
+  margin-top:clamp(40px,6vh,72px);
+  margin-bottom:clamp(8px,1.5vh,16px)}
 
 /* ── CTA ── */
 .cta-section{padding:clamp(32px,5vh,64px) 0 clamp(64px,10vh,120px);text-align:center;position:relative;z-index:1}
