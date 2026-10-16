@@ -1,0 +1,557 @@
+---
+/**
+ * LE TABLEAU DE BORD.
+ *
+ * La page arrive vide et se remplit depuis /api/admin/data. Un seul
+ * chemin de rendu, en JavaScript : le faire aussi au serveur
+ * obligerait a ecrire deux fois le meme balisage, et les deux
+ * finiraient par diverger.
+ *
+ * Aucune donnee n'est inscrite dans le HTML. La page ne contient que sa
+ * structure ; tout ce qui vient de la feuille passe par l'API, qui
+ * refuse d'elle-meme une requete sans session valide. Enregistrer cette
+ * page ne sauvegarde donc aucun chiffre.
+ *
+ * On arrive ici seulement si src/middleware.ts a valide la session.
+ */
+import AdminLayout from '../../layouts/AdminLayout.astro';
+
+export const prerender = false;
+
+/* Pose par la garde. Sans elle, on ne serait pas sur cette ligne. */
+const email = Astro.locals.admin?.email;
+
+Astro.response.headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
+Astro.response.headers.set('Cache-Control', 'private, no-store');
+---
+
+<AdminLayout titre="Tableau de bord" email={email}>
+  <div class="ad-tete">
+    <h1 class="ad-h1">Tableau de bord</h1>
+    <div class="ad-outils" style="margin:0">
+      <span class="ad-maj" id="ad-maj">Chargement…</span>
+      <button type="button" class="ad-btn ad-btn-fin" id="ad-refresh">Actualiser</button>
+    </div>
+  </div>
+
+  <p class="ad-resume" id="ad-resume">&nbsp;</p>
+
+  <div id="ad-erreur"></div>
+  <div id="ad-corps" hidden>
+
+    <section class="ad-section" aria-labelledby="h-prospection">
+      <h2 class="ad-h2" id="h-prospection">Prospection</h2>
+      <div class="ad-jauges" id="ad-jauges"></div>
+    </section>
+
+    <section class="ad-section" aria-labelledby="h-repartition">
+      <h2 class="ad-h2" id="h-repartition">Répartition</h2>
+      <div class="ad-jauges" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+        <div class="ad-carte">
+          <div class="ad-jauge-titre">Par statut</div>
+          <div class="ad-rep" id="ad-rep"></div>
+        </div>
+        <div class="ad-carte" style="padding:0;overflow:hidden">
+          <div class="ad-defile">
+            <table class="ad-table">
+              <thead><tr>
+                <th>Associé</th><th class="ad-num">Actifs</th><th class="ad-num">Contactés</th>
+                <th class="ad-num">RDV</th><th class="ad-num">Signés</th>
+              </tr></thead>
+              <tbody id="ad-associes"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ad-section" aria-labelledby="h-pipeline">
+      <h2 class="ad-h2" id="h-pipeline">Pipeline</h2>
+      <div class="ad-outils">
+        <input class="ad-champ" id="ad-q" type="search" autocomplete="off"
+               placeholder="Rechercher une entreprise, un secteur, un statut…"
+               aria-label="Rechercher dans le pipeline" />
+        <span class="ad-compte" id="ad-compte"></span>
+      </div>
+      <div class="ad-carte" style="padding:0;overflow:hidden">
+        <div class="ad-defile">
+          <table class="ad-table" id="ad-pipeline">
+            <thead><tr id="ad-pipeline-th"></tr></thead>
+            <tbody id="ad-pipeline-tb"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="ad-section" aria-labelledby="h-ca">
+      <h2 class="ad-h2" id="h-ca">Chiffre d'affaires</h2>
+      <div id="ad-ca"></div>
+    </section>
+
+    <section class="ad-section" aria-labelledby="h-projets">
+      <h2 class="ad-h2" id="h-projets">Projets</h2>
+      <div id="ad-projets"></div>
+    </section>
+
+  </div>
+</AdminLayout>
+
+<script is:inline>
+(function () {
+  'use strict';
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  var euro = new Intl.NumberFormat('fr-FR', {
+    style: 'currency', currency: 'EUR', maximumFractionDigits: 0,
+  });
+  var heure = new Intl.DateTimeFormat('fr-FR', {
+    hour: '2-digit', minute: '2-digit', second: '2-digit',
+  });
+
+  /* Tout texte venant de la feuille passe par ici avant d'etre insere.
+     Les noms d'entreprise et les notes d'appel sont saisis a la main :
+     une balise s'y glisse sans mauvaise intention, et serait exécutée.
+     On ecrit donc du texte, jamais du balisage. */
+  function texte(valeur) {
+    var n = document.createElement('span');
+    n.textContent = valeur == null ? '' : String(valeur);
+    return n;
+  }
+  function cellule(valeur, classe) {
+    var td = document.createElement('td');
+    if (classe) td.className = classe;
+    td.textContent = valeur == null ? '' : String(valeur);
+    return td;
+  }
+
+  var LIBELLES = {
+    'a-appeler': 'À appeler', 'en-cours': 'En cours',
+    'rdv': 'RDV / Devis', 'signe': 'Signé', 'perdu': 'Écarté / Perdu',
+  };
+
+  /* La meme regle que kpi.ts, pour colorer une pastille. Le COMPTAGE,
+     lui, reste entierement au serveur : ceci ne sert qu'a choisir une
+     couleur. */
+  function classe(statut) {
+    var s = (statut || '').normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .toUpperCase().replace(/\s+/g, ' ').trim();
+    if (/ECARTE|REFUS|PERDU/.test(s)) return 'perdu';
+    if (/SIGNE|GAGNE/.test(s)) return 'signe';
+    if (/RDV|DEVIS/.test(s)) return 'rdv';
+    if (s === '' || s.indexOf('A APPELER') >= 0) return 'a-appeler';
+    return 'en-cours';
+  }
+
+  /* ── Rendu ─────────────────────────────────────────────────────── */
+
+  function jauges(liste) {
+    var hote = $('ad-jauges');
+    hote.textContent = '';
+    liste.forEach(function (j) {
+      var part = j.objectif > 0 ? Math.min(j.valeur / j.objectif, 1) : 0;
+      var c = document.createElement('div');
+      c.className = 'ad-carte';
+
+      var t = document.createElement('div');
+      t.className = 'ad-jauge-titre'; t.textContent = j.titre;
+
+      var v = document.createElement('div');
+      v.className = 'ad-jauge-val';
+      var n = document.createElement('span');
+      n.className = 'ad-jauge-n'; n.textContent = String(j.valeur);
+      var o = document.createElement('span');
+      o.className = 'ad-jauge-obj'; o.textContent = '/ ' + j.objectif;
+      v.appendChild(n); v.appendChild(o);
+
+      var piste = document.createElement('div');
+      piste.className = 'ad-piste';
+      piste.setAttribute('role', 'progressbar');
+      piste.setAttribute('aria-label', j.titre);
+      piste.setAttribute('aria-valuenow', String(j.valeur));
+      piste.setAttribute('aria-valuemin', '0');
+      piste.setAttribute('aria-valuemax', String(j.objectif));
+      var pleine = document.createElement('div');
+      pleine.className = 'ad-remplie';
+      pleine.style.width = (part * 100).toFixed(1) + '%';
+      if (part >= 1) pleine.setAttribute('data-plein', '1');
+      piste.appendChild(pleine);
+
+      c.appendChild(t); c.appendChild(v); c.appendChild(piste);
+      hote.appendChild(c);
+    });
+  }
+
+  function repartition(liste) {
+    var hote = $('ad-rep');
+    hote.textContent = '';
+    if (!liste.length) { hote.appendChild(vide('Aucun prospect pour l’instant.')); return; }
+    var max = liste.reduce(function (m, r) { return Math.max(m, r.nombre); }, 0) || 1;
+    liste.forEach(function (r) {
+      var l = document.createElement('div'); l.className = 'ad-rep-l';
+      var nom = document.createElement('span');
+      nom.className = 'ad-rep-nom'; nom.textContent = r.libelle;
+      var piste = document.createElement('div'); piste.className = 'ad-rep-piste';
+      var barre = document.createElement('div');
+      barre.className = 'ad-rep-barre';
+      barre.style.width = ((r.nombre / max) * 100).toFixed(1) + '%';
+      barre.style.background = 'var(--' + couleurDe(r.classe) + ')';
+      piste.appendChild(barre);
+      var n = document.createElement('span');
+      n.className = 'ad-rep-n'; n.textContent = String(r.nombre);
+      l.appendChild(nom); l.appendChild(piste); l.appendChild(n);
+      hote.appendChild(l);
+    });
+  }
+
+  function couleurDe(c) {
+    if (c === 'perdu') return 'danger';
+    if (c === 'signe') return 'gold';
+    if (c === 'en-cours') return 'warning';
+    if (c === 'a-appeler') return 'text-subtle';
+    return 'accent';
+  }
+
+  function associes(liste) {
+    var tb = $('ad-associes');
+    tb.textContent = '';
+    if (!liste.length) {
+      var tr = document.createElement('tr');
+      var td = document.createElement('td');
+      td.colSpan = 5; td.className = 'ad-vide'; td.textContent = 'Personne d’assigné pour l’instant.';
+      tr.appendChild(td); tb.appendChild(tr); return;
+    }
+    liste.forEach(function (a) {
+      var tr = document.createElement('tr');
+      tr.appendChild(cellule(a.nom, 'ad-entreprise'));
+      tr.appendChild(cellule(a.actifs, 'ad-num'));
+      tr.appendChild(cellule(a.contactes, 'ad-num'));
+      tr.appendChild(cellule(a.rdv, 'ad-num'));
+      tr.appendChild(cellule(a.signes, 'ad-num'));
+      tb.appendChild(tr);
+    });
+  }
+
+  /* ── Pipeline : recherche et tri ───────────────────────────────── */
+
+  var pipeline = [], colonnes = [], triCol = null, triSens = 1;
+
+  function entetesPipeline() {
+    var tr = $('ad-pipeline-th');
+    tr.textContent = '';
+    colonnes.forEach(function (c) {
+      var th = document.createElement('th');
+      th.textContent = joli(c);
+      th.setAttribute('data-tri', c);
+      th.setAttribute('tabindex', '0');
+      th.setAttribute('role', 'button');
+      if (triCol === c) th.setAttribute('aria-sort', triSens === 1 ? 'ascending' : 'descending');
+      var trier = function () {
+        if (triCol === c) { triSens = -triSens; } else { triCol = c; triSens = 1; }
+        entetesPipeline(); corpsPipeline();
+      };
+      th.addEventListener('click', trier);
+      th.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trier(); }
+      });
+      tr.appendChild(th);
+    });
+  }
+
+  function joli(cle) {
+    return cle.charAt(0) + cle.slice(1).toLowerCase();
+  }
+
+  function corpsPipeline() {
+    var tb = $('ad-pipeline-tb');
+    var q = ($('ad-q').value || '').trim().toLowerCase();
+
+    var lignes = pipeline.filter(function (l) {
+      if (!q) return true;
+      for (var k in l) {
+        if (Object.prototype.hasOwnProperty.call(l, k)
+          && String(l[k]).toLowerCase().indexOf(q) >= 0) return true;
+      }
+      return false;
+    });
+
+    if (triCol) {
+      lignes = lignes.slice().sort(function (a, b) {
+        var x = String(a[triCol] || ''), y = String(b[triCol] || '');
+        /* Une case vide part toujours en fin de liste, quel que soit le
+           sens du tri : elle n'est ni la plus petite ni la plus grande,
+           elle est absente. */
+        if (!x && !y) return 0;
+        if (!x) return 1;
+        if (!y) return -1;
+        return x.localeCompare(y, 'fr', { numeric: true }) * triSens;
+      });
+    }
+
+    $('ad-compte').textContent = lignes.length + ' / ' + pipeline.length
+      + (pipeline.length > 1 ? ' prospects' : ' prospect');
+
+    tb.textContent = '';
+    if (!lignes.length) {
+      var tr0 = document.createElement('tr');
+      var td0 = document.createElement('td');
+      td0.colSpan = colonnes.length || 1; td0.className = 'ad-vide';
+      td0.textContent = q ? 'Aucun résultat pour « ' + q + ' ».' : 'Aucun prospect dans la feuille.';
+      tr0.appendChild(td0); tb.appendChild(tr0); return;
+    }
+
+    lignes.forEach(function (l) {
+      var tr = document.createElement('tr');
+      colonnes.forEach(function (c) {
+        if (c === 'STATUT') {
+          var td = document.createElement('td');
+          var pz = document.createElement('span');
+          pz.className = 'ad-pz';
+          pz.setAttribute('data-c', classe(l[c]));
+          pz.textContent = l[c] || 'À appeler';
+          td.appendChild(pz); tr.appendChild(td);
+        } else {
+          tr.appendChild(cellule(l[c], c === 'ENTREPRISE' ? 'ad-entreprise' : ''));
+        }
+      });
+      tb.appendChild(tr);
+    });
+  }
+
+  /* ── Etats vides ───────────────────────────────────────────────── */
+
+  function vide(titre, detail) {
+    var d = document.createElement('div');
+    d.className = 'ad-vide';
+    var b = document.createElement('b'); b.textContent = titre;
+    d.appendChild(b);
+    if (detail) d.appendChild(texte(detail));
+    return d;
+  }
+
+  function ongletAbsent(nom, colonnes) {
+    var d = document.createElement('div');
+    d.className = 'ad-carte';
+    var v = document.createElement('div');
+    v.className = 'ad-vide';
+    var b = document.createElement('b');
+    b.textContent = 'L’onglet « ' + nom + ' » n’existe pas encore';
+    v.appendChild(b);
+    v.appendChild(texte('Créez-le dans la feuille avec les colonnes : '));
+    var code = document.createElement('code');
+    code.textContent = colonnes;
+    v.appendChild(code);
+    v.appendChild(texte(' — il apparaîtra ici tout seul.'));
+    d.appendChild(v);
+    return d;
+  }
+
+  function stat(valeur, titre) {
+    var c = document.createElement('div'); c.className = 'ad-carte';
+    var n = document.createElement('div'); n.className = 'ad-stat-n'; n.textContent = valeur;
+    var t = document.createElement('div'); t.className = 'ad-stat-t'; t.textContent = titre;
+    c.appendChild(n); c.appendChild(t);
+    return c;
+  }
+
+  /* ── Chiffre d'affaires ────────────────────────────────────────── */
+
+  function sectionCa(d) {
+    var hote = $('ad-ca');
+    hote.textContent = '';
+    if (d.ongletsManquants.indexOf('Ventes') >= 0) {
+      hote.appendChild(ongletAbsent('Ventes', 'facture, date, client, prestation, montant_ht, statut'));
+      return;
+    }
+    var ca = d.ca;
+    var g = document.createElement('div'); g.className = 'ad-stats';
+    g.appendChild(stat(euro.format(ca.encaisse), 'CA encaissé'));
+    g.appendChild(stat(euro.format(ca.duMois), 'CA du mois'));
+    g.appendChild(stat(euro.format(ca.enAttente), 'En attente de paiement'));
+    g.appendChild(stat(String(ca.nombre), ca.nombre > 1 ? 'Ventes' : 'Vente'));
+    hote.appendChild(g);
+
+    if (!ca.parMois.length) {
+      var c = document.createElement('div');
+      c.className = 'ad-carte'; c.style.marginTop = '12px';
+      c.appendChild(vide('Aucune vente payée pour l’instant.',
+        'Le graphique apparaîtra dès la première facture réglée.'));
+      hote.appendChild(c);
+      return;
+    }
+
+    var carte = document.createElement('div');
+    carte.className = 'ad-carte'; carte.style.marginTop = '12px';
+    var titre = document.createElement('div');
+    titre.className = 'ad-jauge-titre'; titre.textContent = 'CA par mois';
+    carte.appendChild(titre);
+
+    var graphe = document.createElement('div'); graphe.className = 'ad-graphe';
+    var max = ca.parMois.reduce(function (m, p) { return Math.max(m, p.total); }, 0) || 1;
+    /* Douze mois au plus : au-dela, les colonnes deviennent des traits. */
+    ca.parMois.slice(-12).forEach(function (p) {
+      var col = document.createElement('div'); col.className = 'ad-col';
+      var v = document.createElement('div');
+      v.className = 'ad-col-v'; v.textContent = euro.format(p.total);
+      var b = document.createElement('div');
+      b.className = 'ad-col-b';
+      b.style.height = Math.max((p.total / max) * 100, 2) + '%';
+      b.title = p.mois + ' : ' + euro.format(p.total);
+      var e = document.createElement('div');
+      e.className = 'ad-col-e'; e.textContent = etiquetteMois(p.mois);
+      col.appendChild(v); col.appendChild(b); col.appendChild(e);
+      graphe.appendChild(col);
+    });
+    carte.appendChild(graphe);
+    hote.appendChild(carte);
+  }
+
+  var MOIS = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin',
+    'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
+  function etiquetteMois(m) {
+    var p = m.split('-');
+    var i = parseInt(p[1], 10) - 1;
+    return (MOIS[i] || p[1]) + ' ' + p[0].slice(2);
+  }
+
+  /* ── Projets ───────────────────────────────────────────────────── */
+
+  function sectionProjets(d) {
+    var hote = $('ad-projets');
+    hote.textContent = '';
+    if (d.ongletsManquants.indexOf('Projets') >= 0) {
+      hote.appendChild(ongletAbsent('Projets', 'client, projet, statut, assigne, echeance, montant_ht'));
+      return;
+    }
+    var p = d.projets;
+    var g = document.createElement('div'); g.className = 'ad-stats';
+    g.appendChild(stat(String(p.enCours), 'Projets en cours'));
+    g.appendChild(stat(String(p.livres), 'Sites livrés'));
+    g.appendChild(stat(euro.format(p.montantEnCours), 'Montant en cours'));
+    hote.appendChild(g);
+
+    var carte = document.createElement('div');
+    carte.className = 'ad-carte';
+    carte.style.cssText = 'margin-top:12px;padding:0;overflow:hidden';
+
+    if (!p.lignes.length) {
+      carte.appendChild(vide('Aucun projet pour l’instant.'));
+      hote.appendChild(carte);
+      return;
+    }
+
+    var cadre = document.createElement('div'); cadre.className = 'ad-defile';
+    var table = document.createElement('table'); table.className = 'ad-table';
+    var thead = document.createElement('thead');
+    var trh = document.createElement('tr');
+    ['Client', 'Projet', 'Statut', 'Assigné', 'Échéance', 'Montant HT'].forEach(function (t, i) {
+      var th = document.createElement('th');
+      th.textContent = t;
+      if (i === 5) th.className = 'ad-num';
+      trh.appendChild(th);
+    });
+    thead.appendChild(trh); table.appendChild(thead);
+
+    var tb = document.createElement('tbody');
+    p.lignes.forEach(function (l) {
+      var tr = document.createElement('tr');
+      tr.appendChild(cellule(l['CLIENT'], 'ad-entreprise'));
+      tr.appendChild(cellule(l['PROJET']));
+      var tdS = document.createElement('td');
+      var pz = document.createElement('span');
+      pz.className = 'ad-pz';
+      pz.setAttribute('data-c', /LIVR|TERMIN|FINI|EN LIGNE/.test(
+        (l['STATUT'] || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase(),
+      ) ? 'signe' : 'en-cours');
+      pz.textContent = l['STATUT'] || '—';
+      tdS.appendChild(pz); tr.appendChild(tdS);
+      tr.appendChild(cellule(l['ASSIGNE']));
+      tr.appendChild(cellule(l['ECHEANCE'] || '—'));
+      tr.appendChild(cellule(l['MONTANT_HT'] ? euro.format(Number(
+        String(l['MONTANT_HT']).replace(/[\s  €]/g, '').replace(',', '.'),
+      ) || 0) : '—', 'ad-num'));
+      tb.appendChild(tr);
+    });
+    table.appendChild(tb);
+    cadre.appendChild(table); carte.appendChild(cadre);
+    hote.appendChild(carte);
+  }
+
+  /* ── Chargement ────────────────────────────────────────────────── */
+
+  var enCours = false;
+
+  function peindre(d) {
+    $('ad-resume').textContent = d.resume;
+    jauges(d.jauges);
+    repartition(d.repartition);
+    associes(d.associes);
+
+    pipeline = d.pipeline; colonnes = d.colonnes;
+    entetesPipeline(); corpsPipeline();
+
+    sectionCa(d); sectionProjets(d);
+    $('ad-corps').hidden = false;
+    $('ad-erreur').textContent = '';
+  }
+
+  function erreur(message) {
+    var hote = $('ad-erreur');
+    hote.textContent = '';
+    var d = document.createElement('div');
+    d.className = 'ad-alerte';
+    d.textContent = message;
+    hote.appendChild(d);
+  }
+
+  function charger(forcer) {
+    if (enCours) return;
+    enCours = true;
+    var maj = $('ad-maj');
+    maj.setAttribute('data-etat', 'charge');
+    maj.textContent = 'Actualisation…';
+    $('ad-refresh').disabled = true;
+
+    fetch('/api/admin/data' + (forcer ? '?forcer=1' : ''), {
+      credentials: 'same-origin',
+      headers: { accept: 'application/json' },
+    }).then(function (r) {
+      /* La session a expire pendant que l'onglet etait ouvert : la
+         garde repond 401, et on repart par la porte d'entree. */
+      if (r.status === 401) { window.location.href = '/admin/login'; return null; }
+      if (r.status === 403) { window.location.reload(); return null; }
+      return r.json().then(function (corps) {
+        if (!r.ok) throw new Error(corps && corps.erreur ? corps.erreur : 'Lecture impossible.');
+        return corps;
+      });
+    }).then(function (d) {
+      if (!d) return;
+      peindre(d);
+      maj.removeAttribute('data-etat');
+      maj.textContent = 'Mis à jour à ' + heure.format(new Date());
+    }).catch(function (e) {
+      erreur(e && e.message ? e.message : 'Lecture impossible.');
+      maj.setAttribute('data-etat', 'erreur');
+      maj.textContent = 'Échec de l’actualisation';
+    }).then(function () {
+      enCours = false;
+      $('ad-refresh').disabled = false;
+    });
+  }
+
+  $('ad-refresh').addEventListener('click', function () { charger(true); });
+  $('ad-q').addEventListener('input', function () { corpsPipeline(); });
+
+  charger(false);
+
+  /* Rafraichissement automatique. Il se met en veille quand l'onglet
+     passe en arriere-plan : rien ne sert d'interroger l'API pour une
+     page que personne ne regarde. */
+  setInterval(function () {
+    if (!document.hidden) charger(false);
+  }, 60000);
+  document.addEventListener('visibilitychange', function () {
+    if (!document.hidden) charger(false);
+  });
+})();
+</script>

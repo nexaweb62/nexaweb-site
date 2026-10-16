@@ -31,3 +31,9 @@ Thumbs.db
 # Captures de contrôle : on les regarde, on ne les versionne pas
 apercu/
 .probe-*.mjs
+
+# Variables locales de wrangler (secrets de dev)
+.dev.vars
+
+# Cache local de wrangler
+.wrangler/

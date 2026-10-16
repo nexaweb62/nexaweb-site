@@ -1,0 +1,292 @@
+/* ══════════════════════════════════════════════════════════════════════
+   LE TABLEAU DE BORD INTERNE
+
+   Aucune couleur ecrite : tout vient des jetons de tokens.css, qui gere
+   deja le clair, le sombre et le mode systeme. Les statuts reutilisent
+   la signaletique existante — et comme « aucun vert » est une regle
+   absolue sur ce site, le succes prend l'or, pas un vert de formulaire.
+
+   Pensee pour le telephone d'abord : les tableaux defilent
+   horizontalement dans leur propre cadre plutot que de deborder la page,
+   et les grilles tombent a une colonne.
+   ══════════════════════════════════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── La barre ────────────────────────────────────────────────────── */
+
+.ad-bar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 10px clamp(12px, 3vw, 28px);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.ad-marque {
+  display: inline-flex; align-items: center; gap: 10px;
+  color: var(--text); text-decoration: none;
+  font-weight: 600; letter-spacing: -.01em;
+}
+.ad-marque b { color: var(--text-subtle); font-weight: 500; }
+
+.ad-pastille {
+  display: grid; place-items: center;
+  width: 26px; height: 26px; border-radius: 8px;
+  background: var(--accent); color: var(--accent-text);
+  font-weight: 700; font-size: 14px;
+}
+
+.ad-bar-droite { display: flex; align-items: center; gap: 10px; }
+
+.ad-qui {
+  color: var(--text-muted); font-size: 13px;
+  max-width: 34vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+.ad-theme {
+  width: 32px; height: 32px; display: grid; place-items: center;
+  border: 1px solid var(--border); border-radius: 9px;
+  background: var(--surface-2); color: var(--text-muted);
+  font-size: 15px; cursor: pointer;
+}
+.ad-theme:hover { color: var(--text); border-color: var(--border-strong); }
+.ad-theme svg { width: 16px; height: 16px; display: block; }
+
+/* ── Boutons ─────────────────────────────────────────────────────── */
+
+.ad-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 16px; border-radius: 10px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-2); color: var(--text);
+  font: 600 14px/1 var(--font); cursor: pointer;
+  transition: border-color .18s, background .18s;
+}
+.ad-btn:hover { border-color: var(--accent); }
+.ad-btn:disabled { opacity: .5; cursor: progress; }
+.ad-btn-fin { padding: 7px 12px; font-size: 13px; font-weight: 500; }
+
+.ad-btn-or {
+  background: var(--accent); color: var(--accent-text);
+  border-color: var(--accent);
+}
+.ad-btn-or:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+
+/* ── Structure ───────────────────────────────────────────────────── */
+
+.ad-main { padding: clamp(16px, 3vw, 32px); max-width: 1320px; margin: 0 auto; }
+
+.ad-tete {
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  justify-content: space-between; gap: 12px; margin-bottom: 6px;
+}
+.ad-h1 { font-size: clamp(1.3rem, 3vw, 1.75rem); font-weight: 600; letter-spacing: -.02em; margin: 0; }
+
+.ad-resume {
+  margin: 0 0 22px; color: var(--text-muted);
+  font-size: clamp(.95rem, 2vw, 1.05rem);
+}
+.ad-resume b { color: var(--text); font-weight: 600; }
+
+.ad-maj { color: var(--text-subtle); font-size: 12.5px; }
+.ad-maj[data-etat="charge"] { color: var(--accent); }
+.ad-maj[data-etat="erreur"] { color: var(--danger); }
+
+.ad-section { margin-top: 34px; }
+.ad-h2 {
+  font-size: 1rem; font-weight: 600; letter-spacing: -.01em;
+  margin: 0 0 14px; display: flex; align-items: center; gap: 10px;
+}
+.ad-h2::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+
+.ad-carte {
+  background: var(--cardbg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+/* ── Les quatre jauges ───────────────────────────────────────────── */
+
+.ad-jauges {
+  display: grid; gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+}
+
+.ad-jauge-titre {
+  color: var(--text-muted); font-size: 12.5px;
+  text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px;
+}
+.ad-jauge-val {
+  display: flex; align-items: baseline; gap: 6px; margin-bottom: 12px;
+}
+.ad-jauge-n { font-size: 2rem; font-weight: 600; letter-spacing: -.03em; line-height: 1; }
+.ad-jauge-obj { color: var(--text-subtle); font-size: 13px; }
+
+.ad-piste {
+  height: 7px; border-radius: 99px; overflow: hidden;
+  background: var(--surface-2);
+}
+.ad-remplie {
+  height: 100%; border-radius: 99px; background: var(--accent);
+  transition: width .5s var(--ease-out, cubic-bezier(.16, 1, .3, 1));
+}
+.ad-remplie[data-plein="1"] { background: var(--gold); }
+
+/* ── Barres de repartition ───────────────────────────────────────── */
+
+.ad-rep { display: grid; gap: 9px; }
+.ad-rep-l {
+  display: grid; grid-template-columns: minmax(96px, 128px) 1fr auto;
+  align-items: center; gap: 10px;
+}
+.ad-rep-nom { color: var(--text-muted); font-size: 13px; }
+.ad-rep-n { font-variant-numeric: tabular-nums; font-weight: 600; font-size: 13px; }
+.ad-rep-piste { height: 9px; border-radius: 99px; background: var(--surface-2); overflow: hidden; }
+.ad-rep-barre { height: 100%; border-radius: 99px; background: var(--accent); }
+
+/* ── Tableaux ────────────────────────────────────────────────────── */
+
+/* Le cadre defile, pas la page : sur un telephone, un tableau de huit
+   colonnes ferait sinon deborder tout le document vers la droite. */
+.ad-defile { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+.ad-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.ad-table th, .ad-table td {
+  text-align: left; padding: 9px 12px;
+  border-bottom: 1px solid var(--border); white-space: nowrap;
+}
+.ad-table th {
+  color: var(--text-muted); font-weight: 600; font-size: 12px;
+  text-transform: uppercase; letter-spacing: .05em;
+  position: sticky; top: 0; background: var(--cardbg);
+}
+.ad-table th[data-tri] { cursor: pointer; user-select: none; }
+.ad-table th[data-tri]:hover { color: var(--text); }
+.ad-table th[aria-sort] { color: var(--accent); }
+.ad-table tbody tr:hover { background: var(--surface-2); }
+.ad-table tbody tr:last-child td { border-bottom: 0; }
+.ad-table .ad-num { text-align: right; font-variant-numeric: tabular-nums; }
+.ad-entreprise { font-weight: 600; color: var(--text); }
+
+/* ── Pastilles de statut ─────────────────────────────────────────── */
+
+.ad-pz {
+  display: inline-block; padding: 3px 9px; border-radius: 99px;
+  font-size: 12px; font-weight: 600; white-space: nowrap;
+  border: 1px solid currentColor;
+}
+.ad-pz[data-c="a-appeler"] { color: var(--text-subtle); }
+.ad-pz[data-c="en-cours"]  { color: var(--warning); }
+.ad-pz[data-c="rdv"]       { color: var(--accent); }
+/* Le succes prend l'or : la regle « aucun vert » vaut partout. */
+.ad-pz[data-c="signe"]     { color: var(--gold); }
+.ad-pz[data-c="perdu"]     { color: var(--danger); }
+
+/* ── Recherche ───────────────────────────────────────────────────── */
+
+.ad-outils { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 12px; }
+
+.ad-champ {
+  flex: 1 1 220px; min-width: 0;
+  padding: 9px 13px; border-radius: 10px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-2); color: var(--text);
+  font: 400 14px/1.3 var(--font);
+}
+.ad-champ::placeholder { color: var(--placeholder); }
+.ad-champ:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+.ad-compte { color: var(--text-subtle); font-size: 13px; }
+
+/* ── Statistiques simples ────────────────────────────────────────── */
+
+.ad-stats {
+  display: grid; gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+}
+.ad-stat-n {
+  font-size: 1.6rem; font-weight: 600; letter-spacing: -.03em;
+  font-variant-numeric: tabular-nums; line-height: 1.1;
+}
+.ad-stat-t {
+  color: var(--text-muted); font-size: 12.5px;
+  text-transform: uppercase; letter-spacing: .06em; margin-top: 6px;
+}
+
+/* ── Graphique du CA ─────────────────────────────────────────────── */
+
+/* « justify-content: center » et une largeur plafonnee : avec deux mois
+   seulement, des colonnes en « flex:1 » devenaient deux paves de six
+   cents pixels. Une barre reste une barre, quel que soit le nombre. */
+.ad-graphe { display: flex; align-items: flex-end; justify-content: center;
+  gap: clamp(8px, 2vw, 20px); height: 170px; padding-top: 10px; }
+.ad-col { flex: 1 1 0; min-width: 22px; max-width: 110px;
+  display: flex; flex-direction: column; justify-content: flex-end; height: 100%; }
+.ad-col-b {
+  border-radius: 7px 7px 2px 2px; background: var(--accent);
+  min-height: 3px; transition: height .5s cubic-bezier(.16, 1, .3, 1);
+}
+.ad-col-e { color: var(--text-subtle); font-size: 11px; text-align: center; margin-top: 7px; }
+.ad-col-v { color: var(--text-muted); font-size: 11px; text-align: center; margin-bottom: 5px; font-variant-numeric: tabular-nums; }
+
+/* ── Etats vides et erreurs ──────────────────────────────────────── */
+
+.ad-vide {
+  padding: 26px 18px; text-align: center;
+  color: var(--text-muted); font-size: 14px;
+}
+.ad-vide b { display: block; color: var(--text); font-weight: 600; margin-bottom: 5px; }
+.ad-vide code {
+  font-size: 12.5px; padding: 2px 6px; border-radius: 5px;
+  background: var(--surface-2); color: var(--text);
+}
+
+.ad-alerte {
+  border: 1px solid var(--danger); border-radius: 12px;
+  padding: 13px 16px; margin-bottom: 18px;
+  color: var(--danger); font-size: 14px;
+}
+
+/* ── Connexion ───────────────────────────────────────────────────── */
+
+.ad-login { min-height: 76dvh; display: grid; place-items: center; }
+.ad-login-c {
+  width: min(100%, 380px); text-align: center;
+  padding: clamp(24px, 5vw, 36px);
+  background: var(--cardbg); border: 1px solid var(--border); border-radius: 18px;
+}
+.ad-login-h { font-size: 1.25rem; font-weight: 600; margin: 16px 0 6px; letter-spacing: -.02em; }
+.ad-login-p { color: var(--text-muted); font-size: 14px; margin: 0 0 22px; }
+.ad-login .ad-pastille { width: 42px; height: 42px; border-radius: 13px; font-size: 21px; margin: 0 auto; }
+
+.ad-google {
+  width: 100%; justify-content: center;
+  padding: 11px 16px; font-size: 14.5px;
+}
+.ad-google svg { width: 18px; height: 18px; flex: 0 0 auto; }
+
+/* ── Mouvement ───────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .ad-remplie, .ad-col-b { transition: none; }
+}
+
+@media (max-width: 560px) {
+  .ad-qui { display: none; }
+  .ad-table th, .ad-table td { padding: 8px 10px; }
+}

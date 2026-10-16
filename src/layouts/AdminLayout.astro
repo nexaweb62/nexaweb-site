@@ -1,0 +1,101 @@
+---
+/**
+ * LA COQUILLE DU TABLEAU DE BORD.
+ *
+ * Volontairement SEPAREE de BaseLayout. Le gabarit public charge l'ecran
+ * d'intro, la riviere d'or, le moteur de traduction, le bandeau cookies,
+ * le selecteur de langue, les boutons metalliques — tout cela existe
+ * pour convaincre un visiteur. Un outil de travail interne n'a rien a
+ * convaincre : il doit s'ouvrir vite et afficher des chiffres.
+ *
+ * Il reprend en revanche la CHARTE : les memes jetons, la meme pile de
+ * polices, les memes rayons. Le tableau de bord ressemble au site parce
+ * qu'il lit le meme fichier, pas parce qu'on a recopie des valeurs.
+ */
+import '../styles/tokens.css';
+import '../styles/admin.css';
+
+interface Props {
+  titre: string;
+  /** L'e-mail connecte. Absent sur la page de connexion. */
+  email?: string;
+}
+const { titre, email } = Astro.props;
+---
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Jamais indexe. L'en-tete X-Robots-Tag pose par la garde dit la
+       meme chose : celui-ci protege la page si elle est enregistree
+       puis rouverte depuis un fichier local. -->
+  <meta name="robots" content="noindex, nofollow, noarchive, noimageindex" />
+  <meta name="referrer" content="same-origin" />
+
+  <title>{titre} · Nexa Web</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+  <!-- Meme amorce de theme que le site public, et meme cle de stockage :
+       l'associe qui met le site en clair retrouve l'admin en clair. -->
+  <script is:inline>
+    (function () {
+      try {
+        var t = localStorage.getItem('nw-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) { /* navigation privee */ }
+    })();
+  </script>
+</head>
+<body>
+  <header class="ad-bar">
+    <a class="ad-marque" href="/admin">
+      <span class="ad-pastille" aria-hidden="true">N</span>
+      <span>Nexa Web <b>· interne</b></span>
+    </a>
+
+    <div class="ad-bar-droite">
+      <!-- Un demi-disque DESSINE, pas le caractere « ◐ » : la pile de
+           polices systeme ne le contient pas partout, et il tombait sur
+           un glyphe de remplacement — un trait vertical, vu a l'ecran.
+           Un SVG est le meme dessin sur toutes les machines. -->
+      <button type="button" class="ad-theme" id="ad-theme" aria-label="Changer de thème">
+        <svg viewBox="0 0 16 16" aria-hidden="true">
+          <circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M8 1.5a6.5 6.5 0 0 0 0 13z" fill="currentColor"/>
+        </svg>
+      </button>
+      {email && (
+        <>
+          <span class="ad-qui" title={email}>{email}</span>
+          <form method="POST" action="/admin/logout">
+            <button type="submit" class="ad-btn ad-btn-fin">Déconnexion</button>
+          </form>
+        </>
+      )}
+    </div>
+  </header>
+
+  <main class="ad-main">
+    <slot />
+  </main>
+
+  <script is:inline>
+    /* Trois etats comme sur le site : systeme, clair, sombre. */
+    (function () {
+      var b = document.getElementById('ad-theme');
+      if (!b) return;
+      b.addEventListener('click', function () {
+        var r = document.documentElement;
+        var a = r.getAttribute('data-theme');
+        var suivant = a === 'dark' ? 'light' : a === 'light' ? null : 'dark';
+        try {
+          if (suivant) { r.setAttribute('data-theme', suivant); localStorage.setItem('nw-theme', suivant); }
+          else { r.removeAttribute('data-theme'); localStorage.removeItem('nw-theme'); }
+        } catch (e) { /* stockage bloque : le theme ne survivra pas au rechargement */ }
+      });
+    })();
+  </script>
+</body>
+</html>

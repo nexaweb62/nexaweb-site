@@ -1,4 +1,4 @@
-# ─── Cloudflare Workers (Static Assets) — Nexa Web ───────────────────────────
+# ─── Cloudflare Workers (Static Assets + SSR) — Nexa Web ─────────────────────
 # ⚠ Ce projet est un WORKER, pas un projet Pages. Le tableau de bord le déploie
 # avec « npx wrangler deploy », et cette commande refuse un fichier contenant
 # « pages_build_output_dir » : elle renvoie vers « wrangler pages deploy ».
@@ -10,6 +10,31 @@
 name = "nexaweb-site"
 compatibility_date = "2024-09-23"
 
+# ─── CE QUI A CHANGÉ, ET POURQUOI ────────────────────────────────────────────
+# Le site reste statique : les 23 pages publiques sont prérendues au build et
+# servies comme des fichiers, sans passer par le Worker. Seules /admin et son
+# API portent « prerender = false » — elles vérifient une session à chaque
+# requête et détiennent la clé d'un compte de service Google, deux choses
+# qu'un fichier statique ne peut pas faire.
+#
+# « main » : le script produit par @astrojs/cloudflare. Sans lui, aucun code
+# ne tourne et /admin renverrait un 404 d'asset.
+
+# « nodejs_compat » : exigé par l'adaptateur Astro. La date de compatibilité
+# ci-dessus (≥ 2024-09-23) active la v2 du mode, celle qui convient.
+compatibility_flags = ["nodejs_compat"]
+
 [assets]
 directory = "dist"
-not_found_handling = "404-page"
+
+# « binding » : donne au Worker un accès explicite aux fichiers statiques.
+# C'est par lui que l'adaptateur sert tout ce qui n'est pas une route SSR.
+binding = "ASSETS"
+
+# « not_found_handling » n'est PLUS posé ici, et ce n'est pas un oubli.
+# Il valait « 404-page ». Avec un Worker, ce réglage décide si une requête
+# sans fichier correspondant reçoit directement dist/404.html — auquel cas
+# /admin, qui n'a aucun fichier, n'atteindrait jamais le code et le tableau
+# de bord serait injoignable. Le Worker gère donc lui-même les routes
+# inconnues : Astro rend 404.astro, le même fichier qu'avant.
+# Vérifié dans le runtime workerd local avant d'être écrit ici, pas supposé.

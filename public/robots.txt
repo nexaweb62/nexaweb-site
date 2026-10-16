@@ -1,4 +1,17 @@
 User-agent: *
 Allow: /
 
+# Le tableau de bord interne. Il est de toute facon inaccessible sans un
+# compte Google de la liste blanche — la verification est faite au serveur,
+# a chaque requete, page comme API.
+#
+# Ce « Disallow » ne protege donc rien : il evite seulement qu'une page
+# d'erreur ou de connexion se retrouve dans un index. Il a meme un cout,
+# qu'il faut connaitre : ce fichier est public, et y ecrire un chemin
+# revient a l'annoncer. C'est acceptable parce que la serrure n'est pas
+# l'obscurite du chemin. Les reponses portent en plus un en-tete
+# X-Robots-Tag: noindex, qui lui s'applique meme a qui ignore ce fichier.
+Disallow: /admin
+Disallow: /api/admin
+
 Sitemap: https://nexaaweb.com/sitemap.xml
