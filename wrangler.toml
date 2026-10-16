@@ -25,7 +25,24 @@ compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat"]
 
 [assets]
-directory = "dist"
+# « dist/client » et non « dist ».
+#
+# LA COMMANDE DE DEPLOIEMENT NE CHANGE PAS, et ce n'est pas une
+# supposition : « npm run build » ecrit .wrangler/deploy/config.json,
+# un fichier de REDIRECTION que wrangler lit de lui-meme. Un
+# « npx wrangler deploy » nu annonce alors :
+#     Configuration being used: "dist/server/wrangler.json"
+# et deploie le Worker avec ses 143 fichiers statiques. Verifie apres
+# avoir efface .wrangler et dist, donc dans les conditions d'un
+# checkout propre.
+#
+# Ce fichier-ci reste l'ENTREE que l'adaptateur lit au build — nom,
+# date et drapeaux de compatibilite — et le filet si la redirection
+# manque, par exemple un deploiement lance sans build prealable. Avec
+# « dist », ce filet publierait un dossier ne contenant que deux
+# sous-dossiers et casserait la vitrine. Avec « dist/client », il
+# publie le site public CORRECT ; seul /admin manquerait.
+directory = "dist/client"
 
 # « binding » : donne au Worker un accès explicite aux fichiers statiques.
 # C'est par lui que l'adaptateur sert tout ce qui n'est pas une route SSR.

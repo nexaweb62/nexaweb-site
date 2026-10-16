@@ -1,8 +1,9 @@
 # Tableau de bord interne — mise en service
 
-Le code est en place. Il reste **sept étapes manuelles**, toutes de ton côté :
-trois dans la console Google Cloud, une dans la feuille, deux chez Cloudflare,
-et une vérification finale.
+Le code est en place. Il reste **six étapes manuelles**, toutes de ton côté :
+trois dans la console Google Cloud, une dans la feuille, une chez Cloudflare,
+et une vérification finale. La commande de déploiement, elle, ne change pas
+— voir le point 7.
 
 Tant qu'elles ne sont pas faites, `/admin` répond **403** et n'ouvre rien.
 C'est voulu : une configuration absente ferme la porte, elle ne la laisse pas
@@ -107,9 +108,10 @@ l'accès immédiatement, sans attendre l'expiration du cookie. Changer
 
 ---
 
-## 7. La commande de déploiement
+## 7. La commande de déploiement — rien à changer
 
-C'est le **seul point qui touche à l'existant**, et il faut le vérifier.
+**Je t'ai d'abord dit le contraire. C'était faux, et voici la mesure qui
+le montre.**
 
 Le build produit maintenant deux dossiers au lieu d'un :
 
@@ -118,22 +120,24 @@ dist/client/   les 23 pages publiques, prérendues comme avant
 dist/server/   le Worker, pour /admin et son API seulement
 ```
 
-L'adaptateur écrit lui-même la configuration résolue dans
-`dist/server/wrangler.json`. La commande de déploiement doit la désigner :
+J'en avais conclu qu'il fallait remplacer la commande de déploiement par
+`npx wrangler deploy -c dist/server/wrangler.json`. Vérification faite,
+c'est inutile : `npm run build` écrit `.wrangler/deploy/config.json`, un
+fichier de **redirection** que wrangler lit tout seul. Un `npx wrangler
+deploy` nu annonce alors :
 
 ```
-npx wrangler deploy -c dist/server/wrangler.json
+Using redirected Wrangler configuration.
+ - Configuration being used: "dist/server/wrangler.json"
+ - Original user's configuration: "wrangler.toml"
 ```
 
-Va voir dans le tableau de bord Cloudflare (**Workers → nexaweb-site →
-Settings → Build**) quelle commande de déploiement y est configurée. Si c'est
-`npx wrangler deploy` tout court, **remplace-la par la ligne ci-dessus**. Sans
-ce changement, le déploiement ne trouvera pas le Worker et `/admin` restera
-introuvable.
+et déploie le Worker avec ses 143 fichiers statiques. Testé après avoir
+effacé `.wrangler/` **et** `dist/`, donc dans les conditions d'un
+checkout propre comme celui de Cloudflare.
 
-La commande de build (`npm run build`) ne change pas.
-
----
+**Tu n'as donc rien à toucher dans le tableau de bord Cloudflare.** Ni la
+commande de build (`npm run build`), ni celle de déploiement.
 
 ## 8. Vérifier
 
