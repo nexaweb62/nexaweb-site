@@ -252,11 +252,30 @@ for (const theme of ['dark', 'light']) {
 const ctx = await navigateur.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
 const page = await ctx.newPage();
 
+/* LA BARRE FINALE N'EST PAS UNE DESTINATION DIFFERENTE.
+
+   Cloudflare Workers Assets normalise « /contact » en « /contact/ » par
+   une redirection 307, et c'est ainsi DEPUIS TOUJOURS en production :
+   mesure faite en lancant cote a cote l'ancienne configuration (assets
+   seuls) et la nouvelle (Worker + assets), sur 30 URL — statut,
+   redirection, type, cache et taille identiques a l'octet pres.
+
+   Ce qui a change, c'est le banc d'essai : « astro preview » passe
+   desormais par l'adaptateur, donc par le meme runtime que la
+   production, au lieu du serveur Node d'Astro qui, lui, ne redirigeait
+   pas. Ce controle comparait donc a une orthographe que la production
+   n'a jamais servie — il mesurait le banc, pas le site.
+
+   On compare desormais la page ATTEINTE, barre finale mise de cote.
+   Le bouton continue d'etre juge sur ce qu'il doit faire : ramener a la
+   page precedente de ce site, et a l'accueil quand il n'y en a pas. */
+const memePage = (a, b) => a.replace(/\/+$/, '') === b.replace(/\/+$/, '');
+
 await page.goto(BASE + '/tarifs', { waitUntil: 'domcontentloaded' });
 await page.click('#hdr-back').catch(() => {});
 await page.waitForTimeout(900);
 let ou = new URL(page.url()).pathname;
-if (ou !== '/') echecs.push(`arrivée directe : le Retour mène à ${ou}, attendu /`);
+if (!memePage(ou, '/')) echecs.push(`arrivée directe : le Retour mène à ${ou}, attendu /`);
 
 /* On repart d'un onglet vierge, puis on visite deux pages du site.
    On navigue par goto et non par clic : à 390 px les liens de l'en-tête
@@ -273,7 +292,7 @@ await page.waitForTimeout(300);
 await page.click('#hdr-back').catch(() => {});
 await page.waitForTimeout(900);
 ou = new URL(page.url()).pathname;
-if (ou !== '/contact') echecs.push(`parcours interne : le Retour mène à ${ou}, attendu /contact`);
+if (!memePage(ou, '/contact')) echecs.push(`parcours interne : le Retour mène à ${ou}, attendu /contact`);
 
 /* Le menu plein écran pilote bien la langue. Le thème n'y est plus. */
 await page.goto(BASE + '/tarifs', { waitUntil: 'domcontentloaded' });
