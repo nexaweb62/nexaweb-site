@@ -7,6 +7,22 @@ import '../styles/global.css';
 import GarantieBadge from '../components/GarantieBadge.astro';
 import Timeline from '../components/Timeline.astro';
 import { FORMULES, VITRINE_PRIX } from '../data/formules';
+import { lireEnv } from '../lib/admin/env';
+
+/* ── CETTE PAGE N'EST PLUS PRERENDUE, ET C'EST POUR UNE SEULE RAISON ──
+   La cle PUBLIQUE de Turnstile doit arriver dans le HTML. La lire au
+   build imposerait de la configurer a un deuxieme endroit — les
+   variables de build de Cloudflare — alors que tout le reste du
+   formulaire vit dans les secrets du Worker. Une configuration a deux
+   endroits est une configuration qu'on oublie a moitie.
+   Le cout est une invocation du Worker par affichage de /devis, sur une
+   page qui mene de toute facon a un appel serveur. */
+export const prerender = false;
+
+const env = await lireEnv() as Record<string, string | undefined>;
+/* Publique par nature : elle s'affiche dans le HTML, c'est son role.
+   Le SECRET, lui, ne quitte jamais le serveur. */
+const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
 ---
 <BaseLayout title="Devis gratuit — Nexa Web" description="Décrivez votre projet web et recevez un devis gratuit sous 24 h. Site vitrine, e-commerce, refonte — Nexa Web, Carvin, Hauts-de-France.">
 <style>
@@ -259,6 +275,10 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
 .form-banner svg{flex-shrink:0;margin-top:1px}
 
 /* ── SUCCESS ── */
+/* Turnstile. La rangée reste masquée tant que le widget n'est pas
+   chargé : un cadre vide au milieu du formulaire inquiéterait. */
+.tst-rangee{margin-top:26px;display:flex;flex-direction:column;gap:8px}
+.tst-rangee[hidden]{display:none}
 .success-overlay{display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;padding:40px;min-height:360px}
 .success-overlay.show{display:flex}
 .devis-form.hide{display:none}
@@ -299,13 +319,17 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
         <div class="success-icon">
           <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
-        <h2 class="success-title" data-i18n="dv-ok-t">Devis envoyé !</h2>
-        <p class="success-text" data-i18n="dv-ok-s">Merci pour votre demande. Nous vous recontacterons sous <strong>24 heures ouvrées</strong> avec une proposition personnalisée.</p>
+        <!-- LE MESSAGE A CHANGE AVEC LE CIRCUIT. Dire « envoyé » serait
+             faux : rien ne nous parvient avant le clic de confirmation.
+             Une personne qui croit sa demande transmise attendrait une
+             réponse qui ne viendrait jamais. -->
+        <h2 class="success-title" data-i18n="dv-ok-t">Vérifiez votre boîte mail</h2>
+        <p class="success-text" data-i18n="dv-ok-s">Nous venons de vous envoyer un e-mail. <strong>Cliquez sur le lien qu'il contient</strong> pour confirmer votre demande — c'est seulement à ce moment qu'elle nous parvient. Pensez à regarder vos indésirables. Le lien est valable 24 heures.</p>
         <InteractiveButton text="Retour à l'accueil" class="success-back" id="success-back-btn" data-i18n="dv-ok-btn" />
       </div>
 
       <!-- FORM -->
-      <form class="devis-form" id="devis-form" novalidate>
+      <form class="devis-form" id="devis-form" novalidate data-turnstile={cleTurnstile}>
 
         <!-- Honeypot -->
         <div style="position:absolute;left:-9999px;opacity:0;pointer-events:none" aria-hidden="true">
@@ -354,11 +378,24 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
             </div>
             <div class="field">
               <label for="tel"><span data-i18n="tel">Téléphone</span></label>
-              <input type="tel" id="tel" name="tel" placeholder="+33 6 00 00 00 00" data-i18n-ph="dv-ph-tel" autocomplete="tel">
+              <input type="tel" id="tel" name="tel" placeholder="06 12 34 56 78" data-i18n-ph="dv-ph-tel" autocomplete="tel">
+              <span class="field-err" id="err-tel"></span>
             </div>
-            <div class="field field-full">
+            <div class="field">
               <label for="entreprise"><span data-i18n="entreprise">Entreprise / Activité</span></label>
               <input type="text" id="entreprise" name="entreprise" placeholder="Ma Boulangerie, Auto-entrepreneur…" data-i18n-ph="dv-ph-societe" autocomplete="organization">
+            </div>
+            <!-- SIRET : obligatoire pour la formule Entreprise, facultatif
+                 sinon. Le libellé le dit, et le serveur le vérifie auprès
+                 de l'annuaire de l'État — pas seulement ici. -->
+            <div class="field" id="champ-siret">
+              <label for="siret">
+                <span data-i18n="dv-siret">SIRET</span>
+                <span class="lf-opt" id="siret-mention" data-i18n="dv-siret-opt">facultatif</span>
+              </label>
+              <input type="text" id="siret" name="siret" inputmode="numeric" maxlength="17"
+                     placeholder="732 829 320 00074" data-i18n-ph="dv-ph-siret" autocomplete="off">
+              <span class="field-err" id="err-siret"></span>
             </div>
           </div>
         </div>
@@ -444,6 +481,16 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
         </div>
 
         <!-- SUBMIT -->
+        <!-- Turnstile. Le conteneur reste vide si la clé publique n'est
+             pas configurée : le formulaire continue de fonctionner, et
+             c'est le serveur qui décide si l'absence de jeton est
+             acceptable. Rien ne se charge sans consentement préalable :
+             le script vient de Cloudflare, déjà notre hébergeur. -->
+        <div class="tst-rangee" id="tst-rangee" hidden>
+          <div id="tst-widget"></div>
+          <span class="field-err" id="err-turnstile"></span>
+        </div>
+
         <div class="submit-row">
           <!-- « Garantie 14 jours » ne disait ni ce qu'elle couvrait ni
                à compter de quand : le badge le dit, en un clic. Les deux
@@ -576,6 +623,75 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
 (function(){
   const form=document.getElementById('devis-form');
   const overlay=document.getElementById('success-overlay');
+
+  /* ── Telephone francais, cote navigateur ───────────────────────────
+     Meme regle que src/lib/devis/validation.ts, volontairement courte :
+     elle ne sert qu'a repondre tout de suite. Le verdict qui compte
+     est celui du serveur, qui refait le controle en entier. */
+  function telFr(brut){
+    var n=String(brut||'').replace(/[^\d+]/g,'');
+    if(n.indexOf('+33')===0)n='0'+n.slice(3);
+    else if(n.indexOf('0033')===0)n='0'+n.slice(4);
+    return n.replace(/\D/g,'');
+  }
+
+  /* ── SIRET : obligatoire ou non, selon la formule ──────────────────
+     La formule arrive par l'URL (/devis?formule=entreprise) ou par la
+     pastille de budget. La mention a cote du libelle doit suivre, sinon
+     on exige un champ marque « facultatif ». */
+  function majMentionSiret(){
+    var q=new URLSearchParams(location.search);
+    var budgetEl=document.querySelector('input[name="budget"]:checked');
+    var f=q.get('formule')||q.get('plan')||(budgetEl?budgetEl.value:'')||'';
+    var requis=/entreprise|business/i.test(f);
+    var m=document.getElementById('siret-mention');
+    var champ=document.getElementById('siret');
+    if(!m||!champ)return;
+    m.textContent=requis?T('dv-siret-req','requis'):T('dv-siret-opt','facultatif');
+    champ.setAttribute('aria-required',requis?'true':'false');
+  }
+  majMentionSiret();
+  document.querySelectorAll('input[name="budget"]').forEach(function(r){
+    r.addEventListener('change',majMentionSiret);
+  });
+
+  /* ── Turnstile ─────────────────────────────────────────────────────
+     Le script n'est charge QUE si une cle publique est configuree. Sans
+     elle, la rangee reste masquee et le formulaire fonctionne : c'est
+     le serveur qui tranche, pas cette page. */
+  var tstId=null;
+  /* La cle vient du formulaire et non de document.currentScript :
+     Astro regroupe les scripts de module, et « currentScript » y vaut
+     null. Un attribut de donnees survit a tout regroupement. */
+  var CLE_TST=(form&&form.dataset.turnstile)||'';
+  function jetonTurnstile(){
+    var champ=document.querySelector('[name="cf-turnstile-response"]');
+    return champ?champ.value:'';
+  }
+  function rearmerTurnstile(){
+    /* Un jeton Turnstile ne sert qu'une fois. Apres un refus, il faut
+       en redemander un, sinon la tentative suivante echoue toujours. */
+    try{ if(window.turnstile&&tstId!==null)window.turnstile.reset(tstId); }catch(e){}
+  }
+  (function chargerTurnstile(){
+    if(!CLE_TST)return;
+    var rangee=document.getElementById('tst-rangee');
+    var sc=document.createElement('script');
+    sc.src='https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+    sc.async=true;sc.defer=true;
+    sc.onload=function(){
+      try{
+        tstId=window.turnstile.render('#tst-widget',{
+          sitekey:CLE_TST,
+          theme:'auto',
+          language:(document.documentElement.lang==='en'?'en':'fr')
+        });
+        if(rangee)rangee.hidden=false;
+      }catch(e){console.warn('[devis] Turnstile non rendu :',e)}
+    };
+    sc.onerror=function(){console.warn('[devis] Turnstile injoignable')};
+    document.head.appendChild(sc);
+  })();
   const btn=document.getElementById('submit-btn');
   document.getElementById('success-back-btn').addEventListener('click',()=>window.location.href='/');
 
@@ -627,6 +743,15 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
   function hideBanner(){document.getElementById('form-error').classList.remove('show')}
   function setLoading(on){btn.classList.toggle('loading',on);btn.disabled=on}
 
+  /* ── L'ENVOI PASSE DESORMAIS PAR NOTRE SERVEUR ────────────────────
+     Avant, le navigateur ecrivait lui-meme dans Supabase puis appelait
+     la fonction d'envoi. Les deux acceptaient la cle publique du site :
+     n'importe quel robot pouvait donc les appeler directement, sans
+     jamais voir ce formulaire ni ses controles. C'etait la porte par
+     ou arrivaient les fausses demandes.
+     Tout passe maintenant par /api/devis/envoyer, qui verifie, puis
+     n'envoie qu'un lien de confirmation. La notification a Nexa Web
+     n'existe qu'apres le clic sur ce lien. */
   form.addEventListener('submit',async function(e){
     e.preventDefault();clearErrors();
 
@@ -640,18 +765,21 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
     const desc=document.getElementById('description').value.trim();
     const tel=document.getElementById('tel').value.trim();
     const entreprise=document.getElementById('entreprise').value.trim();
+    const siret=document.getElementById('siret').value.replace(/\D/g,'');
     const delai=document.getElementById('delai').value;
     const siteActuel=document.getElementById('site-actuel').value.trim();
     const rgpd=document.getElementById('rgpd-consent').checked;
     const budgetEl=document.querySelector('input[name="budget"]:checked');
     const budget=budgetEl?budgetEl.value:'';
-    /* L'échéancier choisi — ou rapporté de la page Tarifs. Le groupe
-       revient toujours à « En une fois » quand on le déselectionne,
-       mais on garde le repli : sans JavaScript, rien ne garantit
-       qu'une pastille soit cochée. */
     const paieEl=document.querySelector('input[name="paiement"]:checked');
     const paiement=paieEl?paieEl.value:'comptant';
 
+    var q=new URLSearchParams(location.search);
+    var planParam=q.get('formule')||q.get('plan')||budget||'';
+
+    /* Les memes controles qu'avant, pour repondre sans aller-retour.
+       Ils ne REMPLACENT pas ceux du serveur : celui-ci refait tout,
+       parce qu'un controle qui vit dans le navigateur n'en est pas un. */
     let ok=true;
     if(!prenom){setErr('err-prenom',T('dv-err-prenom','Le prénom est requis.'));ok=false}
     if(!nom){setErr('err-nom',T('dv-err-nom','Le nom est requis.'));ok=false}
@@ -660,6 +788,9 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
     if(!type){setErr('err-type',T('dv-err-type','Veuillez sélectionner un type de site.'));ok=false}
     if(!desc){setErr('err-desc',T('dv-err-desc','La description est requise.'));ok=false}
     else if(desc.length<20){setErr('err-desc',T('dv-err-desc-court','Décrivez votre projet en au moins 20 caractères.'));ok=false}
+    if(tel&&!/^0[1-79]\d{8}$/.test(telFr(tel))){setErr('err-tel',T('dv-err-tel','Numéro français à 10 chiffres attendu (01 à 07, ou 09).'));ok=false}
+    if(siret&&siret.length!==14){setErr('err-siret',T('dv-err-siret-14','Le SIRET compte 14 chiffres.'));ok=false}
+    if(!siret&&/entreprise|business/i.test(planParam)){setErr('err-siret',T('dv-err-siret-requis','Le SIRET est requis pour la formule Entreprise.'));ok=false}
     if(!rgpd){setErr('err-rgpd',T('dv-err-rgpd','Vous devez accepter le traitement de vos données pour continuer.'));ok=false}
     if(!ok){
       if(premierFautif){
@@ -669,48 +800,40 @@ import { FORMULES, VITRINE_PRIX } from '../data/formules';
       return;
     }
 
-    if(!window.sb){showBanner(T('dv-err-connexion','Erreur de connexion. Écrivez-nous à')+' contact.nexaweb62@gmail.com');return}
-
     setLoading(true);
     try{
-      /* La formule vient du lien de la carte tarif. On lisait « plan »,
-         que rien n'écrit jamais : les cartes pointent vers
-         /devis?formule=… depuis toujours, et la colonne formule est donc
-         restée vide à chaque demande. On lit le bon paramètre, et on
-         retombe sur la pastille de budget cochée si le visiteur est
-         arrivé directement sur la page. */
-      var q=new URLSearchParams(location.search);
-      var planParam=q.get('formule')||q.get('plan')||budget||null;
-      var ligne={
-        prenom,nom,email:emailVal,telephone:tel||null,entreprise:entreprise||null,
-        type_site:type||null,delai_souhaite:delai||null,budget_estime:budget||null,
-        description:desc,site_existant:siteActuel||null,formule:planParam,
-        paiement:paiement
-      };
-      var{error:insertErr}=await window.sb.from('demandes_devis').insert(ligne);
-      /* La colonne « paiement » arrive avec la migration
-         supabase/migrations/20261003_devis_paiement.sql. Tant qu'elle
-         n'a pas été passée, PostgREST refuse la ligne entière (PGRST204,
-         « column not found »). Une demande perdue coûte infiniment plus
-         cher qu'un champ manquant : on renvoie alors la ligne sans lui.
-         L'échéancier reste dans l'e-mail, qui n'a pas de schéma. */
-      if(insertErr&&/paiement/.test(insertErr.message||'')){
-        console.warn('[devis] colonne paiement absente — migration non passée');
-        delete ligne.paiement;
-        insertErr=(await window.sb.from('demandes_devis').insert(ligne)).error;
+      var reponse=await fetch('/api/devis/envoyer',{
+        method:'POST',
+        headers:{'content-type':'application/json'},
+        body:JSON.stringify({
+          prenom:prenom,nom:nom,email:emailVal,telephone:tel,entreprise:entreprise,
+          siret:siret,formule:planParam,type_site:type,delai_souhaite:delai,
+          budget_estime:budget,paiement:paiement,description:desc,
+          site_existant:siteActuel,rgpd:true,
+          website_url:document.getElementById('website_url').value,
+          turnstile:jetonTurnstile()
+        })
+      });
+      var corps=null;
+      try{corps=await reponse.json()}catch(e){}
+
+      if(!reponse.ok||!corps||corps.ok!==true){
+        var msg=(corps&&corps.message)||T('dv-err-inattendu',"Une erreur inattendue est survenue. Écrivez-nous à")+' contact@nexaaweb.com';
+        rearmerTurnstile();
+        if(corps&&corps.champ&&document.getElementById('err-'+corps.champ)){
+          setErr('err-'+corps.champ,msg);
+          if(premierFautif){premierFautif.focus({preventScroll:true});premierFautif.scrollIntoView({behavior:'smooth',block:'center'})}
+          return;
+        }
+        showBanner(msg);return;
       }
-      if(insertErr){showBanner(T('dv-err-enreg',"Erreur lors de l'enregistrement. Contactez-nous directement à")+' contact.nexaweb62@gmail.com');return}
+
       stampSubmit();
-      /* Décrémente les places Vitrine Pro si applicable */
-      if(planParam==='vitrine-pro'){
-        try{await window.sb.rpc('decrement_vitrine_spots');}catch(e){console.warn('[spots]',e);}
-      }
-      try{await window.sb.functions.invoke('send-devis-email',{body:{prenom,nom,email:emailVal,telephone:tel,entreprise,formule:planParam,type_site:type,delai_souhaite:delai,budget_estime:budget,paiement,description:desc,site_existant:siteActuel}})}
-      catch(e){console.warn('[devis] email failed (data saved):',e)}
       form.classList.add('hide');overlay.classList.add('show');window.scrollTo({top:0,behavior:'smooth'});
     }catch(err){
       console.error('[devis] unexpected:',err);
-      showBanner(T('dv-err-inattendu',"Une erreur inattendue est survenue. Écrivez-nous à")+' contact.nexaweb62@gmail.com');
+      showBanner(T('dv-err-inattendu',"Une erreur inattendue est survenue. Écrivez-nous à")+' contact@nexaaweb.com');
+      rearmerTurnstile();
     }finally{setLoading(false)}
   });
 })();

@@ -258,5 +258,48 @@ await texture('texture-2-dark',  T.dark,  1);
 await texture('texture-1-light', T.light, 0);
 await texture('texture-2-light', T.light, 1);
 
+/* ═══════════════════════════════════════════════════════════════════════
+   LA PALETTE DES COURRIELS
+
+   Un client de messagerie ne lit ni variable CSS, ni feuille externe :
+   les couleurs d'un e-mail sont forcément écrites dans son HTML. Les
+   figer ici, depuis tokens.css, est le seul moyen qu'elles ne divergent
+   jamais de la charte — exactement le raisonnement du favicon.
+
+   Thème CLAIR : c'est celui que rendent la quasi-totalité des clients,
+   et un e-mail sombre sur fond blanc serait illisible.
+
+   Ne jamais éditer src/lib/devis/palette-courriel.ts à la main.
+   ═══════════════════════════════════════════════════════════════════════ */
+{
+  /* « surface » et non « cardbg » : ce dernier n'est pas un simple alias
+     de jeton brut et n'apparaît donc pas dans le bloc résolu. « on-accent »
+     et non « accent-text » : il faut du texte SUR l'or, pas de l'or sur
+     du clair — accent-text est un doré sombre, illisible sur le bouton. */
+  const voulus = ['bg', 'surface', 'surface-2', 'text', 'text-muted',
+    'border', 'accent', 'on-accent'];
+  const manquants = voulus.filter(k => !T.light[k]);
+  if (manquants.length) {
+    throw new Error('palette courriel : jetons absents de tokens.css — ' + manquants.join(', '));
+  }
+  const lignes = voulus.map(k =>
+    `  ${JSON.stringify(k.replace(/-([a-z])/g, (_, c) => c.toUpperCase()))}: ${JSON.stringify(T.light[k])},`);
+  const fichier = `/* GÉNÉRÉ par scripts/build-assets.mjs depuis src/styles/tokens.css.
+   NE PAS ÉDITER À LA MAIN — relancer « npm run build:assets ».
+
+   Un courriel ne peut lire ni variable CSS ni feuille externe : ses
+   couleurs sont forcément écrites dans son HTML. Les tirer d'ici, et
+   non les retaper, est ce qui les empêche de diverger de la charte.
+   Thème clair : c'est celui que rendent presque tous les clients. */
+export const COURRIEL = {
+${lignes.join('\n')}
+} as const;
+`;
+  const chemin = join(ROOT, 'src/lib/devis/palette-courriel.ts');
+  mkdirSync(join(chemin, '..'), { recursive: true });
+  writeFileSync(chemin, fichier);
+  out.push('src/lib/devis/palette-courriel.ts'.padEnd(34) + `${(fichier.length / 1024).toFixed(1).padStart(7)} Ko`);
+}
+
 console.log('Assets générés depuis src/styles/tokens.css :\n');
 console.log(out.join('\n'));

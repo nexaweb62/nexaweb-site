@@ -25,6 +25,11 @@ const GENERATED = new Set([
   'public/logo.svg',
   'public/logo-complet.svg',
   'public/site.webmanifest',
+  /* Genere par build-assets.mjs depuis tokens.css. Un client de
+     messagerie ne lit ni variable CSS ni feuille externe : les couleurs
+     d'un courriel sont forcement ecrites dans son HTML. Les generer est
+     le seul moyen qu'elles ne divergent pas de la charte. */
+  'src/lib/devis/palette-courriel.ts',
 ]);
 /* Répertoires entièrement produits par un générateur lisant les tokens. */
 const GENERATED_DIRS = ['src/assets/logos/', 'public/logos/'];
