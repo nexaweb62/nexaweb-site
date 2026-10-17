@@ -53,14 +53,14 @@ const prospects = [
   { ENTREPRISE:'<script>alert(1)</script>', SECTEUR:'Test d’injection', 'PRESENCE WEB':'—', PRIORITE:'Basse', ASSIGNE:'Imad', JOUR:'Vendredi', STATUT:'À appeler', RELANCE:'' },
 ];
 const ventes = [
-  { FACTURE:'F-2026-001', DATE:'12/08/2026', CLIENT:'Boulangerie Lefèvre', PRESTATION:'Site vitrine', MONTANT_HT:'999 €', STATUT:'Payé' },
-  { FACTURE:'F-2026-002', DATE:'03/09/2026', CLIENT:'Garage Dubois', PRESTATION:'Refonte', MONTANT_HT:'1 490 €', STATUT:'Payé' },
-  { FACTURE:'F-2026-003', DATE:'05/10/2026', CLIENT:'Coiffure Éclat', PRESTATION:'Site vitrine', MONTANT_HT:'1 200 €', STATUT:'En attente' },
+  { FACTURE:'F-2026-001', DATE:'12/08/2026', CLIENT:'Boulangerie Lefèvre', PRESTATION:'Site vitrine', 'MONTANT HT':'999 €', STATUT:'Payé' },
+  { FACTURE:'F-2026-002', DATE:'03/09/2026', CLIENT:'Garage Dubois', PRESTATION:'Refonte', 'MONTANT HT':'1 490 €', STATUT:'Payé' },
+  { FACTURE:'F-2026-003', DATE:'05/10/2026', CLIENT:'Coiffure Éclat', PRESTATION:'Site vitrine', 'MONTANT HT':'1 200 €', STATUT:'En attente' },
 ];
 const projets = [
-  { CLIENT:'Boulangerie Lefèvre', PROJET:'Site vitrine 5 pages', STATUT:'Livré', ASSIGNE:'Mahmoud', ECHEANCE:'01/09/2026', MONTANT_HT:'999' },
-  { CLIENT:'Garage Dubois', PROJET:'Refonte + SEO', STATUT:'En cours', ASSIGNE:'Imad', ECHEANCE:'28/10/2026', MONTANT_HT:'1490' },
-  { CLIENT:'Coiffure Éclat', PROJET:'Site vitrine', STATUT:'En cours', ASSIGNE:'Mahmoud', ECHEANCE:'', MONTANT_HT:'1200' },
+  { CLIENT:'Boulangerie Lefèvre', PROJET:'Site vitrine 5 pages', STATUT:'Livré', ASSIGNE:'Mahmoud', ECHEANCE:'01/09/2026', 'MONTANT HT':'999' },
+  { CLIENT:'Garage Dubois', PROJET:'Refonte + SEO', STATUT:'En cours', ASSIGNE:'Imad', ECHEANCE:'28/10/2026', 'MONTANT HT':'1490' },
+  { CLIENT:'Coiffure Éclat', PROJET:'Site vitrine', STATUT:'En cours', ASSIGNE:'Mahmoud', ECHEANCE:'', 'MONTANT HT':'1200' },
 ];
 
 /* Le VRAI calcul, transpile depuis src/lib/admin/kpi.ts (voir la
@@ -75,6 +75,14 @@ function charge(avecOnglets) {
   return {
     prospects, ventes: avecOnglets ? ventes : [], projets: avecOnglets ? projets : [],
     ongletsManquants: avecOnglets ? [] : ['Ventes', 'Projets'],
+    ongletsSansEntete: [],
+    /* Les libelles tels qu'ecrits dans la feuille : le tableau doit
+       afficher « Présence web » avec son accent, et non la clef
+       normalisee qui sert a retrouver la colonne. */
+    etiquettes: { 'ENTREPRISE': 'ENTREPRISE', 'SECTEUR': 'SECTEUR',
+      'PRESENCE WEB': 'PRÉSENCE WEB', 'PRIORITE': 'PRIORITÉ',
+      'ASSIGNE': 'ASSIGNÉ', 'JOUR': 'JOUR', 'STATUT': 'STATUT',
+      'RELANCE': 'RELANCE' },
     majLe: new Date().toISOString(),
   };
 }
@@ -113,25 +121,26 @@ for (const [nom, avecOnglets, largeur, theme] of [
   });
 
   await page.goto(BASE + '/admin', { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('#ad-corps:not([hidden])', { timeout: 8000 }).catch(() => {});
+  await page.waitForSelector('#nxa-corps:not([hidden])', { timeout: 8000 }).catch(() => {});
   await page.waitForTimeout(700);
 
   const vu = await page.evaluate(() => ({
-    resume: document.getElementById('ad-resume').textContent.trim(),
-    jauges: [...document.querySelectorAll('#ad-jauges .ad-carte')].map(c => ({
-      titre: c.querySelector('.ad-jauge-titre').textContent,
-      valeur: c.querySelector('.ad-jauge-n').textContent,
-      objectif: c.querySelector('.ad-jauge-obj').textContent,
-      largeur: c.querySelector('.ad-remplie').style.width,
+    resume: document.getElementById('nxa-resume').textContent.trim(),
+    jauges: [...document.querySelectorAll('#nxa-jauges .nxa-carte')].map(c => ({
+      titre: c.querySelector('.nxa-jauge-titre').textContent,
+      valeur: c.querySelector('.nxa-jauge-n').textContent,
+      objectif: c.querySelector('.nxa-jauge-obj').textContent,
+      largeur: c.querySelector('.nxa-remplie').style.width,
     })),
-    lignes: document.querySelectorAll('#ad-pipeline-tb tr').length,
-    compte: document.getElementById('ad-compte').textContent,
-    ca: document.getElementById('ad-ca').textContent.slice(0, 160),
-    projets: document.getElementById('ad-projets').textContent.slice(0, 160),
-    maj: document.getElementById('ad-maj').textContent,
+    lignes: document.querySelectorAll('#nxa-pipeline-tb tr').length,
+    compte: document.getElementById('nxa-compte').textContent,
+    ca: document.getElementById('nxa-ca').textContent.slice(0, 160),
+    projets: document.getElementById('nxa-projets').textContent.slice(0, 160),
+    maj: document.getElementById('nxa-maj').textContent,
     /* Une balise injectee depuis la feuille doit rester du TEXTE. */
-    scriptInjecte: document.querySelectorAll('#ad-pipeline-tb script').length,
+    scriptInjecte: document.querySelectorAll('#nxa-pipeline-tb script').length,
     debordement: document.documentElement.scrollWidth > window.innerWidth + 1,
+    entetes: [...document.querySelectorAll('#nxa-pipeline-th th')].map(t => t.textContent),
   }));
 
   console.log(`\n── ${nom} ──`);
@@ -145,6 +154,10 @@ for (const [nom, avecOnglets, largeur, theme] of [
   if (vu.scriptInjecte) echecs.push(`${nom} : une balise <script> de la feuille a été exécutée`);
   if (vu.debordement) echecs.push(`${nom} : débordement horizontal`);
   if (!vu.lignes) echecs.push(`${nom} : pipeline vide`);
+  /* Le libelle d'origine doit arriver jusqu'a l'en-tete du tableau. */
+  if (avecOnglets && !vu.entetes.includes('Présence web')) {
+    echecs.push(`${nom} : en-tête « Présence web » absent (lu : ${vu.entetes.join(', ')})`);
+  }
 
   await page.screenshot({ path: `${OUT}/admin-${nom}.png`, fullPage: true });
   await ctx.close();

@@ -41,18 +41,18 @@ Astro.response.headers.set('Cache-Control', 'private, no-store');
 ---
 
 <AdminLayout titre="Connexion">
-  <div class="ad-login">
-    <div class="ad-login-c">
-      <span class="ad-pastille" aria-hidden="true">N</span>
-      <h1 class="ad-login-h">Tableau de bord interne</h1>
-      <p class="ad-login-p">Réservé aux associés de Nexa Web.</p>
+  <div class="nxa-login">
+    <div class="nxa-login-c">
+      <span class="nxa-pastille" aria-hidden="true">N</span>
+      <h1 class="nxa-login-h">Tableau de bord interne</h1>
+      <p class="nxa-login-p">Réservé aux associés de Nexa Web.</p>
 
-      {erreur && <div class="ad-alerte">{erreur}</div>}
+      {erreur && <div class="nxa-alerte">{erreur}</div>}
       {deconnecte && !erreur && (
-        <p class="ad-login-p" style="color:var(--accent)">Vous êtes déconnecté.</p>
+        <p class="nxa-login-p" style="color:var(--accent)">Vous êtes déconnecté.</p>
       )}
 
-      <a class="ad-btn ad-google" href="/admin/oauth/start" rel="nofollow">
+      <a class="nxa-btn nxa-google" href="/admin/oauth/start" rel="nofollow">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path style="fill:var(--brand-google-blue)" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
           <path style="fill:var(--brand-google-green)" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>

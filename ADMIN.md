@@ -155,11 +155,31 @@ peut marcher parfaitement et être inutile si ceux-là échouent.
 
 ---
 
+## Comment la feuille est lue
+
+**Aucun numéro de ligne, aucune lettre de colonne n'est écrit dans le code.**
+
+Le tableau de bord lit l'onglet entier, **cherche** la ligne qui porte une
+colonne connue — `ENTREPRISE` pour Prospects, `FACTURE` pour Ventes, `PROJET`
+pour Projets — et prend celle-là pour en-têtes. Chaque colonne est ensuite
+repérée par son **nom**, accents et majuscules ignorés : `PRÉSENCE WEB`,
+`Presence web` et `presence_web` désignent la même colonne.
+
+Conséquence pratique : tu peux ajouter des lignes de titre au-dessus,
+laisser une colonne vide à gauche, déplacer ou insérer des colonnes — rien
+ne casse. Les lignes dont `ENTREPRISE` est vide sont ignorées.
+
+> La première version supposait les en-têtes en ligne 7 et les colonnes de A
+> à Q. Ta feuille les a en ligne 6 avec la colonne A vide : le tableau de
+> bord affichait **0 prospect sur 16**, et surtout il l'affichait *en
+> silence*. Désormais, si un onglet existe sans ligne d'en-têtes
+> reconnaissable, il le dit en toutes lettres au lieu de montrer un zéro.
+
 ## Les deux onglets à créer
 
 Ils n'existent pas encore, et le tableau de bord l'affiche proprement plutôt
-que de planter. Dès que tu les crées, ils apparaissent tout seuls — en-têtes
-en **ligne 1** :
+que de planter. Dès que tu les crées, ils apparaissent tout seuls. La ligne
+d'en-têtes peut être n'importe où, du moment qu'elle porte ces noms :
 
 **`Ventes`**
 
@@ -206,6 +226,8 @@ un prospect.
 ## Tester en local
 
 ```bash
+npm run check:sheets          # 28 contrôles — aucun serveur requis
+
 cp .env.example .dev.vars     # puis remplis les valeurs
 npm run build
 cp .dev.vars dist/server/.dev.vars
@@ -214,5 +236,9 @@ npx wrangler dev -c dist/server/wrangler.json --port 8787 --local
 npm run check:admin           # 24 contrôles d'accès
 npm run check:admin:rendu     # le tableau de bord s'affiche et compte juste
 ```
+
+`check:sheets` rejoue la mise en page réelle de la feuille — en-têtes en
+ligne 6, colonne A vide — ainsi que des colonnes déplacées, insérées, des
+lignes tronquées et un onglet sans en-têtes.
 
 `.dev.vars` est dans `.gitignore`. Ne le commite jamais.

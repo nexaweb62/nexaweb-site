@@ -49,18 +49,18 @@ const { titre, email } = Astro.props;
   </script>
 </head>
 <body>
-  <header class="ad-bar">
-    <a class="ad-marque" href="/admin">
-      <span class="ad-pastille" aria-hidden="true">N</span>
+  <header class="nxa-bar">
+    <a class="nxa-marque" href="/admin">
+      <span class="nxa-pastille" aria-hidden="true">N</span>
       <span>Nexa Web <b>· interne</b></span>
     </a>
 
-    <div class="ad-bar-droite">
+    <div class="nxa-bar-droite">
       <!-- Un demi-disque DESSINE, pas le caractere « ◐ » : la pile de
            polices systeme ne le contient pas partout, et il tombait sur
            un glyphe de remplacement — un trait vertical, vu a l'ecran.
            Un SVG est le meme dessin sur toutes les machines. -->
-      <button type="button" class="ad-theme" id="ad-theme" aria-label="Changer de thème">
+      <button type="button" class="nxa-theme" id="nxa-theme" aria-label="Changer de thème">
         <svg viewBox="0 0 16 16" aria-hidden="true">
           <circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/>
           <path d="M8 1.5a6.5 6.5 0 0 0 0 13z" fill="currentColor"/>
@@ -68,23 +68,23 @@ const { titre, email } = Astro.props;
       </button>
       {email && (
         <>
-          <span class="ad-qui" title={email}>{email}</span>
+          <span class="nxa-qui" title={email}>{email}</span>
           <form method="POST" action="/admin/logout">
-            <button type="submit" class="ad-btn ad-btn-fin">Déconnexion</button>
+            <button type="submit" class="nxa-btn nxa-btn-fin">Déconnexion</button>
           </form>
         </>
       )}
     </div>
   </header>
 
-  <main class="ad-main">
+  <main class="nxa-main">
     <slot />
   </main>
 
   <script is:inline>
     /* Trois etats comme sur le site : systeme, clair, sombre. */
     (function () {
-      var b = document.getElementById('ad-theme');
+      var b = document.getElementById('nxa-theme');
       if (!b) return;
       b.addEventListener('click', function () {
         var r = document.documentElement;

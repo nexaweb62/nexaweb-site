@@ -26,71 +26,71 @@ Astro.response.headers.set('Cache-Control', 'private, no-store');
 ---
 
 <AdminLayout titre="Tableau de bord" email={email}>
-  <div class="ad-tete">
-    <h1 class="ad-h1">Tableau de bord</h1>
-    <div class="ad-outils" style="margin:0">
-      <span class="ad-maj" id="ad-maj">Chargement…</span>
-      <button type="button" class="ad-btn ad-btn-fin" id="ad-refresh">Actualiser</button>
+  <div class="nxa-tete">
+    <h1 class="nxa-h1">Tableau de bord</h1>
+    <div class="nxa-outils" style="margin:0">
+      <span class="nxa-maj" id="nxa-maj">Chargement…</span>
+      <button type="button" class="nxa-btn nxa-btn-fin" id="nxa-refresh">Actualiser</button>
     </div>
   </div>
 
-  <p class="ad-resume" id="ad-resume">&nbsp;</p>
+  <p class="nxa-resume" id="nxa-resume">&nbsp;</p>
 
-  <div id="ad-erreur"></div>
-  <div id="ad-corps" hidden>
+  <div id="nxa-erreur"></div>
+  <div id="nxa-corps" hidden>
 
-    <section class="ad-section" aria-labelledby="h-prospection">
-      <h2 class="ad-h2" id="h-prospection">Prospection</h2>
-      <div class="ad-jauges" id="ad-jauges"></div>
+    <section class="nxa-section" aria-labelledby="h-prospection">
+      <h2 class="nxa-h2" id="h-prospection">Prospection</h2>
+      <div class="nxa-jauges" id="nxa-jauges"></div>
     </section>
 
-    <section class="ad-section" aria-labelledby="h-repartition">
-      <h2 class="ad-h2" id="h-repartition">Répartition</h2>
-      <div class="ad-jauges" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
-        <div class="ad-carte">
-          <div class="ad-jauge-titre">Par statut</div>
-          <div class="ad-rep" id="ad-rep"></div>
+    <section class="nxa-section" aria-labelledby="h-repartition">
+      <h2 class="nxa-h2" id="h-repartition">Répartition</h2>
+      <div class="nxa-jauges" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+        <div class="nxa-carte">
+          <div class="nxa-jauge-titre">Par statut</div>
+          <div class="nxa-rep" id="nxa-rep"></div>
         </div>
-        <div class="ad-carte" style="padding:0;overflow:hidden">
-          <div class="ad-defile">
-            <table class="ad-table">
+        <div class="nxa-carte" style="padding:0;overflow:hidden">
+          <div class="nxa-defile">
+            <table class="nxa-table">
               <thead><tr>
-                <th>Associé</th><th class="ad-num">Actifs</th><th class="ad-num">Contactés</th>
-                <th class="ad-num">RDV</th><th class="ad-num">Signés</th>
+                <th>Associé</th><th class="nxa-num">Actifs</th><th class="nxa-num">Contactés</th>
+                <th class="nxa-num">RDV</th><th class="nxa-num">Signés</th>
               </tr></thead>
-              <tbody id="ad-associes"></tbody>
+              <tbody id="nxa-associes"></tbody>
             </table>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="ad-section" aria-labelledby="h-pipeline">
-      <h2 class="ad-h2" id="h-pipeline">Pipeline</h2>
-      <div class="ad-outils">
-        <input class="ad-champ" id="ad-q" type="search" autocomplete="off"
+    <section class="nxa-section" aria-labelledby="h-pipeline">
+      <h2 class="nxa-h2" id="h-pipeline">Pipeline</h2>
+      <div class="nxa-outils">
+        <input class="nxa-champ" id="nxa-q" type="search" autocomplete="off"
                placeholder="Rechercher une entreprise, un secteur, un statut…"
                aria-label="Rechercher dans le pipeline" />
-        <span class="ad-compte" id="ad-compte"></span>
+        <span class="nxa-compte" id="nxa-compte"></span>
       </div>
-      <div class="ad-carte" style="padding:0;overflow:hidden">
-        <div class="ad-defile">
-          <table class="ad-table" id="ad-pipeline">
-            <thead><tr id="ad-pipeline-th"></tr></thead>
-            <tbody id="ad-pipeline-tb"></tbody>
+      <div class="nxa-carte" style="padding:0;overflow:hidden">
+        <div class="nxa-defile">
+          <table class="nxa-table" id="nxa-pipeline">
+            <thead><tr id="nxa-pipeline-th"></tr></thead>
+            <tbody id="nxa-pipeline-tb"></tbody>
           </table>
         </div>
       </div>
     </section>
 
-    <section class="ad-section" aria-labelledby="h-ca">
-      <h2 class="ad-h2" id="h-ca">Chiffre d'affaires</h2>
-      <div id="ad-ca"></div>
+    <section class="nxa-section" aria-labelledby="h-ca">
+      <h2 class="nxa-h2" id="h-ca">Chiffre d'affaires</h2>
+      <div id="nxa-ca"></div>
     </section>
 
-    <section class="ad-section" aria-labelledby="h-projets">
-      <h2 class="ad-h2" id="h-projets">Projets</h2>
-      <div id="ad-projets"></div>
+    <section class="nxa-section" aria-labelledby="h-projets">
+      <h2 class="nxa-h2" id="h-projets">Projets</h2>
+      <div id="nxa-projets"></div>
     </section>
 
   </div>
@@ -146,33 +146,33 @@ Astro.response.headers.set('Cache-Control', 'private, no-store');
   /* ── Rendu ─────────────────────────────────────────────────────── */
 
   function jauges(liste) {
-    var hote = $('ad-jauges');
+    var hote = $('nxa-jauges');
     hote.textContent = '';
     liste.forEach(function (j) {
       var part = j.objectif > 0 ? Math.min(j.valeur / j.objectif, 1) : 0;
       var c = document.createElement('div');
-      c.className = 'ad-carte';
+      c.className = 'nxa-carte';
 
       var t = document.createElement('div');
-      t.className = 'ad-jauge-titre'; t.textContent = j.titre;
+      t.className = 'nxa-jauge-titre'; t.textContent = j.titre;
 
       var v = document.createElement('div');
-      v.className = 'ad-jauge-val';
+      v.className = 'nxa-jauge-val';
       var n = document.createElement('span');
-      n.className = 'ad-jauge-n'; n.textContent = String(j.valeur);
+      n.className = 'nxa-jauge-n'; n.textContent = String(j.valeur);
       var o = document.createElement('span');
-      o.className = 'ad-jauge-obj'; o.textContent = '/ ' + j.objectif;
+      o.className = 'nxa-jauge-obj'; o.textContent = '/ ' + j.objectif;
       v.appendChild(n); v.appendChild(o);
 
       var piste = document.createElement('div');
-      piste.className = 'ad-piste';
+      piste.className = 'nxa-piste';
       piste.setAttribute('role', 'progressbar');
       piste.setAttribute('aria-label', j.titre);
       piste.setAttribute('aria-valuenow', String(j.valeur));
       piste.setAttribute('aria-valuemin', '0');
       piste.setAttribute('aria-valuemax', String(j.objectif));
       var pleine = document.createElement('div');
-      pleine.className = 'ad-remplie';
+      pleine.className = 'nxa-remplie';
       pleine.style.width = (part * 100).toFixed(1) + '%';
       if (part >= 1) pleine.setAttribute('data-plein', '1');
       piste.appendChild(pleine);
@@ -183,22 +183,22 @@ Astro.response.headers.set('Cache-Control', 'private, no-store');
   }
 
   function repartition(liste) {
-    var hote = $('ad-rep');
+    var hote = $('nxa-rep');
     hote.textContent = '';
     if (!liste.length) { hote.appendChild(vide('Aucun prospect pour l’instant.')); return; }
     var max = liste.reduce(function (m, r) { return Math.max(m, r.nombre); }, 0) || 1;
     liste.forEach(function (r) {
-      var l = document.createElement('div'); l.className = 'ad-rep-l';
+      var l = document.createElement('div'); l.className = 'nxa-rep-l';
       var nom = document.createElement('span');
-      nom.className = 'ad-rep-nom'; nom.textContent = r.libelle;
-      var piste = document.createElement('div'); piste.className = 'ad-rep-piste';
+      nom.className = 'nxa-rep-nom'; nom.textContent = r.libelle;
+      var piste = document.createElement('div'); piste.className = 'nxa-rep-piste';
       var barre = document.createElement('div');
-      barre.className = 'ad-rep-barre';
+      barre.className = 'nxa-rep-barre';
       barre.style.width = ((r.nombre / max) * 100).toFixed(1) + '%';
       barre.style.background = 'var(--' + couleurDe(r.classe) + ')';
       piste.appendChild(barre);
       var n = document.createElement('span');
-      n.className = 'ad-rep-n'; n.textContent = String(r.nombre);
+      n.className = 'nxa-rep-n'; n.textContent = String(r.nombre);
       l.appendChild(nom); l.appendChild(piste); l.appendChild(n);
       hote.appendChild(l);
     });
@@ -213,31 +213,31 @@ Astro.response.headers.set('Cache-Control', 'private, no-store');
   }
 
   function associes(liste) {
-    var tb = $('ad-associes');
+    var tb = $('nxa-associes');
     tb.textContent = '';
     if (!liste.length) {
       var tr = document.createElement('tr');
       var td = document.createElement('td');
-      td.colSpan = 5; td.className = 'ad-vide'; td.textContent = 'Personne d’assigné pour l’instant.';
+      td.colSpan = 5; td.className = 'nxa-vide'; td.textContent = 'Personne d’assigné pour l’instant.';
       tr.appendChild(td); tb.appendChild(tr); return;
     }
     liste.forEach(function (a) {
       var tr = document.createElement('tr');
-      tr.appendChild(cellule(a.nom, 'ad-entreprise'));
-      tr.appendChild(cellule(a.actifs, 'ad-num'));
-      tr.appendChild(cellule(a.contactes, 'ad-num'));
-      tr.appendChild(cellule(a.rdv, 'ad-num'));
-      tr.appendChild(cellule(a.signes, 'ad-num'));
+      tr.appendChild(cellule(a.nom, 'nxa-entreprise'));
+      tr.appendChild(cellule(a.actifs, 'nxa-num'));
+      tr.appendChild(cellule(a.contactes, 'nxa-num'));
+      tr.appendChild(cellule(a.rdv, 'nxa-num'));
+      tr.appendChild(cellule(a.signes, 'nxa-num'));
       tb.appendChild(tr);
     });
   }
 
   /* ── Pipeline : recherche et tri ───────────────────────────────── */
 
-  var pipeline = [], colonnes = [], triCol = null, triSens = 1;
+  var pipeline = [], colonnes = [], etiquettes = {}, triCol = null, triSens = 1;
 
   function entetesPipeline() {
-    var tr = $('ad-pipeline-th');
+    var tr = $('nxa-pipeline-th');
     tr.textContent = '';
     colonnes.forEach(function (c) {
       var th = document.createElement('th');
@@ -258,13 +258,18 @@ Astro.response.headers.set('Cache-Control', 'private, no-store');
     });
   }
 
+  /* Le libelle ECRIT DANS LA FEUILLE, accents compris : « Présence web »
+     et non « Presence web ». La clef normalisee sert a retrouver la
+     colonne ; elle n'a pas a etre ce qu'on montre. */
   function joli(cle) {
+    var brut = etiquettes[cle];
+    if (brut) return brut.charAt(0).toUpperCase() + brut.slice(1).toLowerCase();
     return cle.charAt(0) + cle.slice(1).toLowerCase();
   }
 
   function corpsPipeline() {
-    var tb = $('ad-pipeline-tb');
-    var q = ($('ad-q').value || '').trim().toLowerCase();
+    var tb = $('nxa-pipeline-tb');
+    var q = ($('nxa-q').value || '').trim().toLowerCase();
 
     var lignes = pipeline.filter(function (l) {
       if (!q) return true;
@@ -288,14 +293,14 @@ Astro.response.headers.set('Cache-Control', 'private, no-store');
       });
     }
 
-    $('ad-compte').textContent = lignes.length + ' / ' + pipeline.length
+    $('nxa-compte').textContent = lignes.length + ' / ' + pipeline.length
       + (pipeline.length > 1 ? ' prospects' : ' prospect');
 
     tb.textContent = '';
     if (!lignes.length) {
       var tr0 = document.createElement('tr');
       var td0 = document.createElement('td');
-      td0.colSpan = colonnes.length || 1; td0.className = 'ad-vide';
+      td0.colSpan = colonnes.length || 1; td0.className = 'nxa-vide';
       td0.textContent = q ? 'Aucun résultat pour « ' + q + ' ».' : 'Aucun prospect dans la feuille.';
       tr0.appendChild(td0); tb.appendChild(tr0); return;
     }
@@ -306,12 +311,12 @@ Astro.response.headers.set('Cache-Control', 'private, no-store');
         if (c === 'STATUT') {
           var td = document.createElement('td');
           var pz = document.createElement('span');
-          pz.className = 'ad-pz';
+          pz.className = 'nxa-pz';
           pz.setAttribute('data-c', classe(l[c]));
           pz.textContent = l[c] || 'À appeler';
           td.appendChild(pz); tr.appendChild(td);
         } else {
-          tr.appendChild(cellule(l[c], c === 'ENTREPRISE' ? 'ad-entreprise' : ''));
+          tr.appendChild(cellule(l[c], c === 'ENTREPRISE' ? 'nxa-entreprise' : ''));
         }
       });
       tb.appendChild(tr);
@@ -322,7 +327,7 @@ Astro.response.headers.set('Cache-Control', 'private, no-store');
 
   function vide(titre, detail) {
     var d = document.createElement('div');
-    d.className = 'ad-vide';
+    d.className = 'nxa-vide';
     var b = document.createElement('b'); b.textContent = titre;
     d.appendChild(b);
     if (detail) d.appendChild(texte(detail));
@@ -331,9 +336,9 @@ Astro.response.headers.set('Cache-Control', 'private, no-store');
 
   function ongletAbsent(nom, colonnes) {
     var d = document.createElement('div');
-    d.className = 'ad-carte';
+    d.className = 'nxa-carte';
     var v = document.createElement('div');
-    v.className = 'ad-vide';
+    v.className = 'nxa-vide';
     var b = document.createElement('b');
     b.textContent = 'L’onglet « ' + nom + ' » n’existe pas encore';
     v.appendChild(b);
@@ -347,9 +352,9 @@ Astro.response.headers.set('Cache-Control', 'private, no-store');
   }
 
   function stat(valeur, titre) {
-    var c = document.createElement('div'); c.className = 'ad-carte';
-    var n = document.createElement('div'); n.className = 'ad-stat-n'; n.textContent = valeur;
-    var t = document.createElement('div'); t.className = 'ad-stat-t'; t.textContent = titre;
+    var c = document.createElement('div'); c.className = 'nxa-carte';
+    var n = document.createElement('div'); n.className = 'nxa-stat-n'; n.textContent = valeur;
+    var t = document.createElement('div'); t.className = 'nxa-stat-t'; t.textContent = titre;
     c.appendChild(n); c.appendChild(t);
     return c;
   }
@@ -357,14 +362,14 @@ Astro.response.headers.set('Cache-Control', 'private, no-store');
   /* ── Chiffre d'affaires ────────────────────────────────────────── */
 
   function sectionCa(d) {
-    var hote = $('ad-ca');
+    var hote = $('nxa-ca');
     hote.textContent = '';
     if (d.ongletsManquants.indexOf('Ventes') >= 0) {
       hote.appendChild(ongletAbsent('Ventes', 'facture, date, client, prestation, montant_ht, statut'));
       return;
     }
     var ca = d.ca;
-    var g = document.createElement('div'); g.className = 'ad-stats';
+    var g = document.createElement('div'); g.className = 'nxa-stats';
     g.appendChild(stat(euro.format(ca.encaisse), 'CA encaissé'));
     g.appendChild(stat(euro.format(ca.duMois), 'CA du mois'));
     g.appendChild(stat(euro.format(ca.enAttente), 'En attente de paiement'));
@@ -373,7 +378,7 @@ Astro.response.headers.set('Cache-Control', 'private, no-store');
 
     if (!ca.parMois.length) {
       var c = document.createElement('div');
-      c.className = 'ad-carte'; c.style.marginTop = '12px';
+      c.className = 'nxa-carte'; c.style.marginTop = '12px';
       c.appendChild(vide('Aucune vente payée pour l’instant.',
         'Le graphique apparaîtra dès la première facture réglée.'));
       hote.appendChild(c);
@@ -381,24 +386,24 @@ Astro.response.headers.set('Cache-Control', 'private, no-store');
     }
 
     var carte = document.createElement('div');
-    carte.className = 'ad-carte'; carte.style.marginTop = '12px';
+    carte.className = 'nxa-carte'; carte.style.marginTop = '12px';
     var titre = document.createElement('div');
-    titre.className = 'ad-jauge-titre'; titre.textContent = 'CA par mois';
+    titre.className = 'nxa-jauge-titre'; titre.textContent = 'CA par mois';
     carte.appendChild(titre);
 
-    var graphe = document.createElement('div'); graphe.className = 'ad-graphe';
+    var graphe = document.createElement('div'); graphe.className = 'nxa-graphe';
     var max = ca.parMois.reduce(function (m, p) { return Math.max(m, p.total); }, 0) || 1;
     /* Douze mois au plus : au-dela, les colonnes deviennent des traits. */
     ca.parMois.slice(-12).forEach(function (p) {
-      var col = document.createElement('div'); col.className = 'ad-col';
+      var col = document.createElement('div'); col.className = 'nxa-col';
       var v = document.createElement('div');
-      v.className = 'ad-col-v'; v.textContent = euro.format(p.total);
+      v.className = 'nxa-col-v'; v.textContent = euro.format(p.total);
       var b = document.createElement('div');
-      b.className = 'ad-col-b';
+      b.className = 'nxa-col-b';
       b.style.height = Math.max((p.total / max) * 100, 2) + '%';
       b.title = p.mois + ' : ' + euro.format(p.total);
       var e = document.createElement('div');
-      e.className = 'ad-col-e'; e.textContent = etiquetteMois(p.mois);
+      e.className = 'nxa-col-e'; e.textContent = etiquetteMois(p.mois);
       col.appendChild(v); col.appendChild(b); col.appendChild(e);
       graphe.appendChild(col);
     });
@@ -417,21 +422,21 @@ Astro.response.headers.set('Cache-Control', 'private, no-store');
   /* ── Projets ───────────────────────────────────────────────────── */
 
   function sectionProjets(d) {
-    var hote = $('ad-projets');
+    var hote = $('nxa-projets');
     hote.textContent = '';
     if (d.ongletsManquants.indexOf('Projets') >= 0) {
       hote.appendChild(ongletAbsent('Projets', 'client, projet, statut, assigne, echeance, montant_ht'));
       return;
     }
     var p = d.projets;
-    var g = document.createElement('div'); g.className = 'ad-stats';
+    var g = document.createElement('div'); g.className = 'nxa-stats';
     g.appendChild(stat(String(p.enCours), 'Projets en cours'));
     g.appendChild(stat(String(p.livres), 'Sites livrés'));
     g.appendChild(stat(euro.format(p.montantEnCours), 'Montant en cours'));
     hote.appendChild(g);
 
     var carte = document.createElement('div');
-    carte.className = 'ad-carte';
+    carte.className = 'nxa-carte';
     carte.style.cssText = 'margin-top:12px;padding:0;overflow:hidden';
 
     if (!p.lignes.length) {
@@ -440,36 +445,35 @@ Astro.response.headers.set('Cache-Control', 'private, no-store');
       return;
     }
 
-    var cadre = document.createElement('div'); cadre.className = 'ad-defile';
-    var table = document.createElement('table'); table.className = 'ad-table';
+    var cadre = document.createElement('div'); cadre.className = 'nxa-defile';
+    var table = document.createElement('table'); table.className = 'nxa-table';
     var thead = document.createElement('thead');
     var trh = document.createElement('tr');
     ['Client', 'Projet', 'Statut', 'Assigné', 'Échéance', 'Montant HT'].forEach(function (t, i) {
       var th = document.createElement('th');
       th.textContent = t;
-      if (i === 5) th.className = 'ad-num';
+      if (i === 5) th.className = 'nxa-num';
       trh.appendChild(th);
     });
     thead.appendChild(trh); table.appendChild(thead);
 
     var tb = document.createElement('tbody');
+    /* Chaque champ arrive deja decide par le serveur : le montant est un
+       nombre, « livre » un booleen. Rien n'est reinterprete ici — cette
+       colonne avait deja diverge une fois, faute d'un seul proprietaire. */
     p.lignes.forEach(function (l) {
       var tr = document.createElement('tr');
-      tr.appendChild(cellule(l['CLIENT'], 'ad-entreprise'));
-      tr.appendChild(cellule(l['PROJET']));
+      tr.appendChild(cellule(l.client, 'nxa-entreprise'));
+      tr.appendChild(cellule(l.projet));
       var tdS = document.createElement('td');
       var pz = document.createElement('span');
-      pz.className = 'ad-pz';
-      pz.setAttribute('data-c', /LIVR|TERMIN|FINI|EN LIGNE/.test(
-        (l['STATUT'] || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase(),
-      ) ? 'signe' : 'en-cours');
-      pz.textContent = l['STATUT'] || '—';
+      pz.className = 'nxa-pz';
+      pz.setAttribute('data-c', l.livre ? 'signe' : 'en-cours');
+      pz.textContent = l.statut || '—';
       tdS.appendChild(pz); tr.appendChild(tdS);
-      tr.appendChild(cellule(l['ASSIGNE']));
-      tr.appendChild(cellule(l['ECHEANCE'] || '—'));
-      tr.appendChild(cellule(l['MONTANT_HT'] ? euro.format(Number(
-        String(l['MONTANT_HT']).replace(/[\s  €]/g, '').replace(',', '.'),
-      ) || 0) : '—', 'ad-num'));
+      tr.appendChild(cellule(l.assigne));
+      tr.appendChild(cellule(l.echeance || '—'));
+      tr.appendChild(cellule(l.montant ? euro.format(l.montant) : '—', 'nxa-num'));
       tb.appendChild(tr);
     });
     table.appendChild(tb);
@@ -482,24 +486,34 @@ Astro.response.headers.set('Cache-Control', 'private, no-store');
   var enCours = false;
 
   function peindre(d) {
-    $('ad-resume').textContent = d.resume;
+    $('nxa-erreur').textContent = '';
+    /* UN ONGLET SANS EN-TETES NE DOIT PAS RESSEMBLER A UN ONGLET VIDE.
+       C'est exactement ce qui s'etait passe : « 0 prospect » affiche
+       sans rien dire, alors que la feuille en contenait seize et que
+       c'est la lecture qui avait rate. */
+    var muets = d.ongletsSansEntete || [];
+    if (muets.length) {
+      erreur('Onglet' + (muets.length > 1 ? 's' : '') + ' « ' + muets.join(' », « ')
+        + ' » : aucune ligne d’en-têtes trouvée. Vérifiez qu’une ligne porte bien'
+        + ' les noms de colonnes (ENTREPRISE, FACTURE, PROJET selon l’onglet).');
+    }
+    $('nxa-resume').textContent = d.resume;
     jauges(d.jauges);
     repartition(d.repartition);
     associes(d.associes);
 
-    pipeline = d.pipeline; colonnes = d.colonnes;
+    pipeline = d.pipeline; colonnes = d.colonnes; etiquettes = d.etiquettes || {};
     entetesPipeline(); corpsPipeline();
 
     sectionCa(d); sectionProjets(d);
-    $('ad-corps').hidden = false;
-    $('ad-erreur').textContent = '';
+    $('nxa-corps').hidden = false;
   }
 
   function erreur(message) {
-    var hote = $('ad-erreur');
+    var hote = $('nxa-erreur');
     hote.textContent = '';
     var d = document.createElement('div');
-    d.className = 'ad-alerte';
+    d.className = 'nxa-alerte';
     d.textContent = message;
     hote.appendChild(d);
   }
@@ -507,10 +521,10 @@ Astro.response.headers.set('Cache-Control', 'private, no-store');
   function charger(forcer) {
     if (enCours) return;
     enCours = true;
-    var maj = $('ad-maj');
+    var maj = $('nxa-maj');
     maj.setAttribute('data-etat', 'charge');
     maj.textContent = 'Actualisation…';
-    $('ad-refresh').disabled = true;
+    $('nxa-refresh').disabled = true;
 
     fetch('/api/admin/data' + (forcer ? '?forcer=1' : ''), {
       credentials: 'same-origin',
@@ -535,12 +549,12 @@ Astro.response.headers.set('Cache-Control', 'private, no-store');
       maj.textContent = 'Échec de l’actualisation';
     }).then(function () {
       enCours = false;
-      $('ad-refresh').disabled = false;
+      $('nxa-refresh').disabled = false;
     });
   }
 
-  $('ad-refresh').addEventListener('click', function () { charger(true); });
-  $('ad-q').addEventListener('input', function () { corpsPipeline(); });
+  $('nxa-refresh').addEventListener('click', function () { charger(true); });
+  $('nxa-q').addEventListener('input', function () { corpsPipeline(); });
 
   charger(false);
 
