@@ -19,15 +19,13 @@
 
 import type { Demande } from './jeton';
 import { telLisible, siretLisible } from './validation';
+import { EXPEDITEUR } from './contact';
 /* Les couleurs viennent de tokens.css, par un fichier genere. Les
    retaper ici les ferait diverger de la charte au premier changement. */
 import { COURRIEL as C } from './palette-courriel';
 
 type Fetch = typeof fetch;
 const RESEND = 'https://api.resend.com/emails';
-
-/** L'expediteur verifie chez Resend, deja utilise par le site. */
-const DE = 'Nexa Web <contact@nexaaweb.com>';
 
 function echapper(v: string | undefined): string {
   return (v ?? '').replace(/[&<>"']/g, c => (
@@ -59,15 +57,20 @@ async function envoyer(
 /* ── 1. Le lien de confirmation ──────────────────────────────────── */
 
 export async function envoyerConfirmation(opts: {
-  cle: string; vers: string; prenom: string; lien: string; f?: Fetch;
+  cle: string; vers: string; prenom: string; lien: string;
+  /** Ou doit arriver une REPONSE a ce courriel. Certaines personnes
+   *  repondent au lieu de cliquer : leur reponse doit atteindre la
+   *  boite relevee, pas l'adresse d'expedition. */
+  repondreA: string; f?: Fetch;
 }): Promise<boolean> {
-  const { cle, vers, prenom, lien, f = fetch } = opts;
+  const { cle, vers, prenom, lien, repondreA, f = fetch } = opts;
   const p = echapper(prenom);
   const l = echapper(lien);
 
   return envoyer(cle, f, {
-    from: DE,
+    from: EXPEDITEUR,
     to: [vers],
+    reply_to: repondreA,
     subject: 'Confirmez votre demande de devis — Nexa Web',
     html: `<!doctype html><html lang="fr"><body style="margin:0;padding:24px;background:${C.bg};font:16px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:${C.text}">
 <div style="max-width:520px;margin:0 auto;background:${C.surface};border-radius:14px;padding:32px">
@@ -133,7 +136,7 @@ export async function envoyerNotification(opts: {
     .join('');
 
   return envoyer(cle, f, {
-    from: DE,
+    from: EXPEDITEUR,
     to: [vers],
     reply_to: d.email,
     subject: `Devis confirmé — ${d.prenom} ${d.nom}${d.ent_nom ? ' · ' + d.ent_nom : ''}`,

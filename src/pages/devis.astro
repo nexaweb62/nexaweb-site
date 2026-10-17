@@ -8,6 +8,7 @@ import GarantieBadge from '../components/GarantieBadge.astro';
 import Timeline from '../components/Timeline.astro';
 import { FORMULES, VITRINE_PRIX } from '../data/formules';
 import { lireEnv } from '../lib/admin/env';
+import { adresseContact } from '../lib/devis/contact';
 
 /* ── CETTE PAGE N'EST PLUS PRERENDUE, ET C'EST POUR UNE SEULE RAISON ──
    La cle PUBLIQUE de Turnstile doit arriver dans le HTML. La lire au
@@ -329,7 +330,7 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
       </div>
 
       <!-- FORM -->
-      <form class="devis-form" id="devis-form" novalidate data-turnstile={cleTurnstile}>
+      <form class="devis-form" id="devis-form" novalidate data-turnstile={cleTurnstile} data-contact={adresseContact(env)}>
 
         <!-- Honeypot -->
         <div style="position:absolute;left:-9999px;opacity:0;pointer-events:none" aria-hidden="true">
@@ -664,6 +665,11 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
      Astro regroupe les scripts de module, et « currentScript » y vaut
      null. Un attribut de donnees survit a tout regroupement. */
   var CLE_TST=(form&&form.dataset.turnstile)||'';
+  /* L'adresse donnee au visiteur quand le serveur n'a pas repondu du
+     tout. Elle vient du HTML, rendu par le serveur, et non d'une
+     constante recopiee ici : une adresse ecrite a deux endroits finit
+     par diverger. */
+  var ADRESSE_CONTACT=(form&&form.dataset.contact)||'contact.nexaweb62@gmail.com';
   function jetonTurnstile(){
     var champ=document.querySelector('[name="cf-turnstile-response"]');
     return champ?champ.value:'';
@@ -818,7 +824,7 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
       try{corps=await reponse.json()}catch(e){}
 
       if(!reponse.ok||!corps||corps.ok!==true){
-        var msg=(corps&&corps.message)||T('dv-err-inattendu',"Une erreur inattendue est survenue. Écrivez-nous à")+' contact@nexaaweb.com';
+        var msg=(corps&&corps.message)||T('dv-err-inattendu',"Une erreur inattendue est survenue. Écrivez-nous à")+' '+ADRESSE_CONTACT;
         rearmerTurnstile();
         if(corps&&corps.champ&&document.getElementById('err-'+corps.champ)){
           setErr('err-'+corps.champ,msg);
@@ -832,7 +838,7 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
       form.classList.add('hide');overlay.classList.add('show');window.scrollTo({top:0,behavior:'smooth'});
     }catch(err){
       console.error('[devis] unexpected:',err);
-      showBanner(T('dv-err-inattendu',"Une erreur inattendue est survenue. Écrivez-nous à")+' contact@nexaaweb.com');
+      showBanner(T('dv-err-inattendu',"Une erreur inattendue est survenue. Écrivez-nous à")+' '+ADRESSE_CONTACT);
       rearmerTurnstile();
     }finally{setLoading(false)}
   });

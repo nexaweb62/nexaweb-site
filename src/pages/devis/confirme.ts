@@ -23,6 +23,7 @@ import type { APIRoute } from 'astro';
 import { lireJeton, type Demande } from '../../lib/devis/jeton';
 import { envoyerNotification } from '../../lib/devis/courriel';
 import { lireEnv } from '../../lib/admin/env';
+import { adresseContact } from '../../lib/devis/contact';
 
 export const prerender = false;
 
@@ -58,17 +59,16 @@ export const GET: APIRoute = async ({ request }) => {
   const env = await lireEnv() as Record<string, string | undefined>;
   const secret = env.DEVIS_TOKEN_SECRET;
   const cleResend = env.RESEND_API_KEY;
-  /* L'adresse de notification. Le code precedent ecrivait une autre
-     adresse en dur ; elle vit desormais dans l'environnement, avec
-     pour defaut celle du site. */
-  const vers = env.CONTACT_EMAIL || 'contact@nexaaweb.com';
+  /* L'adresse de notification : la boite reellement relevee, pas
+     l'adresse d'expedition. Voir src/lib/devis/contact.ts. */
+  const vers = adresseContact(env);
 
   if (!secret || !cleResend) {
     console.error('[devis] confirmation impossible : secrets manquants');
     return page('Indisponible', `
       <h1>Confirmation momentanément indisponible</h1>
       <p>Réessayez dans quelques minutes, ou écrivez-nous directement à
-         <a href="mailto:contact@nexaaweb.com">contact@nexaaweb.com</a>.</p>${retour}`, 503);
+         <a href="mailto:${vers}">${vers}</a>.</p>${retour}`, 503);
   }
 
   const jeton = new URL(request.url).searchParams.get('t') ?? undefined;
@@ -99,7 +99,7 @@ export const GET: APIRoute = async ({ request }) => {
       <h1>Nous n’avons pas pu transmettre votre demande</h1>
       <p>Le lien reste valable : réessayez dans quelques minutes. Si cela
          persiste, écrivez-nous à
-         <a href="mailto:contact@nexaaweb.com">contact@nexaaweb.com</a>.</p>${retour}`, 502);
+         <a href="mailto:${vers}">${vers}</a>.</p>${retour}`, 502);
   }
 
   /* La trace dans Supabase, pour garder l'historique des demandes. Elle

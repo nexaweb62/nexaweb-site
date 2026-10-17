@@ -34,6 +34,7 @@ import { chercherSiret, domaineRecoitDuCourrier, turnstileValide } from '../../.
 import { fabriquerJeton } from '../../../lib/devis/jeton';
 import { envoyerConfirmation } from '../../../lib/devis/courriel';
 import { lireEnv } from '../../../lib/admin/env';
+import { adresseContact } from '../../../lib/devis/contact';
 
 export const prerender = false;
 
@@ -57,6 +58,7 @@ const texte = (v: unknown, max = 2000) =>
 
 export const POST: APIRoute = async ({ request }) => {
   const env = await lireEnv() as Record<string, string | undefined>;
+  const contact = adresseContact(env);
 
   let d: Record<string, unknown>;
   try { d = await request.json() as Record<string, unknown>; }
@@ -178,7 +180,7 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response(
       JSON.stringify({
         ok: false,
-        message: 'Le formulaire est momentanément indisponible. Écrivez-nous à contact@nexaaweb.com.',
+        message: `Le formulaire est momentanément indisponible. Écrivez-nous à ${contact}.`,
       }), { status: 503, headers: JSON_ENTETES },
     );
   }
@@ -195,13 +197,15 @@ export const POST: APIRoute = async ({ request }) => {
   }, secret);
 
   const lien = `${new URL(request.url).origin}/devis/confirme?t=${jeton}`;
-  const parti = await envoyerConfirmation({ cle: cleResend, vers: email, prenom, lien });
+  const parti = await envoyerConfirmation({
+    cle: cleResend, vers: email, prenom, lien, repondreA: contact,
+  });
 
   if (!parti) {
     return new Response(
       JSON.stringify({
         ok: false,
-        message: 'Nous n’avons pas pu envoyer l’e-mail de confirmation. Réessayez dans un instant, ou écrivez-nous à contact@nexaaweb.com.',
+        message: `Nous n’avons pas pu envoyer l’e-mail de confirmation. Réessayez dans un instant, ou écrivez-nous à ${contact}.`,
       }), { status: 502, headers: JSON_ENTETES },
     );
   }

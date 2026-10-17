@@ -308,6 +308,30 @@ if (!joignable) {
   r = await poste(demande({ formule: 'vitrine', siret: '' }));
   verifie('formule Vitrine sans SIRET → accepté', r.statut !== 400, true);
 
+  /* ── L'ADRESSE DE CONTACT NE DOIT PAS DIVERGER ────────────────────
+     Elle apparaît dans la page, dans les messages d'erreur, dans la
+     page de confirmation et dans la notification. Écrite à plusieurs
+     endroits, elle a déjà divergé une fois : le code envoyait vers une
+     adresse, la documentation vers une autre. Un seul owner, et ce
+     contrôle pour le prouver. */
+  const ATTENDUE = process.env.CONTACT_ATTENDUE || 'contact.nexaweb62@gmail.com';
+  const EXPEDITEUR = 'contact@nexaaweb.com';
+
+  const pageDevis = await fetch(BASE + '/devis').then(r => r.text()).catch(() => '');
+  verifie('la page /devis porte l’adresse relevée',
+    pageDevis.includes(`data-contact="${ATTENDUE}"`), true);
+  /* L'expéditeur ne doit PAS être proposé au visiteur comme adresse où
+     écrire : c'est le domaine vérifié chez Resend, pas la boîte lue. */
+  verifie('et ne propose pas l’adresse d’expédition',
+    new RegExp('Écrivez-nous à[^<]{0,20}' + EXPEDITEUR.replace('.', '\\.')).test(pageDevis), false);
+
+  r = await poste(demande({ description: 'court' }));
+  void r;
+  const horsService = await fetch(BASE + '/devis/confirme?t=abimé')
+    .then(x => x.text()).catch(() => '');
+  verifie('la page de confirmation ne mentionne pas l’expéditeur',
+    horsService.includes(EXPEDITEUR), false);
+
   /* Aucun message d'erreur ne doit révéler un secret ni la structure
      interne : ils sont lus par l'expéditeur, qui n'est pas toujours
      un client. */
