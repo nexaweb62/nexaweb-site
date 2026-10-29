@@ -271,8 +271,10 @@
   --plq-or-encre: var(--raw-black-950);
   --max-w: 1280px;
   --pad-x: clamp(20px, 5vw, 80px);   /* gouttière ≥ 20 px partout */
-  /* Deux fois plus de vide entre les sections. */
-  --sec:   clamp(120px, 16vw, 240px);
+  /* Écart vertical entre deux sections : 130 px à 1440, 72 px au téléphone.
+     (Il valait 240 px : jusqu'à 530 px de vide entre deux blocs, ce qui
+     isolait chaque texte au milieu de l'écran.) */
+  --sec:   clamp(72px, 9vw, 136px);
   --hdr:   80px;
 
   /* Mouvement — un seul easing d'entrée, un seul easing continu */
