@@ -36,10 +36,10 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
 /* ── LE HÉROS ── */
 .dv-hero{text-align:center;margin-bottom:clamp(30px,5vw,54px)}
 .dv-pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border-strong);
-  border-radius:var(--radius-pill);padding:6px 16px;font-size:var(--fs-caption);font-weight:600;
+  border-radius:var(--radius-tag);padding:6px 16px;font-size:var(--fs-caption);font-weight:600;
   letter-spacing:0;color:var(--text-muted);margin-bottom:22px}
 .dv-pill-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
-.dv-title{font-size:clamp(1.9rem,5vw,3.4rem);font-weight:600;letter-spacing:-.035em;line-height:1.04;
+.dv-title{font-size:clamp(1.9rem,5vw,3.4rem);font-weight:600;letter-spacing:-.012em;line-height:1.04;
   text-wrap:balance;margin:0}
 .dv-title em{font-style:normal}
 .dv-lede{margin:18px auto 0;max-width:52ch;color:var(--text-muted);font-weight:300;line-height:1.7}
@@ -54,12 +54,12 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
 .devis-main{min-width:0;width:100%;max-width:760px}
 
 /* ── CARD ── */
-.devis-card{width:100%;background:var(--surface);border:1px solid var(--border-strong);border-radius:16px;padding:clamp(32px,5vw,56px) clamp(24px,5vw,52px);box-shadow:var(--shadow-2)}
+.devis-card{width:100%;background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--radius-block);padding:clamp(32px,5vw,56px) clamp(24px,5vw,52px);box-shadow:var(--shadow-2)}
 :root[data-theme="light"] .devis-card{background:var(--surface);border-color:var(--border)}
 @media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .devis-card{background:var(--surface);border-color:var(--border)}}
 
 /* ── LAUNCH NOTICE ── */
-.launch-notice{display:flex;align-items:center;gap:12px;background:var(--success-glow);border:1px solid var(--success);border-radius:10px;padding:14px 18px;margin-bottom:32px}
+.launch-notice{display:flex;align-items:center;gap:12px;background:var(--success-glow);border:1px solid var(--success);border-radius:var(--radius-block);padding:14px 18px;margin-bottom:32px}
 .launch-notice svg{width:18px;height:18px;stroke:var(--success);stroke-width:2;fill:none;flex-shrink:0}
 /* Mesuré : sur un panneau teinté (or ou vert à ~13 %), le gris secondaire
    tombe juste sous AA en sombre — 4.48:1 et 4.1:1. Sur ces fonds-là, le
@@ -69,7 +69,7 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
 
 /* ── CARD HEAD ── */
 .card-eyebrow{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--accent-text);margin-bottom:10px}
-.card-title{font-size:clamp(1.6rem,3vw,2.4rem);font-weight:600;letter-spacing:-.04em;line-height:.95;margin-bottom:10px}
+.card-title{font-size:clamp(1.6rem,3vw,2.4rem);font-weight:600;letter-spacing:-.014em;line-height:.95;margin-bottom:10px}
 .card-title em{font-style:italic;color:var(--text-muted)}
 .card-sub{font-size:13px;color:var(--text-muted);line-height:1.6;margin-bottom:36px}
 
@@ -78,7 +78,7 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
 /* Un numéro dans un cercle doré, et un filet dessous. */
 .fstep{display:flex;align-items:center;gap:11px;margin-bottom:18px;padding-bottom:10px;
   border-bottom:1px solid var(--border)}
-.fstep-n{flex:none;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;
+.fstep-n{flex:none;width:24px;height:24px;border-radius:var(--radius-tag);display:flex;align-items:center;
   justify-content:center;font-size:12px;font-weight:600;color:var(--on-accent);background:var(--accent);
   font-variant-numeric:tabular-nums}
 .fstep-t{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text)}
@@ -166,14 +166,16 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
   /* PAS font:inherit ici : plus specifique que .budget-pill, il ecraserait
      sa taille et ferait passer la pastille de 35 a 46 px de haut. */
   font-size:var(--fs-caption);font-weight:600}
+/* Chaque option est une plaque (.plq dans le balisage). Ne jamais lui
+   reposer border ou background ici : le style scopé pèse plus lourd que
+   la plaque et l'effacerait. On ne règle que ses deux couleurs. */
 .budget-pill{position:relative;cursor:pointer;text-transform:none;letter-spacing:normal;font:inherit;
-  font-size:var(--fs-caption);font-weight:600;padding:8px 16px;border:1px solid var(--border);
-  border-radius:var(--radius-pill);color:var(--text-muted);user-select:none;
-  transition:border-color .2s,background-color .2s,color .2s,box-shadow .2s}
+  --cut:var(--cut-sm);--pl-fond:transparent;--pl-filet:var(--border-strong);
+  font-size:var(--fs-caption);font-weight:600;padding:8px 16px;
+  color:var(--text-muted)}
 /* Masqué mais jamais display:none : sinon il ne reçoit plus le focus
    clavier et les flèches ne parcourent plus le groupe. 1px, pas 0. */
 .budget-pill input{position:absolute;opacity:0;width:1px;height:1px;margin:0;pointer-events:none}
-.budget-pill:hover{border-color:var(--border-strong)}
 /* ── LES TROIS COULEURS DE LA PASTILLE, AU BON POIDS ────────────────
    « .field label » pèse 0,3,1 une fois le marqueur de portée d'Astro
    compté ; « .budget-pill.selected » ne pesait que 0,3,0. Les trois
@@ -194,12 +196,10 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
 .field label.budget-pill.selected{color:var(--accent-text)}
 /* Le focus ne se voit pas sur un radio invisible : il se voit ici. */
 .budget-pill:has(input:focus-visible){outline:3px solid var(--accent-hover);outline-offset:3px}
-.budget-pill.selected{border-color:var(--accent);background:var(--accent-glow);color:var(--accent-text);
-  box-shadow:0 0 0 3px rgb(from var(--accent) r g b / .14)}
-@media (prefers-reduced-motion:no-preference){
-  .budget-pill.selected{animation:pillPick 420ms cubic-bezier(.22,.9,.24,1)}
-  @keyframes pillPick{0%{transform:scale(1)}38%{transform:scale(1.06)}100%{transform:scale(1)}}
-}
+/* La sélection : la plaque prend un filet d'or plein et un fond teinté.
+   Plus de halo carré autour d'une forme coupée, plus de rebond à 106 % :
+   le changement de teinte suffit à dire « c'est celle-là ». */
+.budget-pill.selected,.budget-pill.selected:hover{--pl-fond:var(--accent-glow);--pl-filet:var(--accent);color:var(--accent-text)}
 
 /* ── LA MENSUALITÉ DANS LA PASTILLE ─────────────────────────────────
    Une seule des deux lignes s'affiche, celle de l'échéancier choisi
@@ -250,7 +250,7 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* ── RGPD ── */
-.rgpd-row{padding:14px 16px;margin-top:6px;background:var(--accent-glow);border:1px solid var(--accent);border-radius:8px}
+.rgpd-row{padding:14px 16px;margin-top:6px;background:var(--accent-glow);border:1px solid var(--accent);border-radius:var(--radius-block)}
 .rgpd-label{display:flex;align-items:flex-start;gap:10px;cursor:pointer}
 .rgpd-label input[type=checkbox]{width:15px;height:15px;flex-shrink:0;margin-top:2px;accent-color:var(--accent);cursor:pointer}
 .rgpd-label span{font-size:var(--fs-caption);line-height:1.65;color:var(--text)}
@@ -270,7 +270,7 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
 .rgpd-row.has-err .field-err{margin-top:8px}
 
 /* ── FORM BANNER ── */
-.form-banner{display:none;align-items:flex-start;gap:10px;padding:12px 16px;border-radius:9px;font-size:12.5px;line-height:1.55;margin-bottom:20px}
+.form-banner{display:none;align-items:flex-start;gap:10px;padding:12px 16px;border-radius:var(--radius-block);font-size:12.5px;line-height:1.55;margin-bottom:20px}
 .form-banner.show{display:flex}
 .form-banner.error{background:var(--danger-glow);border:1px solid var(--danger);color:var(--danger)}
 .form-banner svg{flex-shrink:0;margin-top:1px}
@@ -283,9 +283,9 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
 .success-overlay{display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;padding:40px;min-height:360px}
 .success-overlay.show{display:flex}
 .devis-form.hide{display:none}
-.success-icon{width:64px;height:64px;border-radius:50%;background:var(--success-glow);border:1px solid var(--success);display:flex;align-items:center;justify-content:center}
+.success-icon{width:64px;height:64px;border-radius:var(--radius-tag);background:var(--success-glow);border:1px solid var(--success);display:flex;align-items:center;justify-content:center}
 .success-icon svg{width:30px;height:30px;stroke:var(--success);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.success-title{font-size:1.5rem;font-weight:600;letter-spacing:-.03em}
+.success-title{font-size:1.5rem;font-weight:600;letter-spacing:-.010em}
 .success-text{font-size:13px;color:var(--text-muted);line-height:1.65;max-width:380px}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px}
 
@@ -435,16 +435,16 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
             <div class="field field-full">
               <label><span data-i18n="dvs-paiement">Paiement</span></label>
               <div class="budget-pills" role="radiogroup" aria-label="Paiement" data-i18n-aria="dvs-paiement" data-defaut>
-                <label class="budget-pill selected"><input type="radio" name="paiement" value="comptant" checked><span data-i18n="trf-paie-1">En une fois</span></label>
-                <label class="budget-pill"><input type="radio" name="paiement" value="3"><span data-i18n="trf-paie-3">En 3 fois</span></label>
-                <label class="budget-pill"><input type="radio" name="paiement" value="4"><span data-i18n="trf-paie-4">En 4 fois</span></label>
+                <label class="budget-pill plq selected"><input type="radio" name="paiement" value="comptant" checked><span data-i18n="trf-paie-1">En une fois</span></label>
+                <label class="budget-pill plq"><input type="radio" name="paiement" value="3"><span data-i18n="trf-paie-3">En 3 fois</span></label>
+                <label class="budget-pill plq"><input type="radio" name="paiement" value="4"><span data-i18n="trf-paie-4">En 4 fois</span></label>
               </div>
             </div>
             <div class="field field-full">
               <label><span data-i18n="budget">Budget estimé</span></label>
               <div class="budget-pills" role="radiogroup" aria-label="Budget estimé" data-i18n-aria="budget">
                 {FORMULES.map((f) => (
-                  <label class="budget-pill">
+                  <label class="budget-pill plq">
                     <input type="radio" name="budget" value={f.cle} />
                     <span>
                       {/* Le préfixe porte sa clé de traduction — les mêmes que

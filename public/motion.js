@@ -289,15 +289,16 @@
 
   /* ───────────────────────────────────────────────────────────────────
      3 bis. LES BOUCLES SANS FIN S'ARRÊTENT QUAND ON NE LES VOIT PLUS
-     Le reflet des boutons, le dégradé liquide des chiffres et les
-     feuilles de la page Rendez-vous : chacun tourne en permanence.
+     Le dégradé liquide des chiffres et les feuilles de la page
+     Rendez-vous : chacun tourne en permanence. (Le reflet des boutons
+     en faisait partie ; il a été retiré avec les pilules.)
 
      On agit sur l'élément lui-même, jamais par un sélecteur de
      descendance : une classe posée sur une section obligerait le
      navigateur à recalculer le style de toute la sous-arborescence à
      chaque entrée et sortie d'écran, ce qui coûte plus que le gain.
      ─────────────────────────────────────────────────────────────────── */
-  var BOUCLES = '.liquid, .btn .sh, .btn-g .sh, .svc-cta .sh, .cta-btn .sh';
+  var BOUCLES = '.liquid';
 
   /* Certaines boucles sortent d'elles-mêmes du cadre : les feuilles de la
      page Rendez-vous commencent au-dessus de l'écran et y descendent.

@@ -53,12 +53,12 @@ main{position:relative;z-index:1;padding-top:var(--hdr);overflow:hidden}
 
 /* ── Hero ── */
 .rdv-hero{text-align:center;padding:clamp(64px,11vh,130px) var(--pad-x) clamp(48px,7vh,80px)}
-.rdv-label{display:inline-block;font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--accent-text);border:1px solid var(--accent);border-radius:100px;padding:5px 16px;margin-bottom:26px;background:var(--accent-glow)}
-.rdv-title{font-size:clamp(2.4rem,5.5vw,5rem);font-weight:600;line-height:.93;letter-spacing:-.04em;margin-bottom:20px;text-wrap:balance}
+.rdv-label{display:inline-block;font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--accent-text);border:1px solid var(--accent);border-radius:var(--radius-tag);padding:5px 16px;margin-bottom:26px;background:var(--accent-glow)}
+.rdv-title{font-size:clamp(2.4rem,5.5vw,5rem);font-weight:600;line-height:.93;letter-spacing:-.014em;margin-bottom:20px;text-wrap:balance}
 .rdv-title em{font-style:italic;color:var(--text-muted)}
 .rdv-sub{font-size:clamp(.88rem,1.3vw,1.05rem);color:var(--text-muted);font-weight:300;line-height:1.65;max-width:480px;margin:0 auto 32px}
 .rdv-badges{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px}
-.rdv-badge{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border-strong);border-radius:100px;padding:7px 16px;font-size:var(--fs-caption);font-weight:500;color:var(--text-muted);letter-spacing:0}
+.rdv-badge{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border-strong);border-radius:var(--radius-tag);padding:7px 16px;font-size:var(--fs-caption);font-weight:500;color:var(--text-muted);letter-spacing:0}
 .rdv-badge svg{width:13px;height:13px;stroke:var(--accent);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 
 /* ══════════════════════════════════════════════════════════════════
@@ -140,7 +140,7 @@ body.lite .gk:nth-child(2n){display:none}
 
 /* ── Calendly section ── */
 .rdv-section{max-width:900px;margin:0 auto;padding:0 var(--pad-x) clamp(80px,12vh,140px)}
-.calendly-inline-widget{min-width:320px;height:700px;border-radius:16px;overflow:hidden}
+.calendly-inline-widget{min-width:320px;height:700px;border-radius:var(--radius-block);overflow:hidden}
 @media(max-width:600px){.calendly-inline-widget{height:580px}}
 /* Le panneau d'attente occupe la même place que le calendrier : sans
    hauteur propre, la page sauterait de 700 px au moment du chargement. */
@@ -148,7 +148,7 @@ body.lite .gk:nth-child(2n){display:none}
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   text-align:center;gap:10px;min-height:360px;
   padding:clamp(24px,4vw,44px);
-  background:var(--surface);border:1px solid var(--border-strong);border-radius:16px;
+  background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--radius-block);
 }
 .rdv-garde[hidden]{display:none}
 .rdv-garde-t{font-size:var(--fs-body);font-weight:var(--w-semi);margin:0}

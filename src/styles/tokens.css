@@ -183,21 +183,36 @@
      2. ÉCHELLES NON-COLORÉES
      ───────────────────────────────────────────────────────────────────── */
 
-  /* ── ÉCHELLE TYPOGRAPHIQUE — rapports relevés sur apple.com/fr/store ──
-     L'interlettrage est INVERSÉ : négatif au-dessus de 32 px, nul ou à
-     peine positif en dessous de 16 px. La graisse plafonne à 600 : un
-     titre s'impose par sa taille, jamais par son épaisseur. */
-  --fs-title:   clamp(40px, 6.4vw, 80px);   --ls-title:   -.015em; --lh-title:   1.05;
-  --fs-section: clamp(28px, 3.4vw, 44px);   --ls-section: -.01em;  --lh-section: 1.1;
-  --fs-sub:     clamp(20px, 1.9vw, 26px);   --ls-sub:     -.01em;  --lh-sub:     1.2;
-  --fs-body:    17px;                       --ls-body:    -.012em; --lh-body:    1.47;
-  --fs-caption: 12px;                       --ls-caption: -.005em; --lh-caption: 1.35;
-  --w-semi: 600;   /* graisse maximale du site */
+  /* ── ÉCHELLE TYPOGRAPHIQUE ──
+     Les tailles n'ont pas bougé ; l'interlettrage, si. Il avait été relevé
+     sur SF Pro, qui est dessiné large : appliqué à Schibsted Grotesk, plus
+     serrée, -0,012 em collait les lettres du corps. Le texte revient donc
+     à zéro, et les titres, en Bluu Next, ne se resserrent qu'à peine : ses
+     empattements portent déjà leur propre rythme. Le corps clair sur fond
+     noir prend un rien d'air, jamais l'inverse. */
+  --fs-title:   clamp(40px, 6.4vw, 80px);   --ls-title:   -.012em; --lh-title:   1.04;
+  --fs-section: clamp(28px, 3.4vw, 44px);   --ls-section: -.008em; --lh-section: 1.08;
+  --fs-sub:     clamp(20px, 1.9vw, 26px);   --ls-sub:     -.004em; --lh-sub:     1.18;
+  --fs-body:    17px;                       --ls-body:    .002em;  --lh-body:    1.47;
+  --fs-caption: 12px;                       --ls-caption: .01em;   --lh-caption: 1.35;
+  --w-semi: 600;   /* graisse maximale du texte */
   --w-reg:  400;
+  --w-display: 700; /* Bluu Next n'existe qu'en gras : c'est sa seule graisse */
 
-  /* Rayon des blocs. Ils se distinguent par un fond légèrement différent,
-     jamais par une bordure. */
-  --radius-block: 18px;
+  /* ── LA FORME ──
+     Une règle, et une seule, écrite ici pour qu'on ne la redevine pas :
+       · ce qui se CLIQUE est une plaque à angles coupés à 45° — la
+         facette du N du logo, la plaque de laiton vissée à côté d'une
+         porte de commerce. Trois tailles de coupe, selon la hauteur.
+       · ce qui CONTIENT (cartes, panneaux, encadrés) est droit, à 2 px.
+       · ce qui ÉTIQUETTE sans être cliquable est droit, à 2 px.
+     Il n'y a plus de pilule, plus de cercle cliquable. Les seuls ronds
+     restants sont décoratifs (points d'état, roulements de chargement). */
+  --radius-block: 2px;
+  --radius-tag:   2px;
+  --cut-sm: 5px;   /* contrôles de 30 à 40 px de haut */
+  --cut-md: 7px;   /* bouton courant, 44 à 52 px */
+  --cut-lg: 9px;   /* grands contrôles, 54 px et plus */
 
   /* Type — échelle modulaire conservée pour les cas particuliers */
   --fs-25:  .512rem;   /*  8.2 px — micro-label */
@@ -220,18 +235,40 @@
   --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px; --sp-5: 24px;
   --sp-6: 32px; --sp-7: 48px; --sp-8: 64px; --sp-9: 96px; --sp-10: 128px;
 
-  --radius-xs: 2px; --radius-sm: 4px; --radius-md: 8px;
-  --radius-lg: 14px; --radius-pill: 100px;
+  --radius-xs: 2px; --radius-sm: 2px; --radius-md: 2px;
+  --radius-lg: 2px;
 
-  /* Gabarit */
-  /* Pile système : le visiteur lit la police de SON système — SF Pro sur
-     Mac et iPhone, Segoe UI Variable sur Windows, Roboto sur Android.
-     Aucun fichier à télécharger, aucune milliseconde au chargement, rien
-     à déclarer dans la politique de confidentialité. UNE famille pour
-     tout le site : il n'y a plus de police de titre distincte. */
-  --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
-          "Segoe UI Variable Display", "Segoe UI", Roboto,
-          "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* ── LES DEUX FAMILLES ──
+     La pile système a été abandonnée : SF Pro sur iPhone, Segoe sur
+     Windows, c'est la police de tous les sites générés à la chaîne — le
+     visiteur la reconnaît sans savoir la nommer, et le site ne ressemblait
+     à personne en particulier.
+
+     · Bluu Next (Jean-Baptiste Morizot, Velvetyne — fonderie libre
+       française) porte les TITRES. Un empattement franc, gras, qui tient
+       de l'enseigne peinte au-dessus d'une boutique : exactement le
+       métier des clients du site.
+     · Schibsted Grotesk porte le TEXTE, les boutons, les chiffres. Une
+       grotesque de journal, faite pour être lue longtemps, avec des
+       chiffres tabulaires pour les prix.
+
+     Les deux sont servies depuis /fonts, sous licence SIL OFL : aucune
+     requête vers un tiers, rien à déclarer dans la politique de
+     confidentialité. Chaque famille a son repli MÉTRIQUE (« … Repli »,
+     déclaré dans global.css) : tant que le fichier n'est pas arrivé, le
+     navigateur dessine Arial ou Times à la largeur de la vraie police,
+     et la page ne saute pas quand elle arrive. */
+  --font: "Schibsted Grotesk", "Schibsted Repli", -apple-system, BlinkMacSystemFont,
+          "Segoe UI", Roboto, Arial, sans-serif;
+  --font-display: "Bluu Next", "Bluu Repli", Georgia, "Times New Roman", serif;
+
+  /* La plaque d'or est un OBJET, pas une teinte de thème : le laiton est
+     le même sur papier et sur noir. Calculé : l'encre noire y tient
+     9,85:1 au repos, 11,95:1 au survol, 7,14:1 enfoncée. */
+  --plq-or:       var(--raw-gold-400);
+  --plq-or-haut:  var(--raw-gold-300);
+  --plq-or-bas:   var(--raw-gold-600);
+  --plq-or-encre: var(--raw-black-950);
   --max-w: 1280px;
   --pad-x: clamp(20px, 5vw, 80px);   /* gouttière ≥ 20 px partout */
   /* Deux fois plus de vide entre les sections. */

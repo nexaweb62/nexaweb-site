@@ -164,8 +164,22 @@ for (const theme of ['dark', 'light']) {
         if (!r0.width || !r0.height) return;
         const cs = getComputedStyle(el);
         if (+cs.opacity < 0.9) return;
+        /* LES PLAQUES (.plq, .ihb) n'ont pas de background-color : leur
+           fond est peint en dégradés, et sa couleur est écrite dans
+           --pl-fond. Sans cette lecture, une option de paiement cochée —
+           encre noire sur or plein — passait pour un texte posé sur la
+           page, et le masquage par visibility:hidden emportait sa plaque
+           avec lui : on relisait alors le fond du segment derrière (1,07:1),
+           un chiffre faux sur un libellé à 9,85:1. Une plaque au fond
+           opaque couvre son texte : elle sort du périmètre de ce contrôle,
+           exactement comme une carte opaque — check:glass la mesure, elle,
+           au pixel. */
+        const fondPlaque = x => (x.classList && (x.classList.contains('plq') || x.classList.contains('ihb')))
+          ? getComputedStyle(x).getPropertyValue('--pl-fond').trim() : '';
         let cover = 0, n = el;
         while (n && n !== main.parentElement) {
+          const pl = fondPlaque(n);
+          if (pl) cover = 1 - (1 - cover) * (1 - alpha(pl));
           cover = 1 - (1 - cover) * (1 - alpha(getComputedStyle(n).backgroundColor));
           if (cover >= 0.995) break;
           n = n.parentElement;

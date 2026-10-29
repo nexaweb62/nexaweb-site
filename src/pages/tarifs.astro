@@ -52,9 +52,9 @@ main{--text-muted:var(--raw-warm-200)}
   background:radial-gradient(120% 70% at 50% 40%,
     rgb(from var(--bg) r g b / .82), rgb(from var(--bg) r g b / 0) 70%);
 }
-.prix-pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border-strong);border-radius:100px;padding:6px 16px;font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-muted);margin-bottom:24px}
+.prix-pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border-strong);border-radius:var(--radius-tag);padding:6px 16px;font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-muted);margin-bottom:24px}
 .prix-pill-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
-.prix-h1{font-size:clamp(32px,5.5vw,72px);font-weight:600;line-height:1.06;letter-spacing:-.03em;margin-bottom:16px}
+.prix-h1{font-size:clamp(32px,5.5vw,72px);font-weight:600;line-height:1.06;letter-spacing:-.010em;margin-bottom:16px}
 .prix-sub{font-size:clamp(15px,1.4vw,17px);color:var(--text-muted);line-height:1.65;max-width:440px;margin:0 auto}
 
 /* ── OFFRE LANCEMENT ── */
@@ -67,25 +67,25 @@ main{--text-muted:var(--raw-warm-200)}
   background:var(--bg);
   background-image:linear-gradient(var(--success-glow),var(--success-glow));
   border:1px solid var(--success);
-  border-radius:14px;
+  border-radius:var(--radius-block);
   padding:clamp(24px,3vw,36px) clamp(24px,4vw,48px);
   display:flex;align-items:center;gap:24px;
   flex-wrap:wrap;
 }
 .launch-ico{
-  width:56px;height:56px;border-radius:50%;background:var(--success-glow);border:1px solid var(--success);
+  width:56px;height:56px;border-radius:var(--radius-tag);background:var(--success-glow);border:1px solid var(--success);
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
 }
 .launch-ico svg{width:28px;height:28px;stroke:var(--success);stroke-width:2;fill:none}
 .launch-text{flex:1;min-width:200px}
 .launch-tag{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--success);margin-bottom:6px}
-.launch-title{font-size:clamp(18px,2.5vw,26px);font-weight:600;letter-spacing:-.02em;line-height:1.1;margin-bottom:6px}
+.launch-title{font-size:clamp(18px,2.5vw,26px);font-weight:600;letter-spacing:-.007em;line-height:1.1;margin-bottom:6px}
 .launch-title strong{color:var(--success)}
 .launch-desc{font-size:13px;color:var(--text-muted);line-height:1.6}
 .launch-spots{
   display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;flex-shrink:0;
 }
-.launch-num{font-size:clamp(32px,5vw,48px);font-weight:600;color:var(--success);line-height:1;letter-spacing:-.03em}
+.launch-num{font-size:clamp(32px,5vw,48px);font-weight:600;color:var(--success);line-height:1;letter-spacing:-.010em}
 .launch-num-label{font-size:var(--fs-caption);font-weight:600;color:var(--text-muted);letter-spacing:0}
 @media(max-width:600px){.launch-band{flex-direction:column;text-align:center}.launch-spots{flex-direction:row;gap:12px;justify-content:center}}
 
@@ -132,7 +132,12 @@ main{--text-muted:var(--raw-warm-200)}
    compteur de chiffres écrasait le textContent de la carte et
    détruisait le <small> avant même le premier défilement. Corrigé dans
    public/scroll-fx.js, qui n'écrit plus que dans les nœuds de texte. */
-.plan-pre{font-size:.46em;font-weight:500;letter-spacing:.02em;color:var(--text-muted);
+/* « dès », « à partir de », « /mois » : la police du texte, jamais celle
+   du prix qu'ils accompagnent — en Bluu Next à 9 px, l'empattement gras
+   bouchait les lettres. Et un plancher de 11 px sur téléphone, où .46 em
+   d'un prix de 20 px ne laissait que 9,2 px. */
+.plan-pre,.plan-mois-u{font-family:var(--font);font-synthesis:none}
+.plan-pre{font-size:max(11px,.46em);font-weight:500;letter-spacing:.02em;color:var(--text-muted);
   margin-right:.12em;vertical-align:.32em}
 
 /* ── PAIEMENT : COMPTANT OU MENSUEL ────────────────────────────────
@@ -144,9 +149,10 @@ main{--text-muted:var(--raw-warm-200)}
    caché n'entre jamais dans l'écran, son animation ne partirait
    jamais, et il resterait figé sur « 0 € ». */
 .paie{border:0;margin:clamp(20px,3vw,28px) 0 0;padding:0;display:flex;justify-content:center}
-.paie-seg{display:inline-flex;gap:4px;align-items:center;padding:3px 5px;
-  border:1px solid var(--border-strong);border-radius:var(--radius-pill);
-  background:var(--surface)}
+/* Le segment est une plaque fixe (.plq.plq-fixe) ; chaque option, une
+   petite plaque posée dedans, coupe réduite pour rester parallèle. */
+.paie-seg{--cut:var(--cut-sm);--pl-filet:var(--border-strong);
+  display:inline-flex;gap:4px;align-items:center;padding:3px 4px}
 /* IL N'Y A PLUS DE FLOU D'ARRIERE-PLAN SUR CETTE PAGE, ET C'EST VOULU.
    Les cartes, le bandeau, le segment de paiement et l'encart final en
    portaient un — cinq a sept elements selon le defilement. Chacun
@@ -161,12 +167,16 @@ main{--text-muted:var(--raw-warm-200)}
    Ce qu'on gagne, c'est une page qui se peint. */
 .paie-radio{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
 .paie-lbl{
-  font-size:var(--fs-caption);font-weight:500;letter-spacing:0;color:var(--text);
+  --cut:3px;--pl-fond:transparent;--pl-filet:transparent;border-width:0;
+  font-size:var(--fs-caption);font-weight:500;letter-spacing:.01em;color:var(--text);
   display:flex;align-items:center;justify-content:center;cursor:pointer;
-  min-height:30px;padding:2px 14px;border-radius:var(--radius-pill);
-  transition:color var(--dur-micro) var(--ease-out),background-color var(--dur-micro) var(--ease-out);
+  min-height:30px;padding:2px 14px;
 }
-.paie-radio:checked + .paie-lbl{background:var(--accent);color:var(--on-accent);font-weight:600}
+.paie-radio:checked + .paie-lbl{--pl-fond:var(--accent);--pl-filet:var(--accent);color:var(--on-accent);font-weight:600}
+@media (hover:hover) and (pointer:fine){
+  .paie-radio:not(:checked) + .paie-lbl:hover{--pl-fond:var(--surface-2);--pl-filet:var(--surface-2)}
+  .paie-radio:checked + .paie-lbl:hover{--pl-fond:var(--accent);--pl-filet:var(--accent)}
+}
 /* Le radio est hors écran : sans cette règle, rien ne montrerait au
    clavier où l'on se trouve. */
 .paie-radio:focus-visible + .paie-lbl{outline:2px solid var(--focus);outline-offset:2px}
@@ -175,10 +185,10 @@ main{--text-muted:var(--raw-warm-200)}
    .plan-m4 portent la VISIBILITÉ. Séparer les deux permet d'ajouter un
    échéancier sans toucher aux styles. */
 .plan-m3,.plan-m4{display:none}
-.plan-mois{font-size:clamp(20px,2.4vw,28px);font-weight:600;letter-spacing:-.03em;line-height:1;
+.plan-mois{font-size:clamp(20px,2.4vw,28px);font-weight:600;letter-spacing:-.010em;line-height:1;
   white-space:nowrap;font-variant-numeric:tabular-nums}
-.plan-mois-gros{font-size:clamp(23px,3vw,33px);letter-spacing:-.04em}
-.plan-mois-u{font-size:.42em;font-weight:500;color:var(--text-muted);margin-left:.1em}
+.plan-mois-gros{font-size:clamp(23px,3vw,33px);letter-spacing:-.014em}
+.plan-mois-u{font-size:max(11px,.42em);font-weight:500;color:var(--text-muted);margin-left:.1em}
 .plans-section:has(#paie-3:checked) .plan-comptant,
 .plans-section:has(#paie-4:checked) .plan-comptant{display:none}
 /* « block » et non « inline-flex » : un conteneur flex ne rend pas les
@@ -210,7 +220,7 @@ main{--text-muted:var(--raw-warm-200)}
 .plan-card{
   position:relative;display:flex;flex-direction:column;
   background:var(--surface);
-  border:1px solid var(--border-strong);border-radius:16px;
+  border:1px solid var(--border-strong);border-radius:var(--radius-block);
   padding:clamp(18px,2.2vw,26px);transition:border-color .25s,transform .2s ease-out;
   transform-style:preserve-3d;
 }
@@ -237,17 +247,17 @@ main{--text-muted:var(--raw-warm-200)}
 .plan-badge span{
   background:var(--accent);
   color:var(--on-accent);font-size:var(--fs-caption);font-weight:600;letter-spacing:0;
-  padding:4px 12px;border-radius:100px;box-shadow:var(--shadow-1);
+  padding:4px 12px;border-radius:var(--radius-tag);box-shadow:var(--shadow-1);
 }
 .plan-name{font-size:var(--fs-caption);font-weight:600;color:var(--text-muted);margin-bottom:12px}
 .plan-range{display:flex;align-items:center;gap:6px;flex-wrap:nowrap}
-.plan-from{font-size:clamp(20px,2.4vw,28px);font-weight:600;letter-spacing:-.03em;line-height:1;white-space:nowrap;font-variant-numeric:tabular-nums}
+.plan-from{font-size:clamp(20px,2.4vw,28px);font-weight:600;letter-spacing:-.010em;line-height:1;white-space:nowrap;font-variant-numeric:tabular-nums}
 .plan-sep{font-size:clamp(14px,1.5vw,18px);color:var(--text-subtle);flex-shrink:0;line-height:1}
-.plan-to{font-size:clamp(20px,2.4vw,28px);font-weight:600;letter-spacing:-.03em;line-height:1;color:var(--text-muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.plan-to{font-size:clamp(20px,2.4vw,28px);font-weight:600;letter-spacing:-.010em;line-height:1;color:var(--text-muted);white-space:nowrap;font-variant-numeric:tabular-nums}
 /* Chasse fixe pendant que les chiffres montent, sinon ils tremblent.
    Les chiffres tabulaires sont plus larges : la taille descend d'un
    cran pour que « 1 200 € — 3 100 € » tienne encore sur une ligne. */
-.plan-amount{font-size:clamp(23px,3vw,33px);font-weight:600;letter-spacing:-.04em;line-height:1;white-space:nowrap;font-variant-numeric:tabular-nums}
+.plan-amount{font-size:clamp(23px,3vw,33px);font-weight:600;letter-spacing:-.014em;line-height:1;white-space:nowrap;font-variant-numeric:tabular-nums}
 .plan-desc{font-size:var(--fs-caption);color:var(--text-muted);margin-top:5px;line-height:1.5}
 /* La pastille des places restantes n'avait qu'une lueur doree pour
    fond : posee sur une carte deja translucide a 94 %, la soie remontait
@@ -256,12 +266,12 @@ main{--text-muted:var(--raw-warm-200)}
 .plan-spots{display:inline-flex;align-items:center;gap:5px;font-size:var(--fs-caption);font-weight:600;color:var(--accent-text);padding:4px 9px;
   background:var(--surface);
   background-image:linear-gradient(var(--accent-glow),var(--accent-glow));
-  border:1px solid var(--accent);border-radius:6px;margin-bottom:14px}
+  border:1px solid var(--accent);border-radius:var(--radius-block);margin-bottom:14px}
 .plan-spots-num{font-size:12px;font-weight:600;line-height:1}
 .plan-divider{border:none;border-top:1px dashed var(--border-strong);margin:16px 0}
 .plan-features{list-style:none;padding:0;margin:0 0 20px;display:flex;flex-direction:column;gap:8px;flex:1}
 .plan-feature{display:flex;align-items:flex-start;gap:8px;font-size:var(--fs-caption);color:var(--text-muted);line-height:1.4}
-.plan-feature-icon{width:16px;height:16px;border-radius:50%;background:var(--success-glow);border:1px solid var(--success);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.plan-feature-icon{width:16px;height:16px;border-radius:var(--radius-tag);background:var(--success-glow);border:1px solid var(--success);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
 .plan-feature-icon svg{width:8px;height:8px;stroke:var(--success);stroke-width:2.5;fill:none}
 
 /* Le badge de garantie, centré sous la grille. Sa fenêtre et son
@@ -295,10 +305,10 @@ main{--text-muted:var(--raw-warm-200)}
   max-width:580px;margin:0 auto;
   background:var(--bg);
   background-image:linear-gradient(var(--accent-glow),var(--accent-glow));
-  border:1px solid var(--accent);border-radius:16px;
+  border:1px solid var(--accent);border-radius:var(--radius-block);
   padding:clamp(32px,4vw,52px);
 }
-.cta-title{font-size:clamp(20px,3vw,30px);font-weight:600;letter-spacing:-.02em;margin-bottom:12px}
+.cta-title{font-size:clamp(20px,3vw,30px);font-weight:600;letter-spacing:-.007em;margin-bottom:12px}
 /* Mesuré : sur un panneau teinté (or ou vert à ~13 %), le gris secondaire
    tombe juste sous AA en sombre — 4.48:1 et 4.1:1. Sur ces fonds-là, le
    texte secondaire prend l'encre pleine. */
@@ -363,13 +373,13 @@ main{--text-muted:var(--raw-warm-200)}
            et c'est :checked qui bascule l'affichage. Aucun JavaScript. -->
       <fieldset class="paie">
         <legend class="sr-only" data-i18n="trf-paie-legend">Mode de paiement</legend>
-        <div class="paie-seg">
+        <div class="paie-seg plq plq-fixe">
           <input class="paie-radio" type="radio" name="paie" id="paie-1" checked>
-          <label class="paie-lbl" for="paie-1" data-i18n="trf-paie-1">En une fois</label>
+          <label class="paie-lbl plq" for="paie-1" data-i18n="trf-paie-1">En une fois</label>
           <input class="paie-radio" type="radio" name="paie" id="paie-3">
-          <label class="paie-lbl" for="paie-3" data-i18n="trf-paie-3">En 3 fois</label>
+          <label class="paie-lbl plq" for="paie-3" data-i18n="trf-paie-3">En 3 fois</label>
           <input class="paie-radio" type="radio" name="paie" id="paie-4">
-          <label class="paie-lbl" for="paie-4" data-i18n="trf-paie-4">En 4 fois</label>
+          <label class="paie-lbl plq" for="paie-4" data-i18n="trf-paie-4">En 4 fois</label>
         </div>
       </fieldset>
 

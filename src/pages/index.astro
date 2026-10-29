@@ -19,6 +19,17 @@ import '../styles/global.css';
 .h-xl em{font-style:italic;font-weight:600;color:var(--text-muted)}
 .hero-hl{margin-bottom:clamp(24px,4vh,52px);overflow:hidden;width:100%;text-wrap:wrap;overflow-wrap:anywhere}
 .hero-hl .ln{display:block;overflow:hidden}
+/* LE TITRE SUR TÉLÉPHONE. Bluu Next est plus large que la police
+   système qu'il remplace : à 40 px sur 390, le titre tombait en cinq
+   lignes, avec « artisans » puis « des » seuls sur la leur. Sous 520 px
+   la taille suit donc la largeur utile — calée pour que la plus longue
+   ligne insécable, « des Hauts-de-France. », tienne d'un seul tenant
+   (9,6 cadratins mesurés) — et chaque ligne s'équilibre. Mesuré de 320
+   à 480 px : quatre lignes partout, aucun mot seul. */
+@media (max-width:520px){
+  .hero-hl{font-size:min(40px,calc((100vw - 2 * var(--pad-x)) / 9.6))}
+  .hero-hl .li{text-wrap:balance}
+}
 .hero-hl .li{display:block;transform:translateY(110%);animation:su .85s cubic-bezier(.16,1,.3,1) forwards}
 .hero-hl .ln:nth-child(1) .li{animation-delay:.4s}
 .hero-hl .ln:nth-child(2) .li{animation-delay:.56s}
@@ -38,7 +49,7 @@ import '../styles/global.css';
 .s-phil{}
 .phil-in{display:grid;grid-template-columns:1fr 2fr;gap:clamp(32px,6vw,120px);align-items:start}
 .s-phil{min-height:62vh}
-.phil-txt{font-size:clamp(1.5rem,3.5vw,3.4rem);font-weight:600;line-height:1.15;letter-spacing:-.025em}
+.phil-txt{font-size:clamp(1.5rem,3.5vw,3.4rem);font-weight:600;line-height:1.15;letter-spacing:-.009em}
 .phil-txt span{color:var(--text-muted)}
 @media(max-width:700px){.phil-in{grid-template-columns:1fr;gap:22px}.pin-label{position:static}.s-phil{min-height:0}}
 
@@ -63,7 +74,7 @@ import '../styles/global.css';
 .svc-row>*{position:relative;z-index:1}
 .svc-n{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-subtle);
   font-variant-numeric:tabular-nums;transition:color var(--dur-short) var(--ease-out)}
-.svc-name{font-size:clamp(1.05rem,2.4vw,1.6rem);font-weight:600;letter-spacing:-.025em;
+.svc-name{font-size:clamp(1.05rem,2.4vw,1.6rem);font-weight:600;letter-spacing:-.009em;
   transition:transform var(--dur-short) var(--ease-out)}
 .svc-meta{display:flex;align-items:center;gap:16px;color:var(--text-muted)}
 /* Petites capitales espacees : une etiquette, pas un titre. */
@@ -132,8 +143,8 @@ import '../styles/global.css';
 .proc-step{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
   gap:14px;opacity:0;background:none;border-radius:0;padding:0}
 .proc-step .k{font-size:clamp(46px,8.5vw,104px);line-height:.88;font-weight:600;
-  letter-spacing:-.045em;font-variant-numeric:tabular-nums}
-.proc-step .proc-title{font-size:clamp(21px,3vw,32px);font-weight:600;letter-spacing:-.02em;margin:0}
+  letter-spacing:-.016em;font-variant-numeric:tabular-nums}
+.proc-step .proc-title{font-size:clamp(21px,3vw,32px);font-weight:600;letter-spacing:-.007em;margin:0}
 .proc-step .proc-desc{margin:0;color:var(--text-muted);max-width:44ch;
   font-size:16px;font-weight:300;line-height:1.68}
 .procticks{display:flex;gap:7px;margin-top:clamp(20px,3vw,30px)}
@@ -205,7 +216,7 @@ import '../styles/global.css';
    il se cassait en quatre lignes bancales autour de son <br>. */
 .why-in .h-lg{font-size:clamp(var(--fs-500),3.6vw,var(--fs-700))}
 .why-bio{display:flex;flex-direction:column;gap:18px;padding:4px 0}
-.why-bio-lead{font-size:clamp(1.35rem,2.4vw,1.9rem);font-weight:600;line-height:1.18;letter-spacing:-.03em;color:var(--text)}
+.why-bio-lead{font-size:clamp(1.35rem,2.4vw,1.9rem);font-weight:600;line-height:1.18;letter-spacing:-.010em;color:var(--text)}
 .why-bio-body{font-size:13px;font-weight:300;line-height:1.72;color:var(--text-muted)}
 /* Sans « align-self:flex-start », ce bouton s'etire sur toute la largeur
    de sa colonne : mesure, 510 px pour un parent de 510 px. La regle
@@ -231,7 +242,7 @@ import '../styles/global.css';
 }
 
 .stat-val{
-  font-size:clamp(2.8rem,6vw,6rem);font-weight:600;letter-spacing:-.04em;
+  font-size:clamp(2.8rem,6vw,6rem);font-weight:600;letter-spacing:-.014em;
   line-height:1;color:var(--text);
   /* Ligne de base commune aux trois tuiles, quel que soit le glyphe */
   display:flex;align-items:baseline;justify-content:center;
@@ -269,12 +280,12 @@ import '../styles/global.css';
 .qa.open .bar{transform:scaleY(1)}
 .qa .q{width:100%;background:none;border:0;color:inherit;font:inherit;cursor:pointer;text-align:left;
   display:flex;align-items:center;gap:16px;padding:clamp(16px,2.2vw,22px) 4px;
-  font-size:clamp(15px,1.8vw,18px);font-weight:600;letter-spacing:-.02em}
+  font-size:clamp(15px,1.8vw,18px);font-weight:600;letter-spacing:-.007em}
 .qa .q:focus-visible{outline:2px solid var(--text);outline-offset:-2px;border-radius:2px}
 .qa .q .qt{transition:transform 420ms cubic-bezier(.22,.9,.24,1),color 260ms var(--ease-out)}
 .qa.open .q .qt{transform:translateX(12px);color:var(--text)}
 .qa .q:hover .qt{transform:translateX(6px)}
-.qa .plus{margin-left:auto;flex:none;position:relative;width:28px;height:28px;border-radius:50%;
+.qa .plus{margin-left:auto;flex:none;position:relative;width:28px;height:28px;border-radius:var(--radius-tag);
   box-shadow:inset 0 0 0 1px var(--border-strong);
   transition:transform 480ms cubic-bezier(.22,.9,.24,1),box-shadow var(--dur-short) var(--ease-out)}
 .qa .plus::before,.qa .plus::after{content:'';position:absolute;top:50%;left:50%;
@@ -301,7 +312,7 @@ import '../styles/global.css';
 .s-cta{text-align:center}
 .cta-in{max-width:900px;margin:0 auto;padding:clamp(80px,15vw,180px) 0}
 .cta-super{font-size:clamp(.6rem,1vw,.75rem);font-weight:600;letter-spacing:0;color:var(--text-muted);margin-bottom:32px}
-.cta-hl{font-size:clamp(3rem,8vw,9.5rem);font-weight:600;line-height:.92;letter-spacing:-.04em;margin-bottom:48px;text-wrap:balance}
+.cta-hl{font-size:clamp(3rem,8vw,9.5rem);font-weight:600;line-height:.92;letter-spacing:-.014em;margin-bottom:48px;text-wrap:balance}
 .cta-hl em{font-style:italic;font-weight:600}
 
 /* ── POUR QUI ── */
@@ -309,9 +320,9 @@ import '../styles/global.css';
 .who-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:clamp(36px,6vh,72px)}
 .who-card{background:var(--surface);border-radius:var(--radius-block);padding:clamp(28px,4vw,48px);display:flex;flex-direction:column;gap:16px}
 .who-marker{font-size:var(--fs-caption);font-weight:500;letter-spacing:0;color:var(--text-subtle);margin-bottom:6px;font-variant-numeric:tabular-nums}
-.who-target{font-size:clamp(1.1rem,2.2vw,1.7rem);font-weight:600;letter-spacing:-.025em;line-height:1.12}
+.who-target{font-size:clamp(1.1rem,2.2vw,1.7rem);font-weight:600;letter-spacing:-.009em;line-height:1.12}
 .who-desc{font-size:13px;font-weight:300;line-height:1.72;color:var(--text-muted);flex:1}
-.who-price{font-size:clamp(1.7rem,3.2vw,2.6rem);font-weight:600;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.who-price{font-size:clamp(1.7rem,3.2vw,2.6rem);font-weight:600;letter-spacing:-.014em;line-height:1;font-variant-numeric:tabular-nums}
 .who-price-sub{font-size:var(--fs-caption);font-weight:500;letter-spacing:0;color:var(--text-muted);margin-top:6px}
 @media(max-width:600px){.who-grid{grid-template-columns:1fr;gap:0}.who-card:not(:last-child){border-bottom:1px solid var(--border)}}
 
@@ -625,13 +636,13 @@ import '../styles/global.css';
         </a>
         <p class="foot-tag" data-i18n="ftr-tag">Agence web premium · Carvin, Hauts-de-France</p>
         <div class="foot-socials" aria-label="Réseaux sociaux" data-i18n-aria="a11y-sociaux">
-          <a href="https://www.linkedin.com/in/ahmed-chteoui-049211429/" class="foot-soc linkedin" aria-label="LinkedIn" target="_blank" rel="noopener">
+          <a href="https://www.linkedin.com/in/ahmed-chteoui-049211429/" class="foot-soc plq linkedin" aria-label="LinkedIn" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
           </a>
-          <a href="https://www.facebook.com/people/Nexaweb/61593685250868/" class="foot-soc facebook" aria-label="Facebook" target="_blank" rel="noopener">
+          <a href="https://www.facebook.com/people/Nexaweb/61593685250868/" class="foot-soc plq facebook" aria-label="Facebook" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
           </a>
-          <a href="https://wa.me/33641467898" class="foot-soc whatsapp" aria-label="WhatsApp" target="_blank" rel="noopener">
+          <a href="https://wa.me/33641467898" class="foot-soc plq whatsapp" aria-label="WhatsApp" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           </a>
         </div>

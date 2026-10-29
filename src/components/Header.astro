@@ -44,9 +44,9 @@ const THEMES = [
         <li><a href="/contact"  class="nav-link" data-i18n="hdr-nav-contact">Localisation</a></li>
       </ul>
       <div class="nav-r">
-        <div class="lang-sel" role="group" aria-label="Langue" data-i18n-aria="a11y-langue">
-          <button class="lang-opt" data-lang="fr">FR</button>
-          <button class="lang-opt" data-lang="en">EN</button>
+        <div class="lang-sel plq plq-fixe" role="group" aria-label="Langue" data-i18n-aria="a11y-langue">
+          <button class="lang-opt plq" data-lang="fr">FR</button>
+          <button class="lang-opt plq" data-lang="en">EN</button>
         </div>
 
         <!-- SÉLECTEUR DE THÈME — système / clair / sombre.
@@ -64,9 +64,9 @@ const THEMES = [
              D'où aussi le troisième état. À deux options on pouvait
              choisir clair ou sombre, jamais revenir à « suis mon
              téléphone » : le choix était définitif par construction. -->
-        <div class="theme-sel" id="theme-sel" role="radiogroup" aria-label="Thème d'affichage" data-i18n-aria="a11y-theme">
+        <div class="theme-sel plq plq-fixe" id="theme-sel" role="radiogroup" aria-label="Thème d'affichage" data-i18n-aria="a11y-theme">
           {THEMES.map(o => (
-            <button type="button" class="theme-opt" role="radio" data-theme-opt={o.cle}
+            <button type="button" class="theme-opt plq" role="radio" data-theme-opt={o.cle}
                     aria-checked="false" tabindex="-1"
                     title={o.nom} data-i18n-title={o.cleI18n}>
               <Fragment set:html={o.svg} />
@@ -80,7 +80,7 @@ const THEMES = [
              doit jamais disparaitre. Il a ete emporte une fois par un
              retrait du selecteur de theme voisin — d'ou le garde-fou qui
              le reclame desormais sur chaque page. -->
-        <button class="menu-btn" id="menu-btn"
+        <button class="menu-btn plq" id="menu-btn"
           aria-label="Menu — ouvrir la navigation" data-i18n-aria="a11y-menu"
           aria-expanded="false">
           <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
@@ -108,60 +108,60 @@ const THEMES = [
 <!-- CIRCULAR NAV OVERLAY -->
 <div class="cnav" id="cnav" role="dialog" aria-modal="true" aria-label="Navigation"
      data-i18n-aria="a11y-nav" inert>
-  <div class="cnav-ring" id="cnav-ring">
-    <button class="cnav-close" id="cnav-close" aria-label="Fermer la navigation" data-i18n-aria="a11y-fermer">
+  <div class="cnav-ring plq plq-fixe" id="cnav-ring">
+    <button class="cnav-close plq" id="cnav-close" aria-label="Fermer la navigation" data-i18n-aria="a11y-fermer">
       <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
     <div class="cnav-item">
-      <a href="/" class="cnav-link">
+      <a href="/" class="cnav-link plq">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         <span class="cnav-name" data-i18n="hdr-nav-home">Accueil</span>
       </a>
     </div>
     <div class="cnav-item">
-      <a href="/services" class="cnav-link">
+      <a href="/services" class="cnav-link plq">
         <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
         <span class="cnav-name" data-i18n="hdr-nav-services">Services</span>
       </a>
     </div>
     <div class="cnav-item">
-      <a href="/#apropos" class="cnav-link">
+      <a href="/#apropos" class="cnav-link plq">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         <span class="cnav-name" data-i18n="hdr-nav-about">À propos</span>
       </a>
     </div>
     <div class="cnav-item">
-      <a href="/tarifs" class="cnav-link">
+      <a href="/tarifs" class="cnav-link plq">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
         <span class="cnav-name" data-i18n="hdr-nav-pricing">Tarifs</span>
       </a>
     </div>
     <div class="cnav-item">
-      <a href="/#faq" class="cnav-link">
+      <a href="/#faq" class="cnav-link plq">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         <span class="cnav-name" data-i18n="hdr-nav-faq">FAQ</span>
       </a>
     </div>
     <div class="cnav-item">
-      <a href="/contact" class="cnav-link">
+      <a href="/contact" class="cnav-link plq">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         <span class="cnav-name" data-i18n="hdr-nav-contact">Localisation</span>
       </a>
     </div>
     <div class="cnav-item">
-      <a href="/rendez-vous" class="cnav-link">
+      <a href="/rendez-vous" class="cnav-link plq">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
         <span class="cnav-name" data-i18n="hdr-nav-rdv">RDV</span>
       </a>
     </div>
     <div class="cnav-item">
-      <a href="/equipe" class="cnav-link">
+      <a href="/equipe" class="cnav-link plq">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         <span class="cnav-name" data-i18n="hdr-nav-team">Équipe</span>
       </a>
     </div>
     <div class="cnav-item">
-      <a href="/avis" class="cnav-link">
+      <a href="/avis" class="cnav-link plq">
         <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
         <span class="cnav-name" data-i18n="hdr-nav-reviews">Avis</span>
       </a>
@@ -173,13 +173,13 @@ const THEMES = [
        Retour dans le coin, sans son libellé. Ici ils ont la place.
        Le même JS pilote les deux exemplaires. -->
   <div class="cnav-tools">
-    <div class="lang-sel" role="group" aria-label="Langue" data-i18n-aria="a11y-langue">
-      <button class="lang-opt" data-lang="fr">FR</button>
-      <button class="lang-opt" data-lang="en">EN</button>
+    <div class="lang-sel plq plq-fixe" role="group" aria-label="Langue" data-i18n-aria="a11y-langue">
+      <button class="lang-opt plq" data-lang="fr">FR</button>
+      <button class="lang-opt plq" data-lang="en">EN</button>
     </div>
-    <div class="theme-sel" role="radiogroup" aria-label="Thème d'affichage" data-i18n-aria="a11y-theme">
+    <div class="theme-sel plq plq-fixe" role="radiogroup" aria-label="Thème d'affichage" data-i18n-aria="a11y-theme">
       {THEMES.map(o => (
-        <button type="button" class="theme-opt" role="radio" data-theme-opt={o.cle}
+        <button type="button" class="theme-opt plq" role="radio" data-theme-opt={o.cle}
                 aria-checked="false" tabindex="-1"
                 title={o.nom} data-i18n-title={o.cleI18n}>
           <Fragment set:html={o.svg} />

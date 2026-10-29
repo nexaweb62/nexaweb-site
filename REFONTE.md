@@ -10,6 +10,72 @@ ce document décrivent le premier passage et restent valables pour tout
 ce qui n'est pas la couleur elle-même ; la section 0 ci-dessous donne
 l'état courant.
 
+**Octobre 2026 : la typographie et les boutons ont changé.** La section
+00 qui suit remplace les paragraphes « Typographie » et « Liquid Glass »
+de la section 0. Le système complet est résumé dans `DESIGN.md`.
+
+---
+
+## 00. Typographie et boutons — l'enseigne et la plaque
+
+### Pourquoi
+
+La pile système (SF Pro sur iPhone, Segoe sur Windows) et les pilules en
+chrome liquide étaient, ensemble, la signature des sites générés à la
+chaîne : c'est la police que tout le monde a déjà vue cent fois, et le
+bouton (« Interactive Hover Button » de magicui + « Metallic Button »)
+que livrent les bibliothèques de composants. Le site ne ressemblait à
+personne en particulier.
+
+### Ce qui est en place
+
+**Deux familles, servies par le site.** Bluu Next (Velvetyne, fonderie
+libre française) pour tous les titres, les prix et les grands numéros ;
+Schibsted Grotesk pour le texte, les boutons et les étiquettes. Fichiers
+dans `public/fonts/` (74 Ko au total, sous-ensemble latin, licences OFL
+jointes), préchargés, `font-display: swap`, et un repli métrique calibré
+pour chacune (Arial et Times recalés sur la largeur réelle des polices) :
+l'arrivée du fichier ne décale pas la page.
+
+**Les capitales espacées en chasse fixe** (les étiquettes « SERVICES · 05 »
+de /services et de la frise) sont passées dans la police du texte, en
+casse normale. Exception conservée : les étiquettes du formulaire de
+devis, demandées en petites capitales.
+
+**La plaque.** Tout ce qui se clique est un rectangle aux quatre angles
+coupés à 45° — la facette du N du logo. Peinte dans le fond de l'élément
+(douze dégradés à arrêt franc), pas découpée par `clip-path` : le contour
+de focus reste entier. Deux matières : l'or pour l'action principale, la
+plaque neutre à filet d'or sombre pour le reste. Survol : la teinte, avec
+une souris seulement. Appui : un pixel, par `translate`. Le menu plein
+écran est un octogone de la même matière. Cartes et étiquettes : droites,
+2 px. Plus aucune pilule ni aucun cercle cliquable.
+
+**Retirés.** `public/metal.js` (le rendu WebGL du chrome), la copie de
+survol et la flèche du bouton, le reflet, la nappe d'or et l'onde que
+`finition.js` injectait, le système « Liquid Glass » de `global.css`.
+
+### Mesures
+
+| Contrôle | Résultat |
+|---|---|
+| `check:colors` | 0 couleur littérale hors de `tokens.css` |
+| `check:contrast` | 72 paires, 0 en échec |
+| `check:contrast:rendered` | 5 149 textes, 23 pages × 2 thèmes, 0 sous AA |
+| `check:glass` | 0 libellé de bouton sous AA |
+| `check:header`, `check:logo`, `check:i18n`, `check:cookies`, `check:garantie`, `check:mensualites`, `check:devis`, `check:liquid`, `check:seams`, `check:scoped`, `check:anim`, `check:peinture` | tout passe |
+| Titre de l'accueil, 320 à 480 px | 4 lignes, aucun mot seul |
+
+### Deux contrôles réécrits, et pourquoi
+
+- `check:fleches` vérifiait « une seule flèche par bouton » : il vérifie
+  désormais qu'il n'y en a **aucune**, et que rien n'est injecté au survol.
+- `check:contrast:rendered` et `check:fond` lisaient le fond d'un bouton
+  dans `background-color` ou dans le premier arrêt de son dégradé. Sur une
+  plaque, ce premier arrêt est le coin coupé, transparent : ils
+  concluaient à de l'encre noire sur la page noire (1:1). Ils lisent
+  maintenant `--pl-fond`, la couleur réellement posée sous le libellé.
+
 ---
 
 ## 0. État actuel — grammaire Apple, Liquid Glass, fond vivant

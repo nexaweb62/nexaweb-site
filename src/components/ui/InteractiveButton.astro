@@ -1,36 +1,28 @@
 ---
 /**
- * LE BOUTON INTERACTIF — un seul bouton pour tout le site.
+ * LE BOUTON — un seul bouton pour tout le site.
  *
- * Au repos : le libelle, sur une plaque de chrome liquide.
- * Au survol : le libelle s'efface vers la droite, puis revient avec une
- * fleche, pendant que le reflet de la plaque glisse.
+ * Une plaque à angles coupés, et un libellé. Rien d'autre.
  *
- * ── LA PASTILLE A ETE RETIREE ────────────────────────────────────────
- * Il y avait un petit rond dore a gauche, qui s'etalait au survol pour
- * remplir le bouton et servir de fond au libelle de retour. Il a ete
- * retire a la demande. Deux consequences, traitees dans global.css :
- * le rembourrage redevient symetrique — les 34 px de gauche ne logeaient
- * que lui — et la copie de survol herite desormais de la couleur du
- * bouton, faute de quoi elle serait restee noire sur du chrome sombre.
+ * ── CE QUI A ÉTÉ RETIRÉ, ET POURQUOI ─────────────────────────────────
+ * Le bouton précédent reprenait l'« Interactive Hover Button » de
+ * magicui sur une plaque de chrome liquide : au survol, le libellé
+ * fuyait vers la droite et revenait suivi d'une flèche, pendant qu'un
+ * reflet glissait. C'est le bouton par défaut des bibliothèques de
+ * composants, donc celui de tous les sites générés : il disait « modèle »
+ * avant de dire « Nexa ». Plus de copie du libellé, plus de flèche, plus
+ * de reflet. La forme et sa matière vivent dans global.css (« LA
+ * PLAQUE ») ; le survol change la teinte, l'appui enfonce d'un pixel.
  *
- * Inspire de l'« Interactive Hover Button » de magicui, mais REECRIT en
- * Astro pur : pas de React, pas de Tailwind, pas de lucide-react. La
- * fleche est un SVG ecrit a la main.
- *
- * ── LE PIEGE DES TRADUCTIONS ─────────────────────────────────────────
+ * ── LE PIÈGE DES TRADUCTIONS ─────────────────────────────────────────
  * public/i18n.js applique les traductions par « el.innerHTML = t[k] ».
- * Une cle data-i18n posee sur la RACINE de ce bouton remplacerait donc
- * tout son contenu par du texte nu — adieu les trois couches, adieu
- * l'animation, au premier changement de langue.
- * La cle est donc posee sur les DEUX libelles internes. i18n.js parcourt
- * tous les [data-i18n] : il les sert l'un et l'autre, et la structure
- * reste intacte.
+ * Une clé data-i18n posée sur la RACINE remplacerait tout le contenu du
+ * bouton. Elle est donc posée sur le libellé interne, qui ne contient
+ * que du texte : la structure survit au changement de langue.
  *
- * ── LE LIBELLE EST ECRIT DEUX FOIS ───────────────────────────────────
- * Une copie visible au repos, une copie qui arrive au survol. La seconde
- * est aria-hidden : un lecteur d'ecran ne doit entendre le libelle
- * qu'UNE fois.
+ * ── LES VARIANTES ────────────────────────────────────────────────────
+ *   variant="gold" : la plaque d'or, l'action principale (une par écran)
+ *   variant="dark" : la plaque neutre, tout le reste (défaut)
  */
 interface Props {
   text: string;
@@ -50,10 +42,10 @@ const {
   ...reste
 } = Astro.props;
 
-/* Un lien s'il mene quelque part, un bouton sinon. */
+/* Un lien s'il mène quelque part, un bouton sinon. */
 const Balise = href ? 'a' : 'button';
 
-/* La cle de traduction descend sur les libelles (voir plus haut). */
+/* La clé de traduction descend sur le libellé (voir plus haut). */
 const { 'data-i18n': cleI18n, ...autres } = reste;
 
 /* Un <button> sans type vaut « submit » dans un formulaire : on ne veut
@@ -68,11 +60,4 @@ const typeFinal = href ? undefined : (type ?? 'button');
   {...autres}
 >
   <span class="ihb-t" data-i18n={cleI18n}>{text}</span>
-  <span class="ihb-h" aria-hidden="true">
-    <span data-i18n={cleI18n}>{text}</span>
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M5 12h14M12 5l7 7-7 7"/>
-    </svg>
-  </span>
 </Balise>

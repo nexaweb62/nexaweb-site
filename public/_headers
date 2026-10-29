@@ -14,6 +14,12 @@
 /logos/*
   Cache-Control: public, max-age=31536000, immutable
 
+# Les polices ne changent pas : un an. Si un fichier de /fonts devait être
+# remplacé, il change de NOM (bluu-next-bold-2.woff2…), sinon les
+# visiteurs déjà venus garderaient l'ancien pendant un an.
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
 # Le moteur de l'or liquide porte sa version dans son nom, comme les
 # fichiers ci-dessus : à nom égal, c'est le même fichier.
 /vendor/*

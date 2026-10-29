@@ -107,12 +107,26 @@ for (const theme of ['dark', 'light']) {
         const out = cols.map(parse).filter(Boolean);
         return out.length ? out : null;
       };
+      // LES PLAQUES. Un bouton du site (.plq, .ihb) est peint en douze
+      // dégradés à arrêt franc : quatre traits de coupe, quatre côtés,
+      // quatre quarts de fond. Leurs premiers arrêts sont transparents
+      // (le coin coupé) : lus comme un dégradé ordinaire, ils faisaient
+      // conclure à un texte posé sur la page — encre noire sur fond noir,
+      // 1:1, sur un libellé qui tient en réalité 9,85:1 sur l'or. Ce qui
+      // est sous le libellé, c'est le fond de la plaque, et il est écrit
+      // dans --pl-fond : on le lit là, directement.
+      const plaqueOf = n => {
+        if (!n.classList || !(n.classList.contains('plq') || n.classList.contains('ihb'))) return null;
+        return parse(getComputedStyle(n).getPropertyValue('--pl-fond').trim());
+      };
       // k = 0 → premier arrêt de chaque dégradé, k = 1 → dernier.
       function bgOf(el, k) {
         let acc = null;
         for (let n = el; n; n = n.parentElement) {
-          const st = stopsOf(n);
+          const pl = plaqueOf(n);
+          const st = pl ? null : stopsOf(n);
           const layers = [];
+          if (pl) layers.push(pl);
           if (st) layers.push(k === 0 ? st[0] : st[st.length - 1]);
           layers.push(parse(getComputedStyle(n).backgroundColor));
           for (const c of layers) {

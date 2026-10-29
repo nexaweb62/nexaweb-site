@@ -5,6 +5,45 @@
    Aucune couleur littérale ici : tout passe par src/styles/tokens.css.
    ═══════════════════════════════════════════════════════════════════════ */
 
+/* ── LES POLICES ──
+   Servies depuis /fonts, préchargées par BaseLayout. « swap » : le texte
+   s'affiche tout de suite dans le repli, jamais de page blanche.
+
+   LES REPLIS SONT CALIBRÉS, PAS CHOISIS AU HASARD. Chaque police a son
+   double « … Repli » : Arial ou Times, agrandis et recalés pour occuper
+   exactement la place de la vraie police sur un texte français courant.
+   Valeurs calculées sur les fichiers eux-mêmes (largeur moyenne des
+   glyphes de l'accroche du site, hauteurs hhea) contre Liberation Sans
+   et Liberation Serif, métriquement identiques à Arial et Times. Sans
+   elles, l'arrivée de la police décale les lignes : c'est du CLS. */
+@font-face{
+  font-family:"Schibsted Grotesk";
+  src:url('/fonts/schibsted-grotesk-var.woff2') format('woff2');
+  font-weight:400 900;font-style:normal;font-display:swap;
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face{
+  font-family:"Bluu Next";
+  src:url('/fonts/bluu-next-bold.woff2') format('woff2');
+  font-weight:700;font-style:normal;font-display:swap;
+}
+@font-face{
+  font-family:"Bluu Next";
+  src:url('/fonts/bluu-next-bolditalic.woff2') format('woff2');
+  font-weight:700;font-style:italic;font-display:swap;
+}
+@font-face{
+  font-family:"Schibsted Repli";
+  src:local("Arial"),local("ArialMT"),local("Liberation Sans"),local("Helvetica");
+  size-adjust:104.97%;ascent-override:93.04%;descent-override:24.56%;line-gap-override:0%;
+}
+@font-face{
+  font-family:"Bluu Repli";
+  src:local("Times New Roman"),local("TimesNewRomanPS-BoldMT"),local("Liberation Serif"),local("Times");
+  font-weight:700;
+  size-adjust:106.4%;ascent-override:88.34%;descent-override:24.44%;line-gap-override:0%;
+}
+
 /* ── RESET ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{font-size:16px;scroll-behavior:smooth}
@@ -65,7 +104,7 @@ select:-webkit-autofill{
 *{scrollbar-color:var(--border-strong) transparent;scrollbar-width:thin}
 ::-webkit-scrollbar{width:10px;height:10px}
 ::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:var(--radius-pill);border:3px solid var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:var(--radius-tag);border:3px solid var(--bg)}
 ::-webkit-scrollbar-thumb:hover{background:var(--text-subtle)}
 
 /* Focus — visible sur fond clair comme sombre */
@@ -116,8 +155,32 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
 }
 .label-mute{color:var(--text-muted)}
 
-/* Une seule famille, une seule graisse haute. */
-.h-xl,.h-lg,.h-md,.h-sm{font-weight:var(--w-semi);text-wrap:balance}
+/* LES TITRES PORTENT L'ENSEIGNE. Tous les h1 à h3 du site, et les
+   classes de titre, prennent Bluu Next — les pages n'ont rien à écrire
+   pour en hériter. font-synthesis:none : le navigateur ne fabrique
+   jamais un faux gras ni un faux italique, il prend les vrais fichiers
+   ou rien. Les chiffres restent alignés (lnum) : un prix ne danse pas. */
+h1,h2,h3,.h-xl,.h-lg,.h-md,.h-sm{
+  font-family:var(--font-display);font-weight:var(--w-display);
+  font-synthesis:none;font-variant-numeric:lining-nums;
+}
+.h-xl,.h-lg,.h-md,.h-sm{text-wrap:balance}
+/* Sauf les titres qui ne sont que des étiquettes : à 12 px, un empattement
+   gras bouche les lettres. Ils gardent la police du texte. */
+.svc-section-label{font-family:var(--font);font-weight:var(--w-semi)}
+/* LES AUTRES VOIX DE TITRE. Certains éléments font le travail d'un titre
+   sans en avoir la balise : le nom des services dans la liste, les prix,
+   les grands numéros d'étape, l'accroche de la présentation. Ils prennent
+   l'enseigne eux aussi — un prix en Bluu Next se lit comme une étiquette
+   de vitrine, pas comme une cellule de tableur. Liste fermée, écrite ici
+   plutôt que dans chaque page : une page qui ajoute un prix sait où
+   regarder. */
+.svc-name,.why-bio-lead,.who-target,.who-price,
+.proc-step .k,.plan-from,.plan-to,.plan-amount,.plan-mois-gros,
+.prix-depuis,.launch-num{
+  font-family:var(--font-display);font-weight:var(--w-display);
+  font-synthesis:none;font-variant-numeric:lining-nums;
+}
 .h-xl{font-size:var(--fs-title);  letter-spacing:var(--ls-title);  line-height:var(--lh-title)}
 .h-lg{font-size:var(--fs-section);letter-spacing:var(--ls-section);line-height:var(--lh-section)}
 .h-md{font-size:var(--fs-sub);    letter-spacing:var(--ls-sub);    line-height:var(--lh-sub)}
@@ -251,30 +314,112 @@ body.lite .lgm-i:hover .lg-reflet,body.lite .lgm-i.lg-tombe .lg-goutte{animation
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
-   BOUTONS — LA FORME
-   Taille, rythme, typographie. Le verre qui les habille est défini plus
-   bas, en une seule section, après tous les contrôles.
-   ═══════════════════════════════════════════════════════════════════════ */
-.btn,.btn-g{
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  min-height:44px;cursor:pointer;border-radius:980px;padding:11px 25px;
-  font:var(--w-semi) var(--fs-body)/1.24 var(--font);letter-spacing:var(--ls-body);
-  text-align:center;white-space:nowrap;overflow:hidden;
-  transition:transform var(--dur-micro) var(--ease-out),
-             box-shadow var(--dur-micro) var(--ease-out),
-             background-color var(--dur-micro) var(--ease-out);
-}
-.btn-lg{min-height:54px;padding:16px 32px;font-size:19px}
-.btn-round{padding:0;width:54px;min-height:54px;font-size:22px}
+   LA PLAQUE — la forme de tout ce qui se clique
 
-/* Le lien texte reste un lien : accent, 17 px, chevron collé, sans
-   soulignement au repos. */
-.lnk-u{
-  color:var(--accent-text);font-size:var(--fs-body);letter-spacing:var(--ls-body);
-  display:inline-flex;align-items:center;gap:3px;
+   Les pilules en chrome liquide ont été retirées : bord arrondi, reflet
+   qui glisse, flèche qui arrive au survol, c'est le bouton que livre
+   n'importe quelle bibliothèque de composants, et le site le portait
+   cinquante fois par page.
+
+   À la place, une plaque : un rectangle aux quatre angles coupés à 45°.
+   C'est la facette du N du logo, et c'est la plaque de laiton vissée à
+   côté de la porte d'un artisan. Deux matières :
+     · OR (.ihb-gold, ou .plq-or) — l'action principale, une par écran ;
+     · NEUTRE (tout le reste) — le fond de la page, un filet d'or sombre.
+
+   ── POURQUOI DES DÉGRADÉS ET PAS UN clip-path ──
+   clip-path découpe AUSSI le contour de focus et l'ombre : au clavier,
+   l'anneau disparaissait dans les coins. Ici la plaque est peinte dans
+   le fond de l'élément, par huit dégradés à arrêt franc (un par coin,
+   deux couches : le filet sur la boîte de bordure, le fond sur la boîte
+   de remplissage). L'élément reste un rectangle pour le navigateur :
+   le focus, le texte, les pseudo-éléments des pages ne sont pas touchés.
+
+   La géométrie : un dégradé à 135° part du coin ; un arrêt à k pixels
+   coupe chaque bord à k·√2. Pour une coupe de --cut px sur les bords,
+   k = cut × 0,7071. La couche intérieure est décalée d'un pixel en x et
+   en y, donc son arête est retirée de 0,41 px pour que le filet garde
+   la même épaisseur sur la diagonale que sur les côtés droits.
+
+   Les deux couleurs sont des propriétés ENREGISTRÉES (@property) : un
+   dégradé ne s'anime pas, une couleur typée, si. Le survol fond donc
+   d'une teinte à l'autre au lieu de sauter.
+   ═══════════════════════════════════════════════════════════════════════ */
+@property --pl-fond{syntax:'<color>';inherits:false;initial-value:transparent}
+@property --pl-filet{syntax:'<color>';inherits:false;initial-value:transparent}
+
+.plq,.ihb{
+  --cut:var(--cut-md);
+  --pl-k:calc(var(--cut) * .7071);
+  --pl-ki:calc(var(--pl-k) - .41px);
+  --pl-aa:.45px;   /* un demi-pixel de fondu : l'arête ne crénèle pas */
+  --pl-fond:var(--surface);
+  --pl-filet:var(--gold-low);
+  position:relative;
+  border:1px solid transparent;border-radius:0;box-shadow:none;
+  background:
+    /* les quatre arêtes coupées. Le trait diagonal fait 1,3 px et non 1 :
+       il mord d'un tiers de pixel sous le fond, sinon les deux fondus
+       d'anticrénelage se croisent à mi-opacité et laissent une couture
+       sombre le long de la coupe. Une diagonale paraît d'ailleurs plus
+       fine qu'un trait droit de même épaisseur. */
+    linear-gradient(135deg,transparent calc(var(--pl-k) - var(--pl-aa)),var(--pl-filet) calc(var(--pl-k) + var(--pl-aa)),var(--pl-filet) calc(var(--pl-k) + 1.3px - var(--pl-aa)),transparent calc(var(--pl-k) + 1.3px + var(--pl-aa))) 0 0/var(--cut) var(--cut) no-repeat border-box,
+    linear-gradient(225deg,transparent calc(var(--pl-k) - var(--pl-aa)),var(--pl-filet) calc(var(--pl-k) + var(--pl-aa)),var(--pl-filet) calc(var(--pl-k) + 1.3px - var(--pl-aa)),transparent calc(var(--pl-k) + 1.3px + var(--pl-aa))) 100% 0/var(--cut) var(--cut) no-repeat border-box,
+    linear-gradient(315deg,transparent calc(var(--pl-k) - var(--pl-aa)),var(--pl-filet) calc(var(--pl-k) + var(--pl-aa)),var(--pl-filet) calc(var(--pl-k) + 1.3px - var(--pl-aa)),transparent calc(var(--pl-k) + 1.3px + var(--pl-aa))) 100% 100%/var(--cut) var(--cut) no-repeat border-box,
+    linear-gradient(45deg,transparent calc(var(--pl-k) - var(--pl-aa)),var(--pl-filet) calc(var(--pl-k) + var(--pl-aa)),var(--pl-filet) calc(var(--pl-k) + 1.3px - var(--pl-aa)),transparent calc(var(--pl-k) + 1.3px + var(--pl-aa))) 0 100%/var(--cut) var(--cut) no-repeat border-box,
+    /* les quatre côtés droits, arrêtés là où la coupe commence */
+    linear-gradient(var(--pl-filet),var(--pl-filet)) 50% 0/calc(100% - 2 * var(--cut)) 1px no-repeat border-box,
+    linear-gradient(var(--pl-filet),var(--pl-filet)) 50% 100%/calc(100% - 2 * var(--cut)) 1px no-repeat border-box,
+    linear-gradient(var(--pl-filet),var(--pl-filet)) 0 50%/1px calc(100% - 2 * var(--cut)) no-repeat border-box,
+    linear-gradient(var(--pl-filet),var(--pl-filet)) 100% 50%/1px calc(100% - 2 * var(--cut)) no-repeat border-box,
+    /* le fond, en quatre quarts coupés, à l'intérieur du filet */
+    linear-gradient(135deg,transparent calc(var(--pl-ki) - var(--pl-aa)),var(--pl-fond) calc(var(--pl-ki) + var(--pl-aa))) 0 0/51% 51% no-repeat padding-box,
+    linear-gradient(225deg,transparent calc(var(--pl-ki) - var(--pl-aa)),var(--pl-fond) calc(var(--pl-ki) + var(--pl-aa))) 100% 0/51% 51% no-repeat padding-box,
+    linear-gradient(315deg,transparent calc(var(--pl-ki) - var(--pl-aa)),var(--pl-fond) calc(var(--pl-ki) + var(--pl-aa))) 100% 100%/51% 51% no-repeat padding-box,
+    linear-gradient(45deg,transparent calc(var(--pl-ki) - var(--pl-aa)),var(--pl-fond) calc(var(--pl-ki) + var(--pl-aa))) 0 100%/51% 51% no-repeat padding-box;
+  /* Le retour d'appui passe par « translate », pas « transform » : les
+     pages positionnent certains boutons par transform (le bouton flottant
+     de /contact est centré par translateX(-50%)). Les deux propriétés se
+     composent, aucune n'écrase l'autre. */
+  transition:--pl-fond 160ms var(--ease-out),--pl-filet 160ms var(--ease-out),
+             color 160ms var(--ease-out),translate 100ms var(--ease-out);
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+  -webkit-user-select:none;user-select:none;
 }
-.lnk-u::after{content:'\203A';font-size:1.15em;line-height:1;transition:transform var(--dur-micro) var(--ease-out)}
-.lnk-u:hover::after{transform:translateX(3px)}
+.plq-sm{--cut:var(--cut-sm)}
+.plq-lg{--cut:var(--cut-lg)}
+
+/* L'or : le fond ET le filet, pour que l'arête ne fasse pas un liseré. */
+.plq-or,.ihb-gold{--pl-fond:var(--plq-or);--pl-filet:var(--plq-or);color:var(--plq-or-encre)}
+
+/* LES ÉTATS. Écrits à spécificité égale (0,3,0) et dans cet ordre —
+   survol, puis survol de l'or, puis appui — pour que le dernier état
+   vécu l'emporte toujours, sans !important : un bouton d'or survolé
+   reste d'or, un bouton enfoncé sous la souris montre bien l'appui.
+
+   Le survol ne vit qu'avec une souris : sur un écran tactile, le premier
+   toucher poserait l'état survolé et le laisserait collé après le doigt.
+
+   .plq-fixe : une plaque qui CONTIENT des contrôles (le groupe de langue,
+   le plateau du menu) sans en être un. Elle ne réagit à rien. */
+@media (hover:hover) and (pointer:fine){
+  .plq:not(.plq-fixe):hover,.ihb.ihb-dark:hover{--pl-fond:var(--surface-2);--pl-filet:var(--accent)}
+  .plq.plq-or:hover,.ihb.ihb-gold:hover{--pl-fond:var(--plq-or-haut);--pl-filet:var(--plq-or-haut)}
+}
+/* L'appui répond au doigt qui se pose, pas à celui qui se lève : un
+   pixel vers le bas, et l'or se fonce d'un cran. */
+.plq:not(.plq-fixe):active,.ihb.ihb-dark:active,.ihb.ihb-gold:active{translate:0 1px}
+.plq.plq-or:active,.ihb.ihb-gold:active{--pl-fond:var(--plq-or-bas);--pl-filet:var(--plq-or-bas)}
+
+@media (prefers-reduced-motion:reduce){
+  .plq,.ihb{transition:--pl-fond 160ms,--pl-filet 160ms,color 160ms}
+  .plq:active,.ihb:active{translate:none!important}
+}
+/* Couleurs forcées : les dégradés disparaissent, la bordure revient. */
+@media (forced-colors:active){
+  .plq,.ihb{border-color:ButtonBorder;background:ButtonFace}
+}
 
 
 
@@ -390,64 +535,60 @@ body.lite .lgm-i:hover .lg-reflet,body.lite .lgm-i.lg-tombe .lg-goutte{animation
 
 /* WCAG 2.5.8 — cible d'au moins 24×24 px, espacement compris. Les deux
    options de langue étaient à 28×24 collées à 2 px : axe les refusait. */
-.lang-sel{display:flex;gap:4px;border-radius:var(--radius-pill);padding:3px 5px;min-height:38px;align-items:center}
-/* Mesuré : à 12 px sur du verre posé au-dessus d'un halo doré, ni le gris
-   secondaire (1.76:1) ni l'or du texte (3.44:1) ne tiennent AA. L'option
-   inactive prend donc l'encre pleine, et l'active une pastille d'accent
-   opaque — le même parti que le sélecteur de thème juste à côté. */
+/* LES CONTRÔLES DE LA BARRE sont des plaques (classe .plq posée dans
+   Header.astro), en petite coupe : ils font 38 px de haut.
+   Les groupes segmentés (langue, thème) sont UNE plaque ; le segment
+   actif en est une plus petite, posée dedans. Pour que les deux arêtes
+   restent parallèles, la coupe intérieure est réduite de 0,586 px par
+   pixel de retrait : 5 px dehors, 4 px de retrait (filet + marge),
+   3 px dedans. */
+.lang-sel{display:flex;gap:4px;padding:3px 4px;min-height:38px;align-items:center;--cut:var(--cut-sm)}
+/* Mesuré : à 12 px sur le fond de la barre posé au-dessus d'un halo doré,
+   ni le gris secondaire (1.76:1) ni l'or du texte (3.44:1) ne tiennent
+   AA. L'option inactive prend donc l'encre pleine, et l'active une plaque
+   d'accent opaque — le même parti que le sélecteur de thème juste à côté.
+   DE LA MARGE AUTOUR DES LETTRES : à 32 px de large, « FR » frôlait le
+   bord de la pièce dorée et la mesure au pixel y relevait un liseré à
+   1,08:1. On élargit plutôt que d'écarter l'alerte. */
 .lang-opt{
-  font-size:var(--fs-caption);font-weight:500;letter-spacing:0;color:var(--text);
+  font-size:var(--fs-caption);font-weight:500;letter-spacing:.02em;color:var(--text);
   display:flex;align-items:center;justify-content:center;
-  /* L'indicateur suit la forme du contrôle qui le contient : le groupe
-     est une pilule, le segment actif en est une aussi. À 30 px de haut
-     dans une pilule de 38 px avec 3 px de retrait, les deux rayons sont
-     concentriques. */
-  /* DE LA MARGE AUTOUR DES LETTRES. A 32x30 px pour un libelle de 12 px,
-     « FR » frolait le bord du disque dore : la mesure au pixel y relevait
-     un liseré d'anticrenelage a 1,08:1, la ou le coeur de la lettre est a
-     10,5:1. On elargit plutot que d'ecarter l'alerte — les lettres
-     respirent, et la pastille reste une pastille. */
-  min-width:38px;min-height:30px;padding:2px 10px;border-radius:var(--radius-pill);
-  transition:color var(--dur-micro) var(--ease-out),background-color var(--dur-micro) var(--ease-out);
-}
-.lang-opt:hover{color:var(--text)}
-.lang-opt.active{background:var(--accent);color:var(--on-accent);font-weight:600}
-
-.menu-btn{
-  border-radius:var(--radius-pill);
-  font-size:var(--fs-caption);display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:2px;padding:7px 13px;color:var(--text);line-height:1;flex-shrink:0;min-height:38px;
-  transition:border-color var(--dur-micro) var(--ease-out),
-             color var(--dur-micro) var(--ease-out),
-             background-color var(--dur-micro) var(--ease-out);
-}
-.menu-btn:hover{color:var(--text)}
-
-/* Sélecteur de thème — contrôle segmenté à trois états */
-.theme-sel{
-  display:flex;align-items:center;gap:3px;flex-shrink:0;
-  border-radius:var(--radius-pill);padding:3px;min-height:38px;
+  min-width:38px;min-height:30px;padding:2px 10px;
 }
 .theme-opt{
   display:flex;align-items:center;justify-content:center;
-  width:30px;height:30px;border-radius:var(--radius-pill);color:var(--text-subtle);
-  transition:color var(--dur-micro) var(--ease-out),background-color var(--dur-micro) var(--ease-out);
+  width:30px;height:30px;color:var(--text-subtle);
+}
+.lang-opt,.theme-opt{--cut:3px;--pl-fond:transparent;--pl-filet:transparent;border-width:0}
+.lang-opt.active,.theme-opt.on{--pl-fond:var(--accent);--pl-filet:var(--accent);color:var(--on-accent);font-weight:600}
+@media (hover:hover) and (pointer:fine){
+  .lang-opt:not(.active):hover,.theme-opt:not(.on):hover{--pl-fond:var(--surface-2);--pl-filet:var(--surface-2);color:var(--text)}
+  .lang-opt.active.plq:hover,.theme-opt.on.plq:hover{--pl-fond:var(--accent);--pl-filet:var(--accent)}
 }
 .theme-opt svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
-.theme-opt:hover{color:var(--text)}
-.theme-opt.on{background:var(--accent);color:var(--on-accent)}
 .theme-opt:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
-.menu-btn svg{width:15px;height:15px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round}
-.hdr-btn-lbl{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:currentColor}
+
+.menu-btn{
+  --cut:var(--cut-sm);
+  font-size:var(--fs-caption);display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;padding:6px 13px;color:var(--text);line-height:1;flex-shrink:0;min-height:38px;
+}
+/* Sélecteur de thème — contrôle segmenté à trois états */
+.theme-sel{
+  --cut:var(--cut-sm);
+  display:flex;align-items:center;gap:3px;flex-shrink:0;
+  padding:3px;min-height:38px;
+}
+/* Le trait du menu suit la plaque : des bouts carrés, pas arrondis. */
+.menu-btn svg{width:15px;height:15px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:square}
+.hdr-btn-lbl{font-size:var(--fs-caption);font-weight:600;letter-spacing:.01em;color:currentColor}
 
 .login-btn{
-  width:38px;height:38px;border-radius:50%;
+  --cut:var(--cut-sm);
+  width:38px;height:38px;
   display:flex;align-items:center;justify-content:center;color:var(--text-muted);
-  transition:border-color var(--dur-micro) var(--ease-out),
-             color var(--dur-micro) var(--ease-out),
-             background-color var(--dur-micro) var(--ease-out);
 }
-.login-btn:hover{color:var(--text)}
+@media (hover:hover) and (pointer:fine){ .login-btn:hover{color:var(--text)} }
 .login-btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 /* Le pointeur grossier n'a pas 1 px de précision : 44 px de haut, la
    recommandation WCAG 2.5.8, sinon le bouton se rate une fois sur trois.
@@ -481,29 +622,41 @@ body.lite .lgm-i:hover .lg-reflet,body.lite .lgm-i.lg-tombe .lg-goutte{animation
   transition:opacity .32s var(--ease-out);
 }
 .cnav.open{opacity:1;pointer-events:all}
+/* LE PLATEAU DU MENU N'EST PLUS UN DISQUE : c'est un octogone, la même
+   plaque que les boutons, coupée assez loin pour que ses huit côtés soient
+   égaux (coupe = largeur × 0,2929). Les liens restent disposés en cercle
+   à l'intérieur : la géométrie du placement n'a pas bougé.
+   L'ombre passe par drop-shadow : une box-shadow resterait carrée sous
+   un octogone peint dans le fond. Il n'apparaît plus depuis une échelle
+   nulle — rien de réel ne surgit de rien — mais de 94 %, en fondu avec
+   le voile. */
 .cnav-ring{
+  --cut:calc(min(420px, 88vw) * .2929);
+  --pl-fond:var(--surface);--pl-filet:var(--border-strong);
   position:relative;width:420px;height:420px;max-width:88vw;max-height:88vw;
-  border-radius:50%;display:flex;align-items:center;justify-content:center;
-  background:var(--surface);border:1px solid var(--border);
-  box-shadow:var(--shadow-2);
-  transform:scale(0);transition:transform .44s var(--ease-out);
+  display:flex;align-items:center;justify-content:center;
+  filter:drop-shadow(var(--shadow-2));
+  transform:scale(.94);transition:transform .44s var(--ease-out);
 }
 .cnav.open .cnav-ring{transform:scale(1)}
 .cnav-close{
-  width:54px;height:54px;border-radius:50%;
+  --cut:var(--cut-md);
+  width:54px;height:54px;
   display:flex;align-items:center;justify-content:center;
-  transition:transform .24s var(--ease-out),background-color .24s var(--ease-out);
-  position:relative;z-index:1;
+  z-index:1;
 }
-.cnav-close:hover{transform:scale(1.1) rotate(90deg)}
-.cnav-close svg{width:20px;height:20px;stroke:currentColor;stroke-width:2.5;fill:none;stroke-linecap:round}
+.cnav-close svg{width:20px;height:20px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:square;transition:rotate .24s var(--ease-out)}
+@media (hover:hover) and (pointer:fine){ .cnav-close:hover svg{rotate:90deg} }
 .cnav-item{position:absolute;top:50%;left:50%}
 .cnav-link{
+  --cut:var(--cut-md);--pl-fond:transparent;--pl-filet:transparent;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  width:74px;height:74px;border-radius:50%;color:var(--text-muted);gap:var(--sp-1);
-  transition:background-color .22s var(--ease-out),color .22s var(--ease-out),transform .22s var(--ease-out);
+  width:74px;height:74px;color:var(--text-muted);gap:var(--sp-1);
 }
-.cnav-link:hover,.cnav-link:focus-visible{background:var(--accent);color:var(--on-accent);transform:scale(1.09)}
+.cnav-link.plq:focus-visible{--pl-fond:var(--accent);--pl-filet:var(--accent);color:var(--on-accent)}
+@media (hover:hover) and (pointer:fine){
+  .cnav-link.plq:hover{--pl-fond:var(--accent);--pl-filet:var(--accent);color:var(--on-accent)}
+}
 .cnav-link svg{width:21px;height:21px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .cnav-name{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;}
 /* Langue et thème, au bas du menu plein écran. Masqués par défaut : sur
@@ -577,20 +730,22 @@ body:has(.fond-tarifs) footer{
   --text-subtle:var(--raw-stone-600);
 }
 .foot-socials{display:flex;gap:var(--sp-3);margin-top:var(--sp-5);flex-wrap:wrap}
+/* Les réseaux : des plaques carrées (.plq dans Footer.astro). Elles ne
+   sautent plus de 8 px au survol ; elles prennent la couleur du réseau,
+   et c'est tout. */
 .foot-soc{
-  width:48px;height:48px;border-radius:50%;
-  background:var(--surface-2);border:1px solid var(--border-strong);
-  box-shadow:var(--shadow-1);
+  --pl-fond:var(--surface-2);--pl-filet:var(--border-strong);
+  width:48px;height:48px;
   display:flex;align-items:center;justify-content:center;color:var(--text-muted);flex-shrink:0;
-  transition:transform .3s var(--ease-out),background-color .3s var(--ease-out),
-             box-shadow .3s var(--ease-out),color .3s var(--ease-out);
 }
-.foot-soc svg{width:20px;height:20px;fill:currentColor;transition:transform .3s var(--ease-out)}
-.foot-soc:hover{transform:translateY(-8px) scale(1.08);color:var(--on-media);box-shadow:var(--shadow-2)}
+.foot-soc svg{width:20px;height:20px;fill:currentColor}
 /* Couleurs de marque tierces — identités qui ne nous appartiennent pas */
-.foot-soc.linkedin:hover{background:var(--brand-linkedin);border-color:var(--brand-linkedin)}
-.foot-soc.facebook:hover{background:var(--brand-facebook);border-color:var(--brand-facebook)}
-.foot-soc.whatsapp:hover{background:var(--brand-whatsapp);border-color:var(--brand-whatsapp)}
+@media (hover:hover) and (pointer:fine){
+  .foot-soc:hover{color:var(--on-media)}
+  .foot-soc.plq.linkedin:hover{--pl-fond:var(--brand-linkedin);--pl-filet:var(--brand-linkedin)}
+  .foot-soc.plq.facebook:hover{--pl-fond:var(--brand-facebook);--pl-filet:var(--brand-facebook)}
+  .foot-soc.plq.whatsapp:hover{--pl-fond:var(--brand-whatsapp);--pl-filet:var(--brand-whatsapp)}
+}
 .foot-bot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding:18px 0}
 .foot-copy{font-size:var(--fs-caption);color:var(--text-subtle);letter-spacing:0}
 .foot-legal{display:flex;gap:var(--sp-5);flex-wrap:wrap;align-items:center}
@@ -802,137 +957,16 @@ body:has(.fond-tarifs) footer{
 
 /* ── Couleurs forcées (Windows High Contrast) ── */
 @media (forced-colors:active){
-  .btn,.btn-g,.cnav-close,.foot-team-lnk{border:1px solid ButtonBorder}
   .read-bar{background:Highlight}
   :focus-visible{outline:2px solid Highlight}
 }
 
 
 
-/* ═══════════════════════════════════════════════════════════════════════
-   LIQUID GLASS — LE SYSTÈME DE BOUTONS, SANS EXCEPTION
-   Verre translucide : fond flouté, saturation poussée, arête claire en
-   haut qui accroche la lumière, ombre portée douce en dessous.
-
-   Deux teintes seulement :
-     · OR    — l'action principale. « Demander un devis », « Entrer »,
-               « Envoyer », « Créer mon compte », la croix de fermeture.
-     · NEUTRE — tout le reste : secondaire, menu, thème, langue, retour,
-               compte, réinitialiser, Google, explorer.
-
-   Aucune valeur n'est écrite ici : les niveaux de verre vivent dans
-   tokens.css (--glass-*) et basculent avec le thème. Cette section est
-   placée APRÈS les définitions de chaque contrôle pour que le verre
-   l'emporte sur leur fond d'origine, sans recourir à !important.
-
-   Ne sont pas des surfaces de bouton, donc pas de verre : les glyphes
-   nus posés DANS un contrôle déjà en verre ou dans un champ — .theme-opt,
-   .lang-opt, .lf-eye, .star-btn. Leur fond est le verre du parent.
-   ═══════════════════════════════════════════════════════════════════════ */
-
-/* ── Le verre lui-même ──
-   Plus de backdrop-filter ici. Il obligeait le navigateur a relire et
-   reflouter le fond derriere chaque bouton a chaque image, une
-   cinquantaine de fois par page. Mesure avant de le retirer : sur les
-   boutons du hero, sur le bouton fantome et sur les appels a l'action
-   de la page Tarifs, l'image change de 0,2 a 0,5 niveau sur 255 en
-   moyenne — invisible. Le voile de fond (--glass-scrim) et le degrade
-   portaient deja presque tout ; le flou ne travaillait que sur un fond
-   deja uniforme.
-   Le flou reste la ou il se voit : l'en-tete collant et le panneau du
-   menu ouvert, qui passent au-dessus du contenu en defilement. ── */
-.btn,.btn-g,
-.menu-btn,.theme-sel,.login-btn,.hdr-back,.cnav-close,.lang-sel,
-.submit-btn,.lf-btn,.lf-social-btn,.lf-reset-btn,.lf-lang-btn,
-.success-back,.nf-btn-home,.nf-btn-explore,.svc-cta,.cta-btn,.c-btn{
-  position:relative;isolation:isolate;border:0;
-}
-
-/* ── L'arête de lumière : c'est elle qui fait lire le verre comme du
-      verre. Un seul pseudo-élément, au-dessus du fond, sous le texte. ── */
-.btn::before,.btn-g::before,
-.menu-btn::before,.theme-sel::before,.login-btn::before,.hdr-back::before,
-.cnav-close::before,.lang-sel::before,
-.submit-btn::before,.lf-btn::before,
-.lf-social-btn::before,.lf-reset-btn::before,.lf-lang-btn::before,
-.success-back::before,.nf-btn-home::before,.nf-btn-explore::before,
-.svc-cta::before,.cta-btn::before,.c-btn::before{
-  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-  box-shadow:inset 0 1px 0 var(--glass-edge-t),
-             inset 0 -1px 0 var(--glass-edge-b),
-             inset 0 0 0 1px var(--glass-edge-r);
-}
-
-/* ── Teinte NEUTRE ── */
-.btn-g,
-.menu-btn,.theme-sel,.login-btn,.hdr-back,.lang-sel,
-.lf-social-btn,.lf-reset-btn,.lf-lang-btn,.success-back,.nf-btn-explore,.c-btn{
-  background-color:var(--glass-scrim);
-  background-image:linear-gradient(180deg,var(--glass-ghost-a),var(--glass-ghost-b));
-  box-shadow:var(--glass-sh-ghost);
-}
-
-/* LE VOILE DU SELECTEUR DE LANGUE, RENFORCE.
-   En retirant le selecteur de theme, celui-ci s'est decale au-dessus du
-   globe lumineux de /contact : mesure au pixel, « EN » y tombait a
-   3,96:1, sous AA, et la valeur bougeait a chaque passage parce que le
-   globe tourne.
-
-   CETTE REGLE DOIT VENIR APRES CELLE DU VERRE. Posee plus haut, elle
-   avait la meme specificite et perdait : le groupe restait a 34 %, et
-   mon correctif ne corrigeait rien. Verifie en relisant la couleur
-   calculee, pas en la supposant.
-
-   ET SON PENDANT CLAIR DOIT VIVRE DANS LA REQUETE MEDIA. Ecrit au
-   premier niveau, « :root:not([data-theme="dark"]) » s'applique aussi
-   quand aucun theme n'est pose, c'est-a-dire en sombre par defaut : la
-   pilule devenait blanche sur une page noire. */
-.lang-sel{background-color:rgb(from var(--raw-black-950) r g b / .82)}
-:root[data-theme="light"] .lang-sel{
-  background-color:rgb(from var(--raw-paper-0) r g b / .86);
-}
-@media (prefers-color-scheme: light){
-  :root:not([data-theme="dark"]) .lang-sel{
-    background-color:rgb(from var(--raw-paper-0) r g b / .86);
-  }
-}
-.btn-g:hover,
-.menu-btn:hover,.login-btn:hover,.hdr-back:hover,
-.lf-social-btn:hover,.lf-reset-btn:hover,.lf-lang-btn:hover,
-.success-back:hover,.nf-btn-explore:hover,.c-btn:hover{
-  background-image:linear-gradient(180deg,var(--glass-ghost-ah),var(--glass-ghost-bh));
-}
-
-/* ── Teinte OR — l'action principale ── */
-.btn,.cnav-close,.submit-btn,.lf-btn,.nf-btn-home,.svc-cta,.cta-btn{
-  background-color:var(--glass-scrim);
-  background-image:linear-gradient(180deg,var(--glass-gold-a),var(--glass-gold-b));
-  color:var(--glass-gold-ink);
-  box-shadow:var(--glass-sh-gold);
-}
-.btn::before,.cnav-close::before,
-.submit-btn::before,.lf-btn::before,.nf-btn-home::before,
-.svc-cta::before,.cta-btn::before{
-  box-shadow:inset 0 1px 0 var(--glass-gedge-t),
-             inset 0 -1px 0 var(--glass-gedge-b),
-             inset 0 0 0 1px var(--glass-gedge-r);
-}
-.btn:hover,.cnav-close:hover,
-.submit-btn:hover,.lf-btn:hover,.nf-btn-home:hover,
-.svc-cta:hover,.cta-btn:hover{
-  background-image:linear-gradient(180deg,var(--glass-gold-ah),var(--glass-gold-bh));
-  color:var(--glass-gold-ink);
-}
-
-/* ── Le relief au survol : 2 px, rien de plus. ── */
-.btn:hover,.btn-g:hover,.submit-btn:hover,.lf-btn:hover,
-.nf-btn-home:hover,.nf-btn-explore:hover,.success-back:hover,
-.svc-cta:hover,.cta-btn:hover{transform:translateY(-2px)}
-
-/* Le repli opaque a disparu avec le flou : les boutons ne dependent plus
-   de backdrop-filter, il n'y a donc plus rien dont se replier. Les jetons
-   --glass-fb-* restent definis, ils servent de plancher documente si le
-   verre devait revenir. */
+/* Le système « Liquid Glass » des boutons vivait ici : verre translucide,
+   arête de lumière, relief au survol. Il a été remplacé par la plaque
+   (voir « LA PLAQUE », plus haut). Les jetons --glass-* restent définis
+   dans tokens.css : deux effets décoratifs s'en servent encore. */
 
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -1400,35 +1434,6 @@ body[data-page="home"] main>section{position:relative;z-index:2}
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
-   LES BOUTONS — reflet, nappe d'or, flèche, onde d'appui
-   La nappe part du point EXACT où le curseur est entré : --bx/--by sont
-   posés au pointerenter.
-   ═══════════════════════════════════════════════════════════════════════ */
-/* inline-flex, pas block : ce span enveloppe TOUT le contenu du bouton.
-   En block, une flèche qui est un <svg> (lui-même en display:block)
-   part à la ligne et le bouton passe de 44 à 56 px de haut — c'est ce
-   qui arrivait au seul bouton dont la flèche est dessinée et non
-   écrite, « Envoyer mon avis ». */
-.btn .t,.btn-g .t,.svc-cta .t,.cta-btn .t,.submit-btn .t,.lf-btn .t,
-.nf-btn-home .t,.nf-btn-explore .t,.success-back .t{
-  position:relative;z-index:2;display:inline-flex;align-items:center;gap:9px}
-/* background-repeat:no-repeat est indispensable. Sans lui le dégradé se
-   RÉPÈTE : la bande claire réapparaît dans le bouton quelle que soit la
-   position, y compris hors animation. Mesuré : le libellé tombait à
-   3,91:1 alors que le reflet était censé être hors cadre.
-   Et .28 était trop fort de toute façon : au passage du reflet le
-   libellé descendait sous AA. À .18 le pire moment donne 5,03:1. */
-.btn .sh,.btn-g .sh,.svc-cta .sh,.cta-btn .sh,.submit-btn .sh,.lf-btn .sh{
-  inset:0;border-radius:inherit;z-index:0;
-  background:linear-gradient(105deg,transparent 40%,rgba(var(--spec),.18) 50%,transparent 60%);
-  background-repeat:no-repeat;background-size:300% 100%;background-position:200% 0}
-@media (prefers-reduced-motion:no-preference){
-  @keyframes btnSheen{0%{background-position:200% 0}40%,100%{background-position:-130% 0}}
-  @keyframes ripGo{from{transform:translate(-50%,-50%) scale(1);opacity:.85}
-                   to{transform:translate(-50%,-50%) scale(28);opacity:0}}
-}
-
-/* ═══════════════════════════════════════════════════════════════════════
    LE GRAIN — la pellicule qui empêche les aplats de faire « plat »
    ═══════════════════════════════════════════════════════════════════════ */
 .grain{position:fixed;inset:-120px;z-index:300;pointer-events:none;opacity:var(--grain-op);
@@ -1596,128 +1601,57 @@ body.lite .split .w{transition-duration:.35s}
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   LE BOUTON INTERACTIF — voir src/components/ui/InteractiveButton.astro
+   LE BOUTON — voir src/components/ui/InteractiveButton.astro
 
-   Les couleurs passent par des jetons, mais ce sont EXACTEMENT celles
-   de la maquette : --raw-black-925 vaut #0F0F10, --raw-warm-40 vaut
-   #F4F1EA, --raw-gold-400 vaut #D4B36A et --raw-gold-950 vaut #121008.
-   Seule tokens.css a le droit d'ecrire une couleur en clair ici, et
-   check:colors le verifie a chaque passage.
+   Sa matière est la plaque (« LA PLAQUE », plus haut) : .ihb en hérite
+   directement, .ihb-gold en prend l'or. Ici ne vivent que sa taille et
+   sa typographie.
+
+   Le libellé est en Schibsted Grotesk demi-gras, en casse normale, sans
+   interlettrage forcé. 48 px de haut : au-dessus des 44 px qu'un doigt
+   demande, sans l'embonpoint des anciennes pilules de 54 px.
    ═══════════════════════════════════════════════════════════════════ */
 .ihb{
-  position:relative;overflow:hidden;isolation:isolate;
   display:inline-flex;align-items:center;justify-content:center;
-  border-radius:999px;
-  border:1px solid rgb(from var(--raw-paper-0) r g b / .14);
-  background:var(--raw-black-925);
-  color:var(--raw-warm-40);
-  font-weight:600;
-  /* LE REMBOURRAGE REDEVIENT SYMETRIQUE. Les 34 px de gauche
-     logeaient la pastille doree, qui a ete retiree : sans elle le
-     libelle etait pousse hors du centre. */
-  padding:12px 22px;
+  min-height:48px;padding:0 22px;
+  font:var(--w-semi) 16px/1.2 var(--font);letter-spacing:.005em;
+  color:var(--text);
   cursor:pointer;text-decoration:none;white-space:nowrap;
 }
-.ihb-t{display:inline-block;transition:transform .3s,opacity .3s}
-.ihb-h{
-  position:absolute;inset:0;z-index:2;
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  /* LA COPIE DE SURVOL PREND LA COULEUR DU BOUTON, pas une couleur a
-     elle. Elle etait a --raw-gold-950, presque noire, parce qu'une
-     pastille doree s'etalait derriere elle au survol et lui servait de
-     fond. La pastille a ete retiree : gardee telle quelle, cette copie
-     serait du noir sur du chrome sombre, illisible au moment precis ou
-     le visiteur la regarde. Elle herite donc, et reste exactement aussi
-     lisible que le libelle au repos. */
-  color:inherit;
-  opacity:0;transform:translateX(48px);
-  transition:transform .3s,opacity .3s;
+.ihb-t{display:block}
+/* L'encre de l'or, redite ici : .ihb, juste au-dessus, pose la couleur
+   du texte courant et viendrait sinon l'écraser — même poids, plus bas
+   dans la feuille. Du blanc sur l'or ne tiendrait que 1,7:1. */
+.ihb.ihb-gold{color:var(--plq-or-encre)}
+.ihb:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
+
+/* L'ENVOI EN COURS. Le script pose « loading » et « disabled » sur les
+   boutons des deux formulaires qui comptent, le devis et la connexion.
+   Un filet court le long du bas de la plaque, entre les deux coupes, le
+   temps de l'envoi : un signal qui dit « ça travaille » sans recouvrir
+   le libellé. Sans mouvement, il reste posé et le bouton pâlit. */
+.ihb.loading{cursor:progress}
+.ihb.loading::after{
+  content:"";position:absolute;left:var(--cut);right:var(--cut);bottom:4px;height:2px;
+  background:currentColor;opacity:.55;pointer-events:none;
+  transform-origin:0 50%;animation:plqEnvoi 1.1s var(--ease-inout) infinite;
 }
-.ihb-h svg{width:18px;height:18px;flex:none}
-.ihb:hover .ihb-t,.ihb:focus-visible .ihb-t{transform:translateX(48px);opacity:0}
-.ihb:hover .ihb-h,.ihb:focus-visible .ihb-h{transform:translateX(-4px);opacity:1}
-.ihb:focus-visible{outline:2px solid var(--raw-gold-400);outline-offset:3px}
-
-.ihb-gold{
-  background:var(--raw-gold-400);
-  color:var(--raw-gold-950);
-  border-color:var(--raw-gold-400);
-}
-
-/* ═══════════════════════════════════════════════════════════════════
-   LA MATIÈRE — un chrome liquide sur chaque bouton
-
-   La plaque est rendue UNE FOIS par public/metal.js, dans un unique
-   contexte WebGL aussitôt relâché, et arrive ici sous forme de deux
-   variables CSS. Mesuré avant d'écrire une ligne : un contexte par
-   bouton était intenable — le navigateur n'en garde que 16 par page,
-   et l'accueil porte 13 boutons.
-
-   LA COULEUR DE FOND RESTE SOUS LA PLAQUE. .ihb pose déjà
-   background:var(--raw-black-925), et .ihb-gold son or. La plaque
-   s'ajoute PAR-DESSUS, en background-image. Si metal.js n'a rien posé
-   — pas de WebGL, nuanceur refusé, navigateur ancien — var() retombe
-   sur « none » et le bouton garde exactement l'aspect qu'il avait.
-   Un bouton ne perd jamais sa lisibilité, seulement son reflet.
-   ═══════════════════════════════════════════════════════════════════ */
-.ihb{
-  background-image:var(--ihb-metal,none);
-  background-size:260% 100%;
-  background-position:18% 50%;
-  background-repeat:no-repeat;
-}
-.ihb-gold{ background-image:var(--ihb-metal-or,none) }
-
-/* LE REFLET GLISSE AU SURVOL, PAS EN PERMANENCE.
-   Le temps n'entre dans ce nuanceur que par « direction -= t », suivi
-   d'un fract() : il DÉCALE le motif sans le transformer. Faire glisser
-   l'image reproduit donc l'animation d'origine, sans rien recalculer.
-
-   Mais une animation infinie par bouton, c'est treize animations
-   infinies sur l'accueil — au-dessus du plafond que check:peinture
-   fait respecter depuis la page devenue noire. Au repos la plaque est
-   donc immobile ; elle s'anime là où le visiteur regarde. */
-.ihb{ transition:background-position 1.1s var(--ease-out) }
-.ihb:hover,.ihb:focus-visible{ background-position:82% 50% }
-
-/* SAUF L'APPEL À L'ACTION, qui vit en continu. Il y en a un ou deux
-   par page : deux animations infinies, le budget les porte, et c'est
-   l'endroit où le regard doit aller. */
-@keyframes ihbCoulee{ to{ background-position:82% 50% } }
-.ihb-gold{
-  animation:ihbCoulee 7s var(--ease-inout) infinite alternate;
-  transition:none;
+@keyframes plqEnvoi{
+  0%{transform:scaleX(0);transform-origin:0 50%}
+  50%{transform:scaleX(1);transform-origin:0 50%}
+  50.1%{transform:scaleX(1);transform-origin:100% 50%}
+  100%{transform:scaleX(0);transform-origin:100% 50%}
 }
 @media (prefers-reduced-motion:reduce){
-  .ihb-gold{animation:none}
-  .ihb{transition:none}
+  .ihb.loading{opacity:.6}
+  .ihb.loading::after{animation:none;transform:none}
 }
-body.lite .ihb-gold{animation:none}
 
-@media (prefers-reduced-motion:reduce){ .ihb *{transition:none} }
-
-/* L'ENVOI EN COURS. Les anciens boutons de formulaire portaient un
-   spinner dans leur balisage ; le bouton interactif n'en a pas. Le
-   retour visuel passait par la pastille doree qui battait — elle a ete
-   retiree, et il ne fallait pas perdre ce retour sur les deux
-   formulaires les plus importants du site, le devis et la connexion.
-
-   C'est donc LA MATIERE qui coule : la plaque de chrome defile en
-   boucle le temps de l'envoi. Rien a ajouter dans le balisage, aucun
-   element de plus, et le signal occupe tout le bouton au lieu d'un
-   point de huit pixels. Le script pose deja « loading » et
-   « disabled ». */
-.ihb.loading{
-  cursor:not-allowed;
-  /* En aller-retour : une boucle simple ramenerait la plaque a son
-     point de depart d'un coup, et le saut se verrait. */
-  animation:ihbCoulee .9s var(--ease-inout) infinite alternate;
-}
-@media (prefers-reduced-motion:reduce){
-  /* Sans mouvement, le retour passe par l'opacite : il doit rester
-     perceptible, c'est l'ecran ou il compte le plus. */
-  .ihb.loading{animation:none;opacity:.6}
-}
+/* Dans la barre, le bouton se met à la hauteur de ses voisins : 38 px,
+   petite coupe. Sur un pointeur grossier, 44 px — on ne rate pas
+   « Retour » ou « Démarrer un projet » du pouce. */
+.hdr .ihb{--cut:var(--cut-sm);min-height:38px;padding:0 16px;font-size:14px}
+@media (pointer:coarse){ .hdr .ihb{min-height:44px} }
 
 /* ── LA BARRE SUR UN ECRAN ETROIT ────────────────────────────────────
    Les boutons interactifs sont larges. Sur telephone cela ne passe
@@ -1735,9 +1669,7 @@ body.lite .ihb-gold{animation:none}
 
    Le rembourrage se resserre encore ici. */
 @media (max-width:480px){
-  .hdr .ihb{padding:10px 14px;font-size:var(--fs-100)}
-  .hdr .ihb .ihb-h{gap:5px}
-  .hdr .ihb .ihb-h svg{width:15px;height:15px}
+  .hdr .ihb{padding:0 13px;font-size:13px}
   .nav-r{gap:6px}
 
   /* UN ÉCART GARANTI ENTRE LE LOGO ET LA GRAPPE.
@@ -1758,7 +1690,7 @@ body.lite .ihb-gold{animation:none}
    3 px de rembourrage de chaque côté : à 320 px, c'est la différence
    entre 5 px de jeu et un débordement. */
 @media (max-width:360px){
-  .hdr .ihb{padding:10px 11px}
+  .hdr .ihb{padding:0 11px}
   .nav{column-gap:10px}
 }
 /* 320 px, le plancher. Mesuré à ce palier : le contenu réclamait 297 px
@@ -1767,7 +1699,7 @@ body.lite .ihb-gold{animation:none}
    pixels se prennent ici, sur les écarts et le rembourrage, et nulle
    part ailleurs : rogner le libellé serait rendre le bouton muet. */
 @media (max-width:340px){
-  .hdr .ihb{padding:10px 9px}
+  .hdr .ihb{padding:0 9px}
   .nav-r{gap:4px}
   .nav{column-gap:8px}
 }

@@ -76,47 +76,12 @@
   })();
 
   /* ── 2. Les boutons ─────────────────────────────────────────────────
-     La flèche peut être un nœud texte ou un élément : les deux cas sont
-     gérés, sinon elle ne part pas au survol. */
-  var BTN = '.btn, .btn-g, .svc-cta, .cta-btn, .submit-btn, .lf-btn';
-  (function boutons() {
-    document.querySelectorAll(BTN).forEach(function (b) {
-      if (b.dataset.fx) return; b.dataset.fx = '1';
-      var t = document.createElement('span'); t.className = 't';
-      while (b.firstChild) t.appendChild(b.firstChild);
-      var last = t.lastChild;
-      while (last && last.nodeType === 3 && !last.textContent.trim()) { t.removeChild(last); last = t.lastChild; }
-      if (last && last.nodeType === 1 && /^[→↗]$/.test((last.textContent || '').trim())) {
-        last.classList.add('ar'); last.style.fontStyle = 'normal';
-      } else if (last && last.nodeType === 3 && /[→↗]\s*$/.test(last.textContent)) {
-        var txt = last.textContent, idx = txt.search(/[→↗]\s*$/);
-        last.textContent = txt.slice(0, idx);
-        var ar = document.createElement('i');
-        ar.className = 'ar'; ar.style.fontStyle = 'normal'; ar.textContent = txt.slice(idx).trim();
-        t.appendChild(ar);
-      }
-      var sh = document.createElement('span'); sh.className = 'sh'; sh.setAttribute('aria-hidden', 'true');
-      var fi = document.createElement('span'); fi.className = 'fill'; fi.setAttribute('aria-hidden', 'true');
-      b.appendChild(sh); b.appendChild(fi); b.appendChild(t);
-    });
-    if (reduce.matches) return;
-    /* La nappe d'or part du point EXACT où le curseur est entré. */
-    document.addEventListener('pointerenter', function (e) {
-      var b = e.target && e.target.closest ? e.target.closest(BTN) : null; if (!b) return;
-      var r = b.getBoundingClientRect();
-      b.style.setProperty('--bx', (e.clientX - r.left) + 'px');
-      b.style.setProperty('--by', (e.clientY - r.top) + 'px');
-    }, true);
-    document.addEventListener('pointerdown', function (e) {
-      var b = e.target && e.target.closest ? e.target.closest(BTN) : null; if (!b) return;
-      var r = b.getBoundingClientRect();
-      var rp = document.createElement('span'); rp.className = 'rip'; rp.setAttribute('aria-hidden', 'true');
-      rp.style.left = (e.clientX - r.left) + 'px'; rp.style.top = (e.clientY - r.top) + 'px';
-      rp.style.animation = 'ripGo 640ms cubic-bezier(.16,1,.3,1) forwards';
-      b.appendChild(rp);
-      setTimeout(function () { rp.remove(); }, 700);
-    }, true);
-  })();
+     Ce bloc enveloppait chaque bouton de quatre calques — un reflet qui
+     balayait en boucle, une nappe d'or qui partait du curseur, une onde à
+     l'appui, une flèche détachée. Tout cela a été retiré avec les
+     pilules : le bouton est une plaque peinte en CSS (global.css, « LA
+     PLAQUE »), et son seul mouvement est un pixel d'enfoncement à
+     l'appui. Il n'y a plus rien à injecter. */
 
   /* ── 3. Le curseur ──────────────────────────────────────────────────
      RETIRE. Le site rend le curseur du systeme : c'est celui que le

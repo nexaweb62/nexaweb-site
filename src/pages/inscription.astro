@@ -22,9 +22,12 @@ html,body{height:100%;overflow:hidden}
    n'avait aucun moyen de passer en anglais — la seule page du site
    dans ce cas. */
 .lf-lang{display:flex;align-items:center;gap:4px}
-.lf-lang-btn{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text);border-radius:var(--radius-pill);padding:4px 9px;cursor:pointer;transition:color .18s,background-color .18s}
-.lf-lang-btn:hover{color:var(--text)}
-.lf-lang-btn.active{background:var(--accent);color:var(--on-accent)}
+.lf-theme-btn{--cut:4px;--pl-fond:transparent;--pl-filet:var(--border-strong);width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text-muted);cursor:pointer}
+/* Langue : deux petites plaques (.plq dans le balisage). Le fond n'est
+   jamais posé ici — seulement les deux couleurs de la plaque. */
+.lf-lang-btn{--cut:4px;--pl-fond:transparent;--pl-filet:var(--border-strong);
+  font-size:var(--fs-caption);font-weight:600;letter-spacing:.02em;color:var(--text);padding:5px 10px;cursor:pointer}
+.lf-lang-btn.active,.lf-lang-btn.active:hover{--pl-fond:var(--accent);--pl-filet:var(--accent);color:var(--on-accent)}
 .lf-back{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-muted);display:flex;align-items:center;gap:6px;transition:color .2s}
 .lf-back:hover{color:var(--text)}
 .lf-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
@@ -32,11 +35,11 @@ html,body{height:100%;overflow:hidden}
 .lf-body{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:24px 40px 40px;position:relative;z-index:1}
 .lf-form-wrap{width:100%;max-width:400px}
 
-.lf-headline{font-size:clamp(1.5rem,2.6vw,2rem);font-weight:600;line-height:.96;letter-spacing:-.04em;margin-bottom:32px;text-wrap:balance}
+.lf-headline{font-size:clamp(1.5rem,2.6vw,2rem);font-weight:600;line-height:.96;letter-spacing:-.014em;margin-bottom:32px;text-wrap:balance}
 .lf-headline em{font-style:italic;font-weight:600;color:var(--text-muted)}
 
-.lf-social-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:13px 20px;border-radius:var(--radius-pill);font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text);transition:color .2s,background-color .2s;cursor:pointer}
-.lf-social-btn:hover{color:var(--text)}
+/* « Continuer avec Google » : une plaque neutre pleine largeur. */
+.lf-social-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:48px;padding:0 20px;font-size:14px;font-weight:600;letter-spacing:.005em;color:var(--text);cursor:pointer}
 
 .lf-divider{display:flex;align-items:center;gap:14px;margin:20px 0}
 .lf-divider::before,.lf-divider::after{content:'';flex:1;height:1px;background:var(--border)}
@@ -77,8 +80,8 @@ html,body{height:100%;overflow:hidden}
 
 .insc-success{display:none;text-align:center;padding:20px 0}
 .insc-success.show{display:block}
-.insc-success-icon{width:64px;height:64px;border-radius:50%;background:var(--success-glow);border:1px solid var(--success);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;color:var(--success)}
-.insc-success h2{font-size:1.3rem;font-weight:600;letter-spacing:-.03em;margin-bottom:12px}
+.insc-success-icon{width:64px;height:64px;border-radius:var(--radius-tag);background:var(--success-glow);border:1px solid var(--success);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;color:var(--success)}
+.insc-success h2{font-size:1.3rem;font-weight:600;letter-spacing:-.010em;margin-bottom:12px}
 .insc-success p{font-size:12.5px;color:var(--text-muted);line-height:1.65;margin-bottom:6px}
 .insc-success strong{color:var(--text)}
 
@@ -110,10 +113,10 @@ spline-viewer{width:100%;height:100%;display:block}
       <a href="/" class="lf-logo">NEXA<span>WEB</span></a>
       <div style="display:flex;align-items:center;gap:12px">
         <div class="lf-lang" role="group" aria-label="Langue" data-i18n-aria="a11y-langue">
-          <button class="lf-lang-btn" data-lang="fr">FR</button>
-          <button class="lf-lang-btn" data-lang="en">EN</button>
+          <button class="lf-lang-btn plq" data-lang="fr">FR</button>
+          <button class="lf-lang-btn plq" data-lang="en">EN</button>
         </div>
-        <button id="theme-btn" aria-label="Basculer le thème" data-i18n-aria="lf-theme" style="width:28px;height:28px;border:1px solid var(--border-strong);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text-muted);background:none;cursor:pointer;transition:border-color .2s,color .2s">○</button>
+        <button id="theme-btn" class="plq lf-theme-btn" aria-label="Basculer le thème" data-i18n-aria="lf-theme">○</button>
         <a href="/login" class="lf-back">
           <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
           <span data-i18n="ins-retour">Connexion</span>
@@ -139,7 +142,7 @@ spline-viewer{width:100%;height:100%;display:block}
         <!-- FORM -->
         <div id="insc-form-wrap">
 
-          <button type="button" class="lf-social-btn" id="google-btn">
+          <button type="button" class="lf-social-btn plq" id="google-btn">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px;flex-shrink:0">
               <path style="fill:var(--brand-google-blue)" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
               <path style="fill:var(--brand-google-green)" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
