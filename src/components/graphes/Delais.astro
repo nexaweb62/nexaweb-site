@@ -1,0 +1,461 @@
+---
+/**
+ * G5 — COMBIEN DE TEMPS, ÉTAPE PAR ÉTAPE
+ *
+ * Une frise des six étapes de /comment-ca-marche. Seule la portion que
+ * la page chiffre est dessinée à l'échelle : de la validation du brief à
+ * la mise en ligne (étapes 3 à 5 ensemble), en blocs d'une semaine que
+ * l'on peut compter. Les étapes sans durée écrite sont des repères, sans
+ * longueur.
+ *
+ * Props
+ *   colle   boolean, défaut true — au-delà de 1024 px, la frise reste à
+ *           l'écran (position sticky) pendant la lecture des étapes.
+ *           Le parent doit être une colonne de grille ou de flex plus
+ *           haute que la frise. En dessous de 1024 px : en pile.
+ */
+import { REFONTE } from '../../data/formules';
+
+export interface Props {
+  colle?: boolean;
+}
+const { colle = true } = Astro.props;
+
+/* ── LES DURÉES, ET RIEN D'AUTRE ─────────────────────────────────────
+   Toutes viennent du texte de src/pages/comment-ca-marche.astro, ou de
+   src/data/formules.ts pour la refonte. Aucune n'est estimée.
+     - étape 1, l. 79 (ccm-s1-d) : « On vous répond sous 24 h »
+     - étape 2, l. 90 (ccm-s2-d) : « Un appel de 30 minutes »
+     - étape 5, l. 123 (ccm-s5-d) : « Comptez deux semaines pour une
+       refonte, deux à quatre pour un site complet, à partir de la
+       validation du brief. »
+     - formules.ts, l. 25 : REFONTE.delaiSemaines = 2 (la même refonte ;
+       c'est ce fichier qui fait foi pour le chiffre).
+   Étapes 3 et 4 : aucune durée propre — elles sont comprises dans la
+   durée commune « à partir de la validation du brief ». Étape 6 :
+   aucune durée écrite. */
+const REPONSE_H = 24;
+const APPEL_MIN = 30;
+const COMPLET = { min: 2, max: 4 };
+const REFONTE_SEM = REFONTE.delaiSemaines;
+const SUR = Math.max(COMPLET.max, REFONTE_SEM);   // longueur de l'échelle, en semaines
+
+/* Une barre = des blocs d'une semaine. « sur » = bloc certain ; « peut »
+   = bloc de la fourchette (de min à max). */
+const blocs = (min: number, max: number) =>
+  Array.from({ length: Math.ceil(max) }, (_, i) => (i < min ? 'sur' : 'peut'));
+const TICKS = Array.from({ length: SUR + 1 }, (_, k) => k);
+const idT = 'gr-del-t';
+---
+<figure class="gd" data-gr-delais data-colle={colle ? '' : undefined} aria-labelledby={idT}>
+  <h3 class="gd-titre" id={idT} data-i18n="gr-del-t">Du brief validé à la mise en ligne : deux à quatre semaines</h3>
+
+  <div class="gd-frise">
+    <ol class="gd-liste">
+      <li class="gd-e">
+        <span class="gd-num">1</span>
+        <span class="gd-txt">
+          <span class="gd-nom" data-i18n="ccm-s1-t">Prise de contact &amp; devis gratuit</span>
+          <span class="gd-duree" data-i18n="gr-del-d1">Réponse sous {REPONSE_H} h</span>
+        </span>
+      </li>
+      <li class="gd-e">
+        <span class="gd-num">2</span>
+        <span class="gd-txt">
+          <span class="gd-nom" data-i18n="ccm-s2-t">Cadrage du besoin</span>
+          <span class="gd-duree" data-i18n="gr-del-d2">Appel de {APPEL_MIN} minutes</span>
+        </span>
+      </li>
+    </ol>
+
+    <p class="gd-e gd-jalon">
+      <span class="gd-jalon-trait" aria-hidden="true"></span>
+      <span class="gd-jalon-txt" data-i18n="gr-del-jalon">Brief validé : le délai démarre ici</span>
+    </p>
+
+    <ol class="gd-liste" start="3">
+      <li class="gd-e gd-court">
+        <span class="gd-num">3</span>
+        <span class="gd-txt"><span class="gd-nom" data-i18n="ccm-s3-t">Design &amp; maquette</span></span>
+      </li>
+      <li class="gd-e gd-court">
+        <span class="gd-num">4</span>
+        <span class="gd-txt"><span class="gd-nom" data-i18n="ccm-s4-t">Développement &amp; intégration</span></span>
+      </li>
+      <li class="gd-e gd-court">
+        <span class="gd-num">5</span>
+        <span class="gd-txt"><span class="gd-nom" data-i18n="ccm-s5-t">Mise en ligne</span></span>
+      </li>
+    </ol>
+
+    <div class="gd-e gd-echelle">
+      <div class="gd-plot">
+        <div class="gd-ligne" tabindex="0" data-gr-ligne="refonte">
+          <p class="gd-tete">
+            <span class="gd-nomf" data-i18n="trf-p4-name">Refonte de site</span>
+            <span class="gd-val"><span class="gd-n">{REFONTE_SEM}</span> <span data-i18n={REFONTE_SEM > 1 ? 'gr-del-sem' : 'gr-del-sem1'}>{REFONTE_SEM > 1 ? 'semaines' : 'semaine'}</span></span>
+          </p>
+          <span class="gd-barre" style={`--n:${Math.ceil(REFONTE_SEM)};--sur:${SUR}`} aria-hidden="true">
+            {blocs(REFONTE_SEM, REFONTE_SEM).map((b) => <span class:list={['gd-bloc', { 'gd-peut': b === 'peut' }]}></span>)}
+          </span>
+        </div>
+
+        <div class="gd-ligne" tabindex="0" data-gr-ligne="complet">
+          <p class="gd-tete">
+            <span class="gd-nomf" data-i18n="gr-del-complet">Site complet</span>
+            <span class="gd-val"><span class="gd-n">{COMPLET.min}</span> <span data-i18n="gr-del-a">à</span> <span class="gd-n">{COMPLET.max}</span> <span data-i18n="gr-del-sem">semaines</span></span>
+          </p>
+          <span class="gd-barre" style={`--n:${COMPLET.max};--sur:${SUR}`} aria-hidden="true">
+            {blocs(COMPLET.min, COMPLET.max).map((b) => <span class:list={['gd-bloc', { 'gd-peut': b === 'peut' }]}></span>)}
+          </span>
+        </div>
+
+        <div class="gd-axe" aria-hidden="true" style={`--sur:${SUR}`}>
+          {TICKS.map((k) => <span class="gd-tick" style={`--k:${k}`}>{k}</span>)}
+        </div>
+        <p class="gd-axe-leg" data-i18n="gr-del-axe">semaines après la validation du brief</p>
+
+        <div class="gd-bulle" hidden aria-hidden="true">
+          <span class="gd-b-val"></span>
+          <span class="gd-b-lib"></span>
+        </div>
+      </div>
+      <p class="gd-note" data-i18n="gr-del-note">Ce délai couvre les étapes 3, 4 et 5 ensemble ; il n'est pas découpé étape par étape.</p>
+    </div>
+
+    <ol class="gd-liste" start="6">
+      <li class="gd-e gd-dernier">
+        <span class="gd-num">6</span>
+        <span class="gd-txt">
+          <span class="gd-nom" data-i18n="ccm-s6-t">Support post-livraison</span>
+          <span class="gd-duree" data-i18n="gr-del-d6">Après la mise en ligne</span>
+        </span>
+      </li>
+    </ol>
+  </div>
+
+  <p class="gd-src"><span data-i18n="gr-b-src">Source :</span> <span data-i18n="gr-del-src-a">les durées écrites dans</span> <a href="/comment-ca-marche" data-i18n="gr-del-src-lien">les étapes de la page Comment ça marche</a><span data-i18n="gr-del-src-fin"> (2026), sans autre estimation.</span></p>
+
+  <details class="gd-chiffres">
+    <summary class="plq plq-sm gd-voir" data-i18n="gr-b-voir">Voir les chiffres</summary>
+    <table class="gd-table">
+      <caption class="sr-only" data-i18n="gr-del-cap">Durées écrites, étape par étape</caption>
+      <thead>
+        <tr>
+          <th scope="col" data-i18n="gr-del-th-e">Étape</th>
+          <th scope="col" data-i18n="gr-del-th-d">Durée écrite</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row"><span class="gd-th"><span class="gd-tn">1</span> <span data-i18n="ccm-s1-t">Prise de contact &amp; devis gratuit</span></span></th>
+          <td data-i18n="gr-del-d1">Réponse sous {REPONSE_H} h</td>
+        </tr>
+        <tr>
+          <th scope="row"><span class="gd-th"><span class="gd-tn">2</span> <span data-i18n="ccm-s2-t">Cadrage du besoin</span></span></th>
+          <td data-i18n="gr-del-d2">Appel de {APPEL_MIN} minutes</td>
+        </tr>
+        <tr>
+          <th scope="row"><span class="gd-th"><span class="gd-tn" data-i18n="gr-del-35">3 à 5</span> <span data-i18n="trf-p4-name">Refonte de site</span></span></th>
+          <td><span class="gd-n">{REFONTE_SEM}</span> <span data-i18n={REFONTE_SEM > 1 ? 'gr-del-sem' : 'gr-del-sem1'}>{REFONTE_SEM > 1 ? 'semaines' : 'semaine'}</span> <span data-i18n="gr-del-apres">après la validation du brief</span></td>
+        </tr>
+        <tr>
+          <th scope="row"><span class="gd-th"><span class="gd-tn" data-i18n="gr-del-35">3 à 5</span> <span data-i18n="gr-del-complet">Site complet</span></span></th>
+          <td><span class="gd-n">{COMPLET.min}</span> <span data-i18n="gr-del-a">à</span> <span class="gd-n">{COMPLET.max}</span> <span data-i18n="gr-del-sem">semaines</span> <span data-i18n="gr-del-apres">après la validation du brief</span></td>
+        </tr>
+        <tr>
+          <th scope="row"><span class="gd-th"><span class="gd-tn">6</span> <span data-i18n="ccm-s6-t">Support post-livraison</span></span></th>
+          <td data-i18n="gr-del-aucune">Aucune durée écrite</td>
+        </tr>
+      </tbody>
+    </table>
+  </details>
+</figure>
+
+<style>
+  .gd {
+    --num: 24px;            /* côté du carré numéroté */
+    --col: calc(var(--num) + var(--sp-3));
+    --ep: 20px;             /* épaisseur d'une barre (≤ 24 px) */
+    margin: 0;
+    min-width: 0;
+    align-self: start;      /* nécessaire au sticky dans une grille */
+    font-family: var(--font);
+    color: var(--text);
+  }
+  @media (min-width: 1024px) {
+    .gd[data-colle] {
+      position: sticky;
+      top: calc(var(--hdr) + var(--sp-5));
+    }
+  }
+  .gd-titre {
+    margin: 0 0 var(--sp-5);
+    font-size: var(--fs-sub);
+    line-height: var(--lh-sub);
+    letter-spacing: var(--ls-sub);
+    text-wrap: balance;
+  }
+
+  /* ── LE RAIL ── un filet d'1 px relie les étapes, segment par segment,
+     comme les connecteurs de la page. */
+  .gd-liste { list-style: none; margin: 0; padding: 0; }
+  .gd-e {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--num) minmax(0, 1fr);
+    column-gap: var(--sp-3);
+    margin: 0;
+    padding-bottom: var(--sp-4);
+  }
+  .gd-e::before {
+    content: '';
+    position: absolute;
+    left: calc(var(--num) / 2 - .5px);
+    top: calc(var(--num) + var(--sp-1));
+    bottom: var(--sp-1);
+    width: 1px;
+    background: var(--border);
+  }
+  .gd-dernier { padding-bottom: 0; }
+  .gd-dernier::before { display: none; }
+  .gd-court { padding-bottom: var(--sp-3); }
+
+  .gd-num {
+    width: var(--num);
+    height: var(--num);
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-tag);
+    font-size: var(--fs-caption);
+    font-weight: var(--w-semi);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-muted);
+  }
+  .gd-txt { display: grid; gap: 2px; padding-top: 2px; min-width: 0; }
+  .gd-nom { font-size: 15px; line-height: 1.35; color: var(--text); }
+  .gd-duree { font-size: 14px; line-height: 1.35; color: var(--text-muted); }
+
+  /* Le jalon : la validation du brief, point zéro de l'échelle. */
+  .gd-jalon { align-items: center; }
+  .gd-jalon::before { top: calc(50% + 6px); }
+  .gd-jalon-trait {
+    justify-self: center;
+    width: var(--num);
+    height: 1px;
+    background: var(--text-muted);
+  }
+  .gd-jalon-txt {
+    font-size: 13px;
+    line-height: 1.35;
+    font-weight: var(--w-semi);
+    color: var(--text-muted);
+  }
+
+  /* ── L'ÉCHELLE ── décalée d'une colonne, le rail passe à gauche. */
+  .gd-echelle { display: block; padding-left: var(--col); padding-bottom: var(--sp-5); }
+  .gd-echelle::before { top: 0; }
+  .gd-plot { position: relative; display: grid; gap: var(--sp-3); }
+
+  .gd-ligne {
+    display: grid;
+    gap: var(--sp-1);
+    border-radius: var(--radius-block);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .gd-tete {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: var(--sp-2);
+    font-size: 14px;
+    line-height: 1.35;
+  }
+  .gd-nomf { color: var(--text-muted); }
+  .gd-val { color: var(--text); font-weight: var(--w-semi); white-space: nowrap; }
+  .gd-n { font-variant-numeric: tabular-nums; }
+
+  /* Une barre = des blocs d'une semaine séparés par 2 px de vide. La
+     largeur tombe juste : n blocs sur « sur » occupent exactement la
+     même place que n blocs de la barre la plus longue. */
+  .gd-barre {
+    display: flex;
+    gap: 2px;
+    height: var(--ep);
+    width: calc((100% + 2px) * var(--n) / var(--sur) - 2px);
+  }
+  .gd-bloc { flex: 1 1 0; background: var(--accent); }
+  .gd-bloc:last-child { border-radius: 0 4px 4px 0; }
+  .gd-bloc.gd-peut { background: var(--gold-low); }
+
+  @media (hover: hover) and (pointer: fine) {
+    .gd-ligne:hover .gd-barre { outline: 1px solid var(--text); outline-offset: 1px; border-radius: 0 4px 4px 0; }
+    .gd-ligne:hover .gd-nomf { color: var(--text); }
+  }
+  .gd-ligne:focus-visible .gd-barre { outline: 1px solid var(--text); outline-offset: 1px; border-radius: 0 4px 4px 0; }
+
+  .gd-axe {
+    position: relative;
+    height: 20px;
+    margin-top: var(--sp-1);
+    border-top: 1px solid var(--border);
+    font-size: var(--fs-caption);
+    line-height: 1;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  /* Chaque graduation tombe au milieu du vide entre deux blocs. */
+  .gd-tick {
+    position: absolute;
+    top: 6px;
+    left: calc((100% + 2px) * var(--k) / var(--sur) - 1px);
+    transform: translateX(-50%);
+  }
+  .gd-tick::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: -7px;
+    width: 1px;
+    height: 4px;
+    background: var(--border);
+  }
+  .gd-tick:first-child { left: 0; transform: none; }
+  .gd-tick:first-child::before { left: 0; }
+  .gd-tick:last-child { left: auto; right: 0; transform: none; }
+  .gd-tick:last-child::before { left: auto; right: 0; }
+  .gd-axe-leg {
+    margin: 0;
+    font-size: var(--fs-caption);
+    line-height: var(--lh-caption);
+    color: var(--text-muted);
+  }
+
+  .gd-bulle {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    display: grid;
+    gap: 2px;
+    max-width: min(18rem, 100%);
+    padding: var(--sp-2) var(--sp-3);
+    background: var(--surface-2);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-block);
+    pointer-events: none;
+  }
+  .gd-bulle[hidden] { display: none; }
+  .gd-b-val { font-size: 16px; font-weight: var(--w-semi); color: var(--text); }
+  .gd-b-lib { font-size: 13px; line-height: 1.35; color: var(--text-muted); }
+
+  .gd-note {
+    margin: var(--sp-3) 0 0;
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--text-muted);
+  }
+
+  .gd-src {
+    margin: var(--sp-5) 0 0;
+    font-size: var(--fs-caption);
+    line-height: var(--lh-caption);
+    letter-spacing: var(--ls-caption);
+    color: var(--text-muted);
+  }
+  .gd-src a {
+    color: var(--text);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+
+  .gd-chiffres { margin-top: var(--sp-4); }
+  .gd-voir {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    padding: 0 var(--sp-4);
+    font-size: 14px;
+    font-weight: var(--w-semi);
+    color: var(--text);
+    cursor: pointer;
+    list-style: none;
+  }
+  .gd-voir::-webkit-details-marker { display: none; }
+  .gd-voir::marker { content: ''; }
+  .gd-table {
+    width: 100%;
+    margin-top: var(--sp-3);
+    border-collapse: collapse;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  .gd-table th, .gd-table td {
+    padding: var(--sp-2) var(--sp-3) var(--sp-2) 0;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    vertical-align: top;
+    font-weight: var(--w-reg);
+  }
+  .gd-table thead th { color: var(--text-muted); font-weight: var(--w-semi); }
+  .gd-th { display: flex; gap: var(--sp-2); }
+  .gd-tn {
+    flex: none;
+    min-width: 2.75em;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+</style>
+
+<script>
+  /* Infobulle au survol et au focus sur les deux barres ; rien d'autre.
+     Les nombres de cette frise s'écrivent pareil en français et en
+     anglais : seuls les mots changent, et i18n.js s'en charge. */
+  const SUITE = {
+    fr: 'entre la validation du brief et la mise en ligne',
+    en: 'from brief approval to launch',
+  };
+
+  document.querySelectorAll<HTMLElement>('[data-gr-delais]').forEach((fig) => {
+    const plot = fig.querySelector<HTMLElement>('.gd-plot')!;
+    const bulle = fig.querySelector<HTMLElement>('.gd-bulle')!;
+    const lignes = [...fig.querySelectorAll<HTMLElement>('.gd-ligne')];
+    let active: HTMLElement | null = null;
+    const langue = () => (document.documentElement.lang === 'en' ? 'en' : 'fr');
+
+    function montrer(ligne: HTMLElement) {
+      active = ligne;
+      const l = langue();
+      bulle.querySelector('.gd-b-val')!.textContent = ligne.querySelector('.gd-val')!.textContent!.replace(/\s+/g, ' ').trim();
+      bulle.querySelector('.gd-b-lib')!.textContent = `${ligne.querySelector('.gd-nomf')!.textContent}, ${SUITE[l]}`;
+      bulle.hidden = false;
+      const pr = plot.getBoundingClientRect();
+      const br = ligne.querySelector('.gd-barre')!.getBoundingClientRect();
+      const lr = ligne.getBoundingClientRect();
+      const w = bulle.offsetWidth;
+      const h = bulle.offsetHeight;
+      const x = Math.min(Math.max(0, br.right - pr.left - w / 2), Math.max(0, pr.width - w));
+      let y = lr.top - pr.top - h - 4;
+      if (y < 0) y = lr.bottom - pr.top + 4;
+      bulle.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px)`;
+    }
+    function cacher() { active = null; bulle.hidden = true; }
+
+    lignes.forEach((ligne) => {
+      ligne.addEventListener('pointerenter', () => montrer(ligne));
+      ligne.addEventListener('pointerleave', () => { if (document.activeElement !== ligne) cacher(); });
+      ligne.addEventListener('focus', () => montrer(ligne));
+      ligne.addEventListener('blur', cacher);
+      ligne.addEventListener('keydown', (e) => { if ((e as KeyboardEvent).key === 'Escape') cacher(); });
+    });
+
+    /* i18n.js réécrit les mots après l'événement : on attend qu'il ait
+       fini (nw-lang-applied) pour relire le libellé traduit. */
+    document.addEventListener('nw-lang-applied', () => { if (active) montrer(active); });
+  });
+</script>

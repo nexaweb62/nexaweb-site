@@ -1,0 +1,727 @@
+---
+/* G1 — LE SIMULATEUR : CE QU'UN SITE RAPPORTE, AVEC LES CHIFFRES DU VISITEUR.
+
+   Aucune statistique inventée : la courbe est un calcul, rien d'autre.
+     bilan(mois) = − prix de la formule + gain par client × clients par mois × mois
+   Le prix vient de src/data/formules.ts (jamais recopié). Le gain et le
+   nombre de clients sont ceux que le visiteur saisit ; les valeurs de
+   départ sont des EXEMPLES, et l'écran le dit tant qu'il n'y a pas touché.
+
+   « Remboursé » = le bilan cumulé est revenu à zéro ou au-dessus : le
+   site a été payé par ce qu'il a fait gagner. Le simulateur ne ment pas
+   dans l'autre sens non plus : s'il ne rembourse pas en 12 mois, la
+   phrase le dit, avec ce qu'il manque.
+
+   Rendu complet côté serveur (lisible sans JavaScript) ; le script ne
+   fait que recalculer et ajouter l'infobulle. Tous les mots vivent dans
+   le balisage avec une clé data-i18n ; le script ne fabrique que des
+   nombres, formatés selon <html lang>. Aucun élément n'est créé en JS :
+   tout le style reste scopé. */
+import { FORMULES, REFONTE, VITRINE, ENTREPRISE, prix } from '../../data/formules';
+
+type Cle = 'refonte' | 'vitrine' | 'entreprise';
+export interface Props {
+  /** Formule cochée au départ. */
+  formule?: Cle;
+  /** Gain net d'exemple par nouveau client, en euros (marqué « exemple »). */
+  gainExemple?: number;
+  /** Nouveaux clients par mois, valeur d'exemple du curseur (0 à 20). */
+  clientsExemple?: number;
+  /** Préfixe des id : deux simulateurs sur une page ne doivent pas se croiser. */
+  id?: string;
+}
+const { formule = 'vitrine', gainExemple = 60, clientsExemple = 2, id = 'gsim' } = Astro.props;
+
+const MOIS = 12;
+const CLIENTS_MAX = 20;
+const SLOTS_Y = 7;            // au plus 7 graduations (voir echelle())
+
+/* Le montant de chaque formule, lu dans formules.ts. Refonte et
+   Entreprise n'ont qu'un prix de départ : le libellé le dit (« dès »,
+   « à partir de »), et c'est ce prix-là que le calcul prend. */
+const MONTANT: Record<Cle, number> = {
+  refonte: REFONTE.prixDepart,
+  vitrine: VITRINE.prix,
+  entreprise: ENTREPRISE.prixDepart,
+};
+const options = FORMULES.map((f) => ({ ...f, montant: MONTANT[f.cle as Cle] }));
+const choisie = options.find((o) => o.cle === formule) ?? options[1];
+
+const p = choisie.montant;
+const g = gainExemple;
+const c = Math.max(0, Math.min(CLIENTS_MAX, clientsExemple));
+const serie = Array.from({ length: MOIS + 1 }, (_, m) => -p + g * c * m);
+const N = serie.findIndex((v) => v >= 0);
+const X = serie[MOIS];
+const variante = N < 0 ? 'ko' : N === MOIS && X === 0 ? 'juste' : 'ok';
+
+/* Graduations « rondes » (1, 2, 2,5, 5 × 10^k), zéro toujours inclus,
+   au moins un cran au-dessus de zéro pour que la ligne de référence ne
+   colle jamais au bord. Le même calcul tourne dans le script. */
+function echelle(s: number[]) {
+  const lo = Math.min(0, ...s);
+  let hi = Math.max(0, ...s);
+  if (hi <= 0) hi = -lo * 0.2;
+  const brut = (hi - lo) / 4;
+  const p10 = 10 ** Math.floor(Math.log10(brut));
+  const f = brut / p10;
+  const pas = (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * p10;
+  const t0 = Math.floor(lo / pas) * pas;
+  let t1 = Math.ceil(hi / pas) * pas;
+  if (t1 <= 0) t1 = pas;
+  const ticks: number[] = [];
+  for (let t = t0; t <= t1 + pas / 2; t += pas) ticks.push(Math.round(t));
+  return { t0, t1, ticks };
+}
+const { t0, t1, ticks } = echelle(serie);
+const py = (v: number) => ((t1 - v) / (t1 - t0)) * 100;   // % depuis le haut
+const px = (m: number) => (m / MOIS) * 100;
+
+/* Le signe moins typographique (U+2212), et le plus devant un gain. */
+const fmt = (n: number, plus = false) =>
+  (n < 0 ? '−' : plus && n > 0 ? '+' : '') + prix(Math.abs(Math.round(n)));
+
+const yLargeur = Math.max(...ticks.map((t) => fmt(t).length));
+const chemin = serie.map((v, m) => `${m === 0 ? 'M' : 'L'}${(px(m) * 10).toFixed(1)} ${(py(v) * 10).toFixed(1)}`).join(' ');
+
+/* Placement des deux annotations sans JavaScript : une estimation. Le
+   script refait le placement au pixel près, en évitant la courbe. */
+const qMarque = N >= 4 ? 'no' : 'se';
+const qZero = N >= 0 ? 'so' : 'no';
+const remplissage = `calc(11px + (100% - 22px) * ${c / CLIENTS_MAX})`;
+---
+<div class="gsim" data-gsim-root>
+  <h3 class="gsim-h" id={`${id}-h`} data-i18n="gr-sim-h">Ce qu'un site vous rapporte, avec vos chiffres</h3>
+
+  <div class="gsim-grille">
+    <!-- LES ENTRÉES -->
+    <div class="gsim-form">
+      <fieldset class="gsim-f">
+        <legend class="gsim-lab" data-i18n="gr-sim-l-formule">Votre formule</legend>
+        <div class="gsim-opts">
+          {options.map((o) => (
+            <>
+              <input class="gsim-radio" type="radio" name={`${id}-formule`} id={`${id}-f-${o.cle}`}
+                     value={o.cle} data-prix={o.montant} checked={o.cle === choisie.cle} />
+              <label class="gsim-opt plq" for={`${id}-f-${o.cle}`}>
+                <span class="gsim-opt-nom" data-i18n={`gr-f-${o.cle}`}>{o.nom}</span>
+                <span class="gsim-opt-prix">{o.pre && <><span data-i18n={o.preCle}>{o.pre}</span> </>}<span data-i18n-prix>{o.total}</span></span>
+              </label>
+            </>
+          ))}
+        </div>
+      </fieldset>
+
+      <div class="gsim-champ">
+        <label class="gsim-lab" for={`${id}-gain`}><span data-i18n="gr-sim-l-gain">Ce que vous gagnez net sur un nouveau client</span><span class="sr-only" data-i18n="gr-sim-euros"> (en euros)</span></label>
+        <div class="gsim-gain">
+          <span class="gsim-saisie">
+            <input id={`${id}-gain`} data-gsim="gain" type="text" inputmode="numeric" pattern="[0-9]*"
+                   maxlength="5" autocomplete="off" enterkeyhint="done" value={String(g)}
+                   aria-describedby={`${id}-gain-ex`} />
+            <span class="gsim-unite" aria-hidden="true">€</span>
+          </span>
+          <span class="gsim-ex" id={`${id}-gain-ex`} data-ex="gain" data-i18n="gr-sim-ex-gain">exemple, mettez la vôtre</span>
+        </div>
+      </div>
+
+      <div class="gsim-champ">
+        <div class="gsim-lab-ligne">
+          <label class="gsim-lab" for={`${id}-clients`} data-i18n="gr-sim-l-clients">Nouveaux clients par mois venus du site</label>
+          <output class="gsim-val" for={`${id}-clients`} data-n="clients">{c}</output>
+        </div>
+        <input class="gsim-range" id={`${id}-clients`} data-gsim="clients" type="range" min="0" max={CLIENTS_MAX}
+               step="1" value={String(c)} style={`--p:${remplissage}`} aria-describedby={`${id}-cli-ex`} />
+        <div class="gsim-bornes" aria-hidden="true"><span>0</span><span>{CLIENTS_MAX}</span></div>
+        <span class="gsim-ex" id={`${id}-cli-ex`} data-ex="clients" data-i18n="gr-sim-ex-clients">exemple, réglez le vôtre</span>
+      </div>
+      <noscript><p class="gsim-nojs" data-i18n="gr-sim-nojs">Le calcul se met à jour avec JavaScript. Sans lui, voici l'exemple de départ.</p></noscript>
+    </div>
+
+    <!-- LA SORTIE -->
+    <div class="gsim-out">
+      <p class="gsim-synth" aria-live="polite">
+        <span data-var="ok" hidden={variante !== 'ok'}><span data-i18n="gr-sim-ok-1">Remboursé en</span> <b data-n="mois">{N}</b> <span data-pl="n" data-i18n="gr-sim-ok-2" hidden={N === 1}>mois, puis</span><span data-pl="1" data-i18n="gr-sim-ok-2s" hidden={N !== 1}>mois, puis</span> <b data-n="x">{fmt(X, true)}</b> <span data-i18n="gr-sim-ok-3">sur la première année.</span></span>
+        <span data-var="juste" hidden={variante !== 'juste'} data-i18n="gr-sim-juste">Remboursé tout juste en 12 mois : la première année paie le site, sans plus.</span>
+        <span data-var="ko" hidden={variante !== 'ko'}><span data-i18n="gr-sim-ko-1">Pas remboursé en 12 mois avec ces chiffres : il manque</span> <b data-n="manque">{fmt(-X)}</b> <span data-i18n="gr-sim-ko-2">au bout d'un an.</span></span>
+        <span data-var="vide" hidden data-i18n="gr-sim-vide">Indiquez ce que vous gagnez sur un client pour lancer le calcul.</span>
+      </p>
+
+      <div class="gsim-chart" style={`--gsim-yl:${yLargeur}ch`}>
+        <p class="gsim-yt" aria-hidden="true" data-i18n="gr-sim-yt">Bilan net cumulé</p>
+        <div class="gsim-y" aria-hidden="true">
+          {Array.from({ length: SLOTS_Y }, (_, i) => (
+            <span style={i < ticks.length ? `top:${py(ticks[i]).toFixed(3)}%` : undefined} hidden={i >= ticks.length}>{i < ticks.length ? fmt(ticks[i]) : ''}</span>
+          ))}
+        </div>
+        <div class="gsim-plot" tabindex="0" role="group" aria-label="Bilan net mois par mois. Flèches gauche et droite pour parcourir les mois."
+             data-i18n-aria="gr-sim-plot-aria" aria-describedby={`${id}-sr`}>
+          <svg class="gsim-svg" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            {Array.from({ length: SLOTS_Y }, (_, i) => {
+              const y = i < ticks.length ? (py(ticks[i]) * 10).toFixed(1) : '0';
+              return <line class="gsim-grid-l" x1="0" x2="1000" y1={y} y2={y} vector-effect="non-scaling-stroke"
+                           shape-rendering="crispEdges" visibility={i < ticks.length && ticks[i] !== 0 ? 'visible' : 'hidden'} />;
+            })}
+            <line class="gsim-zero" x1="0" x2="1000" y1={(py(0) * 10).toFixed(1)} y2={(py(0) * 10).toFixed(1)}
+                  vector-effect="non-scaling-stroke" shape-rendering="crispEdges" />
+            <line class="gsim-cross" x1="0" x2="0" y1="0" y2="1000" vector-effect="non-scaling-stroke"
+                  shape-rendering="crispEdges" visibility="hidden" />
+            <path class="gsim-ligne" d={chemin} vector-effect="non-scaling-stroke" />
+          </svg>
+          <span class="gsim-ann gsim-zlab" aria-hidden="true" data-q={qZero} data-i18n="gr-sim-zero"
+                style={`left:100%;top:${py(0).toFixed(3)}%`}>sans site, rien ne change</span>
+          <span class="gsim-dot" data-dot="pay" hidden={N < 0}
+                style={N >= 0 ? `left:${px(N).toFixed(3)}%;top:${py(serie[N]).toFixed(3)}%` : undefined}></span>
+          <span class="gsim-ann gsim-mk" aria-hidden="true" data-q={qMarque} hidden={N < 0}
+                style={N >= 0 ? `left:${px(N).toFixed(3)}%;top:${py(serie[N]).toFixed(3)}%` : undefined}><span data-i18n="gr-sim-mk">remboursé au mois</span> <span data-n="mois">{N}</span></span>
+          <span class="gsim-dot gsim-dot-h" data-dot="survol" hidden></span>
+          <div class="gsim-tip" aria-hidden="true">
+            <p class="gsim-tip-m"><span data-t="m0" data-i18n="gr-sim-tt-0">Mise en ligne</span><span data-t="mn"><span data-i18n="gr-sim-tt-mois">Mois</span> <span data-n="tm">1</span></span></p>
+            <p class="gsim-tip-v"><b data-n="tv">0</b> <span data-i18n="gr-sim-tt-bilan">bilan net</span></p>
+            <p class="gsim-tip-d"><span data-n="tg">0</span> <span data-i18n="gr-sim-tt-gagne">gagnés grâce au site</span></p>
+          </div>
+        </div>
+        <div class="gsim-x" aria-hidden="true">
+          {serie.map((_, m) => <span style={`left:${px(m).toFixed(3)}%`}>{m}</span>)}
+        </div>
+        <p class="gsim-xt" aria-hidden="true" data-i18n="gr-sim-xt">mois après la mise en ligne</p>
+        <p class="sr-only" id={`${id}-sr`} aria-live="polite" data-gsim-sr></p>
+      </div>
+
+      <p class="gsim-note" data-i18n="gr-sim-note">Simulation, pas une promesse : les chiffres sont les vôtres.</p>
+      <p class="gsim-ctx" data-i18n="gr-sim-ctx">Pour situer : 46 % des TPE et PME déclarent qu'au moins 5 % de leurs clients viennent d'Internet (site, réseaux sociaux et plateformes confondus).</p>
+      <p class="gsim-src"><span data-i18n="gr-src">Source :</span> <a href="https://www.francenum.gouv.fr/guides-et-conseils/strategie-numerique/comprendre-le-numerique/barometre-france-num-2026-le"
+         target="_blank" rel="noopener noreferrer"><span data-i18n="gr-sim-src">DGE / France Num, Baromètre France Num (2026)</span><span class="sr-only" data-i18n="gr-onglet"> (s'ouvre dans un nouvel onglet)</span></a></p>
+
+      <details class="gsim-det">
+        <summary class="gsim-sum plq plq-sm" data-i18n="gr-voir">Voir les chiffres</summary>
+        <div class="gsim-tab-w">
+          <table class="gsim-tab">
+            <caption class="sr-only" data-i18n="gr-sim-cap">Bilan du site, mois par mois</caption>
+            <thead>
+              <tr>
+                <th scope="col" data-i18n="gr-sim-th-mois">Mois</th>
+                <th scope="col" data-i18n="gr-sim-th-gagne">Gagné grâce au site</th>
+                <th scope="col" data-i18n="gr-sim-th-bilan">Bilan net</th>
+              </tr>
+            </thead>
+            <tbody>
+              {serie.map((v, m) => (
+                <tr data-m={m} class:list={[{ 'gsim-pay': m === N }]}>
+                  <th scope="row">{m === 0 ? <span data-i18n="gr-sim-tt-0">Mise en ligne</span> : m}</th>
+                  <td data-c="g">{fmt(g * c * m)}</td>
+                  <td data-c="b">{fmt(v)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </div>
+  </div>
+</div>
+
+<style>
+/* ── LE CADRE ─────────────────────────────────────────────────────────
+   Un palier de fond, pas de bordure. Le composant se règle sur SA
+   largeur (requête de conteneur), pas sur celle de l'écran : il tient
+   aussi bien dans une colonne que sur toute la largeur. */
+.gsim{
+  container:gsim / inline-size;
+  background:var(--surface);border-radius:var(--radius-block);
+  padding:clamp(20px,3.4vw,40px);color:var(--text);
+}
+.gsim [hidden]{display:none !important}
+.gsim-h{
+  font-size:var(--fs-sub);letter-spacing:var(--ls-sub);line-height:var(--lh-sub);
+  max-width:30ch;text-wrap:balance;margin-bottom:var(--sp-6);
+}
+.gsim-grille{display:grid;gap:var(--sp-6)}
+@container gsim (min-width:760px){
+  .gsim-grille{grid-template-columns:minmax(260px,320px) minmax(0,1fr);gap:var(--sp-7)}
+}
+
+/* ── LES ENTRÉES ── */
+.gsim-form{display:flex;flex-direction:column;gap:var(--sp-5);min-width:0}
+:root:not(.js-enabled) .gsim-form{pointer-events:none}
+.gsim-f{border:0;padding:0;margin:0;min-width:0}
+.gsim-lab{display:block;padding:0;font-size:15px;font-weight:600;line-height:1.35;color:var(--text);margin-bottom:var(--sp-2)}
+.gsim-opts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--sp-2)}
+.gsim-radio{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+/* La plaque ne reçoit que ses deux couleurs : son fond et son filet sont
+   peints par global.css. Un background posé ici l'effacerait. */
+.gsim-opt{
+  display:flex;flex-direction:column;justify-content:center;gap:2px;
+  min-height:56px;padding:8px 10px;cursor:pointer;
+  font-size:14px;line-height:1.25;color:var(--text);
+}
+.gsim-opt-nom{font-weight:600}
+.gsim-opt-prix{font-size:13px;color:var(--text-muted);font-variant-numeric:tabular-nums}
+.gsim-radio:checked + .gsim-opt{--pl-fond:var(--accent);--pl-filet:var(--accent);color:var(--on-accent)}
+.gsim-radio:checked + .gsim-opt .gsim-opt-prix{color:var(--on-accent)}
+.gsim-radio:focus-visible + .gsim-opt{outline:2px solid var(--focus);outline-offset:3px}
+
+.gsim-champ{min-width:0}
+.gsim-gain{display:flex;align-items:center;flex-wrap:wrap;gap:var(--sp-2) var(--sp-3)}
+.gsim-saisie{
+  display:inline-flex;align-items:center;gap:6px;min-height:48px;padding:0 14px;
+  background:var(--bg);border:1px solid var(--field-border);border-radius:var(--radius-block);
+  cursor:text;
+}
+.gsim-saisie:focus-within{border-color:var(--accent);outline:2px solid var(--focus);outline-offset:2px}
+/* 16 px au minimum : en dessous, Safari iOS zoome la page sur le champ. */
+.gsim-saisie input{
+  width:6ch;padding:10px 0;border:0;background:transparent;outline:none;
+  font:inherit;font-size:20px;font-weight:600;color:var(--text);
+  font-variant-numeric:tabular-nums;
+}
+.gsim-unite{font-size:17px;color:var(--text-muted)}
+/* En anglais, le symbole passe devant : « €60 ». */
+.gsim-saisie:lang(en) .gsim-unite{order:-1}
+.gsim-ex{
+  display:inline-block;font-size:12px;line-height:1.35;color:var(--text-muted);
+  border:1px solid var(--border-strong);border-radius:var(--radius-tag);padding:3px 8px;
+}
+
+.gsim-lab-ligne{display:flex;align-items:baseline;justify-content:space-between;gap:var(--sp-3)}
+.gsim-lab-ligne .gsim-lab{margin-bottom:0}
+.gsim-val{font-size:20px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--text);min-width:2ch;text-align:right}
+
+/* LE CURSEUR, DROIT. Une piste fine, une poignée carrée aux coins coupés
+   comme les plaques. La partie remplie est l'or ; le reste, le filet des
+   champs (3:1 sur le fond, la limite pour un contrôle). La poignée est en
+   or de thème et non en laiton de plaque : sur papier blanc, le laiton
+   pâle tomberait sous 3:1. */
+.gsim-range{
+  --t:22px;--c:5px;
+  -webkit-appearance:none;appearance:none;display:block;
+  width:100%;height:36px;margin:var(--sp-1) 0 0;background:transparent;cursor:pointer;
+  touch-action:manipulation;
+}
+.gsim-range::-webkit-slider-runnable-track{
+  height:2px;border:0;
+  background:linear-gradient(to right,var(--accent) 0 var(--p,50%),var(--field-border) var(--p,50%) 100%);
+}
+.gsim-range::-moz-range-track{height:2px;border:0;background:var(--field-border)}
+.gsim-range::-moz-range-progress{height:2px;background:var(--accent)}
+.gsim-range::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:var(--t);height:var(--t);margin-top:calc((2px - var(--t)) / 2);
+  border:0;border-radius:0;background:var(--accent);
+  clip-path:polygon(var(--c) 0,calc(100% - var(--c)) 0,100% var(--c),100% calc(100% - var(--c)),calc(100% - var(--c)) 100%,var(--c) 100%,0 calc(100% - var(--c)),0 var(--c));
+  transition:background-color 160ms var(--ease-out),translate 100ms var(--ease-out);
+}
+.gsim-range::-moz-range-thumb{
+  width:var(--t);height:var(--t);border:0;border-radius:0;background:var(--accent);
+  clip-path:polygon(var(--c) 0,calc(100% - var(--c)) 0,100% var(--c),100% calc(100% - var(--c)),calc(100% - var(--c)) 100%,var(--c) 100%,0 calc(100% - var(--c)),0 var(--c));
+  transition:background-color 160ms var(--ease-out);
+}
+@media (hover:hover) and (pointer:fine){
+  .gsim-range:hover::-webkit-slider-thumb{background:var(--accent-hover)}
+  .gsim-range:hover::-moz-range-thumb{background:var(--accent-hover)}
+}
+.gsim-range:active::-webkit-slider-thumb{background:var(--accent-active)}
+.gsim-range:active::-moz-range-thumb{background:var(--accent-active)}
+.gsim-bornes{display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);font-variant-numeric:tabular-nums;margin-bottom:var(--sp-2)}
+.gsim-nojs{font-size:13px;color:var(--text-muted)}
+
+/* ── LA SORTIE ── */
+.gsim-out{min-width:0;display:flex;flex-direction:column}
+/* Hauteur réservée pour deux lignes : la phrase change de longueur à
+   chaque saisie, le graphique en dessous ne doit pas sautiller. */
+.gsim-synth{
+  font-size:clamp(19px,2vw,22px);line-height:1.35;max-width:36ch;min-height:2.7em;
+  margin-bottom:var(--sp-5);text-wrap:pretty;
+}
+.gsim-synth b{font-weight:600;white-space:nowrap}
+
+.gsim-chart{
+  --gsim-h:220px;
+  display:grid;grid-template-columns:var(--gsim-yl,8ch) minmax(0,1fr);column-gap:10px;
+  padding-right:12px;font-size:12px;line-height:1.2;color:var(--text-muted);
+}
+/* Chiffres alignés sur les axes seulement. Posé sur tout le graphique,
+   tabular-nums donnait aussi à la virgule la chasse d'un chiffre :
+   « sans site , rien ne change ». */
+.gsim-y,.gsim-x,.gsim-tip [data-n]{font-variant-numeric:tabular-nums}
+@container gsim (min-width:760px){ .gsim-chart{--gsim-h:280px} }
+.gsim-yt{grid-column:1 / -1;margin-bottom:var(--sp-3);color:var(--text-muted)}
+.gsim-y{position:relative;height:var(--gsim-h)}
+.gsim-y span{position:absolute;right:0;transform:translateY(-50%);white-space:nowrap}
+.gsim-plot{position:relative;height:var(--gsim-h);touch-action:pan-y;outline-offset:6px}
+.gsim-svg{position:absolute;inset:0;width:100%;height:100%;max-width:none;overflow:visible;pointer-events:none}
+.gsim-grid-l{stroke:var(--border);stroke-width:1}
+.gsim-zero{stroke:var(--text-muted);stroke-width:1}
+.gsim-cross{stroke:var(--text-muted);stroke-width:1}
+.gsim-ligne{fill:none;stroke:var(--accent);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+
+.gsim-x{grid-column:2;position:relative;height:22px}
+.gsim-x span{position:absolute;top:8px;transform:translateX(-50%)}
+/* Étroit : un mois sur deux, sinon « 10 11 12 » se touchent. */
+@container gsim (max-width:479px){ .gsim-x span:nth-child(even){display:none} }
+.gsim-xt{grid-column:2;margin-top:var(--sp-2);text-align:right}
+
+/* Les annotations : posées sur un point, décalées dans un quadrant
+   choisi par le script pour ne jamais couvrir la courbe. */
+.gsim-ann{
+  --dx:8px;--dy:6px;
+  position:absolute;white-space:nowrap;pointer-events:none;line-height:1.2;
+}
+.gsim-ann[data-q="no"]{transform:translate(calc(-100% - var(--dx)),calc(-100% - var(--dy)))}
+.gsim-ann[data-q="ne"]{transform:translate(var(--dx),calc(-100% - var(--dy)))}
+.gsim-ann[data-q="so"]{transform:translate(calc(-100% - var(--dx)),var(--dy))}
+.gsim-ann[data-q="se"]{transform:translate(var(--dx),var(--dy))}
+.gsim-zlab{--dx:0px;--dy:5px;font-size:12px;color:var(--text-muted)}
+.gsim-mk{font-size:13px;font-weight:600;color:var(--text)}
+/* Le point : 10 px, cerclé de 2 px de la couleur du fond pour rester net
+   là où il croise une ligne. */
+.gsim-dot{
+  position:absolute;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;
+  background:var(--accent);box-shadow:0 0 0 2px var(--surface);pointer-events:none;
+}
+
+.gsim-tip{
+  position:absolute;top:0;left:0;z-index:2;min-width:150px;padding:10px 12px;
+  background:var(--surface-2);border:1px solid var(--border-strong);border-radius:var(--radius-block);
+  font-size:12px;line-height:1.4;color:var(--text-muted);white-space:nowrap;
+  pointer-events:none;opacity:0;visibility:hidden;
+  transition:opacity 125ms var(--ease-out),visibility 0s linear 125ms;
+}
+.gsim-tip.on{opacity:1;visibility:visible;transition:opacity 125ms var(--ease-out),visibility 0s}
+.gsim-tip[data-cote="d"]{transform:translateX(14px)}
+.gsim-tip[data-cote="g"]{transform:translateX(calc(-100% - 14px))}
+.gsim-tip[data-haut="b"]{top:auto;bottom:0}
+.gsim-tip-v{margin:2px 0}
+.gsim-tip-v b{font-size:16px;font-weight:600;color:var(--text)}
+
+.gsim-note{margin-top:var(--sp-5);font-size:15px;color:var(--text)}
+.gsim-ctx{margin-top:var(--sp-2);font-size:14px;line-height:1.5;color:var(--text-muted);max-width:62ch}
+.gsim-src{margin-top:var(--sp-2);font-size:12px;line-height:1.5;color:var(--text-muted)}
+.gsim-src a{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+@media (hover:hover) and (pointer:fine){ .gsim-src a:hover{color:var(--text)} }
+
+/* ── LA VUE TABLEAU ── */
+.gsim-det{margin-top:var(--sp-4)}
+.gsim-sum{
+  display:inline-flex;align-items:center;min-height:36px;padding:0 14px;
+  font-size:14px;font-weight:500;color:var(--text);cursor:pointer;list-style:none;
+}
+.gsim-sum::-webkit-details-marker{display:none}
+.gsim-tab-w{overflow-x:auto;margin-top:var(--sp-3)}
+.gsim-tab{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums}
+.gsim-tab th,.gsim-tab td{padding:6px 10px;border-bottom:1px solid var(--border);text-align:right;white-space:nowrap}
+.gsim-tab th:first-child{text-align:left}
+.gsim-tab thead th{font-weight:600;color:var(--text-muted)}
+.gsim-tab tbody th{font-weight:400;color:var(--text-muted)}
+.gsim-tab .gsim-pay td,.gsim-tab .gsim-pay th{font-weight:600;color:var(--text)}
+
+@media (prefers-reduced-motion:reduce){
+  .gsim-tip,.gsim-tip.on{transition:none}
+  /* Deux règles et non une liste : un navigateur qui ne connaît pas
+     l'un des deux pseudo-éléments jetterait la règle entière. */
+  .gsim-range::-webkit-slider-thumb{transition:none}
+  .gsim-range::-moz-range-thumb{transition:none}
+}
+</style>
+
+<script>
+  import { prix } from '../../data/formules';
+
+  const MOIS = 12;
+  const CLIENTS_MAX = 20;
+  type Q = 'no' | 'ne' | 'so' | 'se';
+  type Boite = { x1: number; y1: number; x2: number; y2: number };
+
+  const langue = () => (document.documentElement.lang === 'en' ? 'en' : 'fr');
+  /* Même forme que le reste du site : « 1 200 € » en français (espace
+     fine insécable, formules.ts), « €1,200 » en anglais (i18n.js). */
+  const absolu = (n: number) => {
+    const a = Math.abs(Math.round(n));
+    return langue() === 'en' ? '€' + a.toLocaleString('en-US') : prix(a);
+  };
+  /* Le signe est un nœud de texte à part : « − » et « 519 € » se lisent
+     chacun comme ce qu'ils sont (le contrôle de traduction excepte les
+     montants, pas les montants signés d'un U+2212). */
+  function montant(el: Element | null, n: number, plus = false) {
+    if (!el) return;
+    const s = n < 0 ? '−' : plus && n > 0 ? '+' : '';
+    const noeuds: Node[] = [];
+    if (s) noeuds.push(document.createTextNode(s));
+    noeuds.push(document.createTextNode(absolu(n)));
+    el.replaceChildren(...noeuds);
+  }
+
+  function echelle(s: number[]) {
+    const lo = Math.min(0, ...s);
+    let hi = Math.max(0, ...s);
+    if (hi <= 0) hi = -lo * 0.2;
+    const brut = (hi - lo) / 4;
+    const p10 = 10 ** Math.floor(Math.log10(brut));
+    const f = brut / p10;
+    const pas = (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * p10;
+    const t0 = Math.floor(lo / pas) * pas;
+    let t1 = Math.ceil(hi / pas) * pas;
+    if (t1 <= 0) t1 = pas;
+    const ticks: number[] = [];
+    for (let t = t0; t <= t1 + pas / 2; t += pas) ticks.push(Math.round(t));
+    return { t0, t1, ticks };
+  }
+
+  function init(root: HTMLElement) {
+    const q1 = <T extends Element = HTMLElement>(s: string, r: ParentNode = root) => r.querySelector<T>(s);
+    const qa = <T extends Element = HTMLElement>(s: string, r: ParentNode = root) => Array.from(r.querySelectorAll<T>(s));
+
+    const radios = qa<HTMLInputElement>('input.gsim-radio');
+    const gain = q1<HTMLInputElement>('[data-gsim="gain"]')!;
+    const range = q1<HTMLInputElement>('[data-gsim="clients"]')!;
+    const plot = q1('.gsim-plot')!;
+    const svg = q1<SVGSVGElement>('.gsim-svg')!;
+    const ligne = q1<SVGPathElement>('.gsim-ligne', svg)!;
+    const zero = q1<SVGLineElement>('.gsim-zero', svg)!;
+    const croix = q1<SVGLineElement>('.gsim-cross', svg)!;
+    const grilles = qa<SVGLineElement>('.gsim-grid-l', svg);
+    const yLabs = qa('.gsim-y > span');
+    const chart = q1('.gsim-chart')!;
+    const zlab = q1('.gsim-zlab')!;
+    const mk = q1('.gsim-mk')!;
+    const dotPay = q1('[data-dot="pay"]')!;
+    const dotH = q1('[data-dot="survol"]')!;
+    const tip = q1('.gsim-tip')!;
+    const sr = q1('[data-gsim-sr]')!;
+    const lignesTab = qa<HTMLTableRowElement>('tbody tr[data-m]');
+
+    const touche = { gain: false, clients: false };
+    let survol: number | null = null;
+
+    const calc = () => {
+      const r = radios.find((x) => x.checked) ?? radios[0];
+      const p = Number(r.dataset.prix);
+      const brut = gain.value.trim();
+      const vide = brut === '';
+      const g = vide ? 0 : Number(brut);
+      const c = Number(range.value);
+      const serie = Array.from({ length: MOIS + 1 }, (_, m) => -p + g * c * m);
+      const n = serie.findIndex((v) => v >= 0);
+      return { p, g, c, vide, serie, n, ...echelle(serie) };
+    };
+    let st = calc();
+
+    const pctY = (v: number) => ((st.t1 - v) / (st.t1 - st.t0)) * 100;
+    const pctX = (m: number) => (m / MOIS) * 100;
+
+    /* ── PLACEMENT DES ANNOTATIONS ──────────────────────────────────
+       Chaque étiquette essaie ses quadrants dans l'ordre et prend le
+       premier où elle ne couvre ni la courbe, ni la ligne du zéro, ni
+       une autre étiquette, sans sortir du tracé. Si aucun ne va, elle
+       se retire : la phrase et le tableau portent déjà l'information. */
+    function placer() {
+      const W = plot.clientWidth;
+      const H = plot.clientHeight;
+      if (!W || !H) return;
+      const X = (m: number) => (m / MOIS) * W;
+      const Y = (v: number) => ((st.t1 - v) / (st.t1 - st.t0)) * H;
+      const yCourbe = (x: number) => {
+        const m = Math.max(0, Math.min(MOIS, (x / W) * MOIS));
+        const i = Math.min(MOIS - 1, Math.floor(m));
+        return Y(st.serie[i] + (st.serie[i + 1] - st.serie[i]) * (m - i));
+      };
+      const yZ = Y(0);
+      const boite = (ax: number, ay: number, w: number, h: number, q: Q, dx: number, dy: number): Boite => {
+        const x1 = q[1] === 'o' ? ax - dx - w : ax + dx;
+        const y1 = q[0] === 'n' ? ay - dy - h : ay + dy;
+        return { x1, y1, x2: x1 + w, y2: y1 + h };
+      };
+      const touche2 = (a: Boite, b: Boite) => !(a.x2 < b.x1 || a.x1 > b.x2 || a.y2 < b.y1 || a.y1 > b.y2);
+      const libre = (b: Boite, obst: Boite[]) => {
+        if (b.x1 < 0 || b.y1 < 0 || b.x2 > W || b.y2 > H) return false;
+        for (let x = b.x1; x <= b.x2 + 0.5; x += 2) {
+          const y = yCourbe(x);
+          if (y >= b.y1 - 3 && y <= b.y2 + 3) return false;
+        }
+        if (yZ >= b.y1 - 2 && yZ <= b.y2 + 2) return false;
+        return !obst.some((o) => touche2(b, o));
+      };
+      const essayer = (el: HTMLElement, essais: { ax: number; ay: number; q: Q }[], dx: number, dy: number, obst: Boite[]) => {
+        el.hidden = false;
+        const w = el.offsetWidth;
+        const h = el.offsetHeight;
+        for (const e of essais) {
+          const b = boite(e.ax, e.ay, w, h, e.q, dx, dy);
+          if (libre(b, obst)) {
+            el.style.left = (e.ax / W) * 100 + '%';
+            el.style.top = (e.ay / H) * 100 + '%';
+            el.dataset.q = e.q;
+            return b;
+          }
+        }
+        el.hidden = true;
+        return null;
+      };
+
+      const obst: Boite[] = [];
+      const paye = !st.vide && st.n >= 0;
+      if (paye) {
+        const ax = X(st.n);
+        const ay = Y(st.serie[st.n]);
+        obst.push({ x1: ax - 7, y1: ay - 7, x2: ax + 7, y2: ay + 7 });
+        const b = essayer(mk, [
+          { ax, ay, q: 'no' }, { ax, ay, q: 'se' }, { ax, ay, q: 'ne' }, { ax, ay, q: 'so' },
+        ], 8, 6, obst);
+        if (b) obst.push(b);
+      } else {
+        mk.hidden = true;
+      }
+      essayer(zlab, [
+        { ax: W, ay: yZ, q: 'so' }, { ax: W, ay: yZ, q: 'no' },
+        { ax: 0, ay: yZ, q: 'ne' }, { ax: 0, ay: yZ, q: 'se' },
+      ], 0, 5, obst);
+    }
+
+    /* ── L'INFOBULLE ─────────────────────────────────────────────────
+       Le réticule trouve le mois : on vise une date, pas une ligne de
+       2 px. Même contenu au survol et au clavier. */
+    function montrer(m: number | null, clavier = false) {
+      survol = m;
+      if (m === null) {
+        tip.classList.remove('on');
+        croix.setAttribute('visibility', 'hidden');
+        dotH.hidden = true;
+        return;
+      }
+      const v = st.serie[m];
+      q1('[data-t="m0"]', tip)!.hidden = m !== 0;
+      q1('[data-t="mn"]', tip)!.hidden = m === 0;
+      q1('[data-n="tm"]', tip)!.textContent = String(m);
+      montant(q1('[data-n="tv"]', tip), v);
+      montant(q1('[data-n="tg"]', tip), st.g * st.c * m);
+
+      const W = plot.clientWidth;
+      const x = (m / MOIS) * W;
+      tip.style.left = pctX(m) + '%';
+      tip.dataset.cote = x + 14 + tip.offsetWidth <= W ? 'd' : 'g';
+      tip.dataset.haut = pctY(v) < 45 ? 'b' : 'h';
+      croix.setAttribute('x1', String(pctX(m) * 10));
+      croix.setAttribute('x2', String(pctX(m) * 10));
+      croix.setAttribute('visibility', 'visible');
+      dotH.style.left = pctX(m) + '%';
+      dotH.style.top = pctY(v) + '%';
+      dotH.hidden = false;
+      tip.classList.add('on');
+      /* innerText et non textContent : il ignore le libellé masqué
+         (« Mois » quand c'est la mise en ligne) et sépare les lignes. */
+      if (clavier) sr.textContent = tip.innerText.split('\n').map((s) => s.trim()).filter(Boolean).join(', ');
+    }
+
+    function rendre() {
+      st = calc();
+      const { serie, n, vide, ticks } = st;
+
+      /* La phrase de synthèse. */
+      const variante = vide ? 'vide' : n < 0 ? 'ko' : n === MOIS && serie[MOIS] === 0 ? 'juste' : 'ok';
+      qa('[data-var]').forEach((el) => { el.hidden = el.dataset.var !== variante; });
+      qa('[data-pl]').forEach((el) => { el.hidden = (el.dataset.pl === '1') !== (n === 1); });
+      qa('[data-n="mois"]').forEach((el) => { el.textContent = String(n); });
+      montant(q1('[data-n="x"]'), serie[MOIS], true);
+      montant(q1('[data-n="manque"]'), -serie[MOIS]);
+
+      /* Les graduations, et la largeur de leur colonne, mesurée. */
+      yLabs.forEach((el, i) => {
+        const t = ticks[i];
+        el.hidden = t === undefined;
+        if (t === undefined) return;
+        el.style.top = pctY(t) + '%';
+        montant(el, t);
+      });
+      grilles.forEach((l, i) => {
+        const t = ticks[i];
+        const y = t === undefined ? 0 : pctY(t) * 10;
+        l.setAttribute('y1', String(y));
+        l.setAttribute('y2', String(y));
+        l.setAttribute('visibility', t === undefined || t === 0 ? 'hidden' : 'visible');
+      });
+      const largeur = Math.max(...yLabs.filter((e) => !e.hidden).map((e) => e.offsetWidth));
+      if (largeur > 0) chart.style.setProperty('--gsim-yl', Math.ceil(largeur) + 'px');
+      const yz = String(pctY(0) * 10);
+      zero.setAttribute('y1', yz);
+      zero.setAttribute('y2', yz);
+
+      /* La courbe. */
+      ligne.setAttribute('d', serie.map((v, m) => `${m ? 'L' : 'M'}${(pctX(m) * 10).toFixed(1)} ${(pctY(v) * 10).toFixed(1)}`).join(' '));
+
+      /* Le mois du remboursement. */
+      const paye = !vide && n >= 0;
+      dotPay.hidden = !paye;
+      if (paye) {
+        dotPay.style.left = pctX(n) + '%';
+        dotPay.style.top = pctY(serie[n]) + '%';
+      }
+      zlab.style.top = pctY(0) + '%';
+      placer();
+
+      /* Le tableau. */
+      lignesTab.forEach((tr) => {
+        const m = Number(tr.dataset.m);
+        montant(q1('[data-c="g"]', tr), st.g * st.c * m);
+        montant(q1('[data-c="b"]', tr), serie[m]);
+        tr.classList.toggle('gsim-pay', paye && m === n);
+      });
+
+      /* Le curseur : la partie d'or s'arrête au centre de la poignée. */
+      range.style.setProperty('--p', `calc(11px + (100% - 22px) * ${st.c / CLIENTS_MAX})`);
+      q1('[data-n="clients"]')!.textContent = String(st.c);
+      q1('[data-ex="gain"]')!.hidden = touche.gain;
+      q1('[data-ex="clients"]')!.hidden = touche.clients;
+
+      if (survol !== null) montrer(survol);
+    }
+
+    radios.forEach((r) => r.addEventListener('change', rendre));
+    gain.addEventListener('input', () => {
+      const propre = gain.value.replace(/\D/g, '').slice(0, 5);
+      if (propre !== gain.value) gain.value = propre;
+      touche.gain = true;
+      rendre();
+    });
+    range.addEventListener('input', () => { touche.clients = true; rendre(); });
+
+    const moisDe = (clientX: number) => {
+      const r = plot.getBoundingClientRect();
+      return Math.max(0, Math.min(MOIS, Math.round(((clientX - r.left) / r.width) * MOIS)));
+    };
+    plot.addEventListener('pointermove', (e) => montrer(moisDe(e.clientX)));
+    plot.addEventListener('pointerdown', (e) => montrer(moisDe(e.clientX)));
+    plot.addEventListener('pointerleave', (e) => {
+      if (e.pointerType === 'mouse' && document.activeElement !== plot) montrer(null);
+    });
+    /* Au doigt, l'infobulle reste après le toucher ; elle part quand on
+       touche ailleurs. */
+    document.addEventListener('pointerdown', (e) => {
+      if (survol !== null && !plot.contains(e.target as Node) && document.activeElement !== plot) montrer(null);
+    });
+    plot.addEventListener('focus', () => montrer(survol ?? (st.n >= 0 && !st.vide ? st.n : MOIS), true));
+    plot.addEventListener('blur', () => montrer(null));
+    plot.addEventListener('keydown', (e) => {
+      let m = survol ?? 0;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowUp') m = Math.min(MOIS, m + 1);
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') m = Math.max(0, m - 1);
+      else if (e.key === 'Home') m = 0;
+      else if (e.key === 'End') m = MOIS;
+      else if (e.key === 'Escape') { montrer(null); return; }
+      else return;
+      e.preventDefault();
+      montrer(m, true);
+    });
+
+    /* La langue change la forme des montants et la longueur des mots :
+       on refait tout, placement compris. i18n.js a déjà réécrit les
+       mots quand ces deux événements arrivent. */
+    document.addEventListener('nw-lang', rendre);
+    document.addEventListener('nw-lang-applied', rendre);
+    if ('ResizeObserver' in window) new ResizeObserver(() => { placer(); if (survol !== null) montrer(survol); }).observe(plot);
+    document.fonts?.ready.then(() => rendre());
+
+    rendre();
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-gsim-root]').forEach(init);
+</script>

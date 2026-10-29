@@ -1,0 +1,342 @@
+---
+/**
+ * G4 — MESURÉ, PAS PROMIS
+ *
+ * Une seule comparaison, parce que c'est la seule qui soit à la fois
+ * vraie, comparable et à notre avantage sans tricher : le POIDS de la
+ * page d'accueil sur mobile, face à la page d'accueil médiane du web.
+ * Le temps d'affichage (LCP) n'est PAS montré : mesuré en laboratoire, il
+ * est au-dessus du seuil « bon » de Google.
+ *
+ * Props — toutes les valeurs du site arrivent d'ici ; aucune n'est
+ * écrite dans ce fichier. Aucune valeur par défaut : sans mesure, rien
+ * ne s'affiche (le build échoue, plutôt que d'inventer un chiffre).
+ *   poidsKo    number   poids de la page d'accueil sur mobile, en Ko de
+ *                       1 024 octets, tel que Lighthouse le rapporte
+ *   compresse  boolean  true si ce poids a été compté APRÈS compression,
+ *                       comme celui du web ; false sinon (la note le dit)
+ *   date       string   date de la mesure, AAAA-MM-JJ
+ *   outil      string   l'outil et sa version, ex. « Lighthouse 12.8.2 »
+ *   cls        number?  stabilité de l'affichage (CLS) de la même mesure ;
+ *                       facultatif. Affiché seul, jamais comparé à une
+ *                       donnée de terrain.
+ */
+export interface Props {
+  poidsKo: number;
+  compresse: boolean;
+  date: string;
+  outil: string;
+  cls?: number;
+}
+const { poidsKo, compresse, date, outil, cls } = Astro.props;
+
+if (typeof poidsKo !== 'number' || !(poidsKo > 0)) throw new Error('Mesure : poidsKo manquant ou invalide');
+if (typeof compresse !== 'boolean') throw new Error('Mesure : compresse manquant (true ou false)');
+if (!/^\d{4}-\d{2}-\d{2}$/.test(date ?? '')) throw new Error('Mesure : date manquante (AAAA-MM-JJ)');
+if (!outil) throw new Error('Mesure : outil manquant');
+if (cls !== undefined && !(cls >= 0)) throw new Error('Mesure : cls invalide');
+
+/* ── LA RÉFÉRENCE ─────────────────────────────────────────────────────
+   S31 (sources.json) : HTTP Archive, Web Almanac 2025, chapitre « Page
+   Weight », figure 14.1 — poids médian d'une page d'accueil sur mobile,
+   juillet 2025 : 2 559 Ko (octets transférés, donc compressés). */
+const MEDIANE_KO = 2559;
+const S31_URL = 'https://almanac.httparchive.org/en/2025/page-weight';
+
+/* « N fois plus légère » : N arrondi VERS LE BAS, jamais flatté. */
+const ratio = MEDIANE_KO / poidsKo;
+const N = Math.floor(ratio);
+const cas = N >= 2 ? 'fois' : ratio > 1 ? 'plus' : 'neutre';
+
+/* Nombres à la française : espace fine insécable entre les milliers,
+   virgule décimale. Écrit à la main pour ne pas dépendre de l'ICU du
+   moteur qui fait le rendu. */
+const nombre = (v: number, dec = 0) => {
+  const [ent, fra] = v.toFixed(dec).split('.');
+  return ent.replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + (fra ? ',' + fra : '');
+};
+const MOIS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+const [aa, mm, jj] = date.split('-').map(Number);
+const dateFr = `${jj === 1 ? '1er' : jj} ${MOIS[mm - 1]} ${aa}`;
+
+const max = Math.max(MEDIANE_KO, poidsKo);
+const LIGNES = [
+  { cle: 'nous', ko: poidsKo, fr: "Notre page d'accueil", or: true },
+  { cle: 'web', ko: MEDIANE_KO, fr: "Page d'accueil médiane du web", or: false },
+];
+const idT = 'gr-mes-t';
+---
+<figure class="gm" data-gr-mesure data-compresse={compresse ? '1' : '0'} aria-labelledby={idT}>
+  <h3 class="gm-titre" id={idT}>
+    {cas === 'fois' && (
+      <Fragment><span data-i18n="gr-mes-t-a">Une page d'accueil</span> <span class="gm-n">{N}</span> <span data-i18n="gr-mes-t-b">fois plus légère que la médiane du web</span></Fragment>
+    )}
+    {cas === 'plus' && <span data-i18n="gr-mes-t-plus">Une page d'accueil plus légère que la médiane du web</span>}
+    {cas === 'neutre' && <span data-i18n="gr-mes-t-neutre">Notre page d'accueil face à la médiane du web</span>}
+  </h3>
+  <p class="gm-champ" data-i18n="gr-mes-champ">Poids de la page d'accueil sur mobile, ce que le téléphone télécharge pour l'afficher.</p>
+
+  <div class="gm-plot">
+    {LIGNES.map((l) => (
+      <div class:list={['gm-l', { 'gm-or': l.or }]} tabindex="0" data-gr-ligne={l.cle}>
+        <span class="gm-lib" data-i18n={`gr-mes-l-${l.cle}`}>{l.fr}</span>
+        <span class="gm-piste">
+          <span class="gm-barre" style={`--v:${(l.ko / max) * 100}`}></span>
+          <span class="gm-val"><span class="gm-n" data-gr-ko={l.ko}>{nombre(l.ko)}</span> <span data-i18n="gr-mes-ko">Ko</span></span>
+        </span>
+      </div>
+    ))}
+
+    <div class="gm-bulle" hidden aria-hidden="true">
+      <span class="gm-b-val"></span>
+      <span class="gm-b-lib"></span>
+    </div>
+  </div>
+
+  <div class="gm-notes">
+    <p data-i18n="gr-mes-def">Médiane : la moitié des pages d'accueil du web pèsent plus, l'autre moitié moins.</p>
+    {compresse
+      ? <p data-i18n="gr-mes-comp">Les deux poids sont comptés après compression.</p>
+      : <p data-i18n="gr-mes-prud">Mesure prudente : notre poids est compté sans compression, celui du web après compression. La comparaison nous désavantage.</p>}
+    {cls !== undefined && (
+      <p class="gm-sec"><span data-i18n="gr-mes-cls">Même mesure, stabilité de l'affichage (CLS) :</span> <span class="gm-n" data-gr-num={cls}>{nombre(cls, cls === 0 ? 0 : 3)}</span>{cls === 0 ? <span data-i18n="gr-mes-cls0">, aucun décalage de mise en page relevé pendant le chargement.</span> : <span>.</span>}</p>
+    )}
+  </div>
+
+  <p class="gm-src">
+    <span data-i18n="gr-b-src">Source :</span> <span data-i18n="gr-mes-src-a">notre mesure en laboratoire,</span> <span class="gm-outil">{outil}</span><span data-i18n="gr-mes-src-b">, mobile simulé, le</span> <span class="gm-date" data-gr-date={date}>{dateFr}</span> ; <a href={S31_URL} data-i18n="gr-mes-src-lien">HTTP Archive, Web Almanac 2025</a><span data-i18n="gr-mes-src-c">, chapitre « Page Weight », figure 14.1 (juillet 2025).</span>
+  </p>
+
+  <details class="gm-chiffres">
+    <summary class="plq plq-sm gm-voir" data-i18n="gr-b-voir">Voir les chiffres</summary>
+    <table class="gm-table">
+      <caption class="sr-only" data-i18n="gr-mes-cap">Poids de la page d'accueil sur mobile</caption>
+      <thead>
+        <tr>
+          <th scope="col" data-i18n="gr-mes-th-page">Page d'accueil, mobile</th>
+          <th scope="col" class="gm-num" data-i18n="gr-mes-th-poids">Poids</th>
+          <th scope="col" data-i18n="gr-mes-th-comment">Comment c'est compté</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="gm-t-or">
+          <th scope="row" data-i18n="gr-mes-l-nous">Notre page d'accueil</th>
+          <td class="gm-num"><span class="gm-n" data-gr-ko={poidsKo} data-gr-dec="1">{nombre(poidsKo, 1)}</span> <span data-i18n="gr-mes-ko">Ko</span></td>
+          <td><span class="gm-outil">{outil}</span><span data-i18n="gr-mes-src-b">, mobile simulé, le</span> <span class="gm-date" data-gr-date={date}>{dateFr}</span>{compresse ? <span data-i18n="gr-mes-avec">, après compression</span> : <span data-i18n="gr-mes-sans">, sans compression</span>}</td>
+        </tr>
+        <tr>
+          <th scope="row" data-i18n="gr-mes-l-web">Page d'accueil médiane du web</th>
+          <td class="gm-num"><span class="gm-n" data-gr-ko={MEDIANE_KO}>{nombre(MEDIANE_KO)}</span> <span data-i18n="gr-mes-ko">Ko</span></td>
+          <td data-i18n="gr-mes-web-comment">HTTP Archive, juillet 2025, après compression</td>
+        </tr>
+      </tbody>
+    </table>
+  </details>
+</figure>
+
+<style>
+  .gm {
+    --val-w: 5.5rem;        /* place réservée à droite pour « 2 559 Ko » */
+    --ep: 20px;             /* épaisseur d'une barre (≤ 24 px) */
+    margin: 0;
+    min-width: 0;
+    font-family: var(--font);
+    color: var(--text);
+  }
+  .gm-titre {
+    margin: 0 0 var(--sp-2);
+    font-size: var(--fs-sub);
+    line-height: var(--lh-sub);
+    letter-spacing: var(--ls-sub);
+    text-wrap: balance;
+  }
+  .gm-champ {
+    margin: 0 0 var(--sp-5);
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--text-muted);
+  }
+
+  .gm-plot { position: relative; display: grid; gap: var(--sp-3); }
+  .gm-l {
+    display: grid;
+    gap: var(--sp-1);
+    border-radius: var(--radius-block);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .gm-lib { font-size: 14px; line-height: 1.3; color: var(--text-muted); }
+  .gm-piste { display: flex; align-items: center; gap: var(--sp-2); min-height: 24px; }
+  .gm-barre {
+    flex: none;
+    height: var(--ep);
+    width: calc((100% - var(--val-w)) * var(--v) / 100);
+    min-width: 2px;
+    background: var(--border-strong);
+    border-radius: 0 4px 4px 0;
+  }
+  .gm-val { font-size: 15px; line-height: 1; color: var(--text); white-space: nowrap; }
+  /* Chiffres proportionnels : en tabulaire, Schibsted élargit aussi la
+     virgule décimale (« 458 , 4 »). Deux lignes n'ont rien à aligner. */
+  .gm-n { font-variant-numeric: proportional-nums; }
+  .gm-or .gm-barre { background: var(--accent); }
+  .gm-or .gm-lib { color: var(--text); font-weight: var(--w-semi); }
+  .gm-or .gm-val { font-weight: var(--w-semi); }
+
+  @media (hover: hover) and (pointer: fine) {
+    .gm-l:hover .gm-barre { outline: 1px solid var(--text); outline-offset: 1px; }
+    .gm-l:hover .gm-lib { color: var(--text); }
+  }
+  .gm-l:focus-visible .gm-barre { outline: 1px solid var(--text); outline-offset: 1px; }
+
+  .gm-bulle {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    display: grid;
+    gap: 2px;
+    max-width: min(18rem, 100%);
+    padding: var(--sp-2) var(--sp-3);
+    background: var(--surface-2);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-block);
+    pointer-events: none;
+  }
+  .gm-bulle[hidden] { display: none; }
+  .gm-b-val { font-size: 16px; font-weight: var(--w-semi); color: var(--text); font-variant-numeric: tabular-nums; }
+  .gm-b-lib { font-size: 13px; line-height: 1.35; color: var(--text-muted); }
+
+  .gm-notes { margin-top: var(--sp-5); display: grid; gap: var(--sp-2); }
+  .gm-notes p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--text-muted);
+  }
+
+  .gm-src {
+    margin: var(--sp-4) 0 0;
+    font-size: var(--fs-caption);
+    line-height: var(--lh-caption);
+    letter-spacing: var(--ls-caption);
+    color: var(--text-muted);
+  }
+  .gm-src a {
+    color: var(--text);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+  .gm-outil { white-space: nowrap; }
+
+  .gm-chiffres { margin-top: var(--sp-4); }
+  .gm-voir {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    padding: 0 var(--sp-4);
+    font-size: 14px;
+    font-weight: var(--w-semi);
+    color: var(--text);
+    cursor: pointer;
+    list-style: none;
+  }
+  .gm-voir::-webkit-details-marker { display: none; }
+  .gm-voir::marker { content: ''; }
+  .gm-table {
+    width: 100%;
+    margin-top: var(--sp-3);
+    border-collapse: collapse;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  .gm-table th, .gm-table td {
+    padding: var(--sp-2) var(--sp-3) var(--sp-2) 0;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    vertical-align: top;
+    font-weight: var(--w-reg);
+  }
+  .gm-table th:last-child, .gm-table td:last-child { padding-right: 0; }
+  .gm-table thead th { color: var(--text-muted); font-weight: var(--w-semi); }
+  .gm-table .gm-num { text-align: right; white-space: nowrap; }
+  .gm-t-or th, .gm-t-or .gm-num { font-weight: var(--w-semi); }
+</style>
+
+<script>
+  const MOIS_EN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const MOIS_FR = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+
+  function nombre(v: number, l: string, dec = 0): string {
+    const [ent, fra] = v.toFixed(dec).split('.');
+    const g = ent.replace(/\B(?=(\d{3})+(?!\d))/g, l === 'en' ? ',' : ' ');
+    return fra ? g + (l === 'en' ? '.' : ',') + fra : g;
+  }
+  function laDate(iso: string, l: string): string {
+    const [a, m, j] = iso.split('-').map(Number);
+    return l === 'en' ? `${MOIS_EN[m - 1]} ${j}, ${a}` : `${j === 1 ? '1er' : j} ${MOIS_FR[m - 1]} ${a}`;
+  }
+  const DETAIL = {
+    nous: { fr: ['mesuré après compression', 'mesuré sans compression'], en: ['measured compressed', 'measured uncompressed'] },
+    web: { fr: 'HTTP Archive, juillet 2025, après compression', en: 'HTTP Archive, July 2025, compressed' },
+  };
+
+  document.querySelectorAll<HTMLElement>('[data-gr-mesure]').forEach((fig) => {
+    const plot = fig.querySelector<HTMLElement>('.gm-plot')!;
+    const bulle = fig.querySelector<HTMLElement>('.gm-bulle')!;
+    const lignes = [...fig.querySelectorAll<HTMLElement>('.gm-l')];
+    const compresse = fig.dataset.compresse === '1';
+    let langue = document.documentElement.lang === 'en' ? 'en' : 'fr';
+    let active: HTMLElement | null = null;
+
+    function montrer(ligne: HTMLElement) {
+      active = ligne;
+      const cle = ligne.dataset.grLigne as 'nous' | 'web';
+      const l = langue as 'fr' | 'en';
+      bulle.querySelector('.gm-b-val')!.textContent = ligne.querySelector('.gm-val')!.textContent!.replace(/\s+/g, ' ').trim();
+      const detail = cle === 'nous' ? DETAIL.nous[l][compresse ? 0 : 1] : DETAIL.web[l];
+      bulle.querySelector('.gm-b-lib')!.textContent = `${ligne.querySelector('.gm-lib')!.textContent}, ${detail}`;
+      bulle.hidden = false;
+      const pr = plot.getBoundingClientRect();
+      const br = ligne.querySelector('.gm-barre')!.getBoundingClientRect();
+      const lr = ligne.getBoundingClientRect();
+      const w = bulle.offsetWidth;
+      const h = bulle.offsetHeight;
+      const x = Math.min(Math.max(0, br.right - pr.left - w / 2), Math.max(0, pr.width - w));
+      let y = lr.top - pr.top - h - 4;
+      if (y < 0) y = lr.bottom - pr.top + 4;
+      bulle.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px)`;
+    }
+    function cacher() { active = null; bulle.hidden = true; }
+
+    lignes.forEach((ligne) => {
+      ligne.addEventListener('pointerenter', () => montrer(ligne));
+      ligne.addEventListener('pointerleave', () => { if (document.activeElement !== ligne) cacher(); });
+      ligne.addEventListener('focus', () => montrer(ligne));
+      ligne.addEventListener('blur', cacher);
+      ligne.addEventListener('keydown', (e) => { if ((e as KeyboardEvent).key === 'Escape') cacher(); });
+    });
+
+    /* La langue : séparateurs des nombres et date (« 2 559 » / « 2,559 »,
+       « 29 octobre 2026 » / « October 29, 2026 »). Les mots, eux, sont
+       réécrits par i18n.js. */
+    function appliquer(l: string) {
+      langue = l === 'en' ? 'en' : 'fr';
+      fig.querySelectorAll<HTMLElement>('[data-gr-ko]').forEach((el) => {
+        el.textContent = nombre(Number(el.dataset.grKo), langue, Number(el.dataset.grDec || 0));
+      });
+      fig.querySelectorAll<HTMLElement>('[data-gr-num]').forEach((el) => {
+        const v = Number(el.dataset.grNum);
+        el.textContent = nombre(v, langue, v === 0 ? 0 : 3);
+      });
+      fig.querySelectorAll<HTMLElement>('[data-gr-date]').forEach((el) => {
+        el.textContent = laDate(el.dataset.grDate!, langue);
+      });
+      if (active) montrer(active);
+    }
+    document.addEventListener('nw-lang', (e) => appliquer((e as CustomEvent).detail));
+    document.addEventListener('nw-lang-applied', (e) => appliquer((e as CustomEvent).detail));
+    appliquer(langue);
+  });
+</script>
