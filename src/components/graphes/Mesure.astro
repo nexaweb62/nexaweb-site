@@ -20,6 +20,13 @@
  *   cls        number?  stabilité de l'affichage (CLS) de la même mesure ;
  *                       facultatif. Affiché seul, jamais comparé à une
  *                       donnée de terrain.
+ *   compact    boolean? (déf. false) la version posée dans un panneau
+ *                       étroit — le « dossier » de l'étape Développement
+ *                       sur l'accueil. Mêmes chiffres, mêmes notes, même
+ *                       source ; en moins : l'infobulle (les deux valeurs
+ *                       sont déjà écrites au bout des barres) et la vue
+ *                       tableau, qui n'a que deux lignes. Les barres n'y
+ *                       prennent pas le focus : rien ne s'y ouvre.
  */
 export interface Props {
   poidsKo: number;
@@ -27,8 +34,9 @@ export interface Props {
   date: string;
   outil: string;
   cls?: number;
+  compact?: boolean;
 }
-const { poidsKo, compresse, date, outil, cls } = Astro.props;
+const { poidsKo, compresse, date, outil, cls, compact = false } = Astro.props;
 
 if (typeof poidsKo !== 'number' || !(poidsKo > 0)) throw new Error('Mesure : poidsKo manquant ou invalide');
 if (typeof compresse !== 'boolean') throw new Error('Mesure : compresse manquant (true ou false)');
@@ -66,7 +74,7 @@ const LIGNES = [
 ];
 const idT = 'gr-mes-t';
 ---
-<figure class="gm" data-gr-mesure data-compresse={compresse ? '1' : '0'} aria-labelledby={idT}>
+<figure class:list={['gm', { 'gm-compact': compact }]} data-gr-mesure data-compresse={compresse ? '1' : '0'} aria-labelledby={idT}>
   <h3 class="gm-titre" id={idT}>
     {cas === 'fois' && (
       <Fragment><span data-i18n="gr-mes-t-a">Une page d'accueil</span> <span class="gm-n">{N}</span> <span data-i18n="gr-mes-t-b">fois plus légère que la médiane du web</span></Fragment>
@@ -78,7 +86,7 @@ const idT = 'gr-mes-t';
 
   <div class="gm-plot">
     {LIGNES.map((l) => (
-      <div class:list={['gm-l', { 'gm-or': l.or }]} tabindex="0" data-gr-ligne={l.cle}>
+      <div class:list={['gm-l', { 'gm-or': l.or }]} tabindex={compact ? undefined : '0'} data-gr-ligne={l.cle}>
         <span class="gm-lib" data-i18n={`gr-mes-l-${l.cle}`}>{l.fr}</span>
         <span class="gm-piste">
           <span class="gm-barre" style={`--v:${(l.ko / max) * 100}`}></span>
@@ -87,10 +95,12 @@ const idT = 'gr-mes-t';
       </div>
     ))}
 
-    <div class="gm-bulle" hidden aria-hidden="true">
-      <span class="gm-b-val"></span>
-      <span class="gm-b-lib"></span>
-    </div>
+    {!compact && (
+      <div class="gm-bulle" hidden aria-hidden="true">
+        <span class="gm-b-val"></span>
+        <span class="gm-b-lib"></span>
+      </div>
+    )}
   </div>
 
   <div class="gm-notes">
@@ -104,10 +114,10 @@ const idT = 'gr-mes-t';
   </div>
 
   <p class="gm-src">
-    <span data-i18n="gr-b-src">Source :</span> <span data-i18n="gr-mes-src-a">notre mesure en laboratoire,</span> <span class="gm-outil">{outil}</span><span data-i18n="gr-mes-src-b">, mobile simulé, le</span> <span class="gm-date" data-gr-date={date}>{dateFr}</span> ; <a href={S31_URL} data-i18n="gr-mes-src-lien">HTTP Archive, Web Almanac 2025</a><span data-i18n="gr-mes-src-c">, chapitre « Page Weight », figure 14.1 (juillet 2025).</span>
+    <span data-i18n="gr-b-src">Source :</span> <span data-i18n="gr-mes-src-a">notre mesure en laboratoire,</span> <span class="gm-outil">{outil}</span><span data-i18n="gr-mes-src-b">, mobile simulé, le</span> <span class="gm-date" data-gr-date={date}>{dateFr}</span><span data-i18n="gr-mes-sep"> ; </span><a href={S31_URL} data-i18n="gr-mes-src-lien">HTTP Archive, Web Almanac 2025</a><span data-i18n="gr-mes-src-c">, chapitre « Page Weight », figure 14.1 (juillet 2025).</span>
   </p>
 
-  <details class="gm-chiffres">
+  {!compact && <details class="gm-chiffres">
     <summary class="plq plq-sm gm-voir" data-i18n="gr-b-voir">Voir les chiffres</summary>
     <table class="gm-table">
       <caption class="sr-only" data-i18n="gr-mes-cap">Poids de la page d'accueil sur mobile</caption>
@@ -131,7 +141,7 @@ const idT = 'gr-mes-t';
         </tr>
       </tbody>
     </table>
-  </details>
+  </details>}
 </figure>
 
 <style>
@@ -205,6 +215,9 @@ const idT = 'gr-mes-t';
   }
   .gm-bulle[hidden] { display: none; }
   .gm-b-val { font-size: 16px; font-weight: var(--w-semi); color: var(--text); font-variant-numeric: tabular-nums; }
+  /* En anglais, le séparateur des milliers est une virgule : en chiffres tabulaires
+     Schibsted lui donne la chasse d'un chiffre (« 2 , 559 »). */
+  :global(html[lang='en']) .gm-b-val { font-variant-numeric: normal; }
   .gm-b-lib { font-size: 13px; line-height: 1.35; color: var(--text-muted); }
 
   .gm-notes { margin-top: var(--sp-5); display: grid; gap: var(--sp-2); }
@@ -262,6 +275,31 @@ const idT = 'gr-mes-t';
   .gm-table thead th { color: var(--text-muted); font-weight: var(--w-semi); }
   .gm-table .gm-num { text-align: right; white-space: nowrap; }
   .gm-t-or th, .gm-t-or .gm-num { font-weight: var(--w-semi); }
+
+  /* ── VERSION COMPACTE ──
+     Même graphique, resserré pour un panneau de 320 à 520 px : titre à
+     la taille d'un titre de panneau, barres plus fines, notes en 13 px.
+     Sans infobulle, la ligne ne réagit plus au survol. */
+  /* Posée dans un panneau en colonne flexible, la figure en prend toute
+     la hauteur et la source descend au pied, comme les autres panneaux. */
+  .gm-compact { --ep: 14px; flex: 1 1 auto; display: flex; flex-direction: column; }
+  .gm-compact .gm-titre {
+    font-size: var(--fs-300);
+    line-height: 1.2;
+    letter-spacing: var(--ls-sub);
+  }
+  .gm-compact .gm-champ { margin-bottom: var(--sp-4); font-size: 13px; }
+  .gm-compact .gm-plot { gap: var(--sp-2); }
+  .gm-compact .gm-lib { font-size: 13px; }
+  .gm-compact .gm-val { font-size: 14px; }
+  .gm-compact .gm-notes { margin-top: var(--sp-4); gap: var(--sp-1); }
+  .gm-compact .gm-notes p { font-size: 13px; }
+  .gm-compact .gm-src { margin-top: auto; padding-top: var(--sp-4); }
+  @media (hover: hover) and (pointer: fine) {
+    .gm-compact .gm-l:hover .gm-barre { outline: none; }
+    .gm-compact .gm-l:hover .gm-lib { color: var(--text-muted); }
+    .gm-compact .gm-or:hover .gm-lib { color: var(--text); }
+  }
 </style>
 
 <script>
@@ -275,7 +313,7 @@ const idT = 'gr-mes-t';
   }
   function laDate(iso: string, l: string): string {
     const [a, m, j] = iso.split('-').map(Number);
-    return l === 'en' ? `${MOIS_EN[m - 1]} ${j}, ${a}` : `${j === 1 ? '1er' : j} ${MOIS_FR[m - 1]} ${a}`;
+    return l === 'en' ? `${j} ${MOIS_EN[m - 1]} ${a}` : `${j === 1 ? '1er' : j} ${MOIS_FR[m - 1]} ${a}`;
   }
   const DETAIL = {
     nous: { fr: ['mesuré après compression', 'mesuré sans compression'], en: ['measured compressed', 'measured uncompressed'] },
@@ -284,13 +322,16 @@ const idT = 'gr-mes-t';
 
   document.querySelectorAll<HTMLElement>('[data-gr-mesure]').forEach((fig) => {
     const plot = fig.querySelector<HTMLElement>('.gm-plot')!;
-    const bulle = fig.querySelector<HTMLElement>('.gm-bulle')!;
+    /* Absente de la version compacte : on y garde seulement la mise en
+       forme des nombres et de la date selon la langue. */
+    const bulle = fig.querySelector<HTMLElement>('.gm-bulle');
     const lignes = [...fig.querySelectorAll<HTMLElement>('.gm-l')];
     const compresse = fig.dataset.compresse === '1';
     let langue = document.documentElement.lang === 'en' ? 'en' : 'fr';
     let active: HTMLElement | null = null;
 
     function montrer(ligne: HTMLElement) {
+      if (!bulle) return;
       active = ligne;
       const cle = ligne.dataset.grLigne as 'nous' | 'web';
       const l = langue as 'fr' | 'en';
@@ -308,9 +349,9 @@ const idT = 'gr-mes-t';
       if (y < 0) y = lr.bottom - pr.top + 4;
       bulle.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px)`;
     }
-    function cacher() { active = null; bulle.hidden = true; }
+    function cacher() { active = null; if (bulle) bulle.hidden = true; }
 
-    lignes.forEach((ligne) => {
+    if (bulle) lignes.forEach((ligne) => {
       ligne.addEventListener('pointerenter', () => montrer(ligne));
       ligne.addEventListener('pointerleave', () => { if (document.activeElement !== ligne) cacher(); });
       ligne.addEventListener('focus', () => montrer(ligne));

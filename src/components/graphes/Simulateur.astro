@@ -29,8 +29,13 @@ export interface Props {
   clientsExemple?: number;
   /** Préfixe des id : deux simulateurs sur une page ne doivent pas se croiser. */
   id?: string;
+  /** true quand la section qui l'accueille porte déjà un titre h2 qui pose
+   *  la question (l'accueil) : le h3 reste pour les lecteurs d'écran, mais
+   *  n'est plus affiché — deux titres empilés disaient deux fois la même
+   *  chose. Déf. false : rendu inchangé. */
+  titreMasque?: boolean;
 }
-const { formule = 'vitrine', gainExemple = 60, clientsExemple = 2, id = 'gsim' } = Astro.props;
+const { formule = 'vitrine', gainExemple = 60, clientsExemple = 2, id = 'gsim', titreMasque = false } = Astro.props;
 
 const MOIS = 12;
 const CLIENTS_MAX = 20;
@@ -91,7 +96,7 @@ const qZero = N >= 0 ? 'so' : 'no';
 const remplissage = `calc(11px + (100% - 22px) * ${c / CLIENTS_MAX})`;
 ---
 <div class="gsim" data-gsim-root>
-  <h3 class="gsim-h" id={`${id}-h`} data-i18n="gr-sim-h">Ce qu'un site vous rapporte, avec vos chiffres</h3>
+  <h3 class:list={['gsim-h', { 'sr-only': titreMasque }]} id={`${id}-h`} data-i18n="gr-sim-h">Ce qu'un site vous rapporte, avec vos chiffres</h3>
 
   <div class="gsim-grille">
     <!-- LES ENTRÉES -->
@@ -344,6 +349,9 @@ const remplissage = `calc(11px + (100% - 22px) * ${c / CLIENTS_MAX})`;
    tabular-nums donnait aussi à la virgule la chasse d'un chiffre :
    « sans site , rien ne change ». */
 .gsim-y,.gsim-x,.gsim-tip [data-n]{font-variant-numeric:tabular-nums}
+/* En anglais, le séparateur des milliers est une virgule, et en chiffres tabulaires
+   Schibsted lui donne la chasse d'un chiffre (« €1 , 200 ») : chiffres proportionnels. */
+:global(html[lang='en']) :is(.gsim-y,.gsim-x,.gsim-tip [data-n],.gsim-opt-prix,.gsim-val,.gsim-tab,.gsim-bornes){font-variant-numeric:normal}
 @container gsim (min-width:760px){ .gsim-chart{--gsim-h:280px} }
 .gsim-yt{grid-column:1 / -1;margin-bottom:var(--sp-3);color:var(--text-muted)}
 .gsim-y{position:relative;height:var(--gsim-h)}

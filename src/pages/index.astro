@@ -4,8 +4,42 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Logo from '../components/Logo.astro';
 import GarantieBadge from '../components/GarantieBadge.astro';
-import { VITRINE_PRIX, REFONTE_PRIX, ENTREPRISE, prix } from '../data/formules';
+import Simulateur from '../components/graphes/Simulateur.astro';
+import Mesure from '../components/graphes/Mesure.astro';
+import { VITRINE_PRIX, REFONTE_PRIX, ENTREPRISE, REFONTE, prix } from '../data/formules';
+import { MESURE_ACCUEIL } from '../data/mesures';
+import manifest from '../../public/img/manifest.json';
 import '../styles/global.css';
+
+/* LES DÉLAIS DU DOSSIER « MISE EN LIGNE ».
+   Refonte : formules.ts (REFONTE.delaiSemaines), jamais recopié.
+   Vitrine Pro : « 2 à 4 semaines », tel qu'écrit sur /site-vitrine
+   (« Livraison en 2 à 4 semaines ») et dans la FAQ de cette page.
+   L'échelle des barres va jusqu'au plus long des deux délais. */
+const VP_MIN = 2, VP_MAX = 4;
+const ECHELLE_SEM = Math.max(VP_MAX, REFONTE.delaiSemaines);
+const pctSem = (s: number) => ((s / ECHELLE_SEM) * 100).toFixed(2);
+
+/* LES FONDATEURS — les photos de /equipe (public/img/gen/vignette-*),
+   servies en AVIF/WebP/JPEG d'après public/img/manifest.json, comme le
+   fait Picture.astro. Picture n'est pas utilisé ici : il ne sait pas
+   porter la clé de traduction du texte alternatif (data-i18n-alt).
+   Prénom, rôle et spécialité : les mêmes clés que /equipe. */
+const jeu = (nom: string, ext: string) =>
+  Object.values((manifest as Record<string, { widths: Record<string, { w: number }> }>)[nom].widths)
+    .map((v) => `/img/gen/${nom}-${v.w}.${ext} ${v.w}w`).join(', ');
+const FONDATEURS = [
+  { photo: 'vignette-membre1', prenom: 'Imad', prenomCle: 'idx-fond1-nom',
+    alt: 'Imad Torchi, co-fondateur de Nexa Web, développement web et architecture', altCle: 'idx-fond1-alt',
+    spe: 'Développement web & Architecture', speCle: 'eq-title1' },
+  { photo: 'vignette-membre2', prenom: 'Ahmed', prenomCle: 'idx-fond2-nom',
+    alt: 'Ahmed Chteoui, co-fondateur de Nexa Web, design UI/UX et stratégie digitale', altCle: 'idx-fond2-alt',
+    spe: 'Design UI/UX & Stratégie digitale', speCle: 'eq-title2' },
+].map((f) => {
+  const tailles = Object.values((manifest as any)[f.photo].widths) as { w: number }[];
+  return { ...f, avif: jeu(f.photo, 'avif'), webp: jeu(f.photo, 'webp'), jpg: jeu(f.photo, 'jpg'),
+           src: `/img/gen/${f.photo}-${tailles[0].w}.jpg` };
+});
 ---
 <BaseLayout title="Nexa Web — Agence Web Premium · Carvin" description="Nexa Web conçoit des sites internet sur-mesure pour commerçants et artisans. Refonte dès 490 €, livraison en 2 à 4 semaines. Carvin, Hauts-de-France.">
 <style>
@@ -134,71 +168,158 @@ import '../styles/global.css';
    ═══════════════════════════════════════════════════════════════════ */
 .s-proc{padding-top:clamp(60px,10vw,120px)}
 .proc-hdr{margin-bottom:clamp(36px,6vh,72px)}
-.procwrap{position:relative;height:340vh;z-index:2}
-.procpin{position:sticky;top:0;height:100svh;display:flex;align-items:center;
-  perspective:1200px;overflow:clip}
+
+/* ── LA BASE : UNE LISTE ──────────────────────────────────────────────
+   Chaque étape, puis son dossier. C'est ce que voient le navigateur
+   sans animations au défilement (Firefox, Safari anciens), le visiteur
+   en mouvement réduit, l'écran de moins de 768 px et l'écran trop bas
+   pour tenir la séquence épinglée. Dès 768 px, l'étape et son dossier
+   se rangent sur la même ligne : le dossier n'est jamais un panneau
+   isolé, ni quatre panneaux empilés à la même place.
+   L'ordre du DOM est l'ordre de lecture dans tous les cas : étape 1,
+   dossier 1, étape 2, dossier 2… Les étapes sont des <div>, les
+   dossiers des <article> : :nth-of-type les compte chacun de leur côté
+   (.procticks, le seul autre <div>, vient après les quatre étapes). */
+.procwrap{position:relative;z-index:2}
 .procpin .wrap{position:relative;z-index:1}
-.procstack{position:relative;width:100%;min-height:clamp(240px,34vh,340px);
-  transform-style:preserve-3d}
-.proc-step{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
-  gap:14px;opacity:0;background:none;border-radius:0;padding:0}
+.procstack{display:grid;grid-template-columns:minmax(0,1fr);row-gap:var(--sp-5)}
+.proc-step{display:flex;flex-direction:column;gap:14px;background:none;border-radius:0;padding:0}
 .proc-step .k{font-size:clamp(46px,8.5vw,104px);line-height:.88;font-weight:600;
   letter-spacing:-.016em;font-variant-numeric:tabular-nums}
 .proc-step .proc-title{font-size:clamp(21px,3vw,32px);font-weight:600;letter-spacing:-.007em;margin:0}
 .proc-step .proc-desc{margin:0;color:var(--text-muted);max-width:44ch;
   font-size:16px;font-weight:300;line-height:1.68}
-.procticks{display:flex;gap:7px;margin-top:clamp(20px,3vw,30px)}
+.procticks{display:none;gap:7px;margin-top:clamp(20px,3vw,30px)}
 .procticks i{display:block;height:2px;width:clamp(34px,5vw,56px);background:var(--border);
   border-radius:2px;overflow:hidden;position:relative}
 .procticks i::after{content:'';position:absolute;inset:0;background:var(--accent);
   transform-origin:left;transform:scaleX(0)}
-.proc-glow{position:absolute;inset:-20% -10%;z-index:0;pointer-events:none;opacity:0;
-  background:
-    radial-gradient(34% 30% at 80% 34%, rgb(from var(--accent) r g b / .15) 0, rgb(from var(--accent) r g b / 0) 70%),
-    radial-gradient(30% 26% at 14% 78%, rgb(from var(--gold-deep) r g b / .13) 0, rgb(from var(--gold-deep) r g b / 0) 72%)}
+@media (max-width:767.98px){
+  .dossier:not(:last-of-type){margin-bottom:var(--sp-7)}
+}
+@media (min-width:768px){
+  .procstack{grid-template-columns:minmax(0,5fr) minmax(0,6fr);
+    column-gap:clamp(40px,6vw,104px);row-gap:var(--sp-8);align-items:start}
+}
 
+/* ── LE DOSSIER DE L'ÉTAPE ──
+   Un palier de fond, droit à 2 px. Titre en haut, provenance en bas :
+   le pied descend au bas du panneau, quelle que soit la hauteur. */
+.dossier{display:flex;flex-direction:column;min-width:0;
+  background:var(--surface);border-radius:var(--radius-block);
+  padding:clamp(24px,2.8vw,40px);color:var(--text)}
+.dos-t{margin:0 0 var(--sp-5);font-family:var(--font-display);font-weight:var(--w-display);
+  font-synthesis:none;font-size:var(--fs-300);line-height:1.2;letter-spacing:var(--ls-sub);
+  text-wrap:balance}
+.dos-st{margin:0 0 var(--sp-2);font-size:14px;font-weight:var(--w-semi);line-height:1.35;color:var(--text)}
+.dos-ligne{margin:0 0 var(--sp-4);font-size:15px;line-height:1.5;color:var(--text-muted)}
+.dos-liste{margin:0;padding:0;list-style:none;font-size:15px;line-height:1.4;color:var(--text-muted)}
+.dos-liste li{padding:7px 0;border-top:1px solid var(--border)}
+.dos-liste li:last-child{border-bottom:1px solid var(--border)}
+.dos-pied{margin:auto 0 0;padding-top:var(--sp-5);font-size:13px;line-height:1.45;color:var(--text-muted)}
+.dos-lien{color:var(--text);font-size:15px;font-weight:var(--w-semi);
+  text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;
+  text-decoration-color:var(--border-strong);
+  transition:text-decoration-color 160ms var(--ease-out),color 160ms var(--ease-out)}
+@media (hover:hover) and (pointer:fine){.dos-lien:hover{color:var(--accent-text);text-decoration-color:currentColor}}
+.dos-lien:focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:var(--radius-tag)}
+
+/* 02 — la direction de ce site : les jetons eux-mêmes, peints. Le
+   filet de 1 px rend visible la pastille du fond sur le panneau. */
+.dos-nuancier{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--sp-3);
+  margin:0 0 var(--sp-6);padding:0;list-style:none}
+.dos-nuancier li{display:flex;flex-direction:column;gap:var(--sp-2);font-size:14px;color:var(--text)}
+.dos-pastille{display:block;height:clamp(72px,7vw,104px);border-radius:var(--radius-block);
+  box-shadow:inset 0 0 0 1px var(--border-strong)}
+.dos-p-fond{background:var(--bg)}
+.dos-p-or{background:var(--accent)}
+.dos-p-texte{background:var(--text)}
+.dos-fonte{margin:0;padding:var(--sp-4) 0;border-top:1px solid var(--border);color:var(--text)}
+.dos-f-texte{border-bottom:1px solid var(--border)}
+.dos-f-titre{font-family:var(--font-display);font-weight:var(--w-display);font-synthesis:none;
+  font-size:clamp(24px,2.6vw,34px);line-height:1.15;letter-spacing:var(--ls-sub)}
+.dos-f-texte{font-family:var(--font);font-weight:var(--w-reg);font-size:clamp(18px,1.6vw,21px);line-height:1.35}
+
+/* 04 — les délais, en semaines. Même dessin que le graphique de la
+   mesure (étape 03) : libellé, barre, valeur au bout. La part « jusqu'à
+   4 semaines » de la Vitrine Pro est la même barre, en or bas. */
+.dos-delais{margin:0 0 var(--sp-6);display:grid;gap:var(--sp-3)}
+.dos-d{display:grid;gap:var(--sp-1)}
+.dos-d dt{font-size:14px;line-height:1.3;color:var(--text);font-weight:var(--w-semi)}
+.dos-d dd{margin:0;display:flex;align-items:center;gap:var(--sp-2);min-height:22px}
+.dos-piste{flex:none;display:flex;gap:2px;width:calc((100% - 8.5rem) * var(--l) / 100)}
+.dos-barre{height:14px;flex:var(--f) 1 0;min-width:2px;background:var(--accent);border-radius:0 4px 4px 0}
+.dos-barre-min{border-radius:0}
+.dos-barre-max{background:var(--gold-low)}
+.dos-val{font-size:14px;line-height:1;color:var(--text);white-space:nowrap}
+
+/* ── LA SÉQUENCE ÉPINGLÉE ─────────────────────────────────────────────
+   Seulement si le navigateur sait animer au défilement, si le mouvement
+   est permis, et si l'écran a la place (768 px de large, 640 de haut).
+   La section se bloque ; à gauche les quatre étapes passent l'une après
+   l'autre au même endroit, à droite leurs dossiers dans un seul panneau.
+   Étapes et dossiers suivent LA MÊME chronologie (--proc) avec les
+   mêmes plages : aucun JavaScript de défilement.
+   La première étape et son dossier sont déjà là quand la section
+   arrive, et la dernière reste en place quand elle repart : la séquence
+   ne commence ni ne finit sur un écran vide. */
 @supports (animation-timeline: view()){
-  .procwrap{view-timeline-name:--proc;view-timeline-axis:block}
-  .proc-step{animation:stepIn linear both;animation-timeline:--proc}
-  .proc-step:nth-child(1){animation-range:contain 0% contain 26%}
-  .proc-step:nth-child(2){animation-range:contain 25% contain 51%}
-  .proc-step:nth-child(3){animation-range:contain 50% contain 76%}
-  .proc-step:nth-child(4){animation-range:contain 75% contain 100%}
+@media (prefers-reduced-motion:no-preference) and (min-width:768px) and (min-height:640px){
+  .procwrap{height:340vh;view-timeline-name:--proc;view-timeline-axis:block}
+  .procpin{position:sticky;top:0;height:100svh;display:flex;align-items:center;
+    padding-top:var(--hdr);perspective:1200px;overflow:clip}
+  .procstack{grid-template-rows:auto 1fr;row-gap:0;transform-style:preserve-3d}
+  /* Le panneau ne bouge pas : seul son contenu change. */
+  .procstack::before{content:'';grid-area:1 / 2 / 3 / 3;align-self:stretch;
+    background:var(--surface);border-radius:var(--radius-block)}
+  .proc-step{grid-area:1 / 1;animation:stepIn linear both;animation-timeline:--proc}
+  .dossier{grid-area:1 / 2 / 3 / 3;align-self:stretch;background:none;
+    animation:dosIn linear both;animation-timeline:--proc}
+  /* Les repères de progression se posent sur la ligne du bas du
+     panneau : la colonne de gauche tient la même hauteur que lui. */
+  .procticks{display:flex;grid-area:2 / 1;align-self:end;margin-top:var(--sp-6)}
+
+  .proc-step:nth-of-type(1),.dossier:nth-of-type(1){animation-range:contain 0% contain 26%}
+  .proc-step:nth-of-type(2),.dossier:nth-of-type(2){animation-range:contain 25% contain 51%}
+  .proc-step:nth-of-type(3),.dossier:nth-of-type(3){animation-range:contain 50% contain 76%}
+  .proc-step:nth-of-type(4),.dossier:nth-of-type(4){animation-range:contain 75% contain 100%}
+  .proc-step:nth-of-type(1){animation-name:stepFirst}
+  .proc-step:nth-of-type(4){animation-name:stepLast}
+  .dossier:nth-of-type(1){animation-name:dosFirst}
+  .dossier:nth-of-type(4){animation-name:dosLast}
+
   @keyframes stepIn{
     0%{opacity:0;transform:translate3d(0,30px,-80px) rotateX(8deg)}
     18%{opacity:1;transform:none}
     80%{opacity:1;transform:none}
     100%{opacity:0;transform:translate3d(0,-24px,-60px) rotateX(-6deg)}}
+  @keyframes stepFirst{
+    0%,80%{opacity:1;transform:none}
+    100%{opacity:0;transform:translate3d(0,-24px,-60px) rotateX(-6deg)}}
+  @keyframes stepLast{
+    0%{opacity:0;transform:translate3d(0,30px,-80px) rotateX(8deg)}
+    18%,100%{opacity:1;transform:none}}
+  /* visibility suit l'opacité : un dossier éteint ne prend ni le focus,
+     ni le pointeur, et les lecteurs d'écran ne lisent que celui qu'on voit. */
+  @keyframes dosIn{
+    0%{opacity:0;visibility:hidden;transform:translateY(20px)}
+    18%{opacity:1;visibility:visible;transform:none}
+    80%{opacity:1;visibility:visible;transform:none}
+    100%{opacity:0;visibility:hidden;transform:translateY(-16px)}}
+  @keyframes dosFirst{
+    0%,80%{opacity:1;visibility:visible;transform:none}
+    100%{opacity:0;visibility:hidden;transform:translateY(-16px)}}
+  @keyframes dosLast{
+    0%{opacity:0;visibility:hidden;transform:translateY(20px)}
+    18%,100%{opacity:1;visibility:visible;transform:none}}
+
   .procticks i::after{animation:lineDraw linear both;animation-timeline:--proc}
   .procticks i:nth-child(1)::after{animation-range:contain 0% contain 26%}
   .procticks i:nth-child(2)::after{animation-range:contain 25% contain 51%}
   .procticks i:nth-child(3)::after{animation-range:contain 50% contain 76%}
   .procticks i:nth-child(4)::after{animation-range:contain 75% contain 100%}
   @keyframes lineDraw{to{transform:scaleX(1)}}
-  .proc-glow{animation:procGlow linear both;animation-timeline:--proc;
-    animation-range:contain 0% contain 100%}
-  @keyframes procGlow{
-    0%{opacity:0}12%{opacity:.85}24%{opacity:.34}
-    36%{opacity:.85}50%{opacity:.34}
-    62%{opacity:.85}74%{opacity:.34}
-    88%{opacity:.85}100%{opacity:0}}
 }
-
-/* Sans animations au defilement, ou en mouvement reduit : les quatre
-   etapes l'une sous l'autre. Rien ne reste invisible. */
-@supports not (animation-timeline: view()){
-  .procticks i::after{transform:scaleX(1)}
-  .proc-step{opacity:1;position:relative;inset:auto;margin-bottom:30px}
-  .procstack{min-height:0}.procwrap{height:auto}
-  .procpin{position:static;height:auto;display:block}
-}
-@media (prefers-reduced-motion:reduce){
-  .proc-step{opacity:1!important;position:relative;inset:auto;margin-bottom:30px;
-    animation:none!important;transform:none!important}
-  .procstack{min-height:0}.procwrap{height:auto}
-  .procpin{position:static;height:auto;display:block}
-  .procticks i::after{transform:scaleX(1);animation:none!important}
-  .proc-glow{opacity:0;animation:none!important}
 }
 
 /* ── WHY ── */
@@ -228,36 +349,24 @@ import '../styles/global.css';
 .why-gar{align-self:flex-start;margin-top:4px}
 @media(max-width:720px){.why-in{grid-template-columns:1fr}}
 
-/* ── STATS ── */
-/* ── TUILES DE CHIFFRES ──
-   Règles du système de dataviz appliquées : la valeur domine, le libellé
-   reste discret, les lignes de base sont alignées, et AUCUNE couleur
-   décorative ne touche les chiffres — ils portent le token de texte, pas
-   l'accent. Le cuivre ne sert qu'au filet sous la valeur. */
-.s-stats{}
-.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.stat{
-  padding:clamp(28px,6vw,64px);background:var(--surface);border-radius:var(--radius-block);
-  display:flex;flex-direction:column;align-items:center;
-}
+/* LES FONDATEURS — sous le paragraphe de la colonne de gauche. Les
+   photos de /equipe, en petit, droites à 2 px : ni cercle, ni ombre,
+   ni cadre. Les fichiers d'origine portent un liseré clair sur leurs
+   bords ; le léger agrandissement le sort du cadre. */
+.fond{margin-top:clamp(32px,4vw,48px);max-width:480px}
+.fond-liste{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--sp-5);
+  margin:0;padding:0;list-style:none}
+.fond-photo{display:block;width:96px;aspect-ratio:4 / 5;overflow:hidden;
+  border-radius:var(--radius-block);background:var(--surface-2);margin-bottom:var(--sp-3)}
+.fond-photo img{display:block;width:100%;height:100%;object-fit:cover;scale:1.06}
+.fond-p1 img{object-position:50% 24%}
+.fond-p2 img{object-position:50% 12%}
+.fond-nom{margin:0;font-size:15px;font-weight:var(--w-semi);line-height:1.35;color:var(--text)}
+.fond-role{margin:0;font-size:13px;line-height:1.4;color:var(--text-muted)}
+.fond-lien{display:inline-block;margin-top:var(--sp-5)}
 
-.stat-val{
-  font-size:clamp(2.8rem,6vw,6rem);font-weight:600;letter-spacing:-.014em;
-  line-height:1;color:var(--text);
-  /* Ligne de base commune aux trois tuiles, quel que soit le glyphe */
-  display:flex;align-items:baseline;justify-content:center;
-  min-height:1em;
-}
-/* Filet cuivre : le seul accent de la tuile */
-.stat-rule{width:32px;height:2px;background:var(--accent);margin:18px 0 12px;transform-origin:left}
-.stat-lbl{
-  font-size:13px;font-weight:400;letter-spacing:0;color:var(--text-muted);
-  text-align:center;
-}
-/* Masqué seulement si le JS peut le révéler : sans JS, « 24/7 » reste entier. */
-.js-enabled .stat-static{opacity:0}
-@media(prefers-reduced-motion:reduce){.js-enabled .stat-static{opacity:1}}
-@media(max-width:500px){.stats-grid{grid-template-columns:1fr}.stat{border-right:none;border-bottom:1px solid var(--border)}.stat:last-child{border-bottom:none}}
+/* ── LE SIMULATEUR ── */
+.sim-h{margin:0 0 clamp(28px,4vw,48px);max-width:24ch}
 
 /* ── FAQ ── */
 .s-faq{}
@@ -476,23 +585,92 @@ import '../styles/global.css';
   </div>
 </section>
 <div class="procwrap">
-  <div class="procpin"><span class="proc-glow" aria-hidden="true"></span>
+  <div class="procpin">
     <div class="wrap" style="width:100%">
       <div class="procstack">
         <div class="proc-step"><span class="k liquid">01</span>
           <h3 class="proc-title" data-i18n="idx-proc-t1">Découverte</h3>
           <p class="proc-desc" data-i18n="idx-proc-d1">Nous apprenons à connaître votre activité, vos objectifs et votre audience pour concevoir une stratégie digitale sur mesure.</p></div>
+        {/* Dossier 01 — les intitulés du formulaire de devis
+            (src/pages/devis.astro), avec les clés qu'il utilise. */}
+        <article class="dossier" aria-labelledby="dos1-t">
+          <h4 class="dos-t" id="dos1-t" data-i18n="idx-dos1-t">Ce que le devis vous demande</h4>
+          <p class="dos-st" data-i18n="sec1">Vos coordonnées</p>
+          <p class="dos-ligne" data-i18n="idx-dos1-coord">Prénom, nom, e-mail, téléphone, entreprise / activité</p>
+          <p class="dos-st" data-i18n="sec2">Votre projet</p>
+          <ul class="dos-liste">
+            <li data-i18n="type">Type de site</li>
+            <li data-i18n="delai">Délai souhaité</li>
+            <li data-i18n="dvs-paiement">Paiement</li>
+            <li data-i18n="budget">Budget estimé</li>
+            <li data-i18n="desc">Décrivez votre projet</li>
+            <li data-i18n="siteActuel">Avez-vous un site existant ?</li>
+          </ul>
+          <p class="dos-pied"><a class="dos-lien" href="/devis" data-i18n="idx-dos1-lien">Ouvrir le formulaire de devis</a></p>
+        </article>
+
         <div class="proc-step"><span class="k liquid">02</span>
           <h3 class="proc-title" data-i18n="idx-proc-t2">Direction artistique</h3>
           <p class="proc-desc" data-i18n="idx-proc-d2">Création d'une identité visuelle cohérente, des maquettes aux prototypes interactifs, validés à chaque étape.</p></div>
+        {/* Dossier 02 — la direction de CE site : les jetons de
+            tokens.css peints tels quels (ils suivent le thème), et les
+            deux polices de DESIGN.md, chacune écrite dans elle-même. */}
+        <article class="dossier" aria-labelledby="dos2-t">
+          <h4 class="dos-t" id="dos2-t" data-i18n="idx-dos2-t">La direction de ce site</h4>
+          <ul class="dos-nuancier">
+            <li><span class="dos-pastille dos-p-fond" aria-hidden="true"></span><span data-i18n="idx-dos2-c1">Fond</span></li>
+            <li><span class="dos-pastille dos-p-or" aria-hidden="true"></span><span data-i18n="idx-dos2-c2">Or</span></li>
+            <li><span class="dos-pastille dos-p-texte" aria-hidden="true"></span><span data-i18n="idx-dos2-c3">Texte</span></li>
+          </ul>
+          <p class="dos-fonte dos-f-titre" data-i18n="idx-dos2-f1">Bluu Next pour les titres</p>
+          <p class="dos-fonte dos-f-texte" data-i18n="idx-dos2-f2">Schibsted Grotesk pour le texte</p>
+          <p class="dos-pied" data-i18n="idx-dos2-pied">Une seule couleur d'accent et deux polices, sur tout le site.</p>
+        </article>
+
         <div class="proc-step"><span class="k liquid">03</span>
           <h3 class="proc-title" data-i18n="idx-proc-t3">Développement</h3>
           <p class="proc-desc" data-i18n="idx-proc-d3">Code propre, performant et maintenable. Optimisé pour la vitesse, le référencement et tous les appareils.</p></div>
+        {/* Dossier 03 — la mesure de cette page (src/data/mesures.ts). */}
+        <article class="dossier" aria-labelledby="gr-mes-t">
+          <Mesure {...MESURE_ACCUEIL} compact />
+        </article>
+
         <div class="proc-step"><span class="k liquid">04</span>
           <h3 class="proc-title" data-i18n="idx-proc-t4">Mise en ligne</h3>
           <p class="proc-desc" data-i18n="idx-proc-d4">Déploiement soigné, tests complets et formation à la gestion de votre site. Nous restons disponibles après le lancement.</p></div>
+        {/* Dossier 04 — délais : formules.ts et /site-vitrine ; ce qui
+            est livré : /comment-ca-marche (étape 5), cette page (étape 04
+            et FAQ), /tarifs (Vitrine Pro). */}
+        <article class="dossier" aria-labelledby="dos4-t">
+          <h4 class="dos-t" id="dos4-t" data-i18n="idx-dos4-t">Délais de mise en ligne</h4>
+          <dl class="dos-delais">
+            <div class="dos-d">
+              <dt data-i18n="trf-p4-name">Refonte de site</dt>
+              <dd>
+                <span class="dos-piste" style={`--l:${pctSem(REFONTE.delaiSemaines)}`} aria-hidden="true"><span class="dos-barre" style="--f:1"></span></span>
+                <span class="dos-val"><span>{REFONTE.delaiSemaines}</span> <span data-i18n="idx-dos4-sem">semaines</span></span>
+              </dd>
+            </div>
+            <div class="dos-d">
+              <dt data-i18n="trf-p2-name">Vitrine Pro</dt>
+              <dd>
+                <span class="dos-piste" style={`--l:${pctSem(VP_MAX)}`} aria-hidden="true"><span class="dos-barre dos-barre-min" style={`--f:${VP_MIN}`}></span><span class="dos-barre dos-barre-max" style={`--f:${VP_MAX - VP_MIN}`}></span></span>
+                <span class="dos-val" data-i18n="idx-dos4-vp">2 à 4 semaines</span>
+              </dd>
+            </div>
+          </dl>
+          <p class="dos-st" data-i18n="idx-dos4-livre">À la mise en ligne</p>
+          <ul class="dos-liste">
+            <li data-i18n="idx-dos4-l1">Tests sur tous les appareils</li>
+            <li data-i18n="idx-dos4-l2">Déploiement sur votre nom de domaine</li>
+            <li data-i18n="idx-dos4-l3">Formation à la gestion de votre site</li>
+            <li data-i18n="idx-dos4-l4">1 mois de support inclus avec la Vitrine Pro</li>
+          </ul>
+          <p class="dos-pied" data-i18n="idx-dos4-depart">Délais comptés à partir de la validation du brief.</p>
+        </article>
+
+        <div class="procticks" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
       </div>
-      <div class="procticks" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
     </div>
   </div>
 </div>
@@ -506,6 +684,24 @@ import '../styles/global.css';
         <span class="label r" id="why-h" data-i18n="idx-why-lbl">Pourquoi Nexa Web</span>
         <h2 class="h-lg" style="margin-top:14px" data-i18n="idx-why-h">La différence qui<br>fait la différence.</h2>
         <p class="body r d2" style="margin-top:22px;max-width:380px" data-i18n="idx-why-sub">Nous ne faisons pas dans la quantité. Chaque projet reçoit une attention totale, de la stratégie à la mise en ligne.</p>
+        <div class="fond r d3">
+          <ul class="fond-liste">
+            {FONDATEURS.map((f, i) => (
+              <li>
+                <picture class={`fond-photo fond-p${i + 1}`}>
+                  <source type="image/avif" srcset={f.avif} sizes="96px" />
+                  <source type="image/webp" srcset={f.webp} sizes="96px" />
+                  <img src={f.src} srcset={f.jpg} sizes="96px" width="96" height="120"
+                       alt={f.alt} data-i18n-alt={f.altCle} loading="lazy" decoding="async" />
+                </picture>
+                <p class="fond-nom" data-i18n={f.prenomCle}>{f.prenom}</p>
+                <p class="fond-role" data-i18n="eq-role">Co-fondateur</p>
+                <p class="fond-role" data-i18n={f.speCle}>{f.spe}</p>
+              </li>
+            ))}
+          </ul>
+          <a class="dos-lien fond-lien" href="/equipe" data-i18n="idx-fond-lien">Voir l'équipe</a>
+        </div>
       </div>
       <div class="why-bio r d1">
         <p class="why-bio-lead" data-i18n="idx-why-lead">Une agence jeune, des ambitions sérieuses.</p>
@@ -521,30 +717,12 @@ import '../styles/global.css';
   </div>
 </section>
 
-<!-- STATS -->
-<section class="s-stats sec-seam" style="padding:var(--sec) 0" aria-label="Chiffres clés" data-i18n-aria="a11y-chiffres">
+<!-- LE SIMULATEUR — à la place de la rangée « 100 % / 24/7 / ∞ ».
+     Aucune statistique : un calcul fait avec les chiffres du visiteur. -->
+<section class="s-sim sec-seam" style="padding:var(--sec) 0" id="calcul" aria-labelledby="sim-h">
   <div class="wrap">
-    <div class="stats-grid" data-count-group>
-      <div class="stat r">
-        <!-- Comptage de 0 à 100, 1 400 ms, out-expo -->
-        <div class="stat-val"><span data-count="100" data-count-dur="1400">100</span>%</div>
-        <div class="stat-rule" data-anim="rule" aria-hidden="true"></div>
-        <div class="stat-lbl" data-i18n="idx-stat1">Sur mesure</div>
-      </div>
-      <div class="stat r d1">
-        <!-- Seul le « 24 » se compte. « /7 » n'est pas un nombre : le
-             compter produirait des valeurs absurdes en cours d'animation. -->
-        <div class="stat-val"><span data-count-symbol>24/7</span></div>
-        <div class="stat-rule" data-anim="rule" aria-hidden="true"></div>
-        <div class="stat-lbl" data-i18n="idx-stat2">Présence digitale</div>
-      </div>
-      <div class="stat r d2">
-        <!-- Aucun comptage possible : fondu + léger scale -->
-        <div class="stat-val"><span data-count-symbol>∞</span></div>
-        <div class="stat-rule" data-anim="rule" aria-hidden="true"></div>
-        <div class="stat-lbl" data-i18n="idx-stat3">Possibilités</div>
-      </div>
-    </div>
+    <h2 class="h-lg sim-h" id="sim-h" data-i18n="idx-sim-h">Votre site, remboursé en combien de mois&nbsp;?</h2>
+    <Simulateur titreMasque />
   </div>
 </section>
 

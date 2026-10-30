@@ -1235,11 +1235,11 @@ body[data-page="home"] main>section{position:relative;z-index:2}
    carte. L'ombre est fixe, la profondeur vient de la 3D.
    ═══════════════════════════════════════════════════════════════════════ */
 
-.plans-grid,.cards,.feat-grid,.who-grid,.team-grid,.stats-grid,.proc-grid,
-.steps,.constat-list,.cta-section,.s-who,.s-stats,.s-proc{perspective:1600px}
+.plans-grid,.cards,.feat-grid,.who-grid,.team-grid,.proc-grid,
+.steps,.constat-list,.cta-section,.s-who,.s-proc{perspective:1600px}
 
 .plan-card,.card,.feat-item,.who-card,.team-card,.constat-item,.step,
-.stat,.cta-inner,.launch-notice,.aside{
+.cta-inner,.launch-notice,.aside{
   /* Le repère de la lèvre et du reflet. Posé en CSS et pas en ligne par
      le script : un style en ligne bat toute règle, y compris celle qui
      rend la carte collante plus bas. */
@@ -1264,17 +1264,17 @@ body[data-page="home"] main>section{position:relative;z-index:2}
 
 @media (hover:hover) and (pointer:fine){
   .plan-card:hover>.gloss,.card:hover>.gloss,.who-card:hover>.gloss,.team-card:hover>.gloss,
-  .stat:hover>.gloss,.feat-item:hover>.gloss,.aside:hover>.gloss,.cta-inner:hover>.gloss,
+  .feat-item:hover>.gloss,.aside:hover>.gloss,.cta-inner:hover>.gloss,
   .constat-item:hover>.gloss,.step:hover>.gloss{
     opacity:1;background-position:-90% 0}
-  .plan-card:hover,.card:hover,.who-card:hover,.team-card:hover,.stat:hover,
+  .plan-card:hover,.card:hover,.who-card:hover,.team-card:hover,
   .feat-item:hover,.aside:hover,.cta-inner:hover,.constat-item:hover,
   .step:hover{--ly:-7px;--sc:1.012}
 }
 
 @supports (animation-timeline: view()){
   .plan-card,.card,.feat-item,.who-card,.team-card,.constat-item,.step,
-  .stat,.cta-inner,.launch-notice,.aside{
+  .cta-inner,.launch-notice,.aside{
     animation:cardFlight linear both;animation-timeline:view();
     animation-range:entry 0% exit 92%}
 
@@ -1302,15 +1302,15 @@ body[data-page="home"] main>section{position:relative;z-index:2}
      débordement à 390 px sur trois pages. */
   @media (min-width:760px){
   .plans-grid>*:nth-child(1),.cards>*:nth-child(1),.who-grid>*:nth-child(1),
-  .team-grid>*:nth-child(1),.stats-grid>*:nth-child(1){--fx:130px;--fr:-6deg}
+  .team-grid>*:nth-child(1){--fx:130px;--fr:-6deg}
   .plans-grid>*:nth-child(3),.cards>*:nth-child(3),.who-grid>*:nth-child(3),
-  .team-grid>*:nth-child(3),.stats-grid>*:nth-child(3){--fx:-130px;--fr:6deg}
-  .plans-grid>*:nth-child(2),.cards>*:nth-child(2),.stats-grid>*:nth-child(2){--fx:0px;--fr:0deg}
+  .team-grid>*:nth-child(3){--fx:-130px;--fr:6deg}
+  .plans-grid>*:nth-child(2),.cards>*:nth-child(2){--fx:0px;--fr:0deg}
   /* elles ne se déplient pas en même temps */
   .plans-grid>*:nth-child(2),.cards>*:nth-child(2),.who-grid>*:nth-child(2),
-  .team-grid>*:nth-child(2),.stats-grid>*:nth-child(2){animation-range:entry -8% exit 92%}
+  .team-grid>*:nth-child(2){animation-range:entry -8% exit 92%}
   .plans-grid>*:nth-child(3),.cards>*:nth-child(3),.who-grid>*:nth-child(3),
-  .team-grid>*:nth-child(3),.stats-grid>*:nth-child(3){animation-range:entry -17% exit 92%}
+  .team-grid>*:nth-child(3){animation-range:entry -17% exit 92%}
 
   /* Les tarifs ne passent a trois colonnes qu'a 900 px. Entre 760 et
      900 ils sont en UNE colonne : un decalage de 130 px sortirait de
@@ -1376,7 +1376,7 @@ body[data-page="home"] main>section{position:relative;z-index:2}
 @media (prefers-reduced-motion:reduce){
   /* Le tiroir reste ouvert : aucune carte ne bouge, rien ne reste caché. */
   .plan-card,.card,.feat-item,.who-card,.team-card,.constat-item,.step,
-  .stat,.cta-inner,.launch-notice,.aside,.drwi,
+  .cta-inner,.launch-notice,.aside,.drwi,
   .plan-features li,.card li,.aside li,.feat-item li{
     animation:none!important;clip-path:none!important;opacity:1!important;transform:none!important}
   body .steps .step,body .constat-list .constat-item{
@@ -1548,7 +1548,7 @@ body.lite .aside li,body.lite .feat-item li{
   animation:none!important;opacity:1!important;transform:none!important}
 body.lite .plan-card,body.lite .card,body.lite .feat-item,body.lite .who-card,
 body.lite .team-card,body.lite .constat-item,body.lite .step,
-body.lite .stat,body.lite .cta-inner,body.lite .launch-notice,body.lite .aside{
+body.lite .cta-inner,body.lite .launch-notice,body.lite .aside{
   animation-name:cardLite!important}
 @keyframes cardLite{
   0%{opacity:0;transform:translateY(30px) scale(.98)}

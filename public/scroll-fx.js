@@ -20,7 +20,7 @@
      1280x770 px pour un parent de 675x69. Cinq .pass arrondis empiles
      sur toute la FAQ, c'etait le grand panneau gris. */
   var CARTES = '.plan-card,.card,.feat-item,.who-card,.team-card,.constat-item,' +
-               '.step,.stat,.cta-inner,.launch-notice,.aside';
+               '.step,.cta-inner,.launch-notice,.aside';
 
   /* Un calque decoratif ne doit JAMAIS pouvoir sortir de son parent.
      Un parent en position:static ne retient rien : on l'ancre avant
