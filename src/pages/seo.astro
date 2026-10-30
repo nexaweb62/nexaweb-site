@@ -3,18 +3,27 @@ import InteractiveButton from '../components/ui/InteractiveButton.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Mesure from '../components/graphes/Mesure.astro';
+import { MESURE_ACCUEIL } from '../data/mesures';
 import '../styles/global.css';
 ---
 <BaseLayout title="SEO & Performance — Nexa Web" description="Audit SEO, optimisation technique et performance web. Nexa Web booste votre visibilité Google à Carvin.">
 <style>
 main{padding-top:var(--hdr)}
 
-.svc-hero{padding:80px var(--pad-x) 60px;max-width:1100px;margin:0 auto;position:relative}
-.svc-hero::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse 70% 50% at 60% 20%,var(--accent-glow) 0%,rgb(from var(--accent-glow) r g b / 0) 70%);pointer-events:none;z-index:0}
+.svc-hero{padding:80px var(--pad-x) 60px;max-width:1100px;margin:0 auto;position:relative;
+  display:grid;row-gap:var(--sp-8)}
+/* La promesse à gauche, sa preuve mesurée à droite : le poids de notre
+   propre page d'accueil. Sous 960 px, la mesure passe sous le bouton. */
+.svc-hero-fig{min-width:0;max-width:560px}
+@media(min-width:960px){
+  .svc-hero{grid-template-columns:minmax(0,1fr) minmax(320px,400px);column-gap:clamp(40px,5vw,72px);align-items:start}
+  .svc-hero-fig{max-width:none;padding-top:var(--sp-2)}
+  .svc-hero .svc-title{font-size:clamp(2.8rem,5.6vw,4.75rem)}
+}
 .svc-eyebrow{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--accent-text);margin-bottom:20px;display:flex;align-items:center;gap:8px;position:relative;z-index:1}
 .svc-eyebrow::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0}
 .svc-title{font-size:clamp(2.8rem,7vw,5.5rem);font-weight:600;letter-spacing:-.010em;line-height:1;margin-bottom:28px;position:relative;z-index:1}
-.svc-title span{color:var(--accent-text)}
 .svc-desc{font-size:clamp(1rem,1.8vw,1.15rem);color:var(--text-muted);line-height:1.75;max-width:640px;margin-bottom:40px;position:relative;z-index:1}
 
 .svc-features{padding:60px var(--pad-x);max-width:1100px;margin:0 auto}
@@ -40,10 +49,13 @@ main{padding-top:var(--hdr)}
 
 <main id="main-content" tabindex="-1">
   <div class="svc-hero">
-    <p class="svc-eyebrow" data-i18n="seo-1">Service · Visibilité</p>
-    <h1 class="svc-title" data-i18n="seo-h1">SEO & <span>Performance</span></h1>
-    <p class="svc-desc" data-i18n="seo-3">Être en ligne ne suffit pas — il faut être visible. On optimise votre site pour qu'il remonte sur Google, charge en moins de 2 secondes et convertisse davantage. Résultats mesurables, stratégie sur mesure.</p>
-    <InteractiveButton text="Obtenir un audit gratuit" data-i18n="seo-b1" href="/devis" class="svc-cta" />
+    <div class="svc-hero-txt">
+      <p class="svc-eyebrow" data-i18n="seo-1">Service · Visibilité</p>
+      <h1 class="svc-title" data-i18n="seo-h1">SEO & <span>Performance</span></h1>
+      <p class="svc-desc" data-i18n="seo-3">Être en ligne ne suffit pas — il faut être visible. On optimise votre site pour qu'il remonte sur Google, reste léger sur mobile et convertisse davantage. Résultats mesurables, stratégie sur mesure.</p>
+      <InteractiveButton text="Obtenir un audit gratuit" data-i18n="seo-b1" href="/devis" class="svc-cta" />
+    </div>
+    <div class="svc-hero-fig"><Mesure {...MESURE_ACCUEIL} /></div>
   </div>
 
   <div class="svc-divider"></div>
