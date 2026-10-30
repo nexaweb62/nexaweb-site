@@ -3,6 +3,7 @@ import InteractiveButton from '../components/ui/InteractiveButton.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Delais from '../components/graphes/Delais.astro';
 import '../styles/global.css';
 ---
 <BaseLayout
@@ -14,13 +15,21 @@ main { padding-top: var(--hdr) }
 
 /* Hero */
 .hero { padding: clamp(72px,12vh,140px) 0 clamp(48px,8vh,96px); text-align: center; position: relative; overflow: hidden; }
-.hero::before { content:''; position:absolute; inset:0; background: radial-gradient(ellipse 70% 55% at 50% 0%, var(--accent-glow) 0%, rgb(from var(--accent-glow) r g b / 0) 70%); pointer-events:none; }
 .hero-tag { font-size:var(--fs-caption); font-weight:600; letter-spacing:0; color:var(--accent-text); margin-bottom:20px; display:inline-block; }
 .hero-title { font-size:clamp(2rem,5vw,4rem); font-weight:600; letter-spacing:-.014em; line-height:1.05; text-wrap:balance; margin-bottom:20px; }
 .hero-sub { font-size:clamp(.95rem,1.6vw,1.1rem); color:var(--text-muted); line-height:1.7; max-width:520px; margin:0 auto; }
 
-/* Steps section */
+/* Steps section — les étapes à gauche, leur frise à l'échelle du temps à
+   droite. La frise est la cellule de grille elle-même (pas d'enveloppe) :
+   sa position collante a besoin d'une rangée plus haute qu'elle, et c'est
+   la colonne des étapes qui la donne. Sous 1024 px, elle passe dessous. */
 .s-steps { padding: clamp(64px,10vw,120px) 0; }
+.ccm-duo { display:grid; row-gap:var(--sp-9); }
+.ccm-duo > :global(.gd) { max-width:560px; }
+@media (min-width:1024px) {
+  .ccm-duo { grid-template-columns:minmax(0,1fr) minmax(340px,440px); column-gap:clamp(48px,6vw,96px); }
+  .ccm-duo > :global(.gd) { max-width:none; }
+}
 .steps { display:flex; flex-direction:column; max-width:700px; }
 
 .step { display:flex; gap:32px; padding-bottom:52px; position:relative; }
@@ -66,7 +75,7 @@ main { padding-top: var(--hdr) }
 
   <!-- Étapes -->
   <section class="s-steps">
-    <div class="wrap">
+    <div class="wrap ccm-duo">
       <div class="steps">
 
         <div class="step r d1">
@@ -136,6 +145,7 @@ main { padding-top: var(--hdr) }
         </div>
 
       </div>
+      <Delais />
     </div>
   </section>
 

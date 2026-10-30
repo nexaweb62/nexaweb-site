@@ -4,6 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import GarantieBadge from '../components/GarantieBadge.astro';
+import { REFONTE, VITRINE, ENTREPRISE, prix } from '../data/formules';
 import '../styles/global.css';
 
 /* Les trois temps de la méthode. Le dessin de chacun vit plus bas, en
@@ -32,11 +33,30 @@ const ETAPES = [
     ] },
 ];
 
-/* Les prestations, telles qu'elles existent déjà sur le site. */
+/* Les prestations, telles qu'elles existent déjà sur le site, avec leur
+   prix de départ et leur délai — UNIQUEMENT ceux qui sont déjà écrits
+   ailleurs. Aucun n'est estimé ici.
+     prix   src/data/formules.ts : VITRINE.prix (l. 33), REFONTE.prixDepart
+            (l. 23), ENTREPRISE.prixDepart (l. 39). La boutique en ligne
+            relève de la formule Entreprise : « Site professionnel ou
+            e-commerce » et « E-commerce ou espace client » (tarifs.astro,
+            l. 491 et 503).
+     délai  « Livraison en 2 à 4 semaines » : site-vitrine.astro l. 76 et
+            ecommerce.astro l. 81 ; refonte : REFONTE.delaiSemaines
+            (formules.ts l. 25, repris par refonte.astro l. 81).
+   Le référencement et le design n'ont ni prix ni délai écrits : la case
+   dit « sur devis ». */
+const LIVRAISON_SITE = { min: 2, max: 4 };   // site-vitrine.astro l. 76, ecommerce.astro l. 81
 const PRESTATIONS = [
-  { cle: 'sv-p1', nom: 'Site vitrine',        href: '/site-vitrine' },
-  { cle: 'sv-p2', nom: 'Boutique en ligne',   href: '/ecommerce' },
-  { cle: 'sv-p3', nom: 'Refonte de site',     href: '/refonte' },
+  { cle: 'sv-p1', nom: 'Site vitrine',        href: '/site-vitrine',
+    prix: VITRINE.prix,            formule: { cle: 'sv-tab-f-vitrine',    nom: 'Formule Vitrine Pro, prix de lancement' },
+    delai: LIVRAISON_SITE },
+  { cle: 'sv-p2', nom: 'Boutique en ligne',   href: '/ecommerce',
+    prix: ENTREPRISE.prixDepart,   formule: { cle: 'sv-tab-f-entreprise', nom: 'Formule Entreprise' },
+    delai: LIVRAISON_SITE },
+  { cle: 'sv-p3', nom: 'Refonte de site',     href: '/refonte',
+    prix: REFONTE.prixDepart,      formule: { cle: 'sv-tab-f-refonte',    nom: 'Formule Refonte' },
+    delai: { min: REFONTE.delaiSemaines, max: REFONTE.delaiSemaines } },
   { cle: 'sv-p4', nom: 'Référencement local', href: '/seo' },
   { cle: 'sv-p5', nom: 'Design UI/UX',        href: '/design-uiux' },
 ];
@@ -210,16 +230,62 @@ const PRESTATIONS = [
   .sv-somm a.ici::before{width:34px;background:var(--accent)}
 }
 
-/* ── LISTE DES PRESTATIONS ── */
-.sv-liste{list-style:none;margin:0;padding:0;border-top:1px solid var(--border)}
-.sv-liste li{border-bottom:1px solid var(--border)}
-.sv-liste a{
-  display:flex;align-items:center;gap:14px;padding:18px 4px;
-  font-size:clamp(16px,2vw,21px);font-weight:500;letter-spacing:-.007em;
-  color:var(--text);transition:color var(--dur-micro) var(--ease-out),padding-left .3s var(--ease-out);
+/* ── LES PRESTATIONS, EN TABLEAU ──
+   Prestation, prix de départ, délai, page dédiée : quatre colonnes au
+   bureau. Sous 700 px, chaque rangée devient un bloc et chaque cellule
+   porte son intitulé (.sv-tab-lib, masqué au bureau, où l'en-tête le
+   donne) : rien ne défile à l'horizontale. Les rôles ARIA écrits dans
+   le balisage gardent la sémantique de tableau quand le CSS change le
+   display des cellules (Safari la perdait). */
+.sv-tab{width:100%;border-collapse:collapse;font-family:var(--font);text-align:left}
+.sv-tab thead th{
+  padding:0 var(--sp-4) var(--sp-3) 0;border-bottom:1px solid var(--border-strong);
+  font-size:13px;line-height:1.35;font-weight:var(--w-semi);color:var(--text-muted);
+  vertical-align:bottom;white-space:nowrap}
+.sv-tab tbody th,.sv-tab td{
+  padding:var(--sp-5) var(--sp-4) var(--sp-5) 0;border-bottom:1px solid var(--border);
+  vertical-align:top}
+.sv-tab tbody th{
+  width:32%;font-family:var(--font);font-size:clamp(17px,1.7vw,21px);line-height:1.25;
+  font-weight:500;letter-spacing:-.007em;color:var(--text)}
+.sv-tab td:nth-child(2){width:28%}
+.sv-tab td:nth-child(3){width:22%}
+.sv-tab td:last-child{padding-right:0}
+.sv-tab-lib{display:none}
+/* Chiffres alignés sur les montants et les délais seulement : dans
+   cette police, tnum élargit aussi la virgule et le point du texte. */
+.sv-tab-val{display:block;font-size:17px;line-height:1.35;font-weight:var(--w-semi);color:var(--text);
+  font-variant-numeric:tabular-nums}
+.sv-tab-del{font-weight:var(--w-reg)}
+.sv-tab-note{display:block;margin-top:2px;font-size:13px;line-height:1.4;color:var(--text-muted)}
+.sv-tab-devis{display:block;font-size:15px;line-height:1.35;color:var(--text-muted)}
+.sv-tab-lien{font-size:15px;line-height:1.35;color:var(--text);
+  text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;
+  text-decoration-color:var(--border-strong);
+  transition:color var(--dur-micro) var(--ease-out),text-decoration-color var(--dur-micro) var(--ease-out)}
+@media (hover:hover) and (pointer:fine){
+  .sv-tab-lien:hover{color:var(--accent-text);text-decoration-color:currentColor}
 }
-.sv-liste a:hover{color:var(--accent-text);padding-left:12px}
-.sv-carre{width:7px;height:7px;background:var(--accent);flex:0 0 auto}
+.sv-tab-cap{caption-side:bottom;padding-top:var(--sp-4);text-align:left;
+  font-size:13px;line-height:1.5;color:var(--text-muted);max-width:68ch}
+@media (max-width:699.98px){
+  .sv-tab,.sv-tab tbody,.sv-tab tr,.sv-tab th,.sv-tab td{display:block;width:auto}
+  /* Le tableau devient une colonne : la légende, premier enfant du
+     balisage, repasse sous les rangées. */
+  .sv-tab{display:flex;flex-direction:column}
+  .sv-tab caption{display:block;order:2}
+  .sv-tab thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .sv-tab tbody tr{padding:var(--sp-5) 0;border-bottom:1px solid var(--border)}
+  .sv-tab tbody tr:first-child{border-top:1px solid var(--border-strong)}
+  .sv-tab tbody th,.sv-tab td,.sv-tab td:nth-child(2),.sv-tab td:nth-child(3){width:auto;padding:0;border:0}
+  .sv-tab tbody th{margin-bottom:var(--sp-3)}
+  .sv-tab td{display:grid;grid-template-columns:7.5rem minmax(0,1fr);column-gap:var(--sp-3);
+    padding:var(--sp-1) 0}
+  .sv-tab-lib{display:block;grid-row:span 2;font-size:14px;line-height:1.5;color:var(--text-muted)}
+  .sv-tab-val,.sv-tab-devis{grid-column:2}
+  .sv-tab-note{grid-column:2}
+  .sv-tab td:last-child{display:block;padding-top:var(--sp-3)}
+}
 .sv-suite{
   display:inline-flex;align-items:center;gap:10px;margin-top:clamp(24px,4vh,40px);
   font-family:var(--font);
@@ -373,14 +439,39 @@ const PRESTATIONS = [
     <div class="wrap">
       <p class="sv-sec-tag sv-rv"><b>03</b> / <span data-i18n="sv-s3-tag">Prestations</span></p>
       <h2 class="sv-sec-h sv-rv" id="sv-h3" data-i18n="sv-s3-h">Ce que nous faisons</h2>
-      <ul class="sv-liste sv-rv">
-        {PRESTATIONS.map(p => (
-          <li><a href={p.href}>
-            <span class="sv-carre" aria-hidden="true"></span>
-            <span data-i18n={p.cle}>{p.nom}</span>
-          </a></li>
-        ))}
-      </ul>
+      <table class="sv-tab sv-rv" role="table" aria-labelledby="sv-h3">
+        <caption class="sv-tab-cap" data-i18n="sv-tab-cap">Prix de départ des formules de la page Tarifs, délais écrits sur la page de chaque prestation. « Sur devis » : aucun chiffre n'est fixé d'avance.</caption>
+        <thead role="rowgroup">
+          <tr role="row">
+            <th scope="col" role="columnheader" data-i18n="sv-tab-th-p">Prestation</th>
+            <th scope="col" role="columnheader" data-i18n="sv-tab-th-prix">À partir de</th>
+            <th scope="col" role="columnheader" data-i18n="sv-tab-th-delai">Délai</th>
+            <th scope="col" role="columnheader" data-i18n="sv-tab-th-page">Page dédiée</th>
+          </tr>
+        </thead>
+        <tbody role="rowgroup">
+          {PRESTATIONS.map(p => (
+            <tr role="row">
+              <th scope="row" role="rowheader"><span data-i18n={p.cle}>{p.nom}</span></th>
+              <td role="cell">
+                <span class="sv-tab-lib" aria-hidden="true" data-i18n="sv-tab-th-prix">À partir de</span>
+                {p.prix
+                  ? <><span class="sv-tab-val" data-i18n-prix>{prix(p.prix)}</span><span class="sv-tab-note" data-i18n={p.formule.cle}>{p.formule.nom}</span></>
+                  : <span class="sv-tab-devis" data-i18n="sv-tab-devis">Sur devis</span>}
+              </td>
+              <td role="cell">
+                <span class="sv-tab-lib" aria-hidden="true" data-i18n="sv-tab-th-delai">Délai</span>
+                {p.delai
+                  ? <span class="sv-tab-val sv-tab-del">{p.delai.min === p.delai.max
+                      ? <>{p.delai.min} <span data-i18n="sv-tab-sem">semaines</span></>
+                      : <>{p.delai.min} <span data-i18n="sv-tab-a">à</span> {p.delai.max} <span data-i18n="sv-tab-sem">semaines</span></>}</span>
+                  : <span class="sv-tab-devis" data-i18n="sv-tab-devis">Sur devis</span>}
+              </td>
+              <td role="cell"><a class="sv-tab-lien" href={p.href}><span data-i18n="sv-tab-voir">Voir la page</span><span class="sr-only"> — <span data-i18n={p.cle}>{p.nom}</span></span></a></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
       <p class="sv-suite sv-rv">
         <span data-i18n="sv-suite">Étape suivante</span> —
         <a href="/tarifs" data-i18n="sv-suite-l">Voir les tarifs ↗</a>
