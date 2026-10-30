@@ -58,6 +58,8 @@ const EXCEPTIONS = [
   { re: /^vs\.?$/i, quoi: 'abreviation latine' },
   /* « 8/10 », « 24/7 » : un rapport chiffre ne se traduit pas. */
   { re: /^\d+\s*\/\s*\d+$/, quoi: 'proportion chiffree' },
+  /* « 3 × » devant un montant : un multiplicateur, pas un mot. */
+  { re: /^\d+\s*×$/u, quoi: 'multiplicateur chiffre' },
   { re: /^https?:\/\//i, quoi: 'adresse web' },
 ];
 /* Les noms de l'equipe, lus dans la page Equipe : ils ne se traduisent
@@ -108,7 +110,12 @@ for (const chemin of PAGES) {
       let n = el;
       while (n && n !== document.documentElement) {
         if (n.hasAttribute && (n.hasAttribute('data-i18n') ||
-            n.hasAttribute('data-i18n-prix'))) return true;
+            n.hasAttribute('data-i18n-prix') ||
+            /* texte que le script du composant écrit lui-même dans la
+               langue de la page (une date, un nombre recalculé) */
+            n.hasAttribute('data-i18n-js') ||
+            /* attribut HTML standard : nom propre qui ne se traduit pas */
+            n.getAttribute('translate') === 'no')) return true;
         n = n.parentElement;
       }
       return false;

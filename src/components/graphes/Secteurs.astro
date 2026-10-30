@@ -10,9 +10,8 @@
  *   secteur  'construction' | 'commerce' | 'restauration'  (obligatoire)
  *            La barre de ce secteur passe en or et le titre en parle.
  *
- * Les textes portent des clés « gr-sect-… » ; leurs traductions sont
- * livrées à part (scratchpad/i18n/graphes-b.json) pour être fusionnées
- * dans public/i18n.js.
+ * Les textes portent des clés « gr-sect-… », traduites dans public/i18n.js
+ * (blocs en et fr).
  */
 export interface Props {
   secteur: 'construction' | 'commerce' | 'restauration';
@@ -345,7 +344,7 @@ const TICKS = [0, 25, 50, 75, 100];
     const s = n > 1 ? 's' : '';
     if (l === 'en') {
       if (d === 0) return 'Same as all sectors';
-      return `${n} point${s} ${d < 0 ? 'below' : 'above'} all sectors`;
+      return `${n} point${s} ${d < 0 ? 'below' : 'above'} the all-sector figure`;
     }
     if (d === 0) return "Autant que l'ensemble des secteurs";
     return `${n} point${s} de ${d < 0 ? 'moins' : 'plus'} que l'ensemble des secteurs`;

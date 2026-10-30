@@ -114,7 +114,7 @@ const idT = 'gr-mes-t';
   </div>
 
   <p class="gm-src">
-    <span data-i18n="gr-b-src">Source :</span> <span data-i18n="gr-mes-src-a">notre mesure en laboratoire,</span> <span class="gm-outil">{outil}</span><span data-i18n="gr-mes-src-b">, mobile simulé, le</span> <span class="gm-date" data-gr-date={date}>{dateFr}</span><span data-i18n="gr-mes-sep"> ; </span><a href={S31_URL} data-i18n="gr-mes-src-lien">HTTP Archive, Web Almanac 2025</a><span data-i18n="gr-mes-src-c">, chapitre « Page Weight », figure 14.1 (juillet 2025).</span>
+    <span data-i18n="gr-b-src">Source :</span> <span data-i18n="gr-mes-src-a">notre mesure en laboratoire,</span> <span class="gm-outil" translate="no">{outil}</span><span data-i18n="gr-mes-src-b">, mobile simulé, le</span> <span class="gm-date" data-gr-date={date} data-i18n-js>{dateFr}</span><span data-i18n="gr-mes-sep"> ; </span><a href={S31_URL} data-i18n="gr-mes-src-lien">HTTP Archive, Web Almanac 2025</a><span data-i18n="gr-mes-src-c">, chapitre « Page Weight », figure 14.1 (juillet 2025).</span>
   </p>
 
   {!compact && <details class="gm-chiffres">
@@ -132,7 +132,7 @@ const idT = 'gr-mes-t';
         <tr class="gm-t-or">
           <th scope="row" data-i18n="gr-mes-l-nous">Notre page d'accueil</th>
           <td class="gm-num"><span class="gm-n" data-gr-ko={poidsKo} data-gr-dec="1">{nombre(poidsKo, 1)}</span> <span data-i18n="gr-mes-ko">Ko</span></td>
-          <td><span class="gm-outil">{outil}</span><span data-i18n="gr-mes-src-b">, mobile simulé, le</span> <span class="gm-date" data-gr-date={date}>{dateFr}</span>{compresse ? <span data-i18n="gr-mes-avec">, après compression</span> : <span data-i18n="gr-mes-sans">, sans compression</span>}</td>
+          <td><span class="gm-outil" translate="no">{outil}</span><span data-i18n="gr-mes-src-b">, mobile simulé, le</span> <span class="gm-date" data-gr-date={date} data-i18n-js>{dateFr}</span>{compresse ? <span data-i18n="gr-mes-avec">, après compression</span> : <span data-i18n="gr-mes-sans">, sans compression</span>}</td>
         </tr>
         <tr>
           <th scope="row" data-i18n="gr-mes-l-web">Page d'accueil médiane du web</th>
