@@ -13,7 +13,6 @@ main { padding-top: var(--hdr) }
 
 /* Hero */
 .hero { padding: clamp(80px,14vh,160px) 0 clamp(60px,10vh,120px); text-align: center; position: relative; overflow: hidden; }
-.hero-tag { font-size:var(--fs-caption); font-weight:600; letter-spacing:0; color:var(--accent-text); margin-bottom:20px; display:inline-block; }
 .hero-title { font-size:clamp(2.2rem,5vw,4.5rem); font-weight:600; letter-spacing:-.014em; line-height:1; text-wrap:balance; margin-bottom:24px; }
 .hero-sub { font-size:clamp(.95rem,1.6vw,1.1rem); color:var(--text-muted); line-height:1.7; max-width:560px; margin:0 auto 40px; }
 
@@ -50,7 +49,7 @@ main { padding-top: var(--hdr) }
    ne reste vide : une colonne au téléphone ; deux de 600 à 899 px, la
    dernière carte seule prenant toute la ligne ; trois au-delà, sur une
    trame de six, la dernière rangée incomplète s'élargissant (5 = 3 + 2). */
-.cards { display:grid; grid-template-columns:minmax(0,1fr); gap:1px; background:var(--border); margin-top:clamp(32px,5vw,60px); }
+.cards { display:grid; grid-template-columns:minmax(0,1fr); gap:0 clamp(24px,3vw,40px); margin-top:clamp(32px,5vw,60px); border-bottom:1px solid var(--border); }
 @media (min-width:600px) and (max-width:899.98px) {
   .cards { grid-template-columns:repeat(2,minmax(0,1fr)); }
   .card:nth-child(odd):last-child { grid-column:1 / -1; }
@@ -62,9 +61,7 @@ main { padding-top: var(--hdr) }
   .card:nth-child(3n+1):nth-last-child(2) ~ .card { grid-column:span 3; }
   .card:nth-child(3n+1):last-child { grid-column:1 / -1; }
 }
-.card { background:var(--bg); padding:32px 28px; }
-.card-icon { width:36px; height:36px; background:var(--accent-glow); border-radius:var(--radius-block); display:flex; align-items:center; justify-content:center; margin-bottom:20px; }
-.card-icon svg { width:18px; height:18px; stroke:var(--accent); stroke-width:1.8; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+.card { padding:28px 0 32px; border-top:1px solid var(--border); }
 .card-title { font-size:1rem; font-weight:600; margin-bottom:8px; }
 .card-desc { font-size:.875rem; color:var(--text-muted); line-height:1.65; }
 
@@ -79,6 +76,14 @@ main { padding-top: var(--hdr) }
 
 /* FAQ */
 .faq-list { display:flex; flex-direction:column; gap:0; max-width:760px; }
+/* La FAQ sur deux colonnes au bureau : le titre à gauche, les réponses à
+   droite, comme sur l'accueil. Sur une colonne, la moitié droite de
+   l'écran restait vide. */
+@media (min-width:1024px){
+  .faq-sec { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.7fr); column-gap:clamp(48px,6vw,96px); align-items:start; }
+  .faq-intro { position:sticky; top:calc(var(--hdr) + var(--sp-5)); }
+  .faq-sec .faq-list { max-width:none; }
+}
 .faq-item { border-top:1px solid var(--border); padding:24px 0; }
 .faq-item:last-child { border-bottom:1px solid var(--border); }
 .faq-q { font-size:1rem; font-weight:600; margin-bottom:10px; }
@@ -97,6 +102,8 @@ main { padding-top: var(--hdr) }
 @media(max-width:599.98px) {
   .card { padding:28px 0; }
 }
+/* Au téléphone, le retour forcé du titre laissait un mot seul en fin de ligne. */
+@media (max-width:600px){ .hero-title br { display:none; } }
 </style>
 
 <Header backBtn={true} />
@@ -105,7 +112,6 @@ main { padding-top: var(--hdr) }
   <!-- 2. Hero -->
   <section class="hero">
     <div class="wrap">
-      <span class="hero-tag r" data-i18n="arti-1">Artisans &amp; TPE</span>
       <h1 class="hero-title r d1" data-i18n="arti-h1">Vous dépendez du bouche-à-oreille<br>et les chantiers se font rares.</h1>
       <p class="hero-sub r d2" data-i18n="arti-2">Sans site, le client qui cherche un artisan appelle le premier qui sort sur Google — et ce n'est pas vous.</p>
       <InteractiveButton text="Avoir mon site artisan" data-i18n="arti-b1" href="/devis?plan=vitrine-pro" class="r d3" r />
@@ -127,14 +133,12 @@ main { padding-top: var(--hdr) }
             </div>
           </li>
           <li class="constat-item r d2">
-            <span class="constat-num" data-i18n="arti-no1">N°1</span>
             <div class="constat-text">
-              <strong data-i18n="arti-7">Les clients Google "plombier [ville]" et appellent le premier résultat</strong>
+              <strong data-i18n="arti-7">Le client tape « plombier » et le nom de sa ville, puis appelle l'un des premiers noms qui sortent</strong>
               <p data-i18n="arti-8">Ils ne font pas le tour des avis PagesJaunes. Ils tapent, ils cliquent, ils appellent. Si ce n'est pas vous qui apparaissez, c'est votre concurrent qui décroche.</p>
             </div>
           </li>
           <li class="constat-item r d3">
-            <span class="constat-num">−</span>
             <div class="constat-text">
               <strong data-i18n="arti-9">Sans galerie de réalisations, impossible de convaincre à distance</strong>
               <p data-i18n="arti-10">Un client veut voir avant de vous faire confiance. Sans photos de vos chantiers, il hésite, compare, et finit par choisir quelqu'un qui montre son travail — même s'il est moins bon que vous.</p>
@@ -153,37 +157,22 @@ main { padding-top: var(--hdr) }
       <p class="s-sub r d1" data-i18n="arti-12">Cinq livrables pour transformer votre réputation locale en chantiers réguliers.</p>
       <div class="cards">
         <div class="card r d1">
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-          </div>
           <h3 class="card-title" data-i18n="arti-13">Galerie réalisations avant / après</h3>
           <p class="card-desc" data-i18n="arti-14">Vos photos de chantiers présentées de façon professionnelle. Le client voit la qualité de votre travail avant de vous appeler.</p>
         </div>
         <div class="card r d2">
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-          </div>
           <h3 class="card-title" data-i18n="arti-15">Formulaire de demande de devis en ligne</h3>
           <p class="card-desc" data-i18n="arti-16">Le client décrit son projet directement depuis le site. Vous recevez sa demande par e-mail, prête à traiter.</p>
         </div>
         <div class="card r d3">
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          </div>
           <h3 class="card-title" data-i18n="arti-17">Zones d'intervention clairement affichées</h3>
           <p class="card-desc" data-i18n="arti-18">Villes et communes où vous intervenez listées sur le site. Moins d'appels hors zone, plus de prospects qualifiés.</p>
         </div>
         <div class="card r d1">
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          </div>
           <h3 class="card-title" data-i18n="arti-19">Avis clients intégrés</h3>
           <p class="card-desc" data-i18n="arti-20">Vos meilleurs avis Google affichés sur le site. La preuve sociale qui rassure le prospect hésitant.</p>
         </div>
         <div class="card r d2">
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          </div>
           <h3 class="card-title" data-i18n="arti-21">SEO local "artisan [ville] [métier]"</h3>
           <p class="card-desc" data-i18n="arti-22">Optimisé pour ressortir quand un habitant cherche votre corps de métier dans votre zone — sans payer de publicité.</p>
         </div>
@@ -211,9 +200,11 @@ main { padding-top: var(--hdr) }
 
   <!-- 6. FAQ -->
   <section class="s sec-seam">
-    <div class="wrap">
-      <h2 class="s-title r" data-i18n="arti-26">Questions fréquentes</h2>
-      <p class="s-sub r d1" data-i18n="arti-27">Les vrais freins des artisans avant de se lancer — avec des réponses directes.</p>
+    <div class="wrap faq-sec">
+      <div class="faq-intro">
+        <h2 class="s-title r" data-i18n="arti-26">Questions fréquentes</h2>
+        <p class="s-sub r d1" data-i18n="arti-27">Les vrais freins des artisans avant de se lancer — avec des réponses directes.</p>
+      </div>
       <div class="faq-list">
         <div class="faq-item r d1">
           <p class="faq-q" data-i18n="arti-28">Je n'ai pas de photos de chantiers. Comment faire ?</p>

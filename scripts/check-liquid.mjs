@@ -47,8 +47,6 @@ const SEUIL = 3;
 /* Où le site peint du texte dans un dégradé. */
 const CIBLES = [
   ['/devis', '.dv-title .liquid', '« 48 heures »'],
-  ['/',      '.proc-step:nth-child(1) .liquid', 'méthode « 01 »'],
-  ['/',      '.proc-step:nth-child(4) .liquid', 'méthode « 04 »'],
 ];
 
 const lum = (r, g, b) => {

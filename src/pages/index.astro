@@ -2,7 +2,7 @@
 import InteractiveButton from '../components/ui/InteractiveButton.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
-import Logo from '../components/Logo.astro';
+import Footer from '../components/Footer.astro';
 import GarantieBadge from '../components/GarantieBadge.astro';
 import Simulateur from '../components/graphes/Simulateur.astro';
 import Mesure from '../components/graphes/Mesure.astro';
@@ -41,51 +41,27 @@ const FONDATEURS = [
            src: `/img/gen/${f.photo}-${tailles[0].w}.jpg` };
 });
 ---
-<BaseLayout title="Nexa Web — Agence Web Premium · Carvin" description="Nexa Web conçoit des sites internet sur-mesure pour commerçants et artisans. Refonte dès 490 €, livraison en 2 à 4 semaines. Carvin, Hauts-de-France.">
+<BaseLayout title="Nexa Web — Agence web à Carvin" description="Nexa Web conçoit des sites internet sur-mesure pour commerçants et artisans. Refonte dès 490 €, livraison en 2 à 4 semaines. Carvin, Hauts-de-France.">
 <style>
 
-/* ── HERO ── */
-.s-hero{min-height:100svh;display:flex;flex-direction:column;padding-top:var(--hdr)}
-.s-hero>.wrap{width:100%}
-.hero-main{flex:1;display:flex;flex-direction:column;justify-content:center;padding:clamp(40px,8vh,100px) 0}
-.hero-eye{display:flex;align-items:center;gap:12px;margin-bottom:clamp(24px,4vh,48px);opacity:0;transform:translateY(14px);animation:fu .6s cubic-bezier(.16,1,.3,1) .2s forwards}
-.hero-dot{width:6px;height:6px;border-radius:50%;background:var(--text-muted)}
-.h-xl em{font-style:italic;font-weight:600;color:var(--text-muted)}
-.hero-hl{margin-bottom:clamp(24px,4vh,52px);overflow:hidden;width:100%;text-wrap:wrap;overflow-wrap:anywhere}
-.hero-hl .ln{display:block;overflow:hidden}
-/* LE TITRE SUR TÉLÉPHONE. Bluu Next est plus large que la police
-   système qu'il remplace : à 40 px sur 390, le titre tombait en cinq
-   lignes, avec « artisans » puis « des » seuls sur la leur. Sous 520 px
-   la taille suit donc la largeur utile — calée pour que la plus longue
-   ligne insécable, « des Hauts-de-France. », tienne d'un seul tenant
-   (9,6 cadratins mesurés) — et chaque ligne s'équilibre. Mesuré de 320
-   à 480 px : quatre lignes partout, aucun mot seul. */
+/* ── HERO ──
+   À la hauteur de son contenu, plus à celle de l'écran : sans décor
+   derrière, un premier écran de 100 svh n'était qu'un titre perdu dans
+   le noir. La liste des prestations commence juste en dessous. */
+.s-hero{padding:calc(var(--hdr) + clamp(48px,11vh,128px)) 0 clamp(24px,4vh,48px)}
+.hero-hl{margin-bottom:clamp(20px,3.4vh,40px);width:100%;text-wrap:wrap;overflow-wrap:anywhere}
+.hero-hl .ln{display:block}
+/* LE TITRE SUR TÉLÉPHONE. Sous 520 px la taille suit la largeur utile,
+   calée pour que « des Hauts-de-France. » tienne d'un seul tenant
+   (9,6 cadratins mesurés), et chaque ligne s'équilibre. */
 @media (max-width:520px){
   .hero-hl{font-size:min(40px,calc((100vw - 2 * var(--pad-x)) / 9.6))}
   .hero-hl .li{text-wrap:balance}
 }
-.hero-hl .li{display:block;transform:translateY(110%);animation:su .85s cubic-bezier(.16,1,.3,1) forwards}
-.hero-hl .ln:nth-child(1) .li{animation-delay:.4s}
-.hero-hl .ln:nth-child(2) .li{animation-delay:.56s}
-.hero-hl .ln:nth-child(3) .li{animation-delay:.72s}
-.hero-sub{margin-bottom:clamp(28px,5vh,52px);opacity:0;animation:fu .6s cubic-bezier(.16,1,.3,1) .95s forwards}
-.hero-ctas{display:flex;flex-wrap:wrap;gap:12px;opacity:0;animation:fu .6s cubic-bezier(.16,1,.3,1) 1.1s forwards}
-.hero-foot{display:flex;align-items:center;gap:12px;padding:22px 0;border-top:1px solid var(--border);opacity:0;animation:fu .5s cubic-bezier(.16,1,.3,1) 1.3s forwards}
-.hero-line{width:40px;height:1px;background:var(--border-strong)}
-.hero-cols{display:flex;align-items:center;gap:clamp(24px,5vw,80px)}
-.hero-cols .hero-main{flex:0 0 auto;min-width:0}
-@media(max-width:900px){.hero-cols{flex-direction:column}}
-@keyframes su{to{transform:translateY(0)}}
-@keyframes fu{to{opacity:1;transform:translateY(0)}}
-@media(prefers-reduced-motion:reduce){.hero-eye,.hero-hl .li,.hero-sub,.hero-ctas,.hero-foot{animation:none!important;opacity:1!important;transform:none!important}}
-
-/* ── PHILOSOPHY ── */
-.s-phil{}
-.phil-in{display:grid;grid-template-columns:1fr 2fr;gap:clamp(32px,6vw,120px);align-items:start}
-.s-phil{min-height:62vh}
-.phil-txt{font-size:clamp(1.5rem,3.5vw,3.4rem);font-weight:600;line-height:1.15;letter-spacing:-.009em}
-.phil-txt span{color:var(--text-muted)}
-@media(max-width:700px){.phil-in{grid-template-columns:1fr;gap:22px}.pin-label{position:static}.s-phil{min-height:0}}
+.hero-hl .li{display:block}
+.hero-sub{margin-bottom:clamp(24px,4vh,40px)}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:12px}
+.hero-main{min-width:0}
 
 /* ── SERVICES ── */
 .s-svc{}
@@ -98,66 +74,30 @@ const FONDATEURS = [
    ═══════════════════════════════════════════════════════════════════ */
 .svc-list{display:flex;flex-direction:column}
 .svc-row{
-  display:grid;grid-template-columns:52px 1fr auto;align-items:center;gap:20px;
-  padding:clamp(18px,2.6vw,28px) clamp(10px,2vw,20px);
-  position:relative;cursor:pointer;color:inherit;border-radius:0;background:transparent;
-  border-top:1px solid var(--border);
+  display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;gap:8px 24px;
+  padding:clamp(18px,2.6vw,26px) clamp(10px,2vw,20px);
+  color:inherit;background:transparent;border-top:1px solid var(--border);
   transition:background-color var(--dur-short) var(--ease-out);
 }
 .svc-list .svc-row:last-child{border-bottom:1px solid var(--border)}
-.svc-row>*{position:relative;z-index:1}
-.svc-n{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-subtle);
-  font-variant-numeric:tabular-nums;transition:color var(--dur-short) var(--ease-out)}
-.svc-name{font-size:clamp(1.05rem,2.4vw,1.6rem);font-weight:600;letter-spacing:-.009em;
-  transition:transform var(--dur-short) var(--ease-out)}
-.svc-meta{display:flex;align-items:center;gap:16px;color:var(--text-muted)}
-/* Petites capitales espacees : une etiquette, pas un titre. */
-.svc-tag{font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--text-subtle);white-space:nowrap}
-.svc-arr{font-size:1.1rem;color:var(--text-subtle);
-  transition:transform var(--dur-short) var(--ease-out),color var(--dur-short) var(--ease-out)}
-
+.svc-name{font-size:clamp(1.05rem,2.4vw,1.6rem);font-weight:600;letter-spacing:-.009em}
+/* Le prix de départ et le délai, lus dans formules.ts : ce qu'un
+   visiteur cherche sur une liste de prestations. */
+.svc-meta{display:flex;align-items:baseline;gap:18px;color:var(--text-muted);font-size:15px;
+  white-space:nowrap}
+.svc-prix{color:var(--text);font-weight:600}
 @media (hover:hover){
   .svc-row:hover{background:var(--surface)}
-  .svc-row:hover .svc-n,.svc-row:hover .svc-arr{color:var(--accent-text)}
-  .svc-row:hover .svc-name{transform:translateX(8px)}
-  .svc-row:hover .svc-arr{transform:translateX(6px)}
+  .svc-row:hover .svc-name{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.18em}
 }
 .svc-row:focus-visible{background:var(--surface)}
-.svc-row:focus-visible .svc-n,.svc-row:focus-visible .svc-arr{color:var(--accent-text)}
-
-/* Le courant qui traverse la ligne au survol. */
-.svc-row::before{
-  content:'';position:absolute;inset:0;border-radius:0;pointer-events:none;opacity:0;z-index:0;
-  background:linear-gradient(90deg,
-    rgb(from var(--accent) r g b / 0),
-    rgb(from var(--accent) r g b / .17) 48%,
-    rgb(from var(--accent) r g b / 0));
-  background-size:42% 100%;background-repeat:no-repeat;background-position:-46% 0;
-  transition:opacity 220ms var(--ease-out);
+@media(max-width:600px){
+  .svc-row{grid-template-columns:1fr}
+  .svc-meta{white-space:normal;flex-wrap:wrap;gap:4px 14px}
 }
-@media (prefers-reduced-motion:no-preference) and (hover:hover){
-  .svc-row:hover::before{opacity:1;animation:flowRun 1.25s linear infinite}
-  @keyframes flowRun{to{background-position:146% 0}}
-}
-
-/* La tete de lecture : le trait d'or qui marque la ligne au centre de
-   l'ecran. A top:-1px — donc JAMAIS d'overflow:hidden sur .svc-row,
-   il la couperait. */
-.svc-row::after{
-  content:'';position:absolute;left:0;top:-1px;height:1px;width:100%;z-index:2;pointer-events:none;
-  background:linear-gradient(90deg,var(--accent),rgb(from var(--accent) r g b / 0));
-  transform-origin:left;transform:scaleX(0);
-}
-@supports (animation-timeline: view()){
-  .svc-row::after{animation:playhead linear both;animation-timeline:view();
-    animation-range:cover 34% cover 66%}
-  @keyframes playhead{0%{transform:scaleX(0)}50%{transform:scaleX(1)}100%{transform:scaleX(0)}}
-}
-@media (prefers-reduced-motion:reduce){
-  .svc-row::after{animation:none!important;transform:scaleX(0)}
-}
-@media(max-width:600px){.svc-tag{display:none}}
+/* L'en-tête de section : à droite au bureau, sous le titre au téléphone. */
+.svc-hdr-d{max-width:320px;text-align:right}
+@media(max-width:700px){.svc-hdr-d{text-align:left;max-width:none}}
 
 /* ═══════════════════════════════════════════════════════════════════
    NOTRE METHODE — une sequence epinglee, pas une grille de cartes.
@@ -224,21 +164,7 @@ const FONDATEURS = [
 @media (hover:hover) and (pointer:fine){.dos-lien:hover{color:var(--accent-text);text-decoration-color:currentColor}}
 .dos-lien:focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:var(--radius-tag)}
 
-/* 02 — la direction de ce site : les jetons eux-mêmes, peints. Le
-   filet de 1 px rend visible la pastille du fond sur le panneau. */
-.dos-nuancier{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--sp-3);
-  margin:0 0 var(--sp-6);padding:0;list-style:none}
-.dos-nuancier li{display:flex;flex-direction:column;gap:var(--sp-2);font-size:14px;color:var(--text)}
-.dos-pastille{display:block;height:clamp(72px,7vw,104px);border-radius:var(--radius-block);
-  box-shadow:inset 0 0 0 1px var(--border-strong)}
-.dos-p-fond{background:var(--bg)}
-.dos-p-or{background:var(--accent)}
-.dos-p-texte{background:var(--text)}
-.dos-fonte{margin:0;padding:var(--sp-4) 0;border-top:1px solid var(--border);color:var(--text)}
-.dos-f-texte{border-bottom:1px solid var(--border)}
-.dos-f-titre{font-family:var(--font-display);font-weight:var(--w-display);font-synthesis:none;
-  font-size:clamp(24px,2.6vw,34px);line-height:1.15;letter-spacing:var(--ls-sub)}
-.dos-f-texte{font-family:var(--font);font-weight:var(--w-reg);font-size:clamp(18px,1.6vw,21px);line-height:1.35}
+
 
 /* 04 — les délais, en semaines. Même dessin que le graphique de la
    mesure (étape 03) : libellé, barre, valeur au bout. La part « jusqu'à
@@ -250,7 +176,7 @@ const FONDATEURS = [
 .dos-piste{flex:none;display:flex;gap:2px;width:calc((100% - 8.5rem) * var(--l) / 100)}
 .dos-barre{height:14px;flex:var(--f) 1 0;min-width:2px;background:var(--accent);border-radius:0 4px 4px 0}
 .dos-barre-min{border-radius:0}
-.dos-barre-max{background:var(--gold-low)}
+.dos-barre-max{background:repeating-linear-gradient(135deg,var(--accent) 0 2px,transparent 2px 5px);box-shadow:inset 0 0 0 1px var(--accent)}
 .dos-val{font-size:14px;line-height:1;color:var(--text);white-space:nowrap}
 
 /* ── LA SÉQUENCE ÉPINGLÉE ─────────────────────────────────────────────
@@ -279,44 +205,47 @@ const FONDATEURS = [
      panneau : la colonne de gauche tient la même hauteur que lui. */
   .procticks{display:flex;grid-area:2 / 1;align-self:end;margin-top:var(--sp-6)}
 
-  .proc-step:nth-of-type(1),.dossier:nth-of-type(1){animation-range:contain 0% contain 26%}
-  .proc-step:nth-of-type(2),.dossier:nth-of-type(2){animation-range:contain 25% contain 51%}
-  .proc-step:nth-of-type(3),.dossier:nth-of-type(3){animation-range:contain 50% contain 76%}
+  .proc-step:nth-of-type(1),.dossier:nth-of-type(1){animation-range:contain 0% contain 25%}
+  .proc-step:nth-of-type(2),.dossier:nth-of-type(2){animation-range:contain 25% contain 50%}
+  .proc-step:nth-of-type(3),.dossier:nth-of-type(3){animation-range:contain 50% contain 75%}
   .proc-step:nth-of-type(4),.dossier:nth-of-type(4){animation-range:contain 75% contain 100%}
   .proc-step:nth-of-type(1){animation-name:stepFirst}
   .proc-step:nth-of-type(4){animation-name:stepLast}
   .dossier:nth-of-type(1){animation-name:dosFirst}
   .dossier:nth-of-type(4){animation-name:dosLast}
 
+  /* Bout à bout, sans fondu croisé : une étape finit de s'effacer
+     exactement où la suivante commence à paraître. Avant, les plages se
+     recouvraient d'un point et les deux textes se superposaient. */
   @keyframes stepIn{
-    0%{opacity:0;transform:translate3d(0,30px,-80px) rotateX(8deg)}
-    18%{opacity:1;transform:none}
-    80%{opacity:1;transform:none}
-    100%{opacity:0;transform:translate3d(0,-24px,-60px) rotateX(-6deg)}}
+    0%{opacity:0;transform:translateY(24px)}
+    15%{opacity:1;transform:none}
+    85%{opacity:1;transform:none}
+    100%{opacity:0;transform:translateY(-18px)}}
   @keyframes stepFirst{
-    0%,80%{opacity:1;transform:none}
-    100%{opacity:0;transform:translate3d(0,-24px,-60px) rotateX(-6deg)}}
+    0%,85%{opacity:1;transform:none}
+    100%{opacity:0;transform:translateY(-18px)}}
   @keyframes stepLast{
-    0%{opacity:0;transform:translate3d(0,30px,-80px) rotateX(8deg)}
-    18%,100%{opacity:1;transform:none}}
+    0%{opacity:0;transform:translateY(24px)}
+    15%,100%{opacity:1;transform:none}}
   /* visibility suit l'opacité : un dossier éteint ne prend ni le focus,
      ni le pointeur, et les lecteurs d'écran ne lisent que celui qu'on voit. */
   @keyframes dosIn{
-    0%{opacity:0;visibility:hidden;transform:translateY(20px)}
-    18%{opacity:1;visibility:visible;transform:none}
-    80%{opacity:1;visibility:visible;transform:none}
-    100%{opacity:0;visibility:hidden;transform:translateY(-16px)}}
+    0%{opacity:0;visibility:hidden;transform:translateY(16px)}
+    15%{opacity:1;visibility:visible;transform:none}
+    85%{opacity:1;visibility:visible;transform:none}
+    100%{opacity:0;visibility:hidden;transform:translateY(-12px)}}
   @keyframes dosFirst{
-    0%,80%{opacity:1;visibility:visible;transform:none}
-    100%{opacity:0;visibility:hidden;transform:translateY(-16px)}}
+    0%,85%{opacity:1;visibility:visible;transform:none}
+    100%{opacity:0;visibility:hidden;transform:translateY(-12px)}}
   @keyframes dosLast{
-    0%{opacity:0;visibility:hidden;transform:translateY(20px)}
-    18%,100%{opacity:1;visibility:visible;transform:none}}
+    0%{opacity:0;visibility:hidden;transform:translateY(16px)}
+    15%,100%{opacity:1;visibility:visible;transform:none}}
 
   .procticks i::after{animation:lineDraw linear both;animation-timeline:--proc}
-  .procticks i:nth-child(1)::after{animation-range:contain 0% contain 26%}
-  .procticks i:nth-child(2)::after{animation-range:contain 25% contain 51%}
-  .procticks i:nth-child(3)::after{animation-range:contain 50% contain 76%}
+  .procticks i:nth-child(1)::after{animation-range:contain 0% contain 25%}
+  .procticks i:nth-child(2)::after{animation-range:contain 25% contain 50%}
+  .procticks i:nth-child(3)::after{animation-range:contain 50% contain 75%}
   .procticks i:nth-child(4)::after{animation-range:contain 75% contain 100%}
   @keyframes lineDraw{to{transform:scaleX(1)}}
 }
@@ -338,7 +267,7 @@ const FONDATEURS = [
 .why-in .h-lg{font-size:clamp(var(--fs-500),3.6vw,var(--fs-700))}
 .why-bio{display:flex;flex-direction:column;gap:18px;padding:4px 0}
 .why-bio-lead{font-size:clamp(1.35rem,2.4vw,1.9rem);font-weight:600;line-height:1.18;letter-spacing:-.010em;color:var(--text)}
-.why-bio-body{font-size:13px;font-weight:300;line-height:1.72;color:var(--text-muted)}
+.why-bio-body{font-size:15px;font-weight:var(--w-reg);line-height:1.7;color:var(--text-muted)}
 /* Sans « align-self:flex-start », ce bouton s'etire sur toute la largeur
    de sa colonne : mesure, 510 px pour un parent de 510 px. La regle
    vivait dans l'ancien .why-bio-cta, emporte avec le CSS des boutons. */
@@ -428,7 +357,6 @@ const FONDATEURS = [
 .s-who{}
 .who-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:clamp(36px,6vh,72px)}
 .who-card{background:var(--surface);border-radius:var(--radius-block);padding:clamp(28px,4vw,48px);display:flex;flex-direction:column;gap:16px}
-.who-marker{font-size:var(--fs-caption);font-weight:500;letter-spacing:0;color:var(--text-subtle);margin-bottom:6px;font-variant-numeric:tabular-nums}
 .who-target{font-size:clamp(1.1rem,2.2vw,1.7rem);font-weight:600;letter-spacing:-.009em;line-height:1.12}
 .who-desc{font-size:13px;font-weight:300;line-height:1.72;color:var(--text-muted);flex:1}
 .who-price{font-size:clamp(1.7rem,3.2vw,2.6rem);font-weight:600;letter-spacing:-.014em;line-height:1;font-variant-numeric:tabular-nums}
@@ -448,16 +376,12 @@ const FONDATEURS = [
 <main id="main-content" tabindex="-1">
 
 <!-- HERO -->
-<section class="s-hero has-glow" id="accueil" aria-label="Accueil" data-i18n-aria="a11y-accueil">
-  <div class="wrap hero-cols">
+<section class="s-hero" id="accueil" aria-label="Accueil" data-i18n-aria="a11y-accueil">
+  <div class="wrap">
     <div class="hero-main">
-      <div class="hero-eye" aria-hidden="true">
-        <div class="hero-dot"></div>
-        <span class="label" data-i18n="idx-eye">Agence web · Carvin</span>
-      </div>
       <h1 class="h-xl hero-hl">
         <span class="ln"><span class="li" data-i18n="idx-hl1">Des sites pour les</span></span>
-        <span class="ln"><span class="li" data-i18n="idx-hl2"><em>commerçants</em> et artisans</span></span>
+        <span class="ln"><span class="li" data-i18n="idx-hl2">commerçants et artisans</span></span>
         <span class="ln"><span class="li" data-i18n="idx-hl3">des <span class="nb">Hauts-de-France.</span></span></span>
       </h1>
       <p class="body hero-sub" style="max-width:480px" data-i18n="idx-sub">
@@ -469,24 +393,6 @@ const FONDATEURS = [
       </div>
     </div>
   </div>
-  <div class="wrap">
-    <div class="hero-foot" aria-hidden="true">
-      <div class="hero-line"></div>
-      <span class="label label-mute" data-i18n="idx-scroll">Défiler pour découvrir</span>
-    </div>
-  </div>
-</section>
-
-<!-- PHILOSOPHY -->
-<section class="s-phil sec-seam" style="padding:var(--sec) 0" id="apropos" aria-labelledby="phil-h">
-  <div class="wrap">
-    <div class="phil-in">
-      <div class="r pin-label"><span class="label" id="phil-h" data-i18n="idx-phil-lbl">Notre vision</span></div>
-      <p class="phil-txt" data-i18n="idx-phil-txt">
-        Votre site n'est pas simplement une vitrine. C'est le <span>premier contact</span> entre votre marque et votre futur client. Chaque détail compte. Chaque pixel est une décision.
-      </p>
-    </div>
-  </div>
 </section>
 
 <!-- SERVICES -->
@@ -494,42 +400,36 @@ const FONDATEURS = [
   <div class="wrap">
     <div class="svc-hdr r">
       <div>
-        <span class="label" id="svc-h" data-i18n="idx-svc-lbl">Ce que nous créons</span>
-        <h2 class="h-lg" style="margin-top:14px" data-i18n="idx-svc-h">Nos services.</h2>
+        <h2 class="h-lg" id="svc-h" data-i18n="idx-svc-h">Nos services.</h2>
       </div>
-      <div style="max-width:300px;text-align:right">
-        <p class="body" data-i18n="idx-svc-sub">Chaque prestation est pensée pour maximiser l'impact de votre présence en ligne.</p>
+      <div class="svc-hdr-d">
+        <p class="body" data-i18n="idx-svc-sub">Cinq prestations, chacune avec sa page : ce qui est compris, le prix et le délai.</p>
         {/* Les cinq lignes ci-dessous gardent chacune leur page : les
             faire toutes mener à /services ferait cinq liens vers le
             même endroit. C'est la section qui y mène. */}
-        <InteractiveButton text="Voir notre méthode" href="/services" class="svc-tout" data-i18n="idx-svc-tout" />
+        <InteractiveButton text="Voir les services" href="/services" class="svc-tout" data-i18n="idx-svc-tout" />
       </div>
     </div>
     <div class="svc-list">
       <a href="/site-vitrine" class="svc-row r">
-        <span class="svc-n" aria-hidden="true">01</span>
         <span class="svc-name" data-i18n="idx-svc1">Site vitrine</span>
-        <div class="svc-meta"><span class="svc-tag" data-i18n="idx-tag1">Essentiel</span><span class="svc-arr" aria-hidden="true">→</span></div>
+        <span class="svc-meta"><span class="svc-prix"><span data-i18n-prix>{VITRINE_PRIX}</span></span><span class="svc-delai"><span data-i18n="idx-svc-d24">2 à 4 semaines</span></span></span>
       </a>
       <a href="/ecommerce" class="svc-row r d1">
-        <span class="svc-n" aria-hidden="true">02</span>
         <span class="svc-name" data-i18n="idx-svc2">Site e-commerce</span>
-        <div class="svc-meta"><span class="svc-tag" data-i18n="idx-tag2">Conversion</span><span class="svc-arr" aria-hidden="true">→</span></div>
+        <span class="svc-meta"><span class="svc-prix"><span data-i18n="idx-svc-des">dès</span> <span data-i18n-prix>{prix(ENTREPRISE.prixDepart)}</span></span><span class="svc-delai"><span data-i18n="idx-svc-d24">2 à 4 semaines</span></span></span>
       </a>
       <a href="/refonte" class="svc-row r d2">
-        <span class="svc-n" aria-hidden="true">03</span>
         <span class="svc-name" data-i18n="idx-svc3">Refonte de site</span>
-        <div class="svc-meta"><span class="svc-tag" data-i18n="idx-tag3">Modernisation</span><span class="svc-arr" aria-hidden="true">→</span></div>
+        <span class="svc-meta"><span class="svc-prix"><span data-i18n="idx-svc-des">dès</span> <span data-i18n-prix>{REFONTE_PRIX}</span></span><span class="svc-delai"><span>{REFONTE.delaiSemaines}</span> <span data-i18n="idx-svc-sem">semaines</span></span></span>
       </a>
       <a href="/design-uiux" class="svc-row r d3">
-        <span class="svc-n" aria-hidden="true">04</span>
         <span class="svc-name" data-i18n="idx-svc4">Design UI/UX</span>
-        <div class="svc-meta"><span class="svc-tag" data-i18n="idx-tag4">Expérience</span><span class="svc-arr" aria-hidden="true">→</span></div>
+        <span class="svc-meta"><span class="svc-prix"><span data-i18n="idx-svc-devis">sur devis</span></span></span>
       </a>
       <a href="/seo" class="svc-row r d4">
-        <span class="svc-n" aria-hidden="true">05</span>
         <span class="svc-name" data-i18n="idx-svc5">Optimisation SEO &amp; Performance</span>
-        <div class="svc-meta"><span class="svc-tag" data-i18n="idx-tag5">Visibilité</span><span class="svc-arr" aria-hidden="true">→</span></div>
+        <span class="svc-meta"><span class="svc-prix"><span data-i18n="idx-svc-devis">sur devis</span></span></span>
       </a>
     </div>
   </div>
@@ -540,14 +440,12 @@ const FONDATEURS = [
   <div class="wrap">
     <div class="svc-hdr r">
       <div>
-        <span class="label" id="who-h" data-i18n="who-lbl">Fait pour vous</span>
-        <h2 class="h-lg" style="margin-top:14px" data-i18n="who-h">Une formule pour<br>chaque profil.</h2>
+        <h2 class="h-lg" id="who-h" data-i18n="who-h">Une formule pour<br>chaque profil.</h2>
       </div>
-      <p class="body" style="max-width:300px;text-align:right" data-i18n="who-sub">Un site à rafraîchir, une activité locale, une entreprise qui grandit — chaque besoin a sa formule.</p>
+      <p class="body svc-hdr-d" data-i18n="who-sub">Un site à rafraîchir, une activité locale, une entreprise qui grandit — chaque besoin a sa formule.</p>
     </div>
     <div class="who-grid">
       <div class="who-card r">
-        <div class="who-marker">01</div>
         <h3 class="who-target" data-i18n="who-t1">Site à rafraîchir</h3>
         <p class="who-desc" data-i18n="who-d1">Votre site existe mais il a vieilli : design daté, lent sur mobile, difficile à mettre à jour. On le reprend de zéro en gardant vos contenus et votre référencement.</p>
         <div>
@@ -557,13 +455,12 @@ const FONDATEURS = [
         <InteractiveButton text="Voir la formule" href="/tarifs" data-i18n="who-cta1" style="align-self:flex-start;margin-top:8px" />
       </div>
       <div class="who-card r d1">
-        <div class="who-marker">02</div>
         <h3 class="who-target" data-i18n="who-t2">Commerçant &amp; artisan local</h3>
         <p class="who-desc" data-i18n="who-d2">Vous avez une activité locale — restaurant, boutique, artisan — mais aucune présence en ligne convaincante. On vous donne un site qui attire et qui rassure.</p>
         <div>
-          <!-- Le montant vient des donnees, le prefixe de la traduction :
-               « a partir de 999 € » devient « from €999 » en anglais. -->
-          <div class="who-price"><span data-i18n="who-prix2-pre">à partir de</span> <span data-i18n-prix>{VITRINE_PRIX}</span></div>
+          <!-- Le montant vient des données : la Vitrine Pro est à prix fixe
+               (formules.ts), sans « à partir de ». -->
+          <div class="who-price"><span data-i18n-prix>{VITRINE_PRIX}</span></div>
           <p class="who-price-sub" data-i18n="who-prix2-sub">Offre de lancement · places limitées · SEO local inclus</p>
         </div>
         <InteractiveButton text="Voir les formules" href="/tarifs" data-i18n="who-cta2" style="align-self:flex-start;margin-top:8px" />
@@ -579,8 +476,7 @@ const FONDATEURS = [
 <section class="s-proc sec-seam" style="padding:var(--sec) 0 0" aria-labelledby="proc-h">
   <div class="wrap">
     <div class="proc-hdr r">
-      <span class="label" id="proc-h" data-i18n="idx-proc-lbl">De l'idée au site en ligne</span>
-      <h2 class="h-lg" style="margin-top:14px" data-i18n="idx-proc-h">Notre méthode.</h2>
+      <h2 class="h-lg" id="proc-h" data-i18n="idx-proc-h">Notre méthode.</h2>
     </div>
   </div>
 </section>
@@ -588,9 +484,9 @@ const FONDATEURS = [
   <div class="procpin">
     <div class="wrap" style="width:100%">
       <div class="procstack">
-        <div class="proc-step"><span class="k liquid">01</span>
+        <div class="proc-step"><span class="k">01</span>
           <h3 class="proc-title" data-i18n="idx-proc-t1">Découverte</h3>
-          <p class="proc-desc" data-i18n="idx-proc-d1">Nous apprenons à connaître votre activité, vos objectifs et votre audience pour concevoir une stratégie digitale sur mesure.</p></div>
+          <p class="proc-desc" data-i18n="idx-proc-d1">Un appel pour comprendre votre activité, vos clients, et ce qu'ils doivent trouver sur votre site.</p></div>
         {/* Dossier 01 — les intitulés du formulaire de devis
             (src/pages/devis.astro), avec les clés qu'il utilise. */}
         <article class="dossier" aria-labelledby="dos1-t">
@@ -609,25 +505,24 @@ const FONDATEURS = [
           <p class="dos-pied"><a class="dos-lien" href="/devis" data-i18n="idx-dos1-lien">Ouvrir le formulaire de devis</a></p>
         </article>
 
-        <div class="proc-step"><span class="k liquid">02</span>
+        <div class="proc-step"><span class="k">02</span>
           <h3 class="proc-title" data-i18n="idx-proc-t2">Direction artistique</h3>
           <p class="proc-desc" data-i18n="idx-proc-d2">Création d'une identité visuelle cohérente, des maquettes aux prototypes interactifs, validés à chaque étape.</p></div>
-        {/* Dossier 02 — la direction de CE site : les jetons de
-            tokens.css peints tels quels (ils suivent le thème), et les
-            deux polices de DESIGN.md, chacune écrite dans elle-même. */}
+        {/* Dossier 02 — ce que le client reçoit à cette étape : la maquette et
+            la garantie, telles qu'écrites dans les CGV (cgv-p2, cgv-p3) et
+            sur /tarifs (gar-p1, gar-p2). */}
         <article class="dossier" aria-labelledby="dos2-t">
-          <h4 class="dos-t" id="dos2-t" data-i18n="idx-dos2-t">La direction de ce site</h4>
-          <ul class="dos-nuancier">
-            <li><span class="dos-pastille dos-p-fond" aria-hidden="true"></span><span data-i18n="idx-dos2-c1">Fond</span></li>
-            <li><span class="dos-pastille dos-p-or" aria-hidden="true"></span><span data-i18n="idx-dos2-c2">Or</span></li>
-            <li><span class="dos-pastille dos-p-texte" aria-hidden="true"></span><span data-i18n="idx-dos2-c3">Texte</span></li>
+          <h4 class="dos-t" id="dos2-t" data-i18n="idx-dos2-t">Ce que vous recevez</h4>
+          <ul class="dos-liste">
+            <li data-i18n="idx-dos2-l1">La maquette de votre site, à valider avant le développement</li>
+            <li data-i18n="idx-dos2-l2">14 jours pour la valider, à partir de sa présentation</li>
+            <li data-i18n="idx-dos2-l3">2 séries de retouches comprises dans le prix</li>
+            <li data-i18n="idx-dos2-l4">Si elle ne vous convient toujours pas, l'acompte vous est remboursé</li>
           </ul>
-          <p class="dos-fonte dos-f-titre" data-i18n="idx-dos2-f1">Bluu Next pour les titres</p>
-          <p class="dos-fonte dos-f-texte" data-i18n="idx-dos2-f2">Schibsted Grotesk pour le texte</p>
-          <p class="dos-pied" data-i18n="idx-dos2-pied">Une seule couleur d'accent et deux polices, sur tout le site.</p>
+          <p class="dos-pied"><a href="/cgv" data-i18n="idx-dos2-pied">Les conditions de la garantie</a></p>
         </article>
 
-        <div class="proc-step"><span class="k liquid">03</span>
+        <div class="proc-step"><span class="k">03</span>
           <h3 class="proc-title" data-i18n="idx-proc-t3">Développement</h3>
           <p class="proc-desc" data-i18n="idx-proc-d3">Code propre, performant et maintenable. Optimisé pour la vitesse, le référencement et tous les appareils.</p></div>
         {/* Dossier 03 — la mesure de cette page (src/data/mesures.ts). */}
@@ -635,7 +530,7 @@ const FONDATEURS = [
           <Mesure {...MESURE_ACCUEIL} compact />
         </article>
 
-        <div class="proc-step"><span class="k liquid">04</span>
+        <div class="proc-step"><span class="k">04</span>
           <h3 class="proc-title" data-i18n="idx-proc-t4">Mise en ligne</h3>
           <p class="proc-desc" data-i18n="idx-proc-d4">Déploiement soigné, tests complets et formation à la gestion de votre site. Nous restons disponibles après le lancement.</p></div>
         {/* Dossier 04 — délais : formules.ts et /site-vitrine ; ce qui
@@ -666,7 +561,7 @@ const FONDATEURS = [
             <li data-i18n="idx-dos4-l3">Formation à la gestion de votre site</li>
             <li data-i18n="idx-dos4-l4">1 mois de support inclus avec la Vitrine Pro</li>
           </ul>
-          <p class="dos-pied" data-i18n="idx-dos4-depart">Délais comptés à partir de la validation du brief.</p>
+          <p class="dos-pied" data-i18n="idx-dos4-depart">Délais comptés à partir de la validation du brief. La partie hachurée dépend du nombre de retours sur la maquette.</p>
         </article>
 
         <div class="procticks" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
@@ -676,13 +571,11 @@ const FONDATEURS = [
 </div>
 
 <!-- WHY -->
-<section class="s-why sec-seam has-texture" style="padding:var(--sec) 0" id="apropos2" aria-labelledby="why-h">
-  <div class="sec-texture" data-texture="1" data-parallax aria-hidden="true"></div>
+<section class="s-why sec-seam" style="padding:var(--sec) 0" id="apropos" aria-labelledby="why-h">
   <div class="wrap">
     <div class="why-in">
       <div>
-        <span class="label r" id="why-h" data-i18n="idx-why-lbl">Pourquoi Nexa Web</span>
-        <h2 class="h-lg" style="margin-top:14px" data-i18n="idx-why-h">La différence qui<br>fait la différence.</h2>
+        <h2 class="h-lg" id="why-h" data-i18n="idx-why-h">Les deux personnes<br>qui feront votre site.</h2>
         <p class="body r d2" style="margin-top:22px;max-width:380px" data-i18n="idx-why-sub">Nous ne faisons pas dans la quantité. Chaque projet reçoit une attention totale, de la stratégie à la mise en ligne.</p>
         <div class="fond r d3">
           <ul class="fond-liste">
@@ -705,7 +598,7 @@ const FONDATEURS = [
       </div>
       <div class="why-bio r d1">
         <p class="why-bio-lead" data-i18n="idx-why-lead">Une agence jeune, des ambitions sérieuses.</p>
-        <p class="why-bio-body" data-i18n="idx-why-b1">Nexa Web est née de la conviction de deux passionnés du web que les petites entreprises méritent des sites aussi soignés que ceux des grandes marques — sans les prix prohibitifs.</p>
+        <p class="why-bio-body" data-i18n="idx-why-b1">Nexa Web, ce sont ses deux fondateurs, Imad et Ahmed, partis d'une idée simple : une petite entreprise mérite un site aussi soigné que celui d'une grande marque, à un prix qu'elle peut payer.</p>
         <p class="why-bio-body" data-i18n="idx-why-b2">Nous démarrons notre aventure sans catalogue de réalisations. Pas parce que nous manquons de compétences, mais parce que nous avons choisi de ne pas gonfler un portfolio avec des projets fictifs. Ce que nous offrons à la place, c'est une implication totale : chaque ligne de code, chaque détail de design, pensés uniquement pour vous.</p>
         <p class="why-bio-body" data-i18n="idx-why-b3">Nos premiers clients bénéficient d'une attention rare — celle qu'une agence qui n'a pas encore cent projets en parallèle peut vraiment offrir.</p>
         <!-- La promesse qui rassure le plus se tient à côté de l'appel
@@ -731,8 +624,7 @@ const FONDATEURS = [
   <div class="wrap">
     <div class="faq-in">
       <div>
-        <span class="label r" id="faq-h" data-i18n="idx-faq-lbl">Questions fréquentes</span>
-        <h2 class="h-md" style="margin-top:14px" data-i18n="idx-faq-h">On répond à vos questions.</h2>
+        <h2 class="h-md" id="faq-h" data-i18n="idx-faq-h">On répond à vos questions.</h2>
         <p class="body faq-side r d2" style="margin-top:18px;font-size:13px" data-i18n="idx-faq-sub">Une question absente de cette liste ? Contactez-nous directement.</p>
         <InteractiveButton text="Nous contacter" href="/contact" class="r d3" style="margin-top:28px;display:inline-flex" data-i18n="idx-faq-contact" r />
       </div>
@@ -787,12 +679,10 @@ const FONDATEURS = [
 </section>
 
 <!-- FINAL CTA -->
-<section class="s-cta sec-seam has-texture" id="contact" aria-labelledby="cta-h">
-  <div class="sec-texture" data-texture="2" data-parallax aria-hidden="true"></div>
+<section class="s-cta sec-seam" id="contact" aria-labelledby="cta-h">
   <div class="wrap">
     <div class="cta-in">
-      <div class="cta-super r" data-i18n="idx-cta-super">Passons à l'action</div>
-      <h2 class="cta-hl" id="cta-h" data-i18n="idx-cta-h">Votre prochain<br>site commence <em>ici.</em></h2>
+      <h2 class="cta-hl" id="cta-h" data-i18n="idx-cta-h">Votre prochain site commence ici.</h2>
       <div class="r d2">
         <InteractiveButton text="Démarrer un projet" href="/devis" variant="gold" data-i18n="idx-cta-btn" />
       </div>
@@ -803,84 +693,16 @@ const FONDATEURS = [
 </main>
 
 <!-- FOOTER -->
-<footer class="s-foot sec-seam" aria-label="Pied de page" data-i18n-aria="a11y-pied">
-  <div class="wrap">
-    <div class="foot-in">
-      <div>
-        {/* Le logo du pied de page ramène à l'accueil : c'est la
-            convention, et c'est le dernier endroit où on la cherche. */}
-        <a href="/" class="foot-marque" aria-label="NEXAWEB — Accueil" data-i18n-aria="a11y-logo">
-          <Logo largeur={40} trait={2.2} texte={true} tailleNom={16} tailleSous={8} />
-        </a>
-        <p class="foot-tag" data-i18n="ftr-tag">Agence web premium · Carvin, Hauts-de-France</p>
-        <div class="foot-socials" aria-label="Réseaux sociaux" data-i18n-aria="a11y-sociaux">
-          <a href="https://www.linkedin.com/in/ahmed-chteoui-049211429/" class="foot-soc plq linkedin" aria-label="LinkedIn" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-          </a>
-          <a href="https://www.facebook.com/people/Nexaweb/61593685250868/" class="foot-soc plq facebook" aria-label="Facebook" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-          </a>
-          <a href="https://wa.me/33641467898" class="foot-soc plq whatsapp" aria-label="WhatsApp" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          </a>
-        </div>
-      </div>
-      <div>
-        <div class="foot-col-title" data-i18n="ftr-nav">Navigation</div>
-        <nav aria-label="Liens de navigation" data-i18n-aria="a11y-liens-nav">
-          <ul class="foot-links">
-            <li><a href="/#accueil"  class="foot-lnk" data-i18n="ftr-home">Accueil</a></li>
-            <li><a href="/services" class="foot-lnk" data-i18n="ftr-services">Services</a></li>
-            <li><a href="/#faq"      class="foot-lnk" data-i18n="ftr-faq">FAQ</a></li>
-          </ul>
-        </nav>
-      </div>
-      <div>
-        <div class="foot-col-title" data-i18n="ftr-team-h">L'équipe</div>
-        <p class="foot-tag" style="margin-bottom:14px" data-i18n="ftr-team-tag">Deux passionnés du digital derrière chaque projet Nexa Web.</p>
-        <InteractiveButton text="Découvrir l'équipe" href="/equipe" class="foot-team-lnk" data-i18n="ftr-team-lnk" />
-      </div>
-    </div>
-    <div class="foot-bot">
-      <span class="foot-copy" data-i18n="ftr-copy">© 2026 Nexa Web. Tous droits réservés.</span>
-      <nav class="foot-legal" aria-label="Liens légaux" data-i18n-aria="a11y-liens-legaux">
-        <a href="/mentions-legales" data-i18n="ftr-mentions">Mentions légales</a>
-        <a href="/politique-confidentialite" data-i18n="ftr-confid">Confidentialité</a>
-      </nav>
-    </div>
-  </div>
-</footer>
+<Footer />
 
 
 
 <script is:inline>
 (function(){
   'use strict';
-  var PRM=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
-  var IS_MOBILE=window.matchMedia('(max-width:768px)').matches;
 
-  /* Les reveals et la parallaxe sont gérés par /motion.js (un seul rAF).
-     Ne reste ici que le fondu du hero, propre à cette page. */
-  if(!PRM && !IS_MOBILE){
-    var heroMain=document.querySelector('.hero-main');
-    var heroFoot=document.querySelector('.hero-foot');
-    var heroSec=document.getElementById('accueil');
-    var heroSecH=heroSec?heroSec.offsetHeight:800;
-    window.addEventListener('resize',function(){if(heroSec)heroSecH=heroSec.offsetHeight;},{passive:true});
-    var _rAF=null;
-    function applyFX(){
-      _rAF=null;
-      if(!heroMain||!heroSec)return;
-      var prog=Math.min(Math.max(window.scrollY/(heroSecH*.62),0),1);
-      heroMain.style.opacity=Math.max(0,1-prog*1.2).toFixed(3);
-      heroMain.style.transform='translateY('+(-50*prog).toFixed(1)+'px)';
-      if(heroFoot)heroFoot.style.opacity=Math.max(0,1-prog*2.5).toFixed(3);
-    }
-    window.addEventListener('scroll',function(){
-      if(!_rAF)_rAF=requestAnimationFrame(applyFX);
-    },{passive:true});
-    applyFX();
-  }
+  /* Le hero ne s'efface plus au défilement : il reste lisible tant qu'il
+     est à l'écran. Les révélations sont gérées par /motion.js. */
 
   /* ── FAQ : ouverture en douceur, une seule a la fois ──
      Plus aucune hauteur mesuree : c'est .panel{grid-template-rows}

@@ -17,18 +17,19 @@
  * `audits["total-byte-weight"].numericValue` (octets) / 1024, et de `audits["cumulative-layout-shift"]`.
  * Mettre à jour `date` le jour de la mesure.
  *
- * Dernière mesure : 30/10/2026, après l'ajout du simulateur et des graphiques (529,0 Ko, CLS 0,
- * identiques sur les 3 passes). Avant ces ajouts : 458,4 Ko.
+ * Dernière mesure : 02/11/2026, après le retrait du décor animé (rivière WebGL, grain, scripts
+ * d'effets) : 434,3 Ko, CLS 0, identiques sur les 3 passes. Avant : 529,0 Ko (30/10/2026, avec le
+ * simulateur et les graphiques) et 458,4 Ko (29/10/2026, sans eux).
  */
 export const MESURE_ACCUEIL = {
   /** Poids total de la page d'accueil sur mobile, en Ko (1 Ko = 1 024 octets), non compressé. */
-  poidsKo: 529.0,
+  poidsKo: 434.3,
   /** false : octets comptés sans compression (voir plus haut). */
   compresse: false,
   /** Décalage cumulé de mise en page (CLS) de l'accueil, médiane des 3 passes. */
   cls: 0,
   /** Jour de la mesure, AAAA-MM-JJ (le composant l'écrit dans la langue de la page). */
-  date: '2026-10-30',
+  date: '2026-11-02',
   /** Outil et version (le composant ajoute lui-même « mobile simulé »). */
   outil: 'Lighthouse 12.8.2',
 } as const;

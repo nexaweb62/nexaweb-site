@@ -34,6 +34,7 @@
   --raw-black-850: #1A1A1D;
   --raw-black-800: #26262A;
   --raw-black-700: #3A3A40;
+  --raw-black-600: #67676D;   /* barres neutres des graphiques : 3,3:1 sur le fond sombre */
   --raw-black-600: #6A6A73;
   --raw-black-ink: #141416;
 
@@ -56,6 +57,7 @@
   --raw-paper-100: #F1EDE5;
   --raw-sand-200:  #E3DDD0;
   --raw-sand-300:  #CFC7B5;
+  --raw-sand-500:  #8E887B;   /* barres neutres des graphiques : 3,3:1 sur le fond clair */
   --raw-sand-500:  #8F8670;
 
   /* Gris chauds — les textes du mode clair */
@@ -299,6 +301,7 @@
   --surface-2:     var(--raw-black-850);
   --border:        var(--raw-black-800);
   --border-strong: var(--raw-black-700);
+  --bar-neutre:   var(--raw-black-600);
   --field-border:  var(--raw-black-600);
   --text:          var(--raw-warm-50);
   --text-muted:    var(--raw-warm-300);
@@ -413,6 +416,7 @@ demandées existaient déjà comme jetons bruts. */
     --surface-2:     var(--raw-paper-100);
     --border:        var(--raw-sand-200);
     --border-strong: var(--raw-sand-300);
+    --bar-neutre:   var(--raw-sand-500);
     --field-border:  var(--raw-sand-500);
     --text:          var(--raw-black-ink);
     --text-muted:    var(--raw-stone-600);
@@ -518,6 +522,7 @@ demandées existaient déjà comme jetons bruts. */
   --surface-2:     var(--raw-paper-100);
   --border:        var(--raw-sand-200);
   --border-strong: var(--raw-sand-300);
+  --bar-neutre:   var(--raw-sand-500);
   --field-border:  var(--raw-sand-500);
   --text:          var(--raw-black-ink);
   --text-muted:    var(--raw-stone-600);
@@ -628,6 +633,7 @@ demandées existaient déjà comme jetons bruts. */
   --surface-2:     var(--raw-black-850);
   --border:        var(--raw-black-800);
   --border-strong: var(--raw-black-700);
+  --bar-neutre:   var(--raw-black-600);
   --field-border:  var(--raw-black-600);
   --text:          var(--raw-warm-50);
   --text-muted:    var(--raw-warm-300);

@@ -31,7 +31,6 @@ const canonicalUrl = siteOrigin + Astro.url.pathname;
 // pratique que la première.
 const ogImageUrl = siteOrigin + '/og-image.png';
 const ogImageLightUrl = siteOrigin + '/og-image-light.png';
-import River from '../components/River.astro';
 import Cookies from '../components/Cookies.astro';
 import Intro from '../components/Intro.astro';
 ---
@@ -179,9 +178,12 @@ import Intro from '../components/Intro.astro';
   <script src="/i18n.js" defer></script>
   <!-- Système de mouvement (reveals, parallaxe, compteurs, barre de lecture) -->
   <script src="/motion.js" defer></script>
-  <!-- Le mouvement au scroll : ruban, lumière de passage, lecture mot à mot -->
-  <script src="/scroll-fx.js" defer></script>
-  <!-- Titres mot a mot, boutons, curseur, rideau de transition -->
+  {/* public/scroll-fx.js n'est plus chargé : il posait les calques de
+      lumière dans les cartes, allumait les paragraphes mot à mot,
+      inclinait la page à la vitesse du défilement et faisait défiler les
+      prix. Rien de tout cela n'aidait à lire, et c'est ce qui donnait au
+      site l'allure d'un gabarit. */}
+  <!-- Le mode léger automatique (le reste de la finition a été retiré) -->
   <script src="/finition.js" defer></script>
   {/* public/metal.js n'est plus charge : il peignait le chrome liquide des
       anciens boutons par WebGL. Les boutons sont des plaques peintes en
@@ -191,23 +193,10 @@ import Intro from '../components/Intro.astro';
   <a class="skip-link" href="#main-content" data-i18n="a11y-skip">Aller au contenu</a>
   {/* L'intro : une fois par visite, sur la premiere page ouverte. */}
   <Intro />
-  <River />
-  <div class="grain" aria-hidden="true" role="presentation"></div>
-  <div class="lamp" aria-hidden="true" role="presentation"></div>
-  <!-- Le rideau de transition. Il n'existe que si le JS tourne : sans
-       lui, la navigation reste une navigation, simplement sans rideau. -->
-  <div class="curtain" aria-hidden="true" role="presentation" hidden>
-    <span class="sheen"></span><span class="edgeline"></span>
-    <span class="cw">NEXA<i>WEB</i></span>
-  </div>
-  <!-- Le fond vivant : ce que le verre des boutons réfracte. Décoratif,
-       retiré de l'arbre d'accessibilité, sous tout le contenu. -->
-  <div class="ambience" aria-hidden="true" role="presentation">
-    <div class="amb-depth"></div>
-    <div class="amb-weave"></div>
-    <div class="amb-streak"></div>
-    <div class="amb-streak-2"></div>
-  </div>
+  {/* La rivière d'or (WebGL), le grain, la lampe qui suivait la souris,
+      le rideau de transition et le fond « vivant » ont été retirés : du
+      décor qui tournait en boucle derrière le texte, sans rien dire du
+      métier de nos clients. La page se lit sur son fond, c'est tout. */}
   <div class="read-bar" aria-hidden="true"></div>
 
   <!-- Cookies et traceurs. AVANT le contenu, et c'est délibéré : son

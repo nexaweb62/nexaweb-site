@@ -9,7 +9,7 @@
 
      1. aucune erreur JavaScript en console ;
      2. aucun débordement horizontal ;
-     3. l'opacité de la rivière : 1 sur l'accueil, 0 partout ailleurs ;
+     3. la rivière d'or (retirée) n'existe plus nulle part ;
      4. aucun élément ENTIÈREMENT visible dans l'écran sous 0,55
         d'opacité — c'est le piège d'un système d'animation au scroll :
         un texte que rien ne déclenche reste à zéro et personne ne le
@@ -213,8 +213,8 @@ for (const theme of ['dark', 'light']) {
       const tag = `[${theme} ${vp.width}] ${path}`;
       for (const e of errs) fails.push(`${tag}  ${e}`);
       if (res.over !== 0) fails.push(`${tag}  débordement horizontal : ${res.over}px`);
-      const attendu = path === '/' ? '1' : '0';
-      if (res.river !== attendu) fails.push(`${tag}  rivière : opacité ${res.river}, attendu ${attendu}`);
+      /* La rivière d'or a été retirée du site : elle ne doit plus exister. */
+      if (res.river !== 'absent') fails.push(`${tag}  rivière : encore présente (opacité ${res.river}), elle a été retirée`);
       for (const e of [...new Set(res.plafond || [])]) {
         fails.push(`${tag}  ${e} passe devant le curseur (z=${res.zRing})`);
       }

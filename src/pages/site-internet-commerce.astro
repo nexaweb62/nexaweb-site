@@ -13,7 +13,6 @@ main { padding-top: var(--hdr) }
 
 /* Hero */
 .hero { padding: clamp(80px,14vh,160px) 0 clamp(60px,10vh,120px); text-align: center; position: relative; overflow: hidden; }
-.hero-tag { font-size:var(--fs-caption); font-weight:600; letter-spacing:0; color:var(--accent-text); margin-bottom:20px; display:inline-block; }
 .hero-title { font-size:clamp(2.2rem,5vw,4.5rem); font-weight:600; letter-spacing:-.014em; line-height:1; text-wrap:balance; margin-bottom:24px; }
 .hero-sub { font-size:clamp(.95rem,1.6vw,1.1rem); color:var(--text-muted); line-height:1.7; max-width:560px; margin:0 auto 40px; }
 
@@ -50,7 +49,7 @@ main { padding-top: var(--hdr) }
    ne reste vide : une colonne au téléphone ; deux de 600 à 899 px, la
    dernière carte seule prenant toute la ligne ; trois au-delà, sur une
    trame de six, la dernière rangée incomplète s'élargissant (5 = 3 + 2). */
-.cards { display:grid; grid-template-columns:minmax(0,1fr); gap:1px; background:var(--border); margin-top:clamp(32px,5vw,60px); }
+.cards { display:grid; grid-template-columns:minmax(0,1fr); gap:0 clamp(24px,3vw,40px); margin-top:clamp(32px,5vw,60px); border-bottom:1px solid var(--border); }
 @media (min-width:600px) and (max-width:899.98px) {
   .cards { grid-template-columns:repeat(2,minmax(0,1fr)); }
   .card:nth-child(odd):last-child { grid-column:1 / -1; }
@@ -62,9 +61,7 @@ main { padding-top: var(--hdr) }
   .card:nth-child(3n+1):nth-last-child(2) ~ .card { grid-column:span 3; }
   .card:nth-child(3n+1):last-child { grid-column:1 / -1; }
 }
-.card { background:var(--bg); padding:32px 28px; }
-.card-icon { width:36px; height:36px; background:var(--accent-glow); border-radius:var(--radius-block); display:flex; align-items:center; justify-content:center; margin-bottom:20px; }
-.card-icon svg { width:18px; height:18px; stroke:var(--accent); stroke-width:1.8; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+.card { padding:28px 0 32px; border-top:1px solid var(--border); }
 .card-title { font-size:1rem; font-weight:600; margin-bottom:8px; }
 .card-desc { font-size:.875rem; color:var(--text-muted); line-height:1.65; }
 
@@ -79,6 +76,14 @@ main { padding-top: var(--hdr) }
 
 /* FAQ */
 .faq-list { display:flex; flex-direction:column; gap:0; max-width:760px; }
+/* La FAQ sur deux colonnes au bureau : le titre à gauche, les réponses à
+   droite, comme sur l'accueil. Sur une colonne, la moitié droite de
+   l'écran restait vide. */
+@media (min-width:1024px){
+  .faq-sec { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.7fr); column-gap:clamp(48px,6vw,96px); align-items:start; }
+  .faq-intro { position:sticky; top:calc(var(--hdr) + var(--sp-5)); }
+  .faq-sec .faq-list { max-width:none; }
+}
 .faq-item { border-top:1px solid var(--border); padding:24px 0; }
 .faq-item:last-child { border-bottom:1px solid var(--border); }
 .faq-q { font-size:1rem; font-weight:600; margin-bottom:10px; }
@@ -97,6 +102,8 @@ main { padding-top: var(--hdr) }
 @media(max-width:599.98px) {
   .card { padding:28px 0; }
 }
+/* Au téléphone, le retour forcé du titre laissait un mot seul en fin de ligne. */
+@media (max-width:600px){ .hero-title br { display:none; } }
 </style>
 
 <Header backBtn={true} />
@@ -105,7 +112,6 @@ main { padding-top: var(--hdr) }
   <!-- 2. Hero -->
   <section class="hero">
     <div class="wrap">
-      <span class="hero-tag r" data-i18n="comm-1">Commerces de proximité</span>
       <h1 class="hero-title r d1" data-i18n="comm-h1">Vos clients commandent sur Amazon<br>parce qu'ils ignorent que vous existez en ligne.</h1>
       <p class="hero-sub r d2" data-i18n="comm-2">Avant de passer la porte, beaucoup de clients vérifient en ligne vos horaires et ce que vous vendez. Sans présence web, vous perdez des ventes sans même le savoir.</p>
       <InteractiveButton text="Créer mon site commerce" data-i18n="comm-b1" href="/devis?plan=vitrine-pro" class="r d3" r />
@@ -127,14 +133,12 @@ main { padding-top: var(--hdr) }
             </div>
           </li>
           <li class="constat-item r d2">
-            <span class="constat-num">−</span>
             <div class="constat-text">
               <strong data-i18n="comm-7">Pas de site = pas d'horaires clairs = clients qui se déplacent pour rien</strong>
               <p data-i18n="comm-8">Un client qui se déplace et trouve porte close ne reviendra pas. Il trouve votre concurrent en deux clics — et commande depuis son canapé.</p>
             </div>
           </li>
           <li class="constat-item r d3">
-            <span class="constat-num">vs</span>
             <div class="constat-text">
               <strong data-i18n="comm-9">Les grandes enseignes vous volent des clients locaux grâce au web</strong>
               <p data-i18n="comm-10">Amazon, Cdiscount, les chaînes nationales — ils ont des équipes entières pour exister en ligne. Un bon site local bien référencé peut renverser la tendance sur votre ville.</p>
@@ -153,37 +157,22 @@ main { padding-top: var(--hdr) }
       <p class="s-sub r d1" data-i18n="comm-12">Cinq livrables pensés pour un commerce de quartier — pas un template générique.</p>
       <div class="cards">
         <div class="card r d1">
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg>
-          </div>
           <h3 class="card-title" data-i18n="comm-13">Catalogue produits ou services visible</h3>
           <p class="card-desc" data-i18n="comm-14">Vos produits phares ou vos prestations mis en valeur, avec descriptions et photos. Le client sait ce que vous vendez avant de passer.</p>
         </div>
         <div class="card r d2">
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          </div>
           <h3 class="card-title" data-i18n="comm-15">Horaires et plan d'accès toujours à jour</h3>
           <p class="card-desc" data-i18n="comm-16">Plus de déplacements inutiles. Vos horaires, votre adresse et un plan Google Maps directement sur le site.</p>
         </div>
         <div class="card r d3">
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          </div>
           <h3 class="card-title" data-i18n="comm-17">Formulaire de contact et de commande</h3>
           <p class="card-desc" data-i18n="comm-18">Les clients vous contactent ou passent commande directement depuis le site, sans intermédiaire.</p>
         </div>
         <div class="card r d1">
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          </div>
           <h3 class="card-title" data-i18n="comm-19">Page "Nouveautés" pour fidéliser</h3>
           <p class="card-desc" data-i18n="comm-20">Partagez vos arrivages, vos promos et vos actualités. Vos clients reviennent voir ce qui change.</p>
         </div>
         <div class="card r d2">
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          </div>
           <h3 class="card-title" data-i18n="comm-21">SEO local "boutique [votre ville]"</h3>
           <p class="card-desc" data-i18n="comm-22">Optimisé pour apparaître quand un habitant cherche ce que vous vendez près de chez lui — sans payer de publicité.</p>
         </div>
@@ -211,9 +200,11 @@ main { padding-top: var(--hdr) }
 
   <!-- 6. FAQ -->
   <section class="s sec-seam">
-    <div class="wrap">
-      <h2 class="s-title r" data-i18n="comm-26">Questions fréquentes</h2>
-      <p class="s-sub r d1" data-i18n="comm-27">Ce que demandent les commerçants avant de se décider.</p>
+    <div class="wrap faq-sec">
+      <div class="faq-intro">
+        <h2 class="s-title r" data-i18n="comm-26">Questions fréquentes</h2>
+        <p class="s-sub r d1" data-i18n="comm-27">Ce que demandent les commerçants avant de se décider.</p>
+      </div>
       <div class="faq-list">
         <div class="faq-item r d1">
           <p class="faq-q" data-i18n="comm-28">Puis-je ajouter des produits moi-même ?</p>
@@ -229,7 +220,7 @@ main { padding-top: var(--hdr) }
         </div>
         <div class="faq-item r d1">
           <p class="faq-q" data-i18n="comm-34">Mon budget est limité. Est-ce vraiment pour moi ?</p>
-          <p class="faq-a" data-i18n="comm-35">Un site professionnel bien référencé travaille pour vous 24h/24, sans frais publicitaires récurrents. C'est un investissement ponctuel qui génère des clients sur la durée — consultez notre page tarifs pour voir si ça correspond à votre situation.</p>
+          <p class="faq-a" data-i18n="comm-35">Un site professionnel bien référencé reste visible jour et nuit, sans frais publicitaires récurrents. C'est un investissement ponctuel : consultez notre page tarifs pour voir s'il correspond à votre situation.</p>
         </div>
       </div>
     </div>

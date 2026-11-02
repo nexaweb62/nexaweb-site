@@ -7,29 +7,28 @@ import GarantieBadge from '../components/GarantieBadge.astro';
 import { REFONTE, VITRINE, ENTREPRISE, prix } from '../data/formules';
 import '../styles/global.css';
 
-/* Les trois temps de la méthode. Le dessin de chacun vit plus bas, en
-   SVG : trois traits animés lentement, pas une illustration. */
+/* Les trois temps de la méthode : un nom, une phrase, trois actions. */
 const ETAPES = [
-  { n: '01', cle: 'sv-m1', nom: 'CONCEPTION', fin: 'DESIGN', gras: 'SUR MESURE',
+  { n: '01', cle: 'sv-m1', nom: 'Conception',
     phrase: 'Une identité, pas un template.',
     lignes: [
-      { t: 'DÉCOUVRIR', d: 'Votre métier, vos clients, ce qui vous distingue.' },
-      { t: 'DESSINER',  d: 'Une maquette complète, pensée pour votre activité.' },
-      { t: 'VALIDER',   d: '14 jours, 2 séries de retouches, satisfait ou remboursé.' },
+      { t: 'Découvrir', d: 'Votre métier, vos clients, ce qui vous distingue.' },
+      { t: 'Dessiner',  d: 'Une maquette complète, pensée pour votre activité.' },
+      { t: 'Valider',   d: '14 jours, 2 séries de retouches, satisfait ou remboursé.' },
     ] },
-  { n: '02', cle: 'sv-m2', nom: 'DÉVELOPPEMENT', fin: 'CODE', gras: 'RAPIDE',
+  { n: '02', cle: 'sv-m2', nom: 'Développement',
     phrase: 'Rapide sur mobile. Simple à gérer.',
     lignes: [
-      { t: 'CONSTRUIRE', d: 'Un site écrit à la main, sans surcouche inutile.' },
-      { t: 'OPTIMISER',  d: 'Images, polices, scripts : chaque kilo-octet compte.' },
-      { t: 'TESTER',     d: 'Sur téléphone, tablette et ordinateur, avant la mise en ligne.' },
+      { t: 'Construire', d: 'Un site écrit à la main, sans surcouche inutile.' },
+      { t: 'Optimiser',  d: 'Images, polices, scripts : chaque kilo-octet compte.' },
+      { t: 'Tester',     d: 'Sur téléphone, tablette et ordinateur, avant la mise en ligne.' },
     ] },
-  { n: '03', cle: 'sv-m3', nom: 'VISIBILITÉ', fin: 'SEO', gras: 'LOCAL',
+  { n: '03', cle: 'sv-m3', nom: 'Visibilité',
     phrase: 'Trouvé là où vos clients cherchent.',
     lignes: [
-      { t: 'RÉFÉRENCER', d: 'Structure, balises et fiche locale soignées dès le départ.' },
-      { t: 'MESURER',    d: 'Ce que les visiteurs cherchent, et ce qu’ils trouvent.' },
-      { t: 'AMÉLIORER',  d: 'Des ajustements réguliers plutôt qu’une refonte de plus.' },
+      { t: 'Référencer', d: 'Structure, balises et fiche locale soignées dès le départ.' },
+      { t: 'Mesurer',    d: 'Ce que les visiteurs cherchent, et ce qu’ils trouvent.' },
+      { t: 'Améliorer',  d: 'Des ajustements réguliers plutôt qu’une refonte de plus.' },
     ] },
 ];
 
@@ -72,38 +71,15 @@ const PRESTATIONS = [
 
 /* ── HERO ── */
 .sv-hero{padding:clamp(56px,10vh,120px) 0 clamp(40px,6vh,80px)}
-.sv-sur{
-  display:flex;align-items:center;gap:16px;margin:0 0 22px;
-  font-family:var(--font);
-  font-size:13px;font-weight:500;letter-spacing:.01em;
-  color:var(--accent-text);
-}
-.sv-sur::after{content:"";flex:0 0 130px;height:1px;
-  background:linear-gradient(90deg,var(--accent),rgb(from var(--accent) r g b / 0))}
 .sv-titre{
   font-size:clamp(46px,9vw,104px);line-height:.92;letter-spacing:-.014em;
   margin:0 0 clamp(24px,4vh,40px);
 }
 .sv-titre span{display:block}
-.sv-l1{font-weight:200}
-.sv-l2{font-weight:800}
-/* Les deux lignes arrivent en contour, puis se remplissent. L'état de
-   départ est posé par JavaScript (.sv-trace) : sans JavaScript le titre
-   est plein dès le premier rendu, et reste lisible pour un robot. */
-.sv-trace{
-  -webkit-text-stroke:1px var(--text);color:transparent;
-  transition:color 1.2s ease,-webkit-text-stroke-color 1.2s ease;
-}
-.sv-trace.sv-plein{color:var(--text);-webkit-text-stroke-color:transparent}
 .sv-intro{font-size:clamp(15px,1.5vw,18px);line-height:1.7;color:var(--text-muted);max-width:52ch;margin:0}
 
 /* ── SECTIONS ── */
 .sv-sec{padding:clamp(48px,8vh,104px) 0}
-.sv-sec-tag{
-  font-family:var(--font);
-  font-size:13px;letter-spacing:.01em;
-  color:var(--text-subtle);margin:0 0 10px;font-weight:500;}
-.sv-sec-tag b{color:var(--accent-text);font-weight:500}
 .sv-sec-h{font-size:clamp(24px,3.6vw,38px);font-weight:var(--w-semi);
   letter-spacing:-.009em;line-height:1.12;margin:0 0 clamp(28px,4vh,48px)}
 
@@ -128,70 +104,19 @@ const PRESTATIONS = [
 .sv-carte.sv-avant .sv-carte-h{color:var(--text-muted)}
 
 /* ── 02 · LA MÉTHODE, CARTES EMPILÉES ── */
-.sv-raccourcis{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:clamp(24px,4vh,40px)}
 /* Les raccourcis sont des plaques (.plq dans le balisage) en petite
    coupe. Plus de capitales espacées en chasse fixe : c'était l'étiquette
    « technique » que portent tous les sites générés. Le texte du site,
    en casse normale, dit la même chose. */
-.sv-rac{
-  --cut:var(--cut-sm);--pl-fond:transparent;--pl-filet:var(--border-strong);
-  display:inline-flex;align-items:center;gap:8px;min-height:36px;
-  padding:0 15px;
-  font:500 14px/1.2 var(--font);letter-spacing:.005em;
-  color:var(--text-muted);cursor:pointer;
-}
-@media (hover:hover) and (pointer:fine){ .sv-rac:hover{color:var(--text)} }
-.sv-rac:focus-visible{outline:3px solid var(--accent-hover);outline-offset:3px}
 
-.sv-pile{display:flex;flex-direction:column;gap:clamp(20px,3vh,32px)}
-.sv-etape{
-  position:sticky;top:84px;
-  background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--radius-block);
-  overflow:hidden;
-  transition:transform .4s var(--ease-out),filter .4s var(--ease-out);
-}
-/* Quand la suivante monte dessus, la précédente recule. La classe est
-   posée au défilement : en CSS seul, rien ne sait qu'une carte est
-   recouverte. */
-.sv-etape.sv-recule{transform:scale(.95);filter:brightness(.55)}
-@media(max-width:760px){.sv-etape{top:70px}}
-
-.sv-barre{
-  display:flex;justify-content:space-between;align-items:center;gap:12px;
-  padding:12px clamp(18px,2.4vw,28px);border-bottom:1px solid var(--border);
-  font-family:var(--font);
-  font-size:13px;letter-spacing:.01em;color:var(--text-subtle);font-weight:500;}
-.sv-barre b{color:var(--accent-text);font-weight:500}
-.sv-corps{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(24px,4vw,56px);
-  padding:clamp(24px,3.4vw,42px)}
+.sv-pile{display:flex;flex-direction:column}
+.sv-etape{border-top:1px solid var(--border)}
+.sv-etape:last-child{border-bottom:1px solid var(--border)}
+.sv-corps{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:clamp(20px,4vw,56px);
+  padding:clamp(24px,3.4vw,40px) 0}
 @media(max-width:860px){.sv-corps{grid-template-columns:1fr}}
 .sv-et-h{font-size:clamp(26px,3.4vw,40px);line-height:1.05;letter-spacing:-.010em;margin:0 0 14px}
-.sv-et-h i{font-style:normal;font-weight:200;display:block}
-.sv-et-h b{font-weight:800;display:block}
-.sv-et-p{font-size:14px;line-height:1.7;color:var(--text-muted);margin:0 0 18px;max-width:38ch}
-.sv-et-tag{
-  display:inline-block;font-family:var(--font);
-  font-size:13px;letter-spacing:.01em;color:var(--accent-text);
-  border:1px solid rgb(from var(--accent) r g b / .4);border-radius:var(--radius-tag);
-  padding:5px 12px;margin-bottom:20px;font-weight:500;}
-/* Le dessin est injecté par set:html : ses éléments ne reçoivent PAS le
-   marqueur de portée d'Astro, qui scope la règle sur son dernier
-   sélecteur. Mesuré avant correction : stroke « none » et un SVG de
-   512 px au lieu de 280 — aucune des règles ne l'atteignait. Le
-   conteneur, lui, est écrit dans le gabarit : il garde sa portée, et
-   :global() ouvre la porte à ses enfants. */
-.sv-boite :global(svg){width:100%;max-width:280px;height:auto;overflow:visible}
-.sv-boite :global(path),.sv-boite :global(line),
-.sv-boite :global(circle),.sv-boite :global(rect){
-  fill:none;stroke:rgb(from var(--accent) r g b / .55);stroke-width:1;
-  stroke-linecap:round;stroke-linejoin:round;
-}
-@media (prefers-reduced-motion:no-preference){
-  .sv-boite :global(.anim){animation:svDerive 9s ease-in-out infinite alternate}
-  .sv-boite :global(.anim2){animation:svDerive2 11s ease-in-out infinite alternate}
-  @keyframes svDerive{to{transform:translateY(-6px)}}
-  @keyframes svDerive2{to{transform:translateX(7px)}}
-}
+.sv-et-n{color:var(--accent-text);font-variant-numeric:tabular-nums}
 .sv-droite{display:flex;flex-direction:column}
 .sv-phrase{font-size:clamp(17px,2vw,22px);font-weight:400;line-height:1.4;
   letter-spacing:-.015em;margin:0 0 22px}
@@ -295,8 +220,6 @@ const PRESTATIONS = [
 /* ── FIN ── */
 .sv-fin{padding:clamp(56px,10vh,128px) 0 clamp(64px,12vh,140px);text-align:center}
 .sv-fin-h{font-size:clamp(32px,6vw,70px);line-height:1.02;letter-spacing:-.012em;margin:0 0 clamp(28px,4vh,44px)}
-.sv-fin-h i{font-style:normal;font-weight:300;display:block;color:var(--text-muted)}
-.sv-fin-h b{font-weight:800;display:block}
 
 /* ── APPARITION AU DÉFILEMENT ──
    Posée en JavaScript, comme partout ailleurs : sans lui, rien n'est
@@ -306,9 +229,10 @@ const PRESTATIONS = [
 .sv-rv.sv-vu{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){
   .sv-rv,.sv-rv.sv-vu{opacity:1!important;transform:none!important;transition:none}
-  .sv-trace{-webkit-text-stroke:0;color:var(--text)}
-  .sv-etape{position:static;transform:none!important;filter:none!important}
 }
+/* En anglais, la virgule des milliers prend la chasse d'un chiffre en
+   chiffres tabulaires (« €1 , 200 ») : chiffres proportionnels. */
+:global(html[lang='en']) .sv-tab-val{font-variant-numeric:normal}
 </style>
 
 <Header backBtn={true} />
@@ -328,10 +252,9 @@ const PRESTATIONS = [
   <!-- HERO -->
   <section class="sv-hero">
     <div class="wrap">
-      <p class="sv-sur" data-i18n="sv-sur">Services · 05 · Création web</p>
       <h1 class="sv-titre">
-        <span class="sv-l1" data-i18n="sv-t1">Sites</span>
-        <span class="sv-l2" data-i18n="sv-t2">sur mesure.</span>
+        <span class="sv-l1" data-i18n="sv-t1">Créer, mettre en ligne,</span>
+        <span class="sv-l2" data-i18n="sv-t2">faire trouver.</span>
       </h1>
       <p class="sv-intro" data-i18n="sv-intro">On conçoit, on développe et on met en ligne des sites qui attirent des clients. Prix affiché, délai fixé dès le premier appel.</p>
     </div>
@@ -340,8 +263,7 @@ const PRESTATIONS = [
   <!-- 01 · LE CHANGEMENT -->
   <section class="sv-sec" id="sv-changement" aria-labelledby="sv-h1">
     <div class="wrap">
-      <p class="sv-sec-tag sv-rv"><b>01</b> / <span data-i18n="sv-s1-tag">Le changement</span></p>
-      <h2 class="sv-sec-h sv-rv" id="sv-h1" data-i18n="sv-s1-h">Avant vs Après</h2>
+      <h2 class="sv-sec-h sv-rv" id="sv-h1" data-i18n="sv-s1-h">Ce qui change avec un nouveau site</h2>
       <div class="sv-duo">
         <div class="sv-carte sv-avant sv-rv">
           <p class="sv-carte-lbl" data-i18n="sv-av-lbl">Aujourd'hui</p>
@@ -360,61 +282,14 @@ const PRESTATIONS = [
   <!-- 02 · LA MÉTHODE -->
   <section class="sv-sec" id="sv-methode" aria-labelledby="sv-h2">
     <div class="wrap">
-      <p class="sv-sec-tag sv-rv"><b>02</b> / <span data-i18n="sv-s2-tag">Notre méthode</span></p>
       <h2 class="sv-sec-h sv-rv" id="sv-h2" data-i18n="sv-s2-h">Du premier appel à la mise en ligne</h2>
-
-      <div class="sv-raccourcis sv-rv">
-        {ETAPES.map((e, i) => (
-          <button type="button" class="sv-rac plq" data-vers={`sv-et-${i}`}>
-            {e.n} <span data-i18n={e.cle + '-n'}>{e.nom}</span> ↓
-          </button>
-        ))}
-      </div>
 
       <div class="sv-pile">
         {ETAPES.map((e, i) => (
           <article class="sv-etape" id={`sv-et-${i}`} data-etape={i}>
-            <div class="sv-barre">
-              <span>{e.n} / <b data-i18n={e.cle + '-n'}>{e.nom}</b></span>
-              <span>{e.n} / 03</span>
-            </div>
             <div class="sv-corps">
               <div>
-                <h3 class="sv-et-h">
-                  <i data-i18n={e.cle + '-fin'}>{e.fin}</i>
-                  <b data-i18n={e.cle + '-gras'}>{e.gras}</b>
-                </h3>
-                <p class="sv-et-p" data-i18n={e.cle + '-p'}>{e.lignes[0].d}</p>
-                <span class="sv-et-tag" data-i18n={e.cle + '-tag'}>{e.nom}</span>
-                <div class="sv-boite" set:html={[
-                  /* 01 — une grille de lignes, trois branches vers des points. */
-                  `<svg class="sv-dessin" viewBox="0 0 280 150" aria-hidden="true">
-                     <g class="anim">
-                       ${Array.from({length:7},(_,k)=>`<line x1="${10+k*28}" y1="12" x2="${10+k*28}" y2="138"/>`).join('')}
-                       ${Array.from({length:5},(_,k)=>`<line x1="10" y1="${16+k*30}" x2="178" y2="${16+k*30}"/>`).join('')}
-                     </g>
-                     <g class="anim2">
-                       <path d="M178 76 C 214 76 216 30 258 30"/><circle cx="262" cy="30" r="3.5"/>
-                       <path d="M178 76 C 216 76 220 76 254 76"/><circle cx="258" cy="76" r="3.5"/>
-                       <path d="M178 76 C 214 76 216 122 258 122"/><circle cx="262" cy="122" r="3.5"/>
-                     </g>
-                   </svg>`,
-                  /* 02 — des barres qui varient entre deux bornes. */
-                  `<svg class="sv-dessin" viewBox="0 0 280 150" aria-hidden="true">
-                     <line x1="12" y1="10" x2="12" y2="140"/><line x1="268" y1="10" x2="268" y2="140"/>
-                     <g class="anim">
-                       ${[0,1,2,3,4,5,6].map(k=>{const w=[210,96,168,62,232,120,186][k];
-                         return `<line x1="12" y1="${22+k*18}" x2="${12+w}" y2="${22+k*18}"/>`;}).join('')}
-                     </g>
-                   </svg>`,
-                  /* 03 — un éventail de lignes qui converge. */
-                  `<svg class="sv-dessin" viewBox="0 0 280 150" aria-hidden="true">
-                     <g class="anim">
-                       ${Array.from({length:9},(_,k)=>`<path d="M8 ${10+k*16} C 120 ${10+k*16} 150 75 262 75"/>`).join('')}
-                     </g>
-                     <circle cx="266" cy="75" r="4"/>
-                   </svg>`,
-                ][i]} />
+                <h3 class="sv-et-h"><span class="sv-et-n">{e.n}</span> <span data-i18n={e.cle + '-n'}>{e.nom}</span></h3>
               </div>
               <div class="sv-droite">
                 <p class="sv-phrase" data-i18n={e.cle + '-phrase'}>{e.phrase}</p>
@@ -437,7 +312,6 @@ const PRESTATIONS = [
   <!-- PRESTATIONS -->
   <section class="sv-sec" id="sv-prestations" aria-labelledby="sv-h3">
     <div class="wrap">
-      <p class="sv-sec-tag sv-rv"><b>03</b> / <span data-i18n="sv-s3-tag">Prestations</span></p>
       <h2 class="sv-sec-h sv-rv" id="sv-h3" data-i18n="sv-s3-h">Ce que nous faisons</h2>
       <table class="sv-tab sv-rv" role="table" aria-labelledby="sv-h3">
         <caption class="sv-tab-cap" data-i18n="sv-tab-cap">Prix de départ des formules de la page Tarifs, délais écrits sur la page de chaque prestation. « Sur devis » : aucun chiffre n'est fixé d'avance.</caption>
@@ -474,7 +348,7 @@ const PRESTATIONS = [
       </table>
       <p class="sv-suite sv-rv">
         <span data-i18n="sv-suite">Étape suivante</span> —
-        <a href="/tarifs" data-i18n="sv-suite-l">Voir les tarifs ↗</a>
+        <a href="/tarifs" data-i18n="sv-suite-l">Voir les tarifs</a>
       </p>
       <div class="sv-rv" style="margin-top:clamp(22px,3vh,34px)"><GarantieBadge /></div>
     </div>
@@ -483,10 +357,7 @@ const PRESTATIONS = [
   <!-- FIN -->
   <section class="sv-fin">
     <div class="wrap">
-      <h2 class="sv-fin-h sv-rv">
-        <i data-i18n="sv-fin-1">Votre projet.</i>
-        <b data-i18n="sv-fin-2">On le construit.</b>
-      </h2>
+      <h2 class="sv-fin-h sv-rv" data-i18n="sv-fin-h">Parlons de votre site.</h2>
       <InteractiveButton text="Démarrer un projet" href="/devis" variant="gold" class="sv-rv" data-i18n="sv-fin-cta" />
     </div>
   </section>
@@ -497,21 +368,12 @@ const PRESTATIONS = [
 
 <script is:inline>
 /* ── LA PAGE SERVICES ─────────────────────────────────────────────────
-   Quatre mécanismes, et pas un de plus : le titre qui se remplit, les
-   blocs qui montent, les cartes empilées qui reculent, et le sommaire
-   qui suit la section en cours. */
+   Deux mécanismes : les blocs qui montent, et le sommaire qui suit la
+   section en cours. */
 (function(){
   'use strict';
   var doux = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
 
-  /* ── Le titre : contour, puis remplissage, ligne après ligne ── */
-  var lignes = [].slice.call(document.querySelectorAll('.sv-l1,.sv-l2'));
-  if(!doux && lignes.length){
-    lignes.forEach(function(l){ l.classList.add('sv-trace'); });
-    lignes.forEach(function(l, i){
-      setTimeout(function(){ l.classList.add('sv-plein'); }, 250 + i * 450);
-    });
-  }
 
   /* ── Les blocs montent quand ils entrent ── */
   var blocs = [].slice.call(document.querySelectorAll('.sv-rv'));
@@ -526,19 +388,6 @@ const PRESTATIONS = [
       });
     }, { threshold:0.2 });
     blocs.forEach(function(b){ io.observe(b); });
-  }
-
-  /* ── Les cartes empilées ──
-     Une carte recule dès que la suivante est montée par-dessus. On
-     compare les positions : en CSS seul, une carte collante ne sait pas
-     qu'une autre la recouvre. */
-  var etapes = [].slice.call(document.querySelectorAll('.sv-etape'));
-  function empiler(){
-    for(var i = 0; i < etapes.length - 1; i++){
-      var moi = etapes[i].getBoundingClientRect();
-      var suiv = etapes[i + 1].getBoundingClientRect();
-      etapes[i].classList.toggle('sv-recule', suiv.top <= moi.top + 24);
-    }
   }
 
   /* ── Le sommaire suit la section visible ── */
@@ -558,7 +407,7 @@ const PRESTATIONS = [
   function auScroll(){
     if(attente) return;
     attente = true;
-    requestAnimationFrame(function(){ attente = false; empiler(); sommaire(); });
+    requestAnimationFrame(function(){ attente = false; sommaire(); });
   }
   if(!doux) window.addEventListener('scroll', auScroll, { passive:true });
   window.addEventListener('resize', auScroll, { passive:true });
@@ -570,9 +419,6 @@ const PRESTATIONS = [
     if(!el) return;
     el.scrollIntoView({ behavior: doux ? 'auto' : 'smooth', block:'start' });
   }
-  document.querySelectorAll('.sv-rac').forEach(function(b){
-    b.addEventListener('click', function(){ versId(b.dataset.vers); });
-  });
   liens.forEach(function(a){
     a.addEventListener('click', function(e){
       e.preventDefault();

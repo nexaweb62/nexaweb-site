@@ -13,7 +13,6 @@ main { padding-top: var(--hdr) }
 
 /* Hero */
 .hero { padding: clamp(80px,14vh,160px) 0 clamp(60px,10vh,120px); text-align: center; position: relative; overflow: hidden; }
-.hero-tag { font-size:var(--fs-caption); font-weight:600; letter-spacing:0; color:var(--accent-text); margin-bottom:20px; display:inline-block; }
 .hero-title { font-size:clamp(2.2rem,5vw,4.5rem); font-weight:600; letter-spacing:-.014em; line-height:1; text-wrap:balance; margin-bottom:24px; }
 .hero-sub { font-size:clamp(.95rem,1.6vw,1.1rem); color:var(--text-muted); line-height:1.7; max-width:560px; margin:0 auto 40px; }
 
@@ -50,7 +49,7 @@ main { padding-top: var(--hdr) }
    ne reste vide : une colonne au téléphone ; deux de 600 à 899 px, la
    dernière carte seule prenant toute la ligne ; trois au-delà, sur une
    trame de six, la dernière rangée incomplète s'élargissant (5 = 3 + 2). */
-.cards { display:grid; grid-template-columns:minmax(0,1fr); gap:1px; background:var(--border); margin-top:clamp(32px,5vw,60px); }
+.cards { display:grid; grid-template-columns:minmax(0,1fr); gap:0 clamp(24px,3vw,40px); margin-top:clamp(32px,5vw,60px); border-bottom:1px solid var(--border); }
 @media (min-width:600px) and (max-width:899.98px) {
   .cards { grid-template-columns:repeat(2,minmax(0,1fr)); }
   .card:nth-child(odd):last-child { grid-column:1 / -1; }
@@ -62,9 +61,7 @@ main { padding-top: var(--hdr) }
   .card:nth-child(3n+1):nth-last-child(2) ~ .card { grid-column:span 3; }
   .card:nth-child(3n+1):last-child { grid-column:1 / -1; }
 }
-.card { background:var(--bg); padding:32px 28px; }
-.card-icon { width:36px; height:36px; background:var(--accent-glow); border-radius:var(--radius-block); display:flex; align-items:center; justify-content:center; margin-bottom:20px; }
-.card-icon svg { width:18px; height:18px; stroke:var(--accent); stroke-width:1.8; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+.card { padding:28px 0 32px; border-top:1px solid var(--border); }
 .card-title { font-size:1rem; font-weight:600; margin-bottom:8px; }
 .card-desc { font-size:.875rem; color:var(--text-muted); line-height:1.65; }
 
@@ -79,6 +76,14 @@ main { padding-top: var(--hdr) }
 
 /* FAQ */
 .faq-list { display:flex; flex-direction:column; gap:0; max-width:760px; }
+/* La FAQ sur deux colonnes au bureau : le titre à gauche, les réponses à
+   droite, comme sur l'accueil. Sur une colonne, la moitié droite de
+   l'écran restait vide. */
+@media (min-width:1024px){
+  .faq-sec { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.7fr); column-gap:clamp(48px,6vw,96px); align-items:start; }
+  .faq-intro { position:sticky; top:calc(var(--hdr) + var(--sp-5)); }
+  .faq-sec .faq-list { max-width:none; }
+}
 .faq-item { border-top:1px solid var(--border); padding:24px 0; }
 .faq-item:last-child { border-bottom:1px solid var(--border); }
 .faq-q { font-size:1rem; font-weight:600; margin-bottom:10px; }
@@ -97,6 +102,8 @@ main { padding-top: var(--hdr) }
 @media(max-width:599.98px) {
   .card { padding:28px 0; }
 }
+/* Au téléphone, le retour forcé du titre laissait un mot seul en fin de ligne. */
+@media (max-width:600px){ .hero-title br { display:none; } }
 </style>
 
 <Header backBtn={true} />
@@ -105,7 +112,6 @@ main { padding-top: var(--hdr) }
   <!-- 2. Hero -->
   <section class="hero">
     <div class="wrap">
-      <span class="hero-tag r" data-i18n="resto-1">Restaurants &amp; Brasseries</span>
       <h1 class="hero-title r d1" data-i18n="resto-h1">Vos concurrents prennent<br>vos réservations en ligne.</h1>
       <p class="hero-sub r d2" data-i18n="resto-2">Avant de sortir, beaucoup de clients cherchent un restaurant sur Google. Sans site, c'est la table d'à côté qui remplit la salle — pas la vôtre.</p>
       <InteractiveButton text="Avoir mon site restaurant" data-i18n="resto-b1" href="/devis?plan=vitrine-pro" class="r d3" r />
@@ -117,7 +123,7 @@ main { padding-top: var(--hdr) }
     <div class="wrap duo">
       <div class="duo-txt">
         <h2 class="s-title r" data-i18n="resto-3">Ce qui se passe vraiment quand vous n'êtes pas en ligne</h2>
-        <p class="s-sub r d1" data-i18n="resto-4">Pas de site, pas de réservation directe. Les chiffres parlent d'eux-mêmes.</p>
+        <p class="s-sub r d1" data-i18n="resto-4">Pas de site, pas de réservation directe.</p>
         <ul class="constat-list">
           <li class="constat-item r d1">
             <span class="constat-num" data-i18n="resto-n1">55 %</span>
@@ -127,14 +133,12 @@ main { padding-top: var(--hdr) }
             </div>
           </li>
           <li class="constat-item r d2">
-            <span class="constat-num">PDF</span>
             <div class="constat-text">
               <strong data-i18n="resto-7">Un menu PDF partagé sur WhatsApp ne rassure pas</strong>
               <p data-i18n="resto-8">Un client qui reçoit un PDF non consultable sur téléphone, sans horaires clairs ni adresse cliquable, passe vite à autre chose.</p>
             </div>
           </li>
           <li class="constat-item r d3">
-            <span class="constat-num">−</span>
             <div class="constat-text">
               <strong data-i18n="resto-9">L'absence en ligne, c'est votre concurrent qui prend la réservation</strong>
               <p data-i18n="resto-10">Le restaurant d'en face avec un site soigné capte les clients du quartier, les touristes, les groupes. Vous, vous attendez le bouche-à-oreille.</p>
@@ -153,37 +157,22 @@ main { padding-top: var(--hdr) }
       <p class="s-sub r d1" data-i18n="resto-12">Cinq livrables concrets, pensés pour un restaurant — pas un site générique.</p>
       <div class="cards">
         <div class="card r d1">
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
-          </div>
           <h3 class="card-title" data-i18n="resto-13">Menu en ligne toujours à jour</h3>
           <p class="card-desc" data-i18n="resto-14">Vos plats, vins et formules affichés clairement. Modifiables sans agence dès que la carte change.</p>
         </div>
         <div class="card r d2">
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-          </div>
           <h3 class="card-title" data-i18n="resto-15">Formulaire de réservation directe</h3>
           <p class="card-desc" data-i18n="resto-16">Les clients réservent depuis le site, sans passer par une plateforme tierce qui prend une commission.</p>
         </div>
         <div class="card r d3">
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-          </div>
           <h3 class="card-title" data-i18n="resto-17">Galerie plats et ambiance</h3>
           <p class="card-desc" data-i18n="resto-18">Photos de vos plats et de votre salle mises en valeur. Le client voit avant de venir — et il vient.</p>
         </div>
         <div class="card r d1">
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v3l2 2"/></svg>
-          </div>
           <h3 class="card-title" data-i18n="resto-19">SEO local "restaurant [votre ville]"</h3>
           <p class="card-desc" data-i18n="resto-20">Optimisé pour que Google vous propose quand quelqu'un cherche où manger près de chez lui.</p>
         </div>
         <div class="card r d2">
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          </div>
           <h3 class="card-title" data-i18n="resto-21">Fiche Google optimisée</h3>
           <p class="card-desc" data-i18n="resto-22">Horaires, photos, avis, lien de réservation — votre fiche Google Maps complète et à jour.</p>
         </div>
@@ -211,9 +200,11 @@ main { padding-top: var(--hdr) }
 
   <!-- 6. FAQ -->
   <section class="s sec-seam">
-    <div class="wrap">
-      <h2 class="s-title r" data-i18n="resto-26">Questions fréquentes</h2>
-      <p class="s-sub r d1" data-i18n="resto-27">Les vraies questions que posent les restaurateurs avant de se lancer.</p>
+    <div class="wrap faq-sec">
+      <div class="faq-intro">
+        <h2 class="s-title r" data-i18n="resto-26">Questions fréquentes</h2>
+        <p class="s-sub r d1" data-i18n="resto-27">Les vraies questions que posent les restaurateurs avant de se lancer.</p>
+      </div>
       <div class="faq-list">
         <div class="faq-item r d1">
           <p class="faq-q" data-i18n="resto-28">Est-ce que je peux mettre à jour le menu moi-même ?</p>

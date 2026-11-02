@@ -118,7 +118,7 @@ const colonnes = Math.max(...plans.map((pl) => pl.n));
 /* La légende reprend la forme des marques : un carré pour une barre. */
 .gech-leg{display:flex;flex-wrap:wrap;gap:var(--sp-2) var(--sp-5);margin:var(--sp-5) 0;font-size:13px;color:var(--text-muted)}
 .gech-leg li{display:inline-flex;align-items:center;gap:var(--sp-2)}
-.gech-cle{width:12px;height:12px;border-radius:var(--radius-tag);background:var(--border-strong)}
+.gech-cle{width:12px;height:12px;border-radius:var(--radius-tag);background:var(--bar-neutre)}
 .gech-cle-or{background:var(--accent)}
 
 .gech-barres{position:relative;display:flex;flex-direction:column;gap:var(--sp-5)}
@@ -130,7 +130,7 @@ const colonnes = Math.max(...plans.map((pl) => pl.n));
    4 px côté valeur (le bout droit du dernier segment). Les segments ne
    se touchent pas : 2 px de vide, le fond passe entre eux. */
 .gech-barre{display:flex;gap:2px;height:24px;cursor:default;outline-offset:4px}
-.gech-seg{display:block;min-width:2px;height:100%;background:var(--border-strong);transition:background-color 125ms var(--ease-out)}
+.gech-seg{display:block;min-width:2px;height:100%;background:var(--bar-neutre);transition:background-color 125ms var(--ease-out)}
 .gech-seg-or{background:var(--accent)}
 .gech-seg:last-child{border-radius:0 4px 4px 0}
 .gech-seg.on{background:var(--field-border)}

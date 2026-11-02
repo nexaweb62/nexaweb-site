@@ -114,6 +114,10 @@ const idT = 'gr-del-t';
           {TICKS.map((k) => <span class="gd-tick" style={`--k:${k}`}>{k}</span>)}
         </div>
         <p class="gd-axe-leg" data-i18n="gr-del-axe">semaines après la validation du brief</p>
+        <ul class="gd-cles">
+          <li><span class="gd-cle" aria-hidden="true"></span><span data-i18n="gr-del-cle-min">délai minimum</span></li>
+          <li><span class="gd-cle gd-cle-peut" aria-hidden="true"></span><span data-i18n="gr-del-cle-peut">selon le nombre de retours sur la maquette</span></li>
+        </ul>
 
         <div class="gd-bulle" hidden aria-hidden="true">
           <span class="gd-b-val"></span>
@@ -289,7 +293,16 @@ const idT = 'gr-del-t';
   }
   .gd-bloc { flex: 1 1 0; background: var(--accent); }
   .gd-bloc:last-child { border-radius: 0 4px 4px 0; }
-  .gd-bloc.gd-peut { background: var(--gold-low); }
+  /* « Peut-être » : hachuré plutôt qu'un or plus pâle, que l'on distinguait
+     mal du plein en thème clair. */
+  .gd-bloc.gd-peut, .gd-cle-peut {
+    background: repeating-linear-gradient(135deg, var(--accent) 0 2px, transparent 2px 5px);
+    box-shadow: inset 0 0 0 1px var(--accent);
+  }
+  .gd-cles { display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-5); margin: var(--sp-3) 0 0; padding: 0; list-style: none;
+    font-size: 13px; color: var(--text-muted); }
+  .gd-cles li { display: inline-flex; align-items: center; gap: var(--sp-2); }
+  .gd-cle { width: 14px; height: 10px; background: var(--accent); flex: none; }
 
   @media (hover: hover) and (pointer: fine) {
     .gd-ligne:hover .gd-barre { outline: 1px solid var(--text); outline-offset: 1px; border-radius: 0 4px 4px 0; }

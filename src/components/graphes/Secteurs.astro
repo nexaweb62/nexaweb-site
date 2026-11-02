@@ -106,6 +106,12 @@ const TICKS = [0, 25, 50, 75, 100];
     {secteur === 'construction' && (
       <p class="gs-note" data-i18n="gr-sect-note-cons">« Construction » est la catégorie de l'Insee la plus proche des artisans du bâtiment, sans se confondre avec eux.</p>
     )}
+    {secteur === 'commerce' && (
+      <p class="gs-note" data-i18n="gr-sect-note-com">« Commerce » comprend, pour l'Insee, le commerce de gros et la réparation automobile, en plus des boutiques.</p>
+    )}
+    {secteur === 'restauration' && (
+      <p class="gs-note" data-i18n="gr-sect-note-heb">« Hébergement-restauration » regroupe hôtels et restaurants : l'Insee ne publie pas les restaurants seuls.</p>
+    )}
     <p class="gs-src"><span data-i18n="gr-b-src">Source :</span> <a href={SOURCE_URL} data-i18n="gr-sect-src-lien">Insee, enquête TIC-TPE 2022</a><span data-i18n="gr-sect-src-fin">, publiée en 2024 (figure 3).</span></p>
   </div>
 
@@ -190,7 +196,7 @@ const TICKS = [0, 25, 50, 75, 100];
     flex: none;
     height: var(--ep);
     width: calc((100% - var(--val-w)) * var(--v) / 100);
-    background: var(--border-strong);
+    background: var(--bar-neutre);
     border-radius: 0 4px 4px 0;
   }
   .gs-val {
@@ -205,8 +211,9 @@ const TICKS = [0, 25, 50, 75, 100];
   .gs-or .gs-barre { background: var(--accent); }
   .gs-or .gs-lib { color: var(--text); font-weight: var(--w-semi); }
   .gs-or .gs-val { font-weight: var(--w-semi); }
-  /* Le repère : l'ensemble des secteurs, dans un gris plus soutenu. */
-  .gs-ens .gs-barre { background: var(--text-muted); }
+  /* Le repère : l'ensemble des secteurs, en barre creuse — un contour, pas
+     un aplat plus sombre qui volerait la vedette à la barre en or. */
+  .gs-ens .gs-barre { background: transparent; box-shadow: inset 0 0 0 1.5px var(--bar-neutre); }
   .gs-ens .gs-lib { color: var(--text); }
 
   /* Survol (souris seulement) et focus clavier : la barre se détache. */
@@ -346,8 +353,8 @@ const TICKS = [0, 25, 50, 75, 100];
       if (d === 0) return 'Same as all sectors';
       return `${n} point${s} ${d < 0 ? 'below' : 'above'} the all-sector figure`;
     }
-    if (d === 0) return "Autant que l'ensemble des secteurs";
-    return `${n} point${s} de ${d < 0 ? 'moins' : 'plus'} que l'ensemble des secteurs`;
+    if (d === 0) return "Autant que l’ensemble des secteurs";
+    return `${n} point${s} de ${d < 0 ? 'moins' : 'plus'} que l’ensemble des secteurs`;
   }
 
   document.querySelectorAll<HTMLElement>('[data-gr-secteurs]').forEach((fig) => {

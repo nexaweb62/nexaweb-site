@@ -185,7 +185,12 @@ h1,h2,h3,.h-xl,.h-lg,.h-md,.h-sm{
 .h-lg{font-size:var(--fs-section);letter-spacing:var(--ls-section);line-height:var(--lh-section)}
 .h-md{font-size:var(--fs-sub);    letter-spacing:var(--ls-sub);    line-height:var(--lh-sub)}
 .h-sm{font-size:var(--fs-sub);    letter-spacing:var(--ls-sub);    line-height:var(--lh-sub)}
-.h-xl em,.h-lg em,.cta-hl em{font-style:normal;font-weight:var(--w-semi);color:var(--accent-text)}
+/* Aucun mot d'un titre n'est peint en or : un <em> resté dans une
+   traduction se lit comme le reste du titre. */
+/* !important : plusieurs pages repeignent encore l'<em> de leur titre dans
+   leur style scopé (plus spécifique). Cette règle doit gagner partout. */
+.h-xl em,.h-lg em,.cta-hl em,h1 em,h2 em{font-style:normal!important;font-weight:inherit!important;
+  color:inherit!important;background:none!important;-webkit-text-fill-color:currentColor!important}
 
 /* ═══════════════════════════════════════════════════════════════════════
    LE LOGO LIQUIDE — le rendu fourni, sa lueur, sa goutte
@@ -856,85 +861,8 @@ body:has(.fond-tarifs) footer{
 }
 .js-enabled [data-anim="curtain"].is-in{clip-path:inset(0);transform:scale(1)}
 
-/* ── FOND VIVANT ──
-   Le verre a besoin de quelque chose derrière lui : sur un aplat noir, un
-   bouton translucide n'est qu'un rectangle un peu plus clair et l'effet
-   disparaît. Tout bloc qui porte un bouton reçoit donc des halos dorés.
-
-   Construit à partir de --accent : il suit la palette et les deux thèmes,
-   plutôt que d'être figé en valeurs littérales. Chaque halo naît et meurt
-   dans le transparent, et l'ensemble est masqué aux deux extrémités —
-   la règle du fond continu reste tenue.
-
-   Repli livré faute de crédits de génération d'images : aucune photo
-   n'est utilisée ici. */
-.has-glow{position:relative;isolation:isolate}
-.has-glow > *{position:relative;z-index:1}
-.has-glow::before{
-  content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
-  background:
-    radial-gradient(52% 40% at 14% 12%,
-      color-mix(in srgb,var(--accent) 30%,transparent) 0%,
-      rgb(from var(--accent) r g b / 0) 62%),
-    radial-gradient(44% 36% at 84% 22%,
-      color-mix(in srgb,var(--accent-hover) 22%,transparent) 0%,
-      rgb(from var(--accent-hover) r g b / 0) 64%),
-    radial-gradient(60% 50% at 70% 92%,
-      color-mix(in srgb,var(--accent-active) 34%,transparent) 0%,
-      rgb(from var(--accent-active) r g b / 0) 66%);
-  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,black 12%,black 88%,transparent 100%);
-          mask-image:linear-gradient(to bottom,transparent 0%,black 12%,black 88%,transparent 100%);
-}
-/* En clair les halos doivent se retenir : le doré sur crème monte vite. */
-:root[data-theme="light"] .has-glow::before{opacity:.55}
-@media(prefers-color-scheme:light){
-  :root:not([data-theme="dark"]) .has-glow::before{opacity:.55}
-}
-
-/* ── TEXTURES DE FOND DE SECTION ──
-   Remplacent les mesh-gradients violets. Une variante par thème, servie en
-   AVIF puis WebP avec repli JPEG, posée à opacity .5 maximum et toujours
-   sous le texte. Parallaxe pilotée par /motion.js (désactivée < 1024 px). */
-.sec-texture{
-  position:absolute;inset:0;z-index:0;pointer-events:none;
-  opacity:.28;background-size:cover;background-position:center;
-  /* Naît et meurt dans le transparent : aucune arête, en haut comme en
-     bas. Le « black » d'un masque est un niveau d'alpha, pas une couleur —
-     seul le canal alpha du dégradé est lu.
-     Comme les deux extrémités sont à alpha 0, la parallaxe peut déplacer
-     l'élément sans jamais exposer de bord franc. */
-  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,black 14%,black 86%,transparent 100%);
-          mask-image:linear-gradient(to bottom,transparent 0%,black 14%,black 86%,transparent 100%);
-}
-/* overflow:hidden : la texture ne déborde plus de sa section. */
-.has-texture{position:relative;isolation:isolate;overflow:hidden}
-.has-texture>.wrap{position:relative;z-index:1}
-
-.sec-texture[data-texture="1"]{background-image:url('/img/textures/texture-1-dark.jpg')}
-.sec-texture[data-texture="2"]{background-image:url('/img/textures/texture-2-dark.jpg')}
-@supports (background-image:image-set(url('a.avif') type('image/avif'))){
-  .sec-texture[data-texture="1"]{
-    background-image:image-set(
-      url('/img/textures/texture-1-dark.avif') type('image/avif'),
-      url('/img/textures/texture-1-dark.webp') type('image/webp'),
-      url('/img/textures/texture-1-dark.jpg')  type('image/jpeg'));
-  }
-  .sec-texture[data-texture="2"]{
-    background-image:image-set(
-      url('/img/textures/texture-2-dark.avif') type('image/avif'),
-      url('/img/textures/texture-2-dark.webp') type('image/webp'),
-      url('/img/textures/texture-2-dark.jpg')  type('image/jpeg'));
-  }
-}
-
-/* Variante claire — une nappe d'encre sur du crème serait aussi fausse
-   qu'une nappe crème sur de l'encre. */
-@media (prefers-color-scheme: light){
-  :root:not([data-theme="dark"]) .sec-texture[data-texture="1"]{background-image:url('/img/textures/texture-1-light.jpg')}
-  :root:not([data-theme="dark"]) .sec-texture[data-texture="2"]{background-image:url('/img/textures/texture-2-light.jpg')}
-}
-:root[data-theme="light"] .sec-texture[data-texture="1"]{background-image:url('/img/textures/texture-1-light.jpg')}
-:root[data-theme="light"] .sec-texture[data-texture="2"]{background-image:url('/img/textures/texture-2-light.jpg')}
+/* Les halos dorés (.has-glow) et les textures photographiques de section
+   (.sec-texture) ont été retirés : du décor derrière le texte. */
 
 /* 7 — Section épinglée */
 .pin-label{position:sticky;top:30vh;align-self:start}
@@ -969,118 +897,8 @@ body:has(.fond-tarifs) footer{
    dans tokens.css : deux effets décoratifs s'en servent encore. */
 
 
-/* ═══════════════════════════════════════════════════════════════════════
-   LE FOND VIVANT — CE QUI PASSE DERRIÈRE LE VERRE
-   Le Liquid Glass ne se voit que s'il a quelque chose à réfracter. Posé
-   sur un aplat, un bouton en verre n'est qu'un bouton translucide.
-
-   Cette couche est fixe, commune à toutes les pages, sous le contenu et
-   hors du chemin du texte : une profondeur (--bg vers --surface), deux
-   traînées de sable très diffuses, et une trame de fils à ~1 % que le
-   flou déforme. Aucune image : c'est le repli CSS, faute de crédits de
-   génération (compte gratuit, 0 crédit). Le visuel photographique du
-   hero et les cinq vignettes de services restent à livrer.
-
-   Elle est continue sur toute la hauteur du document, donc elle ne peut
-   pas créer de cassure à une jonction de section — c'était la leçon du
-   lot 1.
-   ═══════════════════════════════════════════════════════════════════════ */
-.ambience{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;contain:strict}
-.amb-depth{
-  position:absolute;inset:0;
-  background:radial-gradient(ellipse 120% 80% at 70% -10%,var(--surface) 0%,rgb(from var(--surface) r g b / 0) 62%);
-  /* Sans ce masque la couche s'arrête net en bas de sa boîte. */
-  -webkit-mask-image:linear-gradient(to bottom,black 70%,transparent 100%);
-          mask-image:linear-gradient(to bottom,black 70%,transparent 100%);
-}
-.amb-streak{
-  position:absolute;top:-6vh;right:-18vw;width:min(1100px,90vw);height:150px;
-  background:radial-gradient(ellipse at 50% 50%,var(--accent-glow) 0%,rgb(from var(--accent-glow) r g b / 0) 72%);
-  filter:blur(28px);transform:rotate(-28deg);
-  animation:amb-drift 46s var(--ease-inout) infinite;
-}
-.amb-streak-2{
-  position:absolute;bottom:-4vh;left:-14vw;width:min(760px,80vw);height:110px;
-  background:radial-gradient(ellipse at 50% 50%,var(--accent-glow) 0%,rgb(from var(--accent-glow) r g b / 0) 76%);
-  filter:blur(34px);transform:rotate(-16deg);opacity:.7;
-  animation:amb-drift 58s var(--ease-inout) infinite 12s reverse;
-}
-/* La trame : invisible à l'œil nu, mais le flou du verre s'appuie dessus. */
-.amb-weave{
-  position:absolute;inset:0;
-  background-image:
-    repeating-linear-gradient(64deg,
-      rgb(from var(--text) r g b / 0) 0 13px,
-      rgb(from var(--text) r g b / .014) 13px 14px),
-    repeating-linear-gradient(-26deg,
-      rgb(from var(--text) r g b / 0) 0 19px,
-      rgb(from var(--text) r g b / .010) 19px 20px);
-}
-@keyframes amb-drift{
-  0%,100%{transform:rotate(-28deg) translate3d(0,0,0)}
-  50%    {transform:rotate(-24deg) translate3d(-60px,34px,0)}
-}
-@media(max-width:768px){.amb-streak-2{display:none}}
-@media (prefers-reduced-motion:reduce){.amb-streak,.amb-streak-2{animation:none!important}}
-
-
-/* ═══════════════════════════════════════════════════════════════════════
-   LA RIVIÈRE D'OR
-   Un seul canevas WebGL fixe, derrière toute la page. Présent partout,
-   il ne coule que sur l'accueil.
-
-   Le « animation:none!important » n'est pas décoratif : la rivière a une
-   animation pilotée par le scroll, et en CSS une animation bat toujours
-   une déclaration normale. Sans lui, opacity:0 serait écrasé et la
-   rivière réapparaîtrait sur Tarifs, Équipe et les autres.
-   ═══════════════════════════════════════════════════════════════════════ */
-.river{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:1;
-  transition:opacity 620ms var(--curve)}
-.river canvas{width:100%;height:100%;display:block}
-body:not([data-page="home"]) .river{animation:none!important;opacity:0}
-
-/* Hors accueil, c'est le fond vivant qui prend le relais ; sur l'accueil
-   la rivière suffit, et les deux ensemble feraient une bouillie. */
-body[data-page="home"] .ambience{opacity:0}
-/* Et puisque l'ambiance y est invisible, ses deux traînées floutées n'ont
-   plus rien à animer : elles dérivaient en permanence derrière un calque
-   à opacité zéro. */
-body[data-page="home"] .amb-streak,
-body[data-page="home"] .amb-streak-2{animation:none}
-.ambience{transition:opacity 620ms var(--curve)}
-
-@supports (animation-timeline: scroll(root)){
-  /* elle se retire pendant la lecture, et revient à la fin */
-  body[data-page="home"] .river{
-    animation:riverPulse linear both;animation-timeline:scroll(root);animation-range:0 100%}
-  @keyframes riverPulse{0%{opacity:1}20%{opacity:.16}70%{opacity:.16}100%{opacity:1}}
-}
-@media (prefers-reduced-motion:reduce){
-  body[data-page="home"] .river{animation:none!important;opacity:.5}
-}
-
-/* ── Les voiles de lisibilité ──
-   Le texte passe par-dessus la rivière. Tout calque posé sur un fond
-   animé doit être estompé sur ses bords : sans le mask-image on voit une
-   cassure horizontale nette en travers de la page. */
-body[data-page="home"] .s-hero::after{
-  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:linear-gradient(102deg,rgba(var(--scrim),.94) 0%,rgba(var(--scrim),.86) 26%,
-             rgba(var(--scrim),.52) 52%,rgba(var(--scrim),0) 78%);
-  -webkit-mask-image:linear-gradient(to bottom,black 0%,black 78%,transparent 100%);
-          mask-image:linear-gradient(to bottom,black 0%,black 78%,transparent 100%)}
-body[data-page="home"] .s-cta::after{
-  content:"";position:absolute;inset:-10% 0;z-index:1;pointer-events:none;
-  background:radial-gradient(58% 48% at 50% 52%,rgba(var(--scrim),.92) 0%,rgba(var(--scrim),.62) 52%,
-             rgba(var(--scrim),0) 84%);
-  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,black 18%,black 82%,transparent 100%);
-          mask-image:linear-gradient(to bottom,transparent 0%,black 18%,black 82%,transparent 100%)}
-body[data-page="home"] .s-hero>.wrap,
-body[data-page="home"] .s-cta>.wrap{position:relative;z-index:2}
-
-/* Les sections restent au-dessus de la rivière. */
-body[data-page="home"] main>section{position:relative;z-index:2}
-
+/* Le fond « vivant » (traînées dorées floutées, trame) et la rivière d'or
+   WebGL ont été retirés : le texte se lit sur le fond de la page. */
 
 /* ═══════════════════════════════════════════════════════════════════════
    LE MOUVEMENT AU SCROLL
@@ -1103,420 +921,53 @@ body[data-page="home"] main>section{position:relative;z-index:2}
    qui la tire : le JS devient alors un repli inerte. */
 .read-bar{
   height:2px;z-index:210;opacity:1;
-  background:linear-gradient(90deg,var(--gold-deep),var(--gold) 55%,var(--glass-gold-ink));
-  box-shadow:0 0 16px rgba(var(--glow),.55);
+  background:var(--accent);
 }
 
-/* ── Le texte s'allume mot par mot ── */
-.reader .rw{display:inline-block;color:var(--rdim);
-  transition:color var(--dur-micro) var(--ease-out)}
-.reader .rw b,.reader .rw i,.reader .rw em,.reader .rw strong{color:inherit}
-
-/* ── Le ruban qui file au rythme du scroll ── */
-/* ── La lumière qui traverse une carte pendant qu'elle traverse l'écran ── */
-/* background-repeat:no-repeat, sinon le dégradé se RÉPÈTE : la bande
-   claire réapparaît dans chaque carte quelle que soit sa position, et
-   comme ce calque est posé dans toutes les cartes de la page, l'écran
-   entier prend un voile. Mesuré : luminosité moyenne du fond 80,9 avec,
-   14,9 sans. C'est la même faute que sur le reflet des boutons. */
-.pass{position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:1;
-  background:linear-gradient(100deg,transparent 41%,rgba(var(--glow),.11) 50%,transparent 59%);
-  background-repeat:no-repeat;background-size:320% 100%;background-position:210% 0}
-
-/* ── Le trait d'or sous les titres de section ── */
-.s-title,.svc-title,.h-lg,.h-xl,.h-md,.section-title,.legal-title,.prix-h1,
-.hero-title,.hero-hl,.contact-title,.rdv-title,.reviews-hl,.lf-headline,.form-lede-h{position:relative}
-.s-title::after,.svc-title::after,.h-lg::after,.h-xl::after,.h-md::after,
-.section-title::after,.legal-title::after,.prix-h1::after,.hero-title::after,
-.hero-hl::after,.contact-title::after,.rdv-title::after,.reviews-hl::after,
-.lf-headline::after,.form-lede-h::after{
-  content:"";position:absolute;left:0;bottom:-.20em;
-  height:2px;width:min(220px,42%);transform:scaleX(0);transform-origin:0 50%;border-radius:2px;
-  background:linear-gradient(90deg,var(--gold-deep),var(--gold) 50%,rgb(from var(--gold) r g b / 0))}
-/* Un titre centré porte son trait au centre, pas collé à la gouttière
-   gauche : mesuré page par page, .prix-h1, .rdv-title et .hero-title
-   sont les trois qui le sont. */
-.prix-h1::after,.rdv-title::after,.hero-title::after{
-  left:50%;translate:-50% 0;width:min(180px,28%)}
-.s-cta h2::after,.cta-inner h2::after,.cta-title::after{display:none}
+/* Le trait d'or en dégradé sous chaque titre a été retiré. */
 
 @supports (animation-timeline: view()){
   .read-bar{transform-origin:0 50%;
     animation:progGrow linear both;animation-timeline:scroll(root);animation-range:0 100%}
   @keyframes progGrow{to{transform:scaleX(1)}}
 
-  /* Le décalage entre les mots : --st vaut 44/nombreDeMots, plafonné à
-     1.5 %. C'est ce qui fait que la vague traverse un paragraphe court
-     comme un paragraphe long en un temps comparable. */
-  .reader .rw{animation:readLite linear both;animation-timeline:view();
-    animation-range:cover calc(13% + var(--i,0)*var(--st,1%))
-                    cover calc(31% + var(--i,0)*var(--st,1%))}
-  @keyframes readLite{to{color:var(--rlit)}}
-
-  .pass{animation:passLight linear both;animation-timeline:view();animation-range:entry 0% exit 100%}
-  @keyframes passLight{from{background-position:210% 0}to{background-position:-150% 0}}
-
   /* Le héros de chaque page s'éloigne et s'efface quand on le quitte.
      Pas de filter:blur() : trop cher pour un effet à peine visible. */
   .svc-hero,.rdv-hero,.legal-hero,.prix-hero,.lp-hero,.nf-page{
     animation:heroPara linear both;animation-timeline:view();animation-range:exit 0% exit 100%}
   @keyframes heroPara{to{transform:translateY(-70px) scale(.955);opacity:.16}}
-
-  .s-title::after,.svc-title::after,.h-lg::after,.h-xl::after,.h-md::after,
-  .section-title::after,.legal-title::after,.prix-h1::after,.hero-title::after,
-  .hero-hl::after,.contact-title::after,.rdv-title::after,.reviews-hl::after,
-  .lf-headline::after,.form-lede-h::after{
-    animation:ruleDraw linear both;animation-timeline:view();animation-range:entry 16% cover 42%}
-  @keyframes ruleDraw{to{transform:scaleX(1)}}
 }
 
-/* ═══════════════════════════════════════════════════════════════════════
-   L'OR LIQUIDE — le dégradé coule dans le texte lui-même.
-   Le dégradé vit dans tokens.css (c'est une valeur de couleur) ; ici on
-   ne fait que le peindre dans les glyphes. Le repli existe : sans
-   background-clip:text, le texte redevient une couleur pleine plutôt
-   que transparent — donc invisible.
-   ═══════════════════════════════════════════════════════════════════════ */
-.liquid{
-  background-image:var(--liquid-grad);
-  background-size:300% 100%;background-position:0 0;
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-  /* L'italique déborde à droite : on élargit la zone peinte sans
-     décaler le texte. */
-  padding-right:.16em;margin-right:-.16em;padding-bottom:.10em;margin-bottom:-.10em;
-}
-@supports not ((background-clip:text) or (-webkit-background-clip:text)){
-  .liquid{color:var(--accent-text);background-image:none}
-}
-@media (prefers-reduced-motion:no-preference){
-  .liquid{animation:liquidFlow 17s linear infinite}
-  @keyframes liquidFlow{to{background-position:300% 0}}
-}
+/* L'« or liquide » (dégradé qui coulait en boucle dans les chiffres) est
+   devenu une couleur pleine : la classe .liquid reste, elle peint l'or. */
+.liquid{color:var(--accent-text)}
 
-/* ── Le penchant à la vitesse ──
-   Un script mesure la vitesse de défilement et pose --sk (degrés,
-   plafonné à ±1,35°) et --svn (-1 à 1) sur :root. */
-.split{transform:skewY(var(--sk,0deg))}
-
-@supports not (animation-timeline: view()){
-  .reader .rw{color:var(--rlit)}
-  .pass{animation:none}
-  .s-title::after,.svc-title::after,.h-lg::after,.h-xl::after,.h-md::after,
-  .section-title::after,.legal-title::after,.prix-h1::after,.hero-title::after,
-  .hero-hl::after,.contact-title::after,.rdv-title::after,.reviews-hl::after,
-  .lf-headline::after,.form-lede-h::after{transform:scaleX(1)}
-}
 @media (prefers-reduced-motion:reduce){
-  .read-bar,.pass{animation:none!important}
-  .reader .rw{color:var(--rlit);animation:none!important}
-  .split{transform:none}
+  .read-bar{animation:none!important}
   .svc-hero,.rdv-hero,.legal-hero,.prix-hero,.lp-hero,.nf-page{
     animation:none!important;transform:none!important;opacity:1!important}
-  .s-title::after,.svc-title::after,.h-lg::after,.h-xl::after,.h-md::after,
-  .section-title::after,.legal-title::after,.prix-h1::after,.hero-title::after,
-  .hero-hl::after,.contact-title::after,.rdv-title::after,.reviews-hl::after,
-  .lf-headline::after,.form-lede-h::after{animation:none!important;transform:scaleX(1)}
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
-   LES CARTES — LE PLI, L'ÉVENTAIL, L'EMPILEMENT
-   La carte arrive couchée à 72°, charnière sur son arête haute, et se
-   déplie vers le lecteur.
-
-   LA RÈGLE QUI ÉVITE LE PIÈGE PRINCIPAL : une animation CSS écrase toute
-   transformation posée en JS ou par une règle normale. Si l'animation
-   finit sur transform:none, aucun survol ne pourra plus bouger la carte.
-   La solution, ici partout : les transformations interactives passent par
-   des VARIABLES, référencées À L'INTÉRIEUR des keyframes. Le JS pose
-   --rx/--ry au survol, le CSS pose --ly/--sc, et l'animation les reprend
-   en direct.
-
-   box-shadow n'est PAS animé : ça force un repeint par image et par
-   carte. L'ombre est fixe, la profondeur vient de la 3D.
+   LES CARTES — POSÉES, PAS DÉPLIÉES
+   Elles se dépliaient en 3D, en éventail, s'empilaient en se collant
+   sous l'en-tête et repassaient à 16 % d'opacité en sortant : le texte
+   se coupait sous la carte suivante. Une carte est désormais à sa place
+   dans le flux ; elle entre par un fondu court, une seule fois.
    ═══════════════════════════════════════════════════════════════════════ */
-
-.plans-grid,.cards,.feat-grid,.who-grid,.team-grid,.proc-grid,
-.steps,.constat-list,.cta-section,.s-who,.s-proc{perspective:1600px}
-
 .plan-card,.card,.feat-item,.who-card,.team-card,.constat-item,.step,
-.cta-inner,.launch-notice,.aside{
-  /* Le repère de la lèvre et du reflet. Posé en CSS et pas en ligne par
-     le script : un style en ligne bat toute règle, y compris celle qui
-     rend la carte collante plus bas. */
-  position:relative;
-  transform-origin:50% 0;backface-visibility:hidden;
-  transform:translateY(var(--ly,0px)) scale(var(--sc,1))
-            rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) skewY(var(--sk,0deg));
-  transition:transform .5s var(--ease-out),box-shadow .5s var(--curve)}
-
-/* La lèvre dorée : un trait de 2 px sur l'arête haute, qui s'allume et
-   s'étire pendant le dépliage. */
-.lip{position:absolute;left:0;right:0;top:0;height:2px;z-index:3;pointer-events:none;
-  transform-origin:50% 50%;transform:scaleX(.2);opacity:0;border-radius:inherit;
-  background:linear-gradient(90deg,transparent,var(--gold-hi),rgba(var(--glow),1),var(--gold-hi),transparent);
-  box-shadow:0 0 18px 2px rgba(var(--glow),.5)}
-
-/* Le reflet qui balaye au survol. */
-.gloss{position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:1;opacity:0;
-  background:linear-gradient(112deg,transparent 42%,rgba(var(--glow),.15) 50%,transparent 58%);
-  background-repeat:no-repeat;background-size:280% 100%;background-position:200% 0;
-  transition:background-position 1.15s var(--ease-out),opacity .28s linear}
-
-@media (hover:hover) and (pointer:fine){
-  .plan-card:hover>.gloss,.card:hover>.gloss,.who-card:hover>.gloss,.team-card:hover>.gloss,
-  .feat-item:hover>.gloss,.aside:hover>.gloss,.cta-inner:hover>.gloss,
-  .constat-item:hover>.gloss,.step:hover>.gloss{
-    opacity:1;background-position:-90% 0}
-  .plan-card:hover,.card:hover,.who-card:hover,.team-card:hover,
-  .feat-item:hover,.aside:hover,.cta-inner:hover,.constat-item:hover,
-  .step:hover{--ly:-7px;--sc:1.012}
-}
-
+.cta-inner,.launch-notice,.aside{position:relative}
 @supports (animation-timeline: view()){
-  .plan-card,.card,.feat-item,.who-card,.team-card,.constat-item,.step,
-  .cta-inner,.launch-notice,.aside{
-    animation:cardFlight linear both;animation-timeline:view();
-    animation-range:entry 0% exit 92%}
-
-  @keyframes cardFlight{
-    0%{opacity:0;
-       transform:translateX(var(--fx,0px)) translateY(-10px) translateZ(-150px)
-                 rotateX(-72deg) rotateZ(var(--fr,0deg)) scale(.90)}
-    12%{opacity:.45}
-    33%{opacity:1;
-       transform:translateY(var(--ly,0px)) translateZ(0) rotateX(var(--rx,0deg))
-                 rotateY(var(--ry,0deg)) scale(var(--sc,1)) skewY(var(--sk,0deg))}
-    70%{opacity:1;
-       transform:translateY(var(--ly,0px)) translateZ(0) rotateX(var(--rx,0deg))
-                 rotateY(var(--ry,0deg)) scale(var(--sc,1)) skewY(var(--sk,0deg))}
-    100%{opacity:.16;
-       transform:translateY(-16px) translateZ(-190px) rotateX(30deg) scale(.94)}}
-
-  /* L'ÉVENTAIL : la carte de gauche vient de la droite, celle de droite
-     vient de la gauche. C'est ce croisement qui donne l'impression d'un
-     jeu de cartes qu'on ouvre en main.
-
-     Uniquement à partir de 760 px. En dessous, la grille est sur une
-     colonne : une carte pleine largeur décalée de 130 px sort de l'écran
-     et crée une barre de défilement horizontale — mesuré, 69 px de
-     débordement à 390 px sur trois pages. */
-  @media (min-width:760px){
-  .plans-grid>*:nth-child(1),.cards>*:nth-child(1),.who-grid>*:nth-child(1),
-  .team-grid>*:nth-child(1){--fx:130px;--fr:-6deg}
-  .plans-grid>*:nth-child(3),.cards>*:nth-child(3),.who-grid>*:nth-child(3),
-  .team-grid>*:nth-child(3){--fx:-130px;--fr:6deg}
-  .plans-grid>*:nth-child(2),.cards>*:nth-child(2){--fx:0px;--fr:0deg}
-  /* elles ne se déplient pas en même temps */
-  .plans-grid>*:nth-child(2),.cards>*:nth-child(2),.who-grid>*:nth-child(2),
-  .team-grid>*:nth-child(2){animation-range:entry -8% exit 92%}
-  .plans-grid>*:nth-child(3),.cards>*:nth-child(3),.who-grid>*:nth-child(3),
-  .team-grid>*:nth-child(3){animation-range:entry -17% exit 92%}
-
-  /* Les tarifs ne passent a trois colonnes qu'a 900 px. Entre 760 et
-     900 ils sont en UNE colonne : un decalage de 130 px sortirait de
-     l'ecran, exactement le debordement que ce bloc evite ailleurs. */
-  @media (max-width:899.98px){
-    .plans-grid>*{--fx:0px;--fr:0deg}
-  }
-  }
-
-  /* La lèvre suit le dépliage. */
-  .lip{animation:lipOn linear both;animation-timeline:view();animation-range:entry 0% entry 86%}
-  @keyframes lipOn{
-    0%{opacity:0;transform:scaleX(.08)}
-    26%{opacity:1;transform:scaleX(1)}
-    100%{opacity:0;transform:scaleX(1)}}
-
-  /* Le contenu sort du pli, ligne après ligne. */
-  .drwi{animation:drawerPull linear both;animation-timeline:view();
-    animation-range:entry calc(12% + var(--i,0)*6%) entry calc(96% + var(--i,0)*2%)}
-  @keyframes drawerPull{
-    from{opacity:0;transform:translateY(-26px) rotateX(-22deg)}
-    to{opacity:1;transform:none}}
-
-  /* Les puces arrivent une par une, par la gauche. */
-  .plan-features li,.card li,.aside li,.feat-item li{
-    animation:liIn linear both;animation-timeline:view();
-    animation-range:entry calc(26% + var(--j,0)*5%) entry 100%}
-  @keyframes liIn{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
-
-  /* ── L'EMPILEMENT COLLANT ──
-     Chaque carte se colle sous l'en-tête et la suivante vient se poser
-     par-dessus. Trois choses à ne pas rater, et elles sont ici :
-       · la carte empilée a SA PROPRE animation (cardLand), qui finit
-         posée. Avec cardFlight elle finirait à opacity .16 en position
-         collée, et on lirait à travers ;
-       · son fond doit être OPAQUE, sinon la carte du dessous transparaît ;
-       · l'empilement est réservé au desktop. */
-  @media (min-width:760px){
-    .steps,.constat-list{gap:0}
-    /* body en tête : les styles de page d'Astro portent un attribut
-       (.step[data-astro-cid-…] = 0,2,0) et gagneraient à égalité. */
-    body .steps .step,body .constat-list .constat-item{
-      position:sticky;
-      top:calc(var(--hdr, 72px) + 46px + var(--n,0) * 16px);
-      margin-bottom:clamp(120px,21vh,210px);
-      animation-name:cardLand;animation-range:entry 0% cover 30%;
-      background:var(--cardbg);box-shadow:0 -16px 46px -20px var(--shadow-1)}
-    body .steps .step:last-child,body .constat-list .constat-item:last-child{margin-bottom:0}
-    @keyframes cardLand{
-      0%{opacity:0;transform:translateY(-10px) translateZ(-150px) rotateX(-72deg) scale(.90)}
-      38%{opacity:1}
-      100%{opacity:1;
-        transform:translateY(var(--ly,0px)) translateZ(0) rotateX(var(--rx,0deg))
-                  rotateY(var(--ry,0deg)) scale(var(--sc,1)) skewY(var(--sk,0deg))}}
+  @media (prefers-reduced-motion:no-preference){
+    .plan-card,.card,.feat-item,.who-card,.team-card,.constat-item,.step,
+    .cta-inner,.launch-notice,.aside{
+      animation:cardIn linear both;animation-timeline:view();animation-range:entry 0% entry 45%}
+    @keyframes cardIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
   }
 }
 
-@supports not (animation-timeline: view()){
-  .lip{display:none}
-  .drwi,.plan-features li,.card li,.aside li,.feat-item li{opacity:1;transform:none}
-}
-
-@media (prefers-reduced-motion:reduce){
-  /* Le tiroir reste ouvert : aucune carte ne bouge, rien ne reste caché. */
-  .plan-card,.card,.feat-item,.who-card,.team-card,.constat-item,.step,
-  .cta-inner,.launch-notice,.aside,.drwi,
-  .plan-features li,.card li,.aside li,.feat-item li{
-    animation:none!important;clip-path:none!important;opacity:1!important;transform:none!important}
-  body .steps .step,body .constat-list .constat-item{
-    position:relative!important;top:auto!important;margin-bottom:12px!important}
-  .lip{display:none}
-}
-
-/* ═══════════════════════════════════════════════════════════════════════
-   LES TITRES ARRIVENT MOT PAR MOT
-   Chaque mot monte, pivote vers l'avant et sort d'un flou, 46 ms d'écart
-   entre chacun. Le découpage préserve les <em> et les <br> : un élément
-   enfant devient UN SEUL mot, jamais découpé caractère par caractère —
-   sinon un dégradé background-clip:text se brise en morceaux.
-   ═══════════════════════════════════════════════════════════════════════ */
-.split{perspective:820px}
-.split .w{display:inline-block;transform-origin:50% 92%}
-@media (prefers-reduced-motion:no-preference){
-  .split{clip-path:none!important;animation:none!important;opacity:1!important}
-  .split .w{opacity:0;transform:translateY(.46em) rotateX(-48deg);
-    transition:opacity .60s var(--ease-out) var(--dl,0ms),
-               transform .94s var(--ease-out) var(--dl,0ms)}
-  /* Le flou ne reste que sur les titres. Une page compte trois a quatre
-     cents mots decoupes : autant de couches floutees que le navigateur
-     devait peindre, y compris hors ecran. Sur un titre ils se comptent
-     par dizaines, et c'est la que l'effet se voit. */
-  .split-h .w{filter:blur(6px);
-    transition:opacity .60s var(--ease-out) var(--dl,0ms),
-               transform .94s var(--ease-out) var(--dl,0ms),
-               filter .60s var(--ease-out) var(--dl,0ms)}
-  .split.in .w{opacity:1;transform:none}
-  .split-h.in .w{filter:blur(0)}
-  /* UN FLOU DE ZERO RESTE UN FLOU. « filter:blur(0px) » n'est pas
-     « filter:none » : Chrome garde l'element sur sa propre couche de
-     composition et refait passer le filtre a chaque image. Une page en
-     comptait jusqu'a vingt-cinq — mesure sur l'accueil — qui ne
-     servaient plus a rien une fois l'arrivee jouee.
-
-     On ne peut pas pour autant finir la transition sur « none » : les
-     deux valeurs ne s'interpolent pas, le flou sauterait d'un coup. Le
-     mot termine donc sur blur(0), puis finition.js pose « pose » quand
-     l'arrivee est finie, et le filtre s'efface alors vraiment. */
-  .split-h.pose .w{
-    filter:none;will-change:auto;
-    /* ET PLUS AUCUNE TRANSITION. A cet instant l'arrivee est jouee :
-       les transitions qui restaient declarees n'ont plus rien a animer,
-       mais elles retardaient le passage a « none » de 600 ms — blur(0)
-       et none ne s'interpolant pas, le navigateur attendait la fin de
-       la duree pour appliquer la valeur finale. Mesure : « pose » pose,
-       et le filtre encore a blur(0px) une seconde apres. */
-    transition:none;
-  }
-}
-@media (prefers-reduced-motion:reduce){
-  .split .w{opacity:1!important;transform:none!important;filter:none!important}
-}
-
-/* ═══════════════════════════════════════════════════════════════════════
-   LE GRAIN — la pellicule qui empêche les aplats de faire « plat »
-   ═══════════════════════════════════════════════════════════════════════ */
-.grain{position:fixed;inset:-120px;z-index:300;pointer-events:none;opacity:var(--grain-op);
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
-  mix-blend-mode:var(--grain-blend)}
-@media (prefers-reduced-motion:no-preference){
-  .grain{animation:grainShift 1.1s steps(6) infinite}
-  @keyframes grainShift{
-    0%{transform:translate(0,0)}       16%{transform:translate(-14px,9px)}
-    33%{transform:translate(11px,-16px)} 50%{transform:translate(-9px,-11px)}
-    66%{transform:translate(16px,7px)}   83%{transform:translate(-12px,14px)}
-    100%{transform:translate(0,0)}}
-}
-
-/* ═══════════════════════════════════════════════════════════════════════
-   LE CURSEUR — un anneau d'or qui traîne, un point qui colle
-   Le curseur système n'est masqué que par body.pointer, et cette classe
-   n'est posée QUE par le script qui dessine l'anneau : si le script
-   échoue, le curseur normal reste. Les champs gardent le curseur texte.
-   ═══════════════════════════════════════════════════════════════════════ */
-.lamp{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0;
-  background:radial-gradient(520px circle at var(--lx,50%) var(--ly2,40%),
-             rgba(var(--glow),.09),rgba(var(--glow),.03) 42%,transparent 66%);
-  transition:opacity .5s var(--curve)}
-body.pointer .lamp{opacity:1}
-/* LE CURSEUR PERSONNALISE A ETE RETIRE.
-   Le site affichait un anneau dore a la place du curseur systeme. Il
-   n'est plus la : on rend au visiteur le curseur qu'il connait, et le
-   « plafond » de z-index qu'il imposait (2147483000) n'a plus de raison
-   d'exister. La lampe, elle, reste : c'est une lueur de fond, pas un
-   curseur. */
-@media (hover:none),(pointer:coarse){.lamp{display:none}}
-@media (prefers-reduced-motion:reduce){
-  .grain{animation:none}.lamp{display:none}
-}
-
-/* ═══════════════════════════════════════════════════════════════════════
-   LE RIDEAU DE TRANSITION
-   Une crête bombée balaye l'écran de bas en haut, avec une lame de
-   lumière sur son arête, et s'aplatit en arrivant. Le dégradé va du
-   CLAIR vers le FONCÉ de haut en bas : sans ça la crête est sombre sur
-   fond sombre et on ne voit rien.
-   ═══════════════════════════════════════════════════════════════════════ */
-.curtain{position:fixed;inset:-16% 0 0 0;z-index:200;pointer-events:none;transform:translateY(112%);
-  display:grid;place-items:center;
-  background:linear-gradient(180deg,var(--curt1) 0%,var(--curt2) 6%,var(--curt3) 15%,
-             var(--curt4) 44%,var(--curt5) 78%)}
-.curtain .cw{font:700 clamp(22px,4vw,40px)/1 var(--font);letter-spacing:-.03em;
-  color:var(--glass-gold-ink);opacity:0}
-.curtain .cw i{font-style:normal;color:var(--gold)}
-.curtain .cw b{display:inline-block;font-weight:inherit}
-.curtain .sheen{position:absolute;inset:0;pointer-events:none;opacity:0;
-  background:linear-gradient(100deg,transparent 36%,rgba(var(--glow),.40) 50%,transparent 64%);
-  background-size:240% 100%;background-position:200% 0}
-.curtain .edgeline{position:absolute;left:0;right:0;top:0;height:2px;pointer-events:none;opacity:0;
-  background:linear-gradient(90deg,transparent,var(--gold-hi),rgba(var(--glow),1),var(--gold-hi),transparent);
-  box-shadow:0 0 26px 4px rgb(from var(--gold-hi) r g b / .55)}
-@media (prefers-reduced-motion:no-preference){
-  .curtain.in{animation:curtIn 460ms var(--ease-inout) forwards}
-  .curtain.out{animation:curtOut 620ms var(--ease-out) forwards}
-  .curtain.in .cw{animation:cwIn 460ms var(--ease-out) forwards}
-  .curtain.out .cw{animation:cwOut 300ms linear forwards}
-  @keyframes curtIn{
-    0%{transform:translateY(112%);border-radius:60% 40% 0 0/26% 30% 0 0}
-    58%{border-radius:54% 46% 0 0/12% 14% 0 0}
-    100%{transform:translateY(0);border-radius:0}}
-  @keyframes curtOut{
-    0%{transform:translateY(0);border-radius:0}
-    46%{border-radius:0 0 44% 56%/0 0 13% 16%}
-    100%{transform:translateY(-112%);border-radius:0 0 40% 60%/0 0 26% 30%}}
-  @keyframes cwIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-  @keyframes cwOut{to{opacity:0}}
-  .curtain.in .sheen{animation:curtSheen 980ms cubic-bezier(.3,0,.2,1) forwards}
-  @keyframes curtSheen{0%{opacity:0;background-position:200% 0}22%{opacity:1}
-                       100%{opacity:.55;background-position:-120% 0}}
-  .curtain.in .edgeline,.curtain.out .edgeline{animation:edgeFlash 560ms linear forwards}
-  @keyframes edgeFlash{0%{opacity:0}12%{opacity:1}72%{opacity:1}100%{opacity:0}}
-  .curtain.in .cw b{animation:cwLetter 640ms var(--ease-out) both;
-    animation-delay:calc(var(--i,0)*36ms + 110ms)}
-  @keyframes cwLetter{from{opacity:0;transform:translateY(24px) rotateX(-72deg)}
-                      to{opacity:1;transform:none}}
-}
-@media (prefers-reduced-motion:reduce){.curtain{display:none}}
+/* Les titres mot à mot, le grain animé, la lampe qui suivait la souris et
+   le rideau de transition ont été retirés avec leurs scripts. */
 
 /* ═══════════════════════════════════════════════════════════════════════
    LE MODE LÉGER
@@ -1525,7 +976,6 @@ body.pointer .lamp{opacity:1}
    montent simplement), plus de grain animé, plus de lampe, plus de
    lecture mot à mot, plus de lèvre ni de lumière de passage.
    ═══════════════════════════════════════════════════════════════════════ */
-body.lite .grain{animation:none}
 
 /* ── RIEN NE TOURNE QUAND PERSONNE NE REGARDE ───────────────────────
    BaseLayout pose « hors-champ » sur le corps quand l'onglet passe en
@@ -1537,24 +987,9 @@ body.lite .grain{animation:none}
    il en etait, sans saut. Et le dessin reste a l'ecran dans tous les
    cas — un fond qui disparait serait une page qui change d'apparence
    sous les yeux du visiteur. */
-body.hors-champ .grain,
-body.hors-champ .amb-streak,
-body.hors-champ .amb-streak-2,
-body.hors-champ .river{animation-play-state:paused}
-body.lite .pass,body.lite .lip,body.lite .lamp{display:none}
-body.lite .reader .rw{animation:none!important;color:var(--rlit)}
-body.lite .drwi,body.lite .plan-features li,body.lite .card li,
-body.lite .aside li,body.lite .feat-item li{
-  animation:none!important;opacity:1!important;transform:none!important}
 body.lite .plan-card,body.lite .card,body.lite .feat-item,body.lite .who-card,
 body.lite .team-card,body.lite .constat-item,body.lite .step,
-body.lite .cta-inner,body.lite .launch-notice,body.lite .aside{
-  animation-name:cardLite!important}
-@keyframes cardLite{
-  0%{opacity:0;transform:translateY(30px) scale(.98)}
-  42%{opacity:1;transform:none}
-  100%{opacity:1;transform:none}}
-body.lite .split .w{transition-duration:.35s}
+body.lite .cta-inner,body.lite .launch-notice,body.lite .aside{animation:none!important;opacity:1!important;transform:none!important}
 
 
 /* ═══════════════════════════════════════════════════════════════════════
