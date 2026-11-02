@@ -15,7 +15,7 @@
   Cache-Control: public, max-age=31536000, immutable
 
 # Les polices ne changent pas : un an. Si un fichier de /fonts devait être
-# remplacé, il change de NOM (bluu-next-bold-2.woff2…), sinon les
+# remplacé, il change de NOM (arimo-400-2.woff2…), sinon les
 # visiteurs déjà venus garderaient l'ancien pendant un an.
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable

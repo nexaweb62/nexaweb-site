@@ -350,7 +350,7 @@ const remplissage = `calc(11px + (100% - 22px) * ${c / CLIENTS_MAX})`;
    « sans site , rien ne change ». */
 .gsim-y,.gsim-x,.gsim-tip [data-n]{font-variant-numeric:tabular-nums}
 /* En anglais, le séparateur des milliers est une virgule, et en chiffres tabulaires
-   Schibsted lui donne la chasse d'un chiffre (« €1 , 200 ») : chiffres proportionnels. */
+   la police lui donne la chasse d'un chiffre (« €1 , 200 ») : chiffres proportionnels. */
 :global(html[lang='en']) :is(.gsim-y,.gsim-x,.gsim-tip [data-n],.gsim-opt-prix,.gsim-val,.gsim-tab,.gsim-bornes){font-variant-numeric:normal}
 @container gsim (min-width:760px){ .gsim-chart{--gsim-h:280px} }
 .gsim-yt{grid-column:1 / -1;margin-bottom:var(--sp-3);color:var(--text-muted)}

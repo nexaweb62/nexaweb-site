@@ -5,43 +5,24 @@
    Aucune couleur littérale ici : tout passe par src/styles/tokens.css.
    ═══════════════════════════════════════════════════════════════════════ */
 
-/* ── LES POLICES ──
-   Servies depuis /fonts, préchargées par BaseLayout. « swap » : le texte
-   s'affiche tout de suite dans le repli, jamais de page blanche.
-
-   LES REPLIS SONT CALIBRÉS, PAS CHOISIS AU HASARD. Chaque police a son
-   double « … Repli » : Arial ou Times, agrandis et recalés pour occuper
-   exactement la place de la vraie police sur un texte français courant.
-   Valeurs calculées sur les fichiers eux-mêmes (largeur moyenne des
-   glyphes de l'accroche du site, hauteurs hhea) contre Liberation Sans
-   et Liberation Serif, métriquement identiques à Arial et Times. Sans
-   elles, l'arrivée de la police décale les lignes : c'est du CLS. */
+/* ── LA POLICE : ARIAL ──
+   « Nexa Arial » prend d'abord l'Arial de l'appareil (local) ; le fichier
+   Arimo (clone métrique d'Arial) n'est téléchargé que si aucun n'est
+   installé. Rien n'est préchargé : sur la plupart des écrans, aucune
+   police n'est téléchargée du tout. */
 @font-face{
-  font-family:"Schibsted Grotesk";
-  src:url('/fonts/schibsted-grotesk-var.woff2') format('woff2');
-  font-weight:400 900;font-style:normal;font-display:swap;
+  font-family:"Nexa Arial";
+  src:local("Arial"),local("ArialMT"),local("Arimo"),local("Liberation Sans"),
+      url('/fonts/arimo-400.woff2') format('woff2');
+  font-weight:400;font-style:normal;font-display:swap;
   unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
 }
 @font-face{
-  font-family:"Bluu Next";
-  src:url('/fonts/bluu-next-bold.woff2') format('woff2');
+  font-family:"Nexa Arial";
+  src:local("Arial Bold"),local("Arial-BoldMT"),local("Arimo Bold"),local("Liberation Sans Bold"),
+      url('/fonts/arimo-700.woff2') format('woff2');
   font-weight:700;font-style:normal;font-display:swap;
-}
-@font-face{
-  font-family:"Bluu Next";
-  src:url('/fonts/bluu-next-bolditalic.woff2') format('woff2');
-  font-weight:700;font-style:italic;font-display:swap;
-}
-@font-face{
-  font-family:"Schibsted Repli";
-  src:local("Arial"),local("ArialMT"),local("Liberation Sans"),local("Helvetica");
-  size-adjust:104.97%;ascent-override:93.04%;descent-override:24.56%;line-gap-override:0%;
-}
-@font-face{
-  font-family:"Bluu Repli";
-  src:local("Times New Roman"),local("TimesNewRomanPS-BoldMT"),local("Liberation Serif"),local("Times");
-  font-weight:700;
-  size-adjust:106.4%;ascent-override:88.34%;descent-override:24.44%;line-gap-override:0%;
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
 }
 
 /* ── RESET ── */

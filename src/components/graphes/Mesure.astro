@@ -186,7 +186,7 @@ const idT = 'gr-mes-t';
     border-radius: 0 4px 4px 0;
   }
   .gm-val { font-size: 15px; line-height: 1; color: var(--text); white-space: nowrap; }
-  /* Chiffres proportionnels : en tabulaire, Schibsted élargit aussi la
+  /* Chiffres proportionnels : en tabulaire, la police élargit aussi la
      virgule décimale (« 458 , 4 »). Deux lignes n'ont rien à aligner. */
   .gm-n { font-variant-numeric: proportional-nums; }
   .gm-or .gm-barre { background: var(--accent); }
@@ -216,7 +216,7 @@ const idT = 'gr-mes-t';
   .gm-bulle[hidden] { display: none; }
   .gm-b-val { font-size: 16px; font-weight: var(--w-semi); color: var(--text); font-variant-numeric: tabular-nums; }
   /* En anglais, le séparateur des milliers est une virgule : en chiffres tabulaires
-     Schibsted lui donne la chasse d'un chiffre (« 2 , 559 »). */
+     la police lui donne la chasse d'un chiffre (« 2 , 559 »). */
   :global(html[lang='en']) .gm-b-val { font-variant-numeric: normal; }
   .gm-b-lib { font-size: 13px; line-height: 1.35; color: var(--text-muted); }
 

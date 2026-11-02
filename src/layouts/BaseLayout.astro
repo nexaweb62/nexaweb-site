@@ -62,14 +62,8 @@ import Intro from '../components/Intro.astro';
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
   <link rel="manifest" href="/site.webmanifest" />
   <link rel="canonical" href={canonicalUrl} />
-  {/* LES DEUX POLICES DU PREMIER ÉCRAN, PRÉCHARGÉES. Le titre et le texte
-      du hero en dépendent : sans préchargement, le navigateur ne les
-      découvre qu'en lisant la feuille de style, une aller-retour plus
-      tard. L'italique de Bluu Next n'est pas préchargé — il ne sert que
-      plus bas, sur quelques mots. crossorigin est obligatoire pour une
-      police, même servie par le site lui-même. */}
-  <link rel="preload" href="/fonts/bluu-next-bold.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="/fonts/schibsted-grotesk-var.woff2" as="font" type="font/woff2" crossorigin />
+  {/* Aucune police préchargée : le site est en Arial, déjà installé sur
+      presque tous les appareils (voir global.css, « LA POLICE »). */}
   <title>{title}</title>
   <!-- Open Graph -->
   <meta property="og:title" content={title} />

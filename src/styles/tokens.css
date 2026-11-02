@@ -192,14 +192,14 @@
      à zéro, et les titres, en Bluu Next, ne se resserrent qu'à peine : ses
      empattements portent déjà leur propre rythme. Le corps clair sur fond
      noir prend un rien d'air, jamais l'inverse. */
-  --fs-title:   clamp(40px, 6.4vw, 80px);   --ls-title:   -.012em; --lh-title:   1.04;
-  --fs-section: clamp(28px, 3.4vw, 44px);   --ls-section: -.008em; --lh-section: 1.08;
+  --fs-title:   clamp(40px, 6.4vw, 80px);   --ls-title:   -.024em; --lh-title:   1.04;
+  --fs-section: clamp(28px, 3.4vw, 44px);   --ls-section: -.016em; --lh-section: 1.08;
   --fs-sub:     clamp(20px, 1.9vw, 26px);   --ls-sub:     -.004em; --lh-sub:     1.18;
   --fs-body:    17px;                       --ls-body:    .002em;  --lh-body:    1.47;
   --fs-caption: 12px;                       --ls-caption: .01em;   --lh-caption: 1.35;
   --w-semi: 600;   /* graisse maximale du texte */
   --w-reg:  400;
-  --w-display: 700; /* Bluu Next n'existe qu'en gras : c'est sa seule graisse */
+  --w-display: 700; /* les titres : Arial gras */
 
   /* ── LA FORME ──
      Une règle, et une seule, écrite ici pour qu'on ne la redevine pas :
@@ -240,29 +240,18 @@
   --radius-xs: 2px; --radius-sm: 2px; --radius-md: 2px;
   --radius-lg: 2px;
 
-  /* ── LES DEUX FAMILLES ──
-     La pile système a été abandonnée : SF Pro sur iPhone, Segoe sur
-     Windows, c'est la police de tous les sites générés à la chaîne — le
-     visiteur la reconnaît sans savoir la nommer, et le site ne ressemblait
-     à personne en particulier.
+  /* ── UNE SEULE FAMILLE : ARIAL ──
+     Tout le site, titres compris, est en Arial, à la demande du fondateur :
+     la police des documents et des enseignes du quotidien, sans effet de
+     style. Les titres prennent le gras (700), le texte le normal (400).
 
-     · Bluu Next (Jean-Baptiste Morizot, Velvetyne — fonderie libre
-       française) porte les TITRES. Un empattement franc, gras, qui tient
-       de l'enseigne peinte au-dessus d'une boutique : exactement le
-       métier des clients du site.
-     · Schibsted Grotesk porte le TEXTE, les boutons, les chiffres. Une
-       grotesque de journal, faite pour être lue longtemps, avec des
-       chiffres tabulaires pour les prix.
-
-     Les deux sont servies depuis /fonts, sous licence SIL OFL : aucune
-     requête vers un tiers, rien à déclarer dans la politique de
-     confidentialité. Chaque famille a son repli MÉTRIQUE (« … Repli »,
-     déclaré dans global.css) : tant que le fichier n'est pas arrivé, le
-     navigateur dessine Arial ou Times à la largeur de la vraie police,
-     et la page ne saute pas quand elle arrive. */
-  --font: "Schibsted Grotesk", "Schibsted Repli", -apple-system, BlinkMacSystemFont,
-          "Segoe UI", Roboto, Arial, sans-serif;
-  --font-display: "Bluu Next", "Bluu Repli", Georgia, "Times New Roman", serif;
+     « Nexa Arial » (déclarée dans global.css) prend l'Arial installé sur
+     l'appareil — Windows, macOS, iOS l'ont tous — et ne télécharge Arimo,
+     son clone métrique (mêmes largeurs, licence Apache 2.0, servi depuis
+     /fonts), que là où Arial manque : Android et Linux. Aucune requête
+     vers un tiers. */
+  --font: "Nexa Arial", Arial, "Helvetica Neue", Helvetica, "Liberation Sans", sans-serif;
+  --font-display: var(--font);
 
   /* La plaque d'or est un OBJET, pas une teinte de thème : le laiton est
      le même sur papier et sur noir. Calculé : l'encre noire y tient
