@@ -165,9 +165,8 @@ h1,h2,h3,.h-xl,.h-lg,.h-md,.h-sm{
   font-synthesis:none;font-variant-numeric:lining-nums;
 }
 .h-xl,.h-lg,.h-md,.h-sm{text-wrap:balance}
-/* Sauf les titres qui ne sont que des étiquettes : à 12 px, un empattement
-   gras bouche les lettres. Ils gardent la police du texte. */
-.svc-section-label{font-family:var(--font);font-weight:var(--w-semi)}
+/* .svc-section-label était une étiquette dorée de 12 px qui faisait office de
+   titre de section ; c'est désormais un vrai titre, dans la voix des titres. */
 /* LES AUTRES VOIX DE TITRE. Certains éléments font le travail d'un titre
    sans en avoir la balise : le nom des services dans la liste, les prix,
    les grands numéros d'étape, l'accroche de la présentation. Ils prennent

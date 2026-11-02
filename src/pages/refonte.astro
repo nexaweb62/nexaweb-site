@@ -19,7 +19,7 @@ main{padding-top:var(--hdr)}
 .svc-features{padding:60px var(--pad-x);max-width:1100px;margin:0 auto}
 /* Ce libellé introduit les <h3> de la grille : c'est un niveau 2,
    pas un <span> décoratif. axe refusait le saut h1 → h3. */
-.svc-section-label{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--accent-text);margin:0 0 40px;display:block}
+.svc-section-label{font-size:clamp(24px,3vw,34px);line-height:1.1;letter-spacing:var(--ls-section,-.008em);color:var(--text);margin:0 0 32px;display:block}
 .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
 .feat-item{background:var(--bg);padding:32px 28px}
 .feat-num{font-size:var(--fs-caption);font-weight:600;color:var(--accent-text);letter-spacing:0;margin-bottom:14px}
@@ -39,7 +39,6 @@ main{padding-top:var(--hdr)}
 
 <main id="main-content" tabindex="-1">
   <div class="svc-hero">
-    <p class="svc-eyebrow" data-i18n="rf-1">Service · Modernisation</p>
     <h1 class="svc-title" data-i18n="rf-h1">Refonte <span>de site</span></h1>
     <p class="svc-desc" data-i18n="rf-3">Votre site actuel donne une mauvaise image ou est trop lent ? On le reconstruit de zéro — nouveau design, nouvelles performances, même contenu. Aucune perte de données, aucune interruption de service.</p>
     <InteractiveButton text="Obtenir un devis gratuit" data-i18n="rf-b1" href="/devis" class="svc-cta" />
