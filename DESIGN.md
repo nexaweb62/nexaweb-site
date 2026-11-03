@@ -1,7 +1,7 @@
 ---
 version: alpha
 name: Nexa Web
-description: Site de l'agence web Nexa Web (Carvin, Hauts-de-France) — noir et or, titres en Bluu Next, texte en Schibsted Grotesk, contrôles en plaques à angles coupés.
+description: Site de l'agence web Nexa Web (Carvin, Hauts-de-France) — noir et or, tout en Arial (titres en gras), contrôles en plaques à angles coupés.
 colors:
   bg: "#0A0A0B"
   surface: "#121214"
@@ -24,28 +24,28 @@ colors:
   plq-or-encre: "#0A0A0B"
 typography:
   title:
-    fontFamily: Bluu Next
+    fontFamily: Arial
     fontWeight: 700
     lineHeight: 1.04
-    letterSpacing: -0.012em
+    letterSpacing: -0.024em
   section:
-    fontFamily: Bluu Next
+    fontFamily: Arial
     fontWeight: 700
     lineHeight: 1.08
-    letterSpacing: -0.008em
+    letterSpacing: -0.016em
   sub:
-    fontFamily: Bluu Next
+    fontFamily: Arial
     fontWeight: 700
     lineHeight: 1.18
     letterSpacing: -0.004em
   body:
-    fontFamily: Schibsted Grotesk
+    fontFamily: Arial
     fontSize: 17px
     fontWeight: 400
     lineHeight: 1.65
     letterSpacing: 0.002em
   caption:
-    fontFamily: Schibsted Grotesk
+    fontFamily: Arial
     fontSize: 12px
     fontWeight: 400
     lineHeight: 1.35
@@ -126,11 +126,10 @@ Toute couleur littérale vit dans `src/styles/tokens.css` et nulle part ailleurs
 
 ## Typography
 
-Deux familles, servies depuis `/fonts` sous licence SIL OFL, chacune avec un repli calibré en métrique pour que l'arrivée de la police ne décale pas la page.
+Une seule famille : **Arial**, pour les titres comme pour le texte (choix du fondateur, novembre 2026). La pile `"Nexa Arial", Arial, "Helvetica Neue", Helvetica, "Liberation Sans", sans-serif` prend l'Arial installé ; `Nexa Arial` ne télécharge Arimo (clone métrique d'Arial, Apache 2.0, servi depuis `/fonts`) que sur les appareils qui n'ont pas Arial (Android, Linux).
 
-- **Bluu Next** (Velvetyne) porte tous les `h1` à `h3`, les classes `.h-xl`, `.h-lg`, `.h-md`, `.h-sm`, et les éléments qui font un travail de titre sans en avoir la balise : noms de services, prix, grands numéros d'étape. Elle n'existe qu'en gras ; `font-synthesis` est coupé, le navigateur ne fabrique ni faux gras ni faux italique.
-- **Schibsted Grotesk** porte le texte, les boutons, les étiquettes et les petits mots qui accompagnent un prix (« dès », « /mois »).
-- Les titres qui ne sont que des étiquettes (`.svc-section-label`) restent en Schibsted : un empattement gras à très petite taille bouche les lettres.
+- Titres (`h1` à `h3`, `.h-xl` à `.h-sm`) : Arial gras (700), approche resserrée (`--ls-title`, `--ls-section`).
+- Texte, boutons, étiquettes, chiffres : Arial normal (400) ; le « semi-gras » (600) des boutons se rend en gras, Arial n'ayant que deux graisses.
 - Les tailles de `title`, `section` et `sub` sont fluides entre le mobile et le bureau ; seul leur rapport est fixé.
 - Pas de capitales espacées, pas de chasse fixe en guise d'étiquette « technique ».
 
