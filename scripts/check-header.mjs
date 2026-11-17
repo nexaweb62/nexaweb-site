@@ -364,8 +364,9 @@ for (const [largeur, ou] of [[390, 'téléphone'], [1280, 'ordinateur']]) {
   if (apres.attr !== 'light') echecs.push(`[${ou}] clic sur « clair » : data-theme vaut ${apres.attr}`);
   if (apres.garde !== 'light') echecs.push(`[${ou}] clic sur « clair » : nw-theme vaut ${apres.garde}`);
 
-  /* Et le retour au réglage du système : la clé doit DISPARAÎTRE, sans
-     quoi « système » serait un troisième choix figé de plus. */
+  /* Et le retour au réglage du système : la clé vaut « system ». Le
+     site s'ouvre en clair sans choix enregistré ; « système » est donc
+     un choix explicite, gardé comme les deux autres. */
   await pg.evaluate(() => {
     const b = [...document.querySelectorAll('.theme-opt[data-theme-opt="system"]')]
       .find(e => e.getBoundingClientRect().width > 1);
@@ -378,7 +379,7 @@ for (const [largeur, ou] of [[390, 'téléphone'], [1280, 'ordinateur']]) {
     fond: getComputedStyle(document.body).backgroundColor,
   }));
   if (auto.attr !== null) echecs.push(`[${ou}] retour au système : data-theme reste ${auto.attr}`);
-  if (auto.garde !== null) echecs.push(`[${ou}] retour au système : nw-theme reste ${auto.garde}`);
+  if (auto.garde !== 'system') echecs.push(`[${ou}] retour au système : nw-theme reste ${auto.garde}`);
   if (auto.fond === SOMBRE) {
     echecs.push(`[${ou}] retour au système : fond ${auto.fond} alors que l'OS est en clair`);
   }

@@ -219,8 +219,8 @@ const THEMES = [
   var sels = Array.prototype.slice.call(document.querySelectorAll('.theme-sel'));
 
   function choixGarde(){
-    try{ var t = localStorage.getItem('nw-theme'); return (t==='light'||t==='dark') ? t : 'system'; }
-    catch(e){ return 'system'; }
+    try{ var t = localStorage.getItem('nw-theme'); return (t==='light'||t==='dark'||t==='system') ? t : 'light'; }
+    catch(e){ return 'light'; }
   }
 
   function peindre(choix){
@@ -245,7 +245,7 @@ const THEMES = [
     });
     if(choix === 'system'){
       root.removeAttribute('data-theme');
-      try{ localStorage.removeItem('nw-theme'); }catch(e){}
+      try{ localStorage.setItem('nw-theme', 'system'); }catch(e){}
     }else{
       root.setAttribute('data-theme', choix);
       try{ localStorage.setItem('nw-theme', choix); }catch(e){}

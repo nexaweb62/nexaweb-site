@@ -124,9 +124,13 @@ import Intro from '../components/Intro.astro';
     (function () {
       var r = document.documentElement;
       try {
+        /* LE CLAIR PAR DÉFAUT. Sans choix enregistré, le site s'ouvre en
+           clair, quel que soit le réglage de l'appareil. « system » est
+           un choix comme les autres, enregistré, qui rend la main à l'OS. */
         var t = localStorage.getItem('nw-theme');
         if (t === 'light' || t === 'dark') r.setAttribute('data-theme', t);
-      } catch (e) { /* navigation privée, stockage bloqué */ }
+        else if (t !== 'system') r.setAttribute('data-theme', 'light');
+      } catch (e) { r.setAttribute('data-theme', 'light'); /* navigation privée, stockage bloqué */ }
       /* Combien de pages de ce site l'onglet a-t-il déjà servies ? Le
          bouton Retour a besoin de le savoir : document.referrer est vide
          dès qu'une politique de référent le coupe, et history.length

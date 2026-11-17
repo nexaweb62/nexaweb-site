@@ -65,8 +65,8 @@ const FONDATEURS = [
 .pt-h{margin:0 0 18px;max-width:none}
 .pt-tete{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:18px}
 .pt-tete .h-md{margin:0}
-.pt-lien{display:inline-flex;align-items:center;gap:6px;font-size:15px;font-weight:var(--w-bold,700);color:var(--accent-text);text-decoration:none;white-space:nowrap}
-@media (hover:hover) and (pointer:fine){ .pt-lien:hover{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px} }
+.pt-lien{display:inline-flex;align-items:center;gap:6px;font-size:15px;font-weight:var(--w-bold,700);color:var(--text);text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px;text-decoration-color:var(--border-strong);text-decoration:none;white-space:nowrap}
+@media (hover:hover) and (pointer:fine){ .pt-lien:hover{text-decoration-color:currentColor} }
 .pt-lien:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
 .pt-col{display:flex;flex-direction:column;gap:24px;min-width:0}
 
@@ -101,7 +101,7 @@ const FONDATEURS = [
 .pt-prix-l > div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:12px 0;border-top:1px solid var(--border)}
 .pt-prix-l dt{display:flex;flex-direction:column;color:var(--text);font-size:clamp(16px,1vw,19px)}
 .pt-d{font-size:13px;color:var(--text-muted)}
-.pt-prix-l dd{margin:0;font-size:clamp(20px,1.4vw,26px);font-weight:var(--w-bold,700);color:var(--accent-text);white-space:nowrap;font-variant-numeric:tabular-nums}
+.pt-prix-l dd{margin:0;font-size:clamp(20px,1.4vw,26px);font-weight:var(--w-bold,700);color:var(--text);white-space:nowrap;font-variant-numeric:tabular-nums}
 .pt-prix-pied{margin:auto 0 0;padding-top:12px;border-top:1px solid var(--border);font-size:13px;color:var(--text-muted)}
 @media (max-width:980px){
   .pt-hero{grid-template-columns:minmax(0,1fr)}
@@ -113,6 +113,13 @@ const FONDATEURS = [
   .he-sc{padding:0 16px 16px 0}
   .pt-titre,.pt-prix{padding:20px}
 }
+
+/* LES CONTRÔLES EN RECTANGLES. Sur l'accueil, les plaques à angles
+   coupés du calcul (formules, « Voir les chiffres », curseur) et le
+   bouton de la FAQ deviennent des rectangles nets, comme les boutons
+   du premier écran. */
+.s-sim :global(.plq),.s-sim :global(.ihb),.s-faq :global(.ihb){--cut:0px}
+.s-sim :global(.gsim-range){--c:0px}
 
 /* ── LE SIMULATEUR, dans son bloc ── */
 .pt-sim{padding:clamp(20px,3vw,32px)}
@@ -141,7 +148,7 @@ const FONDATEURS = [
    visiteur cherche sur une liste de prestations. */
 .svc-meta{display:flex;align-items:baseline;gap:18px;color:var(--text-muted);font-size:15px;
   white-space:nowrap}
-.svc-prix{color:var(--accent-text);font-weight:var(--w-bold,700);font-size:17px}
+.svc-prix{color:var(--text);font-weight:var(--w-bold,700);font-size:17px}
 @media (hover:hover){
   .svc-row:hover{background:var(--surface-2)}
   .svc-row:hover .svc-name{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.18em}
@@ -315,10 +322,10 @@ const FONDATEURS = [
 .pt-loc-l{flex:1;align-content:space-around}
 .pt-eq-sub{margin:0 0 18px;font-size:15px;line-height:1.6;color:var(--text-muted)}
 .fond-liste{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:0;padding:0;list-style:none}
-.fond-photo{display:block;width:100%;aspect-ratio:4 / 3;overflow:hidden;background:var(--surface-2);margin-bottom:var(--sp-3)}
-.fond-photo img{display:block;width:100%;height:100%;object-fit:cover;scale:1.06}
-.fond-p1 img{object-position:50% 12%}
-.fond-p2 img{object-position:50% 6%}
+.fond-photo{display:block;width:100%;aspect-ratio:4 / 5;overflow:hidden;background:var(--surface-2);margin-bottom:var(--sp-3)}
+.fond-photo img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 0;scale:1.04;transform-origin:50% 30%}
+.fond-p1 img{object-position:50% 17%}
+.fond-p2 img{object-position:50% 0}
 .fond-nom{margin:0;font-size:16px;font-weight:var(--w-bold,700);line-height:1.35;color:var(--text)}
 .fond-role{margin:0;font-size:14px;line-height:1.4;color:var(--text-muted)}
 .pt-loc-nom{margin:0;font-size:17px;font-weight:var(--w-bold,700);color:var(--text)}
