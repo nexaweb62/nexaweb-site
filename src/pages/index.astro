@@ -395,20 +395,24 @@ const FONDATEURS = [
 @media(max-width:700px){.faq-in{grid-template-columns:1fr}}
 
 /* ── CTA ── */
-/* Le bandeau final : un aplat noir, le même en clair et en sombre, avec
-   le bouton de devis en laiton (--plq-or). */
-.s-cta.pt-or{margin-top:clamp(44px,5vw,64px);background:var(--raw-black-950);color:var(--raw-warm-50);border-top:1px solid var(--raw-black-800);border-bottom:1px solid var(--raw-black-800)}
+/* Le bandeau final : blanc en clair, noir en sombre, avec le bouton de
+   devis en laiton (--plq-or). */
+.s-cta.pt-or{margin-top:clamp(44px,5vw,64px);color:var(--text);border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  background:var(--surface);
+  /* Blanc en thème clair, noir en thème sombre : light-dark() suit le
+     color-scheme que pose chaque bloc de thème de tokens.css. */
+  background:light-dark(var(--raw-paper-0),var(--raw-black-950))}
 .cta-in{display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap;padding-top:clamp(40px,5vw,56px);padding-bottom:clamp(40px,5vw,56px)}
-.cta-hl{margin:0 0 8px;color:var(--raw-warm-50)}
-.cta-sub{margin:0;font-size:17px;color:var(--raw-warm-300)}
+.cta-hl{margin:0 0 8px;color:var(--text)}
+.cta-sub{margin:0;font-size:17px;color:var(--text-muted)}
 .cta-btns{display:flex;gap:12px;flex-wrap:wrap}
 .pt-or-btn{display:inline-flex;align-items:center;min-height:50px;padding:0 24px;font-weight:var(--w-bold,700);font-size:16px;text-decoration:none;background:var(--plq-or);color:var(--plq-or-encre);border:1px solid var(--plq-or);transition:background-color 160ms var(--ease-out),color 160ms var(--ease-out),border-color 160ms var(--ease-out)}
-.pt-or-btn2{background:transparent;color:var(--raw-warm-50);border-color:var(--raw-black-600)}
+.pt-or-btn2{background:transparent;color:var(--text);border-color:var(--border-strong)}
 @media (hover:hover) and (pointer:fine){
   .pt-or-btn:hover{background:var(--plq-or-haut);border-color:var(--plq-or-haut)}
-  .pt-or-btn2:hover{background:transparent;border-color:var(--raw-warm-50)}
+  .pt-or-btn2:hover{background:transparent;border-color:var(--text)}
 }
-.pt-or-btn:focus-visible{outline:2px solid var(--raw-warm-50);outline-offset:3px}
+.pt-or-btn:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
 
 
 /* content-visibility:auto a été retiré ici : avec contain-intrinsic-size
