@@ -192,12 +192,12 @@
      à zéro, et les titres, en Bluu Next, ne se resserrent qu'à peine : ses
      empattements portent déjà leur propre rythme. Le corps clair sur fond
      noir prend un rien d'air, jamais l'inverse. */
-  --fs-title:   clamp(40px, 6.4vw, 80px);   --ls-title:   -.024em; --lh-title:   1.04;
-  --fs-section: clamp(28px, 3.4vw, 44px);   --ls-section: -.016em; --lh-section: 1.08;
-  --fs-sub:     clamp(20px, 1.9vw, 26px);   --ls-sub:     -.004em; --lh-sub:     1.18;
+  --fs-title:   clamp(40px, 6.4vw, 80px);   --ls-title:   -.02em;  --lh-title:   1.04;
+  --fs-section: clamp(28px, 3.4vw, 44px);   --ls-section: -.01em;  --lh-section: 1.08;
+  --fs-sub:     clamp(20px, 1.9vw, 26px);   --ls-sub:     0;       --lh-sub:     1.18;
   --fs-body:    17px;                       --ls-body:    .002em;  --lh-body:    1.47;
   --fs-caption: 12px;                       --ls-caption: .01em;   --lh-caption: 1.35;
-  --w-semi: 600;   /* graisse maximale du texte */
+  --w-semi: 700;   /* Arial n'a que 400 et 700 : 600 était arrondi à 700 */
   --w-reg:  400;
   --w-display: 700; /* les titres : Arial gras */
 

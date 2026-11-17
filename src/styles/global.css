@@ -146,6 +146,12 @@ h1,h2,h3,.h-xl,.h-lg,.h-md,.h-sm{
   font-synthesis:none;font-variant-numeric:lining-nums;
 }
 .h-xl,.h-lg,.h-md,.h-sm{text-wrap:balance}
+/* UNE SEULE ÉCHELLE DE TITRES. Les titres qui n'ont pas de classe
+   héritaient de l'interlignage du texte (1,65) : « Prêt à démarrer ? »
+   faisait 41,6 / 68,6 px. Ils prennent 1,12, et aucun titre ne descend
+   sous 1,0 : en Arial, les capitales accentuées touchaient la ligne
+   du dessus. */
+h1,h2,h3,h4{line-height:1.12;text-wrap:balance}
 /* .svc-section-label était une étiquette dorée de 12 px qui faisait office de
    titre de section ; c'est désormais un vrai titre, dans la voix des titres. */
 /* LES AUTRES VOIX DE TITRE. Certains éléments font le travail d'un titre
@@ -162,6 +168,10 @@ h1,h2,h3,.h-xl,.h-lg,.h-md,.h-sm{
   font-synthesis:none;font-variant-numeric:lining-nums;
 }
 .h-xl{font-size:var(--fs-title);  letter-spacing:var(--ls-title);  line-height:var(--lh-title)}
+/* L'approche suit la taille : −0,02 em au-dessus de 64 px, −0,01 em
+   en dessous (à 40 px, « rn » se touchait dans « fondateurs »).
+   --fs-title vaut 64 px à 1000 px de large. */
+@media (max-width:999.98px){ .h-xl{letter-spacing:-.01em} }
 .h-lg{font-size:var(--fs-section);letter-spacing:var(--ls-section);line-height:var(--lh-section)}
 .h-md{font-size:var(--fs-sub);    letter-spacing:var(--ls-sub);    line-height:var(--lh-sub)}
 .h-sm{font-size:var(--fs-sub);    letter-spacing:var(--ls-sub);    line-height:var(--lh-sub)}
@@ -506,7 +516,7 @@ body.lite .lgm-i:hover .lg-reflet,body.lite .lgm-i.lg-tombe .lg-goutte{animation
 .nav-logo{display:flex;align-items:center;color:var(--text);flex:0 0 auto}
 .nav-links{display:none;gap:clamp(16px,3vw,40px);position:absolute;left:50%;transform:translateX(-50%)}
 .nav-link{
-  position:relative;font-size:var(--fs-caption);font-weight:500;letter-spacing:0;color:var(--text-muted);
+  position:relative;font-size:var(--fs-caption);font-weight:400;letter-spacing:0;color:var(--text-muted);
   transition:color var(--dur-micro) var(--ease-out);
 }
 .nav-link::after{
@@ -536,7 +546,7 @@ body.lite .lgm-i:hover .lg-reflet,body.lite .lgm-i.lg-tombe .lg-goutte{animation
    bord de la pièce dorée et la mesure au pixel y relevait un liseré à
    1,08:1. On élargit plutôt que d'écarter l'alerte. */
 .lang-opt{
-  font-size:var(--fs-caption);font-weight:500;letter-spacing:.02em;color:var(--text);
+  font-size:var(--fs-caption);font-weight:400;letter-spacing:.02em;color:var(--text);
   display:flex;align-items:center;justify-content:center;
   min-width:38px;min-height:30px;padding:2px 10px;
 }
@@ -585,7 +595,7 @@ body.lite .lgm-i:hover .lg-reflet,body.lite .lgm-i.lg-tombe .lg-goutte{animation
 .hdr-tip{position:relative}
 .hdr-tip::after{
   content:attr(data-tip);position:absolute;top:calc(100% + 7px);left:50%;
-  transform:translateX(-50%);font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-subtle);white-space:nowrap;
+  transform:translateX(-50%);font-size:var(--fs-caption);font-weight:400;letter-spacing:0;color:var(--text-subtle);white-space:nowrap;
   opacity:0;pointer-events:none;transition:opacity .18s;
 }
 .hdr-tip:hover::after,.hdr-tip.tip-active::after{opacity:1}
@@ -607,43 +617,38 @@ body.lite .lgm-i:hover .lg-reflet,body.lite .lgm-i.lg-tombe .lg-goutte{animation
   transition:opacity .32s var(--ease-out);
 }
 .cnav.open{opacity:1;pointer-events:all}
-/* LE PLATEAU DU MENU N'EST PLUS UN DISQUE : c'est un octogone, la même
-   plaque que les boutons, coupée assez loin pour que ses huit côtés soient
-   égaux (coupe = largeur × 0,2929). Les liens restent disposés en cercle
-   à l'intérieur : la géométrie du placement n'a pas bougé.
-   L'ombre passe par drop-shadow : une box-shadow resterait carrée sous
-   un octogone peint dans le fond. Il n'apparaît plus depuis une échelle
-   nulle — rien de réel ne surgit de rien — mais de 94 %, en fondu avec
-   le voile. */
+/* LE MENU EST UNE LISTE. Alignée à gauche dans .wrap, en .h-md, sans
+   icônes. La transition d'ouverture (94 % → 100 %) est celle de l'ancien
+   plateau, gardée telle quelle. */
+.cnav{align-items:flex-start;overflow-y:auto}
 .cnav-ring{
-  --cut:calc(min(420px, 88vw) * .2929);
-  --pl-fond:var(--surface);--pl-filet:var(--border-strong);
-  position:relative;width:420px;height:420px;max-width:88vw;max-height:88vw;
-  display:flex;align-items:center;justify-content:center;
-  filter:drop-shadow(var(--shadow-2));
-  transform:scale(.94);transition:transform .44s var(--ease-out);
+  position:relative;width:100%;
+  padding-top:calc(var(--hdr) + var(--sp-4));padding-bottom:calc(var(--sp-9, 96px) + env(safe-area-inset-bottom, 0px));
+  transform:scale(.94);transform-origin:top left;transition:transform .44s var(--ease-out);
 }
 .cnav.open .cnav-ring{transform:scale(1)}
 .cnav-close{
   --cut:var(--cut-md);
+  position:absolute;top:var(--sp-5);right:var(--pad-x);
   width:54px;height:54px;
   display:flex;align-items:center;justify-content:center;
   z-index:1;
 }
 .cnav-close svg{width:20px;height:20px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:square;transition:rotate .24s var(--ease-out)}
 @media (hover:hover) and (pointer:fine){ .cnav-close:hover svg{rotate:90deg} }
-.cnav-item{position:absolute;top:50%;left:50%}
-.cnav-link{
-  --cut:var(--cut-md);--pl-fond:transparent;--pl-filet:transparent;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  width:74px;height:74px;color:var(--text-muted);gap:var(--sp-1);
-}
-.cnav-link.plq:focus-visible{--pl-fond:var(--accent);--pl-filet:var(--accent);color:var(--on-accent)}
+.cnav-liste,.cnav-sous{list-style:none;margin:0;padding:0}
+.cnav-liste>li{border-top:1px solid var(--border)}
+.cnav-liste>li:last-child{border-bottom:1px solid var(--border)}
+.cnav-link{display:block;padding:12px 0;color:var(--text);text-decoration:none}
+.cnav-link.h-md{line-height:1.2}
+.cnav-groupe{padding:12px 0}
+.cnav-sous-t{display:block;font-family:var(--font-display);font-weight:var(--w-display);font-size:var(--fs-sub);line-height:1.2;color:var(--text-muted)}
+.cnav-sous{display:flex;flex-wrap:wrap;gap:4px 24px;margin-top:4px}
+.cnav-link-s{font-size:var(--fs-body);padding:6px 0;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;text-decoration-color:var(--border-strong)}
+.cnav-link:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:var(--radius-tag)}
 @media (hover:hover) and (pointer:fine){
-  .cnav-link.plq:hover{--pl-fond:var(--accent);--pl-filet:var(--accent);color:var(--on-accent)}
+  .cnav-link:hover{color:var(--accent-text)}
 }
-.cnav-link svg{width:21px;height:21px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
-.cnav-name{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;}
 /* Langue et thème, au bas du menu plein écran. Masqués par défaut : sur
    grand écran ils sont dans la barre. */
 .cnav-tools{
@@ -688,10 +693,10 @@ body.lite .lgm-i:hover .lg-reflet,body.lite .lgm-i.lg-tombe .lg-goutte{animation
 /* Le filet qui sépare les colonnes de la ligne de copyright existe
    déjà : c'est la bordure basse de .foot-in, juste au-dessus. En
    ajouter un second en dessinait deux, à quarante pixels d'écart. */
-.foot-tag{font-size:var(--fs-100);font-weight:300;color:var(--text-muted);line-height:var(--lh-body);max-width:230px}
-.foot-col-title{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-subtle);margin-bottom:var(--sp-3)}
+.foot-tag{font-size:var(--fs-100);font-weight:400;color:var(--text-muted);line-height:var(--lh-body);max-width:230px}
+.foot-col-title{font-size:var(--fs-caption);font-weight:400;letter-spacing:0;color:var(--text-subtle);margin-bottom:var(--sp-3)}
 .foot-links{display:flex;flex-direction:column;gap:9px}
-.foot-lnk{font-size:13px;font-weight:300;color:var(--text-muted);transition:color var(--dur-micro) var(--ease-out)}
+.foot-lnk{font-size:14px;font-weight:400;color:var(--text-muted);transition:color var(--dur-micro) var(--ease-out)}
 .foot-lnk:hover{color:var(--accent-text)}
 /* ── LE PIED DE PAGE SUR LA SOIE ────────────────────────────────────
    La page Tarifs pose un fond anime, fixe a l'ecran : le pied de page
