@@ -1131,3 +1131,9 @@ body.lite .cta-inner,body.lite .launch-notice,body.lite .aside{animation:none!im
   .nav-r{gap:4px}
   .nav{column-gap:8px}
 }
+
+/* L'EN-TÊTE EN RECTANGLES. Les plaques de la barre (langue, thème, Menu,
+   Retour, devis) et leurs doubles du menu mobile perdent leurs coins
+   coupés. Le menu octogonal lui-même (.cnav-ring, .cnav-link,
+   .cnav-close) garde sa forme. */
+.hdr .plq,.hdr .ihb,.cnav-tools .plq{--cut:0px}
