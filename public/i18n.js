@@ -20,7 +20,7 @@ var D={
     'login-trust':'Your secure space',
     /* ── Header / nav ── */
     'hdr-nav-home':'Home','hdr-nav-services':'Services','hdr-nav-about':'About',
-    'hdr-nav-pricing':'Pricing','hdr-nav-faq':'FAQ','hdr-nav-contact':"Contact",
+    'hdr-nav-pricing':'Pricing','hdr-nav-faq':'FAQ','hdr-nav-contact':"Location",
     'hdr-nav-rdv':"Book a call",'hdr-nav-team':"The team",'hdr-nav-reviews':'Reviews',
     'hdr-cta':"Request a quote",
     'hdr-back':'Back',
@@ -292,8 +292,8 @@ var D={
     'trf-cta-btn1':"Request a quote",
     'trf-cta-btn2':'Contact us',
     /* ── Contact ── */
-    'ctt-eyebrow':'Our location',
-    'ctt-title':"Contact us",
+    'ctt-eyebrow':"Our location",
+    'ctt-title':"We're in<br><em>Carvin.</em>",
     /* ── Équipe ── */
     'eq-lbl':'The agency',
     'eq-h':"Imad and Ahmed,<br>the founders of Nexa&nbsp;Web",
@@ -440,8 +440,8 @@ var D={
     /* ── Divers partages ── */
     'gar-aria':'Money-back guarantee',
     'a11y-fermer-court':'Close',
-    'ct-aria':'Contact Nexa Web',
-    'ct-badge':'Carvin, France',
+    'ct-aria':"Contact Nexa Web",
+    'ct-badge':"Carvin, France",
     'dv-ph-tel':'06 12 34 56 78',
     'dv-ph-siret':'732 829 320 00074',
     /* ── Comment ça marche ── */
@@ -801,7 +801,7 @@ var D={
     'av-vide-t':'We welcome our very first clients.',
     'av-vide-s':"No review has been published yet. If you have worked with us, the form is below.",
     'av-envoi':'Sending…','av-compte':'reviews',
-    'ct-chargement':'Loading the globe…',
+    'ct-chargement':"Loading the globe…",
     /* ── Inscription ── */
     'ins-h':"Create your client account",
     'ins-ok-h':'Check your inbox',
@@ -1255,7 +1255,7 @@ var D={
     'login-trust':'Votre espace sécurisé',
     /* ── Header / nav ── */
     'hdr-nav-home':'Accueil','hdr-nav-services':'Services','hdr-nav-about':'À propos',
-    'hdr-nav-pricing':'Tarifs','hdr-nav-faq':'FAQ','hdr-nav-contact':"Contact",
+    'hdr-nav-pricing':'Tarifs','hdr-nav-faq':'FAQ','hdr-nav-contact':"Localisation",
     'hdr-nav-rdv':"Rendez-vous",'hdr-nav-team':"L'équipe",'hdr-nav-reviews':'Avis',
     'hdr-cta':"Demander un devis",
     'hdr-back':'Retour',
@@ -1527,8 +1527,8 @@ var D={
     'trf-cta-btn1':"Demander un devis",
     'trf-cta-btn2':'Nous contacter',
     /* ── Contact ── */
-    'ctt-eyebrow':'Notre localisation',
-    'ctt-title':"Nous contacter",
+    'ctt-eyebrow':"Notre localisation",
+    'ctt-title':"On est à<br><em>Carvin.</em>",
     /* ── Équipe ── */
     'eq-lbl':'L\'agence',
     'eq-h':"Imad et Ahmed,<br>les fondateurs de Nexa&nbsp;Web",
@@ -1672,8 +1672,8 @@ var D={
     /* ── Divers partages ── */
     'gar-aria':'Garantie satisfait ou remboursé',
     'a11y-fermer-court':'Fermer',
-    'ct-aria':'Contact Nexa Web',
-    'ct-badge':'Carvin, France',
+    'ct-aria':"Contact Nexa Web",
+    'ct-badge':"Carvin, France",
     'dv-ph-tel':'06 12 34 56 78',
     'dv-ph-siret':'732 829 320 00074',
     /* ── Comment ça marche ── */
@@ -2033,7 +2033,7 @@ var D={
     'av-vide-t':'Nous accueillons nos tout premiers clients.',
     'av-vide-s':"Aucun avis n'est encore publié. Si vous avez travaillé avec nous, le formulaire est en dessous.",
     'av-envoi':'Envoi…','av-compte':'avis',
-    'ct-chargement':'Chargement du globe…',
+    'ct-chargement':"Chargement du globe…",
     /* ── Inscription ── */
     'ins-h':"Créer votre espace client",
     'ins-ok-h':'Vérifiez votre boîte mail',

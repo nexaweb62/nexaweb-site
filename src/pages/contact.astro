@@ -4,7 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import '../styles/global.css';
 ---
-<BaseLayout title="Contact — Nexa Web" description="Nexa Web, agence web au 3 rue d'Albi à Carvin : adresse, e-mail, demande de devis et appel de 30 minutes.">
+<BaseLayout title="Localisation — Nexa Web" description="Nexa Web est basée à Carvin, Hauts-de-France. Retrouvez notre localisation et contactez-nous par email.">
 <style>
 /* Page override — full-screen globe */
 html,body{overflow:hidden;height:100%}
@@ -23,17 +23,11 @@ html,body{overflow:hidden;height:100%}
 .gl-loading-text{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-muted)}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* Le titre et les moyens de contact, dans la grille du site (.wrap) :
-   le titre commence au même endroit que sur les autres pages. */
-.contact-head{position:fixed;top:calc(var(--hdr) + 40px);left:0;right:0;z-index:40;pointer-events:none}
-.contact-title{color:var(--text);margin:0 0 var(--sp-5)}
-.contact-liste{list-style:none;margin:0;padding:0;max-width:440px;pointer-events:auto;
-  background:var(--bg);border-top:1px solid var(--border)}
-.contact-liste li{padding:10px 0;border-bottom:1px solid var(--border);font-size:var(--fs-body);line-height:1.4;color:var(--text)}
-.contact-liste .cl-t{color:var(--text-muted)}
-.contact-liste a{color:var(--text);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;text-decoration-color:var(--border-strong)}
-.contact-liste a:hover{text-decoration-color:currentColor}
-.contact-liste a:focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:var(--radius-tag)}
+/* Page title */
+.contact-head{position:fixed;top:calc(var(--hdr) + 40px);left:clamp(20px,5vw,80px);z-index:10;pointer-events:none}
+.contact-eyebrow{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--accent-text);margin-bottom:10px}
+.contact-title{font-size:clamp(1.7rem,3.8vw,3rem);font-weight:600;letter-spacing:-.014em;line-height:.96;color:var(--text)}
+.contact-title em{font-style:italic;color:var(--text-muted)}
 
 /* Carvin marker */
 #carvin-pin{position:fixed;z-index:30;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:4px;transform:translate(-50%,-100%) translateY(-10px);opacity:0;transition:opacity .4s}
@@ -71,17 +65,8 @@ html,body{overflow:hidden;height:100%}
 
 <!-- Page title -->
 <div class="contact-head" aria-label="Contact Nexa Web" data-i18n-aria="ct-aria">
-  <div class="wrap">
-    <h1 class="contact-title h-xl" data-i18n="ctt-title">Nous contacter</h1>
-    {/* Le téléphone manque : il sera ajouté quand le fondateur l'aura
-        donné. L'e-mail est l'adresse en service aujourd'hui. */}
-    <ul class="contact-liste" role="list">
-      <li><span class="cl-t" data-i18n="ctt-adr-t">Adresse :</span> <span data-i18n="ctt-adr">3 rue d'Albi, 62220 Carvin</span></li>
-      <li><span class="cl-t" data-i18n="ctt-mail-t">E-mail :</span> <a href="mailto:contact.nexaweb62@gmail.com">contact.nexaweb62@gmail.com</a></li>
-      <li><span class="cl-t" data-i18n="ctt-devis-t">Devis :</span> <a href="/devis" data-i18n="ctt-devis-l">remplir le formulaire</a></li>
-      <li><span class="cl-t" data-i18n="ctt-rdv-t">Appel de 30 minutes :</span> <a href="/rendez-vous" data-i18n="ctt-rdv-l">réserver un créneau</a></li>
-    </ul>
-  </div>
+  <div class="contact-eyebrow" data-i18n="ctt-eyebrow">Notre localisation</div>
+  <h1 class="contact-title" data-i18n="ctt-title">On est à<br><em>Carvin.</em></h1>
 </div>
 
 <!-- Carvin marker -->
