@@ -1,0 +1,32 @@
+---
+/**
+ * « Dernière mise à jour : 3 novembre 2026 », dans la langue de la page.
+ *
+ * La date vient de MISE_A_JOUR (src/data/entreprise.ts) et nulle part
+ * ailleurs : la recopier dans le dictionnaire de traduction la ferait
+ * dériver à la première révision. Le script la réécrit en anglais quand
+ * la page passe en anglais (data-i18n-js : le contrôle des traductions
+ * sait que ce texte est écrit par le composant lui-même).
+ */
+import { MISE_A_JOUR, dateLongue } from '../data/entreprise';
+export interface Props { iso?: string }
+const { iso = MISE_A_JOUR } = Astro.props;
+---
+<p class="legal-date"><span data-i18n="lg-maj">Dernière mise à jour :</span> <time datetime={iso} data-i18n-js data-date-longue data-fr={dateLongue(iso)}>{dateLongue(iso)}</time></p>
+
+<script>
+  /* Un seul format par langue, écrit à la main : on ne dépend pas de
+     l'ICU du navigateur pour un libellé juridique. */
+  const MOIS_EN = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+    'August', 'September', 'October', 'November', 'December'];
+  function peindre(lang?: string) {
+    const l = lang || (typeof (window as any).nwLang === 'function' ? (window as any).nwLang() : 'fr');
+    document.querySelectorAll<HTMLTimeElement>('time[data-date-longue]').forEach((t) => {
+      const [a, m, j] = (t.dateTime || '').split('-').map(Number);
+      if (!a || !m || !j) return;
+      t.textContent = l === 'en' ? `${j} ${MOIS_EN[m - 1]} ${a}` : (t.dataset.fr || t.textContent);
+    });
+  }
+  peindre();
+  document.addEventListener('nw-lang-applied', (e) => peindre((e as CustomEvent).detail));
+</script>

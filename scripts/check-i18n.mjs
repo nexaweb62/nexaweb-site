@@ -25,7 +25,7 @@ const BASE = process.env.BASE || 'http://localhost:4321';
 const PAGES = (process.env.PAGES || [
   '/', '/services', '/tarifs', '/devis', '/contact', '/equipe', '/avis',
   '/rendez-vous', '/comment-ca-marche', '/cgv', '/mentions-legales',
-  '/politique-confidentialite', '/site-vitrine', '/ecommerce', '/seo',
+  '/politique-confidentialite', '/politique-entreprise', '/site-vitrine', '/ecommerce', '/seo',
   '/design-uiux', '/refonte', '/site-internet-artisan',
   '/site-internet-commerce', '/site-internet-restaurant',
   '/login', '/inscription', '/404',

@@ -1,0 +1,101 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   LES PAGES JURIDIQUES — mentions légales, conditions de vente,
+   confidentialité, politique de l'entreprise.
+
+   POURQUOI UNE FEUILLE GLOBALE ET NON QUATRE <style> SCOPÉS.
+   Chacune des trois pages portait sa copie des mêmes règles, et la page
+   CGV avait dû passer ses liens en :global() : i18n.js réécrit chaque
+   paragraphe traduit par innerHTML, et le <a> ou le <strong> recréé
+   n'a plus l'attribut de portée d'Astro. Ici, rien n'est scopé : un
+   élément recréé par la traduction garde son style, dans les deux
+   langues. Toutes les classes commencent par legal- ou lg- pour ne
+   rien toucher ailleurs.
+
+   Aucune couleur écrite : uniquement les jetons de tokens.css.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.legal-hero{padding:clamp(48px,8vh,96px) 0 clamp(28px,4vh,48px)}
+.legal-title{font-size:clamp(28px,5vw,48px);letter-spacing:-.007em;line-height:1.1;
+  margin-bottom:16px;text-wrap:balance}
+.legal-intro{font-size:16px;line-height:1.65;color:var(--text-muted);max-width:62ch;margin-bottom:14px}
+.legal-date{font-size:13px;color:var(--text-muted)}
+.legal-date time{font-variant-numeric:tabular-nums}
+
+.legal-body{padding-bottom:clamp(64px,10vh,120px)}
+.legal-body section{margin-bottom:44px}
+.legal-body h2{font-size:16px;font-weight:600;letter-spacing:0;color:var(--text-muted);
+  border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:16px}
+.legal-body h3{font-size:15px;letter-spacing:0;color:var(--text);margin:24px 0 8px;line-height:1.35}
+/* L'opacité n'est pas une couleur : le gris secondaire fait l'effet
+   voulu et passe AA, là où une opacité de .85 faisait tomber l'or des
+   liens à 3,96:1. */
+.legal-body p{font-size:15px;line-height:1.75;color:var(--text-muted);margin-bottom:12px}
+.legal-body ul,.legal-body ol{font-size:15px;line-height:1.75;color:var(--text-muted);
+  padding-left:20px;margin-bottom:12px}
+.legal-body ul{list-style:disc}
+.legal-body ol{list-style:decimal}
+.legal-body li{margin-bottom:6px}
+.legal-body a{color:var(--accent-text);text-decoration:underline;text-underline-offset:3px}
+/* Une adresse e-mail ou une URL longue ne doit pas pousser la page
+   hors de l'écran à 390 px. */
+.legal-body a,.legal-body dd{overflow-wrap:anywhere}
+.legal-body strong{color:var(--text);font-weight:600}
+.legal-body a:focus-visible{outline:3px solid var(--accent-hover);outline-offset:2px;border-radius:2px}
+
+/* ── Le sommaire des pages longues ── */
+.lg-toc{margin:0 0 40px;padding:16px 20px;border:1px solid var(--border);border-radius:var(--radius-block)}
+.lg-toc-t{font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px}
+.legal-body .lg-toc ol{margin:0;font-size:14px;line-height:1.6}
+.legal-body .lg-toc li{margin-bottom:2px}
+
+/* ── Les fiches d'identité : un libellé, une valeur ── */
+.lg-dl{margin:4px 0 16px;border-top:1px solid var(--border)}
+.lg-dl > div{display:grid;grid-template-columns:minmax(150px,210px) 1fr;gap:2px 20px;
+  padding:9px 0;border-bottom:1px solid var(--border)}
+.lg-dl dt{font-size:14px;font-weight:600;color:var(--text);line-height:1.6}
+.lg-dl dd{margin:0;font-size:15px;line-height:1.6;color:var(--text-muted)}
+@media(max-width:560px){
+  .lg-dl > div{grid-template-columns:1fr}
+}
+
+/* ── Ce qui manque encore ──
+   Une donnée inconnue s'affiche, elle ne se cache pas. Un filet en
+   tirets la distingue d'une valeur réelle sans lui donner l'air d'une
+   erreur : c'est une case à remplir. */
+.lg-manque{display:inline-block;padding:0 7px;line-height:1.55;font-size:14px;
+  color:var(--text);background:var(--surface-2);
+  border:1px dashed var(--border-strong);border-radius:var(--radius-block)}
+
+/* ── Les encadrés : texte réglementaire, modèle à recopier ── */
+.lg-encadre{margin:14px 0 18px;padding:clamp(16px,2.4vw,22px);
+  background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--radius-block)}
+.legal-body .lg-encadre p:last-child,.legal-body .lg-encadre ul:last-child{margin-bottom:0}
+.lg-encadre-t{font-size:14px;font-weight:600;color:var(--text);margin-bottom:10px}
+.legal-body .lg-modele p{margin-bottom:8px;color:var(--text)}
+
+/* L'encadré de synthèse de la garantie, repris de l'ancienne page. */
+.cgv-resume{background:var(--surface);border:1px solid var(--accent);border-radius:var(--radius-block);
+  padding:clamp(16px,2.4vw,22px);margin-bottom:20px}
+.legal-body .cgv-resume p{margin:0;color:var(--text)}
+.cgv-badge{margin:4px 0 22px}
+
+/* ── Le tableau des traceurs (politique de confidentialité) ── */
+.pc-table{width:100%;border-collapse:collapse;margin:16px 0 18px;
+  font-size:14px;line-height:1.6;color:var(--text-muted)}
+.pc-table th,.pc-table td{text-align:left;vertical-align:top;
+  padding:9px 12px;border-bottom:1px solid var(--border)}
+.pc-table th{color:var(--text);font-weight:600;font-size:13px;
+  letter-spacing:0;border-bottom-color:var(--border-strong)}
+.pc-table td:first-child{color:var(--text);font-weight:500;white-space:nowrap}
+/* Sous 560 px, trois colonnes ne tiennent pas : le tableau se lit en
+   blocs empilés. L'en-tête de la troisième colonne revient devant sa
+   valeur, dans la langue de la page (i18n.js pose lang sur <html>). */
+@media(max-width:560px){
+  .pc-table,.pc-table tbody,.pc-table tr,.pc-table td{display:block;width:100%}
+  .pc-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+  .pc-table tr{border-bottom:1px solid var(--border-strong);padding:10px 0}
+  .pc-table td{border:0;padding:2px 0}
+  .pc-table td:first-child{white-space:normal}
+  .pc-table td:nth-child(3)::before{content:"Durée : ";color:var(--text-muted)}
+  html:lang(en) .pc-table td:nth-child(3)::before{content:"How long: "}
+}

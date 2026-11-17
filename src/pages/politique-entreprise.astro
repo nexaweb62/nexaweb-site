@@ -1,0 +1,127 @@
+---
+/**
+ * POLITIQUE DE L'ENTREPRISE — engagements, qualité et sécurité,
+ * responsabilité sociale et environnementale.
+ *
+ * RÈGLE D'ÉCRITURE : chaque phrase est soit un fait vérifiable dans le
+ * code ou sur le site, soit un engagement tenable. Ce qui n'a pas pu
+ * être vérifié (sauvegardes et mises à jour des sites livrés, achats de
+ * matériel…) n'est PAS écrit ici : il est listé « à confirmer » dans le
+ * rapport juridique, pour que le fondateur le décide.
+ *
+ * Les chiffres viennent de leur source unique : les prix de
+ * src/data/formules.ts, le poids de l'accueil de src/data/mesures.ts.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Valeur from '../components/Valeur.astro';
+import DateMaj from '../components/DateMaj.astro';
+import { EDITEUR, dateLongue } from '../data/entreprise';
+import { MESURE_ACCUEIL } from '../data/mesures';
+import { REFONTE_PRIX, VITRINE_PRIX, ENTREPRISE_PRIX } from '../data/formules';
+import '../styles/global.css';
+import '../styles/legal.css';
+const E = EDITEUR;
+const poids = MESURE_ACCUEIL.poidsKo.toFixed(1).replace('.', ',') + ' Ko';
+---
+<BaseLayout title="Politique de l'entreprise — Nexa Web" description="Les engagements de Nexa Web : prix, délais, garantie, transparence, qualité et sécurité des sites, sobriété numérique et ancrage local.">
+<Header backBtn={true} />
+
+<main id="main-content" tabindex="-1">
+  <div class="wrap" style="max-width:800px">
+    <div class="legal-hero">
+      <h1 class="legal-title" data-i18n="pe-h">Politique de<br>l'entreprise</h1>
+      <p class="legal-intro" data-i18n="pe-intro">Ce que nous nous engageons à faire pour nos clients, ce que nous vérifions avant de livrer un site, et ce que nous faisons pour limiter son poids. Quand un engagement est précisé ailleurs, le lien y mène.</p>
+      <DateMaj />
+    </div>
+    <div class="legal-body">
+
+      <nav class="lg-toc" aria-label="Sommaire" data-i18n-aria="lg-sommaire">
+        <p class="lg-toc-t" data-i18n="lg-sommaire">Sommaire</p>
+        <ol>
+          <li><a href="#engagements" data-i18n="pe-t1">Nos engagements</a></li>
+          <li><a href="#qualite" data-i18n="pe-t2">Qualité et sécurité</a></li>
+          <li><a href="#rse" data-i18n="pe-t3">Responsabilité sociale et environnementale</a></li>
+        </ol>
+      </nav>
+
+      <section id="engagements">
+        <h2 data-i18n="pe-s1">1. Nos engagements</h2>
+
+        <h3 data-i18n="pe-prix-h">Des prix affichés</h3>
+        <p data-i18n="pe-prix-1">Les prix de départ sont publiés sur la page <a href="/tarifs">Tarifs</a> :</p>
+        <ul>
+          <li><span data-i18n="cgv-f-refonte">Refonte de site : dès</span> <span data-i18n-prix>{REFONTE_PRIX}</span></li>
+          <li><span data-i18n="cgv-f-vitrine">Vitrine Pro (offre de lancement) :</span> <span data-i18n-prix>{VITRINE_PRIX}</span></li>
+          <li><span data-i18n="cgv-f-entreprise">Entreprise : à partir de</span> <span data-i18n-prix>{ENTREPRISE_PRIX}</span></li>
+        </ul>
+        <p data-i18n="pe-prix-2">Le devis, gratuit, fixe le prix total avant tout début de travail. Le paiement en 3 ou 4 fois ne coûte rien de plus que le paiement comptant.</p>
+
+        <h3 data-i18n="pe-delai-h">Des délais écrits</h3>
+        <p data-i18n="pe-delai-1">Nous répondons à une demande de devis sous 24 heures ouvrées. Comptez deux semaines pour une refonte et deux à quatre semaines pour un site complet, à partir de la validation du brief ; le délai qui nous engage est celui du devis.</p>
+
+        <h3 data-i18n="pe-gar-h">Une maquette garantie</h3>
+        <p data-i18n="pe-gar-1">Vous avez 14 jours pour valider la maquette, deux séries de retouches incluses ; si elle ne vous convient toujours pas, l'acompte vous est remboursé en entier, sans justification. Les conditions exactes sont dans les <a href="/cgv#garantie">conditions de vente</a>, avec le droit de rétractation et les garanties légales, qui s'appliquent en plus.</p>
+
+        <h3 data-i18n="pe-transp-h">De la transparence</h3>
+        <ul>
+          <li data-i18n="pe-transp-1">Les avis de la page Avis sont déposés par leurs auteurs au moyen d'un formulaire, lus avant publication et affichés du plus récent au plus ancien. Nous n'en écrivons pas et n'en achetons pas.</li>
+          <li data-i18n="pe-transp-2">Chaque chiffre affiché sur le site cite sa source et sa date, ou se calcule à partir de ce que vous saisissez vous-même.</li>
+          <li data-i18n="pe-transp-3">Refuser les cookies prend un clic, comme les accepter. Aucune case n'est cochée à votre place.</li>
+        </ul>
+
+        <h3 data-i18n="pe-donnees-h">Vos données</h3>
+        <p data-i18n="pe-donnees-1">Pas de publicité, pas de mesure d'audience, aucune revente. Ce que nous collectons et chez quels prestataires est détaillé dans la <a href="/politique-confidentialite">politique de confidentialité</a>.</p>
+
+        <h3 data-i18n="pe-acc-h">L'accessibilité visée</h3>
+        <p data-i18n="pe-acc-1">Nous visons le niveau AA des règles d'accessibilité WCAG, sur lesquelles repose le référentiel français RGAA. Sur ce site, le contraste de chaque texte est mesuré automatiquement (au moins 4,5:1), la navigation se fait au clavier, et les animations s'arrêtent si votre appareil le demande. Le site n'a pas fait l'objet d'un audit complet : signalez-nous tout obstacle, nous le corrigerons.</p>
+      </section>
+
+      <section id="qualite">
+        <h2 data-i18n="pe-s2">2. Qualité et sécurité</h2>
+
+        <h3 data-i18n="pe-ctrl-h">Avant la livraison</h3>
+        <ul>
+          <li data-i18n="pe-ctrl-1">Vous suivez le développement sur un lien de prévisualisation et donnez votre avis à chaque étape.</li>
+          <li data-i18n="pe-ctrl-2">Le site est testé sur ordinateur, tablette et téléphone, et ses performances sont vérifiées avant la mise en ligne.</li>
+          <li data-i18n="pe-ctrl-3">Pour une refonte, les anciennes adresses sont redirigées vers les nouvelles, pour garder votre référencement.</li>
+          <li data-i18n="pe-ctrl-4">Après la mise en ligne, nous corrigeons les défauts constatés et vous formons à la mise à jour de vos contenus.</li>
+        </ul>
+        <p data-i18n="pe-ctrl-5">L'hébergement, la maintenance et la durée du support dépendent de la formule et sont écrits dans le devis.</p>
+
+        <h3 id="securite" data-i18n="pe-secu-h">La sécurité de ce site</h3>
+        <ul>
+          <li data-i18n="pe-secu-1">Il est servi en HTTPS, avec des en-têtes qui interdisent au navigateur de deviner le type d'un fichier et limitent les informations transmises aux autres sites.</li>
+          <li data-i18n="pe-secu-2">Le formulaire de devis écarte les robots (champ piège, vérification Turnstile), puis vous envoie un lien de confirmation. Votre demande voyage chiffrée dans ce lien et n'est enregistrée qu'après votre clic.</li>
+          <li data-i18n="pe-secu-3">Les clés secrètes restent sur le serveur, jamais dans les pages. L'espace interne n'est ouvert qu'aux comptes de l'équipe, vérifiés à chaque requête, et lit nos tableaux de suivi en lecture seule.</li>
+        </ul>
+
+        <h3 data-i18n="pe-faille-h">Signaler une faille</h3>
+        <p data-i18n="pe-faille-1">Si vous trouvez une faille sur ce site ou sur un site que nous avons livré, écrivez-nous avec l'objet « Sécurité » en décrivant ce que vous avez constaté. N'accédez pas aux données d'autrui au-delà de ce qui est nécessaire pour le montrer, et n'en gardez pas de copie. Nous accusons réception et vous tenons informé de la correction.</p>
+        <p><Valeur v={E.email} href={'mailto:' + E.email + '?subject=S%C3%A9curit%C3%A9'} /></p>
+      </section>
+
+      <section id="rse">
+        <h2 data-i18n="pe-s3">3. Responsabilité sociale et environnementale</h2>
+
+        <h3 data-i18n="pe-sob-h">Des pages légères</h3>
+        <p><span data-i18n="pe-sob-1">Notre page d'accueil pèse</span> <strong translate="no">{poids}</strong> <span data-i18n="pe-sob-2">sur mobile, mesurée le</span> <time datetime={MESURE_ACCUEIL.date} data-i18n-js data-date-longue data-fr={dateLongue(MESURE_ACCUEIL.date)}>{dateLongue(MESURE_ACCUEIL.date)}</time> <span data-i18n="pe-sob-3">avec Lighthouse 12.8.2 (médiane de trois passes, octets non compressés : en ligne, la page pèse moins).</span></p>
+        <p data-i18n="pe-sob-4">Ce poids tient à des choix simples : aucun traceur ni publicité, des polices servies depuis notre propre domaine, des images produites à plusieurs largeurs pour que chaque écran reçoive la plus petite qui suffit, et le retrait des décors animés qui ne servaient pas le contenu. Nous appliquons les mêmes principes aux sites que nous livrons.</p>
+
+        <h3 data-i18n="pe-heb-h">L'hébergement</h3>
+        <p data-i18n="pe-heb-1">Le site est servi par le réseau de Cloudflare. Nous ne le présentons pas comme un hébergement « vert » : nous n'avons pas de mesure de l'empreinte propre à ce site, et nous n'écrirons pas d'allégation environnementale que nous ne pouvons pas prouver.</p>
+
+        <h3 data-i18n="pe-achats-h">Les outils</h3>
+        <p data-i18n="pe-achats-1">Nous n'ajoutons un service extérieur que s'il sert directement nos clients ou la sécurité du site. Chacun est nommé, avec son rôle, dans la politique de confidentialité.</p>
+
+        <h3 data-i18n="pe-local-h">Un ancrage local</h3>
+        <p data-i18n="pe-local-1">Nexa Web est installée à Carvin, dans le Pas-de-Calais. Nous travaillons d'abord pour les restaurants, commerces et artisans de la région, et ce sont les deux fondateurs qui font votre site, du premier appel à la mise en ligne.</p>
+      </section>
+
+    </div>
+  </div>
+</main>
+
+<Footer />
+</BaseLayout>
