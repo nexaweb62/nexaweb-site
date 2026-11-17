@@ -35,14 +35,8 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
 
 /* ── LE HÉROS ── */
 .dv-hero{text-align:center;margin-bottom:clamp(30px,5vw,54px)}
-.dv-pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border-strong);
-  border-radius:var(--radius-tag);padding:6px 16px;font-size:var(--fs-caption);font-weight:600;
-  letter-spacing:0;color:var(--text-muted);margin-bottom:22px}
-.dv-pill-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
-.dv-title{font-size:clamp(1.9rem,5vw,3.4rem);font-weight:600;letter-spacing:-.012em;line-height:1.04;
-  text-wrap:balance;margin:0}
-.dv-title em{font-style:normal}
-.dv-lede{margin:18px auto 0;max-width:52ch;color:var(--text-muted);font-weight:300;line-height:1.7}
+.dv-title{margin:0}
+.dv-lede{margin:18px auto 0;max-width:52ch;color:var(--text-muted);font-weight:400;line-height:1.6}
 
 /* ── LE FORMULAIRE, SEUL ET CENTRÉ ──
    La colonne « Ce qui se passe ensuite » est partie : ses trois étapes
@@ -60,18 +54,14 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
 
 /* ── LAUNCH NOTICE ── */
 .launch-notice{display:flex;align-items:center;gap:12px;background:var(--success-glow);border:1px solid var(--success);border-radius:var(--radius-block);padding:14px 18px;margin-bottom:32px}
-.launch-notice svg{width:18px;height:18px;stroke:var(--success);stroke-width:2;fill:none;flex-shrink:0}
+/* Plus d'éclair devant l'offre (rapport P1-11, même retrait que sur /tarifs). */
 /* Mesuré : sur un panneau teinté (or ou vert à ~13 %), le gris secondaire
    tombe juste sous AA en sombre — 4.48:1 et 4.1:1. Sur ces fonds-là, le
    texte secondaire prend l'encre pleine. */
-.launch-notice p{font-size:12.5px;color:var(--text);line-height:1.55}
-.launch-notice strong{color:var(--success)}
+.launch-notice p{font-size:14px;color:var(--text);line-height:1.55}
+/* Aucun mot ni montant peint en or dans la phrase. */
+.launch-notice strong{color:inherit;font-weight:inherit}
 
-/* ── CARD HEAD ── */
-.card-eyebrow{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--accent-text);margin-bottom:10px}
-.card-title{font-size:clamp(1.6rem,3vw,2.4rem);font-weight:600;letter-spacing:-.014em;line-height:.95;margin-bottom:10px}
-.card-title em{font-style:italic;color:var(--text-muted)}
-.card-sub{font-size:13px;color:var(--text-muted);line-height:1.6;margin-bottom:36px}
 
 /* ── SECTION LABEL ── */
 .form-section{margin-bottom:28px}
@@ -81,7 +71,7 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
 .fstep-n{flex:none;width:24px;height:24px;border-radius:var(--radius-tag);display:flex;align-items:center;
   justify-content:center;font-size:12px;font-weight:600;color:var(--on-accent);background:var(--accent);
   font-variant-numeric:tabular-nums}
-.fstep-t{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text)}
+.fstep-t{font-size:14px;font-weight:600;letter-spacing:0;color:var(--text)}
 :root[data-theme="light"] .section-label{border-bottom-color:var(--border)}
 @media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .section-label{border-bottom-color:var(--border)}}
 
@@ -89,10 +79,8 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
 .field-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:560px){.field-grid{grid-template-columns:1fr}}
 @media(max-width:600px){
-  .devis-page{padding-top:32px;padding-bottom:40px}
+  .devis-page{padding-top:calc(var(--hdr) + 32px);padding-bottom:40px}
   .devis-card{padding:22px 18px}
-  .card-title{font-size:1.35rem}
-  .card-sub{font-size:12px;margin-bottom:24px}
   .field label{font-size:var(--fs-caption)}
   .field input:not([type=checkbox]):not([type=radio]),.field textarea,.field select{font-size:12px;padding:10px 13px}
   .section-label{font-size:var(--fs-caption)}
@@ -199,7 +187,10 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
 /* La sélection : la plaque prend un filet d'or plein et un fond teinté.
    Plus de halo carré autour d'une forme coupée, plus de rebond à 106 % :
    le changement de teinte suffit à dire « c'est celle-là ». */
-.budget-pill.selected,.budget-pill.selected:hover{--pl-fond:var(--accent-glow);--pl-filet:var(--accent);color:var(--accent-text)}
+/* Fond OPAQUE : la plaque peint son fond en quatre quarts de 51 % qui se
+   chevauchent au milieu ; avec --accent-glow, translucide, le chevauchement
+   dessinait un trait vertical au centre de la pastille choisie. */
+.budget-pill.selected,.budget-pill.selected:hover{--pl-fond:color-mix(in srgb,var(--accent) 11%,var(--surface));--pl-filet:var(--accent);color:var(--accent-text)}
 
 /* ── LA MENSUALITÉ DANS LA PASTILLE ─────────────────────────────────
    Une seule des deux lignes s'affiche, celle de l'échéancier choisi
@@ -215,7 +206,7 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
 #devis-form:has(input[name="paiement"][value="3"]:checked) .budget-m3,
 #devis-form:has(input[name="paiement"][value="4"]:checked) .budget-m4{display:block}
 .budget-mois{
-  font-size:var(--fs-100);font-weight:500;
+  font-size:var(--fs-100);font-weight:400;
   /* La pastille sélectionnée passe en doré : la mensualité suit sa
      couleur au lieu d'un gris qui y perdrait son contraste.
 
@@ -254,6 +245,13 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
 .rgpd-label{display:flex;align-items:flex-start;gap:10px;cursor:pointer}
 .rgpd-label input[type=checkbox]{width:15px;height:15px;flex-shrink:0;margin-top:2px;accent-color:var(--accent);cursor:pointer}
 .rgpd-label span{font-size:var(--fs-caption);line-height:1.65;color:var(--text)}
+/* Le consentement est un paragraphe de quatre lignes, pas un libellé :
+   il ne prend pas les petites capitales espacées des champs. */
+.field label.rgpd-label,.rgpd-label span{text-transform:none;letter-spacing:normal;font-size:14px;font-weight:400}
+/* La mention « facultatif / requis » du SIRET, entre parenthèses, en
+   casse normale : collée au libellé en capitales, elle se lisait
+   « NUMÉRO SIRETFACULTATIF ». */
+.field label .lf-opt{text-transform:none;letter-spacing:normal;font-weight:400}
 .rgpd-label a{color:var(--accent-text);text-decoration:underline}
 .req{color:var(--accent-text)}
 .field-err{font-size:var(--fs-caption);color:var(--danger);min-height:14px;display:block;margin-top:3px;line-height:1.4}
@@ -305,10 +303,8 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
 
     <!-- LE HÉROS -->
     <header class="dv-hero">
-      <span class="dv-pill"><span class="dv-pill-dot" aria-hidden="true"></span><span data-i18n="dv-pill">Devis gratuit</span></span>
-      <h1 class="dv-title" data-i18n="dv-title">Un prix ferme en <em class="liquid">48 heures</em>.</h1>
-      <p class="dv-lede" data-i18n="dv-lede">Décrivez votre projet. Nous revenons vers vous avec un devis
-        détaillé, sans engagement — et sans mauvaise surprise.</p>
+      <h1 class="dv-title h-xl" data-i18n="dv-title">Un prix ferme sous 48&nbsp;h ouvrées</h1>
+      <p class="dv-lede" data-i18n="dv-lede">Décrivez votre projet. On vous répond sous 24 h, puis vous recevez un devis détaillé, sans engagement.</p>
     </header>
 
     <div class="devis-grid">
@@ -325,7 +321,7 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
              Une personne qui croit sa demande transmise attendrait une
              réponse qui ne viendrait jamais. -->
         <h2 class="success-title" data-i18n="dv-ok-t">Vérifiez votre boîte mail</h2>
-        <p class="success-text" data-i18n="dv-ok-s">Nous venons de vous envoyer un e-mail. <strong>Cliquez sur le lien qu'il contient</strong> pour confirmer votre demande — c'est seulement à ce moment qu'elle nous parvient. Pensez à regarder vos indésirables. Le lien est valable 24 heures.</p>
+        <p class="success-text" data-i18n="dv-ok-s">Nous venons de vous envoyer un e-mail. <strong>Cliquez sur le lien qu'il contient</strong> pour confirmer votre demande : elle ne nous parvient qu'à ce moment-là. Pensez à regarder vos indésirables. Le lien est valable 24 heures.</p>
         <InteractiveButton text="Retour à l'accueil" class="success-back" id="success-back-btn" data-i18n="dv-ok-btn" />
       </div>
 
@@ -345,7 +341,6 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
 
         <!-- OFFRE LANCEMENT -->
         <div class="launch-notice">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
           <!-- Le prix vit dans son propre <strong> : i18n.js remplace le
                contenu de l'element qu'il cible, et une cle posee sur le
                paragraphe entier effacerait le montant. La phrase est donc
@@ -354,9 +349,6 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
         </div>
 
         <!-- HEAD -->
-        <div class="card-eyebrow" data-i18n="eyebrow">Demande de devis gratuit</div>
-        <h1 class="card-title" data-i18n="title">Parlons de<br><em>votre projet.</em></h1>
-        <p class="card-sub" data-i18n="sub">Réponse sous 24 h · Devis gratuit &amp; sans engagement</p>
 
         <!-- CONTACT -->
         <div class="form-section">
@@ -391,8 +383,7 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
                  de l'annuaire de l'État — pas seulement ici. -->
             <div class="field" id="champ-siret">
               <label for="siret">
-                <span data-i18n="dv-siret">SIRET</span>
-                <span class="lf-opt" id="siret-mention" data-i18n="dv-siret-opt">facultatif</span>
+                <span data-i18n="dv-siret">Numéro SIRET</span> <span class="lf-opt">(<span id="siret-mention" data-i18n="dv-siret-opt">facultatif</span>)</span>
               </label>
               <input type="text" id="siret" name="siret" inputmode="numeric" maxlength="17"
                      placeholder="732 829 320 00074" data-i18n-ph="dv-ph-siret" autocomplete="off">
@@ -452,7 +443,7 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
                           son propre <span> : i18n.js remplace le texte de
                           l'élément qu'il cible, et le poser sur la pastille
                           entière effacerait le prix et les mensualités. */}
-                      <span data-i18n={f.nomCle}>{f.nom}</span> — {f.pre && <span data-i18n={f.preCle}>{f.pre}</span>}{f.pre ? ' ' : ''}<span data-i18n-prix>{f.total}</span>
+                      <span data-i18n={f.nomCle}>{f.nom}</span>, {f.pre && <span data-i18n={f.preCle}>{f.pre}</span>}{f.pre ? ' ' : ''}<span data-i18n-prix>{f.total}</span>
                       <small class="budget-mois budget-m3">{f.m3}<span data-i18n="dvs-mois">/mois</span></small>
                       <small class="budget-mois budget-m4">{f.m4}<span data-i18n="dvs-mois">/mois</span></small>
                     </span>
@@ -498,7 +489,7 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
                autres promesses restent, elles n'ont rien d'obscur. -->
           <div class="submit-note">
             <GarantieBadge />
-            <span class="submit-note-txt" data-i18n="dvs-note">Réponse sous 24 h · 100 % gratuit</span>
+            <span class="submit-note-txt" data-i18n="dvs-note">Réponse sous 24 h. Gratuit et sans engagement.</span>
           </div>
           <InteractiveButton text="Envoyer ma demande" type="submit" variant="gold" class="submit-btn" id="submit-btn" data-i18n="submit" />
         </div>

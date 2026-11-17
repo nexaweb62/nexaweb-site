@@ -12,7 +12,7 @@ import {
   ENTREPRISE_PRIX, ENTREPRISE_M3, ENTREPRISE_M4,
 } from '../data/formules';
 ---
-<BaseLayout title="Tarifs — Nexa Web" description="Refonte de site dès 490 €, Vitrine Pro à 999 € (offre de lancement, places limitées) et Entreprise à partir de 1 200 €. Paiement en 3 ou 4 fois possible. Devis gratuit — Nexa Web, Carvin.">
+<BaseLayout title="Tarifs — Nexa Web" description="Refonte de site dès 490 €, Vitrine Pro à 999 € (prix de lancement pour nos trois premiers clients) et Entreprise à partir de 1 200 €. Paiement en 1, 3 ou 4 fois. Nexa Web, Carvin.">
 <style>
 /* ── NOTE D'HISTOIRE ──────────────────────────────────────────────────
    Le fond de cette page fut longtemps une SOIE ANIMEE : un shader WebGL
@@ -42,7 +42,7 @@ main{--text-muted:var(--raw-warm-200)}
 :root[data-theme="light"] main,
 :root:not([data-theme="dark"]) main{--text-muted:var(--raw-stone-600)}
 
-.prix-hero{padding:clamp(56px,9vh,100px) 0 clamp(32px,5vh,56px);text-align:center;position:relative;z-index:1}
+.prix-hero{padding:calc(var(--hdr) + clamp(32px,6vh,72px)) 0 clamp(32px,5vh,56px);text-align:center;position:relative;z-index:1}
 /* Le chapeau et le sous-titre n'ont aucune carte pour les porter :
    mesuré, le sous-titre tombe à 2,64:1 sur les passages clairs. Un
    renfort sombre local, qui s'éteint avant le bandeau de lancement. */
@@ -52,9 +52,7 @@ main{--text-muted:var(--raw-warm-200)}
   background:radial-gradient(120% 70% at 50% 40%,
     rgb(from var(--bg) r g b / .82), rgb(from var(--bg) r g b / 0) 70%);
 }
-.prix-pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border-strong);border-radius:var(--radius-tag);padding:6px 16px;font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-muted);margin-bottom:24px}
-.prix-pill-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
-.prix-h1{font-size:clamp(32px,5.5vw,72px);font-weight:600;line-height:1.06;letter-spacing:-.010em;margin-bottom:16px}
+.prix-h1{margin:0 0 16px}
 .prix-sub{font-size:clamp(15px,1.4vw,17px);color:var(--text-muted);line-height:1.65;max-width:440px;margin:0 auto}
 
 /* ── OFFRE LANCEMENT ── */
@@ -72,22 +70,14 @@ main{--text-muted:var(--raw-warm-200)}
   display:flex;align-items:center;gap:24px;
   flex-wrap:wrap;
 }
-.launch-ico{
-  width:56px;height:56px;border-radius:var(--radius-tag);background:var(--success-glow);border:1px solid var(--success);
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-}
-.launch-ico svg{width:28px;height:28px;stroke:var(--success);stroke-width:2;fill:none}
-.launch-text{flex:1;min-width:200px}
-.launch-tag{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--success);margin-bottom:6px}
-.launch-title{font-size:clamp(18px,2.5vw,26px);font-weight:600;letter-spacing:-.007em;line-height:1.1;margin-bottom:6px}
-.launch-title strong{color:var(--success)}
-.launch-desc{font-size:13px;color:var(--text-muted);line-height:1.6}
-.launch-spots{
-  display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;flex-shrink:0;
-}
-.launch-num{font-size:clamp(32px,5vw,48px);font-weight:600;color:var(--success);line-height:1;letter-spacing:-.010em}
-.launch-num-label{font-size:var(--fs-caption);font-weight:600;color:var(--text-muted);letter-spacing:0}
-@media(max-width:600px){.launch-band{flex-direction:column;text-align:center}.launch-spots{flex-direction:row;gap:12px;justify-content:center}}
+.launch-text{flex:1;min-width:200px;text-align:left}
+.launch-title{margin:0 0 8px}
+/* Le montant n'est plus peint en or ni grossi : il se lit dans la phrase. */
+.launch-title strong{color:inherit;font-weight:inherit}
+.launch-desc{font-size:15px;color:var(--text-muted);line-height:1.6;margin:0}
+/* Le nombre de places, seulement s'il vient des données (Supabase) :
+   une phrase, sans compteur ni couleur d'urgence. Caché sinon. */
+.launch-reste{font-size:15px;color:var(--text);line-height:1.5;margin:10px 0 0}
 
 /* ── FORMULES ── */
 .plans-section{padding:clamp(32px,5vh,56px) 0 clamp(48px,7vh,72px);position:relative;z-index:1}
@@ -115,12 +105,7 @@ main{--text-muted:var(--raw-warm-200)}
    qu'aucune règle ne les cible : le titre de section tombait sur le
    style h2 par défaut du navigateur — trop petit, interligne trop
    lâche. Elles prennent l'échelle. */
-.section-tag{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--accent-text);margin:0 0 14px}
-.section-title{
-  font-size:var(--fs-section);font-weight:var(--w-semi);
-  letter-spacing:var(--ls-section);line-height:var(--lh-section);
-  margin:0 0 clamp(28px,4vh,44px);text-wrap:balance;
-}
+.section-title{margin:0 0 clamp(28px,4vh,44px)}
 /* Trois formules : trois colonnes. Deux laisseraient une carte
    orpheline sur sa ligne. La bascule est a 900 px et non a 760 :
    mesure, a 760 px trois colonnes debordent de 31 px. */
@@ -137,7 +122,7 @@ main{--text-muted:var(--raw-warm-200)}
    bouchait les lettres. Et un plancher de 11 px sur téléphone, où .46 em
    d'un prix de 20 px ne laissait que 9,2 px. */
 .plan-pre,.plan-mois-u{font-family:var(--font);font-synthesis:none}
-.plan-pre{font-size:max(11px,.46em);font-weight:500;letter-spacing:.02em;color:var(--text-muted);
+.plan-pre{font-size:max(11px,.46em);font-weight:400;letter-spacing:.02em;color:var(--text-muted);
   margin-right:.12em;vertical-align:.32em}
 
 /* ── PAIEMENT : COMPTANT OU MENSUEL ────────────────────────────────
@@ -168,7 +153,7 @@ main{--text-muted:var(--raw-warm-200)}
 .paie-radio{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
 .paie-lbl{
   --cut:3px;--pl-fond:transparent;--pl-filet:transparent;border-width:0;
-  font-size:var(--fs-caption);font-weight:500;letter-spacing:.01em;color:var(--text);
+  font-size:14px;font-weight:400;letter-spacing:0;color:var(--text);
   display:flex;align-items:center;justify-content:center;cursor:pointer;
   min-height:30px;padding:2px 14px;
 }
@@ -188,7 +173,7 @@ main{--text-muted:var(--raw-warm-200)}
 .plan-mois{font-size:clamp(20px,2.4vw,28px);font-weight:600;letter-spacing:-.010em;line-height:1;
   white-space:nowrap;font-variant-numeric:tabular-nums}
 .plan-mois-gros{font-size:clamp(23px,3vw,33px);letter-spacing:-.014em}
-.plan-mois-u{font-size:max(11px,.42em);font-weight:500;color:var(--text-muted);margin-left:.1em}
+.plan-mois-u{font-size:max(11px,.42em);font-weight:400;color:var(--text-muted);margin-left:.1em}
 .plans-section:has(#paie-3:checked) .plan-comptant,
 .plans-section:has(#paie-4:checked) .plan-comptant{display:none}
 /* « block » et non « inline-flex » : un conteneur flex ne rend pas les
@@ -201,18 +186,12 @@ main{--text-muted:var(--raw-warm-200)}
 .plans-section:has(#paie-4:checked) .plan-m4{display:block}
 @media(max-width:600px){
   .plan-card{padding:14px 14px}
-  .plan-name{font-size:var(--fs-caption);margin-bottom:8px}
+  .plan-name{margin-bottom:8px}
   .plan-from,.plan-to{font-size:20px}
   .plan-amount{font-size:21px}
   .plan-sep{font-size:13px}
-  .plan-desc{font-size:var(--fs-caption)}
-  .plan-feature{font-size:var(--fs-caption);gap:6px}
-  .plan-feature-icon{width:14px;height:14px}
-  .plan-feature-icon svg{width:7px;height:7px}
-  .plan-spots{font-size:var(--fs-caption);padding:4px 8px}
-  .plan-spots-num{font-size:12px}
   .plan-divider{margin:12px 0}
-  .plan-features{gap:7px;margin-bottom:16px}
+  .plan-features{margin-bottom:16px}
 }
 /* Les cartes laissent voir la soie : même couleur de fond qu'avant,
    simplement rendue translucide, et un flou d'arrière-plan pour que les
@@ -243,13 +222,7 @@ main{--text-muted:var(--raw-warm-200)}
   border-color:var(--accent);
   box-shadow:0 0 0 1px var(--accent),var(--shadow-2);
 }
-.plan-badge{position:absolute;inset-x:0;top:-13px;display:flex;justify-content:center}
-.plan-badge span{
-  background:var(--accent);
-  color:var(--on-accent);font-size:var(--fs-caption);font-weight:600;letter-spacing:0;
-  padding:4px 12px;border-radius:var(--radius-tag);box-shadow:var(--shadow-1);
-}
-.plan-name{font-size:var(--fs-caption);font-weight:600;color:var(--text-muted);margin-bottom:12px}
+.plan-name{font-size:15px;font-weight:600;color:var(--text-muted);margin-bottom:12px}
 .plan-range{display:flex;align-items:center;gap:6px;flex-wrap:nowrap}
 .plan-from{font-size:clamp(20px,2.4vw,28px);font-weight:600;letter-spacing:-.010em;line-height:1;white-space:nowrap;font-variant-numeric:tabular-nums}
 .plan-sep{font-size:clamp(14px,1.5vw,18px);color:var(--text-subtle);flex-shrink:0;line-height:1}
@@ -258,21 +231,11 @@ main{--text-muted:var(--raw-warm-200)}
    Les chiffres tabulaires sont plus larges : la taille descend d'un
    cran pour que « 1 200 € — 3 100 € » tienne encore sur une ligne. */
 .plan-amount{font-size:clamp(23px,3vw,33px);font-weight:600;letter-spacing:-.014em;line-height:1;white-space:nowrap;font-variant-numeric:tabular-nums}
-.plan-desc{font-size:var(--fs-caption);color:var(--text-muted);margin-top:5px;line-height:1.5}
-/* La pastille des places restantes n'avait qu'une lueur doree pour
-   fond : posee sur une carte deja translucide a 94 %, la soie remontait
-   jusqu'a 83,74,52 sous son texte et le faisait tomber a 3,72:1. Teinte
-   et bordure inchangees, un fond opaque s'ajoute dessous. */
-.plan-spots{display:inline-flex;align-items:center;gap:5px;font-size:var(--fs-caption);font-weight:600;color:var(--accent-text);padding:4px 9px;
-  background:var(--surface);
-  background-image:linear-gradient(var(--accent-glow),var(--accent-glow));
-  border:1px solid var(--accent);border-radius:var(--radius-block);margin-bottom:14px}
-.plan-spots-num{font-size:12px;font-weight:600;line-height:1}
-.plan-divider{border:none;border-top:1px dashed var(--border-strong);margin:16px 0}
-.plan-features{list-style:none;padding:0;margin:0 0 20px;display:flex;flex-direction:column;gap:8px;flex:1}
-.plan-feature{display:flex;align-items:flex-start;gap:8px;font-size:var(--fs-caption);color:var(--text-muted);line-height:1.4}
-.plan-feature-icon{width:16px;height:16px;border-radius:var(--radius-tag);background:var(--success-glow);border:1px solid var(--success);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-.plan-feature-icon svg{width:8px;height:8px;stroke:var(--success);stroke-width:2.5;fill:none}
+.plan-desc{font-size:14px;color:var(--text-muted);margin-top:5px;line-height:1.5}
+.plan-divider{border:none;border-top:1px solid var(--border-strong);margin:16px 0 0}
+/* Une liste à filets, sans cases cochées. */
+.plan-features{list-style:none;padding:0;margin:0 0 20px;display:flex;flex-direction:column;flex:1}
+.plan-feature{font-size:14px;color:var(--text-muted);line-height:1.4;padding:8px 0;border-bottom:1px solid var(--border)}
 
 /* Le badge de garantie, centré sous la grille. Sa fenêtre et son
    habillage vivent dans le composant ; ici, seule sa place. */
@@ -308,7 +271,7 @@ main{--text-muted:var(--raw-warm-200)}
   border:1px solid var(--accent);border-radius:var(--radius-block);
   padding:clamp(32px,4vw,52px);
 }
-.cta-title{font-size:clamp(20px,3vw,30px);font-weight:600;letter-spacing:-.007em;margin-bottom:12px}
+.cta-title{margin:0 0 12px}
 /* Mesuré : sur un panneau teinté (or ou vert à ~13 %), le gris secondaire
    tombe juste sous AA en sombre — 4.48:1 et 4.1:1. Sur ces fonds-là, le
    texte secondaire prend l'encre pleine. */
@@ -335,38 +298,30 @@ main{--text-muted:var(--raw-warm-200)}
   <div class="amb-depth"></div>
   <div class="amb-streak"></div>
 </div>
-<Header cta="Devis gratuit" ctaHref="/devis" />
+<Header />
 
 <main id="main-content" tabindex="-1" style="position:relative;z-index:1">
-  <div class="wrap" style="max-width:1040px">
+  <div class="wrap">
 
     <!-- HERO -->
     <div class="prix-hero">
-      <div class="prix-pill"><span class="prix-pill-dot"></span><span data-i18n="trf-pill">Tarifs 2026</span></div>
-      <h1 class="prix-h1" data-i18n="trf-h1">Transparent.<br>Sans surprise.</h1>
-      <p class="prix-sub" data-i18n="trf-sub">Un prix juste pour chaque projet. Vous savez exactement ce que vous payez avant de signer.</p>
+      <h1 class="prix-h1 h-xl" data-i18n="trf-h1">Ce que coûte votre site</h1>
+      <p class="prix-sub" data-i18n="trf-sub">Le prix est fixé dans le devis avant de commencer. Il ne change pas en cours de route.</p>
 
       <!-- OFFRE LANCEMENT -->
       <div class="launch-band">
-        <div class="launch-ico">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        </div>
         <div class="launch-text">
-          <p class="launch-tag" data-i18n="trf-launch-tag">Offre de lancement</p>
-          <h2 class="launch-title" data-i18n="trf-launch-h">3 premiers clients à <strong>999&nbsp;€</strong> tout inclus</h2>
-          <p class="launch-desc" data-i18n="trf-launch-d">Site vitrine complet, design sur mesure, responsive, SEO de base et 1 mois de support — à prix de lancement. Places très limitées.</p>
-        </div>
-        <div class="launch-spots">
-          <span class="launch-num" id="launch-num">3</span>
-          <span class="launch-num-label" data-i18n="trf-spots">places restantes</span>
+          {/* Le montant hors de la clé : il vient de formules.ts. */}
+          <h2 class="launch-title h-md"><span data-i18n="trf-launch-h1">Pour nos 3 premiers clients :</span> <span data-i18n-prix>{VITRINE_PRIX}</span> <span data-i18n="trf-launch-h2">tout compris</span></h2>
+          <p class="launch-desc" data-i18n="trf-launch-d">Site vitrine jusqu'à 5 pages, maquette dessinée pour vous, référencement de base et un mois de support.</p>
+          <p class="launch-reste" id="launch-reste" hidden></p>
         </div>
       </div>
     </div>
 
     <!-- FORMULES -->
     <div class="plans-section">
-      <p class="section-tag" data-i18n="trf-plans-tag">Choisissez votre formule</p>
-      <h2 class="section-title" data-i18n="trf-plans-h">La formule<br>adaptée à votre profil.</h2>
+      <h2 class="section-title h-lg" data-i18n="trf-plans-h">Les trois formules</h2>
 
       <!-- Deux vrais boutons radio, et non des <button> pilotés en JS :
            le clavier, le lecteur d'écran et l'état coché viennent avec,
@@ -395,38 +350,22 @@ main{--text-muted:var(--raw-warm-200)}
               <span class="plan-mois plan-m4"><small class="plan-pre" data-i18n="trf-p4-pre">dès</small> {REFONTE_M4}<small class="plan-mois-u" data-i18n="trf-mois-u">/mois</small></span>
             </div>
             <p class="plan-desc plan-comptant" data-i18n="trf-p4-desc">Votre site existe, mais il a vieilli.</p>
-            <p class="plan-desc plan-mois-note plan-m3"><span data-i18n="trf-mois-note-3">3 mensualités · soit</span> {REFONTE_PRIX} <span data-i18n="trf-mois-total">au total</span></p>
-            <p class="plan-desc plan-mois-note plan-m4"><span data-i18n="trf-mois-note-4">4 mensualités · soit</span> {REFONTE_PRIX} <span data-i18n="trf-mois-total">au total</span></p>
+            <p class="plan-desc plan-mois-note plan-m3"><span data-i18n="trf-mois-note-3">3 mensualités, soit</span> {REFONTE_PRIX} <span data-i18n="trf-mois-total">au total</span></p>
+            <p class="plan-desc plan-mois-note plan-m4"><span data-i18n="trf-mois-note-4">4 mensualités, soit</span> {REFONTE_PRIX} <span data-i18n="trf-mois-total">au total</span></p>
           </div>
           <hr class="plan-divider">
           <ul class="plan-features">
-            <li class="plan-feature">
-              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
-              <span data-i18n="trf-p4-f1">Nouveau design sur mesure</span>
-            </li>
-            <li class="plan-feature">
-              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
-              <span data-i18n="trf-p4-f2">Reprise de vos contenus existants</span>
-            </li>
-            <li class="plan-feature">
-              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
-              <span data-i18n="trf-p4-f3">Adapté mobile et tablette</span>
-            </li>
-            <li class="plan-feature">
-              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
-              <span data-i18n="trf-p4-f4">Redirections pour garder votre référencement</span>
-            </li>
-            <li class="plan-feature">
-              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
-              <span data-i18n="trf-p4-f5">Livraison sous {REFONTE_DELAI}</span>
-            </li>
+            <li class="plan-feature"><span data-i18n="trf-p4-f1">Nouveau design sur mesure</span></li>
+            <li class="plan-feature"><span data-i18n="trf-p4-f2">Reprise de vos contenus existants</span></li>
+            <li class="plan-feature"><span data-i18n="trf-p4-f3">Adapté mobile et tablette</span></li>
+            <li class="plan-feature"><span data-i18n="trf-p4-f4">Redirections pour garder votre référencement</span></li>
+            <li class="plan-feature"><span data-i18n="trf-p4-f5">Livraison sous {REFONTE_DELAI}</span></li>
           </ul>
           <InteractiveButton text="Demander un devis" href="/devis?formule=refonte" class="plan-cta" data-plan="refonte" data-i18n="trf-p4-cta" />
         </div>
 
-        <!-- Vitrine Pro — populaire -->
+        <!-- Vitrine Pro — elle se distingue par son bouton d'or, sans ruban. -->
         <div class="plan-card plan-featured" id="plan-vitrine">
-          <div class="plan-badge"><span data-i18n="trf-p2-badge">Populaire</span></div>
           <p class="plan-name" data-i18n="trf-p2-name">Vitrine Pro</p>
           <div>
             <div class="plan-range">
@@ -434,42 +373,20 @@ main{--text-muted:var(--raw-warm-200)}
               <span class="plan-mois plan-mois-gros plan-m3">{VITRINE_M3}<small class="plan-mois-u" data-i18n="trf-mois-u">/mois</small></span>
               <span class="plan-mois plan-mois-gros plan-m4">{VITRINE_M4}<small class="plan-mois-u" data-i18n="trf-mois-u">/mois</small></span>
             </div>
-            <p class="plan-desc plan-comptant" data-i18n="trf-p2-desc">Offre de lancement · places limitées</p>
-            <p class="plan-desc plan-mois-note plan-m3"><span data-i18n="trf-mois-note-3">3 mensualités · soit</span> {VITRINE_PRIX} <span data-i18n="trf-mois-total">au total</span></p>
-            <p class="plan-desc plan-mois-note plan-m4"><span data-i18n="trf-mois-note-4">4 mensualités · soit</span> {VITRINE_PRIX} <span data-i18n="trf-mois-total">au total</span></p>
-          </div>
-          <div class="plan-spots">
-            <span class="plan-spots-num" id="vp-spots-num">3</span>
-            <span data-i18n="trf-spots">places restantes</span>
+            <p class="plan-desc plan-comptant" data-i18n="trf-p2-desc">Prix de lancement</p>
+            <p class="plan-desc plan-mois-note plan-m3"><span data-i18n="trf-mois-note-3">3 mensualités, soit</span> {VITRINE_PRIX} <span data-i18n="trf-mois-total">au total</span></p>
+            <p class="plan-desc plan-mois-note plan-m4"><span data-i18n="trf-mois-note-4">4 mensualités, soit</span> {VITRINE_PRIX} <span data-i18n="trf-mois-total">au total</span></p>
           </div>
           <hr class="plan-divider">
           <ul class="plan-features">
-            <li class="plan-feature">
-              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
-              <span data-i18n="trf-p2-f1">Site vitrine complet (jusqu'à 5 pages)</span>
-            </li>
-            <li class="plan-feature">
-              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
-              <span data-i18n="trf-p2-f2">Design sur mesure</span>
-            </li>
-            <li class="plan-feature">
-              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
-              <span data-i18n="trf-p2-f3">Responsive mobile &amp; tablette</span>
-            </li>
-            <li class="plan-feature">
-              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
-              <span data-i18n="trf-p2-f4">SEO de base inclus</span>
-            </li>
-            <li class="plan-feature">
-              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
-              <span data-i18n="trf-p2-f5">Formulaire de contact</span>
-            </li>
-            <li class="plan-feature">
-              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
-              <span data-i18n="trf-p2-f6">1 mois de support inclus</span>
-            </li>
+            <li class="plan-feature"><span data-i18n="trf-p2-f1">Site vitrine complet (jusqu'à 5 pages)</span></li>
+            <li class="plan-feature"><span data-i18n="trf-p2-f2">Design sur mesure</span></li>
+            <li class="plan-feature"><span data-i18n="trf-p2-f3">Responsive mobile &amp; tablette</span></li>
+            <li class="plan-feature"><span data-i18n="trf-p2-f4">SEO de base inclus</span></li>
+            <li class="plan-feature"><span data-i18n="trf-p2-f5">Formulaire de contact</span></li>
+            <li class="plan-feature"><span data-i18n="trf-p2-f6">1 mois de support inclus</span></li>
           </ul>
-          <InteractiveButton text="Démarrer mon projet" href="/devis?formule=vitrine" variant="gold" class="plan-cta" data-plan="vitrine" data-i18n="trf-p2-cta" />
+          <InteractiveButton text="Demander un devis" href="/devis?formule=vitrine" variant="gold" class="plan-cta" data-plan="vitrine" data-i18n="trf-p2-cta" />
         </div>
 
         <!-- Entreprise -->
@@ -489,37 +406,19 @@ main{--text-muted:var(--raw-warm-200)}
               <span class="plan-mois plan-m4"><small class="plan-pre" data-i18n="trf-pre-apd">à partir de</small> {ENTREPRISE_M4}<small class="plan-mois-u" data-i18n="trf-mois-u">/mois</small></span>
             </div>
             <p class="plan-desc plan-comptant" data-i18n="trf-p3-desc">Site professionnel ou e-commerce</p>
-            <p class="plan-desc plan-mois-note plan-m3"><span data-i18n="trf-mois-note-3">3 mensualités · soit</span> {ENTREPRISE_PRIX} <span data-i18n="trf-mois-total">au total</span></p>
-            <p class="plan-desc plan-mois-note plan-m4"><span data-i18n="trf-mois-note-4">4 mensualités · soit</span> {ENTREPRISE_PRIX} <span data-i18n="trf-mois-total">au total</span></p>
+            <p class="plan-desc plan-mois-note plan-m3"><span data-i18n="trf-mois-note-3">3 mensualités, soit</span> {ENTREPRISE_PRIX} <span data-i18n="trf-mois-total">au total</span></p>
+            <p class="plan-desc plan-mois-note plan-m4"><span data-i18n="trf-mois-note-4">4 mensualités, soit</span> {ENTREPRISE_PRIX} <span data-i18n="trf-mois-total">au total</span></p>
           </div>
           <hr class="plan-divider">
           <ul class="plan-features">
-            <li class="plan-feature">
-              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
-              <span data-i18n="trf-p3-f1">Tout du plan Vitrine Pro</span>
-            </li>
-            <li class="plan-feature">
-              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
-              <span data-i18n="trf-p3-f2">E-commerce ou espace client</span>
-            </li>
-            <li class="plan-feature">
-              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
-              <span data-i18n="trf-p3-f3">SEO avancé &amp; stratégie de contenu</span>
-            </li>
-            <li class="plan-feature">
-              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
-              <span data-i18n="trf-p3-f4">Blog &amp; CMS intégré</span>
-            </li>
-            <li class="plan-feature">
-              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
-              <span data-i18n="trf-p3-f5">Intégrations sur mesure</span>
-            </li>
-            <li class="plan-feature">
-              <span class="plan-feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
-              <span data-i18n="trf-p3-f6">Support étendu</span>
-            </li>
+            <li class="plan-feature"><span data-i18n="trf-p3-f1">Tout ce que comprend la Vitrine Pro</span></li>
+            <li class="plan-feature"><span data-i18n="trf-p3-f2">E-commerce ou espace client</span></li>
+            <li class="plan-feature"><span data-i18n="trf-p3-f3">SEO avancé &amp; stratégie de contenu</span></li>
+            <li class="plan-feature"><span data-i18n="trf-p3-f4">Blog &amp; CMS intégré</span></li>
+            <li class="plan-feature"><span data-i18n="trf-p3-f5">Intégrations sur mesure</span></li>
+            <li class="plan-feature"><span data-i18n="trf-p3-f6">Support étendu</span></li>
           </ul>
-          <InteractiveButton text="Obtenir un devis" href="/devis?formule=entreprise" class="plan-cta" data-plan="entreprise" data-i18n="trf-p3-cta" />
+          <InteractiveButton text="Demander un devis" href="/devis?formule=entreprise" class="plan-cta" data-plan="entreprise" data-i18n="trf-p3-cta" />
         </div>
 
       </div>
@@ -532,10 +431,10 @@ main{--text-muted:var(--raw-warm-200)}
     <!-- CTA -->
     <div class="cta-section">
       <div class="cta-inner">
-        <h2 class="cta-title" data-i18n="trf-cta-h">Obtenez votre devis en 2 minutes</h2>
-        <p class="cta-sub" data-i18n="trf-cta-sub">Décrivez votre projet, on vous répond sous 24 h avec une estimation précise — gratuit et sans engagement.</p>
+        <h2 class="cta-title h-lg" data-i18n="trf-cta-h">Le formulaire prend 2 minutes</h2>
+        <p class="cta-sub" data-i18n="trf-cta-sub">On vous répond sous 24 h, et le prix ferme arrive sous 48 h ouvrées. Gratuit et sans engagement.</p>
         <div class="cta-btns">
-          <InteractiveButton text="Demander un devis gratuit" href="/devis" data-i18n="trf-cta-btn1" />
+          <InteractiveButton text="Demander un devis" href="/devis" data-i18n="trf-cta-btn1" />
           <InteractiveButton text="Nous contacter" href="/contact" data-i18n="trf-cta-btn2" />
         </div>
       </div>
@@ -598,10 +497,18 @@ function initSpots(){
       var card=document.getElementById('plan-vitrine');
       if(!card)return;
       if(n<=0){card.remove();return;}
-      var el=document.getElementById('vp-spots-num');
-      if(el)el.textContent=n;
-      var launchNum=document.getElementById('launch-num');
-      if(launchNum)launchNum.textContent=n;
+      /* Une seule mention, en phrase, et seulement si le nombre vient
+         des données. Elle suit la langue. */
+      var reste=document.getElementById('launch-reste');
+      if(!reste)return;
+      function ecrire(){
+        var T=window.nwT||function(k,d){return d;};
+        var f=n===1?T('trf-reste-1','Il reste {n} place à ce prix.'):T('trf-reste','Il reste {n} places à ce prix.');
+        reste.textContent=f.replace('{n}',n);
+      }
+      ecrire();
+      reste.hidden=false;
+      document.addEventListener('nw-lang-applied',ecrire);
     });
 }
 setTimeout(initSpots,500);
