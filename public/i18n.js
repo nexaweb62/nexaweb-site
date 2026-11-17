@@ -52,7 +52,7 @@ var D={
     'idx-hl1':'Websites for the',
     'idx-hl2':"shops and trades",
     'idx-hl3':"of&nbsp;<span class=\"nb\">Hauts-de-France</span>",
-    'idx-sub':"Showcase sites, online shops and redesigns, for local shops and tradespeople. Prices shown, timing set on the first call.",
+    'idx-sub':"Showcase sites, online shops and redesigns, made in Carvin. Price shown upfront, timing set on the first call.",
     'idx-cta1':"Request a quote",
     'idx-cta2':"See pricing",
     'idx-scroll':'Scroll to discover',
@@ -1232,6 +1232,11 @@ var D={
     'lg-tva-numero':"EU VAT number:",
     'meta-t-politique-entreprise':"Company policy — Nexa Web",
     'meta-d-politique-entreprise':"Nexa Web's commitments: prices, deadlines, guarantee, transparency, site quality and security, digital sobriety and local roots.",
+    'idx-hl':"Websites for local shops and tradespeople",
+    'idx-preuve1':"Reply within 24 h",
+    'idx-preuve2':"Pay in 1, 3 or 4 instalments",
+    'idx-preuve3':"Mock-up guarantee",
+    'idx-cap':"BD Empires, online sneaker shop.",
     /* ── fin de la zone générée ── */
   },
   fr:{
@@ -1281,7 +1286,7 @@ var D={
     'idx-hl1':'Des sites pour les',
     'idx-hl2':"commerçants et artisans",
     'idx-hl3':"des&nbsp;<span class=\"nb\">Hauts-de-France</span>",
-    'idx-sub':"Sites vitrines, boutiques en ligne et refontes, pour les commerces et les artisans de la région. Prix affichés, délai fixé au premier appel.",
+    'idx-sub':"Sites vitrines, boutiques en ligne et refontes, faits à Carvin. Prix affiché, délai fixé dès le premier appel.",
     'idx-cta1':"Demander un devis",
     'idx-cta2':"Voir les tarifs",
     'idx-scroll':'Défiler pour découvrir',
@@ -2459,6 +2464,11 @@ var D={
     'lg-tva-numero':"Numéro de TVA intracommunautaire :",
     'meta-t-politique-entreprise':"Politique de l'entreprise — Nexa Web",
     'meta-d-politique-entreprise':"Les engagements de Nexa Web : prix, délais, garantie, transparence, qualité et sécurité des sites, sobriété numérique et ancrage local.",
+    'idx-hl':"Des sites internet pour les commerçants et les artisans",
+    'idx-preuve1':"Réponse sous 24 h",
+    'idx-preuve2':"Paiement en 1, 3 ou 4 fois",
+    'idx-preuve3':"Maquette garantie",
+    'idx-cap':"BD Empires, boutique de sneakers en ligne.",
     /* ── fin de la zone générée ── */
   }
 };

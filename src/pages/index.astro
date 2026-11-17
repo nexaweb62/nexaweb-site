@@ -48,21 +48,30 @@ const FONDATEURS = [
    À la hauteur de son contenu, plus à celle de l'écran : sans décor
    derrière, un premier écran de 100 svh n'était qu'un titre perdu dans
    le noir. La liste des prestations commence juste en dessous. */
-.s-hero{padding:calc(var(--hdr) + clamp(48px,11vh,128px)) 0 clamp(24px,4vh,48px)}
-.hero-hl{margin-bottom:clamp(20px,3.4vh,40px);width:100%;text-wrap:wrap;overflow-wrap:anywhere}
-.hero-hl .ln{display:block}
-/* LE TITRE SUR TÉLÉPHONE. Sous 520 px la taille suit la largeur utile,
-   calée pour que « des Hauts-de-France. » tienne d'un seul tenant :
-   mesuré en Arial gras, la ligne fait 9,69 cadratins ; on divise par 10
-   pour garder une marge, et « des » est lié par une espace insécable. */
-@media (max-width:520px){
-  .hero-hl{font-size:min(40px,calc((100vw - 2 * var(--pad-x)) / 10))}
-  .hero-hl .li{text-wrap:balance}
-}
-.hero-hl .li{display:block}
-.hero-sub{margin-bottom:clamp(24px,4vh,40px)}
-.hero-ctas{display:flex;flex-wrap:wrap;gap:12px}
+.s-hero{padding:calc(var(--hdr) + clamp(40px,9vh,104px)) 0 clamp(32px,6vh,72px)}
+/* Deux colonnes : le texte à gauche, un vrai site à droite. Le titre
+   descend à 48 px : à 110 px il occupait tout l'écran et ne disait rien
+   de plus. */
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:clamp(40px,5vw,72px);align-items:center}
 .hero-main{min-width:0}
+.hero-hl{margin:0 0 20px;font:var(--w-bold, 700) clamp(32px,3.6vw,48px)/1.1 var(--font);letter-spacing:-.02em;max-width:11em;text-wrap:balance;color:var(--text)}
+.hero-sub{margin:0 0 32px;max-width:30em;color:var(--text-muted)}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:12px}
+.hero-preuves{list-style:none;margin:40px 0 0;padding:20px 0 0;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;gap:8px 32px;font-size:14px;color:var(--text-muted)}
+.hero-ecrans{position:relative;margin:0 18px 34px 0;min-width:0}
+.he-pc{border:1px solid var(--border-strong);background:var(--surface);overflow:hidden;box-shadow:0 30px 80px rgb(from var(--raw-black-950) r g b / .5)}
+.he-barre{display:flex;align-items:center;gap:7px;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface-2)}
+.he-barre span{width:10px;height:10px;border-radius:50%;background:var(--border-strong)}
+.he-barre .he-url{width:auto;height:auto;border-radius:4px;flex:1;margin-left:10px;padding:4px 12px;background:var(--bg);font-size:12px;color:var(--text-muted)}
+.he-pc img{display:block;width:100%;height:auto}
+.he-tel{position:absolute;right:-18px;bottom:-34px;width:min(150px,26%);padding:7px;border:1px solid var(--border-strong);border-radius:18px;background:var(--surface-2);box-shadow:0 20px 50px rgb(from var(--raw-black-950) r g b / .55)}
+.he-tel img{display:block;width:100%;height:auto;border-radius:12px}
+.he-cap{margin-top:14px;padding-right:calc(min(150px,26%) + 8px);font-size:14px;color:var(--text-muted)}
+@media (max-width:900px){
+  .hero-grid{grid-template-columns:minmax(0,1fr)}
+  .hero-ecrans{margin-right:12px}
+  .he-tel{right:-12px}
+}
 
 /* ── SERVICES ── */
 .s-svc{}
@@ -377,19 +386,40 @@ const FONDATEURS = [
 
 <!-- HERO -->
 <section class="s-hero" id="accueil" aria-label="Accueil" data-i18n-aria="a11y-accueil">
-  <div class="wrap">
+  <div class="wrap hero-grid">
     <div class="hero-main">
-      <h1 class="h-xl hero-hl">
-        <span class="ln"><span class="li" data-i18n="idx-hl1">Des sites pour les</span></span>
-        <span class="ln"><span class="li" data-i18n="idx-hl2">commerçants et artisans</span></span>
-        <span class="ln"><span class="li" data-i18n="idx-hl3">des&nbsp;<span class="nb">Hauts-de-France</span></span></span>
-      </h1>
-      <p class="body hero-sub" style="max-width:480px" data-i18n="idx-sub">Sites vitrines, boutiques en ligne et refontes, pour les commerces et les artisans de la région. Prix affichés, délai fixé au premier appel.</p>
+      <h1 class="hero-hl" data-i18n="idx-hl">Des sites internet pour les commerçants et les artisans</h1>
+      <p class="body hero-sub" data-i18n="idx-sub">Sites vitrines, boutiques en ligne et refontes, faits à Carvin. Prix affiché, délai fixé dès le premier appel.</p>
       <div class="hero-ctas">
-        <InteractiveButton text="Demander un devis" href="/devis" variant="gold" data-i18n="idx-cta1" />
-        <InteractiveButton text="Voir les tarifs" href="/tarifs" data-i18n="idx-cta2" />
+        <InteractiveButton text="Demander un devis" href="/devis" variant="gold" class="plq-droit" data-i18n="idx-cta1" />
+        <InteractiveButton text="Voir les tarifs" href="/tarifs" class="plq-droit" data-i18n="idx-cta2" />
       </div>
+      <ul class="hero-preuves">
+        <li data-i18n="idx-preuve1">Réponse sous 24 h</li>
+        <li data-i18n="idx-preuve2">Paiement en 1, 3 ou 4 fois</li>
+        <li data-i18n="idx-preuve3">Maquette garantie</li>
+      </ul>
     </div>
+
+    <!-- UN VRAI SITE, MONTRÉ. Deux captures réelles de bdempires.fr, dans
+         un navigateur et un téléphone dessinés en CSS : aucune image
+         générée, aucune maquette inventée. -->
+    <figure class="hero-ecrans">
+      <div class="he-pc">
+        <div class="he-barre" aria-hidden="true"><span></span><span></span><span></span><span class="he-url">bdempires.fr</span></div>
+        <picture>
+          <source srcset="/img/realisations/bd-empires-ordinateur.webp" type="image/webp" />
+          <img src="/img/realisations/bd-empires-ordinateur.jpg" width="1400" height="715" alt="La page d'accueil de bdempires.fr sur ordinateur" fetchpriority="high" decoding="async" />
+        </picture>
+      </div>
+      <div class="he-tel">
+        <picture>
+          <source srcset="/img/realisations/bd-empires-telephone.webp" type="image/webp" />
+          <img src="/img/realisations/bd-empires-telephone.jpg" width="360" height="672" alt="bdempires.fr sur téléphone" loading="lazy" decoding="async" />
+        </picture>
+      </div>
+      <figcaption class="he-cap" data-i18n="idx-cap">BD Empires, boutique de sneakers en ligne.</figcaption>
+    </figure>
   </div>
 </section>
 

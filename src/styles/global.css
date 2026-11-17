@@ -384,6 +384,8 @@ body.lite .lgm-i:hover .lg-reflet,body.lite .lgm-i.lg-tombe .lg-goutte{animation
 }
 .plq-sm{--cut:var(--cut-sm)}
 .plq-lg{--cut:var(--cut-lg)}
+/* La plaque droite : un rectangle net, sans coupe (boutons du premier écran). */
+.plq-droit{--cut:0px}
 
 /* L'or : le fond ET le filet, pour que l'arête ne fasse pas un liseré. */
 .plq-or,.ihb-gold{--pl-fond:var(--plq-or);--pl-filet:var(--plq-or);color:var(--plq-or-encre)}
@@ -1071,6 +1073,7 @@ body.lite .cta-inner,body.lite .launch-notice,body.lite .aside{animation:none!im
    petite coupe. Sur un pointeur grossier, 44 px — on ne rate pas
    « Retour » ou « Démarrer un projet » du pouce. */
 .hdr .ihb{--cut:var(--cut-sm);min-height:38px;padding:0 16px;font-size:14px}
+.hdr .ihb.plq-droit{--cut:0px}
 @media (pointer:coarse){ .hdr .ihb{min-height:44px} }
 
 /* ── LA BARRE SUR UN ECRAN ETROIT ────────────────────────────────────
