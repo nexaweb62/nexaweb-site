@@ -6,7 +6,7 @@ import Footer from '../components/Footer.astro';
 import GarantieBadge from '../components/GarantieBadge.astro';
 import Simulateur from '../components/graphes/Simulateur.astro';
 import Mesure from '../components/graphes/Mesure.astro';
-import { VITRINE_PRIX, REFONTE_PRIX, ENTREPRISE, REFONTE, prix } from '../data/formules';
+import { VITRINE_PRIX, REFONTE_PRIX, ENTREPRISE_PRIX, ENTREPRISE, REFONTE, prix } from '../data/formules';
 import { MESURE_ACCUEIL } from '../data/mesures';
 import manifest from '../../public/img/manifest.json';
 import '../styles/global.css';
@@ -30,11 +30,11 @@ const jeu = (nom: string, ext: string) =>
     .map((v) => `/img/gen/${nom}-${v.w}.${ext} ${v.w}w`).join(', ');
 const FONDATEURS = [
   { photo: 'vignette-membre1', prenom: 'Imad', prenomCle: 'idx-fond1-nom',
-    alt: 'Imad Torchi, co-fondateur de Nexa Web, développement web et architecture', altCle: 'idx-fond1-alt',
-    spe: 'Développement web & Architecture', speCle: 'eq-title1' },
+    alt: 'Imad Torchi, co-fondateur de Nexa Web', altCle: 'idx-fond1-alt',
+    spe: 'Développe les sites', speCle: 'eq-title1' },
   { photo: 'vignette-membre2', prenom: 'Ahmed', prenomCle: 'idx-fond2-nom',
-    alt: 'Ahmed Chteoui, co-fondateur de Nexa Web, design UI/UX et stratégie digitale', altCle: 'idx-fond2-alt',
-    spe: 'Design UI/UX & Stratégie digitale', speCle: 'eq-title2' },
+    alt: 'Ahmed Chteoui, co-fondateur de Nexa Web', altCle: 'idx-fond2-alt',
+    spe: 'Dessine les maquettes', speCle: 'eq-title2' },
 ].map((f) => {
   const tailles = Object.values((manifest as any)[f.photo].widths) as { w: number }[];
   return { ...f, avif: jeu(f.photo, 'avif'), webp: jeu(f.photo, 'webp'), jpg: jeu(f.photo, 'jpg'),
@@ -52,10 +52,11 @@ const FONDATEURS = [
 .hero-hl{margin-bottom:clamp(20px,3.4vh,40px);width:100%;text-wrap:wrap;overflow-wrap:anywhere}
 .hero-hl .ln{display:block}
 /* LE TITRE SUR TÉLÉPHONE. Sous 520 px la taille suit la largeur utile,
-   calée pour que « des Hauts-de-France. » tienne d'un seul tenant
-   (9,6 cadratins mesurés), et chaque ligne s'équilibre. */
+   calée pour que « des Hauts-de-France. » tienne d'un seul tenant :
+   mesuré en Arial gras, la ligne fait 9,69 cadratins ; on divise par 10
+   pour garder une marge, et « des » est lié par une espace insécable. */
 @media (max-width:520px){
-  .hero-hl{font-size:min(40px,calc((100vw - 2 * var(--pad-x)) / 9.6))}
+  .hero-hl{font-size:min(40px,calc((100vw - 2 * var(--pad-x)) / 10))}
   .hero-hl .li{text-wrap:balance}
 }
 .hero-hl .li{display:block}
@@ -126,9 +127,9 @@ const FONDATEURS = [
 .proc-step{display:flex;flex-direction:column;gap:14px;background:none;border-radius:0;padding:0}
 .proc-step .k{font-size:clamp(46px,8.5vw,104px);line-height:.88;font-weight:600;
   letter-spacing:-.016em;font-variant-numeric:tabular-nums}
-.proc-step .proc-title{font-size:clamp(21px,3vw,32px);font-weight:600;letter-spacing:-.007em;margin:0}
+.proc-step .proc-title{font-size:clamp(21px,3vw,32px);font-weight:600;letter-spacing:-.007em;line-height:1.12;margin:0}
 .proc-step .proc-desc{margin:0;color:var(--text-muted);max-width:44ch;
-  font-size:16px;font-weight:300;line-height:1.68}
+  font-size:16px;font-weight:400;line-height:1.68}
 .procticks{display:none;gap:7px;margin-top:clamp(20px,3vw,30px)}
 .procticks i{display:block;height:2px;width:clamp(34px,5vw,56px);background:var(--border);
   border-radius:2px;overflow:hidden;position:relative}
@@ -156,7 +157,7 @@ const FONDATEURS = [
 .dos-liste{margin:0;padding:0;list-style:none;font-size:15px;line-height:1.4;color:var(--text-muted)}
 .dos-liste li{padding:7px 0;border-top:1px solid var(--border)}
 .dos-liste li:last-child{border-bottom:1px solid var(--border)}
-.dos-pied{margin:auto 0 0;padding-top:var(--sp-5);font-size:13px;line-height:1.45;color:var(--text-muted)}
+.dos-pied{margin:auto 0 0;padding-top:var(--sp-5);font-size:14px;line-height:1.45;color:var(--text-muted)}
 .dos-lien{color:var(--text);font-size:15px;font-weight:var(--w-semi);
   text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;
   text-decoration-color:var(--border-strong);
@@ -291,7 +292,7 @@ const FONDATEURS = [
 .fond-p1 img{object-position:50% 24%}
 .fond-p2 img{object-position:50% 12%}
 .fond-nom{margin:0;font-size:15px;font-weight:var(--w-semi);line-height:1.35;color:var(--text)}
-.fond-role{margin:0;font-size:13px;line-height:1.4;color:var(--text-muted)}
+.fond-role{margin:0;font-size:14px;line-height:1.4;color:var(--text-muted)}
 .fond-lien{display:inline-block;margin-top:var(--sp-5)}
 
 /* ── LE SIMULATEUR ── */
@@ -300,7 +301,7 @@ const FONDATEURS = [
 /* ── FAQ ── */
 .s-faq{}
 .faq-in{display:grid;grid-template-columns:1fr 1.8fr;gap:clamp(40px,8vw,120px)}
-.faq-side p{margin-top:20px;font-size:13px}
+.faq-side p{margin-top:20px;font-size:14px}
 /* ═══════════════════════════════════════════════════════════════════
    FAQ — une liste a filets, pas des cartes. Recopie de la reference.
 
@@ -338,7 +339,7 @@ const FONDATEURS = [
 .qa.open .panel{grid-template-rows:1fr}
 .qa .panel>div{overflow:hidden}
 .qa .ans{padding:0 4px clamp(18px,2.4vw,24px) 18px;color:var(--text-muted);font-size:15px;
-  font-weight:300;line-height:1.75;max-width:60ch;margin:0;opacity:0;transform:translateY(-6px);
+  font-weight:400;line-height:1.75;max-width:60ch;margin:0;opacity:0;transform:translateY(-6px);
   transition:opacity 340ms var(--ease-out) 90ms,transform 420ms cubic-bezier(.22,.9,.24,1) 90ms}
 .qa.open .ans{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){
@@ -349,18 +350,17 @@ const FONDATEURS = [
 /* ── CTA ── */
 .s-cta{text-align:center}
 .cta-in{max-width:900px;margin:0 auto;padding:clamp(80px,15vw,180px) 0}
-.cta-super{font-size:clamp(.6rem,1vw,.75rem);font-weight:600;letter-spacing:0;color:var(--text-muted);margin-bottom:32px}
-.cta-hl{font-size:clamp(3rem,8vw,9.5rem);font-weight:600;line-height:.92;letter-spacing:-.014em;margin-bottom:48px;text-wrap:balance}
-.cta-hl em{font-style:italic;font-weight:600}
+.cta-hl{margin-bottom:16px}
+.cta-sub{margin:0 auto 36px;color:var(--text-muted)}
 
 /* ── POUR QUI ── */
 .s-who{}
 .who-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:clamp(36px,6vh,72px)}
 .who-card{background:var(--surface);border-radius:var(--radius-block);padding:clamp(28px,4vw,48px);display:flex;flex-direction:column;gap:16px}
 .who-target{font-size:clamp(1.1rem,2.2vw,1.7rem);font-weight:600;letter-spacing:-.009em;line-height:1.12}
-.who-desc{font-size:13px;font-weight:300;line-height:1.72;color:var(--text-muted);flex:1}
+.who-desc{font-size:15px;font-weight:400;line-height:1.6;color:var(--text-muted);flex:1}
 .who-price{font-size:clamp(1.7rem,3.2vw,2.6rem);font-weight:600;letter-spacing:-.014em;line-height:1;font-variant-numeric:tabular-nums}
-.who-price-sub{font-size:var(--fs-caption);font-weight:500;letter-spacing:0;color:var(--text-muted);margin-top:6px}
+.who-price-sub{font-size:14px;font-weight:400;letter-spacing:0;color:var(--text-muted);margin-top:6px}
 @media(max-width:600px){.who-grid{grid-template-columns:1fr;gap:0}.who-card:not(:last-child){border-bottom:1px solid var(--border)}}
 
 /* content-visibility:auto a été retiré ici : avec contain-intrinsic-size
@@ -382,16 +382,25 @@ const FONDATEURS = [
       <h1 class="h-xl hero-hl">
         <span class="ln"><span class="li" data-i18n="idx-hl1">Des sites pour les</span></span>
         <span class="ln"><span class="li" data-i18n="idx-hl2">commerçants et artisans</span></span>
-        <span class="ln"><span class="li" data-i18n="idx-hl3">des <span class="nb">Hauts-de-France.</span></span></span>
+        <span class="ln"><span class="li" data-i18n="idx-hl3">des&nbsp;<span class="nb">Hauts-de-France</span></span></span>
       </h1>
-      <p class="body hero-sub" style="max-width:480px" data-i18n="idx-sub">
-        Site vitrine, boutique en ligne ou refonte : on conçoit, on développe, on met en ligne. Tarifs affichés, calendrier fixé dès le premier appel.
-      </p>
+      <p class="body hero-sub" style="max-width:480px" data-i18n="idx-sub">Sites vitrines, boutiques en ligne et refontes, pour les commerces et les artisans de la région. Prix affichés, délai fixé au premier appel.</p>
       <div class="hero-ctas">
-        <InteractiveButton text="Démarrer un projet" href="/devis" variant="gold" data-i18n="idx-cta1" />
-        <InteractiveButton text="Nos avis clients" href="/avis" data-i18n="idx-cta2" />
+        <InteractiveButton text="Demander un devis" href="/devis" variant="gold" data-i18n="idx-cta1" />
+        <InteractiveButton text="Voir les tarifs" href="/tarifs" data-i18n="idx-cta2" />
       </div>
     </div>
+  </div>
+</section>
+
+<!-- LE SIMULATEUR, JUSTE SOUS LE PREMIER ÉCRAN. Il remplace la rangée
+     « 100 % / 24/7 / ∞ » : aucune statistique, un calcul fait avec les
+     chiffres du visiteur. Il est remonté ici (rapport P1-19) : faute de
+     maquette réelle à montrer, c'est la première chose concrète du site. -->
+<section class="s-sim sec-seam" style="padding:var(--sec) 0" id="calcul" aria-labelledby="sim-h">
+  <div class="wrap">
+    <h2 class="h-lg sim-h" id="sim-h" data-i18n="idx-sim-h">Votre site, remboursé en combien de mois&nbsp;?</h2>
+    <Simulateur titreMasque />
   </div>
 </section>
 
@@ -400,7 +409,7 @@ const FONDATEURS = [
   <div class="wrap">
     <div class="svc-hdr r">
       <div>
-        <h2 class="h-lg" id="svc-h" data-i18n="idx-svc-h">Nos services.</h2>
+        <h2 class="h-lg" id="svc-h" data-i18n="idx-svc-h">Nos services</h2>
       </div>
       <div class="svc-hdr-d">
         <p class="body" data-i18n="idx-svc-sub">Cinq prestations, chacune avec sa page : ce qui est compris, le prix et le délai.</p>
@@ -440,28 +449,28 @@ const FONDATEURS = [
   <div class="wrap">
     <div class="svc-hdr r">
       <div>
-        <h2 class="h-lg" id="who-h" data-i18n="who-h">Une formule pour<br>chaque profil.</h2>
+        <h2 class="h-lg" id="who-h" data-i18n="who-h">Par où commencer</h2>
       </div>
-      <p class="body svc-hdr-d" data-i18n="who-sub">Un site à rafraîchir, une activité locale, une entreprise qui grandit — chaque besoin a sa formule.</p>
+      <p class="body svc-hdr-d" data-i18n="who-sub">Vous avez déjà un site, ou vous n'en avez pas encore : voici la formule qui vous correspond.</p>
     </div>
     <div class="who-grid">
       <div class="who-card r">
         <h3 class="who-target" data-i18n="who-t1">Site à rafraîchir</h3>
         <p class="who-desc" data-i18n="who-d1">Votre site existe mais il a vieilli : design daté, lent sur mobile, difficile à mettre à jour. On le reprend de zéro en gardant vos contenus et votre référencement.</p>
         <div>
-          <div class="who-price" data-i18n="who-prix1">dès 490 €</div>
-          <p class="who-price-sub" data-i18n="who-prix1-sub">Nouveau design · Contenus repris · Livré en 2 semaines</p>
+          <div class="who-price"><span data-i18n="idx-svc-des">dès</span> <span data-i18n-prix>{REFONTE_PRIX}</span></div>
+          <p class="who-price-sub" data-i18n="who-prix1-sub">Nouveau design, vos contenus repris, livré en 2 semaines.</p>
         </div>
         <InteractiveButton text="Voir la formule" href="/tarifs" data-i18n="who-cta1" style="align-self:flex-start;margin-top:8px" />
       </div>
       <div class="who-card r d1">
         <h3 class="who-target" data-i18n="who-t2">Commerçant &amp; artisan local</h3>
-        <p class="who-desc" data-i18n="who-d2">Vous avez une activité locale — restaurant, boutique, artisan — mais aucune présence en ligne convaincante. On vous donne un site qui attire et qui rassure.</p>
+        <p class="who-desc" data-i18n="who-d2">Restaurant, boutique ou artisan sans site : on vous fait un site vitrine de cinq pages au plus, avec vos horaires, vos prix et un formulaire de contact.</p>
         <div>
           <!-- Le montant vient des données : la Vitrine Pro est à prix fixe
                (formules.ts), sans « à partir de ». -->
           <div class="who-price"><span data-i18n-prix>{VITRINE_PRIX}</span></div>
-          <p class="who-price-sub" data-i18n="who-prix2-sub">Offre de lancement · places limitées · SEO local inclus</p>
+          <p class="who-price-sub" data-i18n="who-prix2-sub">Prix de lancement pour nos trois premiers clients. Référencement local compris.</p>
         </div>
         <InteractiveButton text="Voir les formules" href="/tarifs" data-i18n="who-cta2" style="align-self:flex-start;margin-top:8px" />
       </div>
@@ -476,7 +485,7 @@ const FONDATEURS = [
 <section class="s-proc sec-seam" style="padding:var(--sec) 0 0" aria-labelledby="proc-h">
   <div class="wrap">
     <div class="proc-hdr r">
-      <h2 class="h-lg" id="proc-h" data-i18n="idx-proc-h">Notre méthode.</h2>
+      <h2 class="h-lg" id="proc-h" data-i18n="idx-proc-h">Notre méthode</h2>
     </div>
   </div>
 </section>
@@ -485,8 +494,8 @@ const FONDATEURS = [
     <div class="wrap" style="width:100%">
       <div class="procstack">
         <div class="proc-step"><span class="k">01</span>
-          <h3 class="proc-title" data-i18n="idx-proc-t1">Découverte</h3>
-          <p class="proc-desc" data-i18n="idx-proc-d1">Un appel pour comprendre votre activité, vos clients, et ce qu'ils doivent trouver sur votre site.</p></div>
+          <h3 class="proc-title" data-i18n="idx-proc-t1">Prise de contact</h3>
+          <p class="proc-desc" data-i18n="idx-proc-d1">Vous remplissez le formulaire de devis. On vous répond sous 24 h, puis on fixe un appel de 30 minutes.</p></div>
         {/* Dossier 01 — les intitulés du formulaire de devis
             (src/pages/devis.astro), avec les clés qu'il utilise. */}
         <article class="dossier" aria-labelledby="dos1-t">
@@ -506,8 +515,8 @@ const FONDATEURS = [
         </article>
 
         <div class="proc-step"><span class="k">02</span>
-          <h3 class="proc-title" data-i18n="idx-proc-t2">Direction artistique</h3>
-          <p class="proc-desc" data-i18n="idx-proc-d2">Création d'une identité visuelle cohérente, des maquettes aux prototypes interactifs, validés à chaque étape.</p></div>
+          <h3 class="proc-title" data-i18n="idx-proc-t2">Maquette</h3>
+          <p class="proc-desc" data-i18n="idx-proc-d2">On dessine la maquette de votre page d'accueil. Vous la validez, ou vous demandez des retouches : deux séries sont comprises.</p></div>
         {/* Dossier 02 — ce que le client reçoit à cette étape : la maquette et
             la garantie, telles qu'écrites dans les CGV (cgv-p2, cgv-p3) et
             sur /tarifs (gar-p1, gar-p2). */}
@@ -524,7 +533,7 @@ const FONDATEURS = [
 
         <div class="proc-step"><span class="k">03</span>
           <h3 class="proc-title" data-i18n="idx-proc-t3">Développement</h3>
-          <p class="proc-desc" data-i18n="idx-proc-d3">Code propre, performant et maintenable. Optimisé pour la vitesse, le référencement et tous les appareils.</p></div>
+          <p class="proc-desc" data-i18n="idx-proc-d3">On construit le site à partir de la maquette validée et on le teste sur téléphone, tablette et ordinateur. Vous suivez l'avancement sur un lien de prévisualisation.</p></div>
         {/* Dossier 03 — la mesure de cette page (src/data/mesures.ts). */}
         <article class="dossier" aria-labelledby="gr-mes-t">
           <Mesure {...MESURE_ACCUEIL} compact />
@@ -532,7 +541,7 @@ const FONDATEURS = [
 
         <div class="proc-step"><span class="k">04</span>
           <h3 class="proc-title" data-i18n="idx-proc-t4">Mise en ligne</h3>
-          <p class="proc-desc" data-i18n="idx-proc-d4">Déploiement soigné, tests complets et formation à la gestion de votre site. Nous restons disponibles après le lancement.</p></div>
+          <p class="proc-desc" data-i18n="idx-proc-d4">Le site passe en ligne sur votre nom de domaine. Ensuite, on vous montre comment changer vos textes et vos photos.</p></div>
         {/* Dossier 04 — délais : formules.ts et /site-vitrine ; ce qui
             est livré : /comment-ca-marche (étape 5), cette page (étape 04
             et FAQ), /tarifs (Vitrine Pro). */}
@@ -575,8 +584,8 @@ const FONDATEURS = [
   <div class="wrap">
     <div class="why-in">
       <div>
-        <h2 class="h-lg" id="why-h" data-i18n="idx-why-h">Les deux personnes<br>qui feront votre site.</h2>
-        <p class="body r d2" style="margin-top:22px;max-width:380px" data-i18n="idx-why-sub">Nous ne faisons pas dans la quantité. Chaque projet reçoit une attention totale, de la stratégie à la mise en ligne.</p>
+        <h2 class="h-lg" id="why-h" data-i18n="idx-why-h">Les deux personnes<br>qui feront votre site</h2>
+        <p class="body r d2" style="margin-top:22px;max-width:380px" data-i18n="idx-why-sub">Vous parlez à l'un de nous deux du premier appel à la mise en ligne. Personne d'autre ne touche à votre site.</p>
         <div class="fond r d3">
           <ul class="fond-liste">
             {FONDATEURS.map((f, i) => (
@@ -597,35 +606,26 @@ const FONDATEURS = [
         </div>
       </div>
       <div class="why-bio r d1">
-        <p class="why-bio-lead" data-i18n="idx-why-lead">Une agence jeune, des ambitions sérieuses.</p>
-        <p class="why-bio-body" data-i18n="idx-why-b1">Nexa Web, ce sont ses deux fondateurs, Imad et Ahmed, partis d'une idée simple : une petite entreprise mérite un site aussi soigné que celui d'une grande marque, à un prix qu'elle peut payer.</p>
-        <p class="why-bio-body" data-i18n="idx-why-b2">Nous démarrons notre aventure sans catalogue de réalisations. Pas parce que nous manquons de compétences, mais parce que nous avons choisi de ne pas gonfler un portfolio avec des projets fictifs. Ce que nous offrons à la place, c'est une implication totale : chaque ligne de code, chaque détail de design, pensés uniquement pour vous.</p>
-        <p class="why-bio-body" data-i18n="idx-why-b3">Nos premiers clients bénéficient d'une attention rare — celle qu'une agence qui n'a pas encore cent projets en parallèle peut vraiment offrir.</p>
+        <p class="why-bio-body" data-i18n="idx-why-b1">Nexa Web, c'est Imad et Ahmed, à Carvin. Nous faisons des sites pour les commerces et les artisans de la région, aux prix affichés sur la page Tarifs.</p>
+        <p class="why-bio-body" data-i18n="idx-why-b2">Nous n'avons pas encore de réalisations à montrer, et nous ne publierons pas de projets inventés. Pour juger notre travail, vous voyez la maquette de votre site avant que nous commencions le développement. Si elle ne vous convient pas après deux séries de retouches, l'acompte vous est remboursé.</p>
         <!-- La promesse qui rassure le plus se tient à côté de l'appel
-             à l'action, pas en bas du formulaire de devis. -->
+             à l'action, SOUS lui : le bouton mène au devis, le lien
+             souligné ouvre les conditions de la garantie. -->
+        <InteractiveButton text="Demander un devis" href="/devis" class="why-bio-cta" data-i18n="idx-why-cta" />
         <GarantieBadge class="why-gar" />
-        <InteractiveButton text="Être parmi les premiers" href="/devis" class="why-bio-cta" data-i18n="idx-why-cta" />
       </div>
     </div>
   </div>
 </section>
 
-<!-- LE SIMULATEUR — à la place de la rangée « 100 % / 24/7 / ∞ ».
-     Aucune statistique : un calcul fait avec les chiffres du visiteur. -->
-<section class="s-sim sec-seam" style="padding:var(--sec) 0" id="calcul" aria-labelledby="sim-h">
-  <div class="wrap">
-    <h2 class="h-lg sim-h" id="sim-h" data-i18n="idx-sim-h">Votre site, remboursé en combien de mois&nbsp;?</h2>
-    <Simulateur titreMasque />
-  </div>
-</section>
 
 <!-- FAQ -->
 <section class="s-faq sec-seam" style="padding:var(--sec) 0" id="faq" aria-labelledby="faq-h">
   <div class="wrap">
     <div class="faq-in">
       <div>
-        <h2 class="h-md" id="faq-h" data-i18n="idx-faq-h">On répond à vos questions.</h2>
-        <p class="body faq-side r d2" style="margin-top:18px;font-size:13px" data-i18n="idx-faq-sub">Une question absente de cette liste ? Contactez-nous directement.</p>
+        <h2 class="h-md" id="faq-h" data-i18n="idx-faq-h">Questions fréquentes</h2>
+        <p class="body faq-side r d2" style="margin-top:18px;font-size:14px" data-i18n="idx-faq-sub">Une question absente de cette liste ? Contactez-nous directement.</p>
         <InteractiveButton text="Nous contacter" href="/contact" class="r d3" style="margin-top:28px;display:inline-flex" data-i18n="idx-faq-contact" r />
       </div>
       <div>
@@ -635,7 +635,7 @@ const FONDATEURS = [
               <span class="qt" data-i18n="idx-faq-q1">Quel est le coût d'un site web ?</span>
               <span class="plus" aria-hidden="true"></span>
             </button>
-            <div class="panel"><div><p class="ans" data-i18n="idx-faq-a1">De {REFONTE_PRIX} pour la refonte d'un site existant à {prix(ENTREPRISE.prixHaut)} pour un site d'entreprise complet. Le site vitrine complet est à {VITRINE_PRIX} en tarif de lancement — places limitées. Le devis est fixe et détaillé avant de commencer, aucune surprise en cours de route. Facilités de paiement possibles sur demande.</p></div></div>
+            <div class="panel"><div><p class="ans"><span data-i18n="idx-faq-a1-1">La refonte d'un site existant est à partir de</span> <span data-i18n-prix>{REFONTE_PRIX}</span><span data-i18n="idx-faq-a1-2">, la Vitrine Pro à</span> <span data-i18n-prix>{VITRINE_PRIX}</span> <span data-i18n="idx-faq-a1-3">(prix de lancement, pour nos trois premiers clients) et la formule Entreprise à partir de</span> <span data-i18n-prix>{ENTREPRISE_PRIX}</span><span data-i18n="idx-faq-a1-4">. Le devis est fixe et détaillé avant de commencer. Chaque formule se paie en 1, 3 ou 4 fois, sans frais.</span></p></div></div>
           </li>
           <li class="qa"><span class="bar" aria-hidden="true"></span>
             <button class="q" type="button" aria-expanded="false">
@@ -656,21 +656,21 @@ const FONDATEURS = [
               <span class="qt" data-i18n="idx-faq-q3">Mon site sera-t-il bien référencé sur Google ?</span>
               <span class="plus" aria-hidden="true"></span>
             </button>
-            <div class="panel"><div><p class="ans" data-i18n="idx-faq-a3">Oui. Le SEO technique est intégré dès la conception : structure sémantique, vitesse de chargement, balises optimisées, données structurées. Nous proposons aussi un accompagnement éditorial pour aller plus loin.</p></div></div>
+            <div class="panel"><div><p class="ans" data-i18n="idx-faq-a3">Oui pour la base : chaque page a son titre et sa description, le site est rapide sur téléphone et Google peut le lire. Le suivi dans le temps (contenus, positions) est une prestation à part, sur devis.</p></div></div>
           </li>
           <li class="qa"><span class="bar" aria-hidden="true"></span>
             <button class="q" type="button" aria-expanded="false">
               <span class="qt" data-i18n="idx-faq-q4">Proposez-vous de la maintenance après livraison ?</span>
               <span class="plus" aria-hidden="true"></span>
             </button>
-            <div class="panel"><div><p class="ans" data-i18n="idx-faq-a4">Absolument. Nos contrats de maintenance incluent les mises à jour de sécurité, les sauvegardes régulières et les petites modifications. Votre site reste performant dans la durée.</p></div></div>
+            <div class="panel"><div><p class="ans" data-i18n="idx-faq-a4">Pas encore : le premier mois de support est compris avec la Vitrine Pro, et on vous répond ensuite au cas par cas.</p></div></div>
           </li>
           <li class="qa"><span class="bar" aria-hidden="true"></span>
             <button class="q" type="button" aria-expanded="false">
               <span class="qt" data-i18n="idx-faq-q5">Je n'ai aucune connaissance technique, est-ce un problème ?</span>
               <span class="plus" aria-hidden="true"></span>
             </button>
-            <div class="panel"><div><p class="ans" data-i18n="idx-faq-a5">Pas du tout. Nous gérons l'intégralité du projet et vous formons à la gestion de votre site à la livraison. L'interface est pensée pour être intuitive, même sans expérience technique.</p></div></div>
+            <div class="panel"><div><p class="ans" data-i18n="idx-faq-a5">Non. On s'occupe de tout, et à la livraison on vous montre comment changer vos textes, vos photos et vos horaires.</p></div></div>
           </li>
         </ul>
       </div>
@@ -682,9 +682,10 @@ const FONDATEURS = [
 <section class="s-cta sec-seam" id="contact" aria-labelledby="cta-h">
   <div class="wrap">
     <div class="cta-in">
-      <h2 class="cta-hl" id="cta-h" data-i18n="idx-cta-h">Votre prochain site commence ici.</h2>
+      <h2 class="cta-hl h-lg" id="cta-h" data-i18n="idx-cta-h">Décrivez-nous votre projet</h2>
+      <p class="body cta-sub" data-i18n="idx-cta-sub">Réponse sous 24 h, prix ferme sous 48 h ouvrées.</p>
       <div class="r d2">
-        <InteractiveButton text="Démarrer un projet" href="/devis" variant="gold" data-i18n="idx-cta-btn" />
+        <InteractiveButton text="Demander un devis" href="/devis" variant="gold" data-i18n="idx-cta-btn" />
       </div>
     </div>
   </div>

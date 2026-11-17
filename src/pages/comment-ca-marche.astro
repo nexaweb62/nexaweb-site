@@ -15,9 +15,8 @@ main { padding-top: var(--hdr) }
 
 /* Hero */
 .hero { padding: clamp(72px,12vh,140px) 0 clamp(48px,8vh,96px); text-align: center; position: relative; overflow: hidden; }
-.hero-tag { font-size:var(--fs-caption); font-weight:600; letter-spacing:0; color:var(--accent-text); margin-bottom:20px; display:inline-block; }
-.hero-title { font-size:clamp(2rem,5vw,4rem); font-weight:600; letter-spacing:-.014em; line-height:1.05; text-wrap:balance; margin-bottom:20px; }
-.hero-sub { font-size:clamp(.95rem,1.6vw,1.1rem); color:var(--text-muted); line-height:1.7; max-width:520px; margin:0 auto; }
+.hero-title { margin-bottom:20px; }
+.hero-sub { font-size:var(--fs-body); color:var(--text-muted); line-height:1.7; max-width:520px; margin:0 auto; }
 
 /* Steps section — les étapes à gauche, leur frise à l'échelle du temps à
    droite. La frise est la cellule de grille elle-même (pas d'enveloppe) :
@@ -41,7 +40,7 @@ main { padding-top: var(--hdr) }
   width:44px; height:44px; border-radius:var(--radius-tag);
   background:var(--accent-glow); border:1px solid var(--accent);
   display:flex; align-items:center; justify-content:center;
-  font-size:13px; font-weight:600; color:var(--accent-text); flex-shrink:0;
+  font-size:14px; font-weight:600; color:var(--accent-text); flex-shrink:0;
   position:relative; z-index:1;
 }
 .step-connector {
@@ -52,11 +51,11 @@ main { padding-top: var(--hdr) }
 /* Step body */
 .step-body { padding-top:10px; padding-bottom:0; }
 .step-title { font-size:1.05rem; font-weight:600; margin-bottom:8px; letter-spacing:-.01em; }
-.step-desc { font-size:.9rem; color:var(--text-muted); line-height:1.75; }
+.step-desc { font-size:15px; color:var(--text-muted); line-height:1.75; }
 
 /* CTA band */
 .cta-band { padding: clamp(56px,8vw,96px) 0; text-align:center; }
-.cta-band h2 { font-size:clamp(1.5rem,3.5vw,2.6rem); font-weight:600; letter-spacing:-.010em; margin-bottom:14px; text-wrap:balance; }
+.cta-band h2 { margin-bottom:14px; }
 .cta-band p { font-size:.95rem; color:var(--text-muted); margin-bottom:36px; line-height:1.65; max-width:440px; margin-left:auto; margin-right:auto; }
 .cta-row { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
 </style>
@@ -67,8 +66,7 @@ main { padding-top: var(--hdr) }
   <!-- Hero -->
   <section class="hero">
     <div class="wrap">
-      <span class="hero-tag r" data-i18n="ccm-tag">Transparence & méthode</span>
-      <h1 class="hero-title r d1" data-i18n="ccm-h">De la première idée<br>à la mise en ligne.</h1>
+      <h1 class="hero-title h-xl r d1" data-i18n="ccm-h">De la première idée<br>à la mise en ligne</h1>
       <p class="hero-sub r d2" data-i18n="ccm-sub">Vous n'avez jamais commandé de site web ? Voici exactement ce qui se passe, étape par étape, sans jargon.</p>
     </div>
   </section>
@@ -96,7 +94,7 @@ main { padding-top: var(--hdr) }
           </div>
           <div class="step-body">
             <p class="step-title" data-i18n="ccm-s2-t">Cadrage du besoin</p>
-            <p class="step-desc" data-i18n="ccm-s2-d">Un appel de 30 minutes pour affiner les détails : vos cibles, vos contenus, les fonctionnalités voulues et votre délai. On définit ensemble ce qui fera un bon site pour votre activité — rien n'est décidé à votre place.</p>
+            <p class="step-desc" data-i18n="ccm-s2-d">Un appel de 30 minutes pour affiner les détails : vos cibles, vos contenus, les fonctionnalités voulues et votre délai. On définit ensemble ce qui fera un bon site pour votre activité. Rien n'est décidé à votre place.</p>
           </div>
         </div>
 
@@ -107,7 +105,7 @@ main { padding-top: var(--hdr) }
           </div>
           <div class="step-body">
             <p class="step-title" data-i18n="ccm-s3-t">Design &amp; maquette</p>
-            <p class="step-desc" data-i18n="ccm-s3-d">On vous présente une maquette de la page principale avant de commencer le développement. Vous validez — ou on ajuste. Rien n'est lancé sans votre accord.</p>
+            <p class="step-desc" data-i18n="ccm-s3-d">On vous présente une maquette de la page principale avant de commencer le développement. Vous la validez, ou on la retouche. Rien n'est lancé sans votre accord.</p>
           </div>
         </div>
 
@@ -152,10 +150,10 @@ main { padding-top: var(--hdr) }
   <!-- CTA -->
   <section class="cta-band sec-seam">
     <div class="wrap">
-      <h2 class="r" data-i18n="ccm-cta-h">Prêt à démarrer ?</h2>
-      <p class="r d1" data-i18n="ccm-cta-p">Décrivez votre projet en 2 minutes. On vous répond sous 24 h avec un devis gratuit et sans engagement.</p>
+      <h2 class="h-lg r" data-i18n="ccm-cta-h">Demander un devis</h2>
+      <p class="r d1" data-i18n="ccm-cta-p">Réponse sous 24 h. Gratuit et sans engagement.</p>
       <div class="cta-row r d2">
-        <InteractiveButton text="Demander un devis gratuit" data-i18n="ccm-cta-1" href="/devis" />
+        <InteractiveButton text="Demander un devis" data-i18n="ccm-cta-1" href="/devis" variant="gold" />
         <InteractiveButton text="Réserver un créneau" data-i18n="ccm-cta-2" href="/rendez-vous" />
       </div>
     </div>
