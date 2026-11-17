@@ -30,38 +30,38 @@
   /* Le fond du bouton interactif. Entre le 950 et le 900, et ni l'un ni
      l'autre : la valeur vient de la maquette, on la garde telle quelle. */
   --raw-black-925: #0F0F10;
-  --raw-black-900: #121214;
+  --raw-black-900: #141416;
   --raw-black-850: #1A1A1D;
-  --raw-black-800: #26262A;
+  --raw-black-800: #242428;
   --raw-black-700: #3A3A40;
   --raw-black-600: #67676D;   /* barres neutres des graphiques : 3,3:1 sur le fond sombre */
   --raw-black-600: #6A6A73;
-  --raw-black-ink: #141416;
+  --raw-black-ink: #121214;
 
   /* Blancs chauds — les textes du mode sombre */
   /* Le creme du bouton interactif : un cheveu plus chaud que le 50. */
   --raw-warm-40:  #F4F1EA;
-  --raw-warm-50:  #F4F2EE;
+  --raw-warm-50:  #F4F4F5;
   /* Un seul gris pour TOUT le secondaire en sombre — le gris d'Apple. */
   /* Gris intermédiaire, né d'une mesure : sur un fond animé, le gris
      secondaire du site tombe sous 3:1 contre les passages clairs. Le
      calcul donne ~162 pour tenir 4,5:1 sur le pire pixel ; celui-ci
      est à 182. */
   --raw-warm-200: #B6B4B1;
-  --raw-warm-300: #86868B;
-  --raw-warm-400: #86868B;
+  --raw-warm-300: #A1A1AA;
+  --raw-warm-400: #A1A1AA;
 
   /* Papier — crème chaud, jamais blanc pur (le blanc pur est froid) */
   --raw-paper-0:   #FFFFFF;
-  --raw-paper-50:  #FAF8F4;
-  --raw-paper-100: #F1EDE5;
-  --raw-sand-200:  #E3DDD0;
+  --raw-paper-50:  #F7F5F0;
+  --raw-paper-100: #EFECE6;
+  --raw-sand-200:  #DCD8CE;
   --raw-sand-300:  #CFC7B5;
   --raw-sand-500:  #8E887B;   /* barres neutres des graphiques : 3,3:1 sur le fond clair */
   --raw-sand-500:  #8F8670;
 
   /* Gris chauds — les textes du mode clair */
-  --raw-stone-600: #55514A;
+  --raw-stone-600: #52525B;
   --raw-stone-500: #6E6960;
 
   /* Or sable — l'accent. Métal mat, joaillerie, jamais cuivré-rouge. */
@@ -69,18 +69,18 @@
      timeline. Plus clair que l'or 300 : c'est une lumiere, pas une
      teinte de marque. */
   --raw-gold-50:  #FFF7E6;
-  --raw-gold-300: #E3C684;
+  --raw-gold-300: #C29F54;
   --raw-gold-400: #D4B36A;
   /* L'encre posee SUR l'or : presque noire, mais chaude, pour ne pas
      trancher froid au milieu du dore. */
   --raw-gold-950: #121008;
-  --raw-gold-600: #B8974F;
+  --raw-gold-600: #B8964C;
   /* L'arete doree du logo en mode clair : un or un peu plus
      chaud que le 700, pour tenir sur fond pale sans virer au brun. */
   --raw-gold-450: #A8853F;
-  --raw-gold-700: #A6822E;
+  --raw-gold-700: #D4B36A;
   --raw-gold-800: #7D6320;
-  --raw-gold-850: #8E6F26;
+  --raw-gold-850: #C29F54;
   --raw-gold-900: #6B541B;
 
   /* ── VERRE ──
