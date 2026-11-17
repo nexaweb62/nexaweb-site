@@ -5,6 +5,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Secteurs from '../components/graphes/Secteurs.astro';
 import Echeancier from '../components/graphes/Echeancier.astro';
+import { VITRINE_PRIX } from '../data/formules';
 import '../styles/global.css';
 ---
 <BaseLayout title="Site Internet pour Commerce de Proximité — Nexa Web" description="Un site vitrine pour votre commerce local : catalogue, horaires, formulaire de commande et SEO local. Nexa Web, Carvin, Hauts-de-France.">
@@ -12,14 +13,14 @@ import '../styles/global.css';
 main { padding-top: var(--hdr) }
 
 /* Hero */
-.hero { padding: clamp(80px,14vh,160px) 0 clamp(60px,10vh,120px); text-align: center; position: relative; overflow: hidden; }
-.hero-title { font-size:clamp(2.2rem,5vw,4.5rem); font-weight:600; letter-spacing:-.014em; line-height:1; text-wrap:balance; margin-bottom:24px; }
-.hero-sub { font-size:clamp(.95rem,1.6vw,1.1rem); color:var(--text-muted); line-height:1.7; max-width:560px; margin:0 auto 40px; }
+.hero { padding: clamp(80px,14vh,160px) 0 clamp(60px,10vh,120px); text-align: left; position: relative; overflow: hidden; }
+.hero-title { margin-bottom:24px; max-width:18ch; }
+.hero-sub { font-size:var(--fs-body); color:var(--text-muted); line-height:1.6; max-width:560px; margin:0 0 40px; }
 
 /* Sections */
 .s { padding: var(--sec) 0; }
-.s-title { font-size:clamp(1.6rem,3.5vw,2.8rem); font-weight:600; letter-spacing:-.010em; line-height:1.1; text-wrap:balance; margin-bottom:16px; }
-.s-sub { font-size:clamp(.9rem,1.4vw,1rem); color:var(--text-muted); line-height:1.7; max-width:580px; margin-bottom:clamp(40px,6vw,72px); }
+.s-title { margin-bottom:16px; }
+.s-sub { font-size:var(--fs-body); color:var(--text-muted); line-height:1.7; max-width:580px; margin-bottom:clamp(40px,6vw,72px); }
 
 /* L'argument à gauche, sa preuve chiffrée à droite. Sous 960 px, la
    preuve passe sous l'argument, à une largeur de lecture.
@@ -40,10 +41,12 @@ main { padding-top: var(--hdr) }
 
 /* Constat */
 .constat-list { display:flex; flex-direction:column; gap:16px; max-width:760px; }
-.constat-item { display:flex; gap:20px; align-items:flex-start; padding:24px; background:var(--surface); border:1px solid var(--border); border-radius:4px; }
-.constat-num { font-size:var(--fs-caption); font-weight:600; color:var(--accent-text); letter-spacing:0; flex-shrink:0; padding-top:2px; }
+.constat-item { display:flex; flex-direction:column; gap:6px; align-items:flex-start; padding:24px; background:var(--surface); border:1px solid var(--border); border-radius:4px; }
+/* Le chiffre Insee, au-dessus de la phrase qu'il fonde : c'est lui
+   qui donne son sens à la phrase, pas une note de bas de case. */
+.constat-num { font-size:var(--fs-sub); font-weight:700; color:var(--text); letter-spacing:0; line-height:1.1; }
 .constat-text strong { display:block; font-size:1rem; font-weight:600; margin-bottom:6px; }
-.constat-text p { font-size:.9rem; color:var(--text-muted); line-height:1.65; }
+.constat-text p { font-size:15px; color:var(--text-muted); line-height:1.65; }
 
 /* Cards livrables — la grille suit le nombre de cartes, aucune case
    ne reste vide : une colonne au téléphone ; deux de 600 à 899 px, la
@@ -68,8 +71,7 @@ main { padding-top: var(--hdr) }
 /* Tarif */
 .prix-block { max-width:540px; }
 .prix-depuis { font-size:clamp(2.2rem,5vw,3.2rem); font-weight:600; letter-spacing:-.014em; margin-bottom:8px; }
-.prix-depuis strong { color:var(--accent-text); }
-.prix-desc { font-size:.95rem; color:var(--text-muted); margin-bottom:28px; line-height:1.6; }
+.prix-desc { font-size:var(--fs-body); color:var(--text-muted); margin-bottom:28px; line-height:1.6; }
 .prix-links { display:flex; gap:16px; flex-wrap:wrap; align-items:center; }
 /* CTA finale */
 .cta-btns { display:flex; gap:16px; flex-wrap:wrap; align-items:center; margin-bottom:40px; }
@@ -87,12 +89,12 @@ main { padding-top: var(--hdr) }
 .faq-item { border-top:1px solid var(--border); padding:24px 0; }
 .faq-item:last-child { border-bottom:1px solid var(--border); }
 .faq-q { font-size:1rem; font-weight:600; margin-bottom:10px; }
-.faq-a { font-size:.9rem; color:var(--text-muted); line-height:1.7; }
+.faq-a { font-size:15px; color:var(--text-muted); line-height:1.7; }
 
 /* Navigation métier */
 .other-pages { margin-top:8px; }
-.other-pages p { font-size:.82rem; color:var(--text-muted); margin-bottom:10px; font-weight:500; letter-spacing:0; }
-.other-pages a { display:inline-block; margin-right:12px; margin-bottom:8px; font-size:.82rem; color:var(--text-muted); border:1px solid var(--border-strong); padding:5px 12px; border-radius:3px; transition:color .2s,border-color .2s; }
+.other-pages p { font-size:14px; color:var(--text-muted); margin-bottom:10px; font-weight:400; letter-spacing:0; }
+.other-pages a { display:inline-block; margin-right:12px; margin-bottom:8px; font-size:14px; color:var(--text-muted); border:1px solid var(--border-strong); padding:5px 12px; border-radius:3px; transition:color .2s,border-color .2s; }
 .other-pages a:hover { color:var(--text); border-color:var(--text-muted); }
 
 @media(max-width:768px) {
@@ -112,9 +114,9 @@ main { padding-top: var(--hdr) }
   <!-- 2. Hero -->
   <section class="hero">
     <div class="wrap">
-      <h1 class="hero-title r d1" data-i18n="comm-h1">Vos clients commandent sur Amazon<br>parce qu'ils ignorent que vous existez en ligne.</h1>
-      <p class="hero-sub r d2" data-i18n="comm-2">Avant de passer la porte, beaucoup de clients vérifient en ligne vos horaires et ce que vous vendez. Sans présence web, vous perdez des ventes sans même le savoir.</p>
-      <InteractiveButton text="Créer mon site commerce" data-i18n="comm-b1" href="/devis?plan=vitrine-pro" class="r d3" r />
+      <h1 class="hero-title h-xl r d1" data-i18n="comm-h1">Des sites pour les commerces de proximité</h1>
+      <p class="hero-sub r d2" data-i18n="comm-2">Avant de passer la porte, beaucoup de clients vérifient en ligne vos horaires et ce que vous vendez. Sans site, ils ne trouvent que vos concurrents.</p>
+      <InteractiveButton text="Demander un devis" data-i18n="comm-b1" href="/devis?plan=vitrine-pro" class="r d3" r />
     </div>
   </section>
 
@@ -122,26 +124,25 @@ main { padding-top: var(--hdr) }
   <section class="s sec-seam">
     <div class="wrap duo">
       <div class="duo-txt">
-        <h2 class="s-title r" data-i18n="comm-3">Ce que vous perdez chaque semaine sans site</h2>
-        <p class="s-sub r d1" data-i18n="comm-4">Des clients passent devant votre vitrine — en ligne — et repartent chez la concurrence.</p>
+        <h2 class="s-title h-lg r" data-i18n="comm-3">Ce que vous perdez chaque semaine sans site</h2>
         <ul class="constat-list">
           <li class="constat-item r d1">
             <span class="constat-num" data-i18n="comm-n1">58 %</span>
             <div class="constat-text">
-              <strong data-i18n="comm-5">Des très petites entreprises du commerce ayant accès à Internet n'ont pas de site web (Insee, 2022)</strong>
-              <p data-i18n="comm-6">Le client qui cherche vos horaires, votre adresse ou ce que vous vendez ne trouve rien. Il suppose que vous êtes fermé ou que vous n'avez pas ce qu'il faut — et il va ailleurs.</p>
+              <strong data-i18n="comm-5">des très petites entreprises du commerce ayant accès à Internet n'ont pas de site web (Insee, 2022)</strong>
+              <p data-i18n="comm-6">Le client qui cherche vos horaires, votre adresse ou ce que vous vendez ne trouve rien. Il suppose que vous êtes fermé ou que vous n'avez pas ce qu'il faut. Il va ailleurs.</p>
             </div>
           </li>
           <li class="constat-item r d2">
             <div class="constat-text">
-              <strong data-i18n="comm-7">Pas de site = pas d'horaires clairs = clients qui se déplacent pour rien</strong>
-              <p data-i18n="comm-8">Un client qui se déplace et trouve porte close ne reviendra pas. Il trouve votre concurrent en deux clics — et commande depuis son canapé.</p>
+              <strong data-i18n="comm-7">Sans horaires en ligne, des clients se déplacent pour rien</strong>
+              <p data-i18n="comm-8">Un client qui se déplace et trouve porte close ne reviendra pas. Il trouve votre concurrent en deux clics.</p>
             </div>
           </li>
           <li class="constat-item r d3">
             <div class="constat-text">
-              <strong data-i18n="comm-9">Les grandes enseignes vous volent des clients locaux grâce au web</strong>
-              <p data-i18n="comm-10">Amazon, Cdiscount, les chaînes nationales — ils ont des équipes entières pour exister en ligne. Un bon site local bien référencé peut renverser la tendance sur votre ville.</p>
+              <strong data-i18n="comm-9">Les grandes enseignes sont visibles en ligne, pas vous</strong>
+              <p data-i18n="comm-10">Amazon, Cdiscount et les chaînes nationales ont des équipes entières pour être visibles en ligne. Sur les recherches de votre ville, un site local bien référencé peut passer devant elles.</p>
             </div>
           </li>
         </ul>
@@ -153,8 +154,8 @@ main { padding-top: var(--hdr) }
   <!-- 4. Ce que vous recevez -->
   <section class="s sec-seam">
     <div class="wrap">
-      <h2 class="s-title r" data-i18n="comm-11">Ce que vous recevez</h2>
-      <p class="s-sub r d1" data-i18n="comm-12">Cinq livrables pensés pour un commerce de quartier — pas un template générique.</p>
+      <h2 class="s-title h-lg r" data-i18n="comm-11">Ce que vous recevez</h2>
+      <p class="s-sub r d1" data-i18n="comm-12">Les cinq parties de votre site</p>
       <div class="cards">
         <div class="card r d1">
           <h3 class="card-title" data-i18n="comm-13">Catalogue produits ou services visible</h3>
@@ -169,12 +170,12 @@ main { padding-top: var(--hdr) }
           <p class="card-desc" data-i18n="comm-18">Les clients vous contactent ou passent commande directement depuis le site, sans intermédiaire.</p>
         </div>
         <div class="card r d1">
-          <h3 class="card-title" data-i18n="comm-19">Page "Nouveautés" pour fidéliser</h3>
+          <h3 class="card-title" data-i18n="comm-19">Une page « Nouveautés »</h3>
           <p class="card-desc" data-i18n="comm-20">Partagez vos arrivages, vos promos et vos actualités. Vos clients reviennent voir ce qui change.</p>
         </div>
         <div class="card r d2">
-          <h3 class="card-title" data-i18n="comm-21">SEO local "boutique [votre ville]"</h3>
-          <p class="card-desc" data-i18n="comm-22">Optimisé pour apparaître quand un habitant cherche ce que vous vendez près de chez lui — sans payer de publicité.</p>
+          <h3 class="card-title" data-i18n="comm-21">Référencement local sur « boutique [ville] »</h3>
+          <p class="card-desc" data-i18n="comm-22">Optimisé pour apparaître quand un habitant cherche ce que vous vendez près de chez lui, sans payer de publicité.</p>
         </div>
       </div>
     </div>
@@ -184,10 +185,10 @@ main { padding-top: var(--hdr) }
   <section class="s sec-seam">
     <div class="wrap duo">
       <div class="duo-txt">
-        <h2 class="s-title r" data-i18n="comm-23">Un prix fixe, sans mauvaise surprise</h2>
+        <h2 class="s-title h-lg r" data-i18n="comm-23">Le prix</h2>
         <p class="s-sub r d1" data-i18n="comm-24">Formule Vitrine Pro adaptée aux commerces de proximité.</p>
         <div class="prix-block r d2">
-          <p class="prix-desc" data-i18n="comm-25">Tarif actuel et détail des places disponibles sur notre page tarifs.</p>
+          <p class="prix-desc"><span data-i18n-prix>{VITRINE_PRIX}</span> <span data-i18n="comm-25">pour nos trois premiers clients, payables en 1, 3 ou 4 fois. Le détail est sur la page Tarifs.</span></p>
           <div class="prix-links">
             <InteractiveButton text="Voir le détail des tarifs" data-i18n="comm-b2" href="/tarifs" />
             <InteractiveButton text="Demander un devis" data-i18n="comm-b3" href="/devis?plan=vitrine-pro" />
@@ -202,13 +203,13 @@ main { padding-top: var(--hdr) }
   <section class="s sec-seam">
     <div class="wrap faq-sec">
       <div class="faq-intro">
-        <h2 class="s-title r" data-i18n="comm-26">Questions fréquentes</h2>
+        <h2 class="s-title h-lg r" data-i18n="comm-26">Questions fréquentes</h2>
         <p class="s-sub r d1" data-i18n="comm-27">Ce que demandent les commerçants avant de se décider.</p>
       </div>
       <div class="faq-list">
         <div class="faq-item r d1">
           <p class="faq-q" data-i18n="comm-28">Puis-je ajouter des produits moi-même ?</p>
-          <p class="faq-a" data-i18n="comm-29">Oui. On vous forme en une demi-heure. Vous gérez votre catalogue, vos photos et vos descriptions depuis votre téléphone ou ordinateur, sans toucher au code. Si vous préférez déléguer, mentionnez-le dans votre devis.</p>
+          <p class="faq-a" data-i18n="comm-29">Oui. On vous forme en 30 minutes. Vous gérez votre catalogue, vos photos et vos descriptions depuis votre téléphone ou ordinateur, sans toucher au code. Si vous préférez déléguer, mentionnez-le dans votre devis.</p>
         </div>
         <div class="faq-item r d2">
           <p class="faq-q" data-i18n="comm-30">Dois-je gérer un stock en ligne ou faire de la vente à distance ?</p>
@@ -216,11 +217,11 @@ main { padding-top: var(--hdr) }
         </div>
         <div class="faq-item r d3">
           <p class="faq-q" data-i18n="comm-32">Ça fonctionne pour quel type de commerce ?</p>
-          <p class="faq-a" data-i18n="comm-33">Boulangerie, fleuriste, librairie, épicerie fine, cave à vins, prêt-à-porter, pharmacie indépendante, animalerie, quincaillerie — tout commerce de proximité qui veut être visible en ligne sans vendre en ligne.</p>
+          <p class="faq-a" data-i18n="comm-33">Boulangerie, fleuriste, librairie, épicerie fine, cave à vins, prêt-à-porter, pharmacie indépendante, animalerie, quincaillerie : tout commerce de proximité qui veut être visible en ligne sans vendre en ligne.</p>
         </div>
         <div class="faq-item r d1">
           <p class="faq-q" data-i18n="comm-34">Mon budget est limité. Est-ce vraiment pour moi ?</p>
-          <p class="faq-a" data-i18n="comm-35">Un site professionnel bien référencé reste visible jour et nuit, sans frais publicitaires récurrents. C'est un investissement ponctuel : consultez notre page tarifs pour voir s'il correspond à votre situation.</p>
+          <p class="faq-a" data-i18n="comm-35">Le site se paie une fois, plus l'hébergement et le nom de domaine chaque année. Les prix sont sur la page Tarifs, payables en 3 ou 4 fois.</p>
         </div>
       </div>
     </div>
@@ -229,10 +230,10 @@ main { padding-top: var(--hdr) }
   <!-- 7. Démarrer -->
   <section class="s sec-seam" id="contact">
     <div class="wrap">
-      <h2 class="s-title r" data-i18n="comm-36">Prêt à vous lancer ?</h2>
-      <p class="s-sub r d1" data-i18n="comm-37">Décrivez votre projet en 2 minutes. On vous revient sous 24 h, sans engagement.</p>
+      <h2 class="s-title h-lg r" data-i18n="comm-36">Demander un devis</h2>
+      <p class="s-sub r d1" data-i18n="comm-37">Réponse sous 24 h. Gratuit et sans engagement.</p>
       <div class="cta-btns r d2">
-        <InteractiveButton text="Demander un devis gratuit" data-i18n="comm-b4" href="/devis?plan=vitrine-pro" />
+        <InteractiveButton text="Demander un devis" data-i18n="comm-b4" href="/devis?plan=vitrine-pro" />
         <InteractiveButton text="Réserver un créneau" data-i18n="comm-b5" href="/rendez-vous" />
       </div>
       <div class="other-pages r d3">

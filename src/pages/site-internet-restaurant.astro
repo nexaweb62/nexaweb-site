@@ -5,6 +5,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Secteurs from '../components/graphes/Secteurs.astro';
 import Echeancier from '../components/graphes/Echeancier.astro';
+import { VITRINE_PRIX } from '../data/formules';
 import '../styles/global.css';
 ---
 <BaseLayout title="Site Internet pour Restaurant — Nexa Web" description="Un site restaurant avec menu en ligne, formulaire de réservation et SEO local. Livraison rapide — Nexa Web, Carvin, Hauts-de-France.">
@@ -12,14 +13,14 @@ import '../styles/global.css';
 main { padding-top: var(--hdr) }
 
 /* Hero */
-.hero { padding: clamp(80px,14vh,160px) 0 clamp(60px,10vh,120px); text-align: center; position: relative; overflow: hidden; }
-.hero-title { font-size:clamp(2.2rem,5vw,4.5rem); font-weight:600; letter-spacing:-.014em; line-height:1; text-wrap:balance; margin-bottom:24px; }
-.hero-sub { font-size:clamp(.95rem,1.6vw,1.1rem); color:var(--text-muted); line-height:1.7; max-width:560px; margin:0 auto 40px; }
+.hero { padding: clamp(80px,14vh,160px) 0 clamp(60px,10vh,120px); text-align: left; position: relative; overflow: hidden; }
+.hero-title { margin-bottom:24px; max-width:18ch; }
+.hero-sub { font-size:var(--fs-body); color:var(--text-muted); line-height:1.6; max-width:560px; margin:0 0 40px; }
 
 /* Sections */
 .s { padding: var(--sec) 0; }
-.s-title { font-size:clamp(1.6rem,3.5vw,2.8rem); font-weight:600; letter-spacing:-.010em; line-height:1.1; text-wrap:balance; margin-bottom:16px; }
-.s-sub { font-size:clamp(.9rem,1.4vw,1rem); color:var(--text-muted); line-height:1.7; max-width:580px; margin-bottom:clamp(40px,6vw,72px); }
+.s-title { margin-bottom:16px; }
+.s-sub { font-size:var(--fs-body); color:var(--text-muted); line-height:1.7; max-width:580px; margin-bottom:clamp(40px,6vw,72px); }
 
 /* L'argument à gauche, sa preuve chiffrée à droite. Sous 960 px, la
    preuve passe sous l'argument, à une largeur de lecture.
@@ -40,10 +41,12 @@ main { padding-top: var(--hdr) }
 
 /* Constat */
 .constat-list { display:flex; flex-direction:column; gap:16px; max-width:760px; }
-.constat-item { display:flex; gap:20px; align-items:flex-start; padding:24px; background:var(--surface); border:1px solid var(--border); border-radius:4px; }
-.constat-num { font-size:var(--fs-caption); font-weight:600; color:var(--accent-text); letter-spacing:0; flex-shrink:0; padding-top:2px; }
+.constat-item { display:flex; flex-direction:column; gap:6px; align-items:flex-start; padding:24px; background:var(--surface); border:1px solid var(--border); border-radius:4px; }
+/* Le chiffre Insee, au-dessus de la phrase qu'il fonde : c'est lui
+   qui donne son sens à la phrase, pas une note de bas de case. */
+.constat-num { font-size:var(--fs-sub); font-weight:700; color:var(--text); letter-spacing:0; line-height:1.1; }
 .constat-text strong { display:block; font-size:1rem; font-weight:600; margin-bottom:6px; }
-.constat-text p { font-size:.9rem; color:var(--text-muted); line-height:1.65; }
+.constat-text p { font-size:15px; color:var(--text-muted); line-height:1.65; }
 
 /* Cards livrables — la grille suit le nombre de cartes, aucune case
    ne reste vide : une colonne au téléphone ; deux de 600 à 899 px, la
@@ -68,8 +71,7 @@ main { padding-top: var(--hdr) }
 /* Tarif */
 .prix-block { max-width:540px; }
 .prix-depuis { font-size:clamp(2.2rem,5vw,3.2rem); font-weight:600; letter-spacing:-.014em; margin-bottom:8px; }
-.prix-depuis strong { color:var(--accent-text); }
-.prix-desc { font-size:.95rem; color:var(--text-muted); margin-bottom:28px; line-height:1.6; }
+.prix-desc { font-size:var(--fs-body); color:var(--text-muted); margin-bottom:28px; line-height:1.6; }
 .prix-links { display:flex; gap:16px; flex-wrap:wrap; align-items:center; }
 /* CTA finale */
 .cta-btns { display:flex; gap:16px; flex-wrap:wrap; align-items:center; margin-bottom:40px; }
@@ -87,12 +89,12 @@ main { padding-top: var(--hdr) }
 .faq-item { border-top:1px solid var(--border); padding:24px 0; }
 .faq-item:last-child { border-bottom:1px solid var(--border); }
 .faq-q { font-size:1rem; font-weight:600; margin-bottom:10px; }
-.faq-a { font-size:.9rem; color:var(--text-muted); line-height:1.7; }
+.faq-a { font-size:15px; color:var(--text-muted); line-height:1.7; }
 
 /* Navigation métier */
 .other-pages { margin-top:8px; }
-.other-pages p { font-size:.82rem; color:var(--text-muted); margin-bottom:10px; font-weight:500; letter-spacing:0; }
-.other-pages a { display:inline-block; margin-right:12px; margin-bottom:8px; font-size:.82rem; color:var(--text-muted); border:1px solid var(--border-strong); padding:5px 12px; border-radius:3px; transition:color .2s,border-color .2s; }
+.other-pages p { font-size:14px; color:var(--text-muted); margin-bottom:10px; font-weight:400; letter-spacing:0; }
+.other-pages a { display:inline-block; margin-right:12px; margin-bottom:8px; font-size:14px; color:var(--text-muted); border:1px solid var(--border-strong); padding:5px 12px; border-radius:3px; transition:color .2s,border-color .2s; }
 .other-pages a:hover { color:var(--text); border-color:var(--text-muted); }
 
 @media(max-width:768px) {
@@ -112,9 +114,9 @@ main { padding-top: var(--hdr) }
   <!-- 2. Hero -->
   <section class="hero">
     <div class="wrap">
-      <h1 class="hero-title r d1" data-i18n="resto-h1">Vos concurrents prennent<br>vos réservations en ligne.</h1>
-      <p class="hero-sub r d2" data-i18n="resto-2">Avant de sortir, beaucoup de clients cherchent un restaurant sur Google. Sans site, c'est la table d'à côté qui remplit la salle — pas la vôtre.</p>
-      <InteractiveButton text="Avoir mon site restaurant" data-i18n="resto-b1" href="/devis?plan=vitrine-pro" class="r d3" r />
+      <h1 class="hero-title h-xl r d1" data-i18n="resto-h1">Des sites pour les restaurants et les brasseries</h1>
+      <p class="hero-sub r d2" data-i18n="resto-2">Avant de sortir, beaucoup de clients cherchent un restaurant sur Google. Sans site, ils réservent ailleurs.</p>
+      <InteractiveButton text="Demander un devis" data-i18n="resto-b1" href="/devis?plan=vitrine-pro" class="r d3" r />
     </div>
   </section>
 
@@ -122,13 +124,12 @@ main { padding-top: var(--hdr) }
   <section class="s sec-seam">
     <div class="wrap duo">
       <div class="duo-txt">
-        <h2 class="s-title r" data-i18n="resto-3">Ce qui se passe vraiment quand vous n'êtes pas en ligne</h2>
-        <p class="s-sub r d1" data-i18n="resto-4">Pas de site, pas de réservation directe.</p>
+        <h2 class="s-title h-lg r" data-i18n="resto-3">Ce qui se passe vraiment quand vous n'êtes pas en ligne</h2>
         <ul class="constat-list">
           <li class="constat-item r d1">
             <span class="constat-num" data-i18n="resto-n1">55 %</span>
             <div class="constat-text">
-              <strong data-i18n="resto-5">Des très petites entreprises de l'hébergement-restauration ayant accès à Internet n'ont pas de site web (Insee, 2022)</strong>
+              <strong data-i18n="resto-5">des très petites entreprises de l'hébergement-restauration ayant accès à Internet n'ont pas de site web (Insee, 2022)</strong>
               <p data-i18n="resto-6">Sur Google, TripAdvisor ou les Pages Jaunes, le client choisit parmi les restaurants qui apparaissent. Si le vôtre n'y est pas, il ne revient pas chercher.</p>
             </div>
           </li>
@@ -140,7 +141,7 @@ main { padding-top: var(--hdr) }
           </li>
           <li class="constat-item r d3">
             <div class="constat-text">
-              <strong data-i18n="resto-9">L'absence en ligne, c'est votre concurrent qui prend la réservation</strong>
+              <strong data-i18n="resto-9">Sans site, la réservation va au restaurant d'en face</strong>
               <p data-i18n="resto-10">Le restaurant d'en face avec un site soigné capte les clients du quartier, les touristes, les groupes. Vous, vous attendez le bouche-à-oreille.</p>
             </div>
           </li>
@@ -153,8 +154,8 @@ main { padding-top: var(--hdr) }
   <!-- 4. Ce que vous recevez -->
   <section class="s sec-seam">
     <div class="wrap">
-      <h2 class="s-title r" data-i18n="resto-11">Ce que vous recevez</h2>
-      <p class="s-sub r d1" data-i18n="resto-12">Cinq livrables concrets, pensés pour un restaurant — pas un site générique.</p>
+      <h2 class="s-title h-lg r" data-i18n="resto-11">Ce que vous recevez</h2>
+      <p class="s-sub r d1" data-i18n="resto-12">Les cinq parties de votre site</p>
       <div class="cards">
         <div class="card r d1">
           <h3 class="card-title" data-i18n="resto-13">Menu en ligne toujours à jour</h3>
@@ -166,15 +167,15 @@ main { padding-top: var(--hdr) }
         </div>
         <div class="card r d3">
           <h3 class="card-title" data-i18n="resto-17">Galerie plats et ambiance</h3>
-          <p class="card-desc" data-i18n="resto-18">Photos de vos plats et de votre salle mises en valeur. Le client voit avant de venir — et il vient.</p>
+          <p class="card-desc" data-i18n="resto-18">Les photos de vos plats et de votre salle, pour que le client sache où il va.</p>
         </div>
         <div class="card r d1">
-          <h3 class="card-title" data-i18n="resto-19">SEO local "restaurant [votre ville]"</h3>
+          <h3 class="card-title" data-i18n="resto-19">Référencement local sur « restaurant [ville] »</h3>
           <p class="card-desc" data-i18n="resto-20">Optimisé pour que Google vous propose quand quelqu'un cherche où manger près de chez lui.</p>
         </div>
         <div class="card r d2">
           <h3 class="card-title" data-i18n="resto-21">Fiche Google optimisée</h3>
-          <p class="card-desc" data-i18n="resto-22">Horaires, photos, avis, lien de réservation — votre fiche Google Maps complète et à jour.</p>
+          <p class="card-desc" data-i18n="resto-22">Votre fiche Google Maps complète : horaires, photos, avis et lien de réservation.</p>
         </div>
       </div>
     </div>
@@ -184,10 +185,10 @@ main { padding-top: var(--hdr) }
   <section class="s sec-seam">
     <div class="wrap duo">
       <div class="duo-txt">
-        <h2 class="s-title r" data-i18n="resto-23">Un tarif lisible, sans surprise</h2>
+        <h2 class="s-title h-lg r" data-i18n="resto-23">Le prix</h2>
         <p class="s-sub r d1" data-i18n="resto-24">Formule Vitrine Pro adaptée aux restaurants et commerces locaux.</p>
         <div class="prix-block r d2">
-          <p class="prix-desc" data-i18n="resto-25">Tarif actuel et détail des places disponibles sur notre page tarifs.</p>
+          <p class="prix-desc"><span data-i18n-prix>{VITRINE_PRIX}</span> <span data-i18n="resto-25">pour nos trois premiers clients, payables en 1, 3 ou 4 fois. Le détail est sur la page Tarifs.</span></p>
           <div class="prix-links">
             <InteractiveButton text="Voir le détail des tarifs" data-i18n="resto-b2" href="/tarifs" />
             <InteractiveButton text="Demander un devis" data-i18n="resto-b3" href="/devis?plan=vitrine-pro" />
@@ -202,13 +203,13 @@ main { padding-top: var(--hdr) }
   <section class="s sec-seam">
     <div class="wrap faq-sec">
       <div class="faq-intro">
-        <h2 class="s-title r" data-i18n="resto-26">Questions fréquentes</h2>
+        <h2 class="s-title h-lg r" data-i18n="resto-26">Questions fréquentes</h2>
         <p class="s-sub r d1" data-i18n="resto-27">Les vraies questions que posent les restaurateurs avant de se lancer.</p>
       </div>
       <div class="faq-list">
         <div class="faq-item r d1">
           <p class="faq-q" data-i18n="resto-28">Est-ce que je peux mettre à jour le menu moi-même ?</p>
-          <p class="faq-a" data-i18n="resto-29">Oui. On vous forme en 20 minutes. Vous changez les plats, les prix et les formules directement depuis votre téléphone, sans toucher au code. Si vous préférez qu'on s'en charge, mentionnez-le dans votre devis.</p>
+          <p class="faq-a" data-i18n="resto-29">Oui. On vous forme en 30 minutes. Vous changez les plats, les prix et les formules directement depuis votre téléphone, sans toucher au code. Si vous préférez qu'on s'en charge, mentionnez-le dans votre devis.</p>
         </div>
         <div class="faq-item r d2">
           <p class="faq-q" data-i18n="resto-30">Combien de temps avant d'être en ligne ?</p>
@@ -225,10 +226,10 @@ main { padding-top: var(--hdr) }
   <!-- 7. Démarrer -->
   <section class="s sec-seam" id="contact">
     <div class="wrap">
-      <h2 class="s-title r" data-i18n="resto-34">Prêt à vous lancer ?</h2>
-      <p class="s-sub r d1" data-i18n="resto-35">Décrivez votre projet en 2 minutes. On vous revient sous 24 h, sans engagement.</p>
+      <h2 class="s-title h-lg r" data-i18n="resto-34">Demander un devis</h2>
+      <p class="s-sub r d1" data-i18n="resto-35">Réponse sous 24 h. Gratuit et sans engagement.</p>
       <div class="cta-btns r d2">
-        <InteractiveButton text="Demander un devis gratuit" data-i18n="resto-b4" href="/devis?plan=vitrine-pro" />
+        <InteractiveButton text="Demander un devis" data-i18n="resto-b4" href="/devis?plan=vitrine-pro" />
         <InteractiveButton text="Réserver un créneau" data-i18n="resto-b5" href="/rendez-vous" />
       </div>
       <div class="other-pages r d3">
