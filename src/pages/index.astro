@@ -81,8 +81,15 @@ const FONDATEURS = [
 .he-barre .he-url{width:auto;height:auto;border-radius:0;flex:1;margin-left:10px;padding:4px 12px;background:var(--bg);font-size:12px;color:var(--text-muted)}
 .he-pc img{display:block;width:100%;height:auto}
 .he-sc{position:relative;padding:0 26px 26px 0}
-.he-tel{position:absolute;right:0;bottom:0;width:min(160px,24%);padding:7px;border:1px solid var(--border-strong);border-radius:20px;background:var(--surface-2);box-shadow:0 20px 50px rgb(from var(--raw-black-950) r g b / .55)}
-.he-tel img{display:block;width:100%;height:auto;border-radius:13px}
+/* LE TÉLÉPHONE, dessiné en CSS : un iPhone de génération récente —
+   bords fins, coins très arrondis, cadre titane, Dynamic Island en
+   haut de l'écran, boutons sur la tranche. Aucune image d'Apple. */
+.he-tel{position:absolute;right:0;bottom:0;width:min(172px,25%);padding:5px;border-radius:32px;
+  background:var(--raw-black-950);
+  box-shadow:0 0 0 2px var(--raw-black-700),0 0 0 3px var(--raw-black-600),0 24px 60px rgb(from var(--raw-black-950) r g b / .55)}
+.he-tel::before{content:"";position:absolute;top:13px;left:50%;translate:-50% 0;width:30%;height:13px;border-radius:999px;background:var(--raw-black-950);z-index:1}
+.he-tel::after{content:"";position:absolute;right:-5px;top:24%;width:3px;height:14%;border-radius:0 2px 2px 0;background:var(--raw-black-600)}
+.he-tel img{display:block;width:100%;height:auto;aspect-ratio:9 / 19.5;object-fit:cover;object-position:50% 0;border-radius:27px}
 .he-cap{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap}
 .he-cap-t{margin:0;font-size:19px;font-weight:var(--w-bold,700);color:var(--text)}
 .pt-engag{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
@@ -388,20 +395,20 @@ const FONDATEURS = [
 @media(max-width:700px){.faq-in{grid-template-columns:1fr}}
 
 /* ── CTA ── */
-/* Le seul aplat de couleur de la page : le laiton des plaques
-   (--plq-or), le même en clair et en sombre, encre noire dessus. */
-.s-cta.pt-or{margin-top:clamp(44px,5vw,64px);background:var(--plq-or);color:var(--plq-or-encre)}
+/* Le bandeau final : un aplat noir, le même en clair et en sombre, avec
+   le bouton de devis en laiton (--plq-or). */
+.s-cta.pt-or{margin-top:clamp(44px,5vw,64px);background:var(--raw-black-950);color:var(--raw-warm-50);border-top:1px solid var(--raw-black-800);border-bottom:1px solid var(--raw-black-800)}
 .cta-in{display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap;padding-top:clamp(40px,5vw,56px);padding-bottom:clamp(40px,5vw,56px)}
-.cta-hl{margin:0 0 8px;color:var(--plq-or-encre)}
-.cta-sub{margin:0;font-size:17px;color:var(--plq-or-encre)}
+.cta-hl{margin:0 0 8px;color:var(--raw-warm-50)}
+.cta-sub{margin:0;font-size:17px;color:var(--raw-warm-300)}
 .cta-btns{display:flex;gap:12px;flex-wrap:wrap}
-.pt-or-btn{display:inline-flex;align-items:center;min-height:50px;padding:0 24px;font-weight:var(--w-bold,700);font-size:16px;text-decoration:none;background:var(--plq-or-encre);color:var(--plq-or);border:1px solid var(--plq-or-encre);transition:background-color 160ms var(--ease-out),color 160ms var(--ease-out)}
-.pt-or-btn2{background:transparent;color:var(--plq-or-encre)}
+.pt-or-btn{display:inline-flex;align-items:center;min-height:50px;padding:0 24px;font-weight:var(--w-bold,700);font-size:16px;text-decoration:none;background:var(--plq-or);color:var(--plq-or-encre);border:1px solid var(--plq-or);transition:background-color 160ms var(--ease-out),color 160ms var(--ease-out),border-color 160ms var(--ease-out)}
+.pt-or-btn2{background:transparent;color:var(--raw-warm-50);border-color:var(--raw-black-600)}
 @media (hover:hover) and (pointer:fine){
-  .pt-or-btn:hover{background:transparent;color:var(--plq-or-encre)}
-  .pt-or-btn2:hover{background:var(--plq-or-encre);color:var(--plq-or)}
+  .pt-or-btn:hover{background:var(--plq-or-haut);border-color:var(--plq-or-haut)}
+  .pt-or-btn2:hover{background:transparent;border-color:var(--raw-warm-50)}
 }
-.pt-or-btn:focus-visible{outline:2px solid var(--plq-or-encre);outline-offset:3px}
+.pt-or-btn:focus-visible{outline:2px solid var(--raw-warm-50);outline-offset:3px}
 
 
 /* content-visibility:auto a été retiré ici : avec contain-intrinsic-size
