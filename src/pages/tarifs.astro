@@ -42,45 +42,30 @@ main{--text-muted:var(--raw-warm-200)}
 :root[data-theme="light"] main,
 :root:not([data-theme="dark"]) main{--text-muted:var(--raw-stone-600)}
 
-.prix-hero{padding:calc(var(--hdr) + clamp(32px,6vh,72px)) 0 clamp(32px,5vh,56px);text-align:center;position:relative;z-index:1}
+.prix-hero{position:relative;z-index:1}
 /* Le chapeau et le sous-titre n'ont aucune carte pour les porter :
    mesuré, le sous-titre tombe à 2,64:1 sur les passages clairs. Un
    renfort sombre local, qui s'éteint avant le bandeau de lancement. */
 .prix-hero::before{
-  content:"";position:absolute;inset-inline:calc(50% - 50vw);inset-block:-8% 0;
+  content:"";position:absolute;inset-inline:-60px 0;inset-block:-8% 0;
   z-index:-1;pointer-events:none;
   background:radial-gradient(120% 70% at 50% 40%,
     rgb(from var(--bg) r g b / .82), rgb(from var(--bg) r g b / 0) 70%);
 }
 .prix-h1{margin:0 0 16px}
-.prix-sub{font-size:clamp(15px,1.4vw,17px);color:var(--text-muted);line-height:1.65;max-width:440px;margin:0 auto}
+.prix-sub{font-size:clamp(16px,1.2vw,19px);color:var(--text-muted);line-height:1.6;max-width:34em;margin:0}
 
-/* ── OFFRE LANCEMENT ── */
-.launch-band{
-  margin:clamp(32px,5vh,56px) auto 0;
-  max-width:780px;
-  /* Même verre que les cartes : ce bandeau porte du texte secondaire
-     directement sur la soie, et y tombait à 1,67:1. Sa teinte et sa
-     bordure ne changent pas, seul un fond opaque s'ajoute dessous. */
-  background:var(--bg);
-  background-image:linear-gradient(var(--success-glow),var(--success-glow));
-  border:1px solid var(--success);
-  border-radius:var(--radius-block);
-  padding:clamp(24px,3vw,36px) clamp(24px,4vw,48px);
-  display:flex;align-items:center;gap:24px;
-  flex-wrap:wrap;
-}
-.launch-text{flex:1;min-width:200px;text-align:left}
-.launch-title{margin:0 0 8px}
+/* ── OFFRE LANCEMENT : une phrase sous les cartes, plus de bandeau ── */
+.launch-text{flex:1;min-width:260px}
 /* Le montant n'est plus peint en or ni grossi : il se lit dans la phrase. */
-.launch-title strong{color:inherit;font-weight:inherit}
 .launch-desc{font-size:15px;color:var(--text-muted);line-height:1.6;margin:0}
+.launch-desc strong{color:var(--text)}
 /* Le nombre de places, seulement s'il vient des données (Supabase) :
    une phrase, sans compteur ni couleur d'urgence. Caché sinon. */
 .launch-reste{font-size:15px;color:var(--text);line-height:1.5;margin:10px 0 0}
 
 /* ── FORMULES ── */
-.plans-section{padding:clamp(32px,5vh,56px) 0 clamp(48px,7vh,72px);position:relative;z-index:1}
+.plans-section{padding:calc(var(--hdr) + clamp(32px,5vh,56px)) 0 0;position:relative;z-index:1}
 /* Le chapeau et le titre de section n'ont, eux non plus, aucune carte
    pour les porter : ils tombent directement sur la soie, qui bouge. Le
    meme renfort sombre que le hero, limite a la hauteur de l'en-tete. */
@@ -109,7 +94,7 @@ main{--text-muted:var(--raw-warm-200)}
 /* Trois formules : trois colonnes. Deux laisseraient une carte
    orpheline sur sa ligne. La bascule est a 900 px et non a 760 :
    mesure, a 760 px trois colonnes debordent de 31 px. */
-.plans-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:clamp(32px,5vw,52px);
+.plans-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:32px;
   max-width:480px;margin-left:auto;margin-right:auto}
 @media(min-width:900px){.plans-grid{grid-template-columns:repeat(3,1fr);gap:20px;max-width:none}}
 /* « dès », « à partir de » : un prefixe, pas un prix. Il ne doit pas
@@ -133,10 +118,10 @@ main{--text-muted:var(--raw-warm-200)}
    chiffres observe, donc il ne les met jamais à zéro — un montant
    caché n'entre jamais dans l'écran, son animation ne partirait
    jamais, et il resterait figé sur « 0 € ». */
-.paie{border:0;margin:clamp(20px,3vw,28px) 0 0;padding:0;display:flex;justify-content:center}
+.paie{border:0;margin:0;padding:0;display:flex;justify-content:flex-end}
 /* Le segment est une plaque fixe (.plq.plq-fixe) ; chaque option, une
    petite plaque posée dedans, coupe réduite pour rester parallèle. */
-.paie-seg{--cut:var(--cut-sm);--pl-filet:var(--border-strong);
+.paie-seg{--cut:0px;--pl-filet:var(--border-strong);--pl-fond:var(--surface);
   display:inline-flex;gap:4px;align-items:center;padding:3px 4px}
 /* IL N'Y A PLUS DE FLOU D'ARRIERE-PLAN SUR CETTE PAGE, ET C'EST VOULU.
    Les cartes, le bandeau, le segment de paiement et l'encart final en
@@ -152,10 +137,10 @@ main{--text-muted:var(--raw-warm-200)}
    Ce qu'on gagne, c'est une page qui se peint. */
 .paie-radio{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
 .paie-lbl{
-  --cut:3px;--pl-fond:transparent;--pl-filet:transparent;border-width:0;
-  font-size:14px;font-weight:400;letter-spacing:0;color:var(--text);
+  --cut:0px;--pl-fond:transparent;--pl-filet:transparent;border-width:0;
+  font-size:15px;font-weight:600;letter-spacing:0;color:var(--text);
   display:flex;align-items:center;justify-content:center;cursor:pointer;
-  min-height:30px;padding:2px 14px;
+  min-height:40px;padding:2px 16px;
 }
 .paie-radio:checked + .paie-lbl{--pl-fond:var(--accent);--pl-filet:var(--accent);color:var(--on-accent);font-weight:600}
 @media (hover:hover) and (pointer:fine){
@@ -170,9 +155,9 @@ main{--text-muted:var(--raw-warm-200)}
    .plan-m4 portent la VISIBILITÉ. Séparer les deux permet d'ajouter un
    échéancier sans toucher aux styles. */
 .plan-m3,.plan-m4{display:none}
-.plan-mois{font-size:clamp(20px,2.4vw,28px);font-weight:600;letter-spacing:-.010em;line-height:1;
+.plan-mois{font-size:clamp(30px,3vw,48px);font-weight:600;letter-spacing:-.010em;line-height:1;
   white-space:nowrap;font-variant-numeric:tabular-nums}
-.plan-mois-gros{font-size:clamp(23px,3vw,33px);letter-spacing:-.014em}
+.plan-mois-gros{font-size:clamp(30px,3vw,48px);letter-spacing:-.014em}
 .plan-mois-u{font-size:max(11px,.42em);font-weight:400;color:var(--text-muted);margin-left:.1em}
 .plans-section:has(#paie-3:checked) .plan-comptant,
 .plans-section:has(#paie-4:checked) .plan-comptant{display:none}
@@ -199,11 +184,11 @@ main{--text-muted:var(--raw-warm-200)}
 .plan-card{
   position:relative;display:flex;flex-direction:column;
   background:var(--surface);
-  border:1px solid var(--border-strong);border-radius:var(--radius-block);
-  padding:clamp(18px,2.2vw,26px);transition:border-color .25s,transform .2s ease-out;
+  border:1px solid var(--border);border-radius:0;
+  padding:clamp(22px,2.2vw,32px);transition:border-color .25s,transform .2s ease-out;
   transform-style:preserve-3d;
 }
-.plan-card:hover{border-color:var(--accent)}
+.plan-card:hover{border-color:var(--border-strong)}
 /* INJECTÉ EN JAVASCRIPT dans chaque .plan-card — d'où :global().
    Scopées, ces deux règles ne s'appliquaient à rien : Astro les compile
    en .plan-spotlight[data-astro-cid-…] et le script ne pose pas cet
@@ -219,23 +204,27 @@ main{--text-muted:var(--raw-warm-200)}
    page — l'apparence vient du bouton interactif. */
 .plan-cta{margin-top:auto;align-self:stretch}
 .plan-card.plan-featured{
-  border-color:var(--accent);
-  box-shadow:0 0 0 1px var(--accent),var(--shadow-2);
+  border-color:var(--raw-black-700);
+  box-shadow:var(--shadow-2);
 }
-.plan-name{font-size:15px;font-weight:600;color:var(--text-muted);margin-bottom:12px}
+.plan-name{font-size:20px;font-weight:700;color:var(--text);margin:0}
+.plan-tete{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px;min-height:28px}
+.plan-card > .plan-name{margin-bottom:16px;min-height:28px;display:flex;align-items:center}
+.plan-tag{font-size:13px;font-weight:700;background:var(--plq-or);color:var(--plq-or-encre);padding:4px 10px}
 .plan-range{display:flex;align-items:center;gap:6px;flex-wrap:nowrap}
-.plan-from{font-size:clamp(20px,2.4vw,28px);font-weight:600;letter-spacing:-.010em;line-height:1;white-space:nowrap;font-variant-numeric:tabular-nums}
+.plan-from{font-size:clamp(30px,3vw,48px);font-weight:600;letter-spacing:-.010em;line-height:1;white-space:nowrap;font-variant-numeric:tabular-nums}
 .plan-sep{font-size:clamp(14px,1.5vw,18px);color:var(--text-subtle);flex-shrink:0;line-height:1}
 .plan-to{font-size:clamp(20px,2.4vw,28px);font-weight:600;letter-spacing:-.010em;line-height:1;color:var(--text-muted);white-space:nowrap;font-variant-numeric:tabular-nums}
 /* Chasse fixe pendant que les chiffres montent, sinon ils tremblent.
    Les chiffres tabulaires sont plus larges : la taille descend d'un
    cran pour que « 1 200 € — 3 100 € » tienne encore sur une ligne. */
-.plan-amount{font-size:clamp(23px,3vw,33px);font-weight:600;letter-spacing:-.014em;line-height:1;white-space:nowrap;font-variant-numeric:tabular-nums}
-.plan-desc{font-size:14px;color:var(--text-muted);margin-top:5px;line-height:1.5}
+.plan-amount{font-size:clamp(30px,3vw,48px);font-weight:600;letter-spacing:-.014em;line-height:1;white-space:nowrap;font-variant-numeric:tabular-nums}
+.plan-desc{font-size:15px;color:var(--text-muted);margin-top:8px;line-height:1.5}
 .plan-divider{border:none;border-top:1px solid var(--border-strong);margin:16px 0 0}
 /* Une liste à filets, sans cases cochées. */
 .plan-features{list-style:none;padding:0;margin:0 0 20px;display:flex;flex-direction:column;flex:1}
-.plan-feature{font-size:14px;color:var(--text-muted);line-height:1.4;padding:8px 0;border-bottom:1px solid var(--border)}
+.plan-feature{font-size:15px;color:var(--text);line-height:1.45;padding:9px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start}
+.plan-chk{flex:none;margin-top:3px}
 
 /* Le badge de garantie, centré sous la grille. Sa fenêtre et son
    habillage vivent dans le composant ; ici, seule sa place. */
@@ -254,29 +243,15 @@ main{--text-muted:var(--raw-warm-200)}
    pour qu'elle ne fuie pas ailleurs. Le centrage horizontal, lui, vient
    de .gar-plein (flex + justify-content:center) qui vit dans le
    composant et s'applique bien : il ne manquait que l'air au-dessus. */
-#main-content :global(.plans-gar){
-  margin-top:clamp(40px,6vh,72px);
-  margin-bottom:clamp(8px,1.5vh,16px)}
+#main-content :global(.plans-gar){margin:0}
 
-/* ── CTA ── */
-.cta-section{padding:clamp(32px,5vh,64px) 0 clamp(64px,10vh,120px);text-align:center;position:relative;z-index:1}
-/* Même verre que les cartes : ce panneau n'avait qu'une lueur dorée
-   translucide pour fond, la soie passait entière derrière son titre.
-   Sa teinte et sa bordure ne changent pas, un fond opaque s'ajoute
-   dessous. */
-.cta-inner{
-  max-width:580px;margin:0 auto;
-  background:var(--bg);
-  background-image:linear-gradient(var(--accent-glow),var(--accent-glow));
-  border:1px solid var(--accent);border-radius:var(--radius-block);
-  padding:clamp(32px,4vw,52px);
-}
-.cta-title{margin:0 0 12px}
-/* Mesuré : sur un panneau teinté (or ou vert à ~13 %), le gris secondaire
-   tombe juste sous AA en sombre — 4.48:1 et 4.1:1. Sur ces fonds-là, le
-   texte secondaire prend l'encre pleine. */
-.cta-sub{font-size:14px;color:var(--text);line-height:1.65;margin-bottom:28px}
-.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+/* ── CTA : le bandeau de l'accueil, blanc en clair, noir en sombre ── */
+.cta-section{position:relative;z-index:1;margin-top:clamp(44px,5vw,64px);border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  background:var(--surface);background:light-dark(var(--raw-paper-0),var(--raw-black-950))}
+.cta-inner{display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap;padding-top:clamp(40px,5vw,56px);padding-bottom:clamp(40px,5vw,56px)}
+.cta-title{margin:0 0 8px}
+.cta-sub{font-size:17px;color:var(--text-muted);line-height:1.6;margin:0}
+.cta-btns{display:flex;gap:12px;flex-wrap:wrap}
 
 /* ── AMBIANCE ──
    Le shader WebGL plein écran a été retiré : violet/rose/jaune à 72 %
@@ -290,6 +265,43 @@ main{--text-muted:var(--raw-warm-200)}
   background:radial-gradient(ellipse at 50% 50%,var(--accent-glow) 0%,rgb(from var(--accent-glow) r g b / 0) 72%);
   filter:blur(28px);transform:rotate(-28deg);
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   LE FORMAT DE L'ACCUEIL — pleine largeur, blocs à filets, rectangles.
+   ═══════════════════════════════════════════════════════════════════ */
+.trf-large{max-width:none;padding-left:clamp(20px,2.1vw,40px);padding-right:clamp(20px,2.1vw,40px)}
+.trf-tete{display:flex;justify-content:space-between;align-items:flex-end;gap:24px 40px;flex-wrap:wrap}
+.trf-tete .prix-h1{margin:0 0 12px;font-size:clamp(36px,3.6vw,56px)}
+.trf-paie{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.trf-paie-t{margin:0;font-size:14px;color:var(--text-muted)}
+@media (max-width:700px){.trf-paie{align-items:flex-start}.paie{justify-content:flex-start}}
+
+/* La Vitrine Pro en noir, en clair comme en sombre : c'est elle qui
+   ressort, sans cadre doré. Ses couleurs sont fixes (jetons bruts). */
+.plan-card.plan-featured{background:var(--raw-black-950);color:var(--raw-warm-50)}
+.plan-featured .plan-name,.plan-featured .plan-amount,.plan-featured .plan-mois,.plan-featured .plan-feature{color:var(--raw-warm-50)}
+.plan-featured .plan-desc,.plan-featured .plan-pre,.plan-featured .plan-mois-u{color:var(--raw-warm-300)}
+.plan-featured .plan-feature,.plan-featured .plan-divider{border-color:var(--raw-black-800)}
+.plan-featured .plan-chk{color:var(--raw-gold-400)}
+
+.trf-pied{display:flex;justify-content:space-between;align-items:center;gap:16px 32px;flex-wrap:wrap;margin-top:20px}
+
+/* LE TABLEAU COMPARATIF */
+.cmp{margin-top:clamp(44px,5vw,64px)}
+.cmp-h{margin:0 0 18px;font-size:clamp(24px,2vw,30px);font-weight:700;letter-spacing:-.018em}
+.cmp-scroll{position:relative;overflow-x:auto;background:var(--surface);border:1px solid var(--border)}
+.cmp-t{width:100%;min-width:640px;border-collapse:collapse;font-size:16px}
+.cmp-t thead th{background:var(--surface-2);padding:16px;text-align:center;font-weight:700;width:18%;vertical-align:bottom}
+.cmp-t thead th:first-child{text-align:left;padding-left:20px;width:auto}
+.cmp-t thead th small{display:block;font-weight:400;font-size:14px;color:var(--text-muted);margin-top:2px}
+.cmp-t thead th.cmp-feat{background:var(--raw-black-950);color:var(--raw-warm-50)}
+.cmp-t thead th.cmp-feat small{color:var(--raw-warm-300)}
+.cmp-t tbody tr{border-top:1px solid var(--border)}
+.cmp-t tbody th{text-align:left;font-weight:400;padding:14px 20px;color:var(--text)}
+.cmp-t td{text-align:center;padding:14px;color:var(--text);vertical-align:middle}
+.cmp-t td svg{display:inline-block;vertical-align:middle}
+.cmp-t .cmp-non{color:var(--border-strong)}
+.cmp-t td strong{font-weight:700}
 </style>
 
 <FondTarifs />
@@ -301,42 +313,34 @@ main{--text-muted:var(--raw-warm-200)}
 <Header />
 
 <main id="main-content" tabindex="-1" style="position:relative;z-index:1">
-  <div class="wrap">
+  <div class="wrap trf-large">
 
-    <!-- HERO -->
-    <div class="prix-hero">
-      <h1 class="prix-h1 h-xl" data-i18n="trf-h1">Ce que coûte votre site</h1>
-      <p class="prix-sub" data-i18n="trf-sub">Le prix est fixé dans le devis avant de commencer. Il ne change pas en cours de route.</p>
-
-      <!-- OFFRE LANCEMENT -->
-      <div class="launch-band">
-        <div class="launch-text">
-          {/* Le montant hors de la clé : il vient de formules.ts. */}
-          <h2 class="launch-title h-md"><span data-i18n="trf-launch-h1">Pour nos 3 premiers clients :</span> <span data-i18n-prix>{VITRINE_PRIX}</span> <span data-i18n="trf-launch-h2">tout compris</span></h2>
-          <p class="launch-desc" data-i18n="trf-launch-d">Site vitrine jusqu'à 5 pages, maquette dessinée pour vous, référencement de base et un mois de support.</p>
-          <p class="launch-reste" id="launch-reste" hidden></p>
+    <!-- FORMULES — le titre de la page et le choix du paiement sur la
+         même ligne, puis les trois cartes, puis le tableau. Le segment de
+         paiement reste DANS .plans-section : c'est elle que lisent les
+         :has() qui basculent comptant et mensualités. -->
+    <div class="plans-section">
+      <div class="trf-tete">
+        <div class="prix-hero">
+          <h1 class="prix-h1 h-xl" data-i18n="trf-h1">Ce que coûte votre site</h1>
+          <p class="prix-sub" data-i18n="trf-sub">Le prix est fixé dans le devis avant de commencer. Il ne change pas en cours de route.</p>
+        </div>
+        <div class="trf-paie">
+          <h2 class="sr-only" data-i18n="trf-plans-h">Les trois formules</h2>
+          <p class="trf-paie-t" aria-hidden="true" data-i18n="trf-paie-legend">Mode de paiement</p>
+          <fieldset class="paie">
+            <legend class="sr-only" data-i18n="trf-paie-legend">Mode de paiement</legend>
+            <div class="paie-seg plq plq-fixe">
+              <input class="paie-radio" type="radio" name="paie" id="paie-1" checked>
+              <label class="paie-lbl plq" for="paie-1" data-i18n="trf-paie-1">En une fois</label>
+              <input class="paie-radio" type="radio" name="paie" id="paie-3">
+              <label class="paie-lbl plq" for="paie-3" data-i18n="trf-paie-3">En 3 fois</label>
+              <input class="paie-radio" type="radio" name="paie" id="paie-4">
+              <label class="paie-lbl plq" for="paie-4" data-i18n="trf-paie-4">En 4 fois</label>
+            </div>
+          </fieldset>
         </div>
       </div>
-    </div>
-
-    <!-- FORMULES -->
-    <div class="plans-section">
-      <h2 class="section-title h-lg" data-i18n="trf-plans-h">Les trois formules</h2>
-
-      <!-- Deux vrais boutons radio, et non des <button> pilotés en JS :
-           le clavier, le lecteur d'écran et l'état coché viennent avec,
-           et c'est :checked qui bascule l'affichage. Aucun JavaScript. -->
-      <fieldset class="paie">
-        <legend class="sr-only" data-i18n="trf-paie-legend">Mode de paiement</legend>
-        <div class="paie-seg plq plq-fixe">
-          <input class="paie-radio" type="radio" name="paie" id="paie-1" checked>
-          <label class="paie-lbl plq" for="paie-1" data-i18n="trf-paie-1">En une fois</label>
-          <input class="paie-radio" type="radio" name="paie" id="paie-3">
-          <label class="paie-lbl plq" for="paie-3" data-i18n="trf-paie-3">En 3 fois</label>
-          <input class="paie-radio" type="radio" name="paie" id="paie-4">
-          <label class="paie-lbl plq" for="paie-4" data-i18n="trf-paie-4">En 4 fois</label>
-        </div>
-      </fieldset>
 
       <div class="plans-grid">
 
@@ -355,18 +359,18 @@ main{--text-muted:var(--raw-warm-200)}
           </div>
           <hr class="plan-divider">
           <ul class="plan-features">
-            <li class="plan-feature"><span data-i18n="trf-p4-f1">Nouveau design sur mesure</span></li>
-            <li class="plan-feature"><span data-i18n="trf-p4-f2">Reprise de vos contenus existants</span></li>
-            <li class="plan-feature"><span data-i18n="trf-p4-f3">Adapté mobile et tablette</span></li>
-            <li class="plan-feature"><span data-i18n="trf-p4-f4">Redirections pour garder votre référencement</span></li>
-            <li class="plan-feature"><span data-i18n="trf-p4-f5">Livraison sous {REFONTE_DELAI}</span></li>
+            <li class="plan-feature"><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span data-i18n="trf-p4-f1">Nouveau design sur mesure</span></li>
+            <li class="plan-feature"><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span data-i18n="trf-p4-f2">Reprise de vos contenus existants</span></li>
+            <li class="plan-feature"><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span data-i18n="trf-p4-f3">Adapté mobile et tablette</span></li>
+            <li class="plan-feature"><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span data-i18n="trf-p4-f4">Redirections pour garder votre référencement</span></li>
+            <li class="plan-feature"><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span data-i18n="trf-p4-f5">Livraison sous {REFONTE_DELAI}</span></li>
           </ul>
-          <InteractiveButton text="Demander un devis" href="/devis?formule=refonte" class="plan-cta" data-plan="refonte" data-i18n="trf-p4-cta" />
+          <InteractiveButton text="Demander un devis" href="/devis?formule=refonte" class="plan-cta plq-droit" data-plan="refonte" data-i18n="trf-p4-cta" />
         </div>
 
         <!-- Vitrine Pro — elle se distingue par son bouton d'or, sans ruban. -->
         <div class="plan-card plan-featured" id="plan-vitrine">
-          <p class="plan-name" data-i18n="trf-p2-name">Vitrine Pro</p>
+          <div class="plan-tete"><p class="plan-name" data-i18n="trf-p2-name">Vitrine Pro</p><span class="plan-tag" data-i18n="trf-tag">Prix de lancement, 3 premiers clients</span></div>
           <div>
             <div class="plan-range">
               <span class="plan-amount plan-comptant" data-i18n="trf-p2-price">{VITRINE_PRIX}</span>
@@ -379,14 +383,14 @@ main{--text-muted:var(--raw-warm-200)}
           </div>
           <hr class="plan-divider">
           <ul class="plan-features">
-            <li class="plan-feature"><span data-i18n="trf-p2-f1">Site vitrine complet (jusqu'à 5 pages)</span></li>
-            <li class="plan-feature"><span data-i18n="trf-p2-f2">Design sur mesure</span></li>
-            <li class="plan-feature"><span data-i18n="trf-p2-f3">Responsive mobile &amp; tablette</span></li>
-            <li class="plan-feature"><span data-i18n="trf-p2-f4">SEO de base inclus</span></li>
-            <li class="plan-feature"><span data-i18n="trf-p2-f5">Formulaire de contact</span></li>
-            <li class="plan-feature"><span data-i18n="trf-p2-f6">1 mois de support inclus</span></li>
+            <li class="plan-feature"><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span data-i18n="trf-p2-f1">Site vitrine complet (jusqu'à 5 pages)</span></li>
+            <li class="plan-feature"><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span data-i18n="trf-p2-f2">Design sur mesure</span></li>
+            <li class="plan-feature"><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span data-i18n="trf-p2-f3">Responsive mobile &amp; tablette</span></li>
+            <li class="plan-feature"><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span data-i18n="trf-p2-f4">SEO de base inclus</span></li>
+            <li class="plan-feature"><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span data-i18n="trf-p2-f5">Formulaire de contact</span></li>
+            <li class="plan-feature"><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span data-i18n="trf-p2-f6">1 mois de support inclus</span></li>
           </ul>
-          <InteractiveButton text="Demander un devis" href="/devis?formule=vitrine" variant="gold" class="plan-cta" data-plan="vitrine" data-i18n="trf-p2-cta" />
+          <InteractiveButton text="Demander un devis" href="/devis?formule=vitrine" variant="gold" class="plan-cta plq-droit" data-plan="vitrine" data-i18n="trf-p2-cta" />
         </div>
 
         <!-- Entreprise -->
@@ -411,36 +415,73 @@ main{--text-muted:var(--raw-warm-200)}
           </div>
           <hr class="plan-divider">
           <ul class="plan-features">
-            <li class="plan-feature"><span data-i18n="trf-p3-f1">Tout ce que comprend la Vitrine Pro</span></li>
-            <li class="plan-feature"><span data-i18n="trf-p3-f2">E-commerce ou espace client</span></li>
-            <li class="plan-feature"><span data-i18n="trf-p3-f3">SEO avancé &amp; stratégie de contenu</span></li>
-            <li class="plan-feature"><span data-i18n="trf-p3-f4">Blog &amp; CMS intégré</span></li>
-            <li class="plan-feature"><span data-i18n="trf-p3-f5">Intégrations sur mesure</span></li>
-            <li class="plan-feature"><span data-i18n="trf-p3-f6">Support étendu</span></li>
+            <li class="plan-feature"><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span data-i18n="trf-p3-f1">Tout ce que comprend la Vitrine Pro</span></li>
+            <li class="plan-feature"><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span data-i18n="trf-p3-f2">E-commerce ou espace client</span></li>
+            <li class="plan-feature"><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span data-i18n="trf-p3-f3">SEO avancé &amp; stratégie de contenu</span></li>
+            <li class="plan-feature"><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span data-i18n="trf-p3-f4">Blog &amp; CMS intégré</span></li>
+            <li class="plan-feature"><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span data-i18n="trf-p3-f5">Intégrations sur mesure</span></li>
+            <li class="plan-feature"><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span data-i18n="trf-p3-f6">Support étendu</span></li>
           </ul>
-          <InteractiveButton text="Demander un devis" href="/devis?formule=entreprise" class="plan-cta" data-plan="entreprise" data-i18n="trf-p3-cta" />
+          <InteractiveButton text="Demander un devis" href="/devis?formule=entreprise" class="plan-cta plq-droit" data-plan="entreprise" data-i18n="trf-p3-cta" />
         </div>
 
       </div>
 
-      <!-- La garantie, sous les trois cartes : c'est ici que la
-           question « et si ça ne me plaît pas ? » se pose. -->
-      <GarantieBadge variante="plein" class="plans-gar" />
-    </div>
-
-    <!-- CTA -->
-    <div class="cta-section">
-      <div class="cta-inner">
-        <h2 class="cta-title h-lg" data-i18n="trf-cta-h">Le formulaire prend 2 minutes</h2>
-        <p class="cta-sub" data-i18n="trf-cta-sub">On vous répond sous 24 h, et le prix ferme arrive sous 48 h ouvrées. Gratuit et sans engagement.</p>
-        <div class="cta-btns">
-          <InteractiveButton text="Demander un devis" href="/devis" data-i18n="trf-cta-btn1" />
-          <InteractiveButton text="Nous contacter" href="/contact" data-i18n="trf-cta-btn2" />
+      <!-- L'offre de lancement, en une phrase sous les cartes, et la
+           garantie à côté. Le nombre de places restantes s'écrit dans
+           #launch-reste s'il vient des données. -->
+      <div class="trf-pied">
+        <div class="launch-text">
+          <p class="launch-desc"><strong data-i18n="trf-launch-h1">Pour nos 3 premiers clients :</strong> <span data-i18n="trf-launch-l">la Vitrine Pro à</span> <span data-i18n-prix>{VITRINE_PRIX}</span> <span data-i18n="trf-launch-h2">tout compris</span>. <span data-i18n="trf-launch-d">Site vitrine jusqu'à 5 pages, maquette dessinée pour vous, référencement de base et un mois de support.</span></p>
+          <p class="launch-reste" id="launch-reste" hidden></p>
         </div>
+        <GarantieBadge class="plans-gar" />
       </div>
-    </div>
 
+      <!-- LE TABLEAU — ce que comprend chaque formule, ligne par ligne. -->
+      <section class="cmp" aria-labelledby="cmp-h">
+        <h2 class="cmp-h" id="cmp-h" data-i18n="trf-cmp-h">Comparer les formules</h2>
+        <div class="cmp-scroll">
+          <table class="cmp-t">
+            <thead>
+              <tr>
+                <th scope="col" data-i18n="trf-cmp-col">Ce qui est compris</th>
+                <th scope="col"><span data-i18n="trf-p4-name">Refonte de site</span><small><span data-i18n="trf-p4-pre">dès</span> {REFONTE_PRIX}</small></th>
+                <th scope="col" class="cmp-feat"><span data-i18n="trf-p2-name">Vitrine Pro</span><small>{VITRINE_PRIX}</small></th>
+                <th scope="col"><span data-i18n="trf-p3-name">Entreprise</span><small><span data-i18n="trf-p4-pre">dès</span> {ENTREPRISE_PRIX}</small></th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr><th scope="row" data-i18n="trf-cmp-r1">Design sur mesure</th><td><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span class="sr-only" data-i18n="trf-cmp-oui">Compris</span></td><td class="cmp-feat"><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span class="sr-only" data-i18n="trf-cmp-oui">Compris</span></td><td><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span class="sr-only" data-i18n="trf-cmp-oui">Compris</span></td></tr>
+            <tr><th scope="row" data-i18n="trf-cmp-r2">Adapté mobile et tablette</th><td><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span class="sr-only" data-i18n="trf-cmp-oui">Compris</span></td><td class="cmp-feat"><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span class="sr-only" data-i18n="trf-cmp-oui">Compris</span></td><td><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span class="sr-only" data-i18n="trf-cmp-oui">Compris</span></td></tr>
+            <tr><th scope="row" data-i18n="trf-cmp-r3">Reprise de vos contenus</th><td><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span class="sr-only" data-i18n="trf-cmp-oui">Compris</span></td><td class="cmp-feat"><svg class="cmp-non" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 8h8"/></svg><span class="sr-only" data-i18n="trf-cmp-non">Non compris</span></td><td><svg class="cmp-non" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 8h8"/></svg><span class="sr-only" data-i18n="trf-cmp-non">Non compris</span></td></tr>
+            <tr><th scope="row" data-i18n="trf-cmp-r4">Jusqu'à 5 pages</th><td><svg class="cmp-non" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 8h8"/></svg><span class="sr-only" data-i18n="trf-cmp-non">Non compris</span></td><td class="cmp-feat"><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span class="sr-only" data-i18n="trf-cmp-oui">Compris</span></td><td><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span class="sr-only" data-i18n="trf-cmp-oui">Compris</span></td></tr>
+            <tr><th scope="row" data-i18n="trf-cmp-r5">Formulaire de contact</th><td><svg class="cmp-non" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 8h8"/></svg><span class="sr-only" data-i18n="trf-cmp-non">Non compris</span></td><td class="cmp-feat"><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span class="sr-only" data-i18n="trf-cmp-oui">Compris</span></td><td><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span class="sr-only" data-i18n="trf-cmp-oui">Compris</span></td></tr>
+            <tr><th scope="row" data-i18n="trf-cmp-r6">SEO de base</th><td><svg class="cmp-non" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 8h8"/></svg><span class="sr-only" data-i18n="trf-cmp-non">Non compris</span></td><td class="cmp-feat"><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span class="sr-only" data-i18n="trf-cmp-oui">Compris</span></td><td><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span class="sr-only" data-i18n="trf-cmp-oui">Compris</span></td></tr>
+            <tr><th scope="row" data-i18n="trf-cmp-r7">SEO avancé &amp; stratégie de contenu</th><td><svg class="cmp-non" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 8h8"/></svg><span class="sr-only" data-i18n="trf-cmp-non">Non compris</span></td><td class="cmp-feat"><svg class="cmp-non" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 8h8"/></svg><span class="sr-only" data-i18n="trf-cmp-non">Non compris</span></td><td><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span class="sr-only" data-i18n="trf-cmp-oui">Compris</span></td></tr>
+            <tr><th scope="row" data-i18n="trf-cmp-r8">E-commerce ou espace client</th><td><svg class="cmp-non" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 8h8"/></svg><span class="sr-only" data-i18n="trf-cmp-non">Non compris</span></td><td class="cmp-feat"><svg class="cmp-non" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 8h8"/></svg><span class="sr-only" data-i18n="trf-cmp-non">Non compris</span></td><td><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span class="sr-only" data-i18n="trf-cmp-oui">Compris</span></td></tr>
+            <tr><th scope="row" data-i18n="trf-cmp-r9">Blog &amp; CMS intégré</th><td><svg class="cmp-non" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 8h8"/></svg><span class="sr-only" data-i18n="trf-cmp-non">Non compris</span></td><td class="cmp-feat"><svg class="cmp-non" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 8h8"/></svg><span class="sr-only" data-i18n="trf-cmp-non">Non compris</span></td><td><svg class="plan-chk" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span class="sr-only" data-i18n="trf-cmp-oui">Compris</span></td></tr>
+            <tr><th scope="row" data-i18n="trf-cmp-r10">Support après la mise en ligne</th><td><svg class="cmp-non" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 8h8"/></svg><span class="sr-only" data-i18n="trf-cmp-non">Non compris</span></td><td class="cmp-feat"><strong data-i18n="trf-cmp-1mois">1 mois</strong></td><td><strong data-i18n="trf-cmp-etendu">étendu</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
   </div>
+
+  <!-- CTA — le même bandeau que l'accueil : blanc en clair, noir en sombre. -->
+  <section class="cta-section" aria-labelledby="trf-cta-h">
+    <div class="wrap trf-large cta-inner">
+      <div>
+        <h2 class="cta-title h-lg" id="trf-cta-h" data-i18n="trf-cta-h">Le formulaire prend 2 minutes</h2>
+        <p class="cta-sub" data-i18n="trf-cta-sub">On vous répond sous 24 h, et le prix ferme arrive sous 48 h ouvrées. Gratuit et sans engagement.</p>
+      </div>
+      <div class="cta-btns">
+        <InteractiveButton text="Demander un devis" href="/devis" variant="gold" class="plq-droit" data-i18n="trf-cta-btn1" />
+        <InteractiveButton text="Nous contacter" href="/contact" class="plq-droit" data-i18n="trf-cta-btn2" />
+      </div>
+    </div>
+  </section>
 </main>
 
 <Footer />
