@@ -21,8 +21,11 @@ export interface Props {
   texte?: boolean;
   /** Taille de « NEXA », en pixels. */
   tailleNom?: number;
-  /** Taille de « WEB · AGENCE », en pixels. */
+  /** Taille de la sous-ligne, en pixels (12 au minimum). */
   tailleSous?: number;
+  /** Afficher la sous-ligne « agence web, Carvin ». L'en-tête ne la
+   *  porte plus : à 7 px elle était illisible. */
+  sous?: boolean;
   /** Classe passée au conteneur par l'appelant. */
   class?: string;
 }
@@ -31,7 +34,8 @@ const {
   trait = 2.2,
   texte = false,
   tailleNom = 13,
-  tailleSous = 7,
+  tailleSous = 12,
+  sous = true,
   class: classe = '',
 } = Astro.props;
 const hauteur = Math.round(largeur * 95 / 90);
@@ -63,7 +67,7 @@ const hauteur = Math.round(largeur * 95 / 90);
   {texte && (
     <span class="lg-txt">
       <span class="lg-nom" style={`font-size:${tailleNom}px`}>NEXA</span>
-      <span class="lg-sous" style={`font-size:${tailleSous}px`}>WEB · AGENCE</span>
+      {sous && <span class="lg-sous" style={`font-size:${Math.max(12, tailleSous)}px`} data-i18n="lg-sous">agence web, Carvin</span>}
     </span>
   )}
 </span>
@@ -80,9 +84,11 @@ const hauteur = Math.round(largeur * 95 / 90);
     font-weight:700;letter-spacing:.28em;line-height:1;
     color:currentColor;white-space:nowrap;
   }
+  /* La sous-ligne : la police du texte, en casse normale, sans
+     chasse fixe ni capitales espacées ni point médian. */
   .lg-sous{
-    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-    font-weight:500;letter-spacing:.32em;line-height:1;white-space:nowrap;
+    font-family:var(--font);
+    font-weight:400;letter-spacing:0;line-height:1;white-space:nowrap;
     /* La teinte demandée, rgba(244,242,238,.55), vaut rgb(139,138,135)
        sur le fond sombre — à deux points près le gris secondaire du
        site, qui a l'avantage d'être réglé pour chaque thème et de tenir
