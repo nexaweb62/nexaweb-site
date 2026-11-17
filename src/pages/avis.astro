@@ -217,7 +217,7 @@ import '../styles/global.css';
 
 <Footer />
 
-<script is:inline src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script is:inline src="/vendor/supabase-js-2.118.0.min.js"></script>
 <script is:inline src="/supabase-client.js"></script>
 <script>
 (function(){
@@ -319,7 +319,11 @@ import '../styles/global.css';
       container.innerHTML = emptyStateHtml();
       return;
     }
-    window.sb.from('reviews').select('*').eq('status','published').order('created_at',{ascending:false}).then(function(res){
+    /* Les colonnes AFFICHEES, et elles seules. « select('*') » renvoyait
+       aussi author_email a chaque visiteur : l'adresse que l'auteur d'un
+       avis nous confie n'a rien a faire dans le navigateur des autres.
+       (La base doit aussi le refuser : voir le rapport de securite.) */
+    window.sb.from('reviews').select('author_name,company,rating,message,created_at').eq('status','published').order('created_at',{ascending:false}).then(function(res){
       if(res.error || !res.data || res.data.length === 0){
         countEl.textContent = '';
         container.innerHTML = emptyStateHtml();

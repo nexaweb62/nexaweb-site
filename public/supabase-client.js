@@ -23,12 +23,8 @@
     }
   });
 
-  /* ── Debug session au chargement (temporaire) ── */
-  console.log('[NexaWeb] Client Supabase initialisé sur', window.location.pathname);
-  window.sb.auth.getSession().then(function (r) {
-    var s = r.data && r.data.session;
-    console.log('[NexaWeb] Session localStorage:', s
-      ? '✓ présente — ' + (s.user.email || 'sans email') + ' (expire ' + new Date(s.expires_at * 1000).toLocaleTimeString() + ')'
-      : '✗ absente');
-  });
+  /* Le journal de debogage « temporaire » qui etait ici ecrivait dans la
+     console l'adresse e-mail de la personne connectee et l'expiration de
+     sa session, sur chaque page. Retire : la console est lue par les
+     extensions du navigateur et par quiconque regarde l'ecran. */
 })();
