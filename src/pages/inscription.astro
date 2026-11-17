@@ -1,6 +1,7 @@
 ---
 import InteractiveButton from '../components/ui/InteractiveButton.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Logo from '../components/Logo.astro';
 import '../styles/global.css';
 ---
 <BaseLayout title="Créer un compte — Nexa Web" noindex={true}>
@@ -15,8 +16,7 @@ html,body{height:100%;overflow:hidden}
 .login-left::after{content:'';position:fixed;left:25%;top:50%;transform:translate(-50%,-50%);width:500px;height:500px;background:radial-gradient(ellipse,var(--accent-glow) 0%,rgb(from var(--accent-glow) r g b / 0) 70%);pointer-events:none;z-index:0}
 
 .lf-top{display:flex;align-items:center;justify-content:space-between;padding:28px 40px;position:relative;z-index:1}
-.lf-logo{font-size:14px;font-weight:600;letter-spacing:0;color:var(--text)}
-.lf-logo span{color:var(--text-muted)}
+.lf-logo{display:inline-flex;color:var(--text)}
 /* LE SELECTEUR DE LANGUE, repris de la page Connexion. Il n'existait
    pas ici : un visiteur qui arrivait directement sur l'inscription
    n'avait aucun moyen de passer en anglais — la seule page du site
@@ -28,15 +28,17 @@ html,body{height:100%;overflow:hidden}
 .lf-lang-btn{--cut:4px;--pl-fond:transparent;--pl-filet:var(--border-strong);
   font-size:var(--fs-caption);font-weight:600;letter-spacing:.02em;color:var(--text);padding:5px 10px;cursor:pointer}
 .lf-lang-btn.active,.lf-lang-btn.active:hover{--pl-fond:var(--accent);--pl-filet:var(--accent);color:var(--on-accent)}
-.lf-back{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-muted);display:flex;align-items:center;gap:6px;transition:color .2s}
+.lf-back{font-size:14px;font-weight:600;letter-spacing:0;color:var(--text-muted);display:flex;align-items:center;gap:6px;transition:color .2s}
 .lf-back:hover{color:var(--text)}
 .lf-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
 .lf-body{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:24px 40px 40px;position:relative;z-index:1}
 .lf-form-wrap{width:100%;max-width:400px}
 
-.lf-headline{font-size:clamp(1.5rem,2.6vw,2rem);font-weight:600;line-height:.96;letter-spacing:-.014em;margin-bottom:32px;text-wrap:balance}
-.lf-headline em{font-style:italic;font-weight:600;color:var(--text-muted)}
+/* L'échelle commune des titres (.h-lg : la colonne du formulaire fait
+   400 px, le niveau .h-xl n'y tiendrait pas). */
+.lf-headline{margin-bottom:32px}
+
 
 /* « Continuer avec Google » : une plaque neutre pleine largeur. */
 .lf-social-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:48px;padding:0 20px;font-size:14px;font-weight:600;letter-spacing:.005em;color:var(--text);cursor:pointer}
@@ -49,7 +51,7 @@ html,body{height:100%;overflow:hidden}
 @media(max-width:480px){.insc-row{grid-template-columns:1fr}}
 
 .lf-field{margin-bottom:10px}
-.lf-label{display:block;font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-subtle);margin-bottom:5px}
+.lf-label{display:block;font-size:14px;font-weight:600;letter-spacing:0;color:var(--text-subtle);margin-bottom:5px}
 .lf-input{display:block;width:100%;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:3px;font:inherit;font-size:13px;color:var(--text);outline:none;transition:border-color .2s,box-shadow .2s}
 .lf-input::placeholder{color:var(--text-muted)}
 .lf-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
@@ -74,7 +76,7 @@ html,body{height:100%;overflow:hidden}
 .insc-hp{position:absolute;left:-9999px;height:0;overflow:hidden;opacity:0}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-.lf-error{display:none;align-items:center;gap:9px;background:var(--danger-glow);border:1px solid var(--danger);border-radius:4px;padding:11px 14px;margin-bottom:14px;font-size:12px;font-weight:500;color:var(--danger);line-height:1.45}
+.lf-error{display:none;align-items:center;gap:9px;background:var(--danger-glow);border:1px solid var(--danger);border-radius:4px;padding:11px 14px;margin-bottom:14px;font-size:12px;font-weight:400;color:var(--danger);line-height:1.45}
 .lf-error.show{display:flex}
 .lf-error svg{width:14px;height:14px;stroke:var(--danger);fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0}
 
@@ -97,10 +99,6 @@ html,body{height:100%;overflow:hidden}
 
 .login-right{position:relative;height:100vh;overflow:hidden;background:var(--bg)}
 .login-right::before{content:'';position:absolute;inset:0;background:linear-gradient(to right,var(--surface) 0%,rgb(from var(--surface) r g b / 0) 18%),linear-gradient(to bottom,var(--bg) 0%,rgb(from var(--surface) r g b / 0) 10%,rgb(from var(--surface) r g b / 0) 90%,var(--bg) 100%);z-index:2;pointer-events:none}
-.lr-trust{position:absolute;bottom:36px;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:14px;z-index:3;pointer-events:none}
-.lr-trust-label{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-subtle)}
-.lr-logos{display:flex;align-items:center;gap:16px}
-.lr-logo-pill{padding:6px 14px;border:1px solid var(--border);border-radius:3px;font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--text-subtle);background:var(--surface)}
 spline-viewer{width:100%;height:100%;display:block}
 :focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:2px}
 </style>
@@ -110,7 +108,7 @@ spline-viewer{width:100%;height:100%;display:block}
   <!-- GAUCHE -->
   <div class="login-left">
     <div class="lf-top">
-      <a href="/" class="lf-logo">NEXA<span>WEB</span></a>
+      <a href="/" class="lf-logo" aria-label="NEXAWEB — Accueil" data-i18n-aria="a11y-logo"><Logo largeur={26} trait={2.2} texte={true} tailleNom={13} sous={false} /></a>
       <div style="display:flex;align-items:center;gap:12px">
         <div class="lf-lang" role="group" aria-label="Langue" data-i18n-aria="a11y-langue">
           <button class="lf-lang-btn plq" data-lang="fr">FR</button>
@@ -127,7 +125,7 @@ spline-viewer{width:100%;height:100%;display:block}
     <div class="lf-body">
       <div class="lf-form-wrap">
 
-        <h1 class="lf-headline" data-i18n="ins-h">Créez votre<br>espace <em>client.</em></h1>
+        <h1 class="lf-headline h-lg" data-i18n="ins-h">Créer votre espace client</h1>
 
         <!-- SUCCESS -->
         <div class="insc-success" id="insc-success">
@@ -233,21 +231,13 @@ spline-viewer{width:100%;height:100%;display:block}
     </div>
 
     <div class="lf-bottom">
-      <p data-i18n="ins-pied">Vos données sont traitées conformément au RGPD. <a href="/politique-confidentialite">Politique de confidentialité</a> · <a href="/mentions-legales">Mentions légales</a></p>
+      <p data-i18n="ins-pied">Vos données sont traitées conformément au RGPD. <a href="/politique-confidentialite">Politique de confidentialité</a><br><a href="/mentions-legales">Mentions légales</a></p>
     </div>
   </div>
 
   <!-- DROITE -->
   <div class="login-right" aria-hidden="true">
     <spline-viewer url="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode" background="transparent" loading-anim-type="none"></spline-viewer>
-    <div class="lr-trust">
-      <span class="lr-trust-label" data-i18n="ins-trust">Inscription sécurisée</span>
-      <div class="lr-logos">
-        <span class="lr-logo-pill">SSL</span>
-        <span class="lr-logo-pill">RGPD</span>
-        <span class="lr-logo-pill" data-i18n="lf-chiffre">Chiffré</span>
-      </div>
-    </div>
   </div>
 
 </main>
@@ -334,8 +324,9 @@ function checkConfirm(){
   var pwd=document.getElementById('password').value,conf=document.getElementById('confirm').value;
   var el=document.getElementById('match-indicator');
   if(!conf){el.className='insc-match';el.textContent='';return false}
-  if(pwd===conf){el.className='insc-match ok';el.textContent='Les mots de passe correspondent';return true}
-  el.className='insc-match err';el.textContent='✗ Les mots de passe ne correspondent pas';return false;
+  var T=window.nwT||function(k,d){return d;};
+  if(pwd===conf){el.className='insc-match ok';el.textContent=T('ins-match-ok','Les mots de passe correspondent');return true}
+  el.className='insc-match err';el.textContent=T('ins-match-err','Les mots de passe ne correspondent pas');return false;
 }
 document.getElementById('password').addEventListener('input',function(){updateCriteria(this.value);checkConfirm()});
 document.getElementById('confirm').addEventListener('input',checkConfirm);
