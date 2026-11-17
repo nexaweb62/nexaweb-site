@@ -14,7 +14,7 @@
  *           Le parent doit être une colonne de grille ou de flex plus
  *           haute que la frise. En dessous de 1024 px : en pile.
  */
-import { REFONTE } from '../../data/formules';
+import { REFONTE, REPONSE_H, APPEL_MIN } from '../../data/formules';
 
 export interface Props {
   colle?: boolean;
@@ -34,8 +34,6 @@ const { colle = true } = Astro.props;
    Étapes 3 et 4 : aucune durée propre — elles sont comprises dans la
    durée commune « à partir de la validation du brief ». Étape 6 :
    aucune durée écrite. */
-const REPONSE_H = 24;
-const APPEL_MIN = 30;
 const COMPLET = { min: 2, max: 4 };
 const REFONTE_SEM = REFONTE.delaiSemaines;
 const SUR = Math.max(COMPLET.max, REFONTE_SEM);   // longueur de l'échelle, en semaines
@@ -51,44 +49,10 @@ const idT = 'gr-del-t';
   <h3 class="gd-titre" id={idT} data-i18n="gr-del-t">Du brief validé à la mise en ligne : deux à quatre semaines</h3>
 
   <div class="gd-frise">
-    <ol class="gd-liste">
-      <li class="gd-e">
-        <span class="gd-num">1</span>
-        <span class="gd-txt">
-          <span class="gd-nom" data-i18n="ccm-s1-t">Prise de contact &amp; devis gratuit</span>
-          <span class="gd-duree" data-i18n="gr-del-d1">Réponse sous {REPONSE_H} h</span>
-        </span>
-      </li>
-      <li class="gd-e">
-        <span class="gd-num">2</span>
-        <span class="gd-txt">
-          <span class="gd-nom" data-i18n="ccm-s2-t">Cadrage du besoin</span>
-          <span class="gd-duree" data-i18n="gr-del-d2">Appel de {APPEL_MIN} minutes</span>
-        </span>
-      </li>
-    </ol>
-
-    <p class="gd-e gd-jalon">
-      <span class="gd-jalon-trait" aria-hidden="true"></span>
-      <span class="gd-jalon-txt" data-i18n="gr-del-jalon">Brief validé : le délai démarre ici</span>
-    </p>
-
-    <ol class="gd-liste" start="3">
-      <li class="gd-e gd-court">
-        <span class="gd-num">3</span>
-        <span class="gd-txt"><span class="gd-nom" data-i18n="ccm-s3-t">Design &amp; maquette</span></span>
-      </li>
-      <li class="gd-e gd-court">
-        <span class="gd-num">4</span>
-        <span class="gd-txt"><span class="gd-nom" data-i18n="ccm-s4-t">Développement &amp; intégration</span></span>
-      </li>
-      <li class="gd-e gd-court">
-        <span class="gd-num">5</span>
-        <span class="gd-txt"><span class="gd-nom" data-i18n="ccm-s5-t">Mise en ligne</span></span>
-      </li>
-    </ol>
-
-    <div class="gd-e gd-echelle">
+    {/* Les six étapes ne sont plus recopiées ici : elles sont écrites
+        juste à côté, dans la page. La figure garde ce qu'elle seule
+        montre, les deux durées à l'échelle. */}
+    <div class="gd-echelle">
       <div class="gd-plot">
         <div class="gd-ligne" tabindex="0" data-gr-ligne="refonte">
           <p class="gd-tete">
@@ -127,18 +91,9 @@ const idT = 'gr-del-t';
       <p class="gd-note" data-i18n="gr-del-note">Ce délai couvre les étapes 3, 4 et 5 ensemble ; il n'est pas découpé étape par étape.</p>
     </div>
 
-    <ol class="gd-liste" start="6">
-      <li class="gd-e gd-dernier">
-        <span class="gd-num">6</span>
-        <span class="gd-txt">
-          <span class="gd-nom" data-i18n="ccm-s6-t">Support post-livraison</span>
-          <span class="gd-duree" data-i18n="gr-del-d6">Après la mise en ligne</span>
-        </span>
-      </li>
-    </ol>
   </div>
 
-  <p class="gd-src"><span data-i18n="gr-b-src">Source :</span> <span data-i18n="gr-del-src-a">les durées écrites dans</span> <a href="/comment-ca-marche" data-i18n="gr-del-src-lien">les étapes de la page Comment ça marche</a><span data-i18n="gr-del-src-fin"> (2026), sans autre estimation.</span></p>
+  <p class="gd-src" data-i18n="gr-del-src">Source : nos délais, écrits dans les étapes ci-contre et dans nos conditions de vente (2026).</p>
 
   <details class="gd-chiffres">
     <summary class="plq plq-sm gd-voir" data-i18n="gr-b-voir">Voir les chiffres</summary>
@@ -258,8 +213,7 @@ const idT = 'gr-del-t';
   }
 
   /* ── L'ÉCHELLE ── décalée d'une colonne, le rail passe à gauche. */
-  .gd-echelle { display: block; padding-left: var(--col); padding-bottom: var(--sp-5); }
-  .gd-echelle::before { top: 0; }
+  .gd-echelle { display: block; padding-bottom: var(--sp-2); }
   .gd-plot { position: relative; display: grid; gap: var(--sp-3); }
 
   .gd-ligne {
@@ -303,6 +257,12 @@ const idT = 'gr-del-t';
     font-size: 13px; color: var(--text-muted); }
   .gd-cles li { display: inline-flex; align-items: center; gap: var(--sp-2); }
   .gd-cle { width: 14px; height: 10px; background: var(--accent); flex: none; }
+  /* La légende des hachures porte LE MÊME motif que la barre : .gd-cle,
+     écrit après, la repeignait en or plein. */
+  .gd-cle.gd-cle-peut {
+    background: repeating-linear-gradient(135deg, var(--accent) 0 2px, transparent 2px 5px);
+    box-shadow: inset 0 0 0 1px var(--accent);
+  }
 
   @media (hover: hover) and (pointer: fine) {
     .gd-ligne:hover .gd-barre { outline: 1px solid var(--text); outline-offset: 1px; border-radius: 0 4px 4px 0; }

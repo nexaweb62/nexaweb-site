@@ -18,6 +18,21 @@ export function prix(montant: number): string {
   return String(montant).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' €';
 }
 
+/* ── LES ENGAGEMENTS DE DÉLAI — une seule version, la même partout ──
+   Ils étaient écrits de trois façons selon la page (devis « en 24h »,
+   « en 48 heures », appel de 20 ou de 30 minutes, formation en 20
+   minutes ou en une demi-heure). Les textes traduits (public/i18n.js)
+   reprennent ces valeurs mot pour mot ; les composants qui affichent un
+   nombre le lisent ici. */
+/** Délai de première réponse, en heures. */
+export const REPONSE_H = 24;
+/** Délai du prix ferme, en heures ouvrées. */
+export const PRIX_FERME_H = 48;
+/** Durée de l'appel de cadrage, en minutes. */
+export const APPEL_MIN = 30;
+/** Durée de la formation à la livraison, en minutes. */
+export const FORMATION_MIN = 30;
+
 export const REFONTE = {
   /** À confirmer par le fondateur. */
   prixDepart: 490,

@@ -1,7 +1,6 @@
 ---
-import InteractiveButton from './ui/InteractiveButton.astro';
 /**
- * LE BADGE DE GARANTIE — « Satisfait ou remboursé · 14 jours »
+ * LE BADGE DE GARANTIE — « Satisfait ou remboursé pendant 14 jours : les conditions »
  *
  * « Garantie 14 jours » figurait au bas du formulaire de devis sans
  * qu'aucune page ne dise ce qu'elle couvrait, ni quatorze jours à
@@ -39,13 +38,11 @@ const { class: classe = '', variante = 'pill' } = Astro.props;
 ---
 
 <span class:list={['gar', classe, variante === 'plein' && 'gar-plein']}>
-  <!-- LE BOUCLIER A DISPARU AVEC LA CONVERSION. Ce badge portait une
-       icone de bouclier, qui disait « garantie » avant meme qu'on lise.
-       Le bouton interactif n'a qu'une fleche : le signal visuel est
-       perdu, le sens repose desormais sur le seul libelle. A revoir si
-       le badge perd de sa force. -->
-  <InteractiveButton text="Satisfait ou remboursé · 14 jours" class="gar-b"
-                     aria-haspopup="dialog" aria-expanded="false" data-i18n="gar-badge" />
+  <!-- UN LIEN SOULIGNÉ, PLUS UNE PLAQUE. Posé à côté du bouton de devis,
+       le badge en plaque faisait deux boutons identiques empilés : on ne
+       savait plus lequel menait au formulaire. Il garde son rôle (il
+       ouvre la fenêtre) et prend l'allure d'un lien. -->
+  <button type="button" class="gar-b" aria-haspopup="dialog" aria-expanded="false"><span class="gar-b-t" data-i18n="gar-badge">Satisfait ou remboursé pendant 14 jours : les conditions</span></button>
 
   <div class="gar-f" role="dialog" aria-modal="true" aria-label="Garantie satisfait ou remboursé" data-i18n-aria="gar-aria" inert>
     <div class="gar-carte" role="document">
@@ -90,6 +87,12 @@ const { class: classe = '', variante = 'pill' } = Astro.props;
   /* ── LE BADGE ── */
   .gar{display:inline-flex}
   .gar-plein{display:flex;width:100%;justify-content:center}
+  .gar-b{appearance:none;background:none;border:0;padding:4px 0;margin:0;cursor:pointer;
+    font:inherit;font-size:15px;line-height:1.4;color:var(--text);text-align:left;
+    text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;
+    text-decoration-color:var(--border-strong)}
+  .gar-b:hover{text-decoration-color:currentColor}
+  .gar-b:focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:var(--radius-tag)}
   .gar-ico{
     width:15px;height:15px;flex:0 0 auto;
     stroke:var(--accent-text);fill:none;stroke-width:2;

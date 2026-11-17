@@ -193,8 +193,15 @@ for (const lang of ['fr', 'en']) {
     const pts = [...document.querySelectorAll('.gar-pt')].map(e => e.textContent.trim());
     const forts = [...document.querySelectorAll('.gar-pt strong')]
       .map(f => ({ txt: f.textContent, c: getComputedStyle(f).color, g: getComputedStyle(f).fontWeight }));
+    /* La couleur attendue, résolue par le navigateur (le jeton est en
+       hexadécimal, getComputedStyle rend du rgb). */
+    const tem = document.createElement('span');
+    tem.style.color = 'var(--text)';
+    document.body.appendChild(tem);
+    const encreRgb = getComputedStyle(tem).color;
+    tem.remove();
     return { badge: document.querySelector('.gar-b').textContent.trim(), pts, forts,
-      encre: getComputedStyle(document.documentElement).getPropertyValue('--text').trim() };
+      encre: getComputedStyle(document.documentElement).getPropertyValue('--text').trim(), encreRgb };
   });
   verifs += 3;
   if (t.pts.length !== 4) fails.push(`${lang} : ${t.pts.length} points au lieu de 4`);
@@ -205,10 +212,14 @@ for (const lang of ['fr', 'en']) {
     if (!motif.test(tout)) fails.push(`${lang} : « ${motif} » absent du texte de la garantie`);
   }
   /* Les <strong> sont recrees par i18n.js (innerHTML) : sans :global()
-     dans le composant, la regle scopee ne les atteint plus. C'est arrive. */
+     dans le composant, la regle scopee ne les atteint plus. C'est arrive.
+     On le reconnaissait a la graisse (600 voulu, 700 par defaut). Depuis
+     que --w-semi vaut 700 (Arial n'a que 400 et 700), la graisse ne
+     distingue plus rien : on regarde la COULEUR, que la regle porte
+     aussi (l'encre pleine, quand le texte autour est en gris). */
   for (const f of t.forts) {
     verifs++;
-    if (f.g !== '600') fails.push(`${lang} : « ${f.txt} » a la graisse ${f.g} — la regle scopee ne l'atteint pas`);
+    if (f.c !== t.encreRgb) fails.push(`${lang} : « ${f.txt} » est en ${f.c} et non ${t.encreRgb} — la regle scopee ne l'atteint pas`);
   }
   await ctx.close();
 }

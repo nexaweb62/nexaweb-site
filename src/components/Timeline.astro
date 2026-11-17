@@ -25,6 +25,7 @@ export interface Props {
   /** Classe de placement, passée par la page hôte. */
   class?: string;
 }
+import { PRIX_FERME_H, APPEL_MIN } from '../data/formules';
 const { class: classe = '' } = Astro.props;
 
 /* Les six étapes. Le texte par défaut est le français ; i18n.js
@@ -38,10 +39,10 @@ const ETAPES = [
     duree: 'Le jour même' },
   { n: '03', cle: 'tl-3', titre: 'Vous recevez un prix ferme',
     txt: 'Détaillé poste par poste. Pas de fourchette vague.',
-    duree: 'Sous 48 h ouvrées' },
+    duree: `Sous ${PRIX_FERME_H} h ouvrées` },
   { n: '04', cle: 'tl-4', titre: 'On en parle',
     txt: 'Un appel pour valider, ajuster ou répondre à vos questions.',
-    duree: '20 minutes' },
+    duree: `${APPEL_MIN} minutes` },
   { n: '05', cle: 'tl-5', titre: 'Design & développement',
     txt: 'Maquette validée avec vous, puis construction du site et optimisation SEO.',
     duree: 'Selon le projet' },
@@ -54,11 +55,7 @@ const ETAPES = [
 <section class:list={['tl', classe]} aria-labelledby="tl-h">
   <div class="wrap">
     <header class="tl-tete">
-      <p class="tl-sur" data-i18n="tl-sur">Le processus</p>
-      <!-- « la mise en ligne » porte .liquid, l'or coulant du hero.
-           La classe vit dans global.css, donc elle survit au
-           remplacement par innerHTML que fait la traduction. -->
-      <h2 class="tl-h" id="tl-h" data-i18n="tl-h">De votre demande à <em class="liquid">la mise en ligne</em></h2>
+      <h2 class="tl-h h-lg" id="tl-h" data-i18n="tl-h">Après l'envoi du formulaire</h2>
     </header>
 
     <div class="tl-piste" data-tl>
@@ -102,21 +99,7 @@ const ETAPES = [
 
   /* ── L'EN-TÊTE ── */
   .tl-tete{margin-bottom:clamp(32px,6vh,64px)}
-  .tl-sur{
-    display:flex;align-items:center;gap:16px;margin:0 0 14px;
-    font-family:var(--font);
-    font-size:13px;font-weight:500;letter-spacing:.01em;
-    color:var(--accent-text);
-  }
-  /* Le trait doré qui s'estompe. */
-  .tl-sur::after{
-    content:"";flex:0 0 130px;height:1px;
-    background:linear-gradient(90deg,var(--accent),rgb(from var(--accent) r g b / 0));
-  }
-  .tl-h{
-    font-size:clamp(26px,4.2vw,44px);font-weight:var(--w-semi);
-    letter-spacing:-.009em;line-height:1.1;margin:0;text-wrap:balance;
-  }
+  .tl-h{margin:0}
 
   /* ── LA PISTE ── */
   .tl-piste{position:relative}
@@ -148,17 +131,17 @@ const ETAPES = [
   .tl-et:nth-child(odd) .tl-txt{grid-column:1;justify-self:end;text-align:right;margin-right:132px}
   .tl-et:nth-child(even) .tl-txt{grid-column:2;justify-self:start;text-align:left;margin-left:132px}
 
-  .tl-t{font-size:24px;font-weight:500;letter-spacing:-.015em;line-height:1.25;margin:0 0 9px}
+  .tl-t{font-size:24px;font-weight:400;letter-spacing:-.015em;line-height:1.25;margin:0 0 9px}
   /* La teinte demandée, rgba(244,242,238,.55), vaut rgb(139,138,135) sur
      le fond sombre — à deux points près le --text-muted du site. On prend
      donc le jeton : en sombre l'œil ne voit pas la différence, et en
      clair il évite le défaut que la formule produisait. Mesuré par
      check:contrast:rendered : 4:1 contre un seuil de 4,5. */
-  .tl-d{font-size:13px;font-weight:300;line-height:1.65;margin:0;color:var(--text-muted)}
+  .tl-d{font-size:14px;font-weight:400;line-height:1.6;margin:0;color:var(--text-muted)}
   .tl-dur{
     margin:12px 0 0;
     font-family:var(--font);
-    font-size:13px;font-weight:500;letter-spacing:.01em;
+    font-size:14px;font-weight:400;letter-spacing:0;
     color:var(--accent-text);
   }
 
@@ -175,7 +158,7 @@ const ETAPES = [
   .tl-et:nth-child(odd) .tl-marque{right:50%}
   .tl-et:nth-child(even) .tl-marque{left:50%;flex-direction:row-reverse}
   .tl-num{
-    font-size:64px;font-weight:200;line-height:1;letter-spacing:-.014em;
+    font-size:64px;font-weight:400;line-height:1;letter-spacing:-.014em;
     font-variant-numeric:tabular-nums;
     color:rgb(from var(--text) r g b / .1);
     transition:color .6s var(--ease-out);
