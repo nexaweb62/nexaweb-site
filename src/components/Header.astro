@@ -8,7 +8,7 @@ export interface Props {
   back?: boolean;
 }
 import InteractiveButton from './ui/InteractiveButton.astro';
-const { cta = 'Demander un devis', ctaHref = '/devis', back = true } = Astro.props;
+const { cta = 'Démarrer un projet', ctaHref = '/devis', back = true } = Astro.props;
 
 /* LES TROIS ÉTATS DU THÈME, écrits une seule fois : la barre et le menu
    plein écran en portent chacun un exemplaire, et deux listes séparées
@@ -41,7 +41,7 @@ const THEMES = [
         <li><a href="/#apropos"  class="nav-link" data-i18n="hdr-nav-about">À propos</a></li>
         <li><a href="/tarifs"    class="nav-link" data-i18n="hdr-nav-pricing">Tarifs</a></li>
         <li><a href="/#faq"     class="nav-link" data-i18n="hdr-nav-faq">FAQ</a></li>
-        <li><a href="/contact"  class="nav-link" data-i18n="hdr-nav-contact">Contact</a></li>
+        <li><a href="/contact"  class="nav-link" data-i18n="hdr-nav-contact">Localisation</a></li>
       </ul>
       <div class="nav-r">
         <div class="lang-sel plq plq-fixe" role="group" aria-label="Langue" data-i18n-aria="a11y-langue">
@@ -105,38 +105,67 @@ const THEMES = [
   </div>
 </header>
 
-<!-- NAVIGATION PLEIN ÉCRAN — une liste, plus un cercle d'icônes.
-     Le menu radial à pictogrammes se lisait plus lentement qu'une liste,
-     et ses icônes n'aidaient pas (une étiquette pour « Tarifs », des
-     calques pour « Services »). Les liens sont écrits en clair, dans
-     l'ordre où un visiteur les cherche, alignés à gauche dans .wrap.
-     #cnav-ring garde son nom et sa transition d'ouverture : seule la
-     forme a changé, pas le mouvement. -->
+<!-- CIRCULAR NAV OVERLAY -->
 <div class="cnav" id="cnav" role="dialog" aria-modal="true" aria-label="Navigation"
      data-i18n-aria="a11y-nav" inert>
-  <div class="cnav-ring wrap" id="cnav-ring">
+  <div class="cnav-ring plq plq-fixe" id="cnav-ring">
     <button class="cnav-close plq" id="cnav-close" aria-label="Fermer la navigation" data-i18n-aria="a11y-fermer">
       <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
-    <ul class="cnav-liste" role="list">
-      <li><a href="/" class="cnav-link h-md" data-i18n="hdr-nav-home">Accueil</a></li>
-      <li><a href="/services" class="cnav-link h-md" data-i18n="hdr-nav-services">Services</a></li>
-      <li><a href="/tarifs" class="cnav-link h-md" data-i18n="hdr-nav-pricing">Tarifs</a></li>
-      <li><a href="/comment-ca-marche" class="cnav-link h-md" data-i18n="hdr-nav-ccm">Comment ça marche</a></li>
-      <li class="cnav-groupe"><span class="cnav-sous-t" data-i18n="hdr-nav-metier">Par métier</span>
-        <ul class="cnav-sous" role="list">
-          <li><a href="/site-internet-restaurant" class="cnav-link cnav-link-s" data-i18n="hdr-nav-resto">Restaurants</a></li>
-          <li><a href="/site-internet-commerce" class="cnav-link cnav-link-s" data-i18n="hdr-nav-commerce">Commerces</a></li>
-          <li><a href="/site-internet-artisan" class="cnav-link cnav-link-s" data-i18n="hdr-nav-artisan">Artisans</a></li>
-        </ul>
-      </li>
-      <li><a href="/equipe" class="cnav-link h-md" data-i18n="hdr-nav-team">L'équipe</a></li>
-      <li><a href="/avis" class="cnav-link h-md" data-i18n="hdr-nav-reviews">Avis</a></li>
-      <li><a href="/#faq" class="cnav-link h-md" data-i18n="hdr-nav-faq">FAQ</a></li>
-      <li><a href="/contact" class="cnav-link h-md" data-i18n="hdr-nav-contact">Contact</a></li>
-      <li><a href="/rendez-vous" class="cnav-link h-md" data-i18n="hdr-nav-rdv">Rendez-vous</a></li>
-      <li><a href="/devis" class="cnav-link h-md" data-i18n="hdr-nav-devis">Demander un devis</a></li>
-    </ul>
+    <div class="cnav-item">
+      <a href="/" class="cnav-link plq">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span class="cnav-name" data-i18n="hdr-nav-home">Accueil</span>
+      </a>
+    </div>
+    <div class="cnav-item">
+      <a href="/services" class="cnav-link plq">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        <span class="cnav-name" data-i18n="hdr-nav-services">Services</span>
+      </a>
+    </div>
+    <div class="cnav-item">
+      <a href="/#apropos" class="cnav-link plq">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span class="cnav-name" data-i18n="hdr-nav-about">À propos</span>
+      </a>
+    </div>
+    <div class="cnav-item">
+      <a href="/tarifs" class="cnav-link plq">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+        <span class="cnav-name" data-i18n="hdr-nav-pricing">Tarifs</span>
+      </a>
+    </div>
+    <div class="cnav-item">
+      <a href="/#faq" class="cnav-link plq">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span class="cnav-name" data-i18n="hdr-nav-faq">FAQ</span>
+      </a>
+    </div>
+    <div class="cnav-item">
+      <a href="/contact" class="cnav-link plq">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <span class="cnav-name" data-i18n="hdr-nav-contact">Localisation</span>
+      </a>
+    </div>
+    <div class="cnav-item">
+      <a href="/rendez-vous" class="cnav-link plq">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span class="cnav-name" data-i18n="hdr-nav-rdv">RDV</span>
+      </a>
+    </div>
+    <div class="cnav-item">
+      <a href="/equipe" class="cnav-link plq">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span class="cnav-name" data-i18n="hdr-nav-team">Équipe</span>
+      </a>
+    </div>
+    <div class="cnav-item">
+      <a href="/avis" class="cnav-link plq">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <span class="cnav-name" data-i18n="hdr-nav-reviews">Avis</span>
+      </a>
+    </div>
   </div>
 
   <!-- Langue et thème, sur mobile uniquement.
@@ -301,7 +330,17 @@ const THEMES = [
   var closeBtn= document.getElementById('cnav-close');
   if(!overlay || !ring || !menuBtn) return;
 
+  var items = Array.prototype.slice.call(ring.querySelectorAll('.cnav-item'));
+  var n = items.length;
   var scrollY = 0;
+
+  function positionItems(){
+    var r = ring.offsetWidth * 0.368;
+    items.forEach(function(item, i){
+      var a = ((360 / n) * i - 90) * Math.PI / 180;
+      item.style.transform = 'translate(calc(-50% + ' + (Math.cos(a) * r).toFixed(1) + 'px), calc(-50% + ' + (Math.sin(a) * r).toFixed(1) + 'px))';
+    });
+  }
 
   function focusables(){
     /* tabIndex < 0 : les radios non cochées du sélecteur de thème. Les
@@ -320,6 +359,7 @@ const THEMES = [
     // Verrouillage du scroll sans saut de page (iOS compris).
     document.body.classList.add('nav-open');
     document.body.style.top = (-scrollY) + 'px';
+    positionItems();
     closeBtn.focus();
   }
 
@@ -350,24 +390,7 @@ const THEMES = [
   });
 
   ring.querySelectorAll('.cnav-link').forEach(function(l){ l.addEventListener('click', closeNav); });
-
-  /* ── UNE SEULE PLAQUE D'OR PAR ÉCRAN ──
-     Tant qu'un bouton d'or de la page est à l'écran (le premier écran de
-     l'accueil en porte un), celui de la barre passe en plaque neutre :
-     deux ors côte à côte, on ne sait plus lequel presser. */
-  /* Ce script s'exécute avant que <main> soit lu : on attend le DOM. */
-  function unSeulOr(){
-    var hdrCta = document.querySelector('.hdr .hdr-cta');
-    var orPage = document.querySelector('main .ihb-gold');
-    if(!hdrCta || !orPage || !('IntersectionObserver' in window)) return;
-    new IntersectionObserver(function(es){
-      var vu = es[0].isIntersecting;
-      hdrCta.classList.toggle('ihb-gold', !vu);
-      hdrCta.classList.toggle('ihb-dark', vu);
-    }).observe(orPage);
-  }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', unSeulOr);
-  else unSeulOr();
+  window.addEventListener('resize', function(){ if(overlay.classList.contains('open')) positionItems(); }, { passive:true });
 
   /* ── Infobulles au toucher ── */
   document.querySelectorAll('.hdr-tip').forEach(function(el){
