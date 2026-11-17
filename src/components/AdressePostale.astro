@@ -1,0 +1,11 @@
+---
+/**
+ * Une adresse postale de src/data/entreprise.ts, sur une ligne.
+ * La rue et la ville ne se traduisent pas ; le nom du pays, si.
+ */
+import type { Adresse } from '../data/entreprise';
+export interface Props { a: Adresse }
+const { a } = Astro.props;
+const PAYS = { fr: 'France', us: 'États-Unis', sg: 'Singapour' } as const;
+---
+<span translate="no">{a.rue}, {a.ville}</span>, <span data-i18n={`lg-pays-${a.pays}`}>{PAYS[a.pays]}</span>

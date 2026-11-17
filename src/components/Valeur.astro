@@ -1,0 +1,28 @@
+---
+/**
+ * UNE DONNÉE DE L'ÉDITEUR, OU SON ABSENCE DITE CLAIREMENT.
+ *
+ * Reçoit une valeur de src/data/entreprise.ts. Si elle vaut null, la
+ * page écrit « à compléter » — en clair, pas dans un commentaire : un
+ * visiteur doit voir qu'une information manque, et le fondateur aussi.
+ *
+ * Une valeur connue (un nom, une adresse, un numéro) ne se traduit pas :
+ * elle porte translate="no", que le contrôle des traductions reconnaît.
+ * Le libellé « à compléter », lui, se traduit.
+ *
+ * Aucun style ici : la classe .lg-manque vit dans src/styles/legal.css,
+ * parce que i18n.js réécrit ce libellé par innerHTML.
+ */
+export interface Props {
+  v: string | null | undefined;
+  /** Lien éventuel (mailto:, tel:, https://). */
+  href?: string;
+}
+const { v, href } = Astro.props;
+const externe = !!href && /^https?:/.test(href);
+---
+{v == null || v === ''
+  ? <span class="lg-manque" data-i18n="lg-a-completer">à compléter</span>
+  : href
+    ? <a href={href} translate="no" {...(externe ? { target: '_blank', rel: 'noopener' } : {})}>{v}</a>
+    : <span translate="no">{v}</span>}

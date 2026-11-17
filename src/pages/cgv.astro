@@ -1,91 +1,190 @@
 ---
+/**
+ * CONDITIONS GÉNÉRALES DE VENTE.
+ *
+ * Cette page ne décrivait que la garantie sur la maquette. Elle couvre
+ * désormais ce que le Code de la consommation exige pour vendre à des
+ * particuliers : identité du prestataire, prix, paiement, délais,
+ * droit de rétractation et son formulaire type, garanties légales,
+ * médiation. Les conditions COMMERCIALES n'ont pas changé : la garantie
+ * (14 jours, 2 séries de retouches, acompte remboursé) est reprise mot
+ * pour mot, les prix et l'échéancier viennent de src/data/formules.ts,
+ * l'identité de src/data/entreprise.ts.
+ */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import GarantieBadge from '../components/GarantieBadge.astro';
+import IdentiteEditeur from '../components/IdentiteEditeur.astro';
+import Mediateur from '../components/Mediateur.astro';
+import Valeur from '../components/Valeur.astro';
+import DateMaj from '../components/DateMaj.astro';
+import { EDITEUR, TVA } from '../data/entreprise';
+import { REFONTE_PRIX, VITRINE_PRIX, ENTREPRISE_PRIX, VITRINE, parMois, prix } from '../data/formules';
 import '../styles/global.css';
----
-<BaseLayout title="Conditions de vente — Nexa Web" description="Les conditions de la garantie satisfait ou remboursé de Nexa Web : 14 jours pour valider la maquette, 2 séries de retouches incluses, remboursement intégral de l'acompte sans justification.">
-<style>
-.legal-hero{padding:clamp(48px,8vh,96px) 0 clamp(32px,4vh,56px)}
-.legal-tag{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--accent-text);margin-bottom:16px}
-.legal-title{font-size:clamp(28px,5vw,48px);font-weight:600;letter-spacing:-.007em;line-height:1.1;margin-bottom:16px}
-.legal-date{font-size:12px;color:var(--text-muted)}
-.legal-body{padding-bottom:clamp(64px,10vh,120px)}
-.legal-body section{margin-bottom:40px}
-.legal-body h2{font-size:16px;font-weight:600;letter-spacing:0;color:var(--text-muted);border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:16px}
-/* Même remarque que sur les autres pages légales : l'opacité n'est pas
-   une couleur, le gris secondaire fait l'effet voulu et passe AA. */
-.legal-body p{font-size:15px;line-height:1.75;color:var(--text-muted);margin-bottom:12px}
-.legal-body ul,.legal-body ol{font-size:15px;line-height:1.75;color:var(--text-muted);padding-left:20px;margin-bottom:12px}
-.legal-body ul{list-style:disc}
-.legal-body ol{list-style:decimal}
-.legal-body li{margin-bottom:6px}
-/* :global() parce que les paragraphes de cette page sont traduits, et
-   que i18n.js les réécrit par innerHTML : le <a> et le <strong> sont
-   recréés sans le marqueur de portée d'Astro. Mesuré avant correction :
-   les liens sortaient en gris secondaire au lieu de l'or, sans
-   soulignement. Les autres pages légales gardent leurs règles scopées :
-   leur balisage est statique. */
-.legal-body :global(a){color:var(--accent-text);text-decoration:underline;text-underline-offset:3px}
-.legal-body :global(strong){color:var(--text);font-weight:600}
-/* Le badge en tête de page : la même chose que ce que le visiteur a
-   cliqué pour arriver ici, pour qu'il sache qu'il est au bon endroit. */
-.cgv-badge{margin-top:22px}
-/* L'encadré de synthèse : la garantie en une phrase, avant le détail. */
-.cgv-resume{
-  background:var(--surface);border:1px solid var(--accent);border-radius:var(--radius-block);
-  padding:clamp(16px,2.4vw,22px);margin-bottom:28px;
-}
-.cgv-resume p{margin:0;color:var(--text)}
-</style>
+import '../styles/legal.css';
 
+const E = EDITEUR;
+/* L'exemple d'échéancier, calculé comme sur la page Tarifs : arrondi
+   au supérieur, le dernier versement absorbe la différence. */
+const m4 = Number(parMois(VITRINE.prix, 4).replace(/\D/g, ''));
+const der4 = VITRINE.prix - m4 * 3;
+const destinataire = [E.nomCommercial, E.titulaire, `${E.adresse.rue}, ${E.adresse.ville}`, E.email]
+  .filter(Boolean).join(', ');
+---
+<BaseLayout title="Conditions de vente — Nexa Web" description="Conditions générales de vente de Nexa Web : prix, paiement en 1, 3 ou 4 fois, délais, garantie satisfait ou remboursé sur la maquette, droit de rétractation, garanties légales et médiation.">
 <Header backBtn={true} />
 
 <main id="main-content" tabindex="-1">
   <div class="wrap" style="max-width:800px">
     <div class="legal-hero">
-      <p class="legal-tag" data-i18n="cgv-tag">Conditions de vente</p>
-      <h1 class="legal-title" data-i18n="cgv-h1">Garantie satisfait<br>ou remboursé</h1>
-      <p class="legal-date" data-i18n="cgv-date">Dernière mise à jour : octobre 2026</p>
-      <div class="cgv-badge"><GarantieBadge /></div>
+      <h1 class="legal-title" data-i18n="cgv-h1">Conditions générales<br>de vente</h1>
+      <p class="legal-intro" data-i18n="cgv-intro">Elles s'appliquent aux prestations de Nexa Web — création et refonte de sites internet et services décrits dans le devis — pour les clients professionnels comme pour les particuliers. Le devis fixe le périmètre, le prix et le calendrier de chaque projet ; en cas de contradiction, il l'emporte sur ces conditions, sans pouvoir réduire les droits que la loi donne aux consommateurs.</p>
+      <DateMaj />
     </div>
     <div class="legal-body">
 
-      <div class="cgv-resume">
-        <p data-i18n="cgv-resume"><strong>En une phrase :</strong> si la maquette de votre site ne vous convient pas après deux séries de retouches, nous vous remboursons l'intégralité de l'acompte, sans avoir à vous justifier.</p>
-      </div>
+      <nav class="lg-toc" aria-label="Sommaire" data-i18n-aria="lg-sommaire">
+        <p class="lg-toc-t" data-i18n="lg-sommaire">Sommaire</p>
+        <ol>
+          <li><a href="#prestataire" data-i18n="cgv-t1">Le prestataire</a></li>
+          <li><a href="#commande" data-i18n="cgv-t2">Devis et commande</a></li>
+          <li><a href="#prix" data-i18n="cgv-t3">Prix et paiement</a></li>
+          <li><a href="#delais" data-i18n="cgv-t4">Déroulement et délais</a></li>
+          <li><a href="#garantie" data-i18n="cgv-t5">Garantie satisfait ou remboursé</a></li>
+          <li><a href="#retractation" data-i18n="cgv-t6">Droit de rétractation</a></li>
+          <li><a href="#garanties-legales" data-i18n="cgv-t7">Garanties légales</a></li>
+          <li><a href="#donnees" data-i18n="cgv-t8">Données personnelles</a></li>
+          <li><a href="#reclamations" data-i18n="cgv-t9">Réclamations et médiation</a></li>
+          <li><a href="#droit" data-i18n="cgv-t10">Droit applicable</a></li>
+        </ol>
+      </nav>
 
-      <section>
-        <h2 data-i18n="cgv-h2-1">1. Objet de la garantie</h2>
-        <p data-i18n="cgv-p1">La garantie « satisfait ou remboursé » porte sur <strong>la maquette</strong> du site, c'est-à-dire la proposition de design qui vous est présentée avant tout développement. Elle ne porte pas sur le site développé, ni sur les prestations d'hébergement, de maintenance ou de référencement.</p>
+      <section id="prestataire">
+        <h2 data-i18n="cgv-s1">1. Le prestataire</h2>
+        <IdentiteEditeur />
       </section>
 
-      <section>
-        <h2 data-i18n="cgv-h2-2">2. Délai de validation</h2>
+      <section id="commande">
+        <h2 data-i18n="cgv-s2">2. Devis et commande</h2>
+        <p data-i18n="cgv-c1">La demande de devis est gratuite et n'engage à rien. Le formulaire du site ne conclut aucun contrat : il nous transmet votre demande, après que vous l'avez confirmée par le lien reçu par e-mail.</p>
+        <p data-i18n="cgv-c2">Le devis écrit décrit la prestation, son prix total, l'échéancier de paiement, le délai de réalisation et la propriété des livrables. Le contrat est conclu quand vous acceptez ce devis par écrit.</p>
+        <p data-i18n="cgv-c3">Les articles 6 (rétractation), 7 (garanties légales) et 9 (médiation) protègent les consommateurs. Ils s'appliquent aussi à un professionnel qui emploie cinq salariés au plus, lorsque le contrat est conclu hors de nos locaux et que la création d'un site n'entre pas dans le champ de son activité principale (Code de la consommation, art. L221-3).</p>
+      </section>
+
+      <section id="prix">
+        <h2 data-i18n="cgv-s3">3. Prix et paiement</h2>
+        <p data-i18n="cgv-p-prix">Les prix sont exprimés en euros. Prix de départ des formules publiées sur la page Tarifs :</p>
+        <ul>
+          <li><span data-i18n="cgv-f-refonte">Refonte de site : dès</span> <span data-i18n-prix>{REFONTE_PRIX}</span></li>
+          <li><span data-i18n="cgv-f-vitrine">Vitrine Pro (offre de lancement) :</span> <span data-i18n-prix>{VITRINE_PRIX}</span></li>
+          <li><span data-i18n="cgv-f-entreprise">Entreprise : à partir de</span> <span data-i18n-prix>{ENTREPRISE_PRIX}</span></li>
+        </ul>
+        <p data-i18n="cgv-p-ttc">Le prix définitif est celui du devis. Pour un client particulier, le devis indique le prix total toutes taxes comprises, c'est-à-dire la somme à payer.</p>
+        <dl class="lg-dl">
+          <div><dt data-i18n="lg-tva">TVA</dt>
+            <dd>{TVA.regime === 'franchise'
+              ? <span data-i18n="lg-tva-franchise">TVA non applicable, art. 293 B du CGI</span>
+              : TVA.regime === 'assujetti'
+                ? <Fragment><span data-i18n="lg-tva-numero">Numéro de TVA intracommunautaire :</span> <Valeur v={TVA.numero} /></Fragment>
+                : <Valeur v={null} />}</dd></div>
+        </dl>
+        <h3 data-i18n="cgv-pay-h">Paiement en 1, 3 ou 4 fois</h3>
+        <p data-i18n="cgv-pay-1">Vous choisissez de payer comptant, en 3 versements ou en 4 versements. Les paiements en plusieurs fois sont sans frais et sans intérêts : le total payé est exactement le prix comptant. Les versements sont arrondis à l'euro supérieur et le dernier absorbe la différence.</p>
+        <p><span data-i18n="cgv-pay-ex">Exemple, Vitrine Pro en 4 fois :</span> 3 × <span data-i18n-prix>{prix(m4)}</span> + <span data-i18n-prix>{prix(der4)}</span> = <span data-i18n-prix>{VITRINE_PRIX}</span>.</p>
+        <p data-i18n="cgv-pay-2">Le montant de l'acompte, les dates des versements et les moyens de paiement acceptés sont indiqués dans le devis.</p>
+        <p data-i18n="cgv-pay-pro">Entre professionnels uniquement : un retard de paiement entraîne de plein droit des pénalités au taux de refinancement de la Banque centrale européenne majoré de 10 points, et une indemnité forfaitaire de 40 € pour frais de recouvrement (Code de commerce, art. L441-10 et D441-5).</p>
+      </section>
+
+      <section id="delais">
+        <h2 data-i18n="cgv-s4">4. Déroulement et délais</h2>
+        <p data-i18n="cgv-d1">Le projet suit quatre étapes : cadrage du besoin, maquette, développement avec un lien de prévisualisation, puis mise en ligne. À titre indicatif, comptez deux semaines pour une refonte et deux à quatre semaines pour un site complet, à partir de la validation du brief. Le devis fixe le délai qui nous engage.</p>
+        <p data-i18n="cgv-d2">Si ce délai n'est pas tenu, un client particulier peut nous enjoindre de terminer dans un délai supplémentaire raisonnable, puis résoudre le contrat par écrit si nous ne l'avons pas fait (Code de la consommation, art. L216-6).</p>
+      </section>
+
+      <section id="garantie">
+        <h2 data-i18n="cgv-s5">5. Garantie satisfait ou remboursé</h2>
+        <div class="cgv-badge"><GarantieBadge /></div>
+        <div class="cgv-resume">
+          <p data-i18n="cgv-resume"><strong>En une phrase :</strong> si la maquette de votre site ne vous convient pas après deux séries de retouches, nous vous remboursons l'intégralité de l'acompte, sans avoir à vous justifier.</p>
+        </div>
+        <p data-i18n="cgv-g0">Cette garantie commerciale s'ajoute au droit de rétractation et aux garanties légales ; elle ne les remplace pas.</p>
+
+        <h3 data-i18n="cgv-g-h1">Ce qu'elle couvre</h3>
+        <p data-i18n="cgv-p1">La garantie « satisfait ou remboursé » porte sur <strong>la maquette</strong> du site, c'est-à-dire la proposition de design qui vous est présentée avant tout développement. Elle ne porte pas sur le site développé, ni sur les prestations d'hébergement, de maintenance ou de référencement.</p>
+
+        <h3 data-i18n="cgv-g-h2">Délai de validation</h3>
         <p data-i18n="cgv-p2">À compter du jour de la <strong>présentation de la maquette</strong>, vous disposez de <strong>14 jours calendaires</strong> pour la valider, demander des retouches ou faire jouer la garantie. Le délai court à partir de la présentation, et non de la commande ni du paiement de l'acompte.</p>
         <p data-i18n="cgv-p2b">Sans réponse de votre part passé ce délai, la maquette est considérée comme validée et la garantie prend fin.</p>
-      </section>
 
-      <section>
-        <h2 data-i18n="cgv-h2-3">3. Retouches incluses</h2>
+        <h3 data-i18n="cgv-g-h3">Retouches incluses</h3>
         <p data-i18n="cgv-p3">Vous avez droit à <strong>deux séries de retouches</strong>, comprises dans le prix convenu. Une série de retouches est un ensemble de demandes transmises en une seule fois ; nous vous présentons une maquette corrigée après chacune d'elles. Ces deux séries s'exercent à l'intérieur du délai de 14 jours.</p>
-      </section>
 
-      <section>
-        <h2 data-i18n="cgv-h2-4">4. Remboursement</h2>
+        <h3 data-i18n="cgv-g-h4">Remboursement</h3>
         <p data-i18n="cgv-p4">Si, après ces deux séries de retouches, la maquette ne vous convient toujours pas, vous nous le signalez par e-mail avant la fin du délai de 14 jours. Nous vous remboursons alors <strong>100 % de l'acompte versé</strong>, <strong>sans justification à fournir</strong>.</p>
         <p data-i18n="cgv-p4b">Le remboursement est effectué sous 14 jours à compter de votre demande, par le même moyen de paiement que celui utilisé pour l'acompte. Les maquettes produites restent notre propriété et ne peuvent pas être utilisées.</p>
-      </section>
 
-      <section>
-        <h2 data-i18n="cgv-h2-5">5. Fin de la garantie</h2>
+        <h3 data-i18n="cgv-g-h5">Fin de la garantie</h3>
         <p data-i18n="cgv-p5">La garantie s'applique <strong>avant le début du développement</strong>. Dès que la maquette est validée — explicitement, ou par l'écoulement du délai de 14 jours — le développement commence et <strong>la garantie prend fin</strong>. L'acompte n'est alors plus remboursable au titre de la présente garantie.</p>
       </section>
 
-      <section>
-        <h2 data-i18n="cgv-h2-6">6. Portée de cette page</h2>
-        <p data-i18n="cgv-p6">Cette page décrit uniquement la garantie satisfait ou remboursé. Les autres conditions de la prestation — périmètre, prix, échéancier de paiement, délais de livraison, propriété des livrables — sont fixées dans le devis qui vous est adressé et que vous acceptez avant le début des travaux. Le devis fait foi.</p>
+      <section id="retractation">
+        <h2 data-i18n="cgv-s6">6. Droit de rétractation</h2>
+        <p data-i18n="cgv-r1">Un contrat conclu à distance (par e-mail, téléphone ou visioconférence) ou hors de nos locaux avec un consommateur peut être annulé sans motif ni pénalité pendant <strong>14 jours</strong> à compter du jour de sa conclusion (Code de la consommation, art. L221-18).</p>
+        <p data-i18n="cgv-r2">Pour vous rétracter, envoyez-nous avant la fin de ce délai le formulaire ci-dessous ou toute déclaration sans ambiguïté, par e-mail ou par courrier (art. L221-21). Nous vous remboursons tous les paiements reçus au plus tard 14 jours après réception de votre décision, par le même moyen de paiement, sans frais (art. L221-24).</p>
+        <h3 data-i18n="cgv-r-h1">Commencer avant la fin du délai</h3>
+        <p data-i18n="cgv-r3">Nous ne commençons pas le travail pendant ces 14 jours, sauf si vous nous le demandez expressément, par écrit. Si vous vous rétractez ensuite, vous nous devez le montant correspondant au travail fourni jusqu'à votre rétractation, proportionnel au prix total (art. L221-25). Si la prestation est entièrement exécutée avant la fin du délai, avec votre accord exprès et votre reconnaissance de la perte de ce droit, vous ne pouvez plus vous rétracter (art. L221-28, 1°).</p>
+        <div class="lg-encadre lg-modele">
+          <p class="lg-encadre-t" data-i18n="cgv-r-dem-t">Demande expresse — phrase à recopier dans votre accord, si vous voulez que nous commencions tout de suite</p>
+          <p data-i18n="cgv-r-dem">« Je demande à Nexa Web de commencer la prestation avant la fin du délai de rétractation de 14 jours. Je sais que si je me rétracte, je devrai payer le travail fourni jusqu'à ma rétractation, et que je perdrai ce droit si la prestation est entièrement exécutée avant la fin du délai. »</p>
+        </div>
+        <p data-i18n="cgv-r4">Si le contrat est signé hors de nos locaux, chez vous par exemple, nous ne pouvons recevoir aucun paiement avant sept jours à compter de sa conclusion (art. L221-10).</p>
+        <h3 data-i18n="cgv-r-h2">Formulaire de rétractation</h3>
+        <p data-i18n="cgv-r5">Modèle fixé par l'annexe à l'article R221-1 du Code de la consommation. À compléter et renvoyer uniquement si vous souhaitez vous rétracter.</p>
+        <div class="lg-encadre lg-modele">
+          <p class="lg-encadre-t" data-i18n="cgv-f-t">MODÈLE DE FORMULAIRE DE RÉTRACTATION</p>
+          <p><span data-i18n="cgv-f-a">À l'attention de</span> <span translate="no">{destinataire}</span> :</p>
+          <p data-i18n="cgv-f-1">Je/nous (*) vous notifie/notifions (*) par la présente ma/notre (*) rétractation du contrat portant sur la vente du bien (*)/pour la prestation de services (*) ci-dessous :</p>
+          <p data-i18n="cgv-f-2">Commandé le (*)/reçu le (*) :</p>
+          <p data-i18n="cgv-f-3">Nom du (des) consommateur(s) :</p>
+          <p data-i18n="cgv-f-4">Adresse du (des) consommateur(s) :</p>
+          <p data-i18n="cgv-f-5">Signature du (des) consommateur(s) (uniquement en cas de notification du présent formulaire sur papier) :</p>
+          <p data-i18n="cgv-f-6">Date :</p>
+          <p data-i18n="cgv-f-7">(*) Rayez la mention inutile.</p>
+        </div>
+      </section>
+
+      <section id="garanties-legales">
+        <h2 data-i18n="cgv-s7">7. Garanties légales</h2>
+        <p data-i18n="cgv-l0">Un site créé sur mesure pour un consommateur est un contenu numérique au sens du Code de la consommation : la garantie légale de conformité des contenus et services numériques s'applique (art. L224-25-12 et suivants).</p>
+        <div class="lg-encadre">
+          <p class="lg-encadre-t" data-i18n="cgv-l-t">Garantie légale de conformité</p>
+          <ul>
+            <li data-i18n="cgv-l1">Nous répondons des défauts de conformité qui existent à la livraison du site et apparaissent dans les <strong>deux ans</strong> qui suivent. Pour une prestation continue (hébergement, maintenance), nous en répondons pendant toute sa durée.</li>
+            <li data-i18n="cgv-l2">Un défaut qui apparaît dans les douze mois suivant la livraison est présumé avoir existé dès la livraison : vous n'avez pas à prouver sa date (art. L224-25-16).</li>
+            <li data-i18n="cgv-l3">Vous avez droit à la mise en conformité, gratuite, sans retard injustifié et sans inconvénient majeur. À défaut, ou si le défaut est grave, vous pouvez obtenir une réduction du prix ou la résolution du contrat avec remboursement sous 14 jours (art. L224-25-17 à L224-25-23).</li>
+            <li data-i18n="cgv-l4">Nous fournissons les mises à jour nécessaires au maintien de la conformité pendant la durée de la garantie (art. L224-25-25).</li>
+          </ul>
+        </div>
+        <p data-i18n="cgv-l5">La garantie des vices cachés s'applique en outre (Code civil, art. 1641 à 1649) : l'action doit être engagée dans les deux ans qui suivent la découverte du vice.</p>
+      </section>
+
+      <section id="donnees">
+        <h2 data-i18n="cgv-s8">8. Données personnelles</h2>
+        <p data-i18n="cgv-dp">Les données nécessaires au devis et au contrat sont traitées comme le décrit la <a href="/politique-confidentialite">politique de confidentialité</a>.</p>
+      </section>
+
+      <section id="reclamations">
+        <h2 data-i18n="cgv-s9">9. Réclamations et médiation</h2>
+        <p data-i18n="cgv-m1">Adressez d'abord votre réclamation par écrit :</p>
+        <p><Valeur v={E.email} href={'mailto:' + E.email} /></p>
+        <p data-i18n="cgv-m2">Si le litige n'est pas réglé, un client particulier peut saisir gratuitement le médiateur de la consommation dont nous relevons (Code de la consommation, art. L612-1 et L616-1) :</p>
+        <Mediateur />
+      </section>
+
+      <section id="droit">
+        <h2 data-i18n="cgv-s10">10. Droit applicable</h2>
+        <p data-i18n="cgv-dr">Ces conditions sont soumises au droit français. Un consommateur peut saisir, à son choix, l'une des juridictions compétentes selon le Code de procédure civile ou celle du lieu où il demeurait au moment de la conclusion du contrat (Code de la consommation, art. R631-3).</p>
         <p data-i18n="cgv-p6b">Pour toute question : <a href="mailto:contact.nexaweb62@gmail.com">contact.nexaweb62@gmail.com</a>. Voir aussi nos <a href="/mentions-legales">mentions légales</a> et notre <a href="/politique-confidentialite">politique de confidentialité</a>.</p>
       </section>
 

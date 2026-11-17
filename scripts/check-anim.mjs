@@ -32,7 +32,7 @@ const CHROME = process.env.CHROME_PATH || undefined;
 const PAGES = (process.env.PAGES || [
   '/', '/services', '/tarifs', '/devis', '/contact', '/equipe', '/avis', '/login', '/inscription',
   '/site-vitrine', '/ecommerce', '/refonte', '/seo', '/design-uiux', '/comment-ca-marche',
-  '/404', '/rendez-vous', '/mentions-legales', '/politique-confidentialite', '/cgv',
+  '/404', '/rendez-vous', '/mentions-legales', '/politique-confidentialite', '/politique-entreprise', '/cgv',
   '/site-internet-artisan', '/site-internet-commerce', '/site-internet-restaurant',
 ].join(',')).split(',');
 const VIEWPORTS = [{ width: 1280, height: 900 }, { width: 390, height: 844 }];

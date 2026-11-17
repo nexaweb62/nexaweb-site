@@ -1,0 +1,18 @@
+---
+/**
+ * LE MÉDIATEUR DE LA CONSOMMATION — nom, adresse postale, site.
+ *
+ * C. conso R616-1 : ces coordonnées figurent « de manière visible et
+ * lisible » sur le site, dans les conditions de vente ou sur les bons
+ * de commande, avec l'adresse du site du médiateur. Tant que
+ * l'entreprise n'a pas adhéré, les trois lignes disent « à compléter ».
+ */
+import { MEDIATEUR } from '../data/entreprise';
+import Valeur from './Valeur.astro';
+const M = MEDIATEUR;
+---
+<dl class="lg-dl">
+  <div><dt data-i18n="lg-med-nom">Médiateur</dt><dd><Valeur v={M.nom} /></dd></div>
+  <div><dt data-i18n="lg-adresse">Adresse</dt><dd><Valeur v={M.adresse} /></dd></div>
+  <div><dt data-i18n="lg-site">Site</dt><dd><Valeur v={M.site} href={M.site ?? undefined} /></dd></div>
+</dl>

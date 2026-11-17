@@ -1,0 +1,43 @@
+---
+/**
+ * L'IDENTITÉ DE L'ÉDITEUR, telle que l'exige la LCEN (art. 1-1, I, 1°).
+ *
+ * Utilisée par les mentions légales (version complète, avec le
+ * directeur de la publication) et par les conditions de vente
+ * (identité du prestataire, C. conso L221-5, 4°). Les deux lisent
+ * src/data/entreprise.ts : elles ne peuvent pas se contredire.
+ */
+import { EDITEUR, TVA } from '../data/entreprise';
+import Valeur from './Valeur.astro';
+import AdressePostale from './AdressePostale.astro';
+export interface Props {
+  /** true : ajoute le site et le directeur de la publication. */
+  complet?: boolean;
+}
+const { complet = false } = Astro.props;
+const E = EDITEUR;
+const tel = E.telephone ? 'tel:' + E.telephone.replace(/[^\d+]/g, '') : undefined;
+---
+<dl class="lg-dl">
+  <div><dt data-i18n="lg-nom-commercial">Nom commercial</dt><dd><Valeur v={E.nomCommercial} /></dd></div>
+  <div><dt data-i18n="lg-titulaire">Titulaire</dt>
+    <dd>{E.titulaire
+      ? <Fragment><Valeur v={E.titulaire} />, <span data-i18n="lg-ei">entrepreneur individuel (EI)</span></Fragment>
+      : <Valeur v={null} />}</dd></div>
+  <div><dt data-i18n="lg-forme">Forme juridique</dt><dd data-i18n="lg-forme-ei">Entreprise individuelle (EI), sous le régime de la micro-entreprise</dd></div>
+  <div><dt data-i18n="lg-siret">SIRET</dt><dd><Valeur v={E.siret} /></dd></div>
+  <div><dt data-i18n="lg-registre">Immatriculation</dt><dd><Valeur v={E.registre} /></dd></div>
+  <div><dt data-i18n="lg-adresse">Adresse</dt><dd><AdressePostale a={E.adresse} /></dd></div>
+  <div><dt data-i18n="lg-tel">Téléphone</dt><dd><Valeur v={E.telephone} href={tel} /></dd></div>
+  <div><dt data-i18n="lg-email">E-mail</dt><dd><Valeur v={E.email} href={'mailto:' + E.email} /></dd></div>
+  <div><dt data-i18n="lg-tva">TVA</dt>
+    <dd>{TVA.regime === 'franchise'
+      ? <span data-i18n="lg-tva-franchise">TVA non applicable, art. 293 B du CGI</span>
+      : TVA.regime === 'assujetti'
+        ? <Fragment><span data-i18n="lg-tva-numero">Numéro de TVA intracommunautaire :</span> <Valeur v={TVA.numero} /></Fragment>
+        : <Valeur v={null} />}</dd></div>
+  {complet && <Fragment>
+    <div><dt data-i18n="lg-site">Site</dt><dd><Valeur v={E.site} href="/" /></dd></div>
+    <div><dt data-i18n="lg-directeur">Directeur de la publication</dt><dd><Valeur v={E.directeurPublication} /></dd></div>
+  </Fragment>}
+</dl>
