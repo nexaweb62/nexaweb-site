@@ -9,73 +9,66 @@ import '../styles/global.css';
 <style>
 main{padding-top:var(--hdr)}
 
-.svc-hero{padding:80px var(--pad-x) 60px;max-width:1100px;margin:0 auto;position:relative}
-.svc-eyebrow{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--accent-text);margin-bottom:20px;display:flex;align-items:center;gap:8px;position:relative;z-index:1}
-.svc-eyebrow::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0}
-.svc-title{font-size:clamp(2.8rem,7vw,5.5rem);font-weight:600;letter-spacing:-.010em;line-height:1;margin-bottom:28px;position:relative;z-index:1}
-.svc-title span{color:var(--accent-text)}
-.svc-desc{font-size:clamp(1rem,1.8vw,1.15rem);color:var(--text-muted);line-height:1.75;max-width:640px;margin-bottom:40px;position:relative;z-index:1}
+.svc-hero{padding-top:80px;padding-bottom:60px;position:relative}
+.svc-title{margin-bottom:28px;position:relative;z-index:1}
+.svc-desc{font-size:var(--fs-body);color:var(--text-muted);line-height:1.75;max-width:640px;margin-bottom:40px;position:relative;z-index:1}
 
-.svc-features{padding:60px var(--pad-x);max-width:1100px;margin:0 auto}
+.svc-features{padding-top:60px;padding-bottom:60px}
 /* Ce libellé introduit les <h3> de la grille : c'est un niveau 2,
    pas un <span> décoratif. axe refusait le saut h1 → h3. */
-.svc-section-label{font-size:clamp(24px,3vw,34px);line-height:1.1;letter-spacing:var(--ls-section,-.008em);color:var(--text);margin:0 0 32px;display:block}
-.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
-.feat-item{background:var(--bg);padding:32px 28px}
-.feat-num{font-size:var(--fs-caption);font-weight:600;color:var(--accent-text);letter-spacing:0;margin-bottom:14px}
-.feat-title{font-size:1rem;font-weight:600;letter-spacing:-.01em;margin-bottom:10px}
+.svc-section-label{color:var(--text);margin:0 0 32px;display:block}
+/* Une liste à filets, une colonne de 68 caractères au plus : ce qui est
+   compris n'est pas une suite d'étapes, il n'y a donc plus de numéros. */
+.feat-grid{display:block;background:none;max-width:68ch}
+.feat-item{padding:var(--sp-5) 0;border-top:1px solid var(--border)}
+.feat-item:last-child{border-bottom:1px solid var(--border)}
+.feat-title{font-size:1.125rem;font-weight:600;letter-spacing:0;margin-bottom:8px}
 .feat-desc{font-size:.875rem;color:var(--text-muted);line-height:1.65}
 
 .svc-divider{height:1px;background:var(--border);margin:0 var(--pad-x)}
 
-.svc-band{padding:60px var(--pad-x);max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap}
-.svc-band-text h2{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:600;letter-spacing:-.007em;margin-bottom:8px}
-.svc-band-text p{font-size:.9rem;color:var(--text-muted);line-height:1.6}
+.svc-band{padding-top:60px;padding-bottom:60px;display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap}
+.svc-band-text h2{margin:0 0 8px}
+.svc-band-text p{font-size:var(--fs-body);color:var(--text-muted);line-height:1.6}
 
-@media(max-width:700px){.feat-grid{grid-template-columns:1fr}.svc-band{flex-direction:column;align-items:flex-start}}
+@media(max-width:700px){.svc-band{flex-direction:column;align-items:flex-start}}
 </style>
 
 <Header backBtn={true} />
 
 <main id="main-content" tabindex="-1">
-  <div class="svc-hero">
-    <h1 class="svc-title" data-i18n="ec-h1">Site <span>E-commerce</span></h1>
-    <p class="svc-desc" data-i18n="ec-3">Vendez en ligne 24h/24 avec une boutique qui inspire confiance et pousse à l'achat. Paiement sécurisé, gestion des stocks, fiches produits optimisées — tout est inclus pour maximiser vos ventes dès le premier jour.</p>
-    <InteractiveButton text="Obtenir un devis gratuit" data-i18n="ec-b1" href="/devis" class="svc-cta" />
+  <div class="svc-hero wrap">
+    <h1 class="svc-title h-xl" data-i18n="ec-h1">Site <span>E-commerce</span></h1>
+    <p class="svc-desc" data-i18n="ec-3">Une boutique en ligne avec paiement par carte, gestion du stock et fiches produits. Vous recevez les commandes par e-mail et dans un tableau de bord.</p>
+    <InteractiveButton text="Demander un devis" data-i18n="ec-b1" href="/devis" class="svc-cta" />
   </div>
 
   <div class="svc-divider"></div>
 
-  <div class="svc-features">
-    <h2 class="svc-section-label" data-i18n="ec-4">Ce qui est inclus</h2>
+  <div class="svc-features wrap">
+    <h2 class="svc-section-label h-lg" data-i18n="ec-4">Ce qui est inclus</h2>
     <div class="feat-grid">
       <div class="feat-item">
-        <div class="feat-num">01</div>
         <h3 class="feat-title" data-i18n="ec-5">Catalogue produits complet</h3>
         <p class="feat-desc" data-i18n="ec-6">Fiches produits détaillées avec galeries photos, variantes (taille, couleur), descriptions SEO et gestion des stocks en temps réel.</p>
       </div>
       <div class="feat-item">
-        <div class="feat-num">02</div>
         <h3 class="feat-title" data-i18n="ec-7">Paiement sécurisé</h3>
         <p class="feat-desc" data-i18n="ec-8">Intégration Stripe, PayPal ou autre solution. Paiement par carte, virement, et possibilité de paiement en plusieurs fois.</p>
       </div>
       <div class="feat-item">
-        <div class="feat-num">03</div>
         <h3 class="feat-title" data-i18n="ec-9">Gestion des commandes</h3>
         <p class="feat-desc" data-i18n="ec-10">Tableau de bord pour suivre chaque commande, gérer les expéditions, envoyer des confirmations automatiques par email.</p>
       </div>
       <div class="feat-item">
-        <div class="feat-num">04</div>
         <h3 class="feat-title" data-i18n="ec-11">SEO e-commerce avancé</h3>
         <p class="feat-desc" data-i18n="ec-12">URLs optimisées, balisage schema.org pour les produits, sitemap automatique. Vos produits remontent sur Google.</p>
       </div>
       <div class="feat-item">
-        <div class="feat-num">05</div>
         <h3 class="feat-title" data-i18n="ec-13">Design sur mesure</h3>
-        <p class="feat-desc" data-i18n="ec-14">Une boutique à votre image, pas un thème générique. Chaque page est pensée pour guider le visiteur vers l'achat.</p>
+        <p class="feat-desc" data-i18n="ec-14">La maquette de la boutique est dessinée pour vos produits, et vous la validez avant le développement.</p>
       </div>
       <div class="feat-item">
-        <div class="feat-num">06</div>
         <h3 class="feat-title" data-i18n="ec-15">Livraison en 2 à 4 semaines</h3>
         <p class="feat-desc" data-i18n="ec-16">Votre boutique en ligne, complète et fonctionnelle. Formation à la prise en main incluse.</p>
       </div>
@@ -84,12 +77,12 @@ main{padding-top:var(--hdr)}
 
   <div class="svc-divider"></div>
 
-  <div class="svc-band">
+  <div class="svc-band wrap">
     <div class="svc-band-text">
-      <h2 data-i18n="ec-17">Prêt à vendre en ligne ?</h2>
-      <p data-i18n="ec-18">Devis gratuit en 24h. On commence dès cette semaine.</p>
+      <h2 class="h-lg" data-i18n="ec-17">Demander un devis</h2>
+      <p data-i18n="ec-18">Réponse sous 24 h. Gratuit et sans engagement.</p>
     </div>
-    <InteractiveButton text="Démarrer mon projet" data-i18n="ec-b2" href="/devis" />
+    <InteractiveButton text="Demander un devis" data-i18n="ec-b2" href="/devis" />
   </div>
 </main>
 

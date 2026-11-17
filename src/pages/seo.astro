@@ -11,7 +11,7 @@ import '../styles/global.css';
 <style>
 main{padding-top:var(--hdr)}
 
-.svc-hero{padding:80px var(--pad-x) 60px;max-width:1100px;margin:0 auto;position:relative;
+.svc-hero{padding-top:80px;padding-bottom:60px;position:relative;
   display:grid;row-gap:var(--sp-8)}
 /* La promesse à gauche, sa preuve mesurée à droite : le poids de notre
    propre page d'accueil. Sous 960 px, la mesure passe sous le bouton. */
@@ -19,39 +19,38 @@ main{padding-top:var(--hdr)}
 @media(min-width:960px){
   .svc-hero{grid-template-columns:minmax(0,1fr) minmax(320px,400px);column-gap:clamp(40px,5vw,72px);align-items:start}
   .svc-hero-fig{max-width:none;padding-top:var(--sp-2)}
-  .svc-hero .svc-title{font-size:clamp(2.8rem,5.6vw,4.75rem)}
 }
-.svc-eyebrow{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--accent-text);margin-bottom:20px;display:flex;align-items:center;gap:8px;position:relative;z-index:1}
-.svc-eyebrow::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0}
-.svc-title{font-size:clamp(2.8rem,7vw,5.5rem);font-weight:600;letter-spacing:-.010em;line-height:1;margin-bottom:28px;position:relative;z-index:1}
-.svc-desc{font-size:clamp(1rem,1.8vw,1.15rem);color:var(--text-muted);line-height:1.75;max-width:640px;margin-bottom:40px;position:relative;z-index:1}
+.svc-title{margin-bottom:28px;position:relative;z-index:1}
+.svc-desc{font-size:var(--fs-body);color:var(--text-muted);line-height:1.75;max-width:640px;margin-bottom:40px;position:relative;z-index:1}
 
-.svc-features{padding:60px var(--pad-x);max-width:1100px;margin:0 auto}
+.svc-features{padding-top:60px;padding-bottom:60px}
 /* Ce libellé introduit les <h3> de la grille : c'est un niveau 2,
    pas un <span> décoratif. axe refusait le saut h1 → h3. */
-.svc-section-label{font-size:clamp(24px,3vw,34px);line-height:1.1;letter-spacing:var(--ls-section,-.008em);color:var(--text);margin:0 0 32px;display:block}
-.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
-.feat-item{background:var(--bg);padding:32px 28px}
-.feat-num{font-size:var(--fs-caption);font-weight:600;color:var(--accent-text);letter-spacing:0;margin-bottom:14px}
-.feat-title{font-size:1rem;font-weight:600;letter-spacing:-.01em;margin-bottom:10px}
+.svc-section-label{color:var(--text);margin:0 0 32px;display:block}
+/* Une liste à filets, une colonne de 68 caractères au plus : ce qui est
+   compris n'est pas une suite d'étapes, il n'y a donc plus de numéros. */
+.feat-grid{display:block;background:none;max-width:68ch}
+.feat-item{padding:var(--sp-5) 0;border-top:1px solid var(--border)}
+.feat-item:last-child{border-bottom:1px solid var(--border)}
+.feat-title{font-size:1.125rem;font-weight:600;letter-spacing:0;margin-bottom:8px}
 .feat-desc{font-size:.875rem;color:var(--text-muted);line-height:1.65}
 
 .svc-divider{height:1px;background:var(--border);margin:0 var(--pad-x)}
 
-.svc-band{padding:60px var(--pad-x);max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap}
-.svc-band-text h2{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:600;letter-spacing:-.007em;margin-bottom:8px}
-.svc-band-text p{font-size:.9rem;color:var(--text-muted);line-height:1.6}
+.svc-band{padding-top:60px;padding-bottom:60px;display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap}
+.svc-band-text h2{margin:0 0 8px}
+.svc-band-text p{font-size:var(--fs-body);color:var(--text-muted);line-height:1.6}
 
-@media(max-width:700px){.feat-grid{grid-template-columns:1fr}.svc-band{flex-direction:column;align-items:flex-start}}
+@media(max-width:700px){.svc-band{flex-direction:column;align-items:flex-start}}
 </style>
 
 <Header backBtn={true} />
 
 <main id="main-content" tabindex="-1">
-  <div class="svc-hero">
+  <div class="svc-hero wrap">
     <div class="svc-hero-txt">
-      <h1 class="svc-title" data-i18n="seo-h1">SEO & <span>Performance</span></h1>
-      <p class="svc-desc" data-i18n="seo-3">Être en ligne ne suffit pas : il faut qu'on vous trouve. On travaille votre site pour qu'il remonte sur Google et reste léger sur mobile, et on vous montre ce qui a changé, mesures à l'appui.</p>
+      <h1 class="svc-title h-xl" data-i18n="seo-h1">SEO & <span>Performance</span></h1>
+      <p class="svc-desc" data-i18n="seo-3">On travaille votre site et votre fiche Google pour que vous apparaissiez dans les recherches locales, et on vous montre chaque mois ce qui a changé.</p>
       <InteractiveButton text="Obtenir un audit gratuit" data-i18n="seo-b1" href="/devis" class="svc-cta" />
     </div>
     <div class="svc-hero-fig"><Mesure {...MESURE_ACCUEIL} /></div>
@@ -59,36 +58,30 @@ main{padding-top:var(--hdr)}
 
   <div class="svc-divider"></div>
 
-  <div class="svc-features">
-    <h2 class="svc-section-label" data-i18n="seo-4">Ce qui est inclus</h2>
+  <div class="svc-features wrap">
+    <h2 class="svc-section-label h-lg" data-i18n="seo-4">Ce qui est inclus</h2>
     <div class="feat-grid">
       <div class="feat-item">
-        <div class="feat-num">01</div>
         <h3 class="feat-title" data-i18n="seo-5">Audit SEO complet</h3>
         <p class="feat-desc" data-i18n="seo-6">Analyse technique de votre site : indexation, balises, maillage interne, backlinks, Core Web Vitals. Un rapport clair avec les priorités à corriger.</p>
       </div>
       <div class="feat-item">
-        <div class="feat-num">02</div>
         <h3 class="feat-title" data-i18n="seo-7">Optimisation technique</h3>
         <p class="feat-desc" data-i18n="seo-8">Correction des erreurs de crawl, optimisation des balises title/méta, schema.org, sitemap XML, robots.txt et redirections 301.</p>
       </div>
       <div class="feat-item">
-        <div class="feat-num">03</div>
         <h3 class="feat-title" data-i18n="seo-9">Performance & vitesse</h3>
         <p class="feat-desc" data-i18n="seo-10">Images compressées, chargement différé, code minifié, cache navigateur et CDN configurés. On mesure le poids de chaque page avant la mise en ligne, et vous recevez la mesure.</p>
       </div>
       <div class="feat-item">
-        <div class="feat-num">04</div>
         <h3 class="feat-title" data-i18n="seo-11">Mots-clés stratégiques</h3>
         <p class="feat-desc" data-i18n="seo-12">Recherche et analyse des mots-clés de votre secteur. On cible les requêtes qui vous apportent de vrais clients, pas juste du trafic.</p>
       </div>
       <div class="feat-item">
-        <div class="feat-num">05</div>
         <h3 class="feat-title" data-i18n="seo-13">Google Analytics 4</h3>
         <p class="feat-desc" data-i18n="seo-14">Configuration complète de GA4 et Google Search Console. Tableau de bord personnalisé pour suivre vos performances chaque mois.</p>
       </div>
       <div class="feat-item">
-        <div class="feat-num">06</div>
         <h3 class="feat-title" data-i18n="seo-15">Rapport mensuel</h3>
         <p class="feat-desc" data-i18n="seo-16">Suivi des positions, du trafic organique et des conversions chaque mois. Vous savez exactement ce qui évolue et pourquoi.</p>
       </div>
@@ -97,12 +90,12 @@ main{padding-top:var(--hdr)}
 
   <div class="svc-divider"></div>
 
-  <div class="svc-band">
+  <div class="svc-band wrap">
     <div class="svc-band-text">
-      <h2 data-i18n="seo-17">Un audit de votre site, gratuit.</h2>
+      <h2 class="h-lg" data-i18n="seo-17">Un audit de votre site, gratuit</h2>
       <p data-i18n="seo-18">On regarde votre site et votre fiche Google, et on vous dit ce qui bloque. Les premiers effets dépendent de votre secteur et de vos concurrents locaux.</p>
     </div>
-    <InteractiveButton text="Démarrer mon SEO" data-i18n="seo-b2" href="/devis" />
+    <InteractiveButton text="Demander un devis" data-i18n="seo-b2" href="/devis" />
   </div>
 </main>
 
