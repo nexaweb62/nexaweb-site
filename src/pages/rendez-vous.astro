@@ -46,20 +46,15 @@ const FEUILLES = [
   { l: 97, w: 46, d: 14.1, dl:  -10.7, x:   12, r:  -597, o: 0.61 },
 ] as const;
 ---
-<BaseLayout title="Rendez-vous — Nexa Web" description="Réservez une consultation gratuite de 30 min avec Nexa Web. Visio ou téléphone. Zéro engagement.">
+<BaseLayout title="Rendez-vous — Nexa Web" description="Réservez un appel de 30 minutes avec Nexa Web, par téléphone ou en visio. Gratuit et sans engagement.">
 <style>
 main{position:relative;z-index:1;padding-top:var(--hdr);overflow:hidden}
 .rdv-hero{position:relative;z-index:2}
 
 /* ── Hero ── */
 .rdv-hero{text-align:center;padding:clamp(64px,11vh,130px) var(--pad-x) clamp(48px,7vh,80px)}
-.rdv-label{display:inline-block;font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:var(--accent-text);border:1px solid var(--accent);border-radius:var(--radius-tag);padding:5px 16px;margin-bottom:26px;background:var(--accent-glow)}
-.rdv-title{font-size:clamp(2.4rem,5.5vw,5rem);font-weight:600;line-height:.93;letter-spacing:-.014em;margin-bottom:20px;text-wrap:balance}
-.rdv-title em{font-style:italic;color:var(--text-muted)}
-.rdv-sub{font-size:clamp(.88rem,1.3vw,1.05rem);color:var(--text-muted);font-weight:300;line-height:1.65;max-width:480px;margin:0 auto 32px}
-.rdv-badges{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px}
-.rdv-badge{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border-strong);border-radius:var(--radius-tag);padding:7px 16px;font-size:var(--fs-caption);font-weight:500;color:var(--text-muted);letter-spacing:0}
-.rdv-badge svg{width:13px;height:13px;stroke:var(--accent);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.rdv-title{margin:0 auto 20px;max-width:16ch}
+.rdv-sub{font-size:var(--fs-body);color:var(--text-muted);font-weight:400;line-height:1.6;max-width:480px;margin:0 auto 8px}
 
 /* ══════════════════════════════════════════════════════════════════
    LES FEUILLES D'OR — le fond de la page
@@ -183,15 +178,8 @@ body.lite .gk:nth-child(2n){display:none}
   </div>
   <!-- HERO -->
   <div class="rdv-hero">
-    <span class="rdv-label" data-i18n="rdv-label">Consultation gratuite</span>
-    <h1 class="rdv-title" data-i18n="rdv-title">Prenons<br><em>rendez-vous.</em></h1>
-    <p class="rdv-sub" data-i18n="rdv-sub">30 minutes pour cadrer votre projet. Visio ou téléphone, à votre convenance. Zéro engagement.</p>
-    <div class="rdv-badges">
-      <span class="rdv-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="rdv-badge1">100 % gratuit</span></span>
-      <span class="rdv-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span data-i18n="rdv-badge2">30 minutes</span></span>
-      <span class="rdv-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg><span data-i18n="rdv-badge3">Visio ou téléphone</span></span>
-      <span class="rdv-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span data-i18n="rdv-badge4">Zéro engagement</span></span>
-    </div>
+    <h1 class="rdv-title h-xl" data-i18n="rdv-title">Réserver un appel de 30 minutes</h1>
+    <p class="rdv-sub" data-i18n="rdv-sub">Par téléphone ou en visio, gratuit et sans engagement. On parle de votre activité et de ce que le site doit faire.</p>
   </div>
 
   <!-- Calendly -->

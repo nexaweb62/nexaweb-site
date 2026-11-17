@@ -19,23 +19,14 @@ import '../styles/global.css';
   gap:0;
 }
 
-/* ── 404 ── */
-.nf-num{
-  font-size:clamp(120px,22vw,240px);
-  font-weight:600;
-  letter-spacing:-.021em;
-  line-height:1;
-  color:var(--text);
-  -webkit-mask-image:linear-gradient(to bottom,black 20%,transparent 80%);
-  mask-image:linear-gradient(to bottom,black 20%,transparent 80%);
-  user-select:none;
-  pointer-events:none;
-}
+/* ── LE TITRE ── l'échelle commune (.h-xl), sans « 404 » géant qui
+   s'efface en dégradé. */
+.nf-h{margin:0;color:var(--text)}
 
 /* ── DESCRIPTION ── */
 .nf-desc{
-  margin-top:-28px;
-  font-size:clamp(13px,1.5vw,16px);
+  margin-top:20px;
+  font-size:var(--fs-body);
   color:var(--text-muted);
   line-height:1.7;
   max-width:400px;
@@ -51,11 +42,11 @@ import '../styles/global.css';
 
 <main id="main-content" tabindex="-1">
   <div class="nf-page">
-    <p class="nf-num" aria-hidden="true">404</p>
+    <h1 class="nf-h h-xl" data-i18n="nf-h">Cette page n'existe pas</h1>
     <p class="nf-desc" data-i18n="nf-desc">La page que vous cherchez a peut-être été déplacée<br>ou n'existe pas.</p>
     <div class="nf-btns">
       <InteractiveButton text="Accueil" href="/" class="nf-btn-home" data-i18n="nf-home" />
-      <InteractiveButton text="Explorer" href="/#services" class="nf-btn-explore" data-i18n="nf-explorer" />
+      <InteractiveButton text="Voir les services" href="/services" class="nf-btn-explore" data-i18n="nf-explorer" />
     </div>
   </div>
 </main>

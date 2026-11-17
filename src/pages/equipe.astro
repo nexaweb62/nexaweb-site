@@ -14,10 +14,8 @@ import '../styles/global.css';
 @media(max-width:768px){.r{transform:translateY(18px);filter:none}}
 @media(prefers-reduced-motion:reduce){.r{opacity:1;transform:none;filter:none;transition:none}}
 
-/* Type */
-.h-xl{font-size:clamp(2rem,4vw,5.5rem);font-weight:600;line-height:.92;letter-spacing:-.014em;text-wrap:balance}
-.h-xl em{font-style:italic;font-weight:600;color:var(--text-muted)}
-.body-text{font-size:clamp(.9rem,1.4vw,1.05rem);font-weight:300;line-height:1.72;color:var(--text-muted)}
+/* Type : le titre prend l'échelle commune (.h-xl, global.css) */
+.body-text{font-size:var(--fs-body);font-weight:400;line-height:1.6;color:var(--text-muted)}
 
 /* Hero */
 .s-eq-hero{padding-top:var(--hdr)}
@@ -26,27 +24,29 @@ import '../styles/global.css';
 /* Team cards */
 .s-team{padding:clamp(80px,12vw,160px) 0}
 .team-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:920px;margin:0 auto}
-.team-card{height:540px}
-.tc-inner{position:relative;display:block;width:100%;height:100%;border-radius:var(--radius-block);overflow:hidden;cursor:default;transition:transform .52s cubic-bezier(.16,1,.3,1),box-shadow .52s cubic-bezier(.16,1,.3,1)}
+/* La photo AU-DESSUS du nom, plus derrière : aucun texte ni voile posé
+   sur le visage. La carte contient la photo, puis le texte sur la
+   surface de la page. */
+.tc-inner{position:relative;display:flex;flex-direction:column;width:100%;height:100%;border-radius:var(--radius-block);overflow:hidden;cursor:default;background:var(--surface);border:1px solid var(--border);transition:transform .52s cubic-bezier(.16,1,.3,1),box-shadow .52s cubic-bezier(.16,1,.3,1)}
+.tc-photo{position:relative;aspect-ratio:4/5;overflow:hidden}
 .tc-inner:hover{transform:scale(1.035)}
 .tc-bg{position:absolute;inset:0;background-size:cover;background-position:center 18%;transition:transform .52s cubic-bezier(.16,1,.3,1)}
 .tc-inner:hover .tc-bg{transform:scale(1.08)}
 /* Les 22 px qui separaient ce bouton du texte au-dessus vivaient dans
    l'ancien .tc-btn : mesure, l'ecart etait retombe a 0. */
 .tc-btn{margin-top:22px;align-self:stretch}
-.tc-overlay{position:absolute;inset:0}
-.tc-content{position:absolute;bottom:0;left:0;right:0;padding:28px;color:var(--on-media)}
-.tc-role{font-size:var(--fs-caption);font-weight:600;letter-spacing:0;color:color-mix(in srgb,var(--on-media) 72%,transparent);margin-bottom:6px}
-.tc-name{font-size:clamp(1.4rem,2.8vw,2rem);font-weight:600;letter-spacing:-.010em;line-height:1.05}
-.tc-title{font-size:var(--fs-caption);font-weight:300;color:color-mix(in srgb,var(--on-media) 70%,transparent);margin-top:4px;letter-spacing:0}
-@media(max-width:540px){.team-grid{grid-template-columns:1fr}.team-card{height:460px}}
+.tc-content{display:flex;flex-direction:column;flex:1;padding:24px 24px 28px;color:var(--text)}
+.tc-role{font-size:15px;font-weight:400;letter-spacing:0;color:var(--text-muted);margin-bottom:6px}
+.tc-name{margin:0}
+.tc-title{font-size:var(--fs-body);font-weight:400;color:var(--text-muted);margin-top:6px;letter-spacing:0}
+.tc-content .tc-btn{margin-top:auto;padding-top:0}
+.tc-content .tc-title{margin-bottom:22px}
+@media(max-width:540px){.team-grid{grid-template-columns:1fr}}
 
 /* CTA */
 .s-eq-cta{text-align:center}
 .eq-cta-in{padding:clamp(60px,10vw,120px) 0}
-.eq-cta-super{font-size:clamp(.6rem,1vw,.75rem);font-weight:600;letter-spacing:0;color:var(--text-muted);margin-bottom:28px}
-.eq-cta-hl{font-size:clamp(2.2rem,5.5vw,6rem);font-weight:600;line-height:.94;letter-spacing:-.012em;margin-bottom:40px;text-wrap:balance}
-.eq-cta-hl em{font-style:italic}
+.eq-cta-hl{margin-bottom:32px}
 
 /* Photos d'équipe — AVIF/WebP avec repli JPEG, produites par
    `npm run build:images`. Les JPEG d'origine pesaient 55 à 583 Ko pour
@@ -66,8 +66,7 @@ import '../styles/global.css';
   <section class="s-eq-hero" aria-labelledby="eq-hero-h">
     <div class="wrap">
       <div class="eq-hero-in">
-        <span class="label r" data-i18n="eq-lbl">L'agence</span>
-        <h1 class="h-xl r d1" id="eq-hero-h" style="margin-top:18px" data-i18n="eq-h">Imad et Ahmed,<br>les fondateurs de Nexa Web.</h1>
+        <h1 class="h-xl r d1" id="eq-hero-h" data-i18n="eq-h">Imad et Ahmed,<br>les fondateurs de Nexa&nbsp;Web</h1>
         <p class="body-text r d2" style="margin-top:26px;max-width:520px" data-i18n="eq-sub">Deux fondateurs, deux métiers : le développement et le design. C'est nous qui faisons votre site, du premier appel à la mise en ligne.</p>
       </div>
     </div>
@@ -81,12 +80,11 @@ import '../styles/global.css';
         <!-- Membre 1 -->
         <div class="team-card r">
           <div class="tc-inner" style="box-shadow:var(--shadow-2)">
-            <div class="tc-bg" data-photo="1" style="background-position:center 15%"></div>
-            <div class="tc-overlay" style="background:linear-gradient(to top,var(--media-scrim-900),var(--media-scrim-600) 40%,rgb(from var(--media-scrim-600) r g b / 0) 68%)"></div>
-            <div class="tc-content" data-on-media>
+            <div class="tc-photo"><div class="tc-bg" data-photo="1" style="background-position:center 15%"></div></div>
+            <div class="tc-content">
               <p class="tc-role" data-i18n="eq-role">Co-fondateur</p>
-              <h2 class="tc-name">Imad Torchi</h2>
-              <p class="tc-title" data-i18n="eq-title1">Développement web & Architecture</p>
+              <h2 class="tc-name h-md">Imad Torchi</h2>
+              <p class="tc-title" data-i18n="eq-title1">Développe les sites</p>
               <InteractiveButton text="Prendre contact" href="/contact" class="tc-btn" data-i18n="eq-contact" />
             </div>
           </div>
@@ -95,12 +93,11 @@ import '../styles/global.css';
         <!-- Membre 2 -->
         <div class="team-card r d1">
           <div class="tc-inner" style="box-shadow:var(--shadow-2)">
-            <div class="tc-bg" data-photo="2" style="background-position:center 12%"></div>
-            <div class="tc-overlay" style="background:linear-gradient(to top,var(--media-scrim-900),var(--media-scrim-600) 40%,rgb(from var(--media-scrim-600) r g b / 0) 68%)"></div>
-            <div class="tc-content" data-on-media>
+            <div class="tc-photo"><div class="tc-bg" data-photo="2" style="background-position:center 12%"></div></div>
+            <div class="tc-content">
               <p class="tc-role" data-i18n="eq-role">Co-fondateur</p>
-              <h2 class="tc-name">Ahmed Chteoui</h2>
-              <p class="tc-title" data-i18n="eq-title2">Design UI/UX & Stratégie digitale</p>
+              <h2 class="tc-name h-md">Ahmed Chteoui</h2>
+              <p class="tc-title" data-i18n="eq-title2">Dessine les maquettes</p>
               <InteractiveButton text="Prendre contact" href="/contact" class="tc-btn" data-i18n="eq-contact" />
             </div>
           </div>
@@ -114,10 +111,9 @@ import '../styles/global.css';
   <section class="s-eq-cta sec-seam" aria-labelledby="eq-cta-h">
     <div class="wrap">
       <div class="eq-cta-in r">
-        <div class="eq-cta-super" data-i18n="eq-cta-super">On travaille ensemble ?</div>
-        <h2 class="eq-cta-hl r d1" id="eq-cta-h" data-i18n="eq-cta-h">Votre projet mérite<br>une équipe <em>investie.</em></h2>
+        <h2 class="eq-cta-hl h-lg r d1" id="eq-cta-h" data-i18n="eq-cta-h">Demander un devis</h2>
         <div class="r d2">
-          <InteractiveButton text="Démarrer un projet" href="/devis" variant="gold" data-i18n="eq-cta-btn" />
+          <InteractiveButton text="Demander un devis" href="/devis" variant="gold" data-i18n="eq-cta-btn" />
         </div>
       </div>
     </div>
