@@ -34,7 +34,8 @@
     "check:admin": "node scripts/check-admin.mjs",
     "check:admin:rendu": "node scripts/check-admin-rendu.mjs",
     "check:sheets": "node scripts/check-sheets.mjs",
-    "check:devis": "node scripts/check-devis.mjs"
+    "check:devis": "node scripts/check-devis.mjs",
+    "check:securite": "node scripts/check-securite.mjs"
   },
   "dependencies": {
     "@astrojs/cloudflare": "14.3.4",

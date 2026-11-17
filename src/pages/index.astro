@@ -744,7 +744,7 @@ const FONDATEURS = [
   var hasToken=window.location.hash.indexOf('access_token=')!==-1;
   if(!hasCode&&!hasToken)return;
   function loadScript(src,cb){var s=document.createElement('script');s.src=src;s.onload=cb;document.head.appendChild(s);}
-  loadScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2',function(){
+  loadScript('/vendor/supabase-js-2.118.0.min.js',function(){
     loadScript('/supabase-client.js',function(){
       if(!window.sb)return;
       window.sb.auth.onAuthStateChange(function(event,session){

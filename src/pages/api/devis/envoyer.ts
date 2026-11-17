@@ -56,22 +56,52 @@ const refus = (message: string, champ?: string) => new Response(
 const texte = (v: unknown, max = 2000) =>
   typeof v === 'string' ? v.trim().slice(0, max) : '';
 
+/** Un champ d'UNE ligne — nom, e-mail, telephone, formule. Un saut de
+ *  ligne ou un caractere de controle n'y a aucune raison d'etre, et le
+ *  prenom et le nom finissent dans l'OBJET d'un courriel, ou un saut de
+ *  ligne sert a fabriquer un en-tete. On les remplace par une espace. */
+const ligne = (v: unknown, max: number) =>
+  texte(v, max).replace(/[\u0000-\u001f\u007f]+/g, ' ').trim();
+
+/** Le texte libre garde ses sauts de ligne, pas les autres controles. */
+const paragraphe = (v: unknown, max: number) =>
+  texte(v, max).replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g, '');
+
+/** Une demande reelle pese quelques kilo-octets, description de 4 000
+ *  caracteres et jeton Turnstile compris. Au-dela, on ne lit pas : rien
+ *  ne justifie de faire analyser des megaoctets au Worker. */
+const TAILLE_MAX = 64 * 1024;
+
+const tropGros = () => new Response(
+  JSON.stringify({ ok: false, message: 'Demande trop volumineuse.' }),
+  { status: 413, headers: JSON_ENTETES },
+);
+
 export const POST: APIRoute = async ({ request }) => {
   const env = await lireEnv() as Record<string, string | undefined>;
   const contact = adresseContact(env);
 
-  let d: Record<string, unknown>;
-  try { d = await request.json() as Record<string, unknown>; }
-  catch { return refus('Demande illisible.'); }
+  if (Number(request.headers.get('content-length') || 0) > TAILLE_MAX) return tropGros();
 
-  const prenom = texte(d.prenom, 80);
-  const nom = texte(d.nom, 80);
-  const email = texte(d.email, 254).toLowerCase();
-  const telephone = texte(d.telephone, 40);
-  const entreprise = texte(d.entreprise, 160);
+  let d: Record<string, unknown>;
+  try {
+    const brut = await request.text();
+    /* Sans content-length (envoi par morceaux), on mesure apres coup. */
+    if (brut.length > TAILLE_MAX) return tropGros();
+    d = JSON.parse(brut) as Record<string, unknown>;
+  } catch { return refus('Demande illisible.'); }
+  /* « null », un nombre ou un tableau sont du JSON valide : sans ce
+     controle, « d.prenom » levait une exception et la route repondait 500. */
+  if (!d || typeof d !== 'object' || Array.isArray(d)) return refus('Demande illisible.');
+
+  const prenom = ligne(d.prenom, 80);
+  const nom = ligne(d.nom, 80);
+  const email = ligne(d.email, 254).toLowerCase();
+  const telephone = ligne(d.telephone, 40);
+  const entreprise = ligne(d.entreprise, 160);
   const siret = normaliserSiret(texte(d.siret, 40));
-  const formule = texte(d.formule, 60);
-  const description = texte(d.description, 4000);
+  const formule = ligne(d.formule, 60);
+  const description = paragraphe(d.description, 4000);
 
   /* ── 1. Le pot de miel ─────────────────────────────────────────── */
   /* Un champ invisible qu'un humain ne remplit jamais. Rempli = robot. */
@@ -188,11 +218,11 @@ export const POST: APIRoute = async ({ request }) => {
   const jeton = await fabriquerJeton({
     prenom, nom, email, telephone: normaliserTel(telephone) ?? telephone,
     entreprise, siret, formule,
-    type_site: texte(d.type_site, 80),
-    delai_souhaite: texte(d.delai_souhaite, 80),
-    budget_estime: texte(d.budget_estime, 80),
-    paiement: texte(d.paiement, 40) || 'comptant',
-    description, site_existant: texte(d.site_existant, 300),
+    type_site: ligne(d.type_site, 80),
+    delai_souhaite: ligne(d.delai_souhaite, 80),
+    budget_estime: ligne(d.budget_estime, 80),
+    paiement: ligne(d.paiement, 40) || 'comptant',
+    description, site_existant: ligne(d.site_existant, 300),
     ent_nom: entNom, ent_activite: entActivite, ent_commune: entCommune,
   }, secret);
 
