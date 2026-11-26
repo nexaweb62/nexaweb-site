@@ -82,15 +82,15 @@ main{position:relative;z-index:1;padding-top:var(--hdr);overflow:hidden}
   width:min(128vw,1320px);aspect-ratio:1.25;
   background:
     radial-gradient(42% 38% at 34% 32%,var(--accent-glow),transparent 68%),
-    radial-gradient(38% 34% at 70% 58%,rgb(from var(--accent) r g b / .13),transparent 70%),
-    radial-gradient(30% 28% at 56% 18%,rgb(from var(--accent-deep) r g b / .14),transparent 72%);
+    radial-gradient(38% 34% at 70% 58%,rgb(from var(--gold) r g b / .13),transparent 70%),
+    radial-gradient(30% 28% at 56% 18%,rgb(from var(--gold-deep) r g b / .14),transparent 72%);
 }
 .gk-src{position:absolute;width:0;height:0;overflow:hidden}
 /* La couleur passe par `color` et non par `fill` : le dessin est appelé
    par <use>, qui crée un arbre fantôme où les sélecteurs du document
    n'entrent pas. Seul l'héritage le traverse, et currentColor avec lui. */
 .gk{position:absolute;top:0;left:var(--l);width:var(--w);
-  color:var(--accent);opacity:0;transform:translate3d(0,-16vh,0)}
+  color:var(--gold);opacity:0;transform:translate3d(0,-16vh,0)}
 .gk svg{display:block;width:100%;height:auto}
 :root[data-theme="light"] .gk{color:var(--accent-text)}
 @media (prefers-color-scheme:light){

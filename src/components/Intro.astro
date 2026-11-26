@@ -51,13 +51,11 @@
   .intro-logo{
     width:96px;height:102px;overflow:visible;
     transform-origin:50% 50%;
-    /* Le halo part d'une ombre DEJA colorée, simplement transparente et
-       sans rayon. Interpoler depuis « none » laissait Chrome fabriquer une
-       valeur batarde : mesuré, le halo tirait vers (64,61,56) au lieu de la
-       couleur voulue — releve du temps de la palette dorée, le defaut vaut
-       pour n'importe quelle teinte. Deux ombres de meme forme s'interpolent
-       proprement. */
-    filter:drop-shadow(0 0 0 rgb(from var(--raw-acc-hi-d) r g b / 0));
+    /* Le halo part d'une ombre DEJA dorée, simplement transparente et sans
+       rayon. Interpoler depuis « none » laissait Chrome fabriquer une teinte
+       batarde : mesuré, le halo tirait au gris (64,61,56) au lieu de l'or.
+       Deux ombres de meme forme s'interpolent proprement. */
+    filter:drop-shadow(0 0 0 rgb(from var(--raw-gold-300) r g b / 0));
     /* Le vol vers la barre. La durée vit ici, la destination en JS.
        Le halo, lui, va deux fois plus vite : il doit etre ARRIVE quand le
        vol commence (0,9 s plus tard), sinon on ne le voit jamais en entier. */
@@ -69,9 +67,9 @@
     to{stroke-dashoffset:0}
   }
   .intro-logo .logo-face{stroke:var(--raw-warm-50)}
-  .intro-logo .logo-depth{stroke:var(--raw-acc-d)}
-  .intro.halo .intro-logo{filter:drop-shadow(0 0 8px rgb(from var(--raw-acc-hi-d) r g b / .55))}
-  .intro.vole .intro-logo{filter:drop-shadow(0 0 0 rgb(from var(--raw-acc-hi-d) r g b / 0))}
+  .intro-logo .logo-depth{stroke:var(--raw-gold-400)}
+  .intro.halo .intro-logo{filter:drop-shadow(0 0 8px rgb(from var(--raw-gold-300) r g b / .55))}
+  .intro.vole .intro-logo{filter:drop-shadow(0 0 0 rgb(from var(--raw-gold-300) r g b / 0))}
 
   .intro-nom{
     margin:0;opacity:0;

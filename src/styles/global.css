@@ -155,7 +155,7 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
    crème. Le laisser tel quel ne coûte rien, le canevas le recouvre
    entièrement une fois opaque, et il n'y a plus de trou possible. */
 
-/* Sans lueur : dans l'en-tête, un halo d'accent permanent autour d'une
+/* Sans lueur : dans l'en-tête, un halo doré permanent autour d'une
    tuile de 26 px est du bruit, pas de la présence. */
 @media (prefers-reduced-motion:no-preference){
               }
@@ -170,43 +170,43 @@ body.nav-open{position:fixed;width:100%;overflow:hidden;overscroll-behavior:cont
    ═══════════════════════════════════════════════════════════════════════ */
 .lgm{
   display:inline-block;line-height:0;
-  --lg-verre-haut:var(--raw-acc-lo-l); --lg-verre-haut-a:.55;
+  --lg-verre-haut:var(--raw-gold-900); --lg-verre-haut-a:.55;
   --lg-verre-bas:var(--raw-black-950);
-  --lg-rim:var(--raw-acc-d);
+  --lg-rim:var(--raw-gold-400);
   --lg-eclat:var(--raw-paper-0); --lg-eclat-a:.11;
   --lg-dome-a:.16; --lg-dome-a2:.045; --lg-rebond-a:.20;
-  --lg-or-clair:var(--raw-acc-d); --lg-or-moyen:var(--raw-acc-hi-d); --lg-or-sombre:var(--raw-acc-lo-d);
-  --lg-lettre-fond:var(--raw-black-950); --lg-lettre-arete:var(--raw-acc-d);
+  --lg-or-clair:var(--raw-gold-300); --lg-or-moyen:var(--raw-gold-400); --lg-or-sombre:var(--raw-gold-600);
+  --lg-lettre-fond:var(--raw-black-950); --lg-lettre-arete:var(--raw-gold-400);
 }
 .lgm svg{display:block;width:var(--lg-taille,128px);height:auto}
 :root[data-theme="light"] .lgm,
 .lgm-clair{
-  --lg-verre-haut:var(--raw-acc-low-l); --lg-verre-haut-a:.42;
+  --lg-verre-haut:var(--raw-gold-300); --lg-verre-haut-a:.42;
   --lg-verre-bas:var(--raw-paper-50);
-  --lg-rim:var(--raw-acc-l);
+  --lg-rim:var(--raw-gold-700);
   --lg-eclat-a:.48; --lg-dome-a:.62; --lg-dome-a2:.17; --lg-rebond-a:.16;
-  --lg-or-clair:var(--raw-acc-low-l); --lg-or-moyen:var(--raw-acc-deep-l); --lg-or-sombre:var(--raw-acc-l);
-  --lg-lettre-fond:var(--raw-paper-50); --lg-lettre-arete:var(--raw-acc-l);
+  --lg-or-clair:var(--raw-gold-600); --lg-or-moyen:var(--raw-gold-700); --lg-or-sombre:var(--raw-gold-900);
+  --lg-lettre-fond:var(--raw-paper-50); --lg-lettre-arete:var(--raw-gold-800);
 }
 @media (prefers-color-scheme:light){
   :root:not([data-theme="dark"]) .lgm{
-    --lg-verre-haut:var(--raw-acc-low-l); --lg-verre-haut-a:.42;
+    --lg-verre-haut:var(--raw-gold-300); --lg-verre-haut-a:.42;
     --lg-verre-bas:var(--raw-paper-50);
-    --lg-rim:var(--raw-acc-l);
+    --lg-rim:var(--raw-gold-700);
     --lg-eclat-a:.48; --lg-dome-a:.62; --lg-dome-a2:.17; --lg-rebond-a:.16;
-    --lg-or-clair:var(--raw-acc-low-l); --lg-or-moyen:var(--raw-acc-deep-l); --lg-or-sombre:var(--raw-acc-l);
-    --lg-lettre-fond:var(--raw-paper-50); --lg-lettre-arete:var(--raw-acc-l);
+    --lg-or-clair:var(--raw-gold-600); --lg-or-moyen:var(--raw-gold-700); --lg-or-sombre:var(--raw-gold-900);
+    --lg-lettre-fond:var(--raw-paper-50); --lg-lettre-arete:var(--raw-gold-800);
   }
 }
 /* Le panneau clair de la page de comparaison force le thème clair sur une
    moitié d'écran : la marque doit suivre ce forçage et non le thème. */
 .lgm-sombre{
-  --lg-verre-haut:var(--raw-acc-lo-l); --lg-verre-haut-a:.55;
+  --lg-verre-haut:var(--raw-gold-900); --lg-verre-haut-a:.55;
   --lg-verre-bas:var(--raw-black-950);
-  --lg-rim:var(--raw-acc-d);
+  --lg-rim:var(--raw-gold-400);
   --lg-eclat-a:.11; --lg-dome-a:.16; --lg-dome-a2:.045; --lg-rebond-a:.20;
-  --lg-or-clair:var(--raw-acc-d); --lg-or-moyen:var(--raw-acc-hi-d); --lg-or-sombre:var(--raw-acc-lo-d);
-  --lg-lettre-fond:var(--raw-black-950); --lg-lettre-arete:var(--raw-acc-d);
+  --lg-or-clair:var(--raw-gold-300); --lg-or-moyen:var(--raw-gold-400); --lg-or-sombre:var(--raw-gold-600);
+  --lg-lettre-fond:var(--raw-black-950); --lg-lettre-arete:var(--raw-gold-400);
 }
 
 @media (prefers-reduced-motion:no-preference){
@@ -310,7 +310,7 @@ body.lite .lgm-i:hover .lg-reflet,body.lite .lgm-i.lg-tombe .lg-goutte{animation
    transition d'un cran. */
 .hdr.scrolled{
   background:rgb(from var(--raw-black-950) r g b / .72);
-  box-shadow:inset 0 -1px 0 rgb(from var(--raw-acc-d) r g b / .16);
+  box-shadow:inset 0 -1px 0 rgb(from var(--raw-gold-400) r g b / .16);
 }
 :root[data-theme="light"] .hdr.scrolled{
   background:rgb(from var(--raw-paper-0) r g b / .72);
@@ -391,11 +391,8 @@ body.lite .lgm-i:hover .lg-reflet,body.lite .lgm-i.lg-tombe .lg-goutte{animation
 /* WCAG 2.5.8 — cible d'au moins 24×24 px, espacement compris. Les deux
    options de langue étaient à 28×24 collées à 2 px : axe les refusait. */
 .lang-sel{display:flex;gap:4px;border-radius:var(--radius-pill);padding:3px 5px;min-height:38px;align-items:center}
-/* Mesuré du temps de la palette dorée : à 12 px sur du verre posé
-   au-dessus d'un halo d'accent, ni le gris secondaire (1.76:1) ni
-   l'accent du texte (3.44:1) ne tenaient AA. La conclusion survit au
-   changement de palette, parce qu'elle tient au verre, pas à la teinte.
-   L'option
+/* Mesuré : à 12 px sur du verre posé au-dessus d'un halo doré, ni le gris
+   secondaire (1.76:1) ni l'or du texte (3.44:1) ne tiennent AA. L'option
    inactive prend donc l'encre pleine, et l'active une pastille d'accent
    opaque — le même parti que le sélecteur de thème juste à côté. */
 .lang-opt{
@@ -707,7 +704,7 @@ body:has(.fond-tarifs) footer{
 /* ── FOND VIVANT ──
    Le verre a besoin de quelque chose derrière lui : sur un aplat noir, un
    bouton translucide n'est qu'un rectangle un peu plus clair et l'effet
-   disparaît. Tout bloc qui porte un bouton reçoit donc des halos d'accent.
+   disparaît. Tout bloc qui porte un bouton reçoit donc des halos dorés.
 
    Construit à partir de --accent : il suit la palette et les deux thèmes,
    plutôt que d'être figé en valeurs littérales. Chaque halo naît et meurt
@@ -733,7 +730,7 @@ body:has(.fond-tarifs) footer{
   -webkit-mask-image:linear-gradient(to bottom,transparent 0%,black 12%,black 88%,transparent 100%);
           mask-image:linear-gradient(to bottom,transparent 0%,black 12%,black 88%,transparent 100%);
 }
-/* En clair les halos doivent se retenir : l'accent sur crème monte vite. */
+/* En clair les halos doivent se retenir : le doré sur crème monte vite. */
 :root[data-theme="light"] .has-glow::before{opacity:.55}
 @media(prefers-color-scheme:light){
   :root:not([data-theme="dark"]) .has-glow::before{opacity:.55}
@@ -909,9 +906,9 @@ body:has(.fond-tarifs) footer{
 /* ── Teinte OR — l'action principale ── */
 .btn,.cnav-close,.submit-btn,.lf-btn,.nf-btn-home,.svc-cta,.cta-btn{
   background-color:var(--glass-scrim);
-  background-image:linear-gradient(180deg,var(--glass-acc-a),var(--glass-acc-b));
-  color:var(--glass-acc-ink);
-  box-shadow:var(--glass-sh-acc);
+  background-image:linear-gradient(180deg,var(--glass-gold-a),var(--glass-gold-b));
+  color:var(--glass-gold-ink);
+  box-shadow:var(--glass-sh-gold);
 }
 .btn::before,.cnav-close::before,
 .submit-btn::before,.lf-btn::before,.nf-btn-home::before,
@@ -923,8 +920,8 @@ body:has(.fond-tarifs) footer{
 .btn:hover,.cnav-close:hover,
 .submit-btn:hover,.lf-btn:hover,.nf-btn-home:hover,
 .svc-cta:hover,.cta-btn:hover{
-  background-image:linear-gradient(180deg,var(--glass-acc-ah),var(--glass-acc-bh));
-  color:var(--glass-acc-ink);
+  background-image:linear-gradient(180deg,var(--glass-gold-ah),var(--glass-gold-bh));
+  color:var(--glass-gold-ink);
 }
 
 /* ── Le relief au survol : 2 px, rien de plus. ── */
@@ -1072,7 +1069,7 @@ body[data-page="home"] main>section{position:relative;z-index:2}
    qui la tire : le JS devient alors un repli inerte. */
 .read-bar{
   height:2px;z-index:210;opacity:1;
-  background:linear-gradient(90deg,var(--accent-deep),var(--accent) 55%,var(--glass-acc-ink));
+  background:linear-gradient(90deg,var(--gold-deep),var(--gold) 55%,var(--glass-gold-ink));
   box-shadow:0 0 16px rgba(var(--glow),.55);
 }
 
@@ -1101,7 +1098,7 @@ body[data-page="home"] main>section{position:relative;z-index:2}
 .lf-headline::after,.form-lede-h::after{
   content:"";position:absolute;left:0;bottom:-.20em;
   height:2px;width:min(220px,42%);transform:scaleX(0);transform-origin:0 50%;border-radius:2px;
-  background:linear-gradient(90deg,var(--accent-deep),var(--accent) 50%,rgb(from var(--accent) r g b / 0))}
+  background:linear-gradient(90deg,var(--gold-deep),var(--gold) 50%,rgb(from var(--gold) r g b / 0))}
 /* Un titre centré porte son trait au centre, pas collé à la gouttière
    gauche : mesuré page par page, .prix-h1, .rdv-title et .hero-title
    sont les trois qui le sont. */
@@ -1140,7 +1137,7 @@ body[data-page="home"] main>section{position:relative;z-index:2}
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
-   LE REFLET LIQUIDE — le dégradé coule dans le texte lui-même.
+   L'OR LIQUIDE — le dégradé coule dans le texte lui-même.
    Le dégradé vit dans tokens.css (c'est une valeur de couleur) ; ici on
    ne fait que le peindre dans les glyphes. Le repli existe : sans
    background-clip:text, le texte redevient une couleur pleine plutôt
@@ -1218,11 +1215,11 @@ body[data-page="home"] main>section{position:relative;z-index:2}
             rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) skewY(var(--sk,0deg));
   transition:transform .5s var(--ease-out),box-shadow .5s var(--curve)}
 
-/* La lèvre d'accent : un trait de 2 px sur l'arête haute, qui s'allume et
+/* La lèvre dorée : un trait de 2 px sur l'arête haute, qui s'allume et
    s'étire pendant le dépliage. */
 .lip{position:absolute;left:0;right:0;top:0;height:2px;z-index:3;pointer-events:none;
   transform-origin:50% 50%;transform:scaleX(.2);opacity:0;border-radius:inherit;
-  background:linear-gradient(90deg,transparent,var(--accent-hover),rgba(var(--glow),1),var(--accent-hover),transparent);
+  background:linear-gradient(90deg,transparent,var(--gold-hi),rgba(var(--glow),1),var(--gold-hi),transparent);
   box-shadow:0 0 18px 2px rgba(var(--glow),.5)}
 
 /* Le reflet qui balaye au survol. */
@@ -1480,15 +1477,15 @@ body.pointer .lamp{opacity:1}
   background:linear-gradient(180deg,var(--curt1) 0%,var(--curt2) 6%,var(--curt3) 15%,
              var(--curt4) 44%,var(--curt5) 78%)}
 .curtain .cw{font:700 clamp(22px,4vw,40px)/1 var(--font);letter-spacing:-.03em;
-  color:var(--glass-acc-ink);opacity:0}
-.curtain .cw i{font-style:normal;color:var(--accent)}
+  color:var(--glass-gold-ink);opacity:0}
+.curtain .cw i{font-style:normal;color:var(--gold)}
 .curtain .cw b{display:inline-block;font-weight:inherit}
 .curtain .sheen{position:absolute;inset:0;pointer-events:none;opacity:0;
   background:linear-gradient(100deg,transparent 36%,rgba(var(--glow),.40) 50%,transparent 64%);
   background-size:240% 100%;background-position:200% 0}
 .curtain .edgeline{position:absolute;left:0;right:0;top:0;height:2px;pointer-events:none;opacity:0;
-  background:linear-gradient(90deg,transparent,var(--accent-hover),rgba(var(--glow),1),var(--accent-hover),transparent);
-  box-shadow:0 0 26px 4px rgb(from var(--accent-hover) r g b / .55)}
+  background:linear-gradient(90deg,transparent,var(--gold-hi),rgba(var(--glow),1),var(--gold-hi),transparent);
+  box-shadow:0 0 26px 4px rgb(from var(--gold-hi) r g b / .55)}
 @media (prefers-reduced-motion:no-preference){
   .curtain.in{animation:curtIn 460ms var(--ease-inout) forwards}
   .curtain.out{animation:curtOut 620ms var(--ease-out) forwards}
@@ -1601,14 +1598,10 @@ body.lite .split .w{transition-duration:.35s}
 /* ═══════════════════════════════════════════════════════════════════
    LE BOUTON INTERACTIF — voir src/components/ui/InteractiveButton.astro
 
-   MONOCHROME. Le bouton secondaire reste sombre dans LES DEUX themes
-   — c'etait deja le cas, et un aplat noir se tient aussi bien sur du
-   creme que sur du noir. Le bouton principal, lui, DOIT suivre le
-   theme : blanc sur fond noir, noir sur fond creme. Un bouton blanc
-   sur la page claire serait invisible.
-   Il passe donc par --accent et --on-accent, qui sont definis par
-   theme, et non par un jeton brut qui vaudrait la meme chose partout.
-   Seule tokens.css a le droit d'ecrire une couleur en clair, et
+   Les couleurs passent par des jetons, mais ce sont EXACTEMENT celles
+   de la maquette : --raw-black-925 vaut #0F0F10, --raw-warm-40 vaut
+   #F4F1EA, --raw-gold-400 vaut #D4B36A et --raw-gold-950 vaut #121008.
+   Seule tokens.css a le droit d'ecrire une couleur en clair ici, et
    check:colors le verifie a chaque passage.
    ═══════════════════════════════════════════════════════════════════ */
 .ihb{
@@ -1617,7 +1610,7 @@ body.lite .split .w{transition-duration:.35s}
   border-radius:999px;
   border:1px solid rgb(from var(--raw-paper-0) r g b / .14);
   background:var(--raw-black-925);
-  color:var(--raw-acc-d);
+  color:var(--raw-warm-40);
   font-weight:600;
   /* LE REMBOURRAGE REDEVIENT SYMETRIQUE. Les 34 px de gauche
      logeaient la pastille doree, qui a ete retiree : sans elle le
@@ -1643,12 +1636,12 @@ body.lite .split .w{transition-duration:.35s}
 .ihb-h svg{width:18px;height:18px;flex:none}
 .ihb:hover .ihb-t,.ihb:focus-visible .ihb-t{transform:translateX(48px);opacity:0}
 .ihb:hover .ihb-h,.ihb:focus-visible .ihb-h{transform:translateX(-4px);opacity:1}
-.ihb:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
+.ihb:focus-visible{outline:2px solid var(--raw-gold-400);outline-offset:3px}
 
-.ihb-accent{
-  background:var(--accent);
-  color:var(--on-accent);
-  border-color:var(--accent);
+.ihb-gold{
+  background:var(--raw-gold-400);
+  color:var(--raw-gold-950);
+  border-color:var(--raw-gold-400);
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -1661,7 +1654,7 @@ body.lite .split .w{transition-duration:.35s}
    et l'accueil porte 13 boutons.
 
    LA COULEUR DE FOND RESTE SOUS LA PLAQUE. .ihb pose déjà
-   background:var(--raw-black-925), et .ihb-accent son aplat. La plaque
+   background:var(--raw-black-925), et .ihb-gold son or. La plaque
    s'ajoute PAR-DESSUS, en background-image. Si metal.js n'a rien posé
    — pas de WebGL, nuanceur refusé, navigateur ancien — var() retombe
    sur « none » et le bouton garde exactement l'aspect qu'il avait.
@@ -1673,7 +1666,7 @@ body.lite .split .w{transition-duration:.35s}
   background-position:18% 50%;
   background-repeat:no-repeat;
 }
-.ihb-accent{ background-image:var(--ihb-metal-acc,none) }
+.ihb-gold{ background-image:var(--ihb-metal-or,none) }
 
 /* LE REFLET GLISSE AU SURVOL, PAS EN PERMANENCE.
    Le temps n'entre dans ce nuanceur que par « direction -= t », suivi
@@ -1691,15 +1684,15 @@ body.lite .split .w{transition-duration:.35s}
    par page : deux animations infinies, le budget les porte, et c'est
    l'endroit où le regard doit aller. */
 @keyframes ihbCoulee{ to{ background-position:82% 50% } }
-.ihb-accent{
+.ihb-gold{
   animation:ihbCoulee 7s var(--ease-inout) infinite alternate;
   transition:none;
 }
 @media (prefers-reduced-motion:reduce){
-  .ihb-accent{animation:none}
+  .ihb-gold{animation:none}
   .ihb{transition:none}
 }
-body.lite .ihb-accent{animation:none}
+body.lite .ihb-gold{animation:none}
 
 @media (prefers-reduced-motion:reduce){ .ihb *{transition:none} }
 

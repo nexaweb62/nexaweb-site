@@ -10,7 +10,6 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "check:jetons": "node scripts/check-jetons.mjs",
     "check:colors": "node scripts/check-colors.mjs",
     "check:contrast": "node scripts/check-contrast.mjs",
     "check": "npm run check:colors && npm run check:contrast",
@@ -59,7 +58,7 @@
     "three": "^0.185.1"
   },
   "devDependencies": {
-    "playwright-core": "1.63.0",
+    "playwright-core": "1.56.0",
     "sharp": "^0.35.3",
     "wrangler": "4.151.1"
   }

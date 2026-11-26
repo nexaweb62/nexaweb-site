@@ -37,7 +37,7 @@
  * 3. LES COULEURS SONT CELLES DU SITE. L'original peint du blanc sur
  *    noir et du noir sur blanc, et lit « document.documentElement
  *    .classList.contains('dark') » — une convention Tailwind que ce
- *    site n'a pas. Ici on lit les JETONS (--bg, --raw-acc-d), et le
+ *    site n'a pas. Ici on lit les JETONS (--bg, --raw-gold-400), et le
  *    theme vient de data-theme ou du reglage systeme, comme partout
  *    ailleurs. Aucune couleur n'est ecrite en clair dans ce fichier :
  *    seul tokens.css en a le droit, et check:colors le verifie.
@@ -130,7 +130,7 @@
   var VOILE   = 0.085;       // opacite du voile qui fait la trainee
   var PALIERS = 8;           // niveaux d'opacite distincts
 
-  /* La force du trait, par theme. Sur le quasi-noir l'accent ressort tout
+  /* La force du trait, par theme. Sur le quasi-noir l'or ressort tout
      de suite ; sur le creme il faut l'appuyer, sinon il n'en reste
      rien. Ces deux valeurs sont le pendant du coefficient qu'avait le
      fond precedent, et elles ont ete reglees a la mesure. */
@@ -148,7 +148,7 @@
     var cs = getComputedStyle(document.body);
     couleurFond = cs.getPropertyValue('--bg').trim();
     var clair = estClair();
-    couleurPoint = cs.getPropertyValue(clair ? '--raw-acc-deep-l' : '--raw-acc-d').trim();
+    couleurPoint = cs.getPropertyValue(clair ? '--raw-gold-600' : '--raw-gold-400').trim();
     force = clair ? FORCE.clair : FORCE.sombre;
   }
   function estClair(){
