@@ -4,7 +4,7 @@
    Aucune couleur ecrite : tout vient des jetons de tokens.css, qui gere
    deja le clair, le sombre et le mode systeme. Les statuts reutilisent
    la signaletique existante — et comme « aucun vert » est une regle
-   absolue sur ce site, le succes prend l'accent, pas un vert de formulaire.
+   absolue sur ce site, le succes prend l'or, pas un vert de formulaire.
 
    Pensee pour le telephone d'abord : les tableaux defilent
    horizontalement dans leur propre cadre plutot que de deborder la page,
@@ -145,7 +145,7 @@ body {
   height: 100%; border-radius: 99px; background: var(--accent);
   transition: width .5s var(--ease-out, cubic-bezier(.16, 1, .3, 1));
 }
-.nxa-remplie[data-plein="1"] { background: var(--accent); }
+.nxa-remplie[data-plein="1"] { background: var(--gold); }
 
 /* ── Barres de repartition ───────────────────────────────────────── */
 
@@ -190,23 +190,11 @@ body {
   font-size: 12px; font-weight: 600; white-space: nowrap;
   border: 1px solid currentColor;
 }
-/* LE PIPELINE, EN VALEURS PLUTOT QU'EN TEINTES.
-   Tant que la palette etait doree, chaque etape avait sa couleur. En
-   monochrome il n'en reste qu'une, et trois etapes — « en cours »,
-   « RDV » et « signe » — se sont retrouvees du meme blanc : la couleur
-   ne disait plus rien. L'echelle est donc refaite en LUMINOSITE, du
-   plus sourd au plus vif, ce qui epouse l'avancement.
-   « Signe » est l'aboutissement : aucune valeur plus vive n'existe
-   au-dessus du blanc, alors il se distingue par le REMPLISSAGE — le
-   seul des cinq qui soit plein. « Perdu » garde le rouge : c'est le
-   seul signal d'echec du tableau de bord, il est prive, et une erreur
-   doit se voir sans etre lue. */
 .nxa-pz[data-c="a-appeler"] { color: var(--text-subtle); }
-.nxa-pz[data-c="en-cours"]  { color: var(--text-muted); }
-.nxa-pz[data-c="rdv"]       { color: var(--text); }
-.nxa-pz[data-c="signe"]     {
-  background: var(--accent); color: var(--on-accent); border-color: var(--accent);
-}
+.nxa-pz[data-c="en-cours"]  { color: var(--warning); }
+.nxa-pz[data-c="rdv"]       { color: var(--accent); }
+/* Le succes prend l'or : la regle « aucun vert » vaut partout. */
+.nxa-pz[data-c="signe"]     { color: var(--gold); }
 .nxa-pz[data-c="perdu"]     { color: var(--danger); }
 
 /* ── Recherche ───────────────────────────────────────────────────── */

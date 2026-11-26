@@ -210,38 +210,6 @@ for (const [name, c] of [['og-image', T.dark], ['og-image-light', T.light]]) {
    ═══════════════════════════════════════════════════════════════════════ */
 const hex2rgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
 
-/* LA FORCE DE LA TRAINEE, PAS SON OPACITE.
-   Elle etait figee a 0,30. Tant que l'accent etait un or moyen, cela
-   soulevait la nappe d'une cinquantaine de niveaux au-dessus du fond.
-   Passe l'accent au blanc pur, la MEME opacite souleve deux fois plus :
-   mesure au garde-fou, la texture creait six paliers de fond sur /tarifs
-   (check:seams, ΔL* 1,04 pour un seuil de 1,0) — absents du site en
-   ligne, donc introduits par le changement de palette.
-   On fixe donc ce qui compte vraiment, l'ECART DE LUMINOSITE vise, et on
-   en deduit l'opacite. La traînee garde sa presence quelle que soit la
-   palette, et un futur changement d'accent ne la fera plus deraper. */
-const luminosite = hex => {
-  const [r, g, b] = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16));
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-};
-/* EN SOMBRE, LA RAMPE DOIT ETRE PLUS COURTE. La courbe L* est tres
-   raide pres du noir : un seul niveau sur 255 y vaut environ 1 L*, le
-   seuil meme auquel check:seams declare une cassure. Une rampe de
-   cinquante niveaux pose donc cinquante marches visibles — ce que l'or
-   masquait en decalant ses canaux, et que le gris ne masque plus.
-   Sur le papier clair le probleme n'existe pas : la meme rampe y tient
-   dans une fraction de L* par niveau. D'ou deux valeurs, et non une. */
-const SOULEVEMENT_CLAIR = 50;
-const SOULEVEMENT_SOMBRE = 16;
-
-function lueur(c) {
-  const sombre = luminosite(c.bg) < 128;
-  const vise = sombre ? SOULEVEMENT_SOMBRE : SOULEVEMENT_CLAIR;
-  const ecart = Math.abs(luminosite(c.accent) - luminosite(c.bg));
-  if (!ecart) return '0.30';
-  return Math.min(0.35, Math.max(0.02, vise / ecart)).toFixed(3);
-}
-
 async function texture(name, c, variant) {
   const W = 2400, H = 1400;
   // Grain argentique : bruit monochrome doux, pas de pixels isolés criards.
@@ -261,7 +229,7 @@ async function texture(name, c, variant) {
         <stop offset="100%" stop-color="${c['surface-2']}"/>
       </linearGradient>
       <radialGradient id="s" cx="50%" cy="50%" r="50%">
-        <stop offset="0%"   stop-color="${c.accent}" stop-opacity="${lueur(c)}"/>
+        <stop offset="0%"   stop-color="${c.accent}" stop-opacity="0.30"/>
         <stop offset="100%" stop-color="${c.accent}" stop-opacity="0"/>
       </radialGradient>
       <filter id="b"><feGaussianBlur stdDeviation="90"/></filter>
@@ -272,50 +240,11 @@ async function texture(name, c, variant) {
     </g>
   </svg>`);
 
-  const composeBase = await sharp(base)
+  const composed = await sharp(base)
     .composite([{ input: grain, blend: 'soft-light' }])
     .toBuffer();
 
-  /* ── LE TRAMAGE, ET POURQUOI LE MONOCHROME EN A BESOIN ────────────
-     Une rampe DOREE ne bande pas : ses trois canaux n'ont pas la meme
-     pente, donc ils ne franchissent pas leur palier de quantification a
-     la meme hauteur, et la luminosite progresse par marches plus fines
-     que le niveau. Une rampe GRISE n'a pas cette chance — les trois
-     canaux montent ensemble et changent au meme pixel.
-     En quasi-noir, un seul niveau sur 255 vaut deja ~1 L*, parce que la
-     courbe L* est tres raide pres de zero. La nappe monochrome affichait
-     donc des paliers que la doree n'avait jamais eus : dix cassures
-     relevees sur /tarifs par check:seams, zero sur le site en ligne.
-     Le grain existant ne les couvre pas : il est flou (blur .7) et pose
-     en soft-light, qui s'annule sur un fond sombre.
-     On ajoute donc un VRAI tramage : un bruit net, de faible amplitude,
-     ajoute avant l'encodage. Il ne change aucune couleur moyenne ; il
-     decide seulement, pixel par pixel, de quel cote du palier on tombe,
-     et la marche se dissout en grain.
-     Meme valeur sur les trois canaux : le tramage ne reintroduit pas de
-     teinte. */
-  /* L'amplitude a ete reglee A LA MESURE, pas a l'oeil : a 3 niveaux il
-     restait une cassure, et baisser la traînee a la place ne faisait que
-     deplacer les paliers. Monter le tramage a 6 et relever la qualite
-     d'encodage reglait bien le probleme — mais multipliait le poids des
-     textures par quinze (AVIF 2,3 -> 35,5 Ko, JPEG 14,6 -> 199,5 Ko),
-     ce qui echange un palier imperceptible contre une page lourde.
-     Le tramage reste donc modere, et c'est la RAMPE elle-meme qui est
-     reduite en sombre : voir SOULEVEMENT. */
-  const AMPLITUDE = 4;                       /* niveaux sur 255 */
-  const brut = await sharp(composeBase).raw().toBuffer({ resolveWithObject: true });
-  const px = brut.data, canaux = brut.info.channels;
-  let g2 = variant === 0 ? 991733 : 5512277;
-  const des = () => { g2 = (g2 * 1664525 + 1013904223) >>> 0; return g2 / 4294967296; };
-  for (let i = 0; i < px.length; i += canaux) {
-    const d = Math.round((des() * 2 - 1) * AMPLITUDE);
-    for (let k = 0; k < Math.min(3, canaux); k++) {
-      px[i + k] = Math.max(0, Math.min(255, px[i + k] + d));
-    }
-  }
-  const composed = await sharp(px, { raw: brut.info }).png().toBuffer();
-
-  for (const [ext, opts] of [['avif', { quality: 50 }], ['webp', { quality: 70 }], ['jpg', { quality: 76, mozjpeg: true }]]) {
+  for (const [ext, opts] of [['avif', { quality: 46 }], ['webp', { quality: 68 }], ['jpg', { quality: 74, mozjpeg: true }]]) {
     const fn = ext === 'jpg' ? 'jpeg' : ext;
     write(`img/textures/${name}.${ext}`, await sharp(composed)[fn](opts).toBuffer());
   }

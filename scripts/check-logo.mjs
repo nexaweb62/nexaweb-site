@@ -24,21 +24,6 @@ const VIEUX = /llq|nav-logo-tuile|foot-tuile|logo-liquide|LogoLiquide/;
 const browser = await chromium.launch({ args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader'] });
 const fails = [];
 let verifs = 0;
-/* Les aretes relevees, par theme : elles doivent differer d'un theme a
-   l'autre, sinon la couleur est figee quelque part. */
-const aretes = { dark: new Set(), light: new Set() };
-
-/* « #RRGGBB » -> « rgb(r, g, b) », pour comparer un jeton a une valeur
-   calculee par le navigateur. Une valeur deja en rgb() passe telle quelle. */
-function enRgb(v) {
-  const t = v.trim();
-  const m = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(t);
-  if (!m) return t;
-  let h = m[1];
-  if (h.length === 3) h = h.split('').map(c => c + c).join('');
-  const n = parseInt(h, 16);
-  return `rgb(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255})`;
-}
 
 for (const vp of VUES) {
   for (const theme of ['dark', 'light']) {
@@ -75,15 +60,11 @@ for (const vp of VUES) {
         const r = el => el ? el.getBoundingClientRect() : null;
         const rh = r(hd), rp = r(pd);
         const prof = hd ? getComputedStyle(hd.querySelector('.logo-depth')).stroke : null;
-        /* Le jeton qui DOIT peindre cette arete. On le resout dans la
-           page plutot que de recopier une couleur ici : la palette
-           n'a qu'un seul proprietaire, tokens.css. */
-        const jeton = getComputedStyle(d).getPropertyValue('--logo-depth').trim();
         return {
           hd: rh ? Math.round(rh.width) + 'x' + Math.round(rh.height) : null,
           pd: rp ? Math.round(rp.width) + 'x' + Math.round(rp.height) : null,
           pdLien: !!document.querySelector('footer a.foot-marque'),
-          prof, jeton,
+          prof,
           deborde: d.scrollWidth > d.clientWidth ? d.scrollWidth + '>' + d.clientWidth : null,
           hdrVisible: document.querySelector('.hdr').getBoundingClientRect().top > -1,
         };
@@ -108,28 +89,13 @@ for (const vp of VUES) {
         fails.push(`${ou} : cette page plein ecran ne doit PAS porter de pied de page`);
       }
       if (vu.deborde) fails.push(`${ou} : debordement horizontal ${vu.deborde}`);
-      /* L'ARETE DOIT SUIVRE LE THEME, jamais etre une couleur figee.
-         Ce controle attendait autrefois l'or, ecrit ici en toutes
-         lettres. Le passage de la palette en monochrome l'a fait echouer
-         sur quatorze pages alors que le site etait juste : la valeur
-         vivait a deux endroits, et seul l'un des deux avait change.
-         Desormais l'attendu est LU dans la page, depuis --logo-depth ;
-         tokens.css reste seul proprietaire de la couleur. Le controle
-         garde ses dents autrement : il exige plus bas que la valeur du
-         theme sombre differe de celle du theme clair — une couleur figee
-         se trahit la, sans qu'aucune teinte soit ecrite ici. */
+      /* L'arete doree doit suivre le theme, jamais etre une couleur figee. */
       if (vu.prof) {
-        const normalise = c => c.replace(/\s/g, '').toLowerCase();
+        const clair = theme === 'light';
+        const or = vu.prof.replace(/\s/g, '');
+        const attendu = clair ? 'rgb(168,133,63)' : 'rgb(212,179,106)';
         verifs++;
-        if (!vu.jeton) {
-          fails.push(`${ou} : --logo-depth n'est pas defini`);
-        } else {
-          const attendu = normalise(enRgb(vu.jeton));
-          if (normalise(vu.prof) !== attendu) {
-            fails.push(`${ou} : arete du logo ${vu.prof} au lieu de ${vu.jeton} (--logo-depth)`);
-          }
-        }
-        aretes[theme].add(normalise(vu.prof));
+        if (or !== attendu) fails.push(`${ou} : arete du logo ${vu.prof} au lieu de ${attendu}`);
       }
 
       /* 3 — la barre s'etire et ne disparait pas.
@@ -207,21 +173,6 @@ for (const [nom, opts] of [['normal', {}], ['mouvement reduit', { reducedMotion:
 }
 
 await browser.close();
-/* LA COULEUR FIGEE SE TRAHIT ICI. Comparer l'arete a son jeton ne
-   suffirait pas : si les deux themes pointaient par erreur vers la meme
-   valeur, chaque page passerait. On exige donc que les deux themes aient
-   peint des aretes DIFFERENTES — sans ecrire une seule teinte ici. */
-verifs++;
-const aSombre = [...aretes.dark], aClair = [...aretes.light];
-if (aSombre.length && aClair.length) {
-  const communes = aSombre.filter(c => aClair.includes(c));
-  if (communes.length) {
-    fails.push(`l'arete du logo ne change pas avec le theme : ${communes.join(', ')} des deux cotes`);
-  }
-} else if (!aSombre.length || !aClair.length) {
-  fails.push(`arete du logo jamais relevee en ${!aSombre.length ? 'sombre' : 'clair'}`);
-}
-
 console.log(`\n${verifs} verifications, ${fails.length} en echec.`);
 fails.forEach(f => console.log('  ✗ ' + f));
 if (!fails.length) console.log("\n✓ Le logo est partout, l'ancien nulle part, et la barre ne disparait plus.");
