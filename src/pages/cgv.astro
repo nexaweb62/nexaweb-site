@@ -24,7 +24,7 @@ import '../styles/global.css';
 /* :global() parce que les paragraphes de cette page sont traduits, et
    que i18n.js les réécrit par innerHTML : le <a> et le <strong> sont
    recréés sans le marqueur de portée d'Astro. Mesuré avant correction :
-   les liens sortaient en gris secondaire au lieu de l'or, sans
+   les liens sortaient en gris secondaire au lieu de l'accent, sans
    soulignement. Les autres pages légales gardent leurs règles scopées :
    leur balisage est statique. */
 .legal-body :global(a){color:var(--accent-text);text-decoration:underline;text-underline-offset:3px}

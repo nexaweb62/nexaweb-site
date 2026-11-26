@@ -142,8 +142,16 @@ void main() {
   float diagBLtoTR = rotatedUV.x - rotatedUV.y;
   float diagTLtoBR = rotatedUV.x + rotatedUV.y;
 
-  vec3 color1 = vec3(.98, .98, 1.);
-  vec3 color2 = vec3(.1, .1, .1 + .1 * smoothstep(.7, 1.3, diagTLtoBR));
+  /* MONOCHROME. Ces deux bornes etaient les dernieres couleurs ecrites
+     en dur du projet : color1 tirait vers le bleu (b=1. contre r=g=.98)
+     et color2 ajoutait jusqu'a +.1 sur le SEUL canal bleu. Mettre la
+     frange a zero ne les touchait pas : la frange ne regle que l'ecart
+     de phase entre les bandes r, g et b, jamais leur teinte. D'ou les
+     stries indigo relevees dans les boutons noirs du theme clair.
+     La variation diagonale est conservee, mais portee par les TROIS
+     canaux : la teinte devient une valeur, le relief survit. */
+  vec3 color1 = vec3(.98);
+  vec3 color2 = vec3(.1 + .1 * smoothstep(.7, 1.3, diagTLtoBR));
 
   vec2 grad_uv = uv - .5;
   float dist = length(grad_uv + vec2(0., .2 * diagBLtoTR));
@@ -319,10 +327,34 @@ void main() {
   function poser() {
     var cs = getComputedStyle(document.body);
     var fondSombre = versFloats(cs.getPropertyValue('--raw-black-925'));
-    var fondOr     = versFloats(cs.getPropertyValue('--raw-gold-400'));
-    var teinteOr   = versFloats(cs.getPropertyValue('--raw-gold-400'));
-    var teinteFroide = versFloats(cs.getPropertyValue('--raw-warm-40'));
-    if (!fondSombre || !fondOr || !teinteOr || !teinteFroide) return;
+    /* MONOCHROME, ET SENSIBLE AU THEME.
+       L'or tenait sur les deux fonds, donc une seule plaque suffisait.
+       Un aplat ne pardonne pas cela : blanc sur la page claire, le
+       bouton d'appel disparaitrait. On lit donc --accent, qui est
+       defini PAR THEME, et non un jeton brut qui vaudrait la meme
+       chose partout. La teinte du reflet suit la meme valeur.
+
+       Le bouton secondaire, lui, reste sombre dans les deux themes :
+       c'etait deja le cas, et un aplat noir se tient aussi bien sur du
+       creme que sur du noir. */
+    var fondAccent = versFloats(cs.getPropertyValue('--accent'));
+    /* LA TEINTE DOIT ETRE EXACTEMENT GRISE, pas « presque ».
+       getColorChanges DIVISE par la teinte, canal par canal : l'ecart
+       d'un seul point entre #0A (r, g) et #0B (b) ressortait multiplie
+       par vingt au sommet des bandes claires. On prend donc le gris de
+       MEME luminosite que l'accent : les trois canaux sont egaux par
+       construction, quelle que soit la valeur du jeton. */
+    var teinteNeutre = fondAccent && (function (c) {
+      var L = 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+      return [L, L, L];
+    })(fondAccent);
+    if (!fondSombre || !fondAccent) return;
+
+    /* Clair ou sombre ? La fenetre de luminosite de la plaque doit
+       suivre : haute pour un aplat blanc, basse pour un aplat noir —
+       sans quoi le libelle, qui prend --on-accent, perdrait son
+       contraste au changement de theme. */
+    var accentClair = (fondAccent[0] + fondAccent[1] + fondAccent[2]) / 3 > 0.5;
 
     var moteur;
     try { moteur = rendre(); } catch (e) { return; }
@@ -355,41 +387,81 @@ void main() {
     /* Les deux plaques sont dessinees sur la MEME toile : il faut donc
        publier la premiere avant de dessiner la seconde, sinon toBlob,
        qui est asynchrone, lirait deux fois la derniere. */
-    /* Bouton sombre : libelle presque blanc. La plaque doit rester
-       SOUS lui. Le libelle est a --raw-warm-40, luminance WCAG 0,876 :
-       pour tenir 4,5:1 la plaque doit rester sous 0,156 en luminance
-       WCAG, soit environ 0,43 dans l'espace du nuanceur. On s'arrete a
-       0,36, avec de la marge. */
-    var t1 = moteur.plaque(fondSombre, teinteOr, 0.85, 0.03, 0.36, 0.30);
+    /* Bouton sombre : libelle blanc pur. La plaque doit rester SOUS
+       lui. Le libelle est desormais a --raw-acc-d, luminance WCAG 1 :
+       la marge est plus large qu'avec l'ancien creme, et la fenetre
+       0,03–0,36 la conserve.
+
+       LA FRANGE PASSE DE 0,30 A 0. Elle ecarte les canaux rouge, vert
+       et bleu pour imiter la dispersion d'un chrome — c'est-a-dire
+       qu'elle FABRIQUE de la couleur. Sur une interface monochrome,
+       c'est precisement ce qu'il ne faut pas. Le relief vient
+       maintenant de la seule bande de luminosite : du metal brosse en
+       niveaux de gris. */
+    var t1 = moteur.plaque(fondSombre, teinteNeutre, 0.85, 0.03, 0.36, 0.0);
     var copie = document.createElement('canvas');
     copie.width = t1.width; copie.height = t1.height;
     copie.getContext('2d').drawImage(t1, 0, 0);
     publier('--ihb-metal', copie);
 
-    /* Bouton d'appel : libelle presque noir. La plaque doit rester
-       AU-DESSUS de lui. Le libelle est a --raw-gold-950, luminance
-       WCAG 0,005 : la plaque doit rester AU-DESSUS de 0,198, soit
-       environ 0,48 dans l'espace du nuanceur. On part de 0,52.
-       Premiere tentative a 0,30 : relevé 2,76:1, sous AA. Les deux
-       espaces ne se correspondent pas lineairement — d'ou la mesure
-       plutot que le calcul.
+    /* Bouton d'appel : plaque BLANCHE, libelle noir profond. Le libelle
+       est a --on-accent : noir profond sur la page sombre, blanc sur
+       la page claire. La fenetre de luminosite se retourne donc avec
+       le theme — 0,82–0,99 pour un aplat blanc, 0,02–0,17 pour un
+       aplat noir — de facon que le libelle garde son contraste des
+       deux cotes.
 
-       ET IL EST BEAUCOUP PLUS SOBRE QUE LE BOUTON SOMBRE. Aux reglages
-       de l'original, l'appel a l'action virait a l'arc-en-ciel :
-       la frange chromatique ecarte les canaux, et sur un fond deja
-       sature cela donnait de l'orange, du jaune et du blanc au lieu de
-       l'or de la marque. On baisse donc la frange de 0,30 a 0,10, on
-       laisse l'or du fond dominer (eclat 0,55 au lieu de 0,85) et on
-       resserre la bande de luminosite. Le chrome devient un reflet SUR
-       l'or, au lieu de le remplacer. */
-    var t2 = moteur.plaque(fondOr, teinteOr, 0.55, 0.55, 0.82, 0.10);
+       L'eclat tombe de 0,55 a 0,22, et la frange de 0,10 a 0. Sur du
+       blanc, des bandes de chrome marquees donneraient du gris sale au
+       lieu d'un aplat ; et une frange chromatique reintroduirait la
+       couleur que ce passage au monochrome supprime. Ce qui reste est
+       une surface blanche avec un souffle de lumiere — pas un degrade
+       gris. */
+    var t2 = accentClair
+      ? moteur.plaque(fondAccent, teinteNeutre, 0.22, 0.82, 0.99, 0.0)
+      : moteur.plaque(fondAccent, teinteNeutre, 0.22, 0.02, 0.17, 0.0);
     var copie2 = document.createElement('canvas');
     copie2.width = t2.width; copie2.height = t2.height;
     copie2.getContext('2d').drawImage(t2, 0, 0);
-    publier('--ihb-metal-or', copie2);
+    publier('--ihb-metal-acc', copie2);
+  }
+
+  /* ── LA PLAQUE SUIT LE THEME ───────────────────────────────────────
+     Tant que l'accent etait dore, une seule paire de plaques servait
+     les deux themes. Depuis le passage au monochrome, l'aplat du
+     bouton d'appel se retourne — blanc en sombre, noir en clair — et
+     une plaque figee laisserait un rectangle blanc sur la page claire.
+
+     On regenere donc a chaque bascule. C'est peu frequent et peu cher :
+     un contexte WebGL est pris puis RELACHE a chaque passage (voir
+     loseContext plus haut), donc rien ne s'accumule. Un petit delai
+     laisse le navigateur recalculer les variables avant qu'on les
+     relise ; sans lui, on redessinerait avec l'ancienne valeur. */
+  var minuteur = null;
+  function reposer() {
+    clearTimeout(minuteur);
+    minuteur = setTimeout(poser, 60);
+  }
+
+  function demarrer() {
+    poser();
+
+    /* Le bouton de theme ecrit data-theme sur <html>. */
+    try {
+      new MutationObserver(reposer).observe(document.documentElement, {
+        attributes: true, attributeFilter: ['data-theme'],
+      });
+    } catch (e) { /* navigateur sans MutationObserver : la plaque reste figee */ }
+
+    /* Et sans data-theme, c'est le systeme qui decide. */
+    try {
+      var mq = window.matchMedia('(prefers-color-scheme: light)');
+      if (mq.addEventListener) mq.addEventListener('change', reposer);
+      else if (mq.addListener) mq.addListener(reposer);
+    } catch (e) { /* idem */ }
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', poser, { once: true });
-  } else { poser(); }
+    document.addEventListener('DOMContentLoaded', demarrer, { once: true });
+  } else { demarrer(); }
 })();

@@ -3,7 +3,7 @@
  * LE LOGO — un « N » en fil de fer, vu de trois quarts.
  *
  * Deux groupes de traits : la FACE, qui prend currentColor et suit donc
- * la couleur du texte autour d'elle, et la PROFONDEUR, l'arête dorée
+ * la couleur du texte autour d'elle, et la PROFONDEUR, l'arête d'accent
  * qui donne le relief. Aucune couleur n'est écrite ici : la face hérite,
  * la profondeur passe par --logo-depth, qui vit dans tokens.css et
  * bascule avec le thème. Changer de thème sans recharger suffit donc à
@@ -90,7 +90,7 @@ const hauteur = Math.round(largeur * 95 / 90);
     color:var(--text-muted);
   }
 
-  /* Au survol du lien qui le porte, le symbole passe à l'or.
+  /* Au survol du lien qui le porte, le symbole passe à l'accent.
      :where() garde la spécificité à zéro : la page hôte peut toujours
      reprendre la main sans se battre. */
   :global(a:hover) .lg-svg .logo-face,
