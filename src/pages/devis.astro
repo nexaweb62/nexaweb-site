@@ -75,7 +75,7 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
 
 /* ── SECTION LABEL ── */
 .form-section{margin-bottom:28px}
-/* Un numéro dans un cercle doré, et un filet dessous. */
+/* Un numéro dans un cercle d'accent, et un filet dessous. */
 .fstep{display:flex;align-items:center;gap:11px;margin-bottom:18px;padding-bottom:10px;
   border-bottom:1px solid var(--border)}
 .fstep-n{flex:none;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;
@@ -178,7 +178,7 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
    « .field label » pèse 0,3,1 une fois le marqueur de portée d'Astro
    compté ; « .budget-pill.selected » ne pesait que 0,3,0. Les trois
    couleurs de la pastille étaient donc écrasées par celle des
-   étiquettes de champ : aucune pastille ne virait jamais à l'or, et
+   étiquettes de champ : aucune pastille ne virait jamais à l'accent, et
    toutes restaient sur --text-subtle. Personne ne l'avait vu parce que
    la sélection se lit aussi à sa bordure, à son fond teinté et à son
    halo — et parce qu'aucun garde-fou ne sélectionne de pastille :
@@ -216,7 +216,7 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
 #devis-form:has(input[name="paiement"][value="4"]:checked) .budget-m4{display:block}
 .budget-mois{
   font-size:var(--fs-100);font-weight:500;
-  /* La pastille sélectionnée passe en doré : la mensualité suit sa
+  /* La pastille sélectionnée passe en accent : la mensualité suit sa
      couleur au lieu d'un gris qui y perdrait son contraste.
 
      PAS d'opacité pour l'adoucir : mesuré, un 0,82 la faisait tomber
@@ -500,7 +500,7 @@ const cleTurnstile = env.TURNSTILE_SITE_KEY ?? '';
             <GarantieBadge />
             <span class="submit-note-txt" data-i18n="dvs-note">Réponse sous 24 h · 100 % gratuit</span>
           </div>
-          <InteractiveButton text="Envoyer ma demande" type="submit" variant="gold" class="submit-btn" id="submit-btn" data-i18n="submit" />
+          <InteractiveButton text="Envoyer ma demande" type="submit" variant="accent" class="submit-btn" id="submit-btn" data-i18n="submit" />
         </div>
 
       </form>

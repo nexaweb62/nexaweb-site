@@ -204,12 +204,23 @@ Astro.response.headers.set('Cache-Control', 'private, no-store');
     });
   }
 
+  /* L'ECHELLE DU PIPELINE, EN VALEURS — la meme que celle des pastilles
+     dans admin.css. En monochrome il ne reste plus de teinte pour dire
+     l'etape : c'est la LUMINOSITE qui la dit, du plus sourd au plus vif.
+     « signe » visait --gold, un alias de --accent supprime avec la
+     palette doree : la barre n'aurait plus rien peint du tout, car ce
+     nom est assemble ici, a l'execution, la ou aucun controle statique
+     ne peut le lire. D'ou ce commentaire, et le garde-fou de rendu.
+     En theme sombre --text-muted et --text-subtle valent la meme chose
+     (c'etait deja vrai avant le monochrome) : « a appeler » et « en
+     cours » y partagent donc leur valeur. Chaque barre porte son nom et
+     son compte a cote d'elle, la couleur n'etant qu'un renfort. */
   function couleurDe(c) {
     if (c === 'perdu') return 'danger';
-    if (c === 'signe') return 'gold';
-    if (c === 'en-cours') return 'warning';
+    if (c === 'signe') return 'accent';
+    if (c === 'en-cours') return 'text-muted';
     if (c === 'a-appeler') return 'text-subtle';
-    return 'accent';
+    return 'text';
   }
 
   function associes(liste) {
