@@ -68,20 +68,20 @@
   /* Blanc chaud de la tete lumineuse et des carres allumes de la
      timeline. Plus clair que l'or 300 : c'est une lumiere, pas une
      teinte de marque. */
-  --raw-gold-50:  #FFF7E6;
-  --raw-gold-300: #C29F54;
-  --raw-gold-400: #D4B36A;
+  --raw-gold-50:  #FFFFFF;
+  --raw-gold-300: #E5E5E5;
+  --raw-gold-400: #FFFFFF;
   /* L'encre posee SUR l'or : presque noire, mais chaude, pour ne pas
      trancher froid au milieu du dore. */
-  --raw-gold-950: #121008;
-  --raw-gold-600: #B8964C;
+  --raw-gold-950: #0A0A0B;
+  --raw-gold-600: #D4D4D8;
   /* L'arete doree du logo en mode clair : un or un peu plus
      chaud que le 700, pour tenir sur fond pale sans virer au brun. */
-  --raw-gold-450: #A8853F;
-  --raw-gold-700: #D4B36A;
-  --raw-gold-800: #7D6320;
-  --raw-gold-850: #C29F54;
-  --raw-gold-900: #6B541B;
+  --raw-gold-450: #71717A;
+  --raw-gold-700: #0A0A0B;
+  --raw-gold-800: #0A0A0B;
+  --raw-gold-850: #27272A;
+  --raw-gold-900: #3F3F46;
 
   /* ── VERRE ──
      Ce sont des NIVEAUX DE VERRE, pas des couleurs de marque : une arête
@@ -89,12 +89,12 @@
      fichier reste la seule source de couleur du projet, et se déclinent
      par thème comme le reste — ce qui évite de dupliquer tout le CSS des
      boutons en clair et en sombre. */
-  --raw-glass-gold-a-d: rgba(212,179,106,.42);  --raw-glass-gold-b-d: rgba(212,179,106,.20);
-  --raw-glass-gold-ah-d: rgba(212,179,106,.54); --raw-glass-gold-bh-d: rgba(212,179,106,.28);
-  --raw-glass-gold-ink-d: #FFF6E4;
-  --raw-glass-gold-a-l: rgba(168,132,47,.46);   --raw-glass-gold-b-l: rgba(168,132,47,.26);
-  --raw-glass-gold-ah-l: rgba(168,132,47,.60);  --raw-glass-gold-bh-l: rgba(168,132,47,.36);
-  --raw-glass-gold-ink-l: #241B06;
+  --raw-glass-gold-a-d: rgba(255,255,255,.42);  --raw-glass-gold-b-d: rgba(255,255,255,.20);
+  --raw-glass-gold-ah-d: rgba(255,255,255,.54); --raw-glass-gold-bh-d: rgba(255,255,255,.28);
+  --raw-glass-gold-ink-d: #FFFFFF;
+  --raw-glass-gold-a-l: rgba(10,10,11,.46);   --raw-glass-gold-b-l: rgba(10,10,11,.26);
+  --raw-glass-gold-ah-l: rgba(10,10,11,.60);  --raw-glass-gold-bh-l: rgba(10,10,11,.36);
+  --raw-glass-gold-ink-l: #0A0A0B;
 
   --raw-glass-ghost-a-d: rgba(255,255,255,.13);  --raw-glass-ghost-b-d: rgba(255,255,255,.05);
   --raw-glass-ghost-ah-d: rgba(255,255,255,.20); --raw-glass-ghost-bh-d: rgba(255,255,255,.09);
@@ -103,14 +103,14 @@
 
   --raw-glass-edge-t-d: rgba(255,255,255,.34); --raw-glass-edge-b-d: rgba(0,0,0,.28);
   --raw-glass-edge-r-d: rgba(255,255,255,.12);
-  --raw-glass-edge-t-l: rgba(255,255,255,.70); --raw-glass-edge-b-l: rgba(90,74,40,.16);
-  --raw-glass-edge-r-l: rgba(125,99,32,.34);
+  --raw-glass-edge-t-l: rgba(255,255,255,.70); --raw-glass-edge-b-l: rgba(10,10,11,.16);
+  --raw-glass-edge-r-l: rgba(63,63,70,.34);
   --raw-glass-gedge-t-d: rgba(255,255,255,.48); --raw-glass-gedge-b-d: rgba(0,0,0,.3);
-  --raw-glass-gedge-r-d: rgba(212,179,106,.42);
+  --raw-glass-gedge-r-d: rgba(255,255,255,.42);
 
   --raw-glass-sh-gold-d: 0 10px 30px rgba(0,0,0,.42);
   --raw-glass-sh-ghost-d: 0 8px 24px rgba(0,0,0,.34);
-  --raw-glass-sh-gold-l: 0 8px 24px rgba(90,74,40,.20);
+  --raw-glass-sh-gold-l: 0 8px 24px rgba(10,10,11,.18);
   --raw-glass-sh-ghost-l: 0 8px 22px rgba(90,74,40,.14);
 
   /* Repli sans flou : opaque plutôt qu'illisible. */
@@ -119,11 +119,11 @@
      son libellé sous AA — mesuré sur /404 à 390 px (3.29:1). */
   --raw-glass-scrim-d: rgba(10,10,11,.34);
   --raw-glass-scrim-l: rgba(255,255,255,.22);
-  --raw-glass-fb-gold-d: #6B5A35;  --raw-glass-fb-ghost-d: #2A2A2E;
-  --raw-glass-fb-gold-l: #A8842F;  --raw-glass-fb-ghost-l: #EAE4D8;
+  --raw-glass-fb-gold-d: #3F3F46;  --raw-glass-fb-ghost-d: #2A2A2E;
+  --raw-glass-fb-gold-l: #0A0A0B;  --raw-glass-fb-ghost-l: #E4E4E7;
   /* Repli clair : blanc sur l'or plein ne donne que 3.5:1 — mesuré avec
      NO_BACKDROP=1. C'est l'encre brune du verre qui tient (4.87:1). */
-  --raw-glass-fb-gold-ink-l: #241B06;
+  --raw-glass-fb-gold-ink-l: #FFFFFF;
 
   /* ── LA RÉFÉRENCE D'ANIMATION ──
      Le fichier de démonstration fourni écrit ses couleurs sous d'autres
@@ -135,24 +135,24 @@
      --spec et --glow sont des TRIPLETS sans parenthèses, à consommer en
      rgba(var(--spec),.34) : c'est ce qui fait qu'un reflet blanc en
      sombre devient bronze en clair sans dupliquer une règle. */
-  --raw-gold-deep-d:  #8A7238;   --raw-gold-deep-l:  #4E3C0E;
-  --raw-gold-low-d:   #5C4C24;   --raw-gold-low-l:   #C6AE74;
-  --raw-curtain-4-d:  #241B08;   --raw-curtain-4-l:  #F0E8D6;
+  --raw-gold-deep-d:  #71717A;   --raw-gold-deep-l:  #3F3F46;
+  --raw-gold-low-d:   #3F3F46;   --raw-gold-low-l:   #D4D4D8;
+  --raw-curtain-4-d:  #1A1A1D;   --raw-curtain-4-l:  #E4E4E7;
   --raw-spec-d:  255,255,255;    --raw-spec-l:  92,72,22;
-  --raw-glow-rgb-d: 255,247,230; --raw-glow-rgb-l: 120,92,26;
+  --raw-glow-rgb-d: 255,255,255; --raw-glow-rgb-l: 10,10,11;
   --raw-scrim-d: 10,10,11;       --raw-scrim-l: 246,243,236;
 
   /* Signalétique — « aucun vert » : la règle est absolue, elle ne vaut pas
      que pour la page Tarifs. Le succès prend donc l'or, pas un vert de
      formulaire. L'ambre et le rouge restent : seul le vert est banni. */
-  --raw-amber-d: #D6A24B;  --raw-amber-l: #8A5E12;
+  --raw-amber-d: #FFFFFF;  --raw-amber-l: #0A0A0B;
   /* Placeholder : le gris du mode sombre est illisible sur blanc. */
   --raw-ph-d:    #86868B;  --raw-ph-l:    #8C8576;
   --raw-red-d:   #D46A5C;  --raw-red-l:   #B4453A;
 
   /* Halos d'or (11–13 % d'opacité, jamais dans le chemin du texte) */
-  --raw-glow-d: rgba(212, 179, 106, .13);
-  --raw-glow-l: rgba(168, 132,  47, .11);
+  --raw-glow-d: rgba(255, 255, 255, .10);
+  --raw-glow-l: rgba(10, 10, 11, .08);
 
   /* Ombres — aucune ombre teintée couleur, aucune ombre en dur ailleurs */
   --raw-shadow-1-d: 0 1px 2px rgba(0, 0, 0, .5);
@@ -319,7 +319,7 @@ chaque bascule clair / sombre, donc le fond change de couleur sans
 demandées existaient déjà comme jetons bruts. */
   /* Timeline : la lumiere vive des carres allumes, et l'inerte. */
   /* L'arete en relief du logo. */
-  --logo-depth: var(--raw-gold-400);
+  --logo-depth: var(--raw-warm-300);
   --tl-vive:   var(--raw-gold-50);
   --tl-eteint: var(--raw-black-800);
   --glass-gold-a:    var(--raw-glass-gold-a-d);
@@ -388,7 +388,7 @@ demandées existaient déjà comme jetons bruts. */
      d'un cran : plancher 4,28:1 en sombre, 3,49:1 en clair. Le
      chatoiement reste, dans la bande lisible. Garde-fou :
      npm run check:liquid. */
-  --liquid-grad: linear-gradient(112deg,#8A7238 0%,#A8853F 12%,#E8CE8E 26%,#FFF7E6 34%,#D4B36A 46%,#8A7238 62%,#E8CE8E 80%,#A8853F 92%,#8A7238 100%);
+  --liquid-grad: linear-gradient(112deg,#71717A 0%,#A1A1AA 12%,#E5E5E5 26%,#FFFFFF 34%,#D4D4D8 46%,#71717A 62%,#E5E5E5 80%,#A1A1AA 92%,#71717A 100%);
 }
 
 /* ───────────────────────────────────────────────────────────────────────
@@ -415,7 +415,11 @@ demandées existaient déjà comme jetons bruts. */
     --accent-text:   var(--raw-gold-800);
     --accent-hover:  var(--raw-gold-850);
     --accent-active: var(--raw-gold-900);
-    --on-accent:     var(--raw-black-ink);
+    --on-accent:     var(--raw-paper-0);
+    --plq-or:        var(--raw-black-950);
+    --plq-or-haut:   var(--raw-gold-850);
+    --plq-or-bas:    var(--raw-gold-900);
+    --plq-or-encre:  var(--raw-paper-0);
     --accent-glow:   var(--raw-glow-l);
     --success:       var(--raw-gold-800);
     --warning:       var(--raw-amber-l);
@@ -496,7 +500,7 @@ demandées existaient déjà comme jetons bruts. */
     --grain-blend: multiply;
     /* L'or liquide de la référence, tel quel. C'est une valeur de
        couleur : elle ne peut vivre que dans ce fichier. */
-    --liquid-grad: linear-gradient(112deg,#4E3C0E 0%,#6F5718 12%,#8A6C22 26%,#9C7B2C 34%,#6F5718 46%,#5B4713 62%,#8A6C22 80%,#7A5F1E 92%,#4E3C0E 100%);
+    --liquid-grad: linear-gradient(112deg,#0A0A0B 0%,#27272A 12%,#3F3F46 26%,#52525B 34%,#27272A 46%,#18181B 62%,#3F3F46 80%,#27272A 92%,#0A0A0B 100%);
   }
 }
 
@@ -521,7 +525,11 @@ demandées existaient déjà comme jetons bruts. */
   --accent-text:   var(--raw-gold-800);
   --accent-hover:  var(--raw-gold-850);
   --accent-active: var(--raw-gold-900);
-  --on-accent:     var(--raw-black-ink);
+  --on-accent:     var(--raw-paper-0);
+  --plq-or:        var(--raw-black-950);
+  --plq-or-haut:   var(--raw-gold-850);
+  --plq-or-bas:    var(--raw-gold-900);
+  --plq-or-encre:  var(--raw-paper-0);
   --accent-glow:   var(--raw-glow-l);
   --success:       var(--raw-gold-800);
   --warning:       var(--raw-amber-l);
@@ -607,7 +615,7 @@ demandées existaient déjà comme jetons bruts. */
      d'un cran : plancher 4,28:1 en sombre, 3,49:1 en clair. Le
      chatoiement reste, dans la bande lisible. Garde-fou :
      npm run check:liquid. */
-  --liquid-grad: linear-gradient(112deg,#4E3C0E 0%,#6F5718 12%,#8A6C22 26%,#9C7B2C 34%,#6F5718 46%,#5B4713 62%,#8A6C22 80%,#7A5F1E 92%,#4E3C0E 100%);
+  --liquid-grad: linear-gradient(112deg,#0A0A0B 0%,#27272A 12%,#3F3F46 26%,#52525B 34%,#27272A 46%,#18181B 62%,#3F3F46 80%,#27272A 92%,#0A0A0B 100%);
 }
 
 /* ───────────────────────────────────────────────────────────────────────
@@ -651,7 +659,7 @@ chaque bascule clair / sombre, donc le fond change de couleur sans
 demandées existaient déjà comme jetons bruts. */
   /* Timeline : la lumiere vive des carres allumes, et l'inerte. */
   /* L'arete en relief du logo. */
-  --logo-depth: var(--raw-gold-400);
+  --logo-depth: var(--raw-warm-300);
   --tl-vive:   var(--raw-gold-50);
   --tl-eteint: var(--raw-black-800);
   --glass-gold-a:    var(--raw-glass-gold-a-d);
@@ -716,5 +724,5 @@ demandées existaient déjà comme jetons bruts. */
      d'un cran : plancher 4,28:1 en sombre, 3,49:1 en clair. Le
      chatoiement reste, dans la bande lisible. Garde-fou :
      npm run check:liquid. */
-  --liquid-grad: linear-gradient(112deg,#8A7238 0%,#A8853F 12%,#E8CE8E 26%,#FFF7E6 34%,#D4B36A 46%,#8A7238 62%,#E8CE8E 80%,#A8853F 92%,#8A7238 100%);
+  --liquid-grad: linear-gradient(112deg,#71717A 0%,#A1A1AA 12%,#E5E5E5 26%,#FFFFFF 34%,#D4D4D8 46%,#71717A 62%,#E5E5E5 80%,#A1A1AA 92%,#71717A 100%);
 }

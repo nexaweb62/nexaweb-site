@@ -93,7 +93,7 @@ for (const vp of VUES) {
       if (vu.prof) {
         const clair = theme === 'light';
         const or = vu.prof.replace(/\s/g, '');
-        const attendu = clair ? 'rgb(168,133,63)' : 'rgb(212,179,106)';
+        const attendu = clair ? 'rgb(113,113,122)' : 'rgb(161,161,170)';  /* charte noir et blanc : arête grise */
         verifs++;
         if (or !== attendu) fails.push(`${ou} : arete du logo ${vu.prof} au lieu de ${attendu}`);
       }

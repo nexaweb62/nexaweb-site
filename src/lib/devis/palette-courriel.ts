@@ -12,6 +12,6 @@ export const COURRIEL = {
   "text": "#141416",
   "textMuted": "#55514A",
   "border": "#E3DDD0",
-  "accent": "#A6822E",
-  "onAccent": "#141416",
+  "accent": "#0A0A0B",
+  "onAccent": "#FFFFFF",
 } as const;
