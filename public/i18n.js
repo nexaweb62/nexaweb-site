@@ -297,8 +297,8 @@ var D={
     /* ── Équipe ── */
     'eq-lbl':'The agency',
     'eq-h':"Imad, Ahmed and Aaron,<br>the Nexa&nbsp;Web team",
-    'eq-sub':"Two founders and a client relations manager: development, design and support. We guide you from the first conversation to launch.",
-    'eq-role-rc':'Client relations manager',
+    'eq-sub':"Three co-founders, three crafts: development, design and client relations. We guide you from the first conversation to launch.",
+    'eq-role-rc':'Co-founder · Client relations',
     'eq-title-rc':"Your main point of contact, from the first call to your meeting",
     'eq-role':'Co-founder',
     'eq-contact':'Get in touch',
@@ -1575,8 +1575,8 @@ var D={
     /* ── Équipe ── */
     'eq-lbl':'L\'agence',
     'eq-h':"Imad, Ahmed et Aaron,<br>l'équipe de Nexa&nbsp;Web",
-    'eq-sub':"Deux fondateurs et un responsable relation client : développement, design et accompagnement. Nous vous suivons du premier échange à la mise en ligne.",
-    'eq-role-rc':'Responsable relation client',
+    'eq-sub':"Trois co-fondateurs, trois métiers : le développement, le design et la relation client. Nous vous suivons du premier échange à la mise en ligne.",
+    'eq-role-rc':'Co-fondateur · Relation client',
     'eq-title-rc':"Votre interlocuteur privilégié, du premier échange au rendez-vous",
     'eq-role':'Co-fondateur',
     'eq-contact':'Prendre contact',
