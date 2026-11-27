@@ -5,7 +5,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 ---
-<BaseLayout title="L'Équipe — Nexa Web" description="Imad et Ahmed, les deux fondateurs de Nexa Web, agence web à Carvin (Hauts-de-France) : ce sont eux qui font votre site.">
+<BaseLayout title="L'Équipe — Nexa Web" description="Imad et Ahmed, les deux fondateurs de Nexa Web, et Aaron, responsable relation client : l'équipe de l'agence web à Carvin (Hauts-de-France).">
 <style>
 /* Scroll reveal */
 .r{opacity:0;transform:translateY(28px);filter:blur(5px);transition:opacity .72s cubic-bezier(.16,1,.3,1),transform .72s cubic-bezier(.16,1,.3,1),filter .72s cubic-bezier(.16,1,.3,1)}
@@ -23,7 +23,7 @@ import '../styles/global.css';
 
 /* Team cards */
 .s-team{padding:clamp(80px,12vw,160px) 0}
-.team-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:920px;margin:0 auto}
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1200px;margin:0 auto}
 /* La photo AU-DESSUS du nom, plus derrière : aucun texte ni voile posé
    sur le visage. La carte contient la photo, puis le texte sur la
    surface de la page. */
@@ -41,7 +41,9 @@ import '../styles/global.css';
 .tc-title{font-size:var(--fs-body);font-weight:400;color:var(--text-muted);margin-top:6px;letter-spacing:0}
 .tc-content .tc-btn{margin-top:auto;padding-top:0}
 .tc-content .tc-title{margin-bottom:22px}
-@media(max-width:540px){.team-grid{grid-template-columns:1fr}}
+/* Trois cartes : sous 860 px elles passent l'une sous l'autre, en
+   gardant une largeur de carte lisible. */
+@media(max-width:860px){.team-grid{grid-template-columns:1fr;max-width:440px}}
 
 /* CTA */
 .s-eq-cta{text-align:center}
@@ -53,9 +55,11 @@ import '../styles/global.css';
    moins de 600 px de large. */
 .tc-bg[data-photo="1"]{background-image:url("/img/gen/vignette-membre1-399.jpg")}
 .tc-bg[data-photo="2"]{background-image:url("/img/gen/vignette-membre2-567.jpg")}
+.tc-bg[data-photo="3"]{background-image:url("/img/gen/vignette-membre3-768.jpg")}
 @supports (background-image:image-set(url('a.avif') type('image/avif'))){
   .tc-bg[data-photo="1"]{background-image:image-set(url("/img/gen/vignette-membre1-399.avif") type("image/avif"),url("/img/gen/vignette-membre1-399.webp") type("image/webp"),url("/img/gen/vignette-membre1-399.jpg") type("image/jpeg"))}
   .tc-bg[data-photo="2"]{background-image:image-set(url("/img/gen/vignette-membre2-567.avif") type("image/avif"),url("/img/gen/vignette-membre2-567.webp") type("image/webp"),url("/img/gen/vignette-membre2-567.jpg") type("image/jpeg"))}
+  .tc-bg[data-photo="3"]{background-image:image-set(url("/img/gen/vignette-membre3-768.avif") type("image/avif"),url("/img/gen/vignette-membre3-768.webp") type("image/webp"),url("/img/gen/vignette-membre3-768.jpg") type("image/jpeg"))}
   }
 </style>
 
@@ -66,8 +70,8 @@ import '../styles/global.css';
   <section class="s-eq-hero" aria-labelledby="eq-hero-h">
     <div class="wrap">
       <div class="eq-hero-in">
-        <h1 class="h-xl r d1" id="eq-hero-h" data-i18n="eq-h">Imad et Ahmed,<br>les fondateurs de Nexa&nbsp;Web</h1>
-        <p class="body-text r d2" style="margin-top:26px;max-width:520px" data-i18n="eq-sub">Deux fondateurs, deux métiers : le développement et le design. C'est nous qui faisons votre site, du premier appel à la mise en ligne.</p>
+        <h1 class="h-xl r d1" id="eq-hero-h" data-i18n="eq-h">Imad, Ahmed et Aaron,<br>l'équipe de Nexa&nbsp;Web</h1>
+        <p class="body-text r d2" style="margin-top:26px;max-width:520px" data-i18n="eq-sub">Deux fondateurs et un responsable relation client : développement, design et accompagnement. Nous vous suivons du premier échange à la mise en ligne.</p>
       </div>
     </div>
   </section>
@@ -98,6 +102,19 @@ import '../styles/global.css';
               <p class="tc-role" data-i18n="eq-role">Co-fondateur</p>
               <h2 class="tc-name h-md">Ahmed Chteoui</h2>
               <p class="tc-title" data-i18n="eq-title2">Dessine les maquettes</p>
+              <InteractiveButton text="Prendre contact" href="/contact" class="tc-btn" data-i18n="eq-contact" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Membre 3 -->
+        <div class="team-card r d2">
+          <div class="tc-inner" style="box-shadow:var(--shadow-2)">
+            <div class="tc-photo"><div class="tc-bg" data-photo="3" style="background-position:center 12%"></div></div>
+            <div class="tc-content">
+              <p class="tc-role" data-i18n="eq-role-rc">Responsable relation client</p>
+              <h2 class="tc-name h-md">Aaron Desprez</h2>
+              <p class="tc-title" data-i18n="eq-title-rc">Votre interlocuteur privilégié, du premier échange au rendez-vous</p>
               <InteractiveButton text="Prendre contact" href="/contact" class="tc-btn" data-i18n="eq-contact" />
             </div>
           </div>
